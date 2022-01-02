@@ -1,0 +1,84 @@
+version: 2.1
+
+orbs:
+  ruby: circleci/ruby@1.1.0
+  node: circleci/node@2
+  heroku: circleci/heroku@1.2.6
+
+jobs:
+  test_client:
+    working_directory: ~/client
+    docker:
+      - image: cimg/node:18.0.0
+    steps:
+      - checkout
+      # - restore_cache:
+      #     key: npm-cache-v1-{{ checksum "package-lock.json" }}
+      - run:
+          name: Install Dependencies
+          command: cd client && npm ci
+      # - save_cache:
+      #     key: npm-cache-v1-{{ checksum "package-lock.json" }}
+      #     paths:
+      #       - /home/circleci/.npm
+      - run:
+          name: Run Tests
+          command: cd client && npm test
+  build:
+    docker:
+      - image: cimg/ruby:2.6.9
+    steps:
+      - checkout
+      - ruby/install-deps
+  test:  # our next job, called "test"
+    # we run "parallel job containers" to enable speeding up our tests;
+    # this splits our tests across multiple containers.
+    parallelism: 3
+    # here we set TWO docker images.
+    docker:
+      - image: cimg/ruby:2.6.9 # this is our primary docker image, where step commands run.
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+      - image: cimg/postgres:14.0
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+        environment: # add POSTGRES environment variables.
+          POSTGRES_USER: gsanta
+          POSTGRES_DB: gamedis
+          POSTGRES_PASSWORD: "santag"
+    # environment variables specific to Ruby/Rails, applied to the primary container.
+    environment:
+      BUNDLE_JOBS: "3"
+      BUNDLE_RETRY: "3"
+      PGHOST: 127.0.0.1
+      PGUSER: gsanta
+      PGPASSWORD: "santag"
+      RAILS_ENV: test
+    # A series of steps to run, some are similar to those in "build".
+    steps:
+      - checkout
+      - ruby/install-deps
+      # Here we make sure that the secondary container boots
+      # up before we run operations on the database.
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Database setup
+          command: bundle exec rails db:schema:load --trace
+      - run: bundle exec rails db:seed
+      - run: bundle exec rake spec
+      # - ruby/rspec-test
+
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+workflows:
+  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
+    # Inside the workflow, you define the jobs you want to run.
+    jobs:
+      - build
+      - test
+      - test_client
+      - heroku/deploy-via-git

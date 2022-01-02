@@ -1,0 +1,64 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    },
+    "outDir": "./build",
+    "typeRoots": [
+      "./node_modules/@types",
+      "@testing-library/jest-dom"
+    ],
+    "types": [
+      "node",
+      "jest",
+      "@testing-library/jest-dom"
+    ],
+    "target": "es6",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "allowJs": true,
+    "jsx": "preserve",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    /* Turning this on is equivalent to enabling all of the strict mode family options */
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "allowUnreachableCode": false,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "useDefineForClassFields": true,
+    "noEmit": true,
+    "incremental": true,
+    "isolatedModules": true,
+    "experimentalDecorators": true
+  },
+  "include": [
+    ".eslintrc.js",
+    "webpack.config.js",
+    "jest.config.js",
+    "pages/**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "test/**/*.ts",
+    "test/**/*.tsx",
+    "msw_mock_api/**/*.ts",
+    "public/mockServiceWorker.js",
+    "pages/app.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
