@@ -1,0 +1,12 @@
+{
+  "sprites": [
+    {
+      "name": "player",
+      "tileWidth": 64,
+      "tileHeight": 64,
+      "columns": 22,
+      "tiles": 45,
+      "src": "sprites/player.png"
+    }
+  ]
+}

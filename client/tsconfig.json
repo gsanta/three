@@ -1,0 +1,50 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./build",
+    "typeRoots": [
+      "./node_modules/@types",
+      "@testing-library/jest-dom"
+    ],
+    "types": [
+      "node", "jest", "@testing-library/jest-dom"
+    ],
+    "target": "es6",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "module": "es6",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "allowJs": true,
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    /* Turning this on is equivalent to enabling all of the strict mode family options */
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "allowUnreachableCode": false,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  },
+  "include": [
+    ".eslintrc.js",
+    "webpack.config.js",
+    "jest.config.js",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "test/**/*.ts",
+    "test/**/*.tsx",
+    "msw_mock_api/**/*.ts",
+    "public/mockServiceWorker.js"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
