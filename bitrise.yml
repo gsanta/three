@@ -8,8 +8,11 @@ trigger_map:
 - pull_request_source_branch: "*"
   workflow: primary
 workflows:
-  rspec:
+  primary:
     steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6: {}
     - script@1.1.5:
         title: rspec
         inputs:
@@ -27,15 +30,6 @@ workflows:
             docker-compose --file=docker-compose.test.yml rm -f
 
             exit "$EXIT_CODE"
-  primary:
-    before_run:
-    - rspec
-    steps:
-    - activate-ssh-key@4:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6: {}
-    - script@1:
-        title: Do anything with Script step
     - deploy-to-bitrise-io@2: {}
 meta:
   bitrise.io:
