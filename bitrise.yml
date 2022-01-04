@@ -10,7 +10,7 @@ trigger_map:
 workflows:
   _setup:
     steps:
-    - activate-ssh-key@4.0.3: {}
+    # - activate-ssh-key@4.0.3: {}
     - script@1.1.5:
         title: git-clone
         inputs:
