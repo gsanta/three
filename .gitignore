@@ -39,3 +39,4 @@ dist
 storybook-static
 
 .DS_Store
+bitrise-test-run
