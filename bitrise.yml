@@ -8,20 +8,6 @@ trigger_map:
 - pull_request_source_branch: "*"
   workflow: primary
 workflows:
-  _setup:
-    steps:
-    # - activate-ssh-key@4.0.3: {}
-    - script@1.1.5:
-        title: git-clone
-        inputs:
-        - content: |-
-            #!/bin/bash
-            set -ex
-            ssh-keyscan -T 15 -H github.com >> ~/.ssh/known_hosts
-
-            git clone --depth 1 git@github.com:bitrise-io/docker-for-bitrise-web.git bitrise-test-run
-
-            (cd $BITRISE_SOURCE_DIR && git log -n 3)
   rspec:
     steps:
     - script@1.1.5:
@@ -43,7 +29,6 @@ workflows:
             exit "$EXIT_CODE"
   primary:
     before_run:
-    - _setup
     - rspec
     steps:
     - activate-ssh-key@4:
