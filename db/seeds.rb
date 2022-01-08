@@ -6,10 +6,5 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-Tdlist.create(title: "Schedule meetings: IT, Accounts, HR", done: false)
-Tdlist.create(title: "Visit children's home: perform duties", done: false)
-
 SpriteSheet.create(columns: 14, name: "Player", path: "player", tileHeight: 64, tileWidth: 64, tiles: 22)
 SpriteSheet.create(columns: 14, name: "Hero", path: "hero", tileHeight: 64, tileWidth: 64, tiles: 22)
-
-User.create(name: "Santa Gergo", username: "gsanta", email: "gsanta@test.com", password_digest: "santag")
