@@ -4,7 +4,7 @@ describe Api::RegistrationsController, type: :request do
 
   let (:user) { build_user }
   let (:existing_user) { create_user }
-  let (:signup_url) { '/api/signup' }
+  let (:signup_url) { '/api/v1/auth/signup' }
 
   context 'When creating a new user' do
     before do

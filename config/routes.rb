@@ -7,17 +7,12 @@ Rails.application.routes.draw do
     defaults: { format: :json },
     path: '',
     path_names: {
-      sign_in: 'api/login',
-      sign_out: 'api/logout',
-      registration: 'api/signup'
+      sign_in: 'api/v1/auth/login',
+      sign_out: 'api/v1/auth/logout',
+      registration: 'api/v1/auth/signup'
     },
     controllers: {
       sessions: 'api/sessions',
       registrations: 'api/registrations'
     }
-
-  # get '/member-data', to: 'members#show'
-  # scope '/api/v1' do
-  #   resources :sprite_sheets
-  # end
 end

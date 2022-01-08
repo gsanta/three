@@ -14,7 +14,7 @@ Devise.setup do |config|
     jwt.secret = ENV['DEVISE_JWT_SECRET_KEY']
 
     jwt.dispatch_requests = [
-      ['POST', %r{^/api/v1/login$}]
+      ['POST', %r{^/api/v1/auth/login$}]
     ]
     jwt.revocation_requests = [
       ['DELETE', %r{^/api/v1/logout$}]

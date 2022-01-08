@@ -3,8 +3,8 @@ require 'rails_helper'
 describe Api::SessionsController, type: :request do
 
   let (:user) { create_user }
-  let (:login_url) { '/api/login' }
-  let (:logout_url) { '/api/logout' }
+  let (:login_url) { '/api/v1/auth/login' }
+  let (:logout_url) { '/api/v1/auth/logout' }
 
   context 'When logging in' do
     before do
