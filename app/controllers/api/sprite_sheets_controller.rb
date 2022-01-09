@@ -1,6 +1,6 @@
-class SpriteSheetsController < ApplicationController
+class Api::SpriteSheetsController < Api::BaseController
   before_action :authenticate_user!
-  
+
   def index
     spriteSheets = SpriteSheet.order("created_at DESC")
     render json: spriteSheets

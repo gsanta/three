@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
-  namespace :api, defaults: { format: :json } do
+  scope module: 'api', path: 'api/v1' do
     resources :users, only: %w[show]
+    resources :sprite_sheets
   end
 
   devise_for :users,
