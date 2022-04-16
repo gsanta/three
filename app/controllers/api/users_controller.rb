@@ -9,7 +9,6 @@ class Api::UsersController < Api::BaseController
   private
 
   def find_user
-    @user = User.find(params[:id])
+    @user = User.where(slug: params[:id]).first
   end
-
 end
