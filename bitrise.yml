@@ -43,7 +43,7 @@ workflows:
 
             exit "$EXIT_CODE"
     - deploy-to-bitrise-io@2: {}
-    - heroku-deploy@0: {}
+#    - heroku-deploy@0: {}
 meta:
   bitrise.io:
     stack: linux-docker-android-20.04
