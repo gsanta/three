@@ -1,12 +1,10 @@
-import axios from 'axios';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
 
-// if (process.env.NODE_ENV === 'development') {
-//   // eslint-disable-next-line @typescript-eslint/no-var-requires
-//   const { worker } = require('../msw_mock_api/src/mocks/msw-browser');
-//   worker.start({ onUnhandledRequest: 'warn' });
-// }
+declare const BACKEND_TYPE: string;
 
-ReactDOM.render(<App />, document.getElementById('root'));
+if (BACKEND_TYPE === 'msw') {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { worker } = require('../msw_mock_api/mocks/browser');
+  worker.start({ onUnhandledRequest: 'warn' });
+}
