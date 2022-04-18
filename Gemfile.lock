@@ -197,6 +197,8 @@ GEM
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
     rspec-support (3.10.3)
+    rspec_junit_formatter (0.4.1)
+      rspec-core (>= 2, < 4, != 2.12.0)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -247,6 +249,7 @@ DEPENDENCIES
   rails (~> 6.0.4, >= 6.0.4.4)
   rspec
   rspec-rails
+  rspec_junit_formatter
   spring
   spring-watcher-listen (~> 2.0.0)
   sqlite3
