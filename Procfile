@@ -1,1 +1,1 @@
-rails server
+web: rails server
