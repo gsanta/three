@@ -45,7 +45,7 @@ jobs:
       # up before we run operations on the database.
       - run:
           name: Wait for DB
-          command: dockerize -wait tcp://localhost:5578 -timeout 1m
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
           name: Database setup
           command: bundle exec rails db:schema:load --trace
