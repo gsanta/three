@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@1.1.0
   node: circleci/node@2
+  heroku: circleci/heroku@1.2.6
 
 jobs:
   build:
@@ -63,3 +64,6 @@ workflows:
       - test
         # requires  # Test requires that build passes for it to run.
         #   - build   # Finally, run the build job.
+  heroku_deploy:
+    jobs:
+      - heroku/deploy-via-git
