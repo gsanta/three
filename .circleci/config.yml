@@ -49,7 +49,7 @@ jobs:
       - run:
           name: Database setup
           command: bundle exec rails db:schema:load --trace
-      - run: rake spec
+      - run: bundle exec rake spec
       # - ruby/rspec-test
 
 # Invoke jobs via workflows
