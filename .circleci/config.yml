@@ -11,7 +11,8 @@ jobs:
     docker:
       - image: cimg/node:18.0.0
     steps:
-      - checkout
+      - checkout:
+          path: ~/client
       # - restore_cache:
       #     key: npm-cache-v1-{{ checksum "package-lock.json" }}
       - run:
