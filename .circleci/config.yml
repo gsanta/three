@@ -7,7 +7,7 @@ orbs:
 
 jobs:
   test_client:
-    working_directory: client
+    working_directory: ~/client
     docker:
       - image: cimg/node:18.0.0
     steps:
