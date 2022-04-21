@@ -5,3 +5,5 @@ if (BACKEND_TYPE === 'msw') {
   const { worker } = require('../msw_mock_api/mocks/browser');
   worker.start({ onUnhandledRequest: 'warn' });
 }
+
+export {}
