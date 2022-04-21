@@ -1,6 +1,3 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-
 declare const BACKEND_TYPE: string;
 
 if (BACKEND_TYPE === 'msw') {
