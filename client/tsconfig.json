@@ -26,7 +26,7 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "allowJs": true,
-    "jsx": "react",
+    "jsx": "preserve",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     /* Turning this on is equivalent to enabling all of the strict mode family options */
