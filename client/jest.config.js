@@ -6,4 +6,9 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['./test/setupJest.ts', './test/setupLocalStorage.ts', './test/setupMsw.ts'],
+  globals: {
+    'ts-jest': {
+      tsconfig: './tsconfig.test.json',
+    },
+  },
 };
