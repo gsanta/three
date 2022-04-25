@@ -18,9 +18,12 @@ class PixelRenderer {
     const { context } = this;
 
     context.clearRect(0, 0, this.canvas.size.x, this.canvas.size.y);
-    context.beginPath();
-    context.rect(20, 20, 150, 100);
-    context.stroke();
+
+    this.pixelStore.getPixels().forEach((pixel) => {
+      context.beginPath();
+      context.rect(pixel.position.x, pixel.position.y, 5, 5);
+      context.stroke();
+    });
   }
 }
 

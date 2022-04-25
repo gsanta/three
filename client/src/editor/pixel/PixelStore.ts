@@ -6,6 +6,10 @@ class PixelStore {
   addPixel(pixel: Pixel) {
     this.pixels.push(pixel);
   }
+
+  getPixels(): Pixel[] {
+    return this.pixels;
+  }
 }
 
 export default PixelStore;

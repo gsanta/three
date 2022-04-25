@@ -1,3 +1,4 @@
+import EditorEventEmitter from '@/editor/core/event/EditorEventEmitter';
 import PixelStore from '@/editor/pixel/PixelStore';
 import Pixel from '@/editor/pixel/types/Pixel';
 import Point from '@/editor/pixel/types/Point';
@@ -9,12 +10,17 @@ class PencilTool implements Tool {
 
   private pixelStore: PixelStore;
 
-  constructor(pixelStore: PixelStore) {
+  private editorEventEmitter: EditorEventEmitter;
+
+  constructor(pixelStore: PixelStore, editorEventEmitter: EditorEventEmitter) {
     this.pixelStore = pixelStore;
+    this.editorEventEmitter = editorEventEmitter;
   }
 
   onClick(e: MouseEvent): void {
-    this.pixelStore.addPixel(new Pixel(new Point(e.clientX, e.clientY)));
+    const pixel = new Pixel(new Point(e.clientX, e.clientY));
+    this.pixelStore.addPixel(pixel);
+    this.editorEventEmitter.emit('pixelAdded', pixel);
   }
 }
 
