@@ -4,7 +4,7 @@ import PixelStore from './PixelStore';
 class PixelRenderer {
   private context: CanvasRenderingContext2D;
 
-  private pixelStore: PixelStore;
+  pixelStore: PixelStore;
 
   private canvas: Canvas;
 
