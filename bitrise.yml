@@ -14,7 +14,7 @@ workflows:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6: {}
     - script@1.1.5:
-        title: rspec
+        title: Test backend
         inputs:
         - content: >-
             #!/usr/bin/env bash
@@ -42,6 +42,15 @@ workflows:
 
 
             exit "$EXIT_CODE"
+    - script@1.1.5:
+        title: Test frontend
+        inputs:
+        - content: >-
+            #!/usr/bin/env bash
+
+            cd client
+            npm ci
+            npm test
     - deploy-to-bitrise-io@2: {}
 #    - heroku-deploy@0: {}
 meta:
