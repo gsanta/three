@@ -86,3 +86,15 @@ workflows:
             - build
             - test_backend
             - test_frontend
+  build-test-and-deploy-sequential:
+    jobs:
+      - build
+      - test_backend:
+          requires:
+            - build
+      - test_frontend:
+          requires:
+            - test_backend
+      - heroku/deploy-via-git:
+          requires:
+            - test_frontend
