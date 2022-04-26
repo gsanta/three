@@ -6,7 +6,7 @@ orbs:
   heroku: circleci/heroku@1.2.6
 
 jobs:
-  test_client:
+  test_frontend:
     working_directory: ~/client
     docker:
       - image: cimg/node:18.0.0
@@ -30,7 +30,7 @@ jobs:
     steps:
       - checkout
       - ruby/install-deps
-  test:  # our next job, called "test"
+  test_backend:  # our next job, called "test"
     # we run "parallel job containers" to enable speeding up our tests;
     # this splits our tests across multiple containers.
     parallelism: 3
@@ -75,10 +75,14 @@ jobs:
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
+  build-test-and-deploy: # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build
-      - test
-      - test_client
-      - heroku/deploy-via-git
+      - test_backend
+      - test_frontend
+      - heroku/deploy-via-git:
+          requires:
+            - build
+            - test_backend
+            - test_frontend
