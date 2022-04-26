@@ -7,11 +7,14 @@ import Point from './pixel/types/Point';
 import EditorEvents from './core/event/EditorEvents';
 import EditorEventEmitter from './core/event/EditorEventEmitter';
 import EditorEventsCreator from './core/event/EditorEventsCreator';
-import Handler from './core/event/Handler';
-import PixelAdded from './handlers/PixelAdded';
+import EventHandler from './core/event/EventHandler';
+import PixelAdded from './event_handlers/PixelAdded';
+import MouseHandler from './input_handlers/MouseHandler';
 
 class Editor {
-  private canvas: Canvas;
+  private canvas: HTMLCanvasElement;
+
+  private canvasData: Canvas;
 
   private pixelStore: PixelStore;
 
@@ -23,18 +26,21 @@ class Editor {
 
   readonly eventEmitter: EditorEventEmitter;
 
-  readonly handlers: Handler[] = [];
+  readonly handlers: EventHandler[] = [];
 
-  constructor(context: CanvasRenderingContext2D) {
+  readonly mouseHandler: MouseHandler;
+
+  constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+    this.canvas = canvas;
     const [editorEvents, editorEventEmitter] = EditorEventsCreator.create();
     this.events = editorEvents;
     this.eventEmitter = editorEventEmitter;
 
     this.pixelStore = new PixelStore();
-    this.canvas = {
+    this.canvasData = {
       size: new Point(400, 400),
     };
-    this.pixelRenderer = new PixelRenderer(this.pixelStore, this.canvas, context);
+    this.pixelRenderer = new PixelRenderer(this.pixelStore, this.canvasData, context);
 
     this.handlers.push(new PixelAdded(this.pixelRenderer, this.events));
 
@@ -42,6 +48,8 @@ class Editor {
 
     this.toolStore = new ToolStore();
     this.toolStore.addTool(new PencilTool(this.pixelStore, this.eventEmitter));
+
+    this.mouseHandler = new MouseHandler(this.canvas, this.toolStore);
 
     this.pixelRenderer.render();
   }

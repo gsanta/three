@@ -1,8 +1,9 @@
+import PointerData from './PointerData';
 import ToolType from './ToolType';
 
 interface Tool {
   type: ToolType;
-  onClick(e: MouseEvent): void;
+  onClick(pointer: PointerData): void;
 }
 
 export default Tool;

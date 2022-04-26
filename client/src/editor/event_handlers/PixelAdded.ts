@@ -1,8 +1,8 @@
 import EditorEvents from '../core/event/EditorEvents';
-import Handler from '../core/event/Handler';
+import EventHandler from '../core/event/EventHandler';
 import PixelRenderer from '../pixel/PixelRenderer';
 
-class PixelAdded implements Handler {
+class PixelAdded implements EventHandler {
   private renderer: PixelRenderer;
 
   private events: EditorEvents;
