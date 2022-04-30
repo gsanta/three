@@ -1,36 +1,27 @@
-import React from 'react';
-import Editor from '@/editor/Editor';
-import { useCallback, useState } from 'react';
+import React, { useContext } from 'react';
 import Palette from '@/editor/components/palette/Palette';
-import EditorContext from '@/editor/components/EditorContext';
+import DataContext from '@/editor/ui/DataContext';
+import useData from '@/editor/ui/hooks/useData';
 
-const Canvas = () => {
-  const [editor, setEditor] = useState<Editor | undefined>(undefined);
+type Props = {
+  canvasRef: (node: HTMLCanvasElement) => void;
+};
 
-  const ref = useCallback((node: HTMLCanvasElement) => {
-    if (node) {
-      node.width = 400;
-      node.height = 400;
-      const context = node.getContext('2d');
-      if (context) {
-        setEditor(new Editor(node, context));
-      }
-    }
-  }, []);
+const Canvas = ({ canvasRef }: Props) => {
+  const { mouseHandler } = useContext(DataContext);
+  const [ selectedColor ] = useData('paletteData', 'selectedColor');
 
   return (
-    <EditorContext.Provider value={editor}>
-      <div>
-        <Palette />
-        <div
-          onClick={(e) => {
-            editor?.mouseHandler.onClick(e.nativeEvent);
-          }}
-        >
-          <canvas ref={ref} className="Canvas" data-testid="editor-canvas" />
-        </div>
+    <div>
+      <Palette />
+      <div
+        onClick={(e) => {
+          mouseHandler?.onClick(e.nativeEvent);
+        }}
+      >
+        <canvas ref={canvasRef} className="Canvas" data-testid="editor-canvas" />
       </div>
-    </EditorContext.Provider>
+    </div>
   );
 };
 
