@@ -1,7 +1,7 @@
 import PixelStore from './pixel/PixelStore';
 import ToolStore from './tool/ToolStore';
 import PixelRenderer from './pixel/PixelRenderer';
-import Canvas from './pixel/Canvas';
+import CanvasData from './pixel/CanvasData';
 import PencilTool from './tool/tools/PencilTool';
 import Point from './pixel/types/Point';
 import EditorEvents from './core/event/EditorEvents';
@@ -10,11 +10,13 @@ import EditorEventsCreator from './core/event/EditorEventsCreator';
 import EventHandler from './core/event/EventHandler';
 import PixelAdded from './event_handlers/PixelAdded';
 import MouseHandler from './input_handlers/MouseHandler';
+import PaletteData from './features/palette/PaletteData';
+import dataProxyHandler from './core/dataProxyHandler';
 
 class Editor {
-  private canvas: HTMLCanvasElement;
+  private canvasElement: HTMLCanvasElement;
 
-  private canvasData: Canvas;
+  readonly canvas: CanvasData;
 
   private pixelStore: PixelStore;
 
@@ -30,17 +32,21 @@ class Editor {
 
   readonly mouseHandler: MouseHandler;
 
+  readonly paletteData: PaletteData;
+
   constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
-    this.canvas = canvas;
+    this.canvasElement = canvas;
     const [editorEvents, editorEventEmitter] = EditorEventsCreator.create();
     this.events = editorEvents;
     this.eventEmitter = editorEventEmitter;
 
+    this.paletteData = new Proxy(new PaletteData(), dataProxyHandler);
+
     this.pixelStore = new PixelStore();
-    this.canvasData = {
+    this.canvas = {
       size: new Point(400, 400),
     };
-    this.pixelRenderer = new PixelRenderer(this.pixelStore, this.canvasData, context);
+    this.pixelRenderer = new PixelRenderer(this.pixelStore, this.canvas, context);
 
     this.handlers.push(new PixelAdded(this.pixelRenderer, this.events));
 
@@ -49,7 +55,7 @@ class Editor {
     this.toolStore = new ToolStore();
     this.toolStore.addTool(new PencilTool(this.pixelStore, this.eventEmitter));
 
-    this.mouseHandler = new MouseHandler(this.canvas, this.toolStore);
+    this.mouseHandler = new MouseHandler(this.canvasElement, this.toolStore);
 
     this.pixelRenderer.render();
   }

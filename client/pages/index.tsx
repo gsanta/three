@@ -1,12 +1,10 @@
-import Canvas from '@/pages/editor/Canvas';
+import App from '@/editor/ui/components/App';
 import React from 'react';
 
-const Index = (): JSX.Element => {
-  return (
-    <>
-      <Canvas/>
-    </>
-  );
-};
+const Index = (): JSX.Element => (
+  <>
+    <App />
+  </>
+);
 
 export default Index;

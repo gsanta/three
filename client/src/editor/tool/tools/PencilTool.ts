@@ -23,6 +23,10 @@ class PencilTool implements Tool {
     this.pixelStore.addPixel(pixel);
     this.editorEventEmitter.emit('pixelAdded', pixel);
   }
+
+  onMove(pointer: PointerData): void {
+    
+  }
 }
 
 export default PencilTool;

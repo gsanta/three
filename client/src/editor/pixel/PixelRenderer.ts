@@ -1,4 +1,4 @@
-import Canvas from './Canvas';
+import CanvasData from './CanvasData';
 import PixelStore from './PixelStore';
 
 class PixelRenderer {
@@ -6,9 +6,9 @@ class PixelRenderer {
 
   pixelStore: PixelStore;
 
-  private canvas: Canvas;
+  private canvas: CanvasData;
 
-  constructor(pixelStore: PixelStore, canvas: Canvas, context: CanvasRenderingContext2D) {
+  constructor(pixelStore: PixelStore, canvas: CanvasData, context: CanvasRenderingContext2D) {
     this.pixelStore = pixelStore;
     this.canvas = canvas;
     this.context = context;
