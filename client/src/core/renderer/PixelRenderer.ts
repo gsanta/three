@@ -1,5 +1,5 @@
-import CanvasData from './CanvasData';
-import PixelStore from './PixelStore';
+import CanvasData from '../../features/canvas/CanvasData';
+import PixelStore from '../../features/canvas/PixelStore';
 
 class PixelRenderer {
   private context: CanvasRenderingContext2D;

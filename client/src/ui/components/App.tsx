@@ -1,4 +1,4 @@
-import Editor from '@/editor/Editor';
+import Editor from '@/Editor';
 import Canvas from '@/pages/editor/Canvas';
 import { useState, useCallback } from 'react';
 import DataContext from '../DataContext';
@@ -23,7 +23,7 @@ const App = () => {
     <DataContext.Provider
       value={{
         canvas: editor?.canvas,
-        mouseHandler: editor?.mouseHandler,
+        mouseInput: editor?.mouseInput,
         paletteData: editor?.paletteData,
       }}
     >

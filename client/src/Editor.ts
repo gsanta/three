@@ -1,15 +1,15 @@
-import PixelStore from './pixel/PixelStore';
-import ToolStore from './tool/ToolStore';
-import PixelRenderer from './pixel/PixelRenderer';
-import CanvasData from './pixel/CanvasData';
-import PencilTool from './tool/tools/PencilTool';
-import Point from './pixel/types/Point';
+import PixelStore from './features/canvas/PixelStore';
+import ToolStore from './core/tool/ToolStore';
+import PixelRenderer from './core/renderer/PixelRenderer';
+import CanvasData from './features/canvas/CanvasData';
+import PencilTool from './features/tools/pencil/PencilTool';
+import Point from './core/primitives/Point';
 import EditorEvents from './core/event/EditorEvents';
 import EditorEventEmitter from './core/event/EditorEventEmitter';
 import EditorEventsCreator from './core/event/EditorEventsCreator';
 import EventHandler from './core/event/EventHandler';
-import PixelAdded from './event_handlers/PixelAdded';
-import MouseHandler from './input_handlers/MouseHandler';
+import PixelAdded from './core/event/handlers/PixelAdded';
+import MouseInput from './core/input/MouseInput';
 import PaletteData from './features/palette/PaletteData';
 import dataProxyHandler from './core/dataProxyHandler';
 
@@ -30,7 +30,7 @@ class Editor {
 
   readonly handlers: EventHandler[] = [];
 
-  readonly mouseHandler: MouseHandler;
+  readonly mouseInput: MouseInput;
 
   readonly paletteData: PaletteData;
 
@@ -55,7 +55,7 @@ class Editor {
     this.toolStore = new ToolStore();
     this.toolStore.addTool(new PencilTool(this.pixelStore, this.eventEmitter));
 
-    this.mouseHandler = new MouseHandler(this.canvasElement, this.toolStore);
+    this.mouseInput = new MouseInput(this.canvasElement, this.toolStore);
 
     this.pixelRenderer.render();
   }
