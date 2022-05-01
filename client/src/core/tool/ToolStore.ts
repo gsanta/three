@@ -1,5 +1,5 @@
-import Tool from './types/Tool';
-import ToolType from './types/ToolType';
+import Tool from './Tool';
+import ToolType from './ToolType';
 
 class ToolStore {
   private tools: Tool[] = [];

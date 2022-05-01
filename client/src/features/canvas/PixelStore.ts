@@ -1,4 +1,4 @@
-import Pixel from './types/Pixel';
+import Pixel from '../../core/primitives/Pixel';
 
 class PixelStore {
   private pixels: Pixel[] = [];

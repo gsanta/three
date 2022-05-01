@@ -1,4 +1,4 @@
-import Pixel from '@/editor/pixel/types/Pixel';
+import Pixel from '@/core/primitives/Pixel';
 import EditorEventType from './EditorEventType';
 
 class EditorEventEmitter {

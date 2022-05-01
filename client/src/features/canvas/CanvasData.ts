@@ -1,4 +1,4 @@
-import Point from './types/Point';
+import Point from '../../core/primitives/Point';
 
 interface CanvasData {
   size: Point;

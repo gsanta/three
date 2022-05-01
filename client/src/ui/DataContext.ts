@@ -1,11 +1,11 @@
 import React from 'react';
 import PaletteData from '../features/palette/PaletteData';
-import MouseHandler from '../input_handlers/MouseHandler';
-import CanvasData from '../pixel/CanvasData';
+import MouseInput from '../core/input/MouseInput';
+import CanvasData from '../features/canvas/CanvasData';
 
 export interface DataContextType {
   canvas: CanvasData;
-  mouseHandler: MouseHandler;
+  mouseInput: MouseInput;
   paletteData: PaletteData;
 }
 

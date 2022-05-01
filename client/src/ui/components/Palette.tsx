@@ -1,6 +1,6 @@
-import DataContext from '@/editor/ui/DataContext';
-import useData from '@/editor/ui/hooks/useData';
 import React, { useContext } from 'react';
+import DataContext from '../DataContext';
+import useData from '../hooks/useData';
 
 const colors = ['#229954', '#E74C3C', '#FDFEFE', '#17202A', '#FDFEFE'];
 

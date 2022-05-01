@@ -1,8 +1,8 @@
-import Point from '../pixel/types/Point';
+import Point from '../primitives/Point';
 import ToolStore from '../tool/ToolStore';
-import PointerData from '../tool/types/PointerData';
+import PointerData from '../tool/PointerData';
 
-class MouseHandler {
+class MouseInput {
   private canvas: HTMLCanvasElement;
 
   private toolStore: ToolStore;
@@ -33,4 +33,4 @@ class MouseHandler {
   }
 }
 
-export default MouseHandler;
+export default MouseInput;

@@ -1,10 +1,10 @@
-import EditorEventEmitter from '@/editor/core/event/EditorEventEmitter';
-import PixelStore from '@/editor/pixel/PixelStore';
-import Pixel from '@/editor/pixel/types/Pixel';
-import Point from '@/editor/pixel/types/Point';
-import PointerData from '../types/PointerData';
-import Tool from '../types/Tool';
-import ToolType from '../types/ToolType';
+import EditorEventEmitter from '@/core/event/EditorEventEmitter';
+import Tool from '@/core/tool/Tool';
+import ToolType from '@/core/tool/ToolType';
+import PixelStore from '@/features/canvas/PixelStore';
+import Pixel from '@/core/primitives/Pixel';
+import Point from '@/core/primitives/Point';
+import PointerData from '../../../core/tool/PointerData';
 
 class PencilTool implements Tool {
   type = ToolType.Pencil;
@@ -25,7 +25,7 @@ class PencilTool implements Tool {
   }
 
   onMove(pointer: PointerData): void {
-    
+
   }
 }
 
