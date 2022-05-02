@@ -1,5 +1,5 @@
 import EditorEventEmitter from '@/core/event/EditorEventEmitter';
-import Tool from '@/core/tool/Tool';
+import Tool, { ToolIconName } from '@/core/tool/Tool';
 import ToolType from '@/core/tool/ToolType';
 import PixelStore from '@/features/canvas/PixelStore';
 import PointerData from '../../../core/tool/PointerData';
@@ -11,6 +11,8 @@ class RectangleTool extends Tool {
   name = 'Rectangle';
 
   type = ToolType.Rectangle;
+
+  icon = 'rectangle' as ToolIconName;
 
   size = 2;
 
