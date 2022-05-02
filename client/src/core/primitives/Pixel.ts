@@ -1,37 +1,19 @@
-import Point from './Point';
+interface Pixel {
+  gridX?: number;
 
-class Pixel {
-  private _position: Point;
+  gridY?: number;
 
-  private _color: string | undefined;
+  width?: number;
 
-  private _dirty = true;
+  height?: number;
 
-  constructor(position: Point) {
-    this._position = position;
-  }
+  topLeftX: number;
 
-  get color(): string | undefined {
-    return this._color;
-  }
+  topLeftY: number;
 
-  set color(color: string | undefined) {
-    this._color = color;
-    this._dirty = true;
-  }
-
-  get position(): Point {
-    return this._position;
-  }
-
-  set position(position: Point) {
-    this._position = position;
-    this._dirty = true;
-  }
-
-  get dirty() {
-    return this._dirty;
-  }
+  color: string;
 }
+
+export const defaultColor = '#000000';
 
 export default Pixel;

@@ -2,7 +2,8 @@ import 'react-reflex/styles.css';
 import 'antd/dist/antd.css';
 import '../src/app.scss';
 import '../src/pages/editor/Canvas.scss';
-import '../src/editor/components/palette/Palette.scss';
+import '../src/ui/components/Palette.scss';
+import '../src/ui/components/Tool.scss';
 // import '../src/components/canvas.scss';
 if (process.env.NEXT_PUBLIC_API_MOCKING === 'true') {
   require('../msw_mock_api/mocks')

@@ -2,6 +2,7 @@ import Editor from '@/Editor';
 import Canvas from '@/pages/editor/Canvas';
 import { useState, useCallback } from 'react';
 import DataContext from '../DataContext';
+import Toolbar from './Toolbar';
 
 const App = () => {
   const [editor, setEditor] = useState<Editor | undefined>(undefined);
@@ -22,11 +23,13 @@ const App = () => {
   return (
     <DataContext.Provider
       value={{
-        canvas: editor?.canvas,
+        canvas: editor?.canvasStore,
         mouseInput: editor?.mouseInput,
-        paletteData: editor?.paletteData,
+        palette: editor?.paletteStore,
+        tool: editor?.toolStore,
       }}
     >
+      <Toolbar />
       <Canvas canvasRef={ref} />
     </DataContext.Provider>
   );

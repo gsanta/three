@@ -1,4 +1,4 @@
-import CanvasData from '../../features/canvas/CanvasData';
+import CanvasStore from '../../features/canvas/CanvasStore';
 import PixelStore from '../../features/canvas/PixelStore';
 
 class PixelRenderer {
@@ -6,9 +6,9 @@ class PixelRenderer {
 
   pixelStore: PixelStore;
 
-  private canvas: CanvasData;
+  private canvas: CanvasStore;
 
-  constructor(pixelStore: PixelStore, canvas: CanvasData, context: CanvasRenderingContext2D) {
+  constructor(pixelStore: PixelStore, canvas: CanvasStore, context: CanvasRenderingContext2D) {
     this.pixelStore = pixelStore;
     this.canvas = canvas;
     this.context = context;
@@ -17,10 +17,11 @@ class PixelRenderer {
   render(): void {
     const { context } = this;
 
-    context.clearRect(0, 0, this.canvas.size.x, this.canvas.size.y);
+    context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.pixelStore.getPixels().forEach((pixel) => {
-      context.fillRect(pixel.position.x, pixel.position.y, 5, 5);
+      context.fillStyle = pixel.color;
+      context.fillRect(pixel.topLeftX, pixel.topLeftY, 5, 5);
     });
   }
 }

@@ -4,6 +4,16 @@
 }
 
 .Palette__Color {
-  width: 10px;
-  height: 10px;
+  width: 20px;
+  height: 20px;
+  position: relative;
+}
+
+.Palette__Color__Selection {
+  position: absolute;
+  background-color: black;
+  width: 4px;
+  height: 4px;
+  left: 8px;
+  top: 8px;
 }

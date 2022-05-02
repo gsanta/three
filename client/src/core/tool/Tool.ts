@@ -2,9 +2,11 @@ import PointerData from './PointerData';
 import ToolType from './ToolType';
 
 interface Tool {
+  name: string;
   type: ToolType;
-  onClick(pointer: PointerData): void;
-  onMove(pointer: PointerData): void;
+  click(pointer: PointerData): void;
+  move(pointer: PointerData): void;
+  drag(pointer: PointerData): void;
 }
 
 export default Tool;

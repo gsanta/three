@@ -1,12 +1,14 @@
+import ToolStore from '@/core/tool/ToolStore';
+import PaletteStore from '@/features/palette/PaletteStore';
 import React from 'react';
-import PaletteData from '../features/palette/PaletteData';
 import MouseInput from '../core/input/MouseInput';
-import CanvasData from '../features/canvas/CanvasData';
+import CanvasStore from '../features/canvas/CanvasStore';
 
 export interface DataContextType {
-  canvas: CanvasData;
+  canvas: CanvasStore;
   mouseInput: MouseInput;
-  paletteData: PaletteData;
+  palette: PaletteStore;
+  tool: ToolStore;
 }
 
 const DataContext = React.createContext<Partial<DataContextType>>({});
