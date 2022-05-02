@@ -1,5 +1,5 @@
 import EditorEventEmitter from '@/core/event/EditorEventEmitter';
-import Tool from '@/core/tool/Tool';
+import Tool, { ToolIconName } from '@/core/tool/Tool';
 import ToolType from '@/core/tool/ToolType';
 import PixelStore from '@/features/canvas/PixelStore';
 import PointerData from '../../../core/tool/PointerData';
@@ -10,6 +10,8 @@ class PencilTool extends Tool {
   name = 'Pencil';
 
   type = ToolType.Pencil;
+
+  icon = 'pencil' as ToolIconName;
 
   private pixelStore: PixelStore;
 

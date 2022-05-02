@@ -11,7 +11,6 @@ const Canvas = ({ canvasRef }: Props) => {
 
   return (
     <div>
-      <Palette />
       <div
         onClick={(e) => mouseInput?.onClick(e.nativeEvent)}
         onMouseMove={(e) => mouseInput?.onMove(e.nativeEvent)}

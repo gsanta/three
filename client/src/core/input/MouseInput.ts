@@ -14,11 +14,10 @@ class MouseInput {
   constructor(canvas: HTMLCanvasElement, toolStore: ToolStore) {
     this.canvas = canvas;
     this.toolStore = toolStore;
-
-    this.setOffset();
   }
 
   onDown(): void {
+    this.setOffset();
     this.isDown = true;
   }
 

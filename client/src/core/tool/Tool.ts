@@ -2,10 +2,14 @@
 import PointerData from './PointerData';
 import ToolType from './ToolType';
 
-abstract class Tool {
-  name: string | undefined;
+export type ToolIconName = 'pencil' | 'rectangle';
 
-  type: ToolType | undefined;
+abstract class Tool {
+  name?: string;
+
+  icon?: ToolIconName;
+
+  type?: ToolType;
 
   click(pointer: PointerData): void {}
 
