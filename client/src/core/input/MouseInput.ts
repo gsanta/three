@@ -9,6 +9,8 @@ class MouseInput {
 
   private offset: Point | undefined;
 
+  private isDown = false;
+
   constructor(canvas: HTMLCanvasElement, toolStore: ToolStore) {
     this.canvas = canvas;
     this.toolStore = toolStore;
@@ -16,15 +18,43 @@ class MouseInput {
     this.setOffset();
   }
 
+  onDown(): void {
+    this.isDown = true;
+  }
+
+  onUp(): void {
+    this.isDown = false;
+  }
+
   onClick(e: MouseEvent): void {
+    const pointerData = this.getPointerData(e);
+    if (pointerData) {
+      this.toolStore.selectedTool.click(pointerData);
+    }
+  }
+
+  onMove(e: MouseEvent): void {
+    const pointerData = this.getPointerData(e);
+    if (!pointerData) {
+      return;
+    }
+
+    if (this.isDown) {
+      this.toolStore.selectedTool.drag(pointerData);
+    } else {
+      this.toolStore.selectedTool.move(pointerData);
+    }
+  }
+
+  private getPointerData(e: MouseEvent): PointerData | undefined {
     if (!this.offset) {
       return;
     }
-    const pointerData: PointerData = {
+
+    return {
       x: e.clientX - this.offset.x,
       y: e.clientY - this.offset.y,
     };
-    this.toolStore.getActiveTool()?.onClick(pointerData);
   }
 
   private setOffset() {

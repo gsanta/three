@@ -7,9 +7,9 @@ import PixelService from '@/features/canvas/PixelService';
 import PaletteStore from '@/features/palette/PaletteStore';
 
 class PencilTool implements Tool {
-  name = 'Pencil';
+  name = 'Rectangle';
 
-  type = ToolType.Pencil;
+  type = ToolType.Rectangle;
 
   private pixelStore: PixelStore;
 

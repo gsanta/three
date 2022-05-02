@@ -15,9 +15,10 @@ const Canvas = ({ canvasRef }: Props) => {
     <div>
       <Palette />
       <div
-        onClick={(e) => {
-          mouseInput?.onClick(e.nativeEvent);
-        }}
+        onClick={(e) => mouseInput?.onClick(e.nativeEvent)}
+        onMouseMove={(e) => mouseInput?.onMove(e.nativeEvent)}
+        onMouseDown={() => mouseInput?.onDown()}
+        onMouseUp={() => mouseInput?.onUp()}
       >
         <canvas ref={canvasRef} className="Canvas" data-testid="editor-canvas" />
       </div>

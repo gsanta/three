@@ -1,22 +1,25 @@
 import PixelStore from './features/canvas/PixelStore';
 import ToolStore from './core/tool/ToolStore';
 import PixelRenderer from './core/renderer/PixelRenderer';
-import CanvasData from './features/canvas/CanvasData';
+import CanvasStore from './features/canvas/CanvasStore';
 import PencilTool from './features/tools/pencil/PencilTool';
-import Point from './core/primitives/Point';
 import EditorEvents from './core/event/EditorEvents';
 import EditorEventEmitter from './core/event/EditorEventEmitter';
 import EditorEventsCreator from './core/event/EditorEventsCreator';
 import EventHandler from './core/event/EventHandler';
 import PixelAdded from './core/event/handlers/PixelAdded';
 import MouseInput from './core/input/MouseInput';
-import PaletteData from './features/palette/PaletteData';
 import dataProxyHandler from './core/dataProxyHandler';
+import PixelService from './features/canvas/PixelService';
+import PaletteStore from './features/palette/PaletteStore';
+import RectangleTool from './features/tools/rectangle/RectangleTool';
 
 class Editor {
   private canvasElement: HTMLCanvasElement;
 
-  readonly canvas: CanvasData;
+  readonly canvasStore: CanvasStore;
+
+  readonly pixelService: PixelService;
 
   private pixelStore: PixelStore;
 
@@ -32,7 +35,7 @@ class Editor {
 
   readonly mouseInput: MouseInput;
 
-  readonly paletteData: PaletteData;
+  readonly paletteStore: PaletteStore;
 
   constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
     this.canvasElement = canvas;
@@ -40,20 +43,31 @@ class Editor {
     this.events = editorEvents;
     this.eventEmitter = editorEventEmitter;
 
-    this.paletteData = new Proxy(new PaletteData(), dataProxyHandler);
+    this.paletteStore = new Proxy(new PaletteStore(), dataProxyHandler);
 
-    this.pixelStore = new PixelStore();
-    this.canvas = {
-      size: new Point(400, 400),
+    this.canvasStore = {
+      gridSizeX: 5,
+      gridSizeY: 5,
+      width: 400,
+      height: 400,
     };
-    this.pixelRenderer = new PixelRenderer(this.pixelStore, this.canvas, context);
+    this.pixelService = new PixelService(this.canvasStore);
+    this.pixelStore = new PixelStore();
+    this.pixelRenderer = new PixelRenderer(this.pixelStore, this.canvasStore, context);
 
     this.handlers.push(new PixelAdded(this.pixelRenderer, this.events));
 
     this.handlers.forEach((handler) => handler.register());
 
-    this.toolStore = new ToolStore();
-    this.toolStore.addTool(new PencilTool(this.pixelStore, this.eventEmitter));
+    const pencilTool = new PencilTool(this.pixelStore, this.eventEmitter, this.pixelService, this.paletteStore);
+    const rectangleTool = new RectangleTool(this.pixelStore, this.eventEmitter, this.pixelService, this.paletteStore);
+    this.toolStore = new Proxy(
+      {
+        tools: [pencilTool, rectangleTool],
+        selectedTool: pencilTool,
+      },
+      dataProxyHandler,
+    );
 
     this.mouseInput = new MouseInput(this.canvasElement, this.toolStore);
 
