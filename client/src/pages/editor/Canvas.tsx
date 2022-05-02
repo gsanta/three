@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import DataContext from '@/ui/DataContext';
-import useData from '@/ui/hooks/useData';
 import Palette from '@/ui/components/Palette';
 
 type Props = {
@@ -9,7 +8,6 @@ type Props = {
 
 const Canvas = ({ canvasRef }: Props) => {
   const { mouseInput } = useContext(DataContext);
-  const [ selectedColor ] = useData('paletteData', 'selectedColor');
 
   return (
     <div>

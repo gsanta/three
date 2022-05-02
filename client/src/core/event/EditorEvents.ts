@@ -8,7 +8,7 @@ class EditorEvents {
     this.handlers = handlers;
   }
 
-  on(type: 'pixelAdded', handler: (pixel: Pixel) => void): void;
+  on(type: 'pixelAdded', handler: (pixels: Pixel[]) => void): void;
   on(type: 'pixelRemoved', handler: () => void): void;
 
   on(type: EditorEventType, handler: unknown): void {

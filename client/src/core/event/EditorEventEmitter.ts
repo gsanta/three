@@ -8,7 +8,7 @@ class EditorEventEmitter {
     this.handlers = handlers;
   }
 
-  emit(type: 'pixelAdded', pixel: Pixel): void;
+  emit(type: 'pixelAdded', pixel: Pixel[]): void;
   emit(type: 'pixelRemoved'): void;
 
   emit(type: EditorEventType, data?: unknown): void {

@@ -1,7 +1,7 @@
 interface Pixel {
-  gridX?: number;
+  gridX: number;
 
-  gridY?: number;
+  gridY: number;
 
   width?: number;
 

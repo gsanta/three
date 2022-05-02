@@ -11,6 +11,10 @@ class PixelService {
   getPixelAtScreenPosition(x: number, y: number) {
     const gridX = Math.floor(x / this.canvasStore.gridSizeX);
     const gridY = Math.floor(y / this.canvasStore.gridSizeY);
+    return this.getPixelAtGridPosition(gridX, gridY);
+  }
+
+  getPixelAtGridPosition(gridX: number, gridY: number) {
     const { gridSizeX, gridSizeY } = this.canvasStore;
     const topLeftX = gridX * gridSizeX;
     const topLeftY = gridY * gridSizeY;

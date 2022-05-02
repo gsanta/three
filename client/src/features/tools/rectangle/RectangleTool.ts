@@ -5,11 +5,14 @@ import PixelStore from '@/features/canvas/PixelStore';
 import PointerData from '../../../core/tool/PointerData';
 import PixelService from '@/features/canvas/PixelService';
 import PaletteStore from '@/features/palette/PaletteStore';
+import Pixel from '@/core/primitives/Pixel';
 
-class PencilTool implements Tool {
+class RectangleTool extends Tool {
   name = 'Rectangle';
 
   type = ToolType.Rectangle;
+
+  size = 2;
 
   private pixelStore: PixelStore;
 
@@ -25,6 +28,7 @@ class PencilTool implements Tool {
     pixelService: PixelService,
     paletteStore: PaletteStore,
   ) {
+    super();
     this.pixelStore = pixelStore;
     this.editorEventEmitter = editorEventEmitter;
     this.pixelService = pixelService;
@@ -33,22 +37,24 @@ class PencilTool implements Tool {
 
   click(pointer: PointerData): void {
     const { x, y } = pointer;
-    this.createPixel(x, y);
-  }
 
-  move(pointer: PointerData): void {}
+    const topLeft = this.pixelService.getPixelAtScreenPosition(x, y);
+    const { gridX, gridY } = topLeft;
+    const pixels: Pixel[] = [topLeft];
 
-  drag(pointer: PointerData): void {
-    const { x, y } = pointer;
-    this.createPixel(x, y);
-  }
+    for (let i = 1; i < this.size; i++) {
+      for (let j = 1; j < this.size; j++) {
+        pixels.push(this.pixelService.getPixelAtGridPosition(gridX + i, gridY + j));
+      }
+    }
 
-  private createPixel(x: number, y: number) {
-    const pixel = this.pixelService.getPixelAtScreenPosition(x, y);
-    pixel.color = this.paletteStore.selectedColor;
-    this.pixelStore.addPixel(pixel);
-    this.editorEventEmitter.emit('pixelAdded', pixel);
+    pixels.forEach((pixel) => {
+      pixel.color = this.paletteStore.selectedColor;
+      this.pixelStore.addPixel(pixel);
+    });
+
+    this.editorEventEmitter.emit('pixelAdded', pixels);
   }
 }
 
-export default PencilTool;
+export default RectangleTool;

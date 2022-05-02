@@ -6,7 +6,7 @@ import PointerData from '../../../core/tool/PointerData';
 import PixelService from '@/features/canvas/PixelService';
 import PaletteStore from '@/features/palette/PaletteStore';
 
-class PencilTool implements Tool {
+class PencilTool extends Tool {
   name = 'Pencil';
 
   type = ToolType.Pencil;
@@ -25,6 +25,7 @@ class PencilTool implements Tool {
     pixelService: PixelService,
     paletteStore: PaletteStore,
   ) {
+    super();
     this.pixelStore = pixelStore;
     this.editorEventEmitter = editorEventEmitter;
     this.pixelService = pixelService;
@@ -36,8 +37,6 @@ class PencilTool implements Tool {
     this.createPixel(x, y);
   }
 
-  move(pointer: PointerData): void {}
-
   drag(pointer: PointerData): void {
     const { x, y } = pointer;
     this.createPixel(x, y);
@@ -47,7 +46,7 @@ class PencilTool implements Tool {
     const pixel = this.pixelService.getPixelAtScreenPosition(x, y);
     pixel.color = this.paletteStore.selectedColor;
     this.pixelStore.addPixel(pixel);
-    this.editorEventEmitter.emit('pixelAdded', pixel);
+    this.editorEventEmitter.emit('pixelAdded', [pixel]);
   }
 }
 
