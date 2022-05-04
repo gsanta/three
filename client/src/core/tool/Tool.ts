@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import Handler from '../ui/Handler';
 import PointerData from './PointerData';
 import ToolType from './ToolType';
 
@@ -10,6 +11,8 @@ abstract class Tool {
   icon?: ToolIconName;
 
   type?: ToolType;
+
+  options?: Handler[];
 
   click(pointer: PointerData): void {}
 

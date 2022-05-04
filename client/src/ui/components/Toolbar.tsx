@@ -1,7 +1,6 @@
 import Tool, { ToolIconName } from '@/core/tool/Tool';
 import React, { useContext } from 'react';
 import useData from '../hooks/useData';
-import classNames from 'classnames';
 import DataContext from '../DataContext';
 import { BiPencil, BiRectangle } from 'react-icons/bi';
 
