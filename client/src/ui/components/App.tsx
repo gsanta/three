@@ -6,6 +6,7 @@ import DataContext from '../DataContext';
 import Toolbar from './Toolbar';
 import { ChakraProvider, Container, Flex, HStack } from '@chakra-ui/react';
 import Palette from './Palette';
+import Menubar from './menubar/Menubar';
 
 const App = () => {
   const [editor, setEditor] = useState<Editor | undefined>(undefined);
@@ -36,8 +37,11 @@ const App = () => {
         <Split className="split" sizes={[75, 25]}>
           <Flex height="100%">
             <Toolbar />
-            <Flex grow={1} height="100%" justifyContent="space-around" alignItems="center">
-              <Canvas canvasRef={ref} />
+            <Flex grow={1} direction="column" height="100%">
+              <Menubar />
+              <Flex grow={1} alignItems="center" justifyContent="space-around">
+                <Canvas canvasRef={ref} />
+              </Flex>
             </Flex>
           </Flex>
           <div>

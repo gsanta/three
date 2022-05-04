@@ -6,6 +6,7 @@ import PointerData from '../../../core/tool/PointerData';
 import PixelService from '@/features/canvas/PixelService';
 import PaletteStore from '@/features/palette/PaletteStore';
 import Pixel from '@/core/primitives/Pixel';
+import RectangleSizeHandler from './RectangleSizeHandler';
 
 class RectangleTool extends Tool {
   name = 'Rectangle';
@@ -42,10 +43,10 @@ class RectangleTool extends Tool {
 
     const topLeft = this.pixelService.getPixelAtScreenPosition(x, y);
     const { gridX, gridY } = topLeft;
-    const pixels: Pixel[] = [topLeft];
+    const pixels: Pixel[] = [];
 
-    for (let i = 1; i < this.size; i++) {
-      for (let j = 1; j < this.size; j++) {
+    for (let i = 0; i < this.size; i++) {
+      for (let j = 0; j < this.size; j++) {
         pixels.push(this.pixelService.getPixelAtGridPosition(gridX + i, gridY + j));
       }
     }
@@ -57,6 +58,8 @@ class RectangleTool extends Tool {
 
     this.editorEventEmitter.emit('pixelAdded', pixels);
   }
+
+  options = [new RectangleSizeHandler()];
 }
 
 export default RectangleTool;
