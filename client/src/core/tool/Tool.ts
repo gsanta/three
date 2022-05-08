@@ -14,11 +14,11 @@ abstract class Tool {
 
   options?: Handler[];
 
-  click(pointer: PointerData): void {}
+  click(_pointer: PointerData): void {}
 
-  move(pointer: PointerData): void {}
+  move(_pointer: PointerData): void {}
 
-  drag(pointer: PointerData): void {}
+  drag(_pointer: PointerData): void {}
 }
 
 export default Tool;

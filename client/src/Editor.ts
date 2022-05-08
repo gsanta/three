@@ -61,13 +61,13 @@ class Editor {
 
     const pencilTool = new PencilTool(this.pixelStore, this.eventEmitter, this.pixelService, this.paletteStore);
     const rectangleTool = new RectangleTool(this.pixelStore, this.eventEmitter, this.pixelService, this.paletteStore);
-    this.toolStore = new Proxy(
-      {
-        tools: [pencilTool, rectangleTool],
-        selectedTool: pencilTool,
-      },
-      dataProxyHandler,
-    );
+
+    const toolStore = new ToolStore();
+    toolStore.addTool(pencilTool);
+    toolStore.addTool(rectangleTool);
+    toolStore.selectedTool = pencilTool;
+
+    this.toolStore = new Proxy(toolStore, dataProxyHandler);
 
     this.mouseInput = new MouseInput(this.canvasElement, this.toolStore);
 

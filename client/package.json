@@ -17,6 +17,8 @@
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@reduxjs/toolkit": "^1.7.1",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^12.1.5",
     "@types/pixi.js": "^5.0.0",
     "antd": "^4.17.4",
     "axios": "^0.24.0",
@@ -42,8 +44,6 @@
     "split.js": "^1.6.5"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^12.1.2",
     "@types/antd": "^1.0.0",
     "@types/axios": "^0.14.0",
     "@types/jest": "^27.0.3",

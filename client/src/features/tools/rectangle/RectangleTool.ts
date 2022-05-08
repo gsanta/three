@@ -17,6 +17,8 @@ class RectangleTool extends Tool {
 
   size = 2;
 
+  sizes = [1, 2, 3, 4];
+
   private pixelStore: PixelStore;
 
   private editorEventEmitter: EditorEventEmitter;

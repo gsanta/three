@@ -1,13 +1,13 @@
+import DataContext from '@/ui/DataContext';
 import useData from '@/ui/hooks/useData';
-import React from 'react';
-import ComponentBuilder from '../ComponentBuilder';
+import React, { useContext } from 'react';
 
 const Menubar = () => {
-  const [selectedTool] = useData('tool', 'selectedTool');
+  const { tools } = useContext(DataContext);
+  const selectedTool = useData('selectedTool', tools);
+  console.log(selectedTool);
 
-  const components = selectedTool?.options?.map((handler) => ComponentBuilder.build(handler));
-
-  return <div className="menubar">{components}</div>;
+  return <div className="menubar"></div>;
 };
 
 export default Menubar;

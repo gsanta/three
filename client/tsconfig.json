@@ -50,6 +50,7 @@
     "webpack.config.js",
     "jest.config.js",
     "pages/**/*.tsx",
+    "pages/**/*.jsx",
     "src/**/*.ts",
     "src/**/*.tsx",
     "test/**/*.ts",
@@ -57,7 +58,7 @@
     "msw_mock_api/**/*.ts",
     "public/mockServiceWorker.js",
     "pages/app.tsx"
-  ],
+, "pages/_app.jsx"  ],
   "exclude": [
     "node_modules"
   ]
