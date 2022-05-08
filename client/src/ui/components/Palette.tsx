@@ -6,7 +6,7 @@ const colors = ['#229954', '#E74C3C', '#FDFEFE', '#17202A', '#FDFEFE'];
 
 const Palette = () => {
   const { palette } = useContext(DataContext);
-  const [selectedColor] = useData('palette', 'selectedColor');
+  const selectedColor = useData('selectedColor', palette);
 
   const setColor = (color: string) => {
     palette!.selectedColor = color;

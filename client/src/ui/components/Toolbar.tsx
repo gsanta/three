@@ -20,8 +20,9 @@ const renderIcon = (iconName: ToolIconName, isSelected: boolean) => {
 };
 
 const Toolbar = () => {
-  const { tool: toolStore } = useContext(DataContext);
-  const [tools, selectedTool] = useData('tool', 'tools', 'selectedTool');
+  const { tools: toolStore } = useContext(DataContext);
+  const tools = useData('tools', toolStore);
+  const selectedTool = useData('selectedTool', toolStore);
 
   const handleClick = (tool: Tool) => {
     toolStore!.selectedTool = tool;

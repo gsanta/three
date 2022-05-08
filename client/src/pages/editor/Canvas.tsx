@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import DataContext from '@/ui/DataContext';
-import Palette from '@/ui/components/Palette';
 
 type Props = {
   canvasRef: (node: HTMLCanvasElement) => void;

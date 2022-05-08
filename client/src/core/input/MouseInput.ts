@@ -28,7 +28,7 @@ class MouseInput {
   onClick(e: MouseEvent): void {
     const pointerData = this.getPointerData(e);
     if (pointerData) {
-      this.toolStore.selectedTool.click(pointerData);
+      this.toolStore.selectedTool?.click(pointerData);
     }
   }
 
@@ -39,9 +39,9 @@ class MouseInput {
     }
 
     if (this.isDown) {
-      this.toolStore.selectedTool.drag(pointerData);
+      this.toolStore.selectedTool?.drag(pointerData);
     } else {
-      this.toolStore.selectedTool.move(pointerData);
+      this.toolStore.selectedTool?.move(pointerData);
     }
   }
 

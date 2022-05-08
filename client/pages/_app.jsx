@@ -7,9 +7,9 @@ import '../src/ui/components/Toolbar.scss';
 import '../src/ui/components/menubar/Menubar.scss';
 // import '../src/components/canvas.scss';
 if (process.env.NEXT_PUBLIC_API_MOCKING === 'true') {
-  require('../msw_mock_api/mocks')
+  require('../msw_mock_api/mocks');
 }
 
-export default function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
-}
+export default MyApp = ({ Component, pageProps }) => {
+  return <Component {...pageProps} />;
+};

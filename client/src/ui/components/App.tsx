@@ -1,10 +1,11 @@
+import React from 'react';
 import Editor from '@/Editor';
 import Canvas from '@/pages/editor/Canvas';
 import Split from 'react-split';
 import { useState, useCallback } from 'react';
 import DataContext from '../DataContext';
 import Toolbar from './Toolbar';
-import { ChakraProvider, Container, Flex, HStack } from '@chakra-ui/react';
+import { ChakraProvider, Flex } from '@chakra-ui/react';
 import Palette from './Palette';
 import Menubar from './menubar/Menubar';
 
@@ -31,7 +32,7 @@ const App = () => {
           canvas: editor?.canvasStore,
           mouseInput: editor?.mouseInput,
           palette: editor?.paletteStore,
-          tool: editor?.toolStore,
+          tools: editor?.toolStore,
         }}
       >
         <Split className="split" sizes={[75, 25]}>
