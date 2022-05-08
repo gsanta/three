@@ -71,7 +71,21 @@ jobs:
       - run: bundle exec rails db:seed
       - run: bundle exec rake spec
       # - ruby/rspec-test
+  deploy:
+    machine:
+        enabled: true
+    # working_directory: ~/circleci-demo-workflows
+    environment:
+      HEROKU_APP: "gamedis"
+    steps:
+      - checkout
+      - run:
+          name: Setup Heroku
+          command: bash .circleci/setup-heroku.sh
 
+      - run:
+          command: |
+            git push backend-heroku master
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
