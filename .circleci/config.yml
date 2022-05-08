@@ -107,28 +107,14 @@ workflows:
   build-test-and-deploy: # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
     jobs:
-      # - build
-      # - test_backend
-      # - test_frontend
-      - deploy-backend
-      - deploy-frontend
-          # requires:
-          #   - build
-          #   - test_backend
-          #   - test_frontend
-  # build-test-and-deploy-sequential:
-  #   jobs:
-  #     - hold: # <<< A job that will require manual approval in the CircleCI web application.
-  #         type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
-  #     - build:
-  #         requires:
-  #           - hold
-  #     - test_backend:
-  #         requires:
-  #           - build
-  #     - test_frontend:
-  #         requires:
-  #           - test_backend
-  #     - heroku/deploy-via-git:
-  #         requires:
-  #           - test_frontend
+      - build
+      - test_backend
+      - test_frontend
+      - deploy-backend:
+          requires:
+            - build
+            - test_backend
+            - test_frontend
+      - deploy-frontend:
+          requires:
+            - deploy-backend
