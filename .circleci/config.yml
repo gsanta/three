@@ -71,13 +71,12 @@ jobs:
       - run: bundle exec rails db:seed
       - run: bundle exec rake spec
       # - ruby/rspec-test
-  deploy:
+  deploy-backend:
     machine:
         enabled: true
     # working_directory: ~/circleci-demo-workflows
     environment:
       HEROKU_APP: "gamedis"
-      HEROKU_GIT_REMOTE: "backend-heroku"
     steps:
       - checkout
       - run:
@@ -86,7 +85,22 @@ jobs:
 
       - run:
           command: |
-            git push backend-heroku master
+            git push heroku master
+  deploy-frontend:
+    machine:
+        enabled: true
+    # working_directory: ~/circleci-demo-workflows
+    environment:
+      HEROKU_APP: "cryptic-chamber-32314"
+    steps:
+      - checkout
+      - run:
+          name: Setup Heroku
+          command: bash .circleci/setup-heroku.sh
+
+      - run:
+          command: |
+            git push heroku master
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
@@ -96,7 +110,8 @@ workflows:
       # - build
       # - test_backend
       # - test_frontend
-      - deploy
+      - deploy-backend
+      - deploy-frontend
           # requires:
           #   - build
           #   - test_backend
