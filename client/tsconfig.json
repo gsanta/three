@@ -58,7 +58,7 @@
     "msw_mock_api/**/*.ts",
     "public/mockServiceWorker.js",
     "pages/app.tsx"
-, "pages/_app.jsx"  ],
+, "pages/_app.js"  ],
   "exclude": [
     "node_modules"
   ]
