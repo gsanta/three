@@ -12,4 +12,4 @@ machine git.heroku.com
 EOF
 
 heroku git:remote -a $HEROKU_APP
-git remote rename heroku backend-heroku
+git remote rename heroku $HEROKU_GIT_REMOTE
