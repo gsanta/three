@@ -48,12 +48,14 @@ workflows:
             cd client
 
             set -x
-            
+
             npm ci
-            
+
             npm test
+    - cache-push@2:
+        inputs:
+        - cache_paths: client/node_modules
     - deploy-to-bitrise-io@2: {}
-#    - heroku-deploy@0: {}
 meta:
   bitrise.io:
     stack: linux-docker-android-20.04
