@@ -42,7 +42,6 @@ jobs:
           POSTGRES_USER: gsanta
           POSTGRES_DB: gamedis
           POSTGRES_PASSWORD: "santag"
-    # environment variables specific to Ruby/Rails, applied to the primary container.
     environment:
       BUNDLE_JOBS: "3"
       BUNDLE_RETRY: "3"
