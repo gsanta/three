@@ -1,23 +1,30 @@
-import { useForceUpdate } from 'framer-motion';
 import { useEffect } from 'react';
+import useForceUpdate from './useForceUpdate';
 
 const useInjector = <T, K extends keyof T>(prop: K, obj?: T): void => {
   const forceUpdate = useForceUpdate();
 
   useEffect(() => {
-    if (!obj) {
+    const anyObj = obj as any;
+    if (!anyObj) {
       return;
     }
 
-    if (!(obj as any).__injector) {
-      (obj as any).__injector = {};
+    if (!anyObj.__injector) {
+      anyObj.__injector = {};
     }
 
-    if (!(obj as any).__injector[prop]) {
-      (obj as any).__injector[prop] = [];
+    if (!anyObj.__injector[prop]) {
+      anyObj.__injector[prop] = [];
     }
-    (obj as any).__injector[prop].push(forceUpdate);
-  }, [obj, forceUpdate, prop]);
+    anyObj.__injector[prop].push(forceUpdate);
+
+    return () => {
+      if (anyObj?.__injector?.[prop]) {
+        anyObj.__injector[prop] = anyObj.__injector[prop].filter((updater: () => void) => updater !== forceUpdate);
+      }
+    };
+  }, [forceUpdate, obj, prop]);
 };
 
 export default useInjector;
