@@ -60,12 +60,16 @@ class Editor {
     this.handlers.forEach((handler) => handler.register());
 
     const pencilTool = new PencilTool(this.pixelStore, this.eventEmitter, this.pixelService, this.paletteStore);
-    const rectangleTool = new RectangleTool(this.pixelStore, this.eventEmitter, this.pixelService, this.paletteStore);
+    const rectangleTool = new Proxy(
+      new RectangleTool(this.pixelStore, this.eventEmitter, this.pixelService, this.paletteStore),
+      dataProxyHandler,
+    );
 
     const toolStore = new ToolStore();
     toolStore.addTool(pencilTool);
     toolStore.addTool(rectangleTool);
     toolStore.selectedTool = pencilTool;
+    toolStore.rectangle = rectangleTool;
 
     this.toolStore = new Proxy(toolStore, dataProxyHandler);
 

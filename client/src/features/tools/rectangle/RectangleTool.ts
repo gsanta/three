@@ -19,6 +19,8 @@ class RectangleTool extends Tool {
 
   sizes = [1, 2, 3, 4];
 
+  filled = true;
+
   private pixelStore: PixelStore;
 
   private editorEventEmitter: EditorEventEmitter;
@@ -45,8 +47,14 @@ class RectangleTool extends Tool {
 
     const topLeft = this.pixelService.getPixelAtScreenPosition(x, y);
     const { gridX, gridY } = topLeft;
-    const pixels: Pixel[] = [];
 
+    const pixels = this.filled ? this.createFilled(gridX, gridY) : this.createOutline(gridX, gridY);
+
+    this.editorEventEmitter.emit('pixelAdded', pixels);
+  }
+
+  private createFilled(gridX: number, gridY: number) {
+    const pixels: Pixel[] = [];
     for (let i = 0; i < this.size; i++) {
       for (let j = 0; j < this.size; j++) {
         pixels.push(this.pixelService.getPixelAtGridPosition(gridX + i, gridY + j));
@@ -58,7 +66,25 @@ class RectangleTool extends Tool {
       this.pixelStore.addPixel(pixel);
     });
 
-    this.editorEventEmitter.emit('pixelAdded', pixels);
+    return pixels;
+  }
+
+  private createOutline(gridX: number, gridY: number) {
+    const pixels: Pixel[] = [];
+
+    for (let i = 0; i < this.size; i++) {
+      pixels.push(this.pixelService.getPixelAtGridPosition(gridX + i, gridY));
+      pixels.push(this.pixelService.getPixelAtGridPosition(gridX + i, gridY + this.size - 1));
+      pixels.push(this.pixelService.getPixelAtGridPosition(gridX, gridY + i));
+      pixels.push(this.pixelService.getPixelAtGridPosition(gridX + this.size - 1, gridY + i));
+    }
+
+    pixels.forEach((pixel) => {
+      pixel.color = this.paletteStore.selectedColor;
+      this.pixelStore.addPixel(pixel);
+    });
+
+    return pixels;
   }
 
   options = [new RectangleSizeHandler()];

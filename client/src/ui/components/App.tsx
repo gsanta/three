@@ -8,6 +8,7 @@ import Toolbar from './Toolbar';
 import { ChakraProvider, Flex } from '@chakra-ui/react';
 import Palette from './Palette';
 import Menubar from './menubar/Menubar';
+import customTheme from '../customTheme';
 
 const App = () => {
   const [editor, setEditor] = useState<Editor | undefined>(undefined);
@@ -26,7 +27,7 @@ const App = () => {
   }, []);
 
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={customTheme}>
       <DataContext.Provider
         value={{
           canvas: editor?.canvasStore,
