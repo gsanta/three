@@ -14,6 +14,7 @@ const Menubar = () => {
       case ToolType.Rectangle:
         return <RectangleToolOptions />;
     }
+    return <></>;
   };
 
   return <div className="menubar">{renderToolOptions()}</div>;
