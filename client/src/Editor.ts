@@ -1,4 +1,4 @@
-import PixelStore from './features/canvas/PixelStore';
+import PixelStore from './features/canvas/Frame';
 import ToolStore from './core/tool/ToolStore';
 import PixelRenderer from './core/renderer/PixelRenderer';
 import CanvasStore from './features/canvas/CanvasStore';
@@ -10,7 +10,6 @@ import EventHandler from './core/event/EventHandler';
 import PixelAdded from './core/event/handlers/PixelAdded';
 import MouseInput from './core/input/MouseInput';
 import dataProxyHandler from './core/dataProxyHandler';
-import PixelService from './features/canvas/PixelService';
 import PaletteStore from './features/palette/PaletteStore';
 import RectangleTool from './features/tools/rectangle/RectangleTool';
 
@@ -18,8 +17,6 @@ class Editor {
   private canvasElement: HTMLCanvasElement;
 
   readonly canvasStore: CanvasStore;
-
-  readonly pixelService: PixelService;
 
   private pixelStore: PixelStore;
 
@@ -51,17 +48,16 @@ class Editor {
       width: 400,
       height: 400,
     };
-    this.pixelService = new PixelService(this.canvasStore);
-    this.pixelStore = new PixelStore();
+    this.pixelStore = new PixelStore(100, 100);
     this.pixelRenderer = new PixelRenderer(this.pixelStore, this.canvasStore, context);
 
     this.handlers.push(new PixelAdded(this.pixelRenderer, this.events));
 
     this.handlers.forEach((handler) => handler.register());
 
-    const pencilTool = new PencilTool(this.pixelStore, this.eventEmitter, this.pixelService, this.paletteStore);
+    const pencilTool = new PencilTool(this.pixelStore, this.eventEmitter, this.paletteStore);
     const rectangleTool = new Proxy(
-      new RectangleTool(this.pixelStore, this.eventEmitter, this.pixelService, this.paletteStore),
+      new RectangleTool(this.pixelStore, this.eventEmitter, this.paletteStore),
       dataProxyHandler,
     );
 
