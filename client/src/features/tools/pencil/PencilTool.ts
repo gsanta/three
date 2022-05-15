@@ -1,10 +1,11 @@
 import EditorEventEmitter from '@/core/event/EditorEventEmitter';
 import Tool, { ToolIconName } from '@/core/tool/Tool';
 import ToolType from '@/core/tool/ToolType';
-import PixelStore from '@/features/canvas/PixelStore';
+import PixelStore from '@/features/canvas/Frame';
 import PointerData from '../../../core/tool/PointerData';
-import PixelService from '@/features/canvas/PixelService';
 import PaletteStore from '@/features/palette/PaletteStore';
+import PixelUtils from '@/core/utils/PixelUtils';
+import ColorUtils from '@/core/utils/ColorUtils';
 
 class PencilTool extends Tool {
   name = 'Pencil';
@@ -17,20 +18,12 @@ class PencilTool extends Tool {
 
   private editorEventEmitter: EditorEventEmitter;
 
-  private pixelService: PixelService;
-
   private paletteStore: PaletteStore;
 
-  constructor(
-    pixelStore: PixelStore,
-    editorEventEmitter: EditorEventEmitter,
-    pixelService: PixelService,
-    paletteStore: PaletteStore,
-  ) {
+  constructor(pixelStore: PixelStore, editorEventEmitter: EditorEventEmitter, paletteStore: PaletteStore) {
     super();
     this.pixelStore = pixelStore;
     this.editorEventEmitter = editorEventEmitter;
-    this.pixelService = pixelService;
     this.paletteStore = paletteStore;
   }
 
@@ -45,10 +38,10 @@ class PencilTool extends Tool {
   }
 
   private createPixel(x: number, y: number) {
-    const pixel = this.pixelService.getPixelAtScreenPosition(x, y);
-    pixel.color = this.paletteStore.selectedColor;
-    this.pixelStore.addPixel(pixel);
-    this.editorEventEmitter.emit('pixelAdded', [pixel]);
+    const { pixelSize, canvasWidth } = this.pixelStore;
+    const pixel = PixelUtils.getPixelAtScreenPosition(x, y, pixelSize, canvasWidth);
+    this.pixelStore.pixels2[pixel] = ColorUtils.colorToInt(this.paletteStore.selectedColor);
+    this.editorEventEmitter.emit('pixelAdded', []);
   }
 }
 

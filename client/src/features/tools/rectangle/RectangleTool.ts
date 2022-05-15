@@ -1,12 +1,13 @@
 import EditorEventEmitter from '@/core/event/EditorEventEmitter';
 import Tool, { ToolIconName } from '@/core/tool/Tool';
 import ToolType from '@/core/tool/ToolType';
-import PixelStore from '@/features/canvas/PixelStore';
+import PixelStore from '@/features/canvas/Frame';
 import PointerData from '../../../core/tool/PointerData';
-import PixelService from '@/features/canvas/PixelService';
 import PaletteStore from '@/features/palette/PaletteStore';
 import Pixel from '@/core/primitives/Pixel';
 import RectangleSizeHandler from './RectangleSizeHandler';
+import PixelUtils from '@/core/utils/PixelUtils';
+import ColorUtils from '@/core/utils/ColorUtils';
 
 class RectangleTool extends Tool {
   name = 'Rectangle';
@@ -25,64 +26,54 @@ class RectangleTool extends Tool {
 
   private editorEventEmitter: EditorEventEmitter;
 
-  private pixelService: PixelService;
-
   private paletteStore: PaletteStore;
 
-  constructor(
-    pixelStore: PixelStore,
-    editorEventEmitter: EditorEventEmitter,
-    pixelService: PixelService,
-    paletteStore: PaletteStore,
-  ) {
+  constructor(pixelStore: PixelStore, editorEventEmitter: EditorEventEmitter, paletteStore: PaletteStore) {
     super();
     this.pixelStore = pixelStore;
     this.editorEventEmitter = editorEventEmitter;
-    this.pixelService = pixelService;
     this.paletteStore = paletteStore;
   }
 
   click(pointer: PointerData): void {
     const { x, y } = pointer;
+    const { canvasWidth, pixelSize } = this.pixelStore;
 
-    const topLeft = this.pixelService.getPixelAtScreenPosition(x, y);
-    const { gridX, gridY } = topLeft;
+    const topLeftIndex = PixelUtils.getPixelAtScreenPosition(x, y, pixelSize, canvasWidth);
+    const topLeft = PixelUtils.getGridPosition(topLeftIndex, canvasWidth);
+    const { x: gridX, y: gridY } = topLeft;
 
     const pixels = this.filled ? this.createFilled(gridX, gridY) : this.createOutline(gridX, gridY);
 
     this.editorEventEmitter.emit('pixelAdded', pixels);
   }
 
-  private createFilled(gridX: number, gridY: number) {
+  private createFilled(x: number, y: number) {
     const pixels: Pixel[] = [];
     for (let i = 0; i < this.size; i++) {
       for (let j = 0; j < this.size; j++) {
-        pixels.push(this.pixelService.getPixelAtGridPosition(gridX + i, gridY + j));
+        const index = PixelUtils.getIndexAtGridPosition(x + i, y + j, this.pixelStore.canvasWidth);
+        this.pixelStore.pixels2[index] = ColorUtils.colorToInt(this.paletteStore.selectedColor);
       }
     }
-
-    pixels.forEach((pixel) => {
-      pixel.color = this.paletteStore.selectedColor;
-      this.pixelStore.addPixel(pixel);
-    });
 
     return pixels;
   }
 
-  private createOutline(gridX: number, gridY: number) {
+  private createOutline(x: number, y: number) {
     const pixels: Pixel[] = [];
 
     for (let i = 0; i < this.size; i++) {
-      pixels.push(this.pixelService.getPixelAtGridPosition(gridX + i, gridY));
-      pixels.push(this.pixelService.getPixelAtGridPosition(gridX + i, gridY + this.size - 1));
-      pixels.push(this.pixelService.getPixelAtGridPosition(gridX, gridY + i));
-      pixels.push(this.pixelService.getPixelAtGridPosition(gridX + this.size - 1, gridY + i));
-    }
+      const nextTop = PixelUtils.getIndexAtGridPosition(x + i, y, this.pixelStore.canvasWidth);
+      const nextBottom = PixelUtils.getIndexAtGridPosition(x + i, y + this.size - 1, this.pixelStore.canvasWidth);
+      const nextLeft = PixelUtils.getIndexAtGridPosition(x, y + i, this.pixelStore.canvasWidth);
+      const nextRight = PixelUtils.getIndexAtGridPosition(x + this.size - 1, y + i, this.pixelStore.canvasWidth);
 
-    pixels.forEach((pixel) => {
-      pixel.color = this.paletteStore.selectedColor;
-      this.pixelStore.addPixel(pixel);
-    });
+      this.pixelStore.pixels2[nextTop] = ColorUtils.colorToInt(this.paletteStore.selectedColor);
+      this.pixelStore.pixels2[nextBottom] = ColorUtils.colorToInt(this.paletteStore.selectedColor);
+      this.pixelStore.pixels2[nextLeft] = ColorUtils.colorToInt(this.paletteStore.selectedColor);
+      this.pixelStore.pixels2[nextRight] = ColorUtils.colorToInt(this.paletteStore.selectedColor);
+    }
 
     return pixels;
   }

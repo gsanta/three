@@ -20,6 +20,7 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^12.1.5",
     "@types/pixi.js": "^5.0.0",
+    "@types/tinycolor2": "^1.4.3",
     "antd": "^4.17.4",
     "axios": "^0.24.0",
     "babylonjs": "^4.2.0",
@@ -41,7 +42,8 @@
     "react-redux": "^7.2.6",
     "react-reflex": "^4.0.3",
     "react-split": "^2.0.14",
-    "split.js": "^1.6.5"
+    "split.js": "^1.6.5",
+    "tinycolor2": "^1.4.2"
   },
   "devDependencies": {
     "@types/antd": "^1.0.0",

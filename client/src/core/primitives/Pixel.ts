@@ -3,10 +3,6 @@ interface Pixel {
 
   gridY: number;
 
-  width?: number;
-
-  height?: number;
-
   topLeftX: number;
 
   topLeftY: number;
