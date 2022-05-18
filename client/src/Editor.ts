@@ -1,4 +1,4 @@
-import PixelStore from './features/canvas/Frame';
+import Frame from './core/models/Frame';
 import ToolStore from './core/tool/ToolStore';
 import PixelRenderer from './core/renderer/PixelRenderer';
 import CanvasStore from './features/canvas/CanvasStore';
@@ -12,13 +12,14 @@ import MouseInput from './core/input/MouseInput';
 import dataProxyHandler from './core/dataProxyHandler';
 import PaletteStore from './features/palette/PaletteStore';
 import RectangleTool from './features/tools/rectangle/RectangleTool';
+import PaintBucketTool from './features/tools/paint_bucket/PaintBucketTool';
 
 class Editor {
   private canvasElement: HTMLCanvasElement;
 
   readonly canvasStore: CanvasStore;
 
-  private pixelStore: PixelStore;
+  private pixelStore: Frame;
 
   private pixelRenderer: PixelRenderer;
 
@@ -48,7 +49,7 @@ class Editor {
       width: 400,
       height: 400,
     };
-    this.pixelStore = new PixelStore(100, 100);
+    this.pixelStore = new Frame(100, 100);
     this.pixelRenderer = new PixelRenderer(this.pixelStore, this.canvasStore, context);
 
     this.handlers.push(new PixelAdded(this.pixelRenderer, this.events));
@@ -60,10 +61,15 @@ class Editor {
       new RectangleTool(this.pixelStore, this.eventEmitter, this.paletteStore),
       dataProxyHandler,
     );
+    const paintBucketTool = new Proxy(
+      new PaintBucketTool(this.pixelStore, this.paletteStore, this.eventEmitter),
+      dataProxyHandler,
+    );
 
     const toolStore = new ToolStore();
     toolStore.addTool(pencilTool);
     toolStore.addTool(rectangleTool);
+    toolStore.addTool(paintBucketTool);
     toolStore.selectedTool = pencilTool;
     toolStore.rectangle = rectangleTool;
 

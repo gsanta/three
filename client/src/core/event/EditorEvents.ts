@@ -1,4 +1,3 @@
-import Pixel from '@/core/primitives/Pixel';
 import EditorEventType from './EditorEventType';
 
 class EditorEvents {
@@ -8,14 +7,14 @@ class EditorEvents {
     this.handlers = handlers;
   }
 
-  on(type: 'pixelAdded', handler: (pixels: Pixel[]) => void): void;
+  on(type: 'pixelAdded', handler: () => void): void;
   on(type: 'pixelRemoved', handler: () => void): void;
 
   on(type: EditorEventType, handler: unknown): void {
     this.handlers.get(type)?.add(handler);
   }
 
-  off(type: 'pixelAdded', handler: (pixel: Pixel) => void): void;
+  off(type: 'pixelAdded', handler: () => void): void;
   off(type: 'pixelRemoved', handler: () => void): void;
 
   off(type: EditorEventType, handler: unknown): void {

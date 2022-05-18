@@ -1,4 +1,4 @@
-import Point from '../primitives/Point';
+import Point from '../models/Point';
 
 class PixelUtils {
   static getPixelAtScreenPosition(x: number, y: number, gridSize: number, canvasWidth: number) {

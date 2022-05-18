@@ -1,4 +1,4 @@
-import Point from '@/core/primitives/Point';
+import PixelUtils from '@/core/utils/PixelUtils';
 import FloodFillRangeQueue from './FloodFillRangeQueue';
 
 type FillerData = {
@@ -6,9 +6,9 @@ type FillerData = {
 
   height: number;
 
-  pixels: number[];
+  pixels: Uint32Array;
 
-  point: Point;
+  pixel: number;
 
   targetColor: number;
 
@@ -29,7 +29,8 @@ class QueueLinearFloodFiller {
     this.pixelsChecked = [];
     this.ranges = new FloodFillRangeQueue();
 
-    this.linearFill(this.data.point.x, this.data.point.y);
+    const { x, y } = PixelUtils.getGridPosition(data.pixel, data.width);
+    this.linearFill(x, y);
 
     while (this.ranges.getCount() > 0) {
       // Get next range of the queue

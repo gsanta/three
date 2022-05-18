@@ -2,7 +2,7 @@ import Tool, { ToolIconName } from '@/core/tool/Tool';
 import React, { useContext } from 'react';
 import useData from '../hooks/useData';
 import DataContext from '../DataContext';
-import { BiPencil, BiRectangle } from 'react-icons/bi';
+import { BiDroplet, BiPencil, BiRectangle } from 'react-icons/bi';
 
 const renderIcon = (iconName: ToolIconName, isSelected: boolean) => {
   const iconSize = 30;
@@ -14,6 +14,8 @@ const renderIcon = (iconName: ToolIconName, isSelected: boolean) => {
       return <BiPencil size={iconSize} color={isSelected ? selectedColor : color} />;
     case 'rectangle':
       return <BiRectangle size={iconSize} color={isSelected ? selectedColor : color} />;
+    case 'paint-bucket':
+      return <BiDroplet size={iconSize} color={isSelected ? selectedColor : color} />;
     default:
       return null;
   }
