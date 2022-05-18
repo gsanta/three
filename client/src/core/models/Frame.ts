@@ -1,10 +1,7 @@
 import ColorUtils from '@/core/utils/ColorUtils';
-import Pixel from '../../core/primitives/Pixel';
 
-class PixelStore {
-  private pixels: Pixel[] = [];
-
-  pixels2: Uint32Array = new Uint32Array();
+class Frame {
+  pixels: Uint32Array = new Uint32Array();
 
   pixelSize = 5;
 
@@ -19,16 +16,8 @@ class PixelStore {
     const pixels = new Uint32Array(this.canvasWidth * this.canvasHeight);
     const transparentColorInt = ColorUtils.colorToInt('rgba(0, 0, 0, 0)');
     pixels.fill(transparentColorInt);
-    this.pixels2 = pixels;
-  }
-
-  addPixel(pixel: Pixel) {
-    this.pixels.push(pixel);
-  }
-
-  getPixels(): Pixel[] {
-    return this.pixels;
+    this.pixels = pixels;
   }
 }
 
-export default PixelStore;
+export default Frame;

@@ -3,7 +3,7 @@ import Handler from '../ui/Handler';
 import PointerData from './PointerData';
 import ToolType from './ToolType';
 
-export type ToolIconName = 'pencil' | 'rectangle';
+export type ToolIconName = 'pencil' | 'rectangle' | 'paint-bucket';
 
 abstract class Tool {
   name?: string;

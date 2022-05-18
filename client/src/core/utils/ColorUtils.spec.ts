@@ -12,6 +12,6 @@ describe('ColorUtils', () => {
     const color = 'blue';
 
     const result = ColorUtils.colorToInt(color);
-    expect(ColorUtils.intToColor(result)).toBe('rgb(255, 0, 0, 1)');
+    expect(ColorUtils.intToColor(result)).toBe('blue');
   });
 });

@@ -1,16 +1,16 @@
 import CanvasStore from '../../features/canvas/CanvasStore';
-import PixelStore from '../../features/canvas/Frame';
+import Frame from '../models/Frame';
 import ColorUtils from '../utils/ColorUtils';
 import PixelUtils from '../utils/PixelUtils';
 
 class PixelRenderer {
   private context: CanvasRenderingContext2D;
 
-  pixelStore: PixelStore;
+  pixelStore: Frame;
 
   private canvas: CanvasStore;
 
-  constructor(pixelStore: PixelStore, canvas: CanvasStore, context: CanvasRenderingContext2D) {
+  constructor(pixelStore: Frame, canvas: CanvasStore, context: CanvasRenderingContext2D) {
     this.pixelStore = pixelStore;
     this.canvas = canvas;
     this.context = context;
@@ -24,7 +24,7 @@ class PixelRenderer {
     const { pixelSize } = this.pixelStore;
     const halfGridSize = this.pixelStore.pixelSize / 2;
 
-    this.pixelStore.pixels2.forEach((pixel, index) => {
+    this.pixelStore.pixels.forEach((pixel, index) => {
       context.fillStyle = ColorUtils.intToColor(pixel);
       const gridPosition = PixelUtils.getGridPosition(index, this.pixelStore.canvasWidth);
       const screenPosition = gridPosition.mul(pixelSize).sub(halfGridSize);

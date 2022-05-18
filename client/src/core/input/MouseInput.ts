@@ -1,4 +1,4 @@
-import Point from '../primitives/Point';
+import Point from '../models/Point';
 import ToolStore from '../tool/ToolStore';
 import PointerData from '../tool/PointerData';
 
