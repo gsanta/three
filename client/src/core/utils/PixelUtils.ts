@@ -1,3 +1,4 @@
+import PDocument from '../models/PDocument';
 import Point from '../models/Point';
 
 class PixelUtils {
@@ -7,15 +8,27 @@ class PixelUtils {
     return gridY * canvasWidth + gridX;
   }
 
-  static getGridPosition(pixelPosition: number, canvasWidth: number) {
-    const y = Math.floor(pixelPosition / canvasWidth);
-    const x = pixelPosition - y * canvasWidth;
+  static getGridPosition(pixelIndex: number, document: PDocument, frameIndex: number) {
+    const { canvasWidth } = document;
+    const scaledWidth = canvasWidth / document.layers[frameIndex].scale;
+    const y = Math.floor(pixelIndex / scaledWidth);
+    const x = pixelIndex - y * scaledWidth;
 
     return new Point(x, y);
   }
 
   static getIndexAtGridPosition(gridX: number, gridY: number, canvasWidth: number) {
     return gridY * canvasWidth + gridX;
+  }
+
+  static iteratePixels(document: PDocument, callback: (row: number, col: number, index: number, val: number) => void) {
+    const { canvasWidth } = document;
+    document.layers[0].pixels.forEach((currVal, index) => {
+      const currCol = index % canvasWidth;
+      const currRow = Math.floor(index / canvasWidth);
+
+      callback(currRow, currCol, index, currVal);
+    });
   }
 }
 

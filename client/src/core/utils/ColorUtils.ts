@@ -5,6 +5,10 @@ class ColorUtils {
 
   private static colorCacheReverse: Record<number, string> = {};
 
+  static COLOR_WHITE = 'rgba(0, 0, 0, 1)';
+
+  static COLOR_BLACK = 'rgba(255, 255, 255, 1)';
+
   static colorToInt(color: number | string): number {
     if (typeof color === 'number') {
       return color;
