@@ -1,4 +1,3 @@
-import Frame from './core/models/Frame';
 import ToolStore from './core/tool/ToolStore';
 import PixelRenderer from './core/renderer/PixelRenderer';
 import CanvasStore from './features/canvas/CanvasStore';
@@ -13,13 +12,14 @@ import dataProxyHandler from './core/dataProxyHandler';
 import PaletteStore from './features/palette/PaletteStore';
 import RectangleTool from './features/tools/rectangle/RectangleTool';
 import PaintBucketTool from './features/tools/paint_bucket/PaintBucketTool';
+import DocumentStore from './features/document/DocumentStore';
 
 class Editor {
   private canvasElement: HTMLCanvasElement;
 
   readonly canvasStore: CanvasStore;
 
-  private pixelStore: Frame;
+  private documentStore: DocumentStore;
 
   private pixelRenderer: PixelRenderer;
 
@@ -43,26 +43,27 @@ class Editor {
 
     this.paletteStore = new Proxy(new PaletteStore(), dataProxyHandler);
 
+    this.documentStore = new Proxy(new DocumentStore(), dataProxyHandler);
+
     this.canvasStore = {
       gridSizeX: 5,
       gridSizeY: 5,
       width: 400,
       height: 400,
     };
-    this.pixelStore = new Frame(100, 100);
-    this.pixelRenderer = new PixelRenderer(this.pixelStore, this.canvasStore, context);
+    this.pixelRenderer = new PixelRenderer(this.documentStore, this.canvasStore, context);
 
     this.handlers.push(new PixelAdded(this.pixelRenderer, this.events));
 
     this.handlers.forEach((handler) => handler.register());
 
-    const pencilTool = new PencilTool(this.pixelStore, this.eventEmitter, this.paletteStore);
+    const pencilTool = new PencilTool(this.documentStore, this.eventEmitter, this.paletteStore);
     const rectangleTool = new Proxy(
-      new RectangleTool(this.pixelStore, this.eventEmitter, this.paletteStore),
+      new RectangleTool(this.documentStore, this.eventEmitter, this.paletteStore),
       dataProxyHandler,
     );
     const paintBucketTool = new Proxy(
-      new PaintBucketTool(this.pixelStore, this.paletteStore, this.eventEmitter),
+      new PaintBucketTool(this.documentStore, this.paletteStore, this.eventEmitter),
       dataProxyHandler,
     );
 

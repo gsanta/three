@@ -1,10 +1,10 @@
 import EditorEventEmitter from '@/core/event/EditorEventEmitter';
-import Frame from '@/core/models/Frame';
 import PointerData from '@/core/tool/PointerData';
 import Tool from '@/core/tool/Tool';
 import ToolType from '@/core/tool/ToolType';
 import ColorUtils from '@/core/utils/ColorUtils';
 import PixelUtils from '@/core/utils/PixelUtils';
+import DocumentStore from '@/features/document/DocumentStore';
 import PaletteStore from '@/features/palette/PaletteStore';
 import QueueLinearFloodFiller from './QueueLinearFloodFiller';
 
@@ -17,15 +17,15 @@ class PaintBucketTool extends Tool {
 
   private floodFiller = new QueueLinearFloodFiller();
 
-  private frame: Frame;
+  private documentStore: DocumentStore;
 
   private editorEventEmitter: EditorEventEmitter;
 
   private paletteStore: PaletteStore;
 
-  constructor(frame: Frame, paletteStore: PaletteStore, editorEventEmitter: EditorEventEmitter) {
+  constructor(frame: DocumentStore, paletteStore: PaletteStore, editorEventEmitter: EditorEventEmitter) {
     super();
-    this.frame = frame;
+    this.documentStore = frame;
     this.paletteStore = paletteStore;
     this.editorEventEmitter = editorEventEmitter;
   }
@@ -33,18 +33,13 @@ class PaintBucketTool extends Tool {
   click(pointer: PointerData): void {
     const { x, y } = pointer;
 
-    const { canvasWidth, pixelSize } = this.frame;
+    const { activeDocument } = this.documentStore;
+    const { canvasWidth, baseSize: pixelSize } = activeDocument;
 
     const pixelIndex = PixelUtils.getPixelAtScreenPosition(x, y, pixelSize, canvasWidth);
 
-    this.floodFiller.floodFill({
-      pixels: this.frame.pixels,
-      width: this.frame.canvasWidth,
-      height: this.frame.canvasHeight,
-      targetColor: this.frame.pixels[pixelIndex],
-      replacementColor: ColorUtils.colorToInt(this.paletteStore.selectedColor),
-      pixel: pixelIndex,
-    });
+    const newColor = ColorUtils.colorToInt(this.paletteStore.selectedColor);
+    this.floodFiller.floodFill(pixelIndex, newColor, activeDocument, 0);
 
     this.editorEventEmitter.emit('pixelAdded');
   }

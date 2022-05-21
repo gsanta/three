@@ -1,17 +1,17 @@
+import DocumentStore from '@/features/document/DocumentStore';
 import CanvasStore from '../../features/canvas/CanvasStore';
-import Frame from '../models/Frame';
 import ColorUtils from '../utils/ColorUtils';
 import PixelUtils from '../utils/PixelUtils';
 
 class PixelRenderer {
   private context: CanvasRenderingContext2D;
 
-  pixelStore: Frame;
+  documentStore: DocumentStore;
 
   private canvas: CanvasStore;
 
-  constructor(pixelStore: Frame, canvas: CanvasStore, context: CanvasRenderingContext2D) {
-    this.pixelStore = pixelStore;
+  constructor(documentStore: DocumentStore, canvas: CanvasStore, context: CanvasRenderingContext2D) {
+    this.documentStore = documentStore;
     this.canvas = canvas;
     this.context = context;
   }
@@ -21,14 +21,18 @@ class PixelRenderer {
 
     context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    const { pixelSize } = this.pixelStore;
-    const halfGridSize = this.pixelStore.pixelSize / 2;
+    const { activeDocument } = this.documentStore;
+    const { activeLayer, canvasWidth } = activeDocument;
+    const { baseSize } = this.documentStore.activeDocument;
+    const pixelSize = baseSize * activeLayer.scale;
+    const halfPixelSize = pixelSize / 2;
+    const scaledCanvasWidth = canvasWidth / activeLayer.scale;
 
-    this.pixelStore.pixels.forEach((pixel, index) => {
+    activeLayer.pixels.forEach((pixel, index) => {
       context.fillStyle = ColorUtils.intToColor(pixel);
-      const gridPosition = PixelUtils.getGridPosition(index, this.pixelStore.canvasWidth);
-      const screenPosition = gridPosition.mul(pixelSize).sub(halfGridSize);
-      context.fillRect(screenPosition.x, screenPosition.y, 5, 5);
+      const gridPosition = PixelUtils.getGridPosition(index, scaledCanvasWidth);
+      const screenPosition = gridPosition.mul(pixelSize).sub(halfPixelSize);
+      context.fillRect(screenPosition.x, screenPosition.y, pixelSize, pixelSize);
     });
 
     // this.pixelStore.getPixels().forEach((pixel) => {

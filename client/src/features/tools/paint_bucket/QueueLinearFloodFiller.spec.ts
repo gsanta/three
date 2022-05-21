@@ -1,3 +1,5 @@
+import Layer from '@/core/models/Layer';
+import PDocument from '@/core/models/PDocument';
 import PixelUtils from '@/core/utils/PixelUtils';
 import QueueLinearFloodFiller from './QueueLinearFloodFiller';
 
@@ -12,21 +14,12 @@ describe('QueueLinearFloodFiller', () => {
       1, 0, 0, 0
     ]);
 
-    const width = 4;
-    const height = 5;
-    const targetColor = 1;
-    const replacementColor = 2;
-    const pixel = PixelUtils.getIndexAtGridPosition(2, 2, width);
+    const document = new PDocument(4, 5);
+    document.layers[0] = new Layer(pixels);
+    const pixel = PixelUtils.getIndexAtGridPosition(2, 2, document.canvasWidth);
 
     const floodFiller = new QueueLinearFloodFiller();
-    floodFiller.floodFill({
-      pixels,
-      width,
-      height,
-      targetColor,
-      replacementColor,
-      pixel,
-    });
+    floodFiller.floodFill(pixel, 2, document, 0);
 
     // eslint-disable-next-line prettier/prettier
     expect(Array.from(pixels)).toEqual([
