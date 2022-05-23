@@ -22,17 +22,17 @@ class PixelRenderer {
     context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     const { activeDocument } = this.documentStore;
-    const { activeLayer, canvasWidth } = activeDocument;
     const { baseSize } = this.documentStore.activeDocument;
-    const pixelSize = baseSize * activeLayer.scale;
-    const halfPixelSize = pixelSize / 2;
-    const scaledCanvasWidth = canvasWidth / activeLayer.scale;
 
-    activeLayer.pixels.forEach((pixel, index) => {
-      context.fillStyle = ColorUtils.intToColor(pixel);
-      const gridPosition = PixelUtils.getGridPosition(index, scaledCanvasWidth);
-      const screenPosition = gridPosition.mul(pixelSize).sub(halfPixelSize);
-      context.fillRect(screenPosition.x, screenPosition.y, pixelSize, pixelSize);
+    activeDocument.layers.forEach((layer) => {
+      const pixelSize = baseSize * layer.scale;
+      const halfPixelSize = pixelSize / 2;
+      layer.pixels.forEach((pixel, index) => {
+        context.fillStyle = ColorUtils.intToColor(pixel);
+        const gridPosition = PixelUtils.getGridPosition(index, layer);
+        const screenPosition = gridPosition.mul(pixelSize).sub(halfPixelSize);
+        context.fillRect(screenPosition.x, screenPosition.y, pixelSize, pixelSize);
+      });
     });
 
     // this.pixelStore.getPixels().forEach((pixel) => {

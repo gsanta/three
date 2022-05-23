@@ -41,7 +41,7 @@ class RectangleTool extends Tool {
     const { canvasWidth, baseSize: pixelSize } = activeDocument;
 
     const topLeftIndex = PixelUtils.getPixelAtScreenPosition(x, y, pixelSize, canvasWidth);
-    const topLeft = PixelUtils.getGridPosition(topLeftIndex, canvasWidth);
+    const topLeft = PixelUtils.getGridPosition(topLeftIndex, activeDocument.activeLayer);
     const { x: gridX, y: gridY } = topLeft;
 
     if (this.filled) {

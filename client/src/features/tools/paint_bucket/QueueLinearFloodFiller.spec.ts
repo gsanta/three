@@ -15,11 +15,14 @@ describe('QueueLinearFloodFiller', () => {
     ]);
 
     const document = new PDocument(4, 5);
-    document.layers[0] = new Layer(pixels);
+    const layer = new Layer(document);
+    layer.pixels = pixels;
+    document.layers[0] = layer;
+
     const pixel = PixelUtils.getIndexAtGridPosition(2, 2, document.canvasWidth);
 
     const floodFiller = new QueueLinearFloodFiller();
-    floodFiller.floodFill(pixel, 2, document, 0);
+    floodFiller.floodFill(pixel, 2, layer);
 
     // eslint-disable-next-line prettier/prettier
     expect(Array.from(pixels)).toEqual([

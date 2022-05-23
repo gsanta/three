@@ -1,5 +1,6 @@
 import ColorUtils from '@/core/utils/ColorUtils';
 import CheckerBoard from '@/features/frame/CheckerBoard';
+import LayerUtils from '../utils/LayerUtils';
 import Layer from './Layer';
 
 class PDocument {
@@ -17,27 +18,20 @@ class PDocument {
 
   canvasHeight = 0;
 
-  getLayerWidth(layerIndex: number) {
-    return this.layers[layerIndex].scale * this.canvasWidth;
-  }
-
-  getLayerHeight(layerIndex: number) {
-    return this.layers[layerIndex].scale * this.canvasHeight;
-  }
-
   constructor(canvasWidth: number, canvasHeight: number) {
     this.canvasWidth = canvasWidth;
     this.canvasHeight = canvasHeight;
 
-    const pixels = new Uint32Array(this.canvasWidth * this.canvasHeight);
-    const frame = new Layer(pixels);
-
+    const backgroundLayer = LayerUtils.createLayer(this, 4);
     const transparentColorInt = ColorUtils.colorToInt('rgba(0, 0, 0, 0)');
-    pixels.fill(transparentColorInt);
-    frame.pixels = pixels;
+    backgroundLayer.pixels.fill(transparentColorInt);
+    this.layers.push(backgroundLayer);
 
-    this.activeLayer = frame;
-    this.layers.push(frame);
+    const firstLayer = LayerUtils.createLayer(this, 1);
+    firstLayer.pixels.fill(transparentColorInt);
+    this.layers.push(firstLayer);
+
+    this.activeLayer = firstLayer;
 
     CheckerBoard.create(this);
   }

@@ -1,13 +1,11 @@
-import PDocument from '@/core/models/PDocument';
+import Layer from '@/core/models/Layer';
 import PixelUtils from '@/core/utils/PixelUtils';
 import FloodFillRangeQueue from './FloodFillRangeQueue';
 
 class QueueLinearFloodFiller {
   // private data?: FillerData;
 
-  private document?: PDocument;
-
-  private layerIndex = -1;
+  private layer?: Layer;
 
   private newColor = 0;
 
@@ -23,20 +21,19 @@ class QueueLinearFloodFiller {
 
   private ranges: FloodFillRangeQueue = new FloodFillRangeQueue();
 
-  public floodFill(pixelIndex: number, newColor: number, document: PDocument, layerIndex: number): void {
-    this.document = document;
-    this.layerIndex = layerIndex;
+  public floodFill(pixelIndex: number, newColor: number, layer: Layer): void {
     this.newColor = newColor;
+    this.layer = layer;
 
-    this.width = this.document.getLayerWidth(this.layerIndex);
-    this.height = this.document.getLayerHeight(this.layerIndex);
-    this.pixels = this.document.layers[layerIndex].pixels;
+    this.width = layer.width;
+    this.height = layer.height;
+    this.pixels = layer.pixels;
     this.oldColor = this.pixels[pixelIndex];
 
     this.pixelsChecked = [];
     this.ranges = new FloodFillRangeQueue();
 
-    const { x, y } = PixelUtils.getGridPosition(pixelIndex, document, layerIndex);
+    const { x, y } = PixelUtils.getGridPosition(pixelIndex, layer);
     this.linearFill(x, y);
 
     while (this.ranges.getCount() > 0) {
@@ -64,18 +61,15 @@ class QueueLinearFloodFiller {
    * horizontal range to the ranges-queue to be processed in the main loop.
    */
   private linearFill(x: number, y: number): void {
-    if (!this.document) {
+    if (!this.layer) {
       return;
     }
 
-    const layer = this.document.layers[this.layerIndex];
-
-    const width = this.document?.getLayerWidth(this.layerIndex);
     let leftMostX = x;
-    let pixelIndex = y * width + x;
+    let pixelIndex = y * this.width + x;
 
     while (true) {
-      layer.pixels[width * y + leftMostX] = this.newColor;
+      this.layer.pixels[this.width * y + leftMostX] = this.newColor;
       this.pixelsChecked[pixelIndex] = true;
       leftMostX -= 1;
       pixelIndex -= 1;
@@ -86,9 +80,9 @@ class QueueLinearFloodFiller {
     leftMostX += 1;
 
     let rightMostX = x;
-    pixelIndex = y * width + x;
+    pixelIndex = y * this.width + x;
     while (true) {
-      layer.pixels[width * y + rightMostX] = this.newColor;
+      this.layer.pixels[this.width * y + rightMostX] = this.newColor;
       this.pixelsChecked[pixelIndex] = true;
       rightMostX += 1;
       pixelIndex += 1;
@@ -106,7 +100,7 @@ class QueueLinearFloodFiller {
   }
 
   private checkPoint(x: number, y: number): boolean {
-    if (!this.document) {
+    if (!this.layer) {
       return false;
     }
 
