@@ -39,7 +39,7 @@ class PaintBucketTool extends Tool {
     const pixelIndex = PixelUtils.getPixelAtScreenPosition(x, y, pixelSize, canvasWidth);
 
     const newColor = ColorUtils.colorToInt(this.paletteStore.selectedColor);
-    this.floodFiller.floodFill(pixelIndex, newColor, activeDocument, 0);
+    this.floodFiller.floodFill(pixelIndex, newColor, activeDocument.activeLayer);
 
     this.editorEventEmitter.emit('pixelAdded');
   }
