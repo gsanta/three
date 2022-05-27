@@ -45,6 +45,10 @@ class MouseInput {
     }
   }
 
+  onWheel(e: WheelEvent): void {
+    this.toolStore.selectedTool?.wheel({ deltaX: e.deltaX, deltaY: e.deltaY });
+  }
+
   private getPointerData(e: MouseEvent): PointerData | undefined {
     if (!this.offset) {
       return;

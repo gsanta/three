@@ -3,6 +3,7 @@ enum ToolType {
   Rectangle = 'Rectangle',
   PaintBucket = 'PaintBucket',
   Erase = 'Erase',
+  Zoom = 'Zoom',
 }
 
 export default ToolType;

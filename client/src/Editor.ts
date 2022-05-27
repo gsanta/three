@@ -14,6 +14,7 @@ import RectangleTool from './features/tools/rectangle/RectangleTool';
 import PaintBucketTool from './features/tools/paint_bucket/PaintBucketTool';
 import DocumentStore from './features/document/DocumentStore';
 import EraseTool from './features/tools/erase/EraseTool';
+import ZoomTool from './features/tools/zoom/ZoomTool';
 
 class Editor {
   private canvasElement: HTMLCanvasElement;
@@ -68,12 +69,14 @@ class Editor {
       dataProxyHandler,
     );
     const eraseTool = new Proxy(new EraseTool(this.documentStore, this.eventEmitter), dataProxyHandler);
+    const zoomTool = new Proxy(new ZoomTool(context, this.eventEmitter), dataProxyHandler);
 
     const toolStore = new ToolStore();
     toolStore.addTool(pencilTool);
     toolStore.addTool(rectangleTool);
     toolStore.addTool(paintBucketTool);
     toolStore.addTool(eraseTool);
+    toolStore.addTool(zoomTool);
     toolStore.selectedTool = pencilTool;
     toolStore.rectangle = rectangleTool;
 
