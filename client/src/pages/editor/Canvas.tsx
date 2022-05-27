@@ -15,6 +15,7 @@ const Canvas = ({ canvasRef }: Props) => {
         onMouseMove={(e) => mouseInput?.onMove(e.nativeEvent)}
         onMouseDown={() => mouseInput?.onDown()}
         onMouseUp={() => mouseInput?.onUp()}
+        onWheel={(e) => mouseInput?.onWheel(e.nativeEvent)}
       >
         <canvas ref={canvasRef} className="Canvas" data-testid="editor-canvas" />
       </div>

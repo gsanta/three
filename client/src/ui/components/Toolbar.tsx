@@ -2,7 +2,7 @@ import Tool, { ToolIconName } from '@/core/tool/Tool';
 import React, { useContext } from 'react';
 import useData from '../hooks/useData';
 import DataContext from '../DataContext';
-import { BiDroplet, BiEraser, BiPencil, BiRectangle } from 'react-icons/bi';
+import { BiDroplet, BiEraser, BiPencil, BiRectangle, BiZoomIn } from 'react-icons/bi';
 
 const renderIcon = (iconName: ToolIconName, isSelected: boolean) => {
   const iconSize = 30;
@@ -18,6 +18,8 @@ const renderIcon = (iconName: ToolIconName, isSelected: boolean) => {
       return <BiDroplet size={iconSize} color={isSelected ? selectedColor : color} />;
     case 'erase':
       return <BiEraser size={iconSize} color={isSelected ? selectedColor : color} />;
+    case 'zoom':
+      return <BiZoomIn size={iconSize} color={isSelected ? selectedColor : color} />;
     default:
       return null;
   }
