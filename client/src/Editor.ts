@@ -13,6 +13,7 @@ import PaletteStore from './features/palette/PaletteStore';
 import RectangleTool from './features/tools/rectangle/RectangleTool';
 import PaintBucketTool from './features/tools/paint_bucket/PaintBucketTool';
 import DocumentStore from './features/document/DocumentStore';
+import EraseTool from './features/tools/erase/EraseTool';
 
 class Editor {
   private canvasElement: HTMLCanvasElement;
@@ -66,11 +67,13 @@ class Editor {
       new PaintBucketTool(this.documentStore, this.paletteStore, this.eventEmitter),
       dataProxyHandler,
     );
+    const eraseTool = new Proxy(new EraseTool(this.documentStore, this.eventEmitter), dataProxyHandler);
 
     const toolStore = new ToolStore();
     toolStore.addTool(pencilTool);
     toolStore.addTool(rectangleTool);
     toolStore.addTool(paintBucketTool);
+    toolStore.addTool(eraseTool);
     toolStore.selectedTool = pencilTool;
     toolStore.rectangle = rectangleTool;
 
