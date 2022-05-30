@@ -4,7 +4,7 @@
 #
 #   let (:user) { build_user }
 #   let (:existing_user) { create_user }
-#   let (:signup_url) { '/api/v1/auth/signup' }
+#   let (:signup_url) { '/users/v1/auth/signup' }
 #
 #   context 'When creating a new user' do
 #     before do
