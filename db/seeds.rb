@@ -20,4 +20,4 @@ User.create!([{
               }
              ])
 
-p "Created #{User.count} movies"
+p "Created #{User.count} users"
