@@ -1,5 +1,5 @@
-# require 'rails_helper'
-#
+require 'rails_helper'
+
 # RSpec.describe 'Users', type: :request do
 #   describe "GET /users/v1/users/{slug}" do
 #     before do
@@ -11,50 +11,71 @@
 #     end
 #   end
 # end
-#
-# # describe Api::UsersController, type: :request do
-# #
-# #   let (:user) { create_user }
-# #
-# #   context 'When fetching a user' do
-# #     before do
-# #       login_with_api(user)
-# #       get "/users/v1/users/#{user.id}", headers: {
-# #         'Authorization': response.headers['Authorization']
-# #       }
-# #     end
-# #
-# #     it 'returns 200' do
-# #       expect(response.status).to eq(200)
-# #     end
-# #
-# #     it 'returns the user' do
-# #       expect(json['data']).to have_id(user.id.to_s)
-# #       expect(json['data']).to have_type('users')
-# #     end
-# #   end
-# #
-# #   context 'When a user is missing' do
-# #     before do
-# #       login_with_api(user)
-# #       get "/users/users/blank", headers: {
-# #         'Authorization': response.headers['Authorization']
-# #       }
-# #     end
-# #
-# #     it 'returns 404' do
-# #       expect(response.status).to eq(404)
-# #     end
-# #   end
-# #
-# #   context 'When the Authorization header is missing' do
-# #     before do
-# #       get "/users/users/#{user.id}"
-# #     end
-# #
-# #     it 'returns 401' do
-# #       expect(response.status).to eq(401)
-# #     end
-# #   end
-# #
-# # end
+
+describe Users::UsersController, type: :request do
+
+  let (:current_user) { create :user, :current_user }
+  let (:user) { create :user }
+
+  context 'When fetching the current user' do
+    before do
+      login_with_api(current_user)
+      get "/users/current-user", headers: {
+        'Authorization': response.headers['Authorization']
+      }
+    end
+
+    it 'returns 200' do
+      expect(response.status).to eq(200)
+    end
+
+    it 'returns the user' do
+      parsed_body = JSON.parse(response.body)
+      expect(parsed_body["user"]["email"]).to eq("user2@test.com")
+      expect(parsed_body["user"]["slug"]).not_to be_nil
+    end
+  end
+
+  context 'When fetching a user' do
+    before do
+      login_with_api(current_user)
+      get "/users/#{user.slug}", headers: {
+        'Authorization': response.headers['Authorization']
+      }
+    end
+
+    it 'returns 200' do
+      expect(response.status).to eq(200)
+    end
+
+    it 'returns with the user data' do
+      parsed_body = JSON.parse(response.body)
+      expect(parsed_body['data']['attributes']['email']).to eq("user1@test.com")
+    end
+  end
+
+  context 'When a user is missing' do
+    before do
+      login_with_api(current_user)
+      get "/users/1234", headers: {
+        'Authorization': response.headers['Authorization']
+      }
+    end
+
+    it 'returns 404' do
+      expect(response.status).to eq(404)
+    end
+  end
+
+  context 'When the Authorization header is missing' do
+    before do
+      login_with_api(current_user)
+      get "/users/#{user.slug}"
+    end
+
+    it 'returns 401' do
+      expect(response.status).to eq(401)
+    end
+  end
+
+end

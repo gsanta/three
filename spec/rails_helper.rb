@@ -33,7 +33,6 @@ rescue ActiveRecord::PendingMigrationError => e
   exit 1
 end
 RSpec.configure do |config|
-  config.include UserHelpers
   config.include JSONAPI::RSpec
   config.include ApiHelpers
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

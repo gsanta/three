@@ -1,5 +1,5 @@
-class Api::UsersController < Api::BaseController
-
+class Users::UsersController < BaseController
+  before_action :authenticate_user!
   before_action :find_user, only: %w[show]
 
   def show
@@ -23,6 +23,6 @@ class Api::UsersController < Api::BaseController
   end
 
   def find_user
-    @user = User.where(slug: params[:id]).first
+    @user = User.where(slug: params[:slug]).first
   end
 end
