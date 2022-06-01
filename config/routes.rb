@@ -12,5 +12,6 @@ Rails.application.routes.draw do
       registrations: 'users/registrations'
     }
 
-  get '/users/current-user' => 'api/users#current_user'
+  get '/users/current-user' => 'users/users#current_user'
+  get '/users/:slug' => 'users/users#show'
 end
