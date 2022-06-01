@@ -20,7 +20,7 @@ jobs:
           command: cd client && npm test
   build:
     docker:
-      - image: cimg/ruby:2.6.9
+      - image: cimg/ruby:2.7.6
     steps:
       - checkout
       - ruby/install-deps
@@ -30,7 +30,7 @@ jobs:
     parallelism: 3
     # here we set TWO docker images.
     docker:
-      - image: cimg/ruby:2.6.9 # this is our primary docker image, where step commands run.
+      - image: cimg/ruby:2.7.6 # this is our primary docker image, where step commands run.
         auth:
           username: mydockerhub-user
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
