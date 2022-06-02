@@ -41,6 +41,7 @@ jobs:
         environment:
           POSTGRES_USER: gsanta
           POSTGRES_DB: gamedis
+          POSTGRES_PORT: 5412
           POSTGRES_PASSWORD: "santag"
     environment:
       BUNDLE_JOBS: "3"
