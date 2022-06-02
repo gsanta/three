@@ -40,7 +40,7 @@ jobs:
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
         environment:
           POSTGRES_USER: gsanta
-          POSTGRES_DB: gamedis
+          POSTGRES_DB: gamedis_test
           POSTGRES_PORT: 5412
           POSTGRES_PASSWORD: "santag"
     environment:
