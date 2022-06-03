@@ -70,7 +70,11 @@ jobs:
     docker:
       - image: cimg/ruby:2.7.6
     steps:
-      - bundle exec rubocop
+      - checkout
+      - ruby/install-deps
+      - run:
+          name: Rubocop
+          command: bundle exec rubocop
   deploy-backend:
     machine:
         enabled: true
