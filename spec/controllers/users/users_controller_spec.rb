@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 # RSpec.describe 'Users', type: :request do
@@ -13,17 +15,13 @@ require 'rails_helper'
 # end
 
 describe Users::UsersController, type: :request do
-
-  let (:current_user) { create :user, :current_user }
-  let (:user) { create :user }
+  let(:current_user) { create :user, :current_user }
+  let(:user) { create :user }
 
   context 'When fetching the current user' do
     before do
-      testuser = User.new(:email => 'gsanta@gmail.com', :password => "Password", :password_confirmation => "Password")
-      testuser.save
-
       login_with_api(current_user)
-      get "/users/current-user", headers: {
+      get '/users/current-user', headers: {
         'Authorization': response.headers['Authorization']
       }
     end
@@ -34,8 +32,8 @@ describe Users::UsersController, type: :request do
 
     it 'returns the user' do
       parsed_body = JSON.parse(response.body)
-      expect(parsed_body["user"]["email"]).to eq("user2@test.com")
-      expect(parsed_body["user"]["slug"]).not_to be_nil
+      expect(parsed_body['user']['email']).to eq('user2@test.com')
+      expect(parsed_body['user']['slug']).not_to be_nil
     end
   end
 
@@ -53,14 +51,14 @@ describe Users::UsersController, type: :request do
 
     it 'returns with the user data' do
       parsed_body = JSON.parse(response.body)
-      expect(parsed_body['data']['attributes']['email']).to eq("user1@test.com")
+      expect(parsed_body['data']['attributes']['email']).to eq('user1@test.com')
     end
   end
 
   context 'When a user is missing' do
     before do
       login_with_api(current_user)
-      get "/users/1234", headers: {
+      get '/users/1234', headers: {
         'Authorization': response.headers['Authorization']
       }
     end
@@ -80,5 +78,4 @@ describe Users::UsersController, type: :request do
       expect(response.status).to eq(401)
     end
   end
-
 end
