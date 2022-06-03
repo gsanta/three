@@ -105,7 +105,8 @@ workflows:
       # - build
       - test_backend
       - test_frontend
-      - rubocop/rubocop
+      - rubocop/rubocop:
+          version: 0.71.0
       - deploy-backend:
           requires:
             # - build
