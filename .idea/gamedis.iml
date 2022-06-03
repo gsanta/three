@@ -111,7 +111,8 @@
     <orderEntry type="library" scope="PROVIDED" name="rspec-rails (v5.0.2, ruby-2.7.6-p219) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rspec-support (v3.10.3, ruby-2.7.6-p219) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rspec_junit_formatter (v0.4.1, ruby-2.7.6-p219) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rubocop (v0.71.0, ruby-2.7.6-p219) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rubocop (v0.74.0, ruby-2.7.6-p219) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rubocop-rspec (v1.27.0, ruby-2.7.6-p219) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="ruby-progressbar (v1.11.0, ruby-2.7.6-p219) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="simplecov (v0.19.0, ruby-2.7.6-p219) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="simplecov-html (v0.12.3, ruby-2.7.6-p219) [gem]" level="application" />

@@ -63,4 +63,5 @@ gem 'rspec'
 gem 'devise'
 gem 'devise-jwt'
 
+gem 'rubocop-rspec', require: false
 gem 'rubocop', require: false
