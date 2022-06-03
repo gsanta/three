@@ -42,3 +42,6 @@ storybook-static
 bitrise-test-run
 .next
 .env
+public/postgres-data-test
+public/postgres-data
+public/coverage

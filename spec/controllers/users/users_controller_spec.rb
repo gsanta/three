@@ -19,6 +19,9 @@ describe Users::UsersController, type: :request do
 
   context 'When fetching the current user' do
     before do
+      testuser = User.new(:email => 'gsanta@gmail.com', :password => "Password", :password_confirmation => "Password")
+      testuser.save
+
       login_with_api(current_user)
       get "/users/current-user", headers: {
         'Authorization': response.headers['Authorization']
