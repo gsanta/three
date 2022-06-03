@@ -5,6 +5,7 @@ orbs:
   node: circleci/node@2
   heroku: circleci/heroku@1.2.6
   codecov: codecov/codecov@3.1.1
+  rubocop: hanachin/rubocop@0.0.6
 
 jobs:
   test_frontend:
@@ -104,10 +105,7 @@ workflows:
       # - build
       - test_backend
       - test_frontend
-      - codecov/upload:
-          requires:
-            - test_backend
-            - test_frontend
+      - rubocop/rubocop
       - deploy-backend:
           requires:
             # - build
