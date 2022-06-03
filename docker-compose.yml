@@ -1,16 +1,16 @@
 # docker-compose.yml
 version: '3'
 services:
-  db_dev:
-    image: "postgres" # use latest official postgres version
-    environment:
-      POSTGRES_DB: ${DEV_DB_NAME}
-      POSTGRES_USER: ${DEV_DB_USER}
-      POSTGRES_PASSWORD: ${DEV_DB_PASSWORD}
-    ports:
-      - '${DEV_DB_PORT}:5432'
-    volumes:
-      - ./public/postgres-data # persist data even if container shuts down
+  # db_dev:
+  #   image: "postgres" # use latest official postgres version
+  #   environment:
+  #     POSTGRES_DB: ${DEV_DB_NAME}
+  #     POSTGRES_USER: ${DEV_DB_USER}
+  #     POSTGRES_PASSWORD: ${DEV_DB_PASSWORD}
+  #   ports:
+  #     - '${DEV_DB_PORT}:5432'
+  #   volumes:
+  #     - ./public/postgres-data:/var/lib/postgresql/data # persist data even if container shuts down
   db_test:
     image: "postgres" # use latest official postgres version
     environment:
@@ -19,3 +19,5 @@ services:
       POSTGRES_PASSWORD: ${TEST_DB_PASSWORD}
     ports:
       - '${TEST_DB_PORT}:5432'
+    volumes:
+      - ./public/postgres-data-test:/var/lib/postgresql/data # persist data even if container shuts down

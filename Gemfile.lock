@@ -73,6 +73,7 @@ GEM
       devise (~> 4.0)
       warden-jwt_auth (~> 0.6)
     diff-lcs (1.5.0)
+    docile (1.4.0)
     dotenv (2.7.6)
     dotenv-rails (2.7.6)
       dotenv (= 2.7.6)
@@ -199,6 +200,10 @@ GEM
     rspec-support (3.10.3)
     rspec_junit_formatter (0.4.1)
       rspec-core (>= 2, < 4, != 2.12.0)
+    simplecov (0.19.0)
+      docile (~> 1.1)
+      simplecov-html (~> 0.11)
+    simplecov-html (0.12.3)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -250,6 +255,7 @@ DEPENDENCIES
   rspec
   rspec-rails
   rspec_junit_formatter
+  simplecov
   spring
   spring-watcher-listen (~> 2.0.0)
   sqlite3
