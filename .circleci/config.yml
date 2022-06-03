@@ -74,7 +74,7 @@ jobs:
       - ruby/install-deps
       - run:
           name: Rubocop
-          command: rubocop
+          command: bundle exec rubocop
   deploy-backend:
     machine:
         enabled: true
