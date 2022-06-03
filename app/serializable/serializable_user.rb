@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Serializable User
 class SerializableUser < JSONAPI::Serializable::Resource
   type 'users'
 

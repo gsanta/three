@@ -1,5 +1,7 @@
-class BaseController < ApplicationController
+# frozen_string_literal: true
 
+# BaseController
+class BaseController < ApplicationController
   # before_action :authenticate_user!
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
@@ -14,5 +16,4 @@ class BaseController < ApplicationController
       ]
     }, status: 404
   end
-
 end

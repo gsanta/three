@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe Users::SessionsController, type: :request do
-
-  let (:user) { create :user }
-  let (:login_url) { '/users/sign_in' }
-  let (:logout_url) { '/users/sign_out' }
+  let(:user) { create :user }
+  let(:login_url) { '/users/sign_in' }
+  let(:logout_url) { '/users/sign_out' }
 
   context 'When logging in' do
     before do
@@ -33,7 +34,6 @@ describe Users::SessionsController, type: :request do
     it 'returns 401' do
       expect(response.status).to eq(401)
     end
-
   end
 
   # context 'When logging out' do
