@@ -66,6 +66,11 @@ jobs:
           command: bundle exec rails db:schema:load --trace
       - ruby/rspec-test
       # - ruby/rspec-test
+  lint-backend:
+    docker:
+      - image: cimg/ruby:2.7.6
+    steps:
+      - bundle exec rubocop
   deploy-backend:
     machine:
         enabled: true
@@ -105,8 +110,9 @@ workflows:
       # - build
       - test_backend
       - test_frontend
-      - rubocop/rubocop:
-          version: 0.71.0
+      - lint-backend
+      # - rubocop/rubocop:
+      #     version: 0.71.0
       - deploy-backend:
           requires:
             # - build
