@@ -44,11 +44,11 @@ jobs:
           POSTGRES_PORT: 5412
           POSTGRES_PASSWORD: "santag"
     environment:
-      BUNDLE_JOBS: "3"
-      BUNDLE_RETRY: "3"
-      PGHOST: 127.0.0.1
-      PGUSER: gsanta
-      PGPASSWORD: "santag"
+      # BUNDLE_JOBS: "3"
+      # BUNDLE_RETRY: "3"
+      # PGHOST: 127.0.0.1
+      # PGUSER: gsanta
+      # PGPASSWORD: "santag"
       RAILS_ENV: test
     # A series of steps to run, some are similar to those in "build".
     steps:
