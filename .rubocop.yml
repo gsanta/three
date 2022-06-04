@@ -5,6 +5,7 @@ AllCops:
     - 'script/**/*'
     - 'bin/**/*'
     - !ruby/regexp /old_and_unused\.rb$/
+  NewCops: enable
 
 Metrics/BlockLength:
   IgnoredMethods: ['describe', 'context']

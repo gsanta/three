@@ -22,7 +22,7 @@ describe Users::UsersController, type: :request do
     before do
       login_with_api(current_user)
       get '/users/current-user', headers: {
-        'Authorization': response.headers['Authorization']
+        Authorization: response.headers['Authorization']
       }
     end
 
@@ -41,7 +41,7 @@ describe Users::UsersController, type: :request do
     before do
       login_with_api(current_user)
       get "/users/#{user.slug}", headers: {
-        'Authorization': response.headers['Authorization']
+        Authorization: response.headers['Authorization']
       }
     end
 
@@ -59,7 +59,7 @@ describe Users::UsersController, type: :request do
     before do
       login_with_api(current_user)
       get '/users/1234', headers: {
-        'Authorization': response.headers['Authorization']
+        Authorization: response.headers['Authorization']
       }
     end
 
