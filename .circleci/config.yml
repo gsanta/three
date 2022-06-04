@@ -65,6 +65,8 @@ jobs:
           name: Database setup
           command: bundle exec rails db:schema:load --trace
       - ruby/rspec-test
+      - codecov/upload:
+          file: './public/coverage/codecov-result.json'
       # - ruby/rspec-test
   deploy-backend:
     machine:
@@ -109,6 +111,11 @@ workflows:
           name: 'Test Frontend'
       - rubocop/rubocop:
           name: 'Lint Backend'
+      # - codecov/upload:
+      #     requires:
+      #       # - build
+      #       - 'Test Backend'
+      #       - 'Test Frontend'
       # - rubocop/rubocop:
       #     version: 0.71.0
       - deploy-backend:
