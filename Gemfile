@@ -65,3 +65,4 @@ gem 'devise-jwt'
 
 gem 'rubocop', require: false
 gem 'rubocop-rspec', require: false
+gem 'panolint', '~> 0.1.4'
