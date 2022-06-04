@@ -66,21 +66,6 @@ jobs:
           command: bundle exec rails db:schema:load --trace
       - ruby/rspec-test
       # - ruby/rspec-test
-  lint-backend:
-    docker:
-      - image: cimg/ruby:2.7.6
-    steps:
-      - checkout
-      - ruby/install-deps
-      - run:
-          name: install dependencies
-          command: |
-            gem install bundler -v 1.17.2
-            bundle install --jobs=4 --retry=3 --path vendor/bundle
-            gem install panolint
-      - run:
-          name: Rubocop
-          command: bundle exec rubocop
   deploy-backend:
     machine:
         enabled: true
@@ -120,8 +105,8 @@ workflows:
       # - build
       - test_backend
       - test_frontend
-      # - lint-backend
-      - rubocop/rubocop
+      - rubocop/rubocop:
+          name: 'Lint Backend'
       # - rubocop/rubocop:
       #     version: 0.71.0
       - deploy-backend:
