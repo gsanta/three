@@ -103,17 +103,22 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       # - build
-      - test_backend
-      - test_frontend
+      - test_backend:
+          name: 'Test Backend'
+      - test_frontend:
+          name: 'Test Frontend'
       - rubocop/rubocop:
           name: 'Lint Backend'
       # - rubocop/rubocop:
       #     version: 0.71.0
       - deploy-backend:
+          name: 'Deploy Backend'
           requires:
             # - build
-            - test_backend
-            - test_frontend
+            - 'Test Backend'
+            - 'Test Frontend'
+            - 'Lint Backend'
       - deploy-frontend:
+          name: 'Deploy Frontend'
           requires:
-            - deploy-backend
+            - 'Deploy Backend'
