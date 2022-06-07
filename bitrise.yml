@@ -30,8 +30,8 @@ workflows:
 
             sleep 5
 
-            # # Merge per-process JUnit reports into one file for Test Reports
-            # Add-on
+            # # Merge per-process JUnit reports into one file for Test Reports #
+            Add-on
 
             # docker-compose --file=docker-compose.test.yml run --rm web bash -c
             # "bundle exec rake spec:merge_junit"
@@ -55,6 +55,22 @@ workflows:
         inputs:
         - cache_paths: client/node_modules
     - deploy-to-bitrise-io@2: {}
+    envs:
+    - opts:
+        is_expand: false
+      TEST_DB_NAME: gamedis_test
+    - opts:
+        is_expand: false
+      TEST_DB_USER: gsanta
+    - opts:
+        is_expand: false
+      TEST_DB_PASSWORD: santag
+    - opts:
+        is_expand: false
+      TEST_DB_PORT: '5412'
+    - opts:
+        is_expand: false
+      TEST_DB_HOST: localhost
 meta:
   bitrise.io:
     stack: linux-docker-android-20.04
