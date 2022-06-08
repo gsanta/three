@@ -46,6 +46,7 @@
     "experimentalDecorators": true
   },
   "include": [
+    ".storybook/**/*.tsx",
     ".eslintrc.js",
     "webpack.config.js",
     "jest.config.js",
