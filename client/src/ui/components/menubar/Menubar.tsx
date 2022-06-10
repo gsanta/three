@@ -27,7 +27,7 @@ const Menubar = () => {
     setLoginDialogOpen(false);
   };
 
-  const handleLogin = (token: string) => {
+  const handleLogin = (_token: string) => {
     setLoginDialogOpen(false);
   }
 

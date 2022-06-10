@@ -1,4 +1,11 @@
+import React from 'react';
 import { QueryClientProvider } from 'react-query';
+import { ChakraProvider } from '@chakra-ui/react';
+import customTheme from '../src/ui/customTheme';
+import {queryClient} from '../src/queryClient';
+import { initialize, mswDecorator } from 'msw-storybook-addon';
+
+initialize();
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -12,12 +19,15 @@ export const parameters = {
 
 export const decorators = [
   (storyFn: () => JSX.Element) => {
-    queryClient.clear();
+  queryClient.clear();
 
     return (
         <QueryClientProvider client={queryClient}>
-              <div className="story-container">{storyFn()}</div>
+          <ChakraProvider theme={customTheme}>
+            <div className="story-container">{storyFn()}</div>
+          </ChakraProvider>
         </QueryClientProvider>
     );
   },
+  mswDecorator
 ];
