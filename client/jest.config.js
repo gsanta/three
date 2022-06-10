@@ -2,6 +2,8 @@
 module.exports = {
   moduleNameMapper: {
     '@/(.*)': '<rootDir>/src/$1',
+    "\\.(css|scss)$": "<rootDir>/test/styleMock.js"
+
   },
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
