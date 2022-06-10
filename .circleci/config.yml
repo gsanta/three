@@ -11,12 +11,12 @@ jobs:
   test_frontend:
     working_directory: ~/client
     docker:
-      - image: cimg/node:16.15.1
+      - image: cimg/node:16.15.0
     steps:
       - checkout
       - run:
           name: Install Dependencies
-          command: cd client && npm ci
+          command: cd client && npm i
       - run:
           name: Run Tests
           command: cd client && npm test
