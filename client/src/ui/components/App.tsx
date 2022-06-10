@@ -14,10 +14,10 @@ import { queryClient } from '@/queryClient';
 import 'react-reflex/styles.css';
 import 'antd/dist/antd.css';
 import '../../app.scss';
-import '@/pages/editor/Canvas.scss';
-import '@/ui/components/Palette.scss';
-import '@/ui/components/Toolbar.scss';
-import '@/ui/components/menubar/Menubar.scss';
+import '../../pages/editor/Canvas.scss';
+import '../../ui/components/Palette.scss';
+import '../../ui/components/Toolbar.scss';
+import '../../ui/components/menubar/Menubar.scss';
 
 const App = () => {
   const [editor, setEditor] = useState<Editor | undefined>(undefined);
