@@ -1,6 +1,10 @@
 {
   "name": "gamedis-client",
   "version": "0.0.1",
+  "engines": {
+    "node": "16.15.0",
+    "npm": "8.5.5"
+  },
   "description": "",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
