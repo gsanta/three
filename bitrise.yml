@@ -39,18 +39,29 @@ workflows:
             docker-compose --file=docker-compose.test.yml rm -f
 
             exit "$EXIT_CODE"
-    - script@1.1.5:
-        title: Test frontend
+    - npm@1:
         inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            cd client
+        - npm_version: 8.5.5
+        - workdir: $BITRISE_SOURCE_DIR/client
+        - command: install
+        title: Npm install
+    - npm@1:
+        inputs:
+        - npm_version: 8.5.5
+        - command: test
+        title: Test frontend
+    # - script@1.1.5:
+    #     title: Test frontend
+    #     inputs:
+    #     - content: |-
+    #         #!/usr/bin/env bash
+    #         cd client
 
-            set -x
+    #         set -x
 
-            npm ci
+    #         npm ci
 
-            npm test
+    #         npm test
     - cache-push@2:
         inputs:
         - cache_paths: client/node_modules
