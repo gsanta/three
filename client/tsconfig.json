@@ -26,7 +26,7 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "allowJs": true,
-    "jsx": "preserve",
+    "jsx": "react",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     /* Turning this on is equivalent to enabling all of the strict mode family options */
@@ -40,7 +40,7 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "useDefineForClassFields": true,
-    "noEmit": true,
+    "noEmit": false,
     "incremental": true,
     "isolatedModules": true,
     "experimentalDecorators": true
