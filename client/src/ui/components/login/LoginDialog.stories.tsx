@@ -4,8 +4,8 @@ import { ComponentStory } from "@storybook/react";
 import { rest } from "msw";
 import { useState } from "react";
 import LoginDialog from "./LoginDialog";
-import authToken from "./mocks/authToken.mock";
-import loginRequestData from "./mocks/loginRequestData.mock";
+import authTokenMock from "./mocks/authToken.mock";
+import loginRequest from "./mocks/loginRequest.mock";
 
 export default {
   title: 'LoginDialog',
@@ -22,10 +22,10 @@ const Template: ComponentStory<typeof LoginDialog> = (props) => {
     <div>
       <VStack align="start">
         <Text>
-          User: {loginRequestData.email}
+          User: {loginRequest.email}
         </Text>
         <Text>
-          Password: {loginRequestData.password}
+          Password: {loginRequest.password}
         </Text>
         {token && (
           <Text>
@@ -46,9 +46,9 @@ Default.args = {
 }
 Default.parameters = {
   msw: [
-    rest.post('http://localhost:3000/users/sign_in', (_req, res, ctx) => {
+    rest.post('/users/sign_in', (_req, res, ctx) => {
       return res(
-        ctx.set('Authorization', `Bearer ${authToken}`),
+        ctx.set('Authorization', `Bearer ${authTokenMock}`),
         ctx.json({
             "message": "You are logged in.",
             "user": {

@@ -1,4 +1,4 @@
-import apiInstance from '@/apiInstance';
+import apiInstance from '@/api/apiInstance';
 import { loginPath } from '@/apiRoutes';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
