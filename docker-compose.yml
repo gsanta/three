@@ -11,12 +11,12 @@ services:
       - '${DEV_DB_PORT}:5432'
     volumes:
       - ./public/postgres-data:/var/lib/postgresql/data # persist data even if container shuts down
-  web:
-    build: .
-    command: bash -c "rm -f tmp/pids/server.pid && bundle install && rake spec"
-    volumes:
-      - .:/myapp
-    ports:
-      - "3000:3000"
-    depends_on:
-      - db_dev
+  # web:
+  #   build: .
+  #   command: bash -c "rm -f tmp/pids/server.pid && bundle install && rake spec"
+  #   volumes:
+  #     - .:/myapp
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - db_dev

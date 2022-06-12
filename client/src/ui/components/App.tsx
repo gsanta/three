@@ -44,6 +44,7 @@ const App = () => {
             mouseInput: editor?.mouseInput,
             palette: editor?.paletteStore,
             tools: editor?.toolStore,
+            userStore: editor?.userStore,
           }}
         >
           <Menubar />

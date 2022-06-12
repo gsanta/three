@@ -2,14 +2,15 @@ import ToolType from '@/core/tool/ToolType';
 import DataContext from '@/ui/DataContext';
 import useData from '@/ui/hooks/useData';
 import RectangleToolOptions from '@/ui/tools/rectangle/RectangleToolOptions';
-import { Button, HStack } from '@chakra-ui/react';
+import { Button, HStack, Text } from '@chakra-ui/react';
 import React, { useContext, useState } from 'react';
 import LoginDialog from '../login/LoginDialog';
 import SignUpDialog from '../signup/SignUpDialog';
 
 const Menubar = () => {
-  const { tools } = useContext(DataContext);
+  const { tools, userStore } = useContext(DataContext);
   const selectedTool = useData('selectedTool', tools);
+  const email = useData('email', userStore);
   const [isLoginDialogOpen, setLoginDialogOpen] = useState(false);
   const [isSignUpDialogOpen, setSignUpDialogOpen] = useState(false);
 
@@ -37,8 +38,12 @@ const Menubar = () => {
     setSignUpDialogOpen(false);
   }
 
-  const handleLogin = (_token: string) => {
+  const handleLogin = (token: string, email: string) => {
     setLoginDialogOpen(false);
+    if (userStore) {
+      userStore.token = token;
+      userStore.email = email;
+    }
   }
 
   const renderLogin = () => (
@@ -56,8 +61,11 @@ const Menubar = () => {
   return (
     <HStack className="menubar" justify="space-between">
       {renderToolOptions()}
-      {renderLogin()}
-      {renderSignUp()}
+      <HStack justify="end" w="full">
+        {renderLogin()}
+        {renderSignUp()}
+        <Text>{email}</Text>
+      </HStack>
       <LoginDialog isOpen={isLoginDialogOpen} onClose={handleClose} onLogin={handleLogin} />
       <SignUpDialog isOpen={isSignUpDialogOpen} onClose={handleSignUpDialogClose} onSignUp={handleSignUp} />
     </HStack>

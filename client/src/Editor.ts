@@ -15,6 +15,7 @@ import PaintBucketTool from './features/tools/paint_bucket/PaintBucketTool';
 import DocumentStore from './features/document/DocumentStore';
 import EraseTool from './features/tools/erase/EraseTool';
 import ZoomTool from './features/tools/zoom/ZoomTool';
+import UserStore from './global/user/UserStore';
 
 class Editor {
   private canvasElement: HTMLCanvasElement;
@@ -37,11 +38,15 @@ class Editor {
 
   readonly paletteStore: PaletteStore;
 
+  readonly userStore: UserStore;
+
   constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
     this.canvasElement = canvas;
     const [editorEvents, editorEventEmitter] = EditorEventsCreator.create();
     this.events = editorEvents;
     this.eventEmitter = editorEventEmitter;
+
+    this.userStore = new Proxy(new UserStore(), dataProxyHandler);
 
     this.paletteStore = new Proxy(new PaletteStore(), dataProxyHandler);
 
