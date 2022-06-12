@@ -21,7 +21,7 @@ import useLogin from './useLogin';
 type Props = {
   isOpen: boolean;
   onClose(): void;
-  onLogin(token: string): void;
+  onLogin(token: string, email: string): void;
 };
 
 const LoginDialog = ({ isOpen, onClose, onLogin }: Props) => {

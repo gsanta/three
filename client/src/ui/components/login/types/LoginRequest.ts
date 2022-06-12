@@ -1,7 +1,9 @@
 
 type LoginRequest = {
-  email: string;
-  password: string;
+  user: {
+    email: string;
+    password: string;
+  }
 }
 
 export default LoginRequest;

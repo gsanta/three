@@ -4,7 +4,7 @@ import { composeStories } from '@storybook/testing-react';
 import { render, screen } from '@testing-library/react';
 import * as stories from './LoginDialog.stories';
 import { userEvent } from '@storybook/testing-library';
-import loginRequest from './mocks/loginRequest.mock';
+import loginRequestMock from './mocks/loginRequest.mock';
 import authTokenMock from './mocks/authToken.mock';
 
 const { Default } = composeStories(stories);
@@ -14,10 +14,10 @@ describe('LoginDialog', () => {
     render(<Default />);
 
     const emailInput = await screen.findByLabelText('Email address');
-    await userEvent.type(emailInput, loginRequest.email);
+    await userEvent.type(emailInput, loginRequestMock.user.email);
 
     const passwordInput = screen.getByLabelText('Password');
-    await userEvent.type(passwordInput, loginRequest.password);
+    await userEvent.type(passwordInput, loginRequestMock.user.password);
 
     const loginButton = screen.getByRole('button', {
       name: /log in/i

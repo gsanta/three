@@ -5,7 +5,7 @@ import { rest } from "msw";
 import { useState } from "react";
 import LoginDialog from "./LoginDialog";
 import authTokenMock from "./mocks/authToken.mock";
-import loginRequest from "./mocks/loginRequest.mock";
+import loginRequestMock from "./mocks/loginRequest.mock";
 
 export default {
   title: 'LoginDialog',
@@ -22,10 +22,10 @@ const Template: ComponentStory<typeof LoginDialog> = (props) => {
     <div>
       <VStack align="start">
         <Text>
-          User: {loginRequest.email}
+          User: {loginRequestMock.user.email}
         </Text>
         <Text>
-          Password: {loginRequest.password}
+          Password: {loginRequestMock.user.password}
         </Text>
         {token && (
           <Text>

@@ -1,9 +1,12 @@
 import apiInstance from '@/api/apiInstance';
 import { loginPath } from '@/apiRoutes';
+import { AxiosResponse } from 'axios';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
+import LoginRequest from './types/LoginRequest';
+import LoginResponse from './types/LoginResponse';
 
-const useLogin = (onLogin: (token: string) => void) => {
+const useLogin = (onLogin: (token: string, email: string) => void) => {
   const { handleSubmit, register, reset } = useForm<{ email: string; password: string }>();
 
   const emailProps = register('email', {
@@ -14,8 +17,8 @@ const useLogin = (onLogin: (token: string) => void) => {
     required: 'Password is required.',
   });
 
-  const { mutate, isError, isLoading } = useMutation(
-    async ({ email, password }: { email: string; password: string }) =>
+  const { mutate, isError, isLoading } = useMutation<AxiosResponse<LoginResponse>, unknown, LoginRequest>(
+    async ({ user: { email, password }}: LoginRequest) =>
       apiInstance.post(loginPath(), {
         user: {
           email,
@@ -23,17 +26,17 @@ const useLogin = (onLogin: (token: string) => void) => {
         },
       }),
     {
-      onSuccess(data) {
+      onSuccess({ data, headers }) {
         reset();
-        const token = data?.headers?.authorization?.split(' ')[1];
-        onLogin(token);
+        const token = headers?.authorization?.split(' ')[1];
+        onLogin(token, data.user.email);
       },
     },
   );
 
   const login = handleSubmit((data) => {
     try {
-      mutate(data);
+      mutate({ user: data });
     } catch (e) {
       // handle your error state here
     }
