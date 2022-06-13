@@ -10,7 +10,7 @@ export interface DataContextType {
   canvas: CanvasStore;
   mouseInput: MouseInput;
   palette: PaletteStore;
-  tools: ToolStore;
+  toolStore: ToolStore;
   rectangleTool: RectangleToolStore;
   userStore: UserStore;
 }

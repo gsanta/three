@@ -5,23 +5,23 @@ import { ChangeEvent, useContext } from 'react';
 import DataContext from '../../DataContext';
 
 const RectangleToolOptions = () => {
-  const { tools } = useContext(DataContext);
-  const size = useData('size', tools?.rectangle);
-  const filled = useData('filled', tools?.rectangle);
+  const { toolStore } = useContext(DataContext);
+  const size = useData('size', toolStore?.rectangle);
+  const filled = useData('filled', toolStore?.rectangle);
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    if (tools && tools.rectangle) {
-      tools.rectangle.size = parseInt(e.currentTarget.value, 10);
+    if (toolStore && toolStore.rectangle) {
+      toolStore.rectangle.size = parseInt(e.currentTarget.value, 10);
     }
   };
 
   const handleFilledChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (tools && tools.rectangle) {
-      tools.rectangle.filled = e.target.checked;
+    if (toolStore && toolStore.rectangle) {
+      toolStore.rectangle.filled = e.target.checked;
     }
   };
 
-  const options = tools?.rectangle?.sizes.map((s) => <option value={s}>{s}</option>);
+  const options = toolStore?.rectangle?.sizes.map((s) => <option value={s}>{s}</option>);
 
   return (
     <HStack spacing="1rem">

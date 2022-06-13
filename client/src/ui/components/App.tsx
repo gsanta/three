@@ -43,7 +43,7 @@ const App = () => {
             canvas: editor?.canvasStore,
             mouseInput: editor?.mouseInput,
             palette: editor?.paletteStore,
-            tools: editor?.toolStore,
+            toolStore: editor?.toolStore,
             userStore: editor?.userStore,
           }}
         >
