@@ -1,33 +1,36 @@
 import { useContext, useEffect, useMemo } from 'react';
-import DataContext, { DataContextType } from '../DataContext';
 import { MakeObservable, ComponentObserver } from './ComponentObserver';
 import useForceUpdate from './useForceUpdate';
 
-const useStore = <T extends keyof DataContextType>(storeKey: T): MakeObservable<typeof store> | undefined => {
-  const context = useContext(DataContext);
-  const store = context[storeKey] as DataContextType[T];
+function useStore<T, A extends keyof T>(reactContext: React.Context<T>, store1: A): [MakeObservable<Required<T>[A]> | undefined];
+function useStore<T, A extends keyof T, B extends keyof T>(reactContext: React.Context<T>, store1: A, store2: B): [MakeObservable<Required<T>[A]> | undefined, MakeObservable<Required<T>[B]> | undefined];
+function useStore<T>(reactContext: React.Context<T>, ...keys: (keyof T)[]): (MakeObservable<any> | undefined)[] {
+  const context = useContext(reactContext);
+  const stores: unknown[] = keys.map((key) => context[key]);
 
   const forceUpdate = useForceUpdate();
 
-  const observer = useMemo(() => {
-    return store ? new ComponentObserver(forceUpdate, store) : undefined;
-  }, [store])
+  const observers = useMemo(() => {
+    return stores.map((store) => store ? new ComponentObserver(forceUpdate, store) : undefined);
+  }, [...stores])
 
   useEffect(() => {
-    if (!store) {
-      return;
-    } 
-
-    (store as any).__componentObservers.push(observer);
+    stores.forEach((store, index) => store && (store as any).__componentObservers.push(observers[index]));
 
     return () => {
-      const observable = store as unknown as {__componentObservers: ComponentObserver<unknown>[]}
-      observable.__componentObservers = observable.__componentObservers.filter((currObserver) => currObserver !== observer);
-      (store as any).__componentObservers.push(observer);
-    }
-  }, [observer, store])
+      stores.forEach((store, index) => {
+        if (!store) {
+          return;
+        }
 
-  return observer?.getMakeObservable();
+        const observable = store as unknown as {__componentObservers: ComponentObserver<unknown>[]}
+        observable.__componentObservers = observable.__componentObservers.filter((currObserver) => currObserver !== observers[index]);
+        (store as any).__componentObservers.push(observers[index]);
+      })
+    }
+  }, [...observers, ...stores])
+
+  return observers.map((observer) => observer?.getMakeObservable());
 };
 
 export default useStore;

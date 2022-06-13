@@ -1,9 +1,9 @@
 import Tool, { ToolIconName } from '@/core/tool/Tool';
 import React, { useContext } from 'react';
-import useData from '../hooks/useData';
 import DataContext from '../DataContext';
 import { BiDroplet, BiEraser, BiPencil, BiRectangle, BiZoomIn } from 'react-icons/bi';
 import useStore from '../hooks/useStore';
+import useObservable from '../hooks/useObservable';
 
 const renderIcon = (iconName: ToolIconName, isSelected: boolean) => {
   const iconSize = 30;
@@ -28,9 +28,8 @@ const renderIcon = (iconName: ToolIconName, isSelected: boolean) => {
 
 const Toolbar = () => {
   const { toolStore } = useContext(DataContext);
-  const connectToolStore = useStore('toolStore');
-  const tools = useData('tools', toolStore);
-  const selectedTool = useData('selectedTool', toolStore);
+  const [connectToolStore] = useStore(DataContext, 'toolStore');
+  const [tools, selectedTool] = useObservable(connectToolStore, (store) => store.tools, (store) => store.selectedTool);
 
   const handleClick = (tool: Tool) => {
     toolStore!.selectedTool = tool;
