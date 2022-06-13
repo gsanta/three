@@ -9,15 +9,15 @@
 User.destroy_all
 
 User.create!([{
-                email: 'user1@test.com',
-                password: 'Password1234',
-                slug: '10740f60-df14-4355-a03e-bf48beb78dac'
-              },
-              {
-                email: 'user2@test.com',
-                password: 'Password1234',
-                slug: '2887e3f6-9ddd-4e82-b99e-b7fc983de7ec'
-              }
-             ])
+  email: 'gsanta@test.com',
+  password: '9!Mom7#O',
+  slug: '10740f60-df14-4355-a03e-bf48beb78dac'
+},
+{
+  email: 'user2@test.com',
+  password: 'Password1234',
+  slug: '2887e3f6-9ddd-4e82-b99e-b7fc983de7ec'
+}
+])
 
 p "Created #{User.count} users"

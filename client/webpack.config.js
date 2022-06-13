@@ -106,7 +106,7 @@ module.exports = (env) => {
     context: __dirname,
     devServer: {
       static: ['.', './test', './assets', './public'],
-      port: 3002,
+      port: 3012,
       proxy: {
         '/users': 'http://localhost:3000',
       },
