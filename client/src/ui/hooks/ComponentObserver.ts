@@ -20,6 +20,7 @@ export class ComponentObserver<S> {
       const currCounter = this.counter;
       this.counter++;
       this.getters[currCounter] = getter;
+      this.values[currCounter] = getter(this.store);
       return {
         getVal: () => this.values[currCounter] as T,
         store: this.store,

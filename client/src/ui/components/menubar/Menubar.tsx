@@ -10,8 +10,8 @@ import SignUpDialog from '../signup/SignUpDialog';
 
 const Menubar = () => {
   const { userStore } = useContext(DataContext);
-  const connectUserStore = useStore('userStore');
-  const connectToolStore = useStore('toolStore');
+  const [connectUserStore, connectToolStore] = useStore(DataContext, 'userStore', 'toolStore');
+  // const connectToolStore = useStore('toolStore');
   const email = useObservable(connectUserStore, (store) => store.email);
   const selectedTool = useObservable(connectToolStore, (store) => store.selectedTool);
   const [isLoginDialogOpen, setLoginDialogOpen] = useState(false);
