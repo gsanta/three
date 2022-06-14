@@ -18,7 +18,7 @@ const useLogin = (onLogin: (token: string, email: string) => void) => {
   });
 
   const { mutate, isError, isLoading } = useMutation<AxiosResponse<LoginResponse>, unknown, LoginRequest>(
-    async ({ user: { email, password }}: LoginRequest) =>
+    async ({ user: { email, password } }: LoginRequest) =>
       apiInstance.post(loginPath(), {
         user: {
           email,

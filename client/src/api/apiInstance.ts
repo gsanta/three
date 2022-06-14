@@ -1,5 +1,5 @@
 import axios from 'axios';
-import flatten from 'lodash/flatten'; 
+import flatten from 'lodash/flatten';
 import { camelCaseKeys, snakeCaseKeys } from './changeCase';
 
 const transformRequest = flatten([snakeCaseKeys, axios.defaults.transformRequest || []]);

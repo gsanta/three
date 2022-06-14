@@ -1,7 +1,7 @@
 import ToolType from '@/core/tool/ToolType';
 import DataContext from '@/ui/DataContext';
-import useObservable from '@/ui/hooks/useObservable';
-import useStore from '@/ui/hooks/useStore';
+import useObservable from '@/ui/state/hooks/useObservable';
+import useStore from '@/ui/state/hooks/useStore';
 import RectangleToolOptions from '@/ui/tools/rectangle/RectangleToolOptions';
 import { Button, HStack, Text } from '@chakra-ui/react';
 import React, { useContext, useState } from 'react';
@@ -35,19 +35,19 @@ const Menubar = () => {
 
   const handleSignUpDialogClose = () => {
     setSignUpDialogOpen(false);
-  }
+  };
 
   const handleSignUp = () => {
     setSignUpDialogOpen(false);
-  }
+  };
 
-  const handleLogin = (token: string, email: string) => {
+  const handleLogin = (currentToken: string, currentEmail: string) => {
     setLoginDialogOpen(false);
     if (userStore) {
-      userStore.token = token;
-      userStore.email = email;
+      userStore.token = currentToken;
+      userStore.email = currentEmail;
     }
-  }
+  };
 
   const renderLogin = () => (
     <Button colorScheme="blue" onClick={handleClick}>

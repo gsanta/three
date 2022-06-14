@@ -16,7 +16,7 @@ import DocumentStore from './features/document/DocumentStore';
 import EraseTool from './features/tools/erase/EraseTool';
 import ZoomTool from './features/tools/zoom/ZoomTool';
 import UserStore from './global/user/UserStore';
-import componentObserverDecorator from './core/componentObserverDecorator';
+import makeObjectObservable from './ui/state/utils/makeObjectObservable';
 
 class Editor {
   private canvasElement: HTMLCanvasElement;
@@ -47,9 +47,8 @@ class Editor {
     this.events = editorEvents;
     this.eventEmitter = editorEventEmitter;
 
-    this.userStore = componentObserverDecorator(new UserStore());
-
-    this.paletteStore = new Proxy(new PaletteStore(), dataProxyHandler);
+    this.userStore = makeObjectObservable(new UserStore());
+    this.paletteStore = makeObjectObservable(new PaletteStore());
 
     this.documentStore = new Proxy(new DocumentStore(), dataProxyHandler);
 
@@ -86,7 +85,7 @@ class Editor {
     toolStore.selectedTool = pencilTool;
     toolStore.rectangle = rectangleTool;
 
-    this.toolStore = componentObserverDecorator(new Proxy(toolStore, dataProxyHandler));
+    this.toolStore = makeObjectObservable(new Proxy(toolStore, dataProxyHandler));
 
     this.mouseInput = new MouseInput(this.canvasElement, this.toolStore);
 
