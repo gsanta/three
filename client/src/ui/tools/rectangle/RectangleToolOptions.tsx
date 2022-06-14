@@ -1,13 +1,18 @@
 import React from 'react';
-import useData from '@/ui/hooks/useData';
 import { FormControl, FormLabel, HStack, Select, Switch } from '@chakra-ui/react';
 import { ChangeEvent, useContext } from 'react';
 import DataContext from '../../DataContext';
+import useStore from '@/ui/state/hooks/useStore';
+import useObservable from '@/ui/state/hooks/useObservable';
 
 const RectangleToolOptions = () => {
   const { toolStore } = useContext(DataContext);
-  const size = useData('size', toolStore?.rectangle);
-  const filled = useData('filled', toolStore?.rectangle);
+  const [bindToolStore] = useStore(DataContext, 'toolStore');
+  const [size, filled] = useObservable(
+    bindToolStore,
+    (store) => store.rectangle?.size,
+    (store) => store.rectangle?.filled,
+  );
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
     if (toolStore && toolStore.rectangle) {

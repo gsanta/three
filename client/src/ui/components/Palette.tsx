@@ -1,12 +1,14 @@
 import React, { useContext } from 'react';
 import DataContext from '../DataContext';
-import useData from '../hooks/useData';
+import useObservable from '../state/hooks/useObservable';
+import useStore from '../state/hooks/useStore';
 
 const colors = ['#229954', '#E74C3C', '#FDFEFE', '#17202A', '#FDFEFE'];
 
 const Palette = () => {
   const { palette } = useContext(DataContext);
-  const selectedColor = useData('selectedColor', palette);
+  const [bindPalette] = useStore(DataContext, 'palette');
+  const selectedColor = useObservable(bindPalette, (store) => store.selectedColor);
 
   const setColor = (color: string) => {
     palette!.selectedColor = color;

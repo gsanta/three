@@ -1,7 +1,3 @@
-
-class ToolbarRegistry {
-
-  
-}
+class ToolbarRegistry {}
 
 export default ToolbarRegistry;

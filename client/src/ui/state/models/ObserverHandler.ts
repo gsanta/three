@@ -1,13 +1,14 @@
-export type MakeObservable<S> = <T>(getter: (store: S) => T) => {
-  getVal: () => ReturnType<typeof getter>,
-  store: S,
-}
+import MakeValueObservable from '../types/MakeValueObservable';
 
-export class ComponentObserver<S> {
-  private getters: ((store: S) => unknown)[] = [];
+export class ObserverHandler<S> {
+  private observers: ((store: S) => unknown)[] = [];
+
   private values: unknown[] = [];
-  private counter = 0; 
+
+  private bindingIdCounter = 0;
+
   private stateUpdater: () => void = () => {};
+
   private store: S;
 
   constructor(updater: () => void, store: S) {
@@ -15,21 +16,21 @@ export class ComponentObserver<S> {
     this.store = store;
   }
 
-  getMakeObservable(): MakeObservable<S> {
+  getBinding(): MakeValueObservable<S> {
     return <T>(getter: (store: S) => T) => {
-      const currCounter = this.counter;
-      this.counter++;
-      this.getters[currCounter] = getter;
+      const currCounter = this.bindingIdCounter;
+      this.bindingIdCounter += 1;
+      this.observers[currCounter] = getter;
       this.values[currCounter] = getter(this.store);
       return {
         getVal: () => this.values[currCounter] as T,
         store: this.store,
-      }
-    }
+      };
+    };
   }
 
   updateState() {
-    const newValues = this.getters.map((getter) => getter(this.store));
+    const newValues = this.observers.map((getter) => getter(this.store));
     for (let i = 0; i < newValues.length; i++) {
       if (newValues[i] !== this.values[i]) {
         this.values[i] = newValues[i];

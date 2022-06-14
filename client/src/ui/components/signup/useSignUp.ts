@@ -1,8 +1,8 @@
-import apiInstance from "@/api/apiInstance";
-import { signUpPath } from "@/apiRoutes";
-import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
-import SignUpRequest from "./types/SignUpRequest";
+import apiInstance from '@/api/apiInstance';
+import { signUpPath } from '@/apiRoutes';
+import { useForm } from 'react-hook-form';
+import { useMutation } from 'react-query';
+import SignUpRequest from './types/SignUpRequest';
 
 const useSignup = (onSignUp: (token: string) => void) => {
   const { handleSubmit, register, reset } = useForm<SignUpRequest>();
@@ -53,7 +53,7 @@ const useSignup = (onSignUp: (token: string) => void) => {
     passwordProps,
     passwordConfirmationProps,
     reset,
-  }
-}
+  };
+};
 
 export default useSignup;
