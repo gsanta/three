@@ -33,7 +33,7 @@
     "strict": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "noUnusedParameters": true,
     "allowUnreachableCode": false,
     "forceConsistentCasingInFileNames": true,
@@ -43,7 +43,7 @@
     "noEmit": false,
     "incremental": true,
     "isolatedModules": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
   },
   "include": [
     ".storybook/**/*.tsx",
@@ -58,8 +58,11 @@
     "test/**/*.tsx",
     "msw_mock_api/**/*.ts",
     "public/mockServiceWorker.js",
-    "pages/app.tsx"
-, "pages/_app.js"  ],
+    "pages/app.tsx",
+    "pages/_app.js",
+    "engine/**/*.ts",
+    "engine/**/*.js"
+  ],
   "exclude": [
     "node_modules"
   ]

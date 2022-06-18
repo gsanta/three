@@ -2,6 +2,7 @@ import ToolType from '@/core/tool/ToolType';
 import DataContext from '@/ui/DataContext';
 import useObservable from '@/ui/state/hooks/useObservable';
 import useStore from '@/ui/state/hooks/useStore';
+import EraseToolOptions from '@/ui/tools/erase/EraseToolOptions';
 import RectangleToolOptions from '@/ui/tools/rectangle/RectangleToolOptions';
 import { Button, HStack, Text } from '@chakra-ui/react';
 import React, { useContext, useState } from 'react';
@@ -10,10 +11,13 @@ import SignUpDialog from '../signup/SignUpDialog';
 
 const Menubar = () => {
   const { userStore } = useContext(DataContext);
-  const [connectUserStore, connectToolStore] = useStore(DataContext, 'userStore', 'toolStore');
-  // const connectToolStore = useStore('toolStore');
-  const email = useObservable(connectUserStore, (store) => store.email);
-  const selectedTool = useObservable(connectToolStore, (store) => store.selectedTool);
+  const [bindUserStore, bindToolStore] = useStore(DataContext, 'userStore', 'toolStore');
+  const [email, isLoggedIn] = useObservable(
+    bindUserStore,
+    (store) => store.email,
+    (store) => store.isLoggedIn(),
+  );
+  const selectedTool = useObservable(bindToolStore, (store) => store.selectedTool);
   const [isLoginDialogOpen, setLoginDialogOpen] = useState(false);
   const [isSignUpDialogOpen, setSignUpDialogOpen] = useState(false);
 
@@ -21,6 +25,8 @@ const Menubar = () => {
     switch (selectedTool?.type) {
       case ToolType.Rectangle:
         return <RectangleToolOptions />;
+      case ToolType.Erase:
+        return <EraseToolOptions />;
     }
     return <></>;
   };
@@ -64,11 +70,20 @@ const Menubar = () => {
   return (
     <HStack className="menubar" justify="space-between">
       {renderToolOptions()}
-      <HStack justify="end" w="full">
-        {renderLogin()}
-        {renderSignUp()}
-        <Text>{email}</Text>
-      </HStack>
+      {!isLoggedIn && (
+        <HStack justify="end" w="full">
+          {renderLogin()}
+          {renderSignUp()}
+        </HStack>
+      )}
+      {isLoggedIn && (
+        <HStack justify="end" w="full">
+          <Text>{email}</Text>
+          <Button colorScheme="blue" onClick={() => userStore?.logOut}>
+            Log out
+          </Button>
+        </HStack>
+      )}
       <LoginDialog isOpen={isLoginDialogOpen} onClose={handleClose} onLogin={handleLogin} />
       <SignUpDialog isOpen={isSignUpDialogOpen} onClose={handleSignUpDialogClose} onSignUp={handleSignUp} />
     </HStack>
