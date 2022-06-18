@@ -1,3 +1,4 @@
+import ColorUtils from '../utils/ColorUtils';
 import PDocument from './PDocument';
 
 class Layer {
@@ -17,6 +18,10 @@ class Layer {
 
   constructor(document: PDocument) {
     this.document = document;
+  }
+
+  clear(clearColor = ColorUtils.colorToInt('rgba(0, 0, 0, 0)')) {
+    this.pixels.fill(clearColor);
   }
 
   scale = 1;

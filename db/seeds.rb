@@ -20,4 +20,10 @@ User.create!([{
 }
 ])
 
+PDocument.create([{
+                    name: 'Doc 1',
+                    doc: '{ "hello": "world" }',
+                    user_slug: '2887e3f6-9ddd-4e82-b99e-b7fc983de7ec'
+                  }])
+
 p "Created #{User.count} users"

@@ -1,3 +1,4 @@
+import EraseTool from '@/features/tools/erase/EraseTool';
 import RectangleTool from '@/features/tools/rectangle/RectangleTool';
 import Tool from './Tool';
 
@@ -5,6 +6,8 @@ class ToolStore {
   tools: Tool[] = [];
 
   rectangle?: RectangleTool;
+
+  erase?: EraseTool;
 
   selectedTool?: Tool;
 

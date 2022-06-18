@@ -15,6 +15,12 @@ class UserStore {
     return !!this._token;
   }
 
+  logOut() {
+    localStorage.removeItem('user');
+    this.token = undefined;
+    this.email = undefined;
+  }
+
   set email(email: string | undefined) {
     this._email = email;
     this.updateLocalStorage({ email });

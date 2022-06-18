@@ -4,6 +4,10 @@ import LayerUtils from '../utils/LayerUtils';
 import Layer from './Layer';
 
 class PDocument {
+  tempLayer: Layer;
+
+  backgroundLayer: Layer;
+
   layers: Layer[] = [];
 
   activeLayer: Layer;
@@ -22,10 +26,12 @@ class PDocument {
     this.canvasWidth = canvasWidth;
     this.canvasHeight = canvasHeight;
 
+    this.tempLayer = LayerUtils.createLayer(this, 1);
+
     const backgroundLayer = LayerUtils.createLayer(this, 4);
     const transparentColorInt = ColorUtils.colorToInt('rgba(0, 0, 0, 0)');
     backgroundLayer.pixels.fill(transparentColorInt);
-    this.layers.push(backgroundLayer);
+    this.backgroundLayer = backgroundLayer;
 
     const firstLayer = LayerUtils.createLayer(this, 1);
     firstLayer.pixels.fill(transparentColorInt);

@@ -84,6 +84,7 @@ class Editor {
     toolStore.addTool(zoomTool);
     toolStore.selectedTool = pencilTool;
     toolStore.rectangle = rectangleTool;
+    toolStore.erase = eraseTool;
 
     this.toolStore = makeObjectObservable(new Proxy(toolStore, dataProxyHandler));
 
