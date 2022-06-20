@@ -1,14 +1,18 @@
 import EditorEvents from '../EditorEvents';
 import EventHandler from '../EventHandler';
 import PixelRenderer from '../../renderer/PixelRenderer';
+import WebGLRenderer from '@/core/renderer/WebGLRenderer';
 
 class PixelAdded implements EventHandler {
   private renderer: PixelRenderer;
 
+  private webGLRenderer: WebGLRenderer;
+
   private events: EditorEvents;
 
-  constructor(renderer: PixelRenderer, events: EditorEvents) {
+  constructor(renderer: PixelRenderer, webGLRenderer: WebGLRenderer, events: EditorEvents) {
     this.renderer = renderer;
+    this.webGLRenderer = webGLRenderer;
     this.events = events;
     this.handler = this.handler.bind(this);
   }
@@ -23,6 +27,7 @@ class PixelAdded implements EventHandler {
 
   private handler() {
     this.renderer.render();
+    this.webGLRenderer.render();
   }
 }
 

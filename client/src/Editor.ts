@@ -17,6 +17,10 @@ import EraseTool from './features/tools/erase/EraseTool';
 import ZoomTool from './features/tools/zoom/ZoomTool';
 import UserStore from './global/user/UserStore';
 import makeObjectObservable from './ui/state/utils/makeObjectObservable';
+import Program from '../engine/models/Program';
+import simpleVertexShader from '../engine/shaders/simpleVertexShader';
+import simpleFragmentShader from '../engine/shaders/simpleFragmentShader';
+import WebGLRenderer from './core/renderer/WebGLRenderer';
 
 class Editor {
   private canvasElement: HTMLCanvasElement;
@@ -26,6 +30,8 @@ class Editor {
   private documentStore: DocumentStore;
 
   private pixelRenderer: PixelRenderer;
+
+  private webGLRenderer: WebGLRenderer;
 
   readonly toolStore: ToolStore;
 
@@ -41,8 +47,14 @@ class Editor {
 
   readonly userStore: UserStore;
 
-  constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+  readonly webglContext: WebGL2RenderingContext;
+
+  readonly program: Program;
+
+  constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, webglContext: WebGL2RenderingContext) {
     this.canvasElement = canvas;
+    this.webglContext = webglContext;
+    this.program = new Program(webglContext, simpleVertexShader, simpleFragmentShader);
     const [editorEvents, editorEventEmitter] = EditorEventsCreator.create();
     this.events = editorEvents;
     this.eventEmitter = editorEventEmitter;
@@ -58,9 +70,10 @@ class Editor {
       width: 400,
       height: 400,
     };
-    this.pixelRenderer = new PixelRenderer(this.documentStore, this.canvasStore, context);
+    this.pixelRenderer = new PixelRenderer(this.documentStore, this.program, this.canvasStore, context);
+    this.webGLRenderer = new WebGLRenderer(this.documentStore, this.program);
 
-    this.handlers.push(new PixelAdded(this.pixelRenderer, this.events));
+    this.handlers.push(new PixelAdded(this.pixelRenderer, this.webGLRenderer, this.events));
 
     this.handlers.forEach((handler) => handler.register());
 

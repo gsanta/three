@@ -1,3 +1,4 @@
+import Program from '@/../engine/models/Program';
 import DocumentStore from '@/features/document/DocumentStore';
 import CanvasStore from '../../features/canvas/CanvasStore';
 import Layer from '../models/Layer';
@@ -11,10 +12,13 @@ class PixelRenderer {
 
   private canvas: CanvasStore;
 
-  constructor(documentStore: DocumentStore, canvas: CanvasStore, context: CanvasRenderingContext2D) {
+  private program: Program;
+
+  constructor(documentStore: DocumentStore, program: Program, canvas: CanvasStore, context: CanvasRenderingContext2D) {
     this.documentStore = documentStore;
     this.canvas = canvas;
     this.context = context;
+    this.program = program;
   }
 
   render(): void {
@@ -27,7 +31,6 @@ class PixelRenderer {
     const { baseSize } = this.documentStore.activeDocument;
 
     this.renderLayer(backgroundLayer, baseSize);
-    // this.renderLayer(layers[0], baseSize);
 
     const pixelSize = baseSize * layers[0].scale;
     const halfPixelSize = pixelSize / 2;
@@ -46,6 +49,7 @@ class PixelRenderer {
       context.fillRect(screenPosition.x, screenPosition.y, pixelSize, pixelSize);
     });
 
+    this.program.drawScene();
     // activeDocument.layers.forEach((layer) => this.renderLayer(layer, baseSize));
 
     // this.renderLayer(activeDocument.tempLayer, baseSize);
