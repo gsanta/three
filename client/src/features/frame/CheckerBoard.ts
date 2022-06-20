@@ -10,9 +10,9 @@ class CheckerBoard {
       const isDarkCol = isDarkRow ? col % 2 === 0 : col % 2 === 1;
 
       if (isDarkCol) {
-        layer.pixels[index] = ColorUtils.colorToInt('rgb(140, 137, 137)');
+        layer.colors[index] = ColorUtils.colorToInt('rgb(140, 137, 137)');
       } else {
-        layer.pixels[index] = ColorUtils.colorToInt('rgb(163, 159, 158)');
+        layer.colors[index] = ColorUtils.colorToInt('rgb(163, 159, 158)');
       }
     });
   }

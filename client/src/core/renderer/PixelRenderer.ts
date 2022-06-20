@@ -34,13 +34,13 @@ class PixelRenderer {
 
     const pixelSize = baseSize * layers[0].scale;
     const halfPixelSize = pixelSize / 2;
-    layers[0].pixels.forEach((pixel, index) => {
+    layers[0].colors.forEach((pixel, index) => {
       let selectedLayer: Layer = layers[0];
-      if (tempLayer.pixels[index] === 1) {
+      if (tempLayer.colors[index] === 1) {
         selectedLayer = tempLayer;
-        context.fillStyle = ColorUtils.intToColor(tempLayer.pixels[index]);
+        context.fillStyle = ColorUtils.intToColor(tempLayer.colors[index]);
       } else {
-        selectedLayer = layers.find((layer) => layer.pixels[index] !== 0) || selectedLayer;
+        selectedLayer = layers.find((layer) => layer.colors[index] !== 0) || selectedLayer;
 
         context.fillStyle = ColorUtils.intToColor(pixel);
       }
@@ -65,7 +65,7 @@ class PixelRenderer {
 
     const pixelSize = baseSize * layer.scale;
     const halfPixelSize = pixelSize / 2;
-    layer.pixels.forEach((pixel, index) => {
+    layer.colors.forEach((pixel, index) => {
       context.fillStyle = ColorUtils.intToColor(pixel);
       const gridPosition = PixelUtils.getGridPosition(index, layer);
       const screenPosition = gridPosition.mul(pixelSize).sub(halfPixelSize);

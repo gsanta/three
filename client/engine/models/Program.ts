@@ -140,7 +140,7 @@ class Program {
     // Set a random color.
     // gl.uniform4fv(colorLocation, color);
 
-    // this.connectColors();
+    this.connectColors();
 
     // Draw the rectangle.
     const primitiveType = gl.TRIANGLE_STRIP;

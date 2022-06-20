@@ -27,7 +27,7 @@ class QueueLinearFloodFiller {
 
     this.width = layer.width;
     this.height = layer.height;
-    this.pixels = layer.pixels;
+    this.pixels = layer.colors;
     this.oldColor = this.pixels[pixelIndex];
 
     this.pixelsChecked = [];
@@ -69,7 +69,7 @@ class QueueLinearFloodFiller {
     let pixelIndex = y * this.width + x;
 
     while (true) {
-      this.layer.pixels[this.width * y + leftMostX] = this.newColor;
+      this.layer.colors[this.width * y + leftMostX] = this.newColor;
       this.pixelsChecked[pixelIndex] = true;
       leftMostX -= 1;
       pixelIndex -= 1;
@@ -82,7 +82,7 @@ class QueueLinearFloodFiller {
     let rightMostX = x;
     pixelIndex = y * this.width + x;
     while (true) {
-      this.layer.pixels[this.width * y + rightMostX] = this.newColor;
+      this.layer.colors[this.width * y + rightMostX] = this.newColor;
       this.pixelsChecked[pixelIndex] = true;
       rightMostX += 1;
       pixelIndex += 1;

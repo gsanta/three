@@ -4,7 +4,7 @@ import PDocument from './PDocument';
 class Layer {
   static BACKGROUND_LAYER = 0;
 
-  pixels: Uint32Array = new Uint32Array();
+  colors: Uint32Array = new Uint32Array();
 
   private document: PDocument;
 
@@ -21,7 +21,7 @@ class Layer {
   }
 
   clear(clearColor = ColorUtils.colorToInt('rgba(0, 0, 0, 0)')) {
-    this.pixels.fill(clearColor);
+    this.colors.fill(clearColor);
   }
 
   scale = 1;

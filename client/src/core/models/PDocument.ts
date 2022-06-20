@@ -30,11 +30,11 @@ class PDocument {
 
     const backgroundLayer = LayerUtils.createLayer(this, 4);
     const transparentColorInt = ColorUtils.colorToInt('rgba(0, 0, 0, 0)');
-    backgroundLayer.pixels.fill(transparentColorInt);
+    backgroundLayer.colors.fill(transparentColorInt);
     this.backgroundLayer = backgroundLayer;
 
     const firstLayer = LayerUtils.createLayer(this, 1);
-    firstLayer.pixels.fill(transparentColorInt);
+    firstLayer.colors.fill(transparentColorInt);
     this.layers.push(firstLayer);
 
     this.activeLayer = firstLayer;
