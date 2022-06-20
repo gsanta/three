@@ -56,7 +56,7 @@ class RectangleTool extends Tool {
     for (let i = 0; i < this.size; i++) {
       for (let j = 0; j < this.size; j++) {
         const index = PixelUtils.getIndexAtGridPosition(x + i, y + j, document.canvasWidth);
-        document.activeLayer.pixels[index] = ColorUtils.colorToInt(this.paletteStore.selectedColor);
+        document.activeLayer.colors[index] = ColorUtils.colorToInt(this.paletteStore.selectedColor);
       }
     }
   }
@@ -68,10 +68,10 @@ class RectangleTool extends Tool {
       const nextLeft = PixelUtils.getIndexAtGridPosition(x, y + i, document.canvasWidth);
       const nextRight = PixelUtils.getIndexAtGridPosition(x + this.size - 1, y + i, document.canvasWidth);
 
-      document.activeLayer.pixels[nextTop] = ColorUtils.colorToInt(this.paletteStore.selectedColor);
-      document.activeLayer.pixels[nextBottom] = ColorUtils.colorToInt(this.paletteStore.selectedColor);
-      document.activeLayer.pixels[nextLeft] = ColorUtils.colorToInt(this.paletteStore.selectedColor);
-      document.activeLayer.pixels[nextRight] = ColorUtils.colorToInt(this.paletteStore.selectedColor);
+      document.activeLayer.colors[nextTop] = ColorUtils.colorToInt(this.paletteStore.selectedColor);
+      document.activeLayer.colors[nextBottom] = ColorUtils.colorToInt(this.paletteStore.selectedColor);
+      document.activeLayer.colors[nextLeft] = ColorUtils.colorToInt(this.paletteStore.selectedColor);
+      document.activeLayer.colors[nextRight] = ColorUtils.colorToInt(this.paletteStore.selectedColor);
     }
   }
 

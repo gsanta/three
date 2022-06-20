@@ -31,6 +31,7 @@ const App = () => {
       node.width = 400;
       node.height = 400;
       const context = node.getContext('2d');
+      setCanvas(node);
       setCanvasContext(context);
       // if (context) {
       //   const newEditor = new Editor(node, context);
@@ -46,7 +47,6 @@ const App = () => {
       node.height = 400;
       const context = node.getContext('webgl2');
       setWebGLContext(context);
-      setCanvas(node);
     }
   }, []);
 

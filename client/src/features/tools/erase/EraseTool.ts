@@ -57,7 +57,7 @@ class EraseTool extends Tool {
     const { activeDocument } = this.documentStore;
     const { baseSize: pixelSize, canvasWidth, activeLayer } = activeDocument;
     const pixel = PixelUtils.getPixelAtScreenPosition(x, y, pixelSize, canvasWidth);
-    activeLayer.pixels[pixel] = ColorUtils.colorToInt('rgba(0, 0, 0, 0)');
+    activeLayer.colors[pixel] = ColorUtils.colorToInt('rgba(0, 0, 0, 0)');
     this.editorEventEmitter.emit('pixelAdded');
   }
 
@@ -65,7 +65,7 @@ class EraseTool extends Tool {
     for (let i = 0; i < this.size; i++) {
       for (let j = 0; j < this.size; j++) {
         const index = PixelUtils.getIndexAtGridPosition(x + i, y + j, document.canvasWidth);
-        layer.pixels[index] = color;
+        layer.colors[index] = color;
       }
     }
   }

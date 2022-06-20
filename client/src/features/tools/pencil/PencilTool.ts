@@ -41,7 +41,7 @@ class PencilTool extends Tool {
     const { activeDocument } = this.documentStore;
     const { baseSize: pixelSize, canvasWidth } = activeDocument;
     const pixel = PixelUtils.getPixelAtScreenPosition(x, y, pixelSize, canvasWidth);
-    activeDocument.activeLayer.pixels[pixel] = ColorUtils.colorToInt(this.paletteStore.selectedColor);
+    activeDocument.activeLayer.colors[pixel] = ColorUtils.colorToInt(this.paletteStore.selectedColor);
     this.editorEventEmitter.emit('pixelAdded');
   }
 }

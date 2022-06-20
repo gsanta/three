@@ -16,7 +16,7 @@ describe('QueueLinearFloodFiller', () => {
 
     const document = new PDocument(4, 5);
     const layer = new Layer(document);
-    layer.pixels = pixels;
+    layer.colors = pixels;
     document.layers[0] = layer;
 
     const pixel = PixelUtils.getIndexAtGridPosition(2, 2, document.canvasWidth);
