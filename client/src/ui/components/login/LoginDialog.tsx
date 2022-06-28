@@ -6,6 +6,7 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -16,6 +17,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React from 'react';
+import getCsrfTokenCookie from '../menubar/getCsrfTokenCookie';
 import useLogin from './useLogin';
 
 type Props = {
@@ -35,11 +37,16 @@ const LoginDialog = ({ isOpen, onClose, onLogin }: Props) => {
   return (
     <Modal isOpen={isOpen} onClose={handleClose}>
       <ModalOverlay />
-      <ModalContent as="form" onSubmit={login}>
+      <ModalContent>
+      <form method="post" action="/users/auth/github">
+
+<Button type="submit">GitHub</Button>
+<input type="hidden" id="payload" name="authenticity_token" value={getCsrfTokenCookie()} />
+</form>
         <ModalHeader>Log in</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <VStack gap="1rem">
+          {/* <VStack gap="1rem">
             <FormControl>
               <FormLabel htmlFor="email">Email address</FormLabel>
               <Input id="email" type="email" {...emailProps} />
@@ -48,7 +55,7 @@ const LoginDialog = ({ isOpen, onClose, onLogin }: Props) => {
               <FormLabel htmlFor="password">Password</FormLabel>
               <Input id="password" type="password" {...passwordProps} />
             </FormControl>
-          </VStack>
+          </VStack> */}
         </ModalBody>
         <ModalFooter>
           <VStack gap="1rem" align="end" width="full">

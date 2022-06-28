@@ -79,7 +79,10 @@ const Menubar = () => {
       {isLoggedIn && (
         <HStack justify="end" w="full">
           <Text>{email}</Text>
-          <Button colorScheme="blue" onClick={() => userStore?.logOut}>
+          <Button colorScheme="blue" onClick={() => {
+            debugger;
+            userStore?.logOut()
+          }}>
             Log out
           </Button>
         </HStack>

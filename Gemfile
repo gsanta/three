@@ -62,6 +62,8 @@ gem 'rspec'
 
 gem 'devise'
 gem 'devise-jwt'
+gem 'omniauth-github'
+gem 'omniauth-rails_csrf_protection'
 
 gem 'panolint', '~> 0.1.4'
 gem 'rubocop', require: false
