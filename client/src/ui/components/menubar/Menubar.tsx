@@ -1,3 +1,4 @@
+import apiInstance from '@/api/apiInstance';
 import ToolType from '@/core/tool/ToolType';
 import DataContext from '@/ui/DataContext';
 import useObservable from '@/ui/state/hooks/useObservable';
@@ -6,7 +7,8 @@ import EraseToolOptions from '@/ui/tools/erase/EraseToolOptions';
 import RectangleToolOptions from '@/ui/tools/rectangle/RectangleToolOptions';
 import { Button, HStack, Text } from '@chakra-ui/react';
 import React, { useContext, useState } from 'react';
-import LoginDialog from '../login/LoginDialog';
+import { useMutation } from 'react-query';
+import LoginDialog from '../login/components/LoginDialog';
 import SignUpDialog from '../signup/SignUpDialog';
 
 const Menubar = () => {
@@ -20,6 +22,12 @@ const Menubar = () => {
   const selectedTool = useObservable(bindToolStore, (store) => store.selectedTool);
   const [isLoginDialogOpen, setLoginDialogOpen] = useState(false);
   const [isSignUpDialogOpen, setSignUpDialogOpen] = useState(false);
+
+  const { mutate } = useMutation(async () => apiInstance.delete('/users/sign_out'), {
+    onSuccess() {
+      userStore?.logOut();
+    },
+  });
 
   const renderToolOptions = () => {
     switch (selectedTool?.type) {
@@ -47,10 +55,9 @@ const Menubar = () => {
     setSignUpDialogOpen(false);
   };
 
-  const handleLogin = (currentToken: string, currentEmail: string) => {
+  const handleLogin = (currentEmail: string) => {
     setLoginDialogOpen(false);
     if (userStore) {
-      userStore.token = currentToken;
       userStore.email = currentEmail;
     }
   };
@@ -79,10 +86,7 @@ const Menubar = () => {
       {isLoggedIn && (
         <HStack justify="end" w="full">
           <Text>{email}</Text>
-          <Button colorScheme="blue" onClick={() => {
-            debugger;
-            userStore?.logOut()
-          }}>
+          <Button colorScheme="blue" onClick={() => mutate()}>
             Log out
           </Button>
         </HStack>

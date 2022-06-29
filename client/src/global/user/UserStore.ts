@@ -3,16 +3,8 @@ class UserStore {
 
   private _email: string | undefined;
 
-  constructor() {
-    const item: { token?: string; email?: string } = JSON.parse(localStorage.getItem('user') || '{}');
-    if (item) {
-      this.token = item.token;
-      this.email = item.email;
-    }
-  }
-
   isLoggedIn() {
-    return !!this._token;
+    return !!this._email;
   }
 
   logOut() {

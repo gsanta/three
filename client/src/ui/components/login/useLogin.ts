@@ -6,7 +6,7 @@ import { useMutation } from 'react-query';
 import LoginRequest from './types/LoginRequest';
 import LoginResponse from './types/LoginResponse';
 
-const useLogin = (onLogin: (token: string, email: string) => void) => {
+const useLogin = (onLogin: (email: string) => void) => {
   const { handleSubmit, register, reset } = useForm<{ email: string; password: string }>();
 
   const emailProps = register('email', {
@@ -26,10 +26,9 @@ const useLogin = (onLogin: (token: string, email: string) => void) => {
         },
       }),
     {
-      onSuccess({ data, headers }) {
+      onSuccess({ data }) {
         reset();
-        const token = headers?.authorization?.split(' ')[1];
-        onLogin(token, data.user.email);
+        onLogin(data.email);
       },
     },
   );
