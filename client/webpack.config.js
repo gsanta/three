@@ -105,6 +105,7 @@ module.exports = (env) => {
       port: 3012,
       proxy: {
         '/users': 'http://localhost:3000',
+        '/editor': 'http://localhost:3000',
       },
     },
   };

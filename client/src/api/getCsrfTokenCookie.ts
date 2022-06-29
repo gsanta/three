@@ -1,6 +1,6 @@
-import getCookie from './getCookie';
+import getCookie from '../ui/components/menubar/getCookie';
 
-const CsrfTokenCookieName = 'CSRF-TOKEN';
+const CsrfTokenCookieName = 'X-CSRF-Token';
 const getCsrfTokenCookie = (): string => getCookie<string>(CsrfTokenCookieName) || '';
 
 export default getCsrfTokenCookie;

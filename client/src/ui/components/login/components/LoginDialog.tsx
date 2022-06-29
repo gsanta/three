@@ -5,8 +5,8 @@ import {
   Button,
   FormControl,
   FormLabel,
+  HStack,
   Input,
-  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -17,36 +17,40 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React from 'react';
-import getCsrfTokenCookie from '../menubar/getCsrfTokenCookie';
-import useLogin from './useLogin';
+import { useQuery } from 'react-query';
+import apiInstance from '@/api/apiInstance';
+import getCsrfTokenCookie from '@/api/getCsrfTokenCookie';
+import useLogin from '../useLogin';
 
 type Props = {
   isOpen: boolean;
   onClose(): void;
-  onLogin(token: string, email: string): void;
+  onLogin(email: string): void;
 };
 
 const LoginDialog = ({ isOpen, onClose, onLogin }: Props) => {
   const { isError, isLoading, login, emailProps, passwordProps, reset } = useLogin(onLogin);
+
+  const { data } = useQuery('token', () => apiInstance.get('/editor/show'));
+
+  // const { data: currentUserData } = useQuery('current_user', () => apiInstance.get(currentUserPath()));
 
   const handleClose = () => {
     reset();
     onClose();
   };
 
+  const cookie = getCsrfTokenCookie();
+  console.log(cookie);
+
   return (
     <Modal isOpen={isOpen} onClose={handleClose}>
       <ModalOverlay />
       <ModalContent>
-      <form method="post" action="/users/auth/github">
-
-<Button type="submit">GitHub</Button>
-<input type="hidden" id="payload" name="authenticity_token" value={getCsrfTokenCookie()} />
-</form>
         <ModalHeader>Log in</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          {/* <VStack gap="1rem">
+          <VStack gap="1rem">
             <FormControl>
               <FormLabel htmlFor="email">Email address</FormLabel>
               <Input id="email" type="email" {...emailProps} />
@@ -55,13 +59,19 @@ const LoginDialog = ({ isOpen, onClose, onLogin }: Props) => {
               <FormLabel htmlFor="password">Password</FormLabel>
               <Input id="password" type="password" {...passwordProps} />
             </FormControl>
-          </VStack> */}
+          </VStack>
         </ModalBody>
         <ModalFooter>
           <VStack gap="1rem" align="end" width="full">
-            <Button isLoading={isLoading} variant="ghost" type="submit">
-              Log in
-            </Button>
+            <HStack alignItems="center" justifyContent="space-between" width="full">
+              <form method="post" action="/users/auth/github">
+                <Button type="submit">GitHub</Button>
+                <input type="hidden" id="payload" name="authenticity_token" value={data?.data?.token} />
+              </form>
+              <Button isLoading={isLoading} variant="ghost" type="submit" onClick={login}>
+                Log in
+              </Button>
+            </HStack>
             {isError && (
               <Alert status="error">
                 <AlertIcon />

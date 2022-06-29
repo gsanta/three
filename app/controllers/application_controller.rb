@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 # Application Controller
-class ApplicationController < ActionController::API
+class ApplicationController < ActionController::Base
+  respond_to :html, :json
   include ActionController::Cookies
   after_action :set_csrf_cookie
 

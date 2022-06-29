@@ -3,8 +3,8 @@ import { composeStories } from '@storybook/testing-react';
 import { render, screen } from '@testing-library/react';
 import * as stories from './LoginDialog.stories';
 import { userEvent } from '@storybook/testing-library';
-import loginRequestMock from './mocks/loginRequest.mock';
-import authTokenMock from './mocks/authToken.mock';
+import loginRequestMock from '../mocks/loginRequest.mock';
+import authTokenMock from '../mocks/authToken.mock';
 
 const { Default } = composeStories(stories);
 
