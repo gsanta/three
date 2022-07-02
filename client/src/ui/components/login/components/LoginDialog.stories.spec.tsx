@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { composeStories } from '@storybook/testing-react';
 import { render, screen } from '@testing-library/react';
-import * as stories from './LoginDialog.stories';
 import { userEvent } from '@storybook/testing-library';
+import * as stories from './LoginDialog.stories';
 import loginRequestMock from '../mocks/loginRequest.mock';
-import authTokenMock from '../mocks/authToken.mock';
 
 const { Default } = composeStories(stories);
 
 describe('LoginDialog', () => {
   it('can login', async () => {
-    render(<Default />);
+    const onClose = jest.fn();
+    render(<Default onClose={onClose} />);
 
     const emailInput = await screen.findByLabelText('Email address');
     await userEvent.type(emailInput, loginRequestMock.user.email);
@@ -23,6 +23,6 @@ describe('LoginDialog', () => {
     });
     await userEvent.click(loginButton);
 
-    expect(await screen.findByText(authTokenMock)).toBeInTheDocument();
+    expect(onClose).toHaveBeenCalled();
   });
 });

@@ -13,8 +13,7 @@ module Users
     def get_current_user
       # user = user_from_token
       render json: {
-        message: 'If you see this, you are in',
-        user: current_user
+        email: current_user.email
       }
     end
 

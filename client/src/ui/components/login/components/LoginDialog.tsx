@@ -19,29 +19,21 @@ import {
 import React from 'react';
 import { useQuery } from 'react-query';
 import apiInstance from '@/api/apiInstance';
-import getCsrfTokenCookie from '@/api/getCsrfTokenCookie';
 import useLogin from '../useLogin';
 
 type Props = {
   isOpen: boolean;
   onClose(): void;
-  onLogin(email: string): void;
 };
 
-const LoginDialog = ({ isOpen, onClose, onLogin }: Props) => {
-  const { isError, isLoading, login, emailProps, passwordProps, reset } = useLogin(onLogin);
-
+const LoginDialog = ({ isOpen, onClose }: Props) => {
+  const { isError, isLoading, login, emailProps, passwordProps, reset } = useLogin(onClose);
   const { data } = useQuery('token', () => apiInstance.get('/editor/show'));
-
-  // const { data: currentUserData } = useQuery('current_user', () => apiInstance.get(currentUserPath()));
 
   const handleClose = () => {
     reset();
     onClose();
   };
-
-  const cookie = getCsrfTokenCookie();
-  console.log(cookie);
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose}>

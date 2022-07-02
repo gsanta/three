@@ -10,10 +10,19 @@ const apiInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
-    'X-CSRF-TOKEN': getCsrfTokenCookie(),
   },
   transformRequest,
   transformResponse,
+});
+
+apiInstance.interceptors.request.use(async (config) => {
+  return {
+    ...config,
+    headers: {
+      ...config.headers,
+      'X-CSRF-TOKEN': getCsrfTokenCookie(),
+    },
+  };
 });
 
 export default apiInstance;

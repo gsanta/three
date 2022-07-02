@@ -1,37 +1,17 @@
 import ToolStore from './core/tool/ToolStore';
-import PixelRenderer from './core/renderer/PixelRenderer';
-import CanvasStore from './features/canvas/CanvasStore';
-import PencilTool from './features/tools/pencil/PencilTool';
 import EditorEvents from './core/event/EditorEvents';
 import EditorEventEmitter from './core/event/EditorEventEmitter';
-import EditorEventsCreator from './core/event/EditorEventsCreator';
 import EventHandler from './core/event/EventHandler';
-import PixelAdded from './core/event/handlers/PixelAdded';
 import MouseInput from './core/input/MouseInput';
-import dataProxyHandler from './core/dataProxyHandler';
 import PaletteStore from './features/palette/PaletteStore';
-import RectangleTool from './features/tools/rectangle/RectangleTool';
-import PaintBucketTool from './features/tools/paint_bucket/PaintBucketTool';
 import DocumentStore from './features/document/DocumentStore';
-import EraseTool from './features/tools/erase/EraseTool';
-import ZoomTool from './features/tools/zoom/ZoomTool';
 import UserStore from './global/user/UserStore';
-import makeObjectObservable from './ui/state/utils/makeObjectObservable';
-import Program from '../engine/models/Program';
-import simpleVertexShader from '../engine/shaders/simpleVertexShader';
-import simpleFragmentShader from '../engine/shaders/simpleFragmentShader';
-import WebGLRenderer from './core/renderer/WebGLRenderer';
+import CanvasContextProvider from './features/canvas/CanvasContextProvider';
 
-class Editor {
-  private canvasElement: HTMLCanvasElement;
+interface Editor {
+  readonly canvasContextProvider: CanvasContextProvider;
 
-  readonly canvasStore: CanvasStore;
-
-  private documentStore: DocumentStore;
-
-  private pixelRenderer: PixelRenderer;
-
-  private webGLRenderer: WebGLRenderer;
+  readonly documentStore: DocumentStore;
 
   readonly toolStore: ToolStore;
 
@@ -39,7 +19,7 @@ class Editor {
 
   readonly eventEmitter: EditorEventEmitter;
 
-  readonly handlers: EventHandler[] = [];
+  readonly handlers: EventHandler[];
 
   readonly mouseInput: MouseInput;
 
@@ -47,64 +27,59 @@ class Editor {
 
   readonly userStore: UserStore;
 
-  readonly webglContext: WebGL2RenderingContext;
+  // constructor(context: CanvasRenderingContext2D, webglContext: WebGL2RenderingContext) {
+  //   this.webglContext = webglContext;
+  //   this.program = new Program(webglContext, simpleVertexShader, simpleFragmentShader);
+  //   const [editorEvents, editorEventEmitter] = EditorEventsCreator.create();
+  //   this.events = editorEvents;
+  //   this.eventEmitter = editorEventEmitter;
 
-  readonly program: Program;
+  //   this.userStore = makeObjectObservable(new UserStore());
+  //   this.paletteStore = makeObjectObservable(new PaletteStore());
 
-  constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, webglContext: WebGL2RenderingContext) {
-    this.canvasElement = canvas;
-    this.webglContext = webglContext;
-    this.program = new Program(webglContext, simpleVertexShader, simpleFragmentShader);
-    const [editorEvents, editorEventEmitter] = EditorEventsCreator.create();
-    this.events = editorEvents;
-    this.eventEmitter = editorEventEmitter;
+  //   this.documentStore = new Proxy(new DocumentStore(), dataProxyHandler);
 
-    this.userStore = makeObjectObservable(new UserStore());
-    this.paletteStore = makeObjectObservable(new PaletteStore());
+  //   this.canvasStore = {
+  //     gridSizeX: 5,
+  //     gridSizeY: 5,
+  //     width: 400,
+  //     height: 400,
+  //   };
+  //   this.pixelRenderer = new HtmlCanvasRenderer(this.documentStore, this.program, this.canvasStore, context);
+  //   this.webGLRenderer = new WebGLRenderer(this.documentStore, this.program);
 
-    this.documentStore = new Proxy(new DocumentStore(), dataProxyHandler);
+  //   this.handlers.push(new PixelAdded(this.pixelRenderer, this.webGLRenderer, this.events));
 
-    this.canvasStore = {
-      gridSizeX: 5,
-      gridSizeY: 5,
-      width: 400,
-      height: 400,
-    };
-    this.pixelRenderer = new PixelRenderer(this.documentStore, this.program, this.canvasStore, context);
-    this.webGLRenderer = new WebGLRenderer(this.documentStore, this.program);
+  //   this.handlers.forEach((handler) => handler.register());
 
-    this.handlers.push(new PixelAdded(this.pixelRenderer, this.webGLRenderer, this.events));
+  //   const pencilTool = new PencilTool(this.documentStore, this.eventEmitter, this.paletteStore);
+  //   const rectangleTool = new Proxy(
+  //     new RectangleTool(this.documentStore, this.eventEmitter, this.paletteStore),
+  //     dataProxyHandler,
+  //   );
+  //   const paintBucketTool = new Proxy(
+  //     new PaintBucketTool(this.documentStore, this.paletteStore, this.eventEmitter),
+  //     dataProxyHandler,
+  //   );
+  //   const eraseTool = new Proxy(new EraseTool(this.documentStore, this.eventEmitter), dataProxyHandler);
+  //   const zoomTool = new Proxy(new ZoomTool(context, this.eventEmitter), dataProxyHandler);
 
-    this.handlers.forEach((handler) => handler.register());
+  //   const toolStore = new ToolStore();
+  //   toolStore.addTool(pencilTool);
+  //   toolStore.addTool(rectangleTool);
+  //   toolStore.addTool(paintBucketTool);
+  //   toolStore.addTool(eraseTool);
+  //   toolStore.addTool(zoomTool);
+  //   toolStore.selectedTool = pencilTool;
+  //   toolStore.rectangle = rectangleTool;
+  //   toolStore.erase = eraseTool;
 
-    const pencilTool = new PencilTool(this.documentStore, this.eventEmitter, this.paletteStore);
-    const rectangleTool = new Proxy(
-      new RectangleTool(this.documentStore, this.eventEmitter, this.paletteStore),
-      dataProxyHandler,
-    );
-    const paintBucketTool = new Proxy(
-      new PaintBucketTool(this.documentStore, this.paletteStore, this.eventEmitter),
-      dataProxyHandler,
-    );
-    const eraseTool = new Proxy(new EraseTool(this.documentStore, this.eventEmitter), dataProxyHandler);
-    const zoomTool = new Proxy(new ZoomTool(context, this.eventEmitter), dataProxyHandler);
+  //   this.toolStore = makeObjectObservable(new Proxy(toolStore, dataProxyHandler));
 
-    const toolStore = new ToolStore();
-    toolStore.addTool(pencilTool);
-    toolStore.addTool(rectangleTool);
-    toolStore.addTool(paintBucketTool);
-    toolStore.addTool(eraseTool);
-    toolStore.addTool(zoomTool);
-    toolStore.selectedTool = pencilTool;
-    toolStore.rectangle = rectangleTool;
-    toolStore.erase = eraseTool;
+  //   this.mouseInput = new MouseInput(this.canvasElement, this.toolStore);
 
-    this.toolStore = makeObjectObservable(new Proxy(toolStore, dataProxyHandler));
-
-    this.mouseInput = new MouseInput(this.canvasElement, this.toolStore);
-
-    this.pixelRenderer.render();
-  }
+  //   this.pixelRenderer.render();
+  // }
 }
 
 export default Editor;

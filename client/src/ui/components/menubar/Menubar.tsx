@@ -55,13 +55,6 @@ const Menubar = () => {
     setSignUpDialogOpen(false);
   };
 
-  const handleLogin = (currentEmail: string) => {
-    setLoginDialogOpen(false);
-    if (userStore) {
-      userStore.email = currentEmail;
-    }
-  };
-
   const renderLogin = () => (
     <Button colorScheme="blue" onClick={handleClick}>
       Log in
@@ -91,7 +84,7 @@ const Menubar = () => {
           </Button>
         </HStack>
       )}
-      <LoginDialog isOpen={isLoginDialogOpen} onClose={handleClose} onLogin={handleLogin} />
+      <LoginDialog isOpen={isLoginDialogOpen} onClose={handleClose} />
       <SignUpDialog isOpen={isSignUpDialogOpen} onClose={handleSignUpDialogClose} onSignUp={handleSignUp} />
     </HStack>
   );

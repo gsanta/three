@@ -2,6 +2,7 @@ import EditorEventEmitter from '@/core/event/EditorEventEmitter';
 import Tool from '@/core/tool/Tool';
 import ToolType from '@/core/tool/ToolType';
 import WheelData from '@/core/tool/WheelData';
+import CanvasContext from '@/features/canvas/CanvasContext';
 
 class ZoomTool extends Tool {
   name = 'Zoom';
@@ -18,13 +19,13 @@ class ZoomTool extends Tool {
 
   private SCROLL_SENSITIVITY = 0.0001;
 
-  private canvasCtx: CanvasRenderingContext2D;
+  private context: CanvasContext;
 
   private editorEventEmitter: EditorEventEmitter;
 
-  constructor(canvasCtx: CanvasRenderingContext2D, editorEventEmitter: EditorEventEmitter) {
+  constructor(context: CanvasContext, editorEventEmitter: EditorEventEmitter) {
     super();
-    this.canvasCtx = canvasCtx;
+    this.context = context;
     this.editorEventEmitter = editorEventEmitter;
   }
 
@@ -34,7 +35,7 @@ class ZoomTool extends Tool {
     this.cameraZoom = Math.min(this.cameraZoom, this.MAX_ZOOM);
     this.cameraZoom = Math.max(this.cameraZoom, this.MIN_ZOOM);
 
-    this.canvasCtx.scale(this.cameraZoom, this.cameraZoom);
+    this.context.transform.scale(this.cameraZoom);
     this.editorEventEmitter.emit('pixelAdded');
   }
 }
