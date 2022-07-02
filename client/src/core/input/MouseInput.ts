@@ -1,19 +1,26 @@
 import Point from '../models/Point';
-import ToolStore from '../tool/ToolStore';
 import PointerData from '../tool/PointerData';
+import MouseInputHandler from './MouseInputHandler';
 
 class MouseInput {
   private canvas: HTMLCanvasElement;
 
-  private toolStore: ToolStore;
+  private handlers: MouseInputHandler[] = [];
 
   private offset: Point | undefined;
 
   private isDown = false;
 
-  constructor(canvas: HTMLCanvasElement, toolStore: ToolStore) {
+  constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
-    this.toolStore = toolStore;
+  }
+
+  addHandler(handler: MouseInputHandler) {
+    this.handlers.push(handler);
+  }
+
+  removeHandler(handler: MouseInputHandler) {
+    this.handlers = this.handlers.filter((currentHandler) => currentHandler !== handler);
   }
 
   onDown(): void {
@@ -28,7 +35,7 @@ class MouseInput {
   onClick(e: MouseEvent): void {
     const pointerData = this.getPointerData(e);
     if (pointerData) {
-      this.toolStore.selectedTool?.click(pointerData);
+      this.handlers.forEach((handler) => handler?.click(pointerData));
     }
   }
 
@@ -39,14 +46,14 @@ class MouseInput {
     }
 
     if (this.isDown) {
-      this.toolStore.selectedTool?.drag(pointerData);
+      this.handlers.forEach((handler) => handler?.drag(pointerData));
     } else {
-      this.toolStore.selectedTool?.move(pointerData);
+      this.handlers.forEach((handler) => handler?.move(pointerData));
     }
   }
 
   onWheel(e: WheelEvent): void {
-    this.toolStore.selectedTool?.wheel({ deltaX: e.deltaX, deltaY: e.deltaY });
+    this.handlers.forEach((handler) => handler?.wheel({ deltaX: e.deltaX, deltaY: e.deltaY }));
   }
 
   private getPointerData(e: MouseEvent): PointerData | undefined {
@@ -62,7 +69,7 @@ class MouseInput {
 
   private setOffset() {
     const rect = this.canvas.getBoundingClientRect();
-    this.offset = new Point(rect.left, rect.top);
+    this.offset = new Point(rect.left || 0, rect.top || 0);
   }
 }
 

@@ -1,6 +1,22 @@
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, VStack, FormControl, FormLabel, Input, ModalFooter, Button, Alert, AlertIcon, AlertDescription } from "@chakra-ui/react";
-import React from "react";
-import useSignUp from "./useSignUp";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  VStack,
+  FormControl,
+  FormLabel,
+  Input,
+  ModalFooter,
+  Button,
+  Alert,
+  AlertIcon,
+  AlertDescription,
+} from '@chakra-ui/react';
+import React from 'react';
+import useSignUp from './useSignUp';
 
 type Props = {
   isOpen: boolean;
@@ -9,7 +25,8 @@ type Props = {
 };
 
 const SignUpDialog = ({ isOpen, onClose, onSignUp }: Props) => {
-  const { isError, isLoading, emailProps, passwordProps, passwordConfirmationProps, reset, signUp } = useSignUp(onSignUp);
+  const { isError, isLoading, emailProps, passwordProps, passwordConfirmationProps, reset, signUp } =
+    useSignUp(onSignUp);
 
   const handleClose = () => {
     reset();
@@ -54,6 +71,6 @@ const SignUpDialog = ({ isOpen, onClose, onSignUp }: Props) => {
       </ModalContent>
     </Modal>
   );
-}
+};
 
 export default SignUpDialog;

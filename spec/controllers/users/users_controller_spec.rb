@@ -67,15 +67,4 @@ describe Users::UsersController, type: :request do
       expect(response.status).to eq(404)
     end
   end
-
-  context 'When the Authorization header is missing' do
-    before do
-      login_with_api(current_user)
-      get "/users/#{user.slug}"
-    end
-
-    it 'returns 401' do
-      expect(response.status).to eq(401)
-    end
-  end
 end

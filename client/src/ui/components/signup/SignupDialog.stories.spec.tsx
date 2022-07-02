@@ -1,4 +1,3 @@
-
 import { userEvent } from '@storybook/testing-library';
 import { composeStories } from '@storybook/testing-react';
 import { render, screen, waitFor } from '@testing-library/react';
@@ -23,10 +22,10 @@ describe('SignUpDialog', () => {
     await userEvent.type(passwordInput, signUpRequest.password);
 
     const passwordConfirmationInput = await screen.getByLabelText('Password Confirmation');
-    await userEvent.type(passwordConfirmationInput, signUpRequest.passwordConfirmation);  
+    await userEvent.type(passwordConfirmationInput, signUpRequest.passwordConfirmation);
 
     const signUpButton = screen.getByRole('button', {
-      name: /sign up/i
+      name: /sign up/i,
     });
     await userEvent.click(signUpButton);
 

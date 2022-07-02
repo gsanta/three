@@ -19,6 +19,7 @@ module.exports = (env) => {
   return {
     entry: {
       app: './src/index.tsx',
+      engine: './engine/index.ts',
     },
     module: {
       rules: [
@@ -76,13 +77,8 @@ module.exports = (env) => {
         inject: false,
       }),
       new HtmlWebpackPlugin({
-        template: 'game.html',
-        filename: 'game.html',
-        inject: false,
-      }),
-      new HtmlWebpackPlugin({
-        template: 'visibility.html',
-        filename: 'visibility.html',
+        template: './engine/index.html',
+        filename: 'engine.html',
         inject: false,
       }),
     ],
@@ -109,6 +105,7 @@ module.exports = (env) => {
       port: 3012,
       proxy: {
         '/users': 'http://localhost:3000',
+        '/editor': 'http://localhost:3000',
       },
     },
   };

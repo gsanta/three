@@ -1,9 +1,13 @@
 import tinycolor from 'tinycolor2';
 
+(window as any).tinycolor = tinycolor;
+
 class ColorUtils {
   private static colorCache: Record<string, number> = {};
 
   private static colorCacheReverse: Record<number, string> = {};
+
+  private static colorCacheRGBA: Record<number, [number, number, number, number]> = {};
 
   static COLOR_WHITE = 'rgba(0, 0, 0, 1)';
 
@@ -42,6 +46,21 @@ class ColorUtils {
 
       return this.colorToInt(color);
     }
+  }
+
+  static toRGBAColor(inputColor: number) {
+    const intColor = this.colorToInt(inputColor);
+
+    if (this.colorCacheRGBA[intColor] !== undefined) {
+      return this.colorCacheRGBA[intColor];
+    }
+
+    const color = tinycolor(this.intToColor(intColor));
+
+    const { r, g, b, a } = color.toRgb();
+    this.colorCacheRGBA[intColor] = [r / 255, g / 255, b / 255, a];
+
+    return this.colorCacheRGBA[intColor];
   }
 
   static intToColor(intValue: number | string) {

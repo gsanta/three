@@ -26,10 +26,9 @@
 # Ignore uploaded files in development.
 /storage/*
 !/storage/.keep
-.byebug_history
 
-# Ignore master key for decrypting credentials and more.
-/config/master.key
+/public/assets
+.byebug_history
 
 node_modules
 node_modules2
@@ -45,3 +44,13 @@ bitrise-test-run
 public/postgres-data-test
 public/postgres-data
 public/coverage
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
+
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity

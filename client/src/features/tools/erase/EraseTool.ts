@@ -1,4 +1,6 @@
 import EditorEventEmitter from '@/core/event/EditorEventEmitter';
+import Layer from '@/core/models/Layer';
+import PDocument from '@/core/models/PDocument';
 import PointerData from '@/core/tool/PointerData';
 import Tool from '@/core/tool/Tool';
 import ToolType from '@/core/tool/ToolType';
@@ -12,6 +14,10 @@ class EraseTool extends Tool {
   type = ToolType.Erase;
 
   icon = 'erase' as const;
+
+  size = 2;
+
+  sizes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   private documentStore: DocumentStore;
 
@@ -33,12 +39,35 @@ class EraseTool extends Tool {
     this.erasePixel(x, y);
   }
 
+  move(pointer: PointerData): void {
+    const { x, y } = pointer;
+    const { activeDocument } = this.documentStore;
+    const { baseSize, canvasWidth, tempLayer } = activeDocument;
+    const pixel = PixelUtils.getPixelAtScreenPosition(x, y, baseSize, canvasWidth);
+
+    // if (tempLayer.pixels[pixel] !== 1) {
+    tempLayer.clear();
+    this.createFilled(x, y, tempLayer, 1, activeDocument);
+    // tempLayer.pixels[pixel] = 1;
+    this.editorEventEmitter.emit('pixelAdded');
+    // }
+  }
+
   private erasePixel(x: number, y: number) {
     const { activeDocument } = this.documentStore;
     const { baseSize: pixelSize, canvasWidth, activeLayer } = activeDocument;
     const pixel = PixelUtils.getPixelAtScreenPosition(x, y, pixelSize, canvasWidth);
-    activeLayer.pixels[pixel] = ColorUtils.colorToInt('rgba(0, 0, 0, 0)');
+    activeLayer.colors[pixel] = ColorUtils.colorToInt('rgba(0, 0, 0, 0)');
     this.editorEventEmitter.emit('pixelAdded');
+  }
+
+  private createFilled(x: number, y: number, layer: Layer, color: number, document: PDocument) {
+    for (let i = 0; i < this.size; i++) {
+      for (let j = 0; j < this.size; j++) {
+        const index = PixelUtils.getIndexAtGridPosition(x + i, y + j, document.canvasWidth);
+        layer.colors[index] = color;
+      }
+    }
   }
 }
 

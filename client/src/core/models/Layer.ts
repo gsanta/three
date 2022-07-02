@@ -1,9 +1,10 @@
+import ColorUtils from '../utils/ColorUtils';
 import PDocument from './PDocument';
 
 class Layer {
   static BACKGROUND_LAYER = 0;
 
-  pixels: Uint32Array = new Uint32Array();
+  colors: Uint32Array = new Uint32Array();
 
   private document: PDocument;
 
@@ -17,6 +18,10 @@ class Layer {
 
   constructor(document: PDocument) {
     this.document = document;
+  }
+
+  clear(clearColor = ColorUtils.colorToInt('rgba(0, 0, 0, 0)')) {
+    this.colors.fill(clearColor);
   }
 
   scale = 1;

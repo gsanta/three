@@ -10,11 +10,10 @@ module Users
       render_jsonapi_response(@user)
     end
 
-    def current_user
-      user = user_from_token
+    def get_current_user
+      # user = user_from_token
       render json: {
-        message: 'If you see this, you are in',
-        user: user
+        email: current_user.email
       }
     end
 
