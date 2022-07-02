@@ -1,12 +1,15 @@
 import apiInstance from '@/api/apiInstance';
 import { loginPath } from '@/apiRoutes';
+import DataContext from '@/ui/DataContext';
 import { AxiosResponse } from 'axios';
+import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import LoginRequest from './types/LoginRequest';
 import LoginResponse from './types/LoginResponse';
 
-const useLogin = (onLogin: (email: string) => void) => {
+const useLogin = (onLogin: () => void) => {
+  const { userStore } = useContext(DataContext);
   const { handleSubmit, register, reset } = useForm<{ email: string; password: string }>();
 
   const emailProps = register('email', {
@@ -17,7 +20,7 @@ const useLogin = (onLogin: (email: string) => void) => {
     required: 'Password is required.',
   });
 
-  const { mutate, isError, isLoading } = useMutation<AxiosResponse<LoginResponse>, unknown, LoginRequest>(
+  const { mutate, isError, isLoading, isSuccess } = useMutation<AxiosResponse<LoginResponse>, unknown, LoginRequest>(
     async ({ user: { email, password } }: LoginRequest) =>
       apiInstance.post(loginPath(), {
         user: {
@@ -28,7 +31,10 @@ const useLogin = (onLogin: (email: string) => void) => {
     {
       onSuccess({ data }) {
         reset();
-        onLogin(data.email);
+        if (userStore) {
+          userStore.email = data.email;
+        }
+        onLogin();
       },
     },
   );
@@ -43,6 +49,7 @@ const useLogin = (onLogin: (email: string) => void) => {
 
   return {
     isError,
+    isSuccess,
     isLoading,
     login,
     emailProps,

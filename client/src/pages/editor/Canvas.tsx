@@ -8,6 +8,14 @@ type Props = {
 const Canvas = ({ canvasRef }: Props) => {
   const { mouseInput } = useContext(DataContext);
 
+  useEffect(() => {
+    if (canvasContext && webGLContext && canvas && !editor) {
+      const newEditor = new Editor(canvas, canvasContext, webGLContext);
+      setEditor(newEditor);
+      (window as any).editor = newEditor;
+    }
+  }, [canvas, canvasContext, editor, webGLContext]);
+
   return (
     <div>
       <div

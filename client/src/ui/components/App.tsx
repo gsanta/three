@@ -19,6 +19,7 @@ import '../../ui/components/Palette.scss';
 import '../../ui/components/Toolbar.scss';
 import '../../ui/components/menubar/Menubar.scss';
 import WebGLCanvas from './webgl_canvas/WebGLCanvas';
+import GlobalContent from './GlobalContent';
 
 const App = () => {
   const [editor, setEditor] = useState<Editor | undefined>();
@@ -57,7 +58,6 @@ const App = () => {
       (window as any).editor = newEditor;
     }
   }, [canvas, canvasContext, editor, webGLContext]);
-
   return (
     <QueryClientProvider client={queryClient}>
       <ChakraProvider theme={customTheme}>
@@ -70,21 +70,23 @@ const App = () => {
             userStore: editor?.userStore,
           }}
         >
-          <Menubar />
-          <Split className="split" sizes={[75, 25]}>
-            <Flex height="100%">
-              <Toolbar />
-              <Flex grow={1} direction="column" height="100%">
-                <Flex grow={1} alignItems="center" justifyContent="space-around">
-                  <Canvas canvasRef={ref} />
-                  <WebGLCanvas canvasRef={webglCanvasRef} />
+          <GlobalContent>
+            <Menubar />
+            <Split className="split" sizes={[75, 25]}>
+              <Flex height="100%">
+                <Toolbar />
+                <Flex grow={1} direction="column" height="100%">
+                  <Flex grow={1} alignItems="center" justifyContent="space-around">
+                    <Canvas canvasRef={ref} />
+                    <WebGLCanvas canvasRef={webglCanvasRef} />
+                  </Flex>
                 </Flex>
               </Flex>
-            </Flex>
-            <div>
-              <Palette />
-            </div>
-          </Split>
+              <div>
+                <Palette />
+              </div>
+            </Split>
+          </GlobalContent>
         </DataContext.Provider>
       </ChakraProvider>
     </QueryClientProvider>

@@ -1,19 +1,19 @@
 import EditorEvents from '../EditorEvents';
 import EventHandler from '../EventHandler';
-import PixelRenderer from '../../renderer/PixelRenderer';
-import WebGLRenderer from '@/core/renderer/WebGLRenderer';
+import CanvasContext from '@/features/canvas/CanvasContext';
+import DocumentStore from '@/features/document/DocumentStore';
 
 class PixelAdded implements EventHandler {
-  private renderer: PixelRenderer;
-
-  private webGLRenderer: WebGLRenderer;
-
   private events: EditorEvents;
 
-  constructor(renderer: PixelRenderer, webGLRenderer: WebGLRenderer, events: EditorEvents) {
-    this.renderer = renderer;
-    this.webGLRenderer = webGLRenderer;
+  private context: CanvasContext;
+
+  private documentStore: DocumentStore;
+
+  constructor(context: CanvasContext, events: EditorEvents, documentStore: DocumentStore) {
+    this.context = context;
     this.events = events;
+    this.documentStore = documentStore;
     this.handler = this.handler.bind(this);
   }
 
@@ -26,8 +26,7 @@ class PixelAdded implements EventHandler {
   }
 
   private handler() {
-    this.renderer.render();
-    this.webGLRenderer.render();
+    this.context.render.render(this.documentStore.activeDocument);
   }
 }
 

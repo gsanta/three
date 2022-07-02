@@ -1,34 +1,27 @@
-import Program from '@/../engine/models/Program';
-import DocumentStore from '@/features/document/DocumentStore';
-import CanvasStore from '../../features/canvas/CanvasStore';
-import Layer from '../models/Layer';
-import ColorUtils from '../utils/ColorUtils';
-import PixelUtils from '../utils/PixelUtils';
+import CanvasRenderer from '@/features/canvas/CanvasRenderer';
+import Layer from '../../../core/models/Layer';
+import ColorUtils from '../../../core/utils/ColorUtils';
+import PixelUtils from '../../../core/utils/PixelUtils';
+import PDocument from '@/core/models/PDocument';
+import CanvasContext from '../CanvasContext';
 
-class PixelRenderer {
+class HtmlCanvasRenderer implements CanvasRenderer {
   private context: CanvasRenderingContext2D;
 
-  documentStore: DocumentStore;
+  private canvasContext: CanvasContext;
 
-  private canvas: CanvasStore;
-
-  private program: Program;
-
-  constructor(documentStore: DocumentStore, program: Program, canvas: CanvasStore, context: CanvasRenderingContext2D) {
-    this.documentStore = documentStore;
-    this.canvas = canvas;
-    this.context = context;
-    this.program = program;
+  constructor(canvasContext: CanvasContext, renderingContext: CanvasRenderingContext2D) {
+    this.canvasContext = canvasContext;
+    this.context = renderingContext;
   }
 
-  render(): void {
+  render(document: PDocument): void {
     const { context } = this;
+    const { width, height } = this.canvasContext;
 
-    context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    context.clearRect(0, 0, width, height);
 
-    const { activeDocument } = this.documentStore;
-    const { tempLayer, backgroundLayer, layers } = activeDocument;
-    const { baseSize } = this.documentStore.activeDocument;
+    const { tempLayer, backgroundLayer, layers, baseSize } = document;
 
     this.renderLayer(backgroundLayer, baseSize);
 
@@ -49,7 +42,6 @@ class PixelRenderer {
       context.fillRect(screenPosition.x, screenPosition.y, pixelSize, pixelSize);
     });
 
-    this.program.drawScene();
     // activeDocument.layers.forEach((layer) => this.renderLayer(layer, baseSize));
 
     // this.renderLayer(activeDocument.tempLayer, baseSize);
@@ -74,4 +66,4 @@ class PixelRenderer {
   }
 }
 
-export default PixelRenderer;
+export default HtmlCanvasRenderer;
