@@ -43,8 +43,12 @@ void ShaderProgramImpl::render() {
         std::cout << "size: " << shape->getSize() / 3 << std::endl;
 
         glBindBuffer(GL_ARRAY_BUFFER, *(getVbo() + counter));
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-        glEnableVertexAttribArray(0);
+        GLint posAttrib = glGetAttribLocation(this->getShaderProgram(), "position");
+        glEnableVertexAttribArray(posAttrib);
+        glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+        // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        // glEnableVertexAttribArray(0);
 
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);

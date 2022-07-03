@@ -90,9 +90,9 @@ int main()
 
     shaderProgram->initBuffers();
 
-    GLint posAttrib = glGetAttribLocation(shaderProgramId, "position");
-    glEnableVertexAttribArray(posAttrib);
-    glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    // GLint posAttrib = glGetAttribLocation(shaderProgramId, "position");
+    // glEnableVertexAttribArray(posAttrib);
+    // glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     // mMat = glm::mat4(1.0f); //glm::translate(glm::mat4(1.0f), glm::vec3(cubeLocX, cubeLocY, cubeLocZ));
 
