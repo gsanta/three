@@ -6,6 +6,7 @@ import {queryClient} from '../src/queryClient';
 import DataContext from '../src/ui/DataContext';
 import Editor from '../src/Editor';
 import { initialize, mswDecorator } from 'msw-storybook-addon';
+import theme from '../src/ui/components/theme';
 
 initialize();
 
@@ -22,22 +23,12 @@ export const parameters = {
 export const decorators = [
   (storyFn: () => JSX.Element) => {
   queryClient.clear();
-  const editor = new Editor(canvas, canvasContext, webGLContext);
+  // const editor = new Editor(canvas, canvasContext, webGLContext);
 
     return (
         <QueryClientProvider client={queryClient}>
-          <ChakraProvider theme={customTheme}>
-          <DataContext.Provider
-          value={{
-            canvas: editor?.canvasStore,
-            mouseInput: editor?.mouseInput,
-            palette: editor?.paletteStore,
-            toolStore: editor?.toolStore,
-            userStore: editor?.userStore,
-          }}
-        >
-            <div className="story-container">{storyFn()}</div>
-        </DataContext.Provider>
+          <ChakraProvider theme={theme} cssVarsRoot="body">
+            {storyFn()}
           </ChakraProvider>
         </QueryClientProvider>
     );
