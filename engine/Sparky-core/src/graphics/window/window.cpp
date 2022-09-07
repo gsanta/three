@@ -1,7 +1,6 @@
 #include "window.h"
 
-namespace sparky {
-	namespace graphics {
+namespace my_app { namespace graphics {
 
 		void window_resize(GLFWwindow* window, int width, int height);
 
@@ -13,6 +12,8 @@ namespace sparky {
 				glfwTerminate();
 			}
 
+			this->m_InputHandler = new InputHandler;
+
 			for (int i = 0; i < MAX_KEYS; i++) {
 				m_Keys[i] = false;
 			}
@@ -23,6 +24,7 @@ namespace sparky {
 
 		Window::~Window()
 		{
+			delete m_InputHandler;
 			glfwTerminate();
 		}
 
@@ -40,7 +42,7 @@ namespace sparky {
 			}
 			glfwMakeContextCurrent(m_Window);
 			glfwSetWindowUserPointer(m_Window, this);
-			glfwSetWindowSizeCallback(m_Window, window_resize);
+			glfwSetFramebufferSizeCallback(m_Window, window_resize);
 			glfwSetKeyCallback(m_Window, key_callback);
 			glfwSetMouseButtonCallback(m_Window, mouse_input_callback);
 			glfwSetCursorPosCallback(m_Window, cursor_position_callback);
@@ -76,9 +78,20 @@ namespace sparky {
 			y = m_y;
 		}
 
+		InputHandler* Window::getInputHandler() const
+		{
+			return this->m_InputHandler;
+		}
 
 		void Window::mouse_input_callback(GLFWwindow* window, int button, int action, int mods) {
 			Window* win = (Window*)glfwGetWindowUserPointer(window);
+
+			if (action == GLFW_PRESS) {
+				win->getInputHandler()->emitMouseDown(button);
+			}
+			else {
+				win->getInputHandler()->emitMouseUp(button);
+			}
 			win->m_MouseButtons[button] = action != GLFW_RELEASE;
 		}
 
@@ -101,6 +114,9 @@ namespace sparky {
 		}
 
 		void Window::update() {
+			if (this->m_Callback != nullptr) {
+				this->m_Callback();
+			}
 			GLenum error = glGetError();
 
 			if (error != GL_NO_ERROR) {
@@ -111,14 +127,30 @@ namespace sparky {
 			glfwGetFramebufferSize(m_Window, &m_Width, &m_Height);
 			glfwSwapBuffers(m_Window);
 		}
+
+		void Window::onUpdate(std::function<void()> callback)
+		{
+			m_Callback = callback;
+		}
 		
 		bool Window::closed() const
 		{
 			return glfwWindowShouldClose(m_Window) == 1;
 		}
 
-		void window_resize(GLFWwindow* window, int width, int height) {
+		void window_resize(GLFWwindow* window, int width, int height)
+		{
 			glViewport(0, 0, width, height);
+			Window* win = (Window*)glfwGetWindowUserPointer(window);
+			win->m_Width = width;
+			win->m_Height = height;
 		}
+
+		//void window_resize(GLFWwindow* window, int width, int height) {
+		//	glViewport(0, 0, width, height);
+		//	Window* win = (Window*)glfwGetWindowUserPointer(window);
+		//	win->m_Width = width;
+		//	win->m_Height = height;
+		//}
 	}
 }

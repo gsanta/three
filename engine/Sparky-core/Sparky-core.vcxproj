@@ -86,9 +86,17 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)\ext\freetype\include;$(SolutionDir)/Dependencies\FreeImage\include;$(SolutionDir)/Dependencies\GLEW\include;$(SolutionDir)/Dependencies\GLFW\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)/Dependencies\FreeImage\lib;$(SolutionDir)/Dependencies\GLEW\lib;$(SolutionDir)/Dependencies\GLFW\lib-vc2019;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)\bin\$(ConfigurationDir)\</OutDir>
+    <IntDir>$(SolutionDir)\bin\$(ConfigurationDir)\intermediates\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)\ext\freetype\include;$(SolutionDir)/Dependencies\FreeImage\include;$(SolutionDir)/Dependencies\GLEW\include;$(SolutionDir)/Dependencies\GLFW\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)/Dependencies\FreeImage\lib;$(SolutionDir)/Dependencies\GLEW\lib;$(SolutionDir)/Dependencies\GLFW\lib-vc2019;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)\bin\$(ConfigurationDir)\</OutDir>
+    <IntDir>$(SolutionDir)\bin\$(ConfigurationDir)\intermediates\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -130,12 +138,13 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glew32s.lib;glfw3.lib;opengl32.lib;FreeImage.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -144,7 +153,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -152,9 +161,17 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glew32s.lib;glfw3.lib;opengl32.lib;FreeImage.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\editor\document\document.cpp" />
+    <ClCompile Include="src\editor\document\document_handler.cpp" />
+    <ClCompile Include="src\editor\editor.cpp" />
+    <ClCompile Include="src\editor\tool\tool.cpp" />
+    <ClCompile Include="src\graphics\window\input_handler.cpp" />
+    <ClCompile Include="src\editor\tool\brush_tool.cpp" />
+    <ClCompile Include="src\editor\tool\tool_handler.cpp" />
     <ClCompile Include="src\graphics\groups\group.cpp" />
     <ClCompile Include="src\graphics\layers\layer.cpp" />
     <ClCompile Include="main.cpp" />
@@ -169,13 +186,20 @@
     <ClCompile Include="src\graphics\staticSprite.cpp" />
     <ClCompile Include="src\graphics\texture\texture.cpp" />
     <ClCompile Include="src\maths\mat4.cpp" />
-    <ClCompile Include="src\graphics\window.cpp" />
+    <ClCompile Include="src\graphics\window\window.cpp" />
     <ClCompile Include="src\maths\mathFuncs.cpp" />
     <ClCompile Include="src\maths\vec2.cpp" />
     <ClCompile Include="src\maths\vec3.cpp" />
     <ClCompile Include="src\maths\vec4.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\editor\document\document.h" />
+    <ClInclude Include="src\editor\document\document_handler.h" />
+    <ClInclude Include="src\editor\editor.h" />
+    <ClInclude Include="src\graphics\window\input_handler.h" />
+    <ClInclude Include="src\editor\tool\brush_tool.h" />
+    <ClInclude Include="src\editor\tool\tool.h" />
+    <ClInclude Include="src\editor\tool\tool_handler.h" />
     <ClInclude Include="src\graphics\groups\group.h" />
     <ClInclude Include="src\graphics\layers\layer.h" />
     <ClInclude Include="src\graphics\batchRenderer2d.h" />
@@ -191,8 +215,9 @@
     <ClInclude Include="src\graphics\staticSprite.h" />
     <ClInclude Include="src\graphics\texture\imageLoad.h" />
     <ClInclude Include="src\graphics\texture\texture.h" />
+    <ClInclude Include="src\graphics\window\input_listener.h" />
     <ClInclude Include="src\maths\mat4.h" />
-    <ClInclude Include="src\graphics\window.h" />
+    <ClInclude Include="src\graphics\window\window.h" />
     <ClInclude Include="src\maths\mathFuncs.h" />
     <ClInclude Include="src\maths\vec2.h" />
     <ClInclude Include="src\maths\vec3.h" />

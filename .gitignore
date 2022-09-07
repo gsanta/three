@@ -63,3 +63,7 @@ engine/Debug
 engine/bin/Debug
 engine/bin/intermediates
 engine/bin/Web
+engine/.vs
+engine/Sparky-core/x64
+engine/x64/Debug
+engine/bin

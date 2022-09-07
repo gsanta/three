@@ -5,7 +5,7 @@
 namespace sparky { namespace graphics {
 
 	StaticSprite::StaticSprite(float x, float y, float width, float height, maths::Vec4 color, Shader& shader)
-		: Renderable2D(maths::Vec3(x, y, 0), maths::Vec2(width, height), color), m_Shader(shader) {
+		: Renderable2D(maths::Vec3(x, y, 0), maths::Vec2(width, height), 0xffff00ff), m_Shader(shader) {
 		m_VertexArray = new VertexArray();
 		GLfloat vertices[] = {
 			0, 0, 0,

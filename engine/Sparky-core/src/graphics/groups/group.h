@@ -10,6 +10,7 @@ namespace sparky { namespace graphics  {
 		maths::Mat4 m_TransformationMatrix;
 	public:
 		Group(const maths::Mat4& transform);
+		~Group();
 		void add(Renderable2D* renderable);
 		void submit(Renderer2D* renderer) const override;
 	};
