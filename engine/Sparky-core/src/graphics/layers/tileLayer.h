@@ -1,7 +1,7 @@
 #pragma once
 
 #include "layer.h";
-#include "../batchRenderer2d.h";
+#include "../batchRenderer2d.h"
 
 namespace sparky {
 	namespace graphics {

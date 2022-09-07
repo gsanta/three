@@ -1,0 +1,29 @@
+#pragma once
+
+#include "../graphics/window/window.h"
+#include "tool/tool_handler.h"
+#include "document/document_handler.h"
+
+namespace my_app { namespace editor {
+	
+	using namespace graphics;
+	using namespace tool;
+	using namespace document;
+
+	class Editor {
+	private:
+		Window* m_Window;
+		ToolHandler* m_toolHandler;
+		DocumentHandler* m_DocumentHandler;
+
+	public:
+		Editor();
+		~Editor();
+		inline Window* getWindow() const {
+			return m_Window;
+		}
+
+		void onUpdate();
+	};
+
+}}
