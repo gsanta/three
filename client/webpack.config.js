@@ -19,7 +19,6 @@ module.exports = (env) => {
   return {
     entry: {
       app: './src/index.tsx',
-      engine: './engine/index.ts',
     },
     module: {
       rules: [
@@ -74,11 +73,6 @@ module.exports = (env) => {
       new HtmlWebpackPlugin({
         template: 'index.html',
         filename: 'index.html',
-        inject: false,
-      }),
-      new HtmlWebpackPlugin({
-        template: './engine/index.html',
-        filename: 'engine.html',
         inject: false,
       }),
     ],

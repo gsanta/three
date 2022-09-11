@@ -5,15 +5,15 @@ namespace my_app { namespace editor { namespace tool {
 	using namespace sparky;
 	using namespace graphics;
 
-	BrushTool::BrushTool(DocumentHandler* documentHandler) 
-		: m_documentHandler(documentHandler), Tool("brush_tool")
+	BrushTool::BrushTool(DocumentHandler* documentHandler, EditorConfig& editorConfig) 
+		: m_documentHandler(documentHandler), m_EditorConfig(editorConfig), Tool("brush_tool")
 	{
 
 	}
 
-	void BrushTool::pointerDown()
+	void BrushTool::pointerDown(PointerInfo& pointerInfo)
 	{
-		Sprite* sprite = new Sprite(0, 0, 0.9f, 0.9f, 0xff0000ff);
+		Sprite* sprite = new Sprite(pointerInfo.curr.x, pointerInfo.curr.y, m_EditorConfig.pixelSize, m_EditorConfig.pixelSize, 0xff0000ff);
 		m_documentHandler->getActiveDocument()->getLayer()->add(sprite);
 	}
 }}}

@@ -14,7 +14,7 @@ const Layout = ({ header, footer, children }: LayoutProps) => (
         {header}
       </Box>
     )}
-    <Box flex="1">{children}</Box>
+    <Box flex="1" display="flex" flexDir="row">{children}</Box>
     {footer && (
       <Box id="footer" width="100%">
         {footer}

@@ -12,7 +12,7 @@ namespace my_app { namespace graphics {
 				glfwTerminate();
 			}
 
-			this->m_InputHandler = new InputHandler;
+			this->m_InputHandler = new InputHandler(this);
 
 			for (int i = 0; i < MAX_KEYS; i++) {
 				m_Keys[i] = false;
@@ -106,6 +106,8 @@ namespace my_app { namespace graphics {
 			Window* win = (Window*)glfwGetWindowUserPointer(window);
 			win->m_x = xpos;
 			win->m_y = ypos;
+
+			win->getInputHandler()->emitMouseMove(xpos, ypos);
 		}
 
 		void Window::clear() const
