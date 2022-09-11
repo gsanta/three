@@ -23,8 +23,23 @@
 
 //#define SPARKY_EMSCRIPTEN 0
 
+Window* window = nullptr;
+
 #ifdef SPARKY_EMSCRIPTEN
 	#include <emscripten/emscripten.h>
+	#include <emscripten/bind.h>
+
+	void setWindowSize(int width, int height) {
+		if (window != nullptr) {
+			window->setSize(width, height);
+		}
+	}
+
+	EMSCRIPTEN_BINDINGS(engine2) {
+		emscripten::function("setWindowSize", &setWindowSize);
+	}
+
+
 #else
 	#include "src/graphics/texture/texture.h"
 #endif
@@ -48,6 +63,9 @@ int main()
 	using namespace maths;
 
 	my_app::editor::Editor editor;
+
+	window = editor.getWindow();
+
 	//Group* group = new Group(Mat4::translation(maths::Vec3(-5.0f, 5.0f, 0.0f)));
 	//group->add(new Sprite(0, 0, 6, 3, maths::Vec4(1, 1, 1, 1)));
 	//group->add(new Sprite(0.5f, 0.5f, 0.5f, 2.0f, maths::Vec4(1, 0, 1, 1)));

@@ -4,4 +4,10 @@ import App from './ui/components/App';
 
 declare const BACKEND_TYPE: string;
 
-ReactDOM.render(<App />, document.getElementById('root'));
+function renderApp() {
+    ReactDOM.render(<App />, document.getElementById('root'));
+}
+
+renderApp();
+
+window.renderApp = renderApp;

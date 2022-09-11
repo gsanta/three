@@ -56,6 +56,11 @@ namespace my_app { namespace graphics {
 			return true;
 		}
 
+		void Window::setSize(int width, int height)
+		{
+			glfwSetWindowSize(m_Window, width, height);
+		}
+
 		bool Window::isKeyPressed(unsigned int keycode) const
 		{
 			// TODO: log this
