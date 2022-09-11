@@ -22,6 +22,11 @@
         var spinnerElement = document.getElementById('spinner');
   
         var Module = {
+          onRuntimeInitialized: function() {
+            Module.isRuntimeInitialize = true;
+            renderApp();
+          },
+          isRuntimeInitialize: false,
           preRun: [],
           postRun: [],
           print: function() {},
@@ -51,6 +56,7 @@
             if (text) console.error('[post-exception status] ' + text);
           };
         };
+
       </script>
     <script async type="text/javascript" src="sparky.js"></script>
 </body>
