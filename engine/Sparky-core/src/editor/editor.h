@@ -3,6 +3,7 @@
 #include "../graphics/window/window.h"
 #include "tool/tool_handler.h"
 #include "document/document_handler.h"
+#include "editor_config.h"
 
 namespace my_app { namespace editor {
 	
@@ -15,8 +16,10 @@ namespace my_app { namespace editor {
 		Window* m_Window;
 		ToolHandler* m_toolHandler;
 		DocumentHandler* m_DocumentHandler;
+		EditorConfig editorConfig;
 
 	public:
+
 		Editor();
 		~Editor();
 		inline Window* getWindow() const {

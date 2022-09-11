@@ -2,6 +2,10 @@
 
 
 namespace my_app { namespace graphics {
+	InputHandler::InputHandler(Window* window) : m_Window(window)
+	{
+		
+	}
 
 	void InputHandler::emitMouseDown(int button)
 	{
@@ -15,7 +19,15 @@ namespace my_app { namespace graphics {
 		for (InputListener* listener : this->m_Listeners) {
 			listener->onMouseUp(button);
 		}
+	}
 
+	void InputHandler::emitMouseMove(double x, double y)
+	{
+		for (InputListener* listener : this->m_Listeners) {
+			double xPos = x * 32.0f / m_Window->getWidth() - 16.0f;
+			double yPos = 9.0f - y * 18.0f / m_Window->getHeight();
+			listener->onMouseMove(xPos, yPos);
+		}
 	}
 
 	void InputHandler::registerListener(InputListener* inputListener)

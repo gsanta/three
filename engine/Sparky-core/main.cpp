@@ -48,38 +48,6 @@ int main()
 	using namespace maths;
 
 	my_app::editor::Editor editor;
-
-#ifdef SPARKY_EMSCRIPTEN
-	Shader* shader = new Shader("res/shaders/basic.es3.vert", "res/shaders/basic.es3.frag");
-
-	shader->enable();
-
-	shader->setUniform2f("light_pos", Vec2(4.0f, 1.5f));
-
-	TileLayer layer(shader);
-	for (float y = -9.0f; y < 9.0f; y++) {
-		for (float x = -16.0f; x < 16.0f; x++) {
-			layer.add(new Sprite(x, y, 0.9f, 0.9f, 0xff0000ff));
-		}
-	}
-
-#else
-	//Shader* shader = new Shader("src/shaders/basic.vert", "src/shaders/basic.frag");
-
-	//shader->enable();
-
-	//shader->setUniform2f("light_pos", Vec2(4.0f, 1.5f));
-
-	//Texture* texture = new Texture("test.png");
-	//Texture* texture2 = new Texture("test2.png");
-
-	//TileLayer layer(shader);
-	//for (float y = -9.0f; y < 9.0f; y++) {
-	//	for (float x = -16.0f; x < 16.0f; x++) {
-	//		layer.add(new Sprite(x, y, 0.9f, 0.9f, rand() % 2 == 0 ? texture : texture2));
-	//	}
-	//}
-#endif
 	//Group* group = new Group(Mat4::translation(maths::Vec3(-5.0f, 5.0f, 0.0f)));
 	//group->add(new Sprite(0, 0, 6, 3, maths::Vec4(1, 1, 1, 1)));
 	//group->add(new Sprite(0.5f, 0.5f, 0.5f, 2.0f, maths::Vec4(1, 0, 1, 1)));

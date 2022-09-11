@@ -55,6 +55,9 @@ namespace sparky { namespace graphics {
 			m_Color = a << 24 | b << 16 | g << 8 | r;
 		}
 
+		void setSize(maths::Vec2 size);
+		void setPosition(maths::Vec3 position);
+
 		inline const maths::Vec3& getPosition() const { return m_Position; }
 		inline const maths::Vec2& getSize() const { return m_Size; }
 		inline const unsigned int getColor() const { return m_Color; }

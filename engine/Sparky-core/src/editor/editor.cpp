@@ -6,7 +6,7 @@ namespace my_app { namespace editor {
 		this->m_Window = new Window("Editor", 800, 600);
 		this->m_DocumentHandler = new DocumentHandler();
 		this->m_DocumentHandler->createDocument();
-		this->m_toolHandler = new ToolHandler(this->m_Window, this->m_DocumentHandler);
+		this->m_toolHandler = new ToolHandler(this->m_Window, this->m_DocumentHandler, this->editorConfig);
 		
 		this->m_Window->onUpdate(std::bind(&Editor::onUpdate, this));
 	}

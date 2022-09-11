@@ -11,7 +11,9 @@ namespace my_app { namespace graphics {
 #define MAX_KEYS 1024
 #define MAX_BUTTONS 32
 
-		class Window {
+	class InputHandler;
+
+	class Window {
 		private:
 			friend struct GLFWwindow;
 

@@ -4,10 +4,6 @@ import customTheme from '../customTheme';
 import { QueryClientProvider } from 'react-query';
 import { queryClient } from '@/queryClient';
 import '../../app.scss';
-import '../../pages/editor/Canvas.scss';
-import '../../ui/components/Palette.scss';
-import '../../ui/components/Toolbar.scss';
-import '../../ui/components/menubar/Menubar.scss';
 import Layout from './layout/Layout';
 import Box from './box/Box';
 
@@ -27,7 +23,8 @@ const App = () => {
           </Box>
         }
       >
-        <canvas id="canvas" width="400" height="400" style={{backgroundColor: 'black'}}></canvas>
+        <Box width="40px" bgColor="green"></Box>
+        <canvas id="canvas" style={{backgroundColor: 'red', width: 'calc(100% - 40px)'}}></canvas>
       </Layout>
       </ChakraProvider>
     </QueryClientProvider>
