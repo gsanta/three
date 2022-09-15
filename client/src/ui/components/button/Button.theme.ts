@@ -6,7 +6,11 @@ const disabled = {
 };
 
 const ButtonTheme: ComponentStyleConfig = {
-  baseStyle: {},
+  baseStyle: {
+    '.chakra-button__icon': {
+      marginInlineEnd: 0,
+    },
+  },
   variants: {
     'primary-action': {
       bgColor: 'orange.500',
