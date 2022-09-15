@@ -1,36 +1,43 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
 import customTheme from '../customTheme';
-import { QueryClientProvider } from 'react-query';
-import { queryClient } from '@/queryClient';
 import '../../app.scss';
 import Layout from './layout/Layout';
 import Box from './box/Box';
+import ExternalTool from '@/services/tool/ExternalTool';
+import ToolStore from '@/services/tool/ToolStore';
+import Toolbar from '../toolbar/Toolbar';
 
 const App = () => {
   const [isModuleSet, setIsModuleSet] = useState(false);
+  const [toolStore, setToolStore] = useState<ToolStore | undefined>();
 
-  console.log('rendering app')
+  console.log('rendering app');
 
   useEffect(() => {
     if (window?.Module?.isRuntimeInitialize && !isModuleSet) {
       setIsModuleSet(true);
-    }
-  });
 
-  const contentRef = useCallback((node: HTMLDivElement) => {
-    if (node) {
-      const rect = node.getBoundingClientRect();
-  
-      if (isModuleSet) {
-        window.Module.setWindowSize(rect.width, rect.height);
-      }
+      const tools = [new ExternalTool('pencil', 'BiPencil', Module), new ExternalTool('rectangle', 'BiPencil', Module)];
+      setToolStore(new ToolStore(tools));
     }
   }, [isModuleSet]);
 
+  const contentRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (node) {
+        const rect = node.getBoundingClientRect();
+
+        if (isModuleSet) {
+          window.Module.setWindowSize(rect.width, rect.height);
+        }
+      }
+    },
+    [isModuleSet],
+  );
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <ChakraProvider theme={customTheme}>
+    <ChakraProvider theme={customTheme}>
       <Layout
         header={
           <Box bgColor="orange.200" height="40px">
@@ -43,13 +50,14 @@ const App = () => {
           </Box>
         }
       >
-        <Box width="40px" bgColor="green"></Box>
-        <Box ref={contentRef} sx={{width: 'calc(100% - 40px)'}}>
+        <Box width="40px" bgColor="green">
+          <Toolbar toolStore={toolStore} />
+        </Box>
+        <Box ref={contentRef} sx={{ width: 'calc(100% - 40px)' }}>
           <canvas id="canvas"></canvas>
         </Box>
       </Layout>
-      </ChakraProvider>
-    </QueryClientProvider>
+    </ChakraProvider>
   );
 };
 

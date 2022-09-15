@@ -1,10 +1,7 @@
 import React from 'react';
 import { QueryClientProvider } from 'react-query';
 import { ChakraProvider } from '@chakra-ui/react';
-import customTheme from '../src/ui/customTheme';
-import {queryClient} from '../src/queryClient';
-import DataContext from '../src/ui/DataContext';
-import Editor from '../src/Editor';
+import { queryClient } from '../src/queryClient';
 import { initialize, mswDecorator } from 'msw-storybook-addon';
 import theme from '../src/ui/components/theme';
 
@@ -22,15 +19,15 @@ export const parameters = {
 
 export const decorators = [
   (storyFn: () => JSX.Element) => {
-  queryClient.clear();
-  // const editor = new Editor(canvas, canvasContext, webGLContext);
+    queryClient.clear();
+    // const editor = new Editor(canvas, canvasContext, webGLContext);
 
     return (
-        <QueryClientProvider client={queryClient}>
-          <ChakraProvider theme={theme} cssVarsRoot="body">
-            {storyFn()}
-          </ChakraProvider>
-        </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <ChakraProvider theme={theme} cssVarsRoot="body">
+          {storyFn()}
+        </ChakraProvider>
+      </QueryClientProvider>
     );
   },
   mswDecorator
