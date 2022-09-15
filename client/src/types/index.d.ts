@@ -1,11 +1,13 @@
-
 declare global {
-    function renderApp(): void;
+  function renderApp(): void;
 
-    var Module: {
-        setWindowSize(width: number, height: number);
-        isRuntimeInitialize: boolean;
-    }
+  // eslint-disable-next-line no-var
+  var Module: {
+    setWindowSize(width: number, height: number);
+    isRuntimeInitialize: boolean;
+
+    selectTool(name: string);
+  };
 }
-  
+
 export {};
