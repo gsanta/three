@@ -8,7 +8,8 @@ namespace my_app { namespace editor { namespace tool {
 
 		this->tools.push_back(new BrushTool(documentHandler, editorConfig));
 		this->tools.push_back(new RectangleTool(documentHandler));
-		this->m_ActiveTool = this->getTool("rectangle_tool");
+		this->tools.push_back(new EraseTool(documentHandler));
+		this->m_ActiveTool = this->getTool("erase");
 	}
 
 	void ToolHandler::onMouseUp(int button) {

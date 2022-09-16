@@ -1,6 +1,7 @@
 enum ToolName {
-  Pencil = 'Pencil',
-  Rectangle = 'Rectangle',
+  Brush = 'brush',
+  Rectangle = 'rectangle',
+  SelectionRectangle = 'selection-rectangle',
 }
 
 export default ToolName;

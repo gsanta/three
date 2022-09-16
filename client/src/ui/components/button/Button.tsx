@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Button as _Button, ButtonProps as _ButtonProps, forwardRef } from '@chakra-ui/react';
 import Icon, { IconName } from '../icon/Icon';
+import classNames from 'classnames';
 
 export type ButtonProps = _ButtonProps & {
   level?: 'primary' | 'secondary';
@@ -19,7 +20,7 @@ export type ButtonProps = _ButtonProps & {
   );
 
 const Button = forwardRef<ButtonProps, 'input'>((props, ref) => {
-  const { iconName, toggle, variant: inputVariant, onClick, onToggle, ...rest } = props;
+  const { children, iconName, toggle, variant: inputVariant, onClick, onToggle, ...rest } = props;
   const properties: Partial<_ButtonProps> = { ...rest };
 
   if (iconName) {
@@ -36,6 +37,10 @@ const Button = forwardRef<ButtonProps, 'input'>((props, ref) => {
     variant = 'default';
   }
 
+  const classes = classNames({
+    iconOnly: iconName && !children,
+  });
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     if (isToggle) {
       onToggle?.(toggle === 'on' ? 'off' : 'on');
@@ -44,7 +49,16 @@ const Button = forwardRef<ButtonProps, 'input'>((props, ref) => {
     onClick?.(event);
   };
 
-  return <_Button {...properties} onClick={handleClick} variant={`${props.level}-${variant}`} ref={ref} />;
+  return (
+    <_Button
+      children={children}
+      className={classes}
+      {...properties}
+      onClick={handleClick}
+      variant={`${props.level}-${variant}`}
+      ref={ref}
+    />
+  );
 });
 
 Button.defaultProps = {

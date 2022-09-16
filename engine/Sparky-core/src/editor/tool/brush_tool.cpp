@@ -6,7 +6,7 @@ namespace my_app { namespace editor { namespace tool {
 	using namespace graphics;
 
 	BrushTool::BrushTool(DocumentHandler* documentHandler, EditorConfig& editorConfig) 
-		: m_documentHandler(documentHandler), m_EditorConfig(editorConfig), Tool("brush_tool")
+		: m_documentHandler(documentHandler), m_EditorConfig(editorConfig), Tool("brush")
 	{
 
 	}

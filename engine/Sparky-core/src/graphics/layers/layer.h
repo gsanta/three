@@ -16,6 +16,7 @@ namespace sparky { namespace graphics {
 	public:
 		virtual ~Layer();
 		virtual void add(Renderable2D* renderable);
+		//virtual void clear();
 		virtual void render();
 	};
 } }

@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
-import customTheme from '../customTheme';
 import '../../app.scss';
 import Layout from './layout/Layout';
 import Box from './box/Box';
 import ExternalTool from '@/services/tool/ExternalTool';
 import ToolStore from '@/services/tool/ToolStore';
 import Toolbar from '../toolbar/Toolbar';
+import theme from './theme';
+import ToolName from '@/services/tool/ToolName';
 
 const App = () => {
   const [isModuleSet, setIsModuleSet] = useState(false);
@@ -14,14 +15,19 @@ const App = () => {
 
   console.log('rendering app');
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (window?.Module?.isRuntimeInitialize && !isModuleSet) {
       setIsModuleSet(true);
 
-      const tools = [new ExternalTool('pencil', 'BiPencil', Module), new ExternalTool('rectangle', 'BiPencil', Module)];
+      const tools = [
+        new ExternalTool(ToolName.Brush, 'BiPencil', Module),
+        new ExternalTool(ToolName.Rectangle, 'BiRectangle', Module),
+        new ExternalTool(ToolName.SelectionRectangle, 'BiBorderRadius', Module),
+      ];
       setToolStore(new ToolStore(tools));
     }
-  }, [isModuleSet]);
+  });
 
   const contentRef = useCallback(
     (node: HTMLDivElement) => {
@@ -37,20 +43,20 @@ const App = () => {
   );
 
   return (
-    <ChakraProvider theme={customTheme}>
+    <ChakraProvider theme={theme} cssVarsRoot="body">
       <Layout
         header={
-          <Box bgColor="orange.200" height="40px">
+          <Box bgColor="blackAlpha.800" height="40px">
             Header
           </Box>
         }
         footer={
-          <Box bgColor="orange.200" height="40px">
+          <Box bgColor="blackAlpha.800" height="40px">
             Footer
           </Box>
         }
       >
-        <Box width="40px" bgColor="green">
+        <Box width="50px">
           <Toolbar toolStore={toolStore} />
         </Box>
         <Box ref={contentRef} sx={{ width: 'calc(100% - 40px)' }}>

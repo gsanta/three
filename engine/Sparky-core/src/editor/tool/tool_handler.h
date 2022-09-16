@@ -3,6 +3,7 @@
 #include "tool.h"
 #include "brush_tool.h"
 #include "rectangle_tool.h"
+#include "erase_tool.h"
 #include "../../graphics/window/window.h"
 #include "../../graphics/window/input_listener.h"
 #include "../editor_config.h"
@@ -30,6 +31,10 @@ namespace my_app { namespace editor { namespace tool {
 
 		inline Tool* getActiveTool() const {
 			return m_ActiveTool;
+		}
+
+		inline void setActiveTool(string name) {
+			m_ActiveTool = getTool(name);
 		}
 	};
 } } }

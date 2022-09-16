@@ -2,7 +2,7 @@
 
 namespace my_app { namespace editor { namespace tool {
 
-	RectangleTool::RectangleTool(DocumentHandler* documentHandler) : m_DocumentHandler(documentHandler), Tool("rectangle_tool") {
+	RectangleTool::RectangleTool(DocumentHandler* documentHandler) : m_DocumentHandler(documentHandler), Tool("rectangle") {
 
 	}
 

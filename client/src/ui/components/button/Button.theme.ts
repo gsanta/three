@@ -10,6 +10,13 @@ const ButtonTheme: ComponentStyleConfig = {
     '.chakra-button__icon': {
       marginInlineEnd: 0,
     },
+    padding: '2px',
+    '&.iconOnly': {
+      px: '1px',
+      py: '1px',
+      paddingY: '1px',
+      paddingX: '2px',
+    },
   },
   variants: {
     'primary-action': {
