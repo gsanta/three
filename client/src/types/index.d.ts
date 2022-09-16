@@ -6,7 +6,7 @@ declare global {
     setWindowSize(width: number, height: number);
     isRuntimeInitialize: boolean;
 
-    selectTool(name: string);
+    setActiveTool(name: string);
   };
 }
 

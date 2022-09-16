@@ -5,10 +5,10 @@ import ToolName from './ToolName';
 class ToolStore {
   tools: Tool[];
 
-  private _selectedTool: Tool;
+  selectedTool?: Tool;
 
-  get selectedTool() {
-    return this._selectedTool;
+  getSelectedTool() {
+    return this.selectedTool;
   }
 
   constructor(tools: Tool[]) {
@@ -19,13 +19,14 @@ class ToolStore {
     });
 
     this.tools = tools;
-    this._selectedTool = tools[0];
+    this.setSelectedTool(tools[0].name);
   }
 
   setSelectedTool(toolName: ToolName) {
     const selectedTool = this.tools.find((tool) => tool.name === toolName);
     if (selectedTool) {
-      this._selectedTool = selectedTool;
+      this.selectedTool = selectedTool;
+      this.selectedTool.activate();
     }
   }
 }

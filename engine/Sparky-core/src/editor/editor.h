@@ -22,6 +22,11 @@ namespace my_app { namespace editor {
 
 		Editor();
 		~Editor();
+
+		inline ToolHandler* getToolHandler() const {
+			return m_toolHandler;
+		}
+
 		inline Window* getWindow() const {
 			return m_Window;
 		}

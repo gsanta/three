@@ -11,7 +11,7 @@ namespace my_app { namespace editor { namespace document {
 	public:
 		Document(sparky::graphics::Layer* layer);
 		~Document();
-		inline sparky::graphics::Layer* getLayer() const {
+		inline sparky::graphics::Layer* getLayer() {
 			return m_Layer;
 		}
 		void render();

@@ -24,6 +24,8 @@
 //#define SPARKY_EMSCRIPTEN 0
 
 Window* window = nullptr;
+my_app::editor::Editor* editor = nullptr;
+
 
 #ifdef SPARKY_EMSCRIPTEN
 	#include <emscripten/emscripten.h>
@@ -35,10 +37,20 @@ Window* window = nullptr;
 		}
 	}
 
+	void setActiveTool(std::string toolName) {
+		if (editor != nullptr) {
+			editor->getToolHandler()->setActiveTool(toolName);
+		}
+	}
+
+
 	EMSCRIPTEN_BINDINGS(engine2) {
 		emscripten::function("setWindowSize", &setWindowSize);
 	}
 
+	EMSCRIPTEN_BINDINGS(editor) {
+		emscripten::function("setActiveTool", &setActiveTool);
+	}
 
 #else
 	#include "src/graphics/texture/texture.h"
@@ -62,9 +74,8 @@ int main()
 	using namespace graphics;
 	using namespace maths;
 
-	my_app::editor::Editor editor;
-
-	window = editor.getWindow();
+	editor = new my_app::editor::Editor();
+	window = editor->getWindow();
 
 	//Group* group = new Group(Mat4::translation(maths::Vec3(-5.0f, 5.0f, 0.0f)));
 	//group->add(new Sprite(0, 0, 6, 3, maths::Vec4(1, 1, 1, 1)));
@@ -87,18 +98,18 @@ int main()
 #ifdef SPARKY_EMSCRIPTEN
 	std::function<void()> mainLoop = [&]() {
 #else
-	while (!editor.getWindow()->closed())
+	while (!editor->getWindow()->closed())
 	{
 #endif
-		editor.getWindow()->clear();
+		editor->getWindow()->clear();
 		double x, y;
-		editor.getWindow()->getMousePosition(x, y);
+		editor->getWindow()->getMousePosition(x, y);
 		//shader->enable();
 		//shader->setUniform2f("light_pos", Vec2((float)(x * 32.0f / editor.getWindow()->getWidth() - 16.0f), (float)(9.0f - y * 18.0f / editor.getWindow()->getHeight())));
 		//shader->disable();
 		//layer.render();
 
-		editor.getWindow()->update();
+		editor->getWindow()->update();
 		frames++;
 		//if (time.elapsed() - timer > 1.0f) {
 		//	timer += 1.0f;
@@ -113,5 +124,7 @@ int main()
 #endif
 
 	//delete texture;
+	delete window;
+	delete editor;
 	return 0;
 }

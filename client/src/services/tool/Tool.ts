@@ -1,7 +1,8 @@
 import { IconName } from '@/ui/components/icon/Icon';
+import ToolName from './ToolName';
 
 interface Tool {
-  name: string;
+  name: ToolName;
   iconName: IconName;
 
   activate(): void;

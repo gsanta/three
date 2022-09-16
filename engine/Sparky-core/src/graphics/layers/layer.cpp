@@ -23,6 +23,10 @@ namespace sparky { namespace graphics {
 		m_Renderables.push_back(renderable);
 	}
 
+	//void Layer::clear() {
+	//	m_Renderables.clear();
+	//}
+
 	void Layer::render() {
 		m_Shader->enable();
 

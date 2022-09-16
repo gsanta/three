@@ -169,6 +169,7 @@
     <ClCompile Include="src\editor\document\document_handler.cpp" />
     <ClCompile Include="src\editor\editor.cpp" />
     <ClCompile Include="src\editor\editor_config.h" />
+    <ClCompile Include="src\editor\tool\erase_tool.cpp" />
     <ClCompile Include="src\editor\tool\pointer_info.cpp" />
     <ClCompile Include="src\editor\tool\rectangle_tool.cpp" />
     <ClCompile Include="src\editor\tool\tool.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="src\editor\document\document.h" />
     <ClInclude Include="src\editor\document\document_handler.h" />
     <ClInclude Include="src\editor\editor.h" />
+    <ClInclude Include="src\editor\tool\erase_tool.h" />
     <ClInclude Include="src\editor\tool\pointer_info.h" />
     <ClInclude Include="src\editor\tool\rectangle_tool.h" />
     <ClInclude Include="src\graphics\window\input_handler.h" />
