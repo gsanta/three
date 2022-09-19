@@ -6,7 +6,7 @@
 #include "editor_config.h"
 
 namespace my_app { namespace editor {
-	
+
 	using namespace graphics;
 	using namespace tool;
 	using namespace document;
@@ -25,6 +25,10 @@ namespace my_app { namespace editor {
 
 		inline ToolHandler* getToolHandler() const {
 			return m_toolHandler;
+		}
+
+		inline void cleanup() {
+			// m_Window->getInputHandler()->unRegisterListener(m_toolHandler);
 		}
 
 		inline Window* getWindow() const {

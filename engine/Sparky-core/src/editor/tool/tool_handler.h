@@ -14,7 +14,7 @@ namespace my_app { namespace editor { namespace tool {
 
 	using namespace std;
 
-	class ToolHandler : InputListener {
+	class ToolHandler : public InputListener {
 	private:
 		Window* m_Window;
 		vector<Tool*> tools;

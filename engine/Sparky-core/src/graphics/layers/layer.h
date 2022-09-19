@@ -18,6 +18,7 @@ namespace sparky { namespace graphics {
 		virtual void add(Renderable2D* renderable);
 		//virtual void clear();
 		virtual void render();
+		virtual void clear();
 	};
 } }
 
