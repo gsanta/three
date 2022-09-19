@@ -24,6 +24,7 @@ const App = () => {
         new ExternalTool(ToolName.Brush, 'BiPencil', Module),
         new ExternalTool(ToolName.Rectangle, 'BiRectangle', Module),
         new ExternalTool(ToolName.SelectionRectangle, 'BiBorderRadius', Module),
+        new ExternalTool(ToolName.Erase, 'BiEraser', Module),
       ];
       setToolStore(new ToolStore(tools));
     }

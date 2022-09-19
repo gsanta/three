@@ -124,7 +124,7 @@ int main()
 #endif
 
 	//delete texture;
-	delete window;
+	// editor->cleanup();
 	delete editor;
 	return 0;
 }
