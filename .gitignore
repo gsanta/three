@@ -67,4 +67,4 @@ engine/.vs
 engine/Sparky-core/x64
 engine/Sparky-core/out
 engine/x64/Debug
-engine/bin
+engine/Web/bin
