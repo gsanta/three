@@ -1,4 +1,4 @@
-#include "./indexBuffer.h";
+#include "./indexBuffer.h"
 
 namespace sparky {
 	namespace graphics {
