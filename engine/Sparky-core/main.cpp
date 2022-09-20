@@ -1,4 +1,4 @@
-#include "src/graphics/window/window.h";
+#include "src/graphics/window/window.h"
 #include "src/maths/vec2.h"
 #include "src/maths/mat4.h"
 //#include "src/utils/timer.h"
@@ -124,7 +124,7 @@ int main()
 #endif
 
 	//delete texture;
-	// editor->cleanup();
+	 editor->cleanup();
 	delete editor;
 	return 0;
 }

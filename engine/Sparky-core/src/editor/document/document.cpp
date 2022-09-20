@@ -2,11 +2,14 @@
 
 namespace my_app { namespace editor { namespace document {
 
-	// Document::Document(sparky::graphics::Layer* layer, sparky::graphics::Layer* tempLayer)
-	// : m_Layer(layer), m_TempLayer(tempLayer)
+	Document::Document(sparky::graphics::Layer* layer, sparky::graphics::Layer* tempLayer)
+		: m_Layer(layer), m_TempLayer(tempLayer)
+	{
+
+	}
 
 	Document::Document(sparky::graphics::Layer* layer)
-	: m_Layer(layer)
+	: m_Layer(layer), m_TempLayer(nullptr)
 	{
 
 	}
@@ -21,12 +24,8 @@ namespace my_app { namespace editor { namespace document {
 			this->m_Layer->render();
 		}
 
-		// if (this->m_TempLayer != nullptr) {
-		// 	this->m_TempLayer->render();
-		// }
-
-		//shader->enable();
-
-		//shader->setUniform2f("light_pos", Vec2(4.0f, 1.5f));
+		 if (this->m_TempLayer != nullptr) {
+		 	this->m_TempLayer->render();
+		 }
 	}
 }}}

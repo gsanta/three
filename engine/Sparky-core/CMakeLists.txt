@@ -5,16 +5,10 @@ project(Editor VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_VERBOSE_MAKEFILE on)
 
 file(GLOB_RECURSE SOURCES "main.cpp" "src/*.cpp")
-
+list(FILTER SOURCES EXCLUDE REGEX "src/graphics/texture/texture.cpp")
 
 add_executable(sparky ${SOURCES})
-target_link_libraries(sparky ${CMAKE_CURRENT_SOURCE_DIR}/../Dependencies/GLEW/lib/glew32.lib ${CMAKE_CURRENT_SOURCE_DIR}/../Dependencies/GLFW/lib-vc2019/glfw3.lib)
-target_include_directories(sparky
- PRIVATE
-  ../Dependencies/GLEW/include
-  ../Dependencies/GLFW/include)
-
-set_target_properties(sparky PROPERTIES LINK_FLAGS  "-s USE_GLFW=3 -O3 -lembind")
+set_target_properties(sparky PROPERTIES LINK_FLAGS  "-lembind -s ASSERTIONS -s ALLOW_MEMORY_GROWTH -s USE_GLFW=3 -s FULL_ES3=1 -DSPARKY_EMSCRIPTEN=1 --memory-init-file 0 --embed-file res -O3")
 
 add_definitions("-std=c++11")
 add_definitions(-DSPARKY_EMSCRIPTEN=1)

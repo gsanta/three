@@ -17,50 +17,50 @@ namespace my_app { namespace editor { namespace tool {
 
 	void EraseTool::pointerMove(PointerInfo& pointerInfo)
 	{
-		// if (!pointerInfo.isDown) {
-		// 	return;
-		// }
+		 if (!pointerInfo.isDown) {
+		 	return;
+		 }
 
-		// auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getTempLayer();
-		// tempLayer->clear();
+		 auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getTempLayer();
+		 tempLayer->clear();
 		
-		// for (Sprite* sprite : sprites) {
-		// 	delete sprite;
-		// }
+		 for (Sprite* sprite : sprites) {
+		 	delete sprite;
+		 }
 
-		// sprites.clear();
+		 sprites.clear();
 
-		// maths::Vec2 down = pointerInfo.down;
-		// maths::Vec2 curr = pointerInfo.curr;
+		 maths::Vec2 down = pointerInfo.down;
+		 maths::Vec2 curr = pointerInfo.curr;
 
-		// float startX = down.x < curr.x ? down.x : curr.x;
-		// float endX = down.x < curr.x ? curr.x : down.x;
-		// float startY = down.y < curr.y ? down.y : curr.y;
-		// float endY = down.y < curr.y ? curr.y : down.y;
+		 float startX = down.x < curr.x ? down.x : curr.x;
+		 float endX = down.x < curr.x ? curr.x : down.x;
+		 float startY = down.y < curr.y ? down.y : curr.y;
+		 float endY = down.y < curr.y ? curr.y : down.y;
 
-		// for (float x = startX; x < endX; x += 2 * m_DashSize) {
-		// 	Sprite* sprite = new Sprite(x, startY, m_DashSize, 0.1f, 0xff0000ff);
-		// 	Sprite* sprite2 = new Sprite(x, endY, m_DashSize, 0.1f, 0xff0000ff);
+		 for (float x = startX; x < endX; x += 2 * m_DashSize) {
+		 	Sprite* sprite = new Sprite(x, startY, m_DashSize, 0.1f, 0xff0000ff);
+		 	Sprite* sprite2 = new Sprite(x, endY, m_DashSize, 0.1f, 0xff0000ff);
 
-		// 	tempLayer->add(sprite);
-		// 	tempLayer->add(sprite2);
+		 	tempLayer->add(sprite);
+		 	tempLayer->add(sprite2);
 
-		// 	sprites.push_back(sprite);
-		// 	sprites.push_back(sprite2);
-		// }
+		 	sprites.push_back(sprite);
+		 	sprites.push_back(sprite2);
+		 }
 
-		// for (float y = startY; y < endY; y += 2 * m_DashSize) {
-		// 	Sprite* sprite = new Sprite(startX, y, m_DashSize, 0.1f, 0xff0000ff);
-		// 	Sprite* sprite2 = new Sprite(endX, y, m_DashSize, 0.1f, 0xff0000ff);
+		 for (float y = startY; y < endY; y += 2 * m_DashSize) {
+		 	Sprite* sprite = new Sprite(startX, y, m_DashSize, 0.1f, 0xff0000ff);
+		 	Sprite* sprite2 = new Sprite(endX, y, m_DashSize, 0.1f, 0xff0000ff);
 
-		// 	tempLayer->add(sprite);
-		// 	tempLayer->add(sprite2);
+		 	tempLayer->add(sprite);
+		 	tempLayer->add(sprite2);
 
-		// 	sprites.push_back(sprite);
-		// 	sprites.push_back(sprite2);
-		// }
+		 	sprites.push_back(sprite);
+		 	sprites.push_back(sprite2);
+		 }
 
-		// std::cout << "size: " << sprites.size() << std::endl;
+		 std::cout << "size: " << sprites.size() << std::endl;
 	}
 
 }}}

@@ -28,7 +28,7 @@ namespace my_app { namespace editor {
 		}
 
 		inline void cleanup() {
-			// m_Window->getInputHandler()->unRegisterListener(m_toolHandler);
+			 m_Window->getInputHandler()->unRegisterListener(m_toolHandler);
 		}
 
 		inline Window* getWindow() const {

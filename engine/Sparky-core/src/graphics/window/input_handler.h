@@ -13,7 +13,7 @@ namespace my_app { namespace graphics {
 	class InputHandler
 	{
 	private:
-		vector<InputListener*>* m_Listeners;
+		vector<InputListener*> m_Listeners;
 		Window* m_Window;
 
 	public:
