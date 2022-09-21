@@ -10,7 +10,9 @@ namespace my_app { namespace editor { namespace tool {
 
 	void BrushTool::pointerDown(PointerInfo& pointerInfo)
 	{
+		sparky::graphics::TileLayer* tileLayer = m_documentHandler->getActiveDocument()->getActiveTileLayer();
+
 		sparky::graphics::Sprite* sprite = new sparky::graphics::Sprite(pointerInfo.curr.x, pointerInfo.curr.y, m_EditorConfig.pixelSize, m_EditorConfig.pixelSize, 0xff0000ff);
-		m_documentHandler->getActiveDocument()->getLayer()->add(sprite);
+		tileLayer->add(sprite);
 	}
 }}}

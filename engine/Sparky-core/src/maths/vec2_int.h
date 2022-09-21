@@ -1,15 +1,13 @@
 
 
-namespace sparky
-{
-  namespace maths
-  {
+namespace my_app { namespace maths {
 
-    class Vec2Int
-    {
+    class Vec2Int {
     public:
-      int x;
-      int y;
+        int x;
+        int y;
+
+    public:
+        Vec2Int(int x, int y);
     };
-  }
-}
+ }}
