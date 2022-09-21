@@ -24,9 +24,15 @@ namespace sparky
 			virtual void add(Renderable2D *renderable);
 			virtual void render();
 			virtual void clear();
+			virtual void remove(Renderable2D* renderable);
+
 			inline float getPixelSize()
 			{
 				return m_PixelSize;
+			}
+
+			inline std::vector<Renderable2D*>& getRenderables() {
+				return m_Renderables;
 			}
 		};
 	}
