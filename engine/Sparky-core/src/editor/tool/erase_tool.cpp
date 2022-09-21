@@ -13,6 +13,28 @@ namespace my_app { namespace editor { namespace tool {
 
 	void EraseTool::pointerUp(PointerInfo& pointerInfo)
 	{
+		Document* activeDocument = m_DocumentHandler->getActiveDocument();
+
+		maths::Vec2 down = pointerInfo.down;
+		maths::Vec2 curr = pointerInfo.curr;
+
+		float startX = down.x < curr.x ? down.x : curr.x;
+		float endX = down.x < curr.x ? curr.x : down.x;
+		float startY = down.y < curr.y ? down.y : curr.y;
+		float endY = down.y < curr.y ? curr.y : down.y;
+
+		Layer* layer = activeDocument->getLayer();
+
+		auto it = layer->getRenderables().begin();
+		while (it != layer->getRenderables().end()) {
+			const graphics::Bounds* bounds = (*it)->getBounds();
+
+			if (bounds->minX > startX && bounds->maxX < endX && bounds->minY > startY && bounds->maxY < endY) {
+				layer->remove(*it);
+			} else {
+				++it;
+			}
+		}
 	}
 
 	void EraseTool::pointerMove(PointerInfo& pointerInfo)

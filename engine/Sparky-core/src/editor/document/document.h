@@ -7,7 +7,7 @@ namespace my_app { namespace editor { namespace document {
 	{
 	private:
 		sparky::graphics::Layer* m_Layer;
-		 sparky::graphics::Layer* m_TempLayer;
+		sparky::graphics::Layer* m_TempLayer;
 
 	public:
 		Document(sparky::graphics::Layer* layer, sparky::graphics::Layer* tempLayer);
