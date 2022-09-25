@@ -1,6 +1,7 @@
 #pragma once
 
 #include "renderable2d.h"
+#include "./renderer/vertex_data.h"
 
 namespace sparky { namespace graphics {
 
@@ -13,6 +14,6 @@ namespace sparky { namespace graphics {
 		Sprite(float x, float y, float width, float height, Texture* texture);
 #endif
 
-		virtual void submit2(VertexData* vertexData) const;
+		virtual void submit(Renderer2D* renderer) const override;
 	};
 } }

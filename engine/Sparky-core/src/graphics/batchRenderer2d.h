@@ -5,6 +5,7 @@
 #include "buffers/indexBuffer.h"
 #include <cstddef>
 #include "renderable2d.h"
+#include "./renderer/vertex_data.h"
 
 namespace sparky { namespace graphics {
 
@@ -24,7 +25,6 @@ namespace sparky { namespace graphics {
 		GLuint m_VBO;
 		GLuint m_VAO;
 		IndexBuffer* m_IBO;
-		GLsizei m_IndexCount;
 #ifdef SPARKY_EMSCRIPTEN
 		VertexData* m_BufferBase;
 #endif
@@ -33,6 +33,9 @@ namespace sparky { namespace graphics {
 	public:
 		BatchRenderer2D();
 		~BatchRenderer2D();
+		inline virtual VertexData* getBuffer() {
+			return m_Buffer;
+		}
 		void begin() override;
 		void submit(const Renderable2D* renderable) override;
 		void end() override;

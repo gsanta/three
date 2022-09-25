@@ -6,6 +6,7 @@
 #include "../maths/vec3.h"
 #include "../maths/vec2.h"
 #include "../maths/vec4.h"
+#include "./renderer/vertex_data.h"
 #include "renderer2d.h"
 #include "shader.h"
 #ifndef SPARKY_EMSCRIPTEN
@@ -13,14 +14,6 @@
 #endif
 #include "shapes/bounds.h"
 namespace sparky { namespace graphics {
-
-	struct VertexData {
-		maths::Vec3 vertex;
-		unsigned int color;
-		float tid;
-		maths::Vec2 uv;
-	};
-
 	class Renderable2D {
 
 	protected:
@@ -45,11 +38,7 @@ namespace sparky { namespace graphics {
 
 		virtual ~Renderable2D() {}
 
-		virtual void submit(Renderer2D* renderer) const {
-			renderer->submit(this);
-		}
-
-		virtual void submit2(VertexData* vertexData) const = 0;
+		virtual void submit(Renderer2D* renderer) const = 0;
 
 		void setColor(unsigned int color) { m_Color = color; }
 		void setColor(const maths::Vec4& color) {
@@ -73,8 +62,6 @@ namespace sparky { namespace graphics {
 		inline int getVertexCount() const { return m_VertexCount; }
 		inline const unsigned int getColor() const { return m_Color; }
 		inline const std::vector<maths::Vec2>& getUV() const { return m_UV; }
-
-		virtual VertexData* getVertices() = 0;
 #ifdef SPARKY_EMSCRIPTEN
 		inline const GLuint getTID() const { return 0; }
 #else

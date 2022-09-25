@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 #include "../maths/mat4.h"
 #include <vector>
+#include "./renderer/vertex_data.h"
 
 namespace sparky { namespace graphics {
 	class Renderable2D;
@@ -12,6 +13,9 @@ namespace sparky { namespace graphics {
 	protected:
 		std::vector<maths::Mat4> m_TransformationStack;
 		const maths::Mat4* m_TransformationBack;
+
+		GLsizei m_IndexCount;
+
 		Renderer2D() {
 			m_TransformationStack.push_back(maths::Mat4::identity());
 			m_TransformationBack = &m_TransformationStack.back();
@@ -38,9 +42,23 @@ namespace sparky { namespace graphics {
 			// TODO: Add to log!
 		}
 
+		const maths::Mat4* getTransformation() {
+			return m_TransformationBack;
+		}
+
+
+		inline GLsizei getIndexCount() {
+			return m_IndexCount;
+		}
+
+		inline void setIndexCount(GLsizei indexCount) {
+			m_IndexCount = indexCount;
+		}
+
 		virtual void submit(const Renderable2D* renderable) = 0;
 		virtual void flush() = 0;
 		virtual void begin() {}
 		virtual void end() {}
+		virtual VertexData* getBuffer() = 0;
 	};
 } }
