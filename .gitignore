@@ -68,3 +68,5 @@ engine/Sparky-core/x64
 engine/Sparky-core/out
 engine/x64/Debug
 engine/Web/bin
+
+enc_temp_folder

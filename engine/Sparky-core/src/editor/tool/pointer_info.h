@@ -8,8 +8,8 @@ namespace my_app { namespace editor { namespace tool {
 	struct PointerInfo {
 	public:
 		bool isDown = false;
-		maths::Vec2 curr;
-		maths:: Vec2 down;
+		sparky::maths::Vec2 curr;
+		sparky::maths:: Vec2 down;
 	public:
 		PointerInfo();
 	};
