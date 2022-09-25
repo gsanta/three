@@ -210,6 +210,7 @@
     <ClInclude Include="src\editor\tool\paint_bucket_tool.h" />
     <ClInclude Include="src\editor\tool\pointer_info.h" />
     <ClInclude Include="src\editor\tool\rectangle_tool.h" />
+    <ClInclude Include="src\graphics\renderer\vertex_data.h" />
     <ClInclude Include="src\graphics\shapes\bounds.h" />
     <ClInclude Include="src\graphics\window\input_handler.h" />
     <ClInclude Include="src\editor\tool\brush_tool.h" />

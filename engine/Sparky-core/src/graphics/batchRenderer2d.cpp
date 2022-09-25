@@ -63,61 +63,29 @@ namespace sparky { namespace graphics {
 #endif
 	}
 
-
 	void BatchRenderer2D::submit(const Renderable2D* renderable) {
-		const maths::Vec3& position = renderable->getPosition();
-		const maths::Vec2& size = renderable->getSize();
-		const unsigned int color = renderable->getColor();
-		const std::vector<maths::Vec2>& uv = renderable->getUV();
-		const GLuint tid = renderable->getTID();
+		// TODO: fix when texture handling will be implemented
+		//float textureSlot = 0.0f;
+		//if (tid > 0) {
+		//	bool found = false;
+		//	for (int i = 0; i < m_TextureSlots.size(); i++) {
+		//		if (m_TextureSlots[i] == tid) {
+		//			textureSlot = (float) (i + 1);
+		//			found = true;
+		//			break;
+		//		}
+		//	}
 
-		float textureSlot = 0.0f;
-		if (tid > 0) {
-			bool found = false;
-			for (int i = 0; i < m_TextureSlots.size(); i++) {
-				if (m_TextureSlots[i] == tid) {
-					textureSlot = (float) (i + 1);
-					found = true;
-					break;
-				}
-			}
-
-			if (!found) {
-				if (m_TextureSlots.size() >= 32) {
-					end();
-					flush();
-					begin();
-				}
-				m_TextureSlots.push_back(tid);
-				textureSlot = (float)(m_TextureSlots.size() - 1);
-			}
-		}
-
-		m_Buffer->vertex = *m_TransformationBack * position;
-		m_Buffer->uv = uv[0];
-		m_Buffer->tid = textureSlot;
-		m_Buffer->color = color;
-		m_Buffer++;
-
-		m_Buffer->vertex = *m_TransformationBack * maths::Vec3(position.x, position.y + size.y, position.z);
-		m_Buffer->uv = uv[1];
-		m_Buffer->tid = textureSlot;
-		m_Buffer->color = color;
-		m_Buffer++;
-
-		m_Buffer->vertex = *m_TransformationBack * maths::Vec3(position.x + size.x, position.y + size.y, position.z);
-		m_Buffer->uv = uv[2];
-		m_Buffer->tid = textureSlot;
-		m_Buffer->color = color;
-		m_Buffer++;
-
-		m_Buffer->vertex = *m_TransformationBack * maths::Vec3(position.x + size.x, position.y, position.z);
-		m_Buffer->uv = uv[3];
-		m_Buffer->tid = textureSlot;
-		m_Buffer->color = color;
-		m_Buffer++;
-
-		m_IndexCount += 6;
+		//	if (!found) {
+		//		if (m_TextureSlots.size() >= 32) {
+		//			end();
+		//			flush();
+		//			begin();
+		//		}
+		//		m_TextureSlots.push_back(tid);
+		//		textureSlot = (float)(m_TextureSlots.size() - 1);
+		//	}
+		//}
 	}
 
 	void BatchRenderer2D::end()

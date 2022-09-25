@@ -21,57 +21,34 @@ namespace sparky { namespace graphics {
 	}
 #endif
 
-	void Sprite::submit2(VertexData* buffer) const {
-		buffer->vertex = *m_TransformationBack * position;
+	void Sprite::submit(Renderer2D* renderer) const {
+		VertexData* buffer = renderer->getBuffer();
+		const maths::Mat4* transformation = renderer->getTransformation();
+		buffer->vertex = *renderer->getTransformation() * m_Position;
 		buffer->uv = m_UV[0];
-		buffer->tid = textureSlot;
+		buffer->tid = 0.0f;
 		buffer->color = m_Color;
 		buffer++;
 
-		buffer->vertex = *m_TransformationBack * maths::Vec3(position.x, position.y + size.y, position.z);
+		buffer->vertex = *transformation * maths::Vec3(m_Position.x, m_Position.y + m_Size.y, m_Position.z);
 		buffer->uv = m_UV[1];
-		buffer->tid = textureSlot;
+		buffer->tid = 0.0f;
 		buffer->color = m_Color;
 		buffer++;
 
-		buffer->vertex = *m_TransformationBack * maths::Vec3(position.x + size.x, position.y + size.y, position.z);
+		buffer->vertex = *transformation * maths::Vec3(m_Position.x + m_Size.x, m_Position.y + m_Size.y, m_Position.z);
 		buffer->uv = m_UV[2];
-		buffer->tid = textureSlot;
+		buffer->tid = 0.0f;
 		buffer->color = m_Color;
 		buffer++;
 
-		buffer->vertex = *m_TransformationBack * maths::Vec3(position.x + size.x, position.y, position.z);
+		buffer->vertex = *transformation * maths::Vec3(m_Position.x + m_Size.x, m_Position.y, m_Position.z);
 		buffer->uv = m_UV[3];
-		buffer->tid = textureSlot;
+		buffer->tid = 0.0f;
 		buffer->color = m_Color;
 		buffer++;
-	}
 
-
-	VertexData* Sprite::getVertices() {
-		m_Buffer->vertex = *m_TransformationBack * position;
-		m_Buffer->uv = uv[0];
-		m_Buffer->tid = textureSlot;
-		m_Buffer->color = color;
-		m_Buffer++;
-
-		m_Buffer->vertex = *m_TransformationBack * maths::Vec3(position.x, position.y + size.y, position.z);
-		m_Buffer->uv = uv[1];
-		m_Buffer->tid = textureSlot;
-		m_Buffer->color = color;
-		m_Buffer++;
-
-		m_Buffer->vertex = *m_TransformationBack * maths::Vec3(position.x + size.x, position.y + size.y, position.z);
-		m_Buffer->uv = uv[2];
-		m_Buffer->tid = textureSlot;
-		m_Buffer->color = color;
-		m_Buffer++;
-
-		m_Buffer->vertex = *m_TransformationBack * maths::Vec3(position.x + size.x, position.y, position.z);
-		m_Buffer->uv = uv[3];
-		m_Buffer->tid = textureSlot;
-		m_Buffer->color = color;
-		m_Buffer++;
+		renderer->setIndexCount(renderer->getIndexCount() + 6);
 	}
 } }
 
