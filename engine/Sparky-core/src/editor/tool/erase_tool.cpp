@@ -15,15 +15,15 @@ namespace my_app { namespace editor { namespace tool {
 	{
 		Document* activeDocument = m_DocumentHandler->getActiveDocument();
 
-		maths::Vec2 down = pointerInfo.down;
-		maths::Vec2 curr = pointerInfo.curr;
+		sparky::maths::Vec2 down = pointerInfo.down;
+		sparky::maths::Vec2 curr = pointerInfo.curr;
 
 		float startX = down.x < curr.x ? down.x : curr.x;
 		float endX = down.x < curr.x ? curr.x : down.x;
 		float startY = down.y < curr.y ? down.y : curr.y;
 		float endY = down.y < curr.y ? curr.y : down.y;
 
-		Layer* layer = activeDocument->getLayer();
+		Layer* layer = activeDocument->getActiveTileLayer();
 
 		auto it = layer->getRenderables().begin();
 		while (it != layer->getRenderables().end()) {
@@ -52,8 +52,8 @@ namespace my_app { namespace editor { namespace tool {
 
 		 sprites.clear();
 
-		 maths::Vec2 down = pointerInfo.down;
-		 maths::Vec2 curr = pointerInfo.curr;
+		 sparky::maths::Vec2 down = pointerInfo.down;
+		 sparky::maths::Vec2 curr = pointerInfo.curr;
 
 		 float startX = down.x < curr.x ? down.x : curr.x;
 		 float endX = down.x < curr.x ? curr.x : down.x;

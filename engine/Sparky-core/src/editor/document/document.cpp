@@ -2,8 +2,8 @@
 
 namespace my_app { namespace editor { namespace document {
 
-	Document::Document(sparky::graphics::TileLayer* layer, sparky::graphics::Layer* tempLayer)
-		: m_TileLayer(layer), m_TempLayer(tempLayer)
+	Document::Document(sparky::graphics::TileLayer* layer, sparky::graphics::Layer* tempLayer, sparky::graphics::TileLayer* backgroundLayer)
+		: m_TileLayer(layer), m_TempLayer(tempLayer), m_BackgroundLayer(backgroundLayer)
 	{
 
 	}

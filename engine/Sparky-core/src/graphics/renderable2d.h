@@ -29,6 +29,7 @@ namespace sparky { namespace graphics {
 		}
 		maths::Vec3 m_Position;
 		maths::Vec2 m_Size;
+		int m_VertexCount;
 		unsigned int m_Color;
 		my_app::graphics::Bounds* m_bounds;
 		std::vector<maths::Vec2> m_UV;
@@ -47,6 +48,8 @@ namespace sparky { namespace graphics {
 		virtual void submit(Renderer2D* renderer) const {
 			renderer->submit(this);
 		}
+
+		virtual void submit2(VertexData* vertexData) const = 0;
 
 		void setColor(unsigned int color) { m_Color = color; }
 		void setColor(const maths::Vec4& color) {
@@ -67,8 +70,11 @@ namespace sparky { namespace graphics {
 
 		inline const maths::Vec3& getPosition() const { return m_Position; }
 		inline const maths::Vec2& getSize() const { return m_Size; }
+		inline int getVertexCount() const { return m_VertexCount; }
 		inline const unsigned int getColor() const { return m_Color; }
 		inline const std::vector<maths::Vec2>& getUV() const { return m_UV; }
+
+		virtual VertexData* getVertices() = 0;
 #ifdef SPARKY_EMSCRIPTEN
 		inline const GLuint getTID() const { return 0; }
 #else

@@ -16,7 +16,7 @@ namespace my_app
                 document::DocumentHandler *m_DocumentHandler;
 
             public:
-                void pointerUp(PointerInfo &pointerInfo) override;
+                //void pointerUp(PointerInfo &pointerInfo) override;
             };
 
         }

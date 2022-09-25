@@ -12,5 +12,7 @@ namespace sparky { namespace graphics {
 #ifndef SPARKY_EMSCRIPTEN
 		Sprite(float x, float y, float width, float height, Texture* texture);
 #endif
+
+		virtual void submit2(VertexData* vertexData) const;
 	};
 } }

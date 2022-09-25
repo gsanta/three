@@ -6,9 +6,7 @@ namespace my_app
   {
     namespace tool
     {
-      void PaintBucketTool::pointerUp()
-      {
-            }
+
     }
   }
 }

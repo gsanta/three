@@ -170,6 +170,7 @@
     <ClCompile Include="src\editor\editor.cpp" />
     <ClCompile Include="src\editor\editor_config.h" />
     <ClCompile Include="src\editor\tool\erase_tool.cpp" />
+    <ClCompile Include="src\editor\tool\paint_bucket_tool.cpp" />
     <ClCompile Include="src\editor\tool\pointer_info.cpp" />
     <ClCompile Include="src\editor\tool\rectangle_tool.cpp" />
     <ClCompile Include="src\editor\tool\tool.cpp" />
@@ -194,6 +195,7 @@
     <ClCompile Include="src\graphics\window\window.cpp" />
     <ClCompile Include="src\maths\mathFuncs.cpp" />
     <ClCompile Include="src\maths\vec2.cpp" />
+    <ClCompile Include="src\maths\vec2_int.cpp" />
     <ClCompile Include="src\maths\vec3.cpp" />
     <ClCompile Include="src\maths\vec4.cpp" />
   </ItemGroup>
@@ -202,9 +204,13 @@
     <ClInclude Include="src\editor\document\document.h" />
     <ClInclude Include="src\editor\document\document_handler.h" />
     <ClInclude Include="src\editor\editor.h" />
+    <ClInclude Include="src\editor\pointer\pointer_utils.h" />
     <ClInclude Include="src\editor\tool\erase_tool.h" />
+    <ClInclude Include="src\editor\tool\flood_fill.h" />
+    <ClInclude Include="src\editor\tool\paint_bucket_tool.h" />
     <ClInclude Include="src\editor\tool\pointer_info.h" />
     <ClInclude Include="src\editor\tool\rectangle_tool.h" />
+    <ClInclude Include="src\graphics\shapes\bounds.h" />
     <ClInclude Include="src\graphics\window\input_handler.h" />
     <ClInclude Include="src\editor\tool\brush_tool.h" />
     <ClInclude Include="src\editor\tool\tool.h" />
@@ -229,6 +235,7 @@
     <ClInclude Include="src\graphics\window\window.h" />
     <ClInclude Include="src\maths\mathFuncs.h" />
     <ClInclude Include="src\maths\vec2.h" />
+    <ClInclude Include="src\maths\vec2_int.h" />
     <ClInclude Include="src\maths\vec3.h" />
     <ClInclude Include="src\maths\vec4.h" />
     <ClInclude Include="src\utils\fileUtils.h" />

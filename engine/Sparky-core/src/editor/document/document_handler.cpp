@@ -22,7 +22,10 @@ namespace my_app { namespace editor { namespace document {
 		sparky::graphics::TileLayer* layer = new sparky::graphics::TileLayer(shader);
 		sparky::graphics::TileLayer* tempLayer = new sparky::graphics::TileLayer(shaderUnlit);
 
-		Document* document = new Document(layer, tempLayer);
+
+		sparky::graphics::TileLayer* backgroundLayer = new sparky::graphics::TileLayer(shaderUnlit);
+
+		Document* document = new Document(layer, tempLayer, backgroundLayer);
 		m_documents.push_back(document);
 		m_ActiveDocument = document;
 	}
