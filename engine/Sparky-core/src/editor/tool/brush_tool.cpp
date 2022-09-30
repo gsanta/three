@@ -10,10 +10,10 @@ namespace my_app { namespace editor { namespace tool {
 
 	void BrushTool::pointerDown(PointerInfo& pointerInfo)
 	{
-		sparky::graphics::TileLayer* tileLayer = m_documentHandler->getActiveDocument()->getActiveTileLayer();
-		sparky::maths::Vec2 tilePos = tileLayer->getTilePos(pointerInfo.curr);
+		my_app::graphics::TileLayer* tileLayer = dynamic_cast<my_app::graphics::TileLayer*>(m_documentHandler->getActiveDocument()->getActiveLayer());
+		my_app::maths::Vec2 tilePos = tileLayer->getTilePos(pointerInfo.curr);
 
-		sparky::graphics::Sprite* sprite = new sparky::graphics::Sprite(tilePos.x, tilePos.y, tileLayer->getTileSize(), tileLayer->getTileSize(), 0xff0000ff);
+		my_app::graphics::Sprite* sprite = new my_app::graphics::Sprite(tilePos.x, tilePos.y, tileLayer->getTileSize(), tileLayer->getTileSize(), 0xff0000ff);
 		tileLayer->add(sprite);
 	}
 }}}

@@ -6,7 +6,7 @@
 #include "../maths/vec3.h"
 #include "shader.h"
 
-namespace sparky { namespace graphics {
+namespace my_app { namespace graphics {
 
 	class StaticSprite : public Renderable2D {
 	private:

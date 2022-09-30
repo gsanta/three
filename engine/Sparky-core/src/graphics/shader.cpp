@@ -1,6 +1,6 @@
 #include "shader.h"
 
-namespace sparky { namespace graphics {
+namespace my_app { namespace graphics {
 	
 	Shader::Shader(const char* vertPath, const char* fragPath)
 		: m_VertPath(vertPath), m_FragPath(fragPath)

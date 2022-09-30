@@ -2,25 +2,35 @@
 
 namespace my_app { namespace editor { namespace document {
 
-	Document::Document(sparky::graphics::TileLayer* layer, sparky::graphics::Layer* tempLayer, sparky::graphics::TileLayer* backgroundLayer)
-		: m_TileLayer(layer), m_TempLayer(tempLayer), m_BackgroundLayer(backgroundLayer)
+	Document::Document(std::vector<my_app::graphics::Layer*> layers)
+		: m_Layers(layers)
 	{
+		auto it = find_if(m_Layers.begin(), m_Layers.end(), [](my_app::graphics::Layer* layer) {
+			return layer->getId().rfind(USER_LAYER_ID_PREFIX, 0) != std::string::npos; 
+		});
 
+		m_ActiveLayer = *it;
 	}
 
 	Document::~Document() {
-		delete m_TileLayer;
-		delete m_TempLayer;
+		std::vector<my_app::graphics::Layer*>::iterator it;
+
+		for (it = m_Layers.begin(); it != m_Layers.end(); ) {
+			delete *it;
+		}
+	}
+
+	my_app::graphics::Layer* Document::getLayer(std::string id)
+	{
+		auto it = find_if(m_Layers.begin(), m_Layers.end(), [&id](my_app::graphics::Layer* layer) { return layer->getId() == id; });
+
+		return *it;
 	}
 
 	void Document::render()
 	{
-		if (this->m_TileLayer != nullptr) {
-			this->m_TileLayer->render();
+		for (my_app::graphics::Layer* layer : m_Layers) {
+			layer->render();
 		}
-
-		 if (this->m_TempLayer != nullptr) {
-		 	this->m_TempLayer->render();
-		 }
 	}
 }}}

@@ -8,12 +8,12 @@
 namespace my_app { namespace editor { namespace tool {
 
 	using namespace document;
-	using namespace sparky::graphics;
+	using namespace my_app::graphics;
 
 	class EraseTool : public Tool {
 	private:
 		DocumentHandler* m_DocumentHandler;
-		vector<sparky::graphics::Sprite*> sprites;
+		vector<my_app::graphics::Sprite*> sprites;
 
 		float m_DashSize = 0.2f;
 

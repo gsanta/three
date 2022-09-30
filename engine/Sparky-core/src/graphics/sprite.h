@@ -3,7 +3,7 @@
 #include "renderable2d.h"
 #include "./renderer/vertex_data.h"
 
-namespace sparky { namespace graphics {
+namespace my_app { namespace graphics {
 
 	class Sprite : public Renderable2D {
 	private:

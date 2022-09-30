@@ -7,7 +7,7 @@
 #include "renderable2d.h"
 #include "./renderer/vertex_data.h"
 
-namespace sparky { namespace graphics {
+namespace my_app { namespace graphics {
 
 #define RENDERER_MAX_SPRITES   60000
 #define RENDERER_VERTEX_SIZE   sizeof(VertexData)
@@ -33,11 +33,10 @@ namespace sparky { namespace graphics {
 	public:
 		BatchRenderer2D();
 		~BatchRenderer2D();
-		inline virtual VertexData* getBuffer() {
+		inline virtual VertexData*& getBuffer() {
 			return m_Buffer;
 		}
 		void begin() override;
-		void submit(const Renderable2D* renderable) override;
 		void end() override;
 		void flush() override;
 	private:

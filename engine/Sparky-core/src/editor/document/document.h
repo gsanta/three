@@ -1,30 +1,34 @@
 #pragma once
 
+#include <vector>
 #include "../../graphics/layers/layer.h"
 #include "../../graphics/layers/tileLayer.h"
 
+
 namespace my_app { namespace editor { namespace document {
+
+	const std::string USER_LAYER_ID_PREFIX("user_layer_");
+	const std::string DEFAULT_TEMP_LAYER_ID("temp_layer_1");
+	const std::string DEFAULT_BACKGROUND_LAYER_ID("background_layer_1");
+
 	class Document
 	{
 	private:
-		sparky::graphics::Layer* m_TempLayer;
-		sparky::graphics::TileLayer* m_BackgroundLayer;
-		sparky::graphics::TileLayer* m_TileLayer;
+		//my_app::graphics::Layer* m_TempLayer;
+		//my_app::graphics::TileLayer* m_BackgroundLayer;
+		//my_app::graphics::TileLayer* m_TileLayer;
+		std::vector<my_app::graphics::Layer*> m_Layers;
+
+		my_app::graphics::Layer* m_ActiveLayer;
 
 	public:
-		Document(sparky::graphics::TileLayer* tileLayer, sparky::graphics::Layer* tempLayer, sparky::graphics::TileLayer* backgroundLayer);
+		Document(std::vector<my_app::graphics::Layer*> layers);
 		~Document();
-		
-		inline sparky::graphics::TileLayer* getActiveTileLayer() {
-			return m_TileLayer;
-		}
 
-		inline sparky::graphics::Layer* getTempLayer() {
-			return m_TempLayer;
-		}
+		my_app::graphics::Layer* getLayer(std::string id);
 
-		inline sparky::graphics::Layer* getBackgroundLayer() {
-			return m_BackgroundLayer;
+		inline my_app::graphics::Layer* getActiveLayer() {
+			return m_ActiveLayer;
 		}
 
 		void render();

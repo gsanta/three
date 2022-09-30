@@ -4,7 +4,7 @@
 #include <GL/glew.h>
 #include "buffer.h"
 
-namespace sparky { namespace graphics {
+namespace my_app { namespace graphics {
 
 	class VertexArray {
 	private:

@@ -8,15 +8,15 @@ namespace my_app { namespace editor { namespace tool {
 
 	void RectangleTool::pointerDown(PointerInfo& pointerInfo)
 	{
-		this->m_Rect = new sparky::graphics::Sprite(pointerInfo.curr.x, pointerInfo.curr.y, 0.1f, 0.1f, 0xff0000ff);
-		this->m_DocumentHandler->getActiveDocument()->getActiveTileLayer()->add(m_Rect);
+		this->m_Rect = new my_app::graphics::Sprite(pointerInfo.curr.x, pointerInfo.curr.y, 0.1f, 0.1f, 0xff0000ff);
+		this->m_DocumentHandler->getActiveDocument()->getActiveLayer()->add(m_Rect);
 	}
 
 	void RectangleTool::pointerUp(PointerInfo& pointerInfo)
 	{
 		if (!pointerInfo.isDown) {
-			this->m_Rect = new sparky::graphics::Sprite(pointerInfo.curr.x, pointerInfo.curr.y - m_Size, m_Size, m_Size, 0xff0000ff);
-			this->m_DocumentHandler->getActiveDocument()->getActiveTileLayer()->add(m_Rect);
+			this->m_Rect = new my_app::graphics::Sprite(pointerInfo.curr.x, pointerInfo.curr.y - m_Size, m_Size, m_Size, 0xff0000ff);
+			this->m_DocumentHandler->getActiveDocument()->getActiveLayer()->add(m_Rect);
 		}
 	}
 
@@ -26,7 +26,7 @@ namespace my_app { namespace editor { namespace tool {
 			float width = pointerInfo.curr.x - pointerInfo.down.x;
 			float height = pointerInfo.curr.y - pointerInfo.down.y;
 			std::cout << width << std::endl;
-			this->m_Rect->setSize(sparky::maths::Vec2(width, height));
+			this->m_Rect->setSize(my_app::maths::Vec2(width, height));
 		}
 	}
 

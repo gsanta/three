@@ -12,20 +12,20 @@ namespace my_app { namespace editor { namespace document {
 	void DocumentHandler::createDocument()
 	{
 #ifdef SPARKY_EMSCRIPTEN
-		sparky::graphics::Shader* shader = new sparky::graphics::Shader("res/shaders/basic.es3.vert", "res/shaders/basic.es3.frag");
-		sparky::graphics::Shader* shaderUnlit = new sparky::graphics::Shader("res/shaders/basic.es3.vert", "res/shaders/basic.es3.frag");
+		my_app::graphics::Shader* shader = new my_app::graphics::Shader("res/shaders/basic.es3.vert", "res/shaders/basic.es3.frag");
+		my_app::graphics::Shader* shaderUnlit = new my_app::graphics::Shader("res/shaders/basic.es3.vert", "res/shaders/basic.es3.frag");
 #else
-		sparky::graphics::Shader* shader = new sparky::graphics::Shader("src/shaders/basic.vert", "src/shaders/basic.frag");
-		sparky::graphics::Shader* shaderUnlit = new sparky::graphics::Shader("src/shaders/basic.vert", "src/shaders/unlit.frag");
+		my_app::graphics::Shader* shader = new my_app::graphics::Shader("src/shaders/basic.vert", "src/shaders/basic.frag");
+		my_app::graphics::Shader* shaderUnlit = new my_app::graphics::Shader("src/shaders/basic.vert", "src/shaders/unlit.frag");
 #endif
 
-		sparky::graphics::TileLayer* layer = new sparky::graphics::TileLayer(shader);
-		sparky::graphics::TileLayer* tempLayer = new sparky::graphics::TileLayer(shaderUnlit);
+		my_app::graphics::TileLayer* layer = new my_app::graphics::TileLayer(USER_LAYER_ID_PREFIX + "1", shader);
+		my_app::graphics::TileLayer* tempLayer = new my_app::graphics::TileLayer(DEFAULT_TEMP_LAYER_ID, shaderUnlit);
 
 
-		sparky::graphics::TileLayer* backgroundLayer = new sparky::graphics::TileLayer(shaderUnlit);
+		my_app::graphics::TileLayer* backgroundLayer = new my_app::graphics::TileLayer(DEFAULT_BACKGROUND_LAYER_ID, shaderUnlit);
 
-		Document* document = new Document(layer, tempLayer, backgroundLayer);
+		Document* document = new Document(std::vector<my_app::graphics::Layer*> { layer, tempLayer, backgroundLayer });
 		m_documents.push_back(document);
 		m_ActiveDocument = document;
 	}

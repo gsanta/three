@@ -1,21 +1,22 @@
 #pragma once
 
-#include "layer.h";
+#include <string>
+#include "layer.h"
 #include "../batchRenderer2d.h"
 #include "../../maths/vec2_int.h"
-#include "../shapes/bounds.h";
+#include "../shapes/bounds.h"
 
-namespace sparky { namespace graphics {
+namespace my_app { namespace graphics {
 	class TileLayer : public Layer
 	{
 	private:
 		float m_TileSize = 0.5;
 		my_app::graphics::Bounds m_Bounds;
 	public:
-		TileLayer(Shader* shader);
+		TileLayer(std::string id, Shader* shader);
 		virtual ~TileLayer();
 
-		sparky::maths::Vec2 getTilePos(sparky::maths::Vec2 pointer);
+		my_app::maths::Vec2 getTilePos(my_app::maths::Vec2 pointer);
 	
 		inline float getTileSize() const
 		{

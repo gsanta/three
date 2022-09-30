@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-namespace sparky { namespace maths {
+namespace my_app { namespace maths {
 
 	struct Vec3 {
 		float x, y, z;

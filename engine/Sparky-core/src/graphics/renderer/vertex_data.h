@@ -3,7 +3,7 @@
 #include "../../maths/vec3.h"
 #include "../../maths/vec2.h"
 
-namespace sparky { namespace graphics {
+namespace my_app { namespace graphics {
 	struct VertexData {
 		maths::Vec3 vertex;
 		unsigned int color;

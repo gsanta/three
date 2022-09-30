@@ -2,7 +2,7 @@
 
 #include <GL/glew.h>
 
-namespace sparky { namespace graphics {
+namespace my_app { namespace graphics {
 	class Buffer {
 	private:
 		GLuint m_BufferID;

@@ -13,7 +13,7 @@
 	#include "texture/texture.h"
 #endif
 #include "shapes/bounds.h"
-namespace sparky { namespace graphics {
+namespace my_app { namespace graphics {
 	class Renderable2D {
 
 	protected:

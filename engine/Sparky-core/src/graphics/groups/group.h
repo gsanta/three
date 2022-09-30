@@ -2,7 +2,7 @@
 
 #include "../renderable2D.h"
 
-namespace sparky { namespace graphics  {
+namespace my_app { namespace graphics  {
 
 	class Group : public Renderable2D {
 	private:

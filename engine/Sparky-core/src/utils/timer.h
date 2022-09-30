@@ -2,7 +2,7 @@
 
 #include <Windows.h>
 
-namespace sparky {
+namespace my_app {
 
 	class Timer {
 	private:

@@ -1,6 +1,6 @@
 #include "./indexBuffer.h"
 
-namespace sparky {
+namespace my_app {
 	namespace graphics {
 
 		IndexBuffer::IndexBuffer(GLushort* data, GLsizei count)

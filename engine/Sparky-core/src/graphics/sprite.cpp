@@ -1,6 +1,6 @@
 #include "sprite.h"
 
-namespace sparky { namespace graphics {
+namespace my_app { namespace graphics {
 	Sprite::Sprite(float x, float y, float width, float height, unsigned int  color)
 		: Renderable2D(maths::Vec3(x, y, 0), maths::Vec2(width, height), color)
 	{
@@ -22,7 +22,7 @@ namespace sparky { namespace graphics {
 #endif
 
 	void Sprite::submit(Renderer2D* renderer) const {
-		VertexData* buffer = renderer->getBuffer();
+		VertexData*& buffer = renderer->getBuffer();
 		const maths::Mat4* transformation = renderer->getTransformation();
 		buffer->vertex = *renderer->getTransformation() * m_Position;
 		buffer->uv = m_UV[0];

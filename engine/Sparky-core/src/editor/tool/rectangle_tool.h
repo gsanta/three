@@ -14,7 +14,7 @@ namespace my_app { namespace editor { namespace tool {
 	private:
 		DocumentHandler* m_DocumentHandler;
 		float m_Size = 10;
-		sparky::graphics::Sprite* m_Rect = nullptr;
+		my_app::graphics::Sprite* m_Rect = nullptr;
 
 	public:
 		RectangleTool(DocumentHandler* documentHandler);

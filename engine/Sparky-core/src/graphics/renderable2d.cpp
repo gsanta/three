@@ -1,6 +1,6 @@
 #include "renderable2d.h"
 
-namespace sparky { namespace graphics {
+namespace my_app { namespace graphics {
 
 	void Renderable2D::setSize(maths::Vec2 size)
 	{
