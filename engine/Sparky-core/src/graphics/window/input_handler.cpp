@@ -50,4 +50,12 @@ namespace my_app { namespace graphics {
 			m_Listeners.erase(it);
 		}
 	}
+
+	my_app::maths::Vec2 InputHandler::screenToCanvasPos(my_app::maths::Vec2 screenPos)
+	{
+		float xPos = (screenPos.x + 16.0f) * m_Window->getWidth() / 32.0f;
+		float yPos = (9.0f - screenPos.y) * m_Window->getHeight() / 18.0f;
+
+		return new my_app::maths::Vec2(xPos, yPos);
+ 	}
 }}

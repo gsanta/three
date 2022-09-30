@@ -3,6 +3,7 @@
 #include <vector>
 #include "input_listener.h"
 #include "window.h"
+#include "../../maths/vec2.h"
 
 using namespace std;
 
@@ -25,6 +26,8 @@ namespace my_app { namespace graphics {
 
 		void registerListener(InputListener* inputListener);
 		void unRegisterListener(InputListener* inputListener);
+	
+		my_app::maths::Vec2 screenToCanvasPos(my_app::maths::Vec2 screenPos);
 	};
 
 }}

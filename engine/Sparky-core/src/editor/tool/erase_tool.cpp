@@ -36,6 +36,9 @@ namespace my_app { namespace editor { namespace tool {
 				++it;
 			}
 		}
+
+		auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayer(DEFAULT_TEMP_LAYER_ID);
+		tempLayer->clear();
 	}
 
 	void EraseTool::pointerMove(PointerInfo& pointerInfo)
