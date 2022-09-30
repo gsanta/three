@@ -31,6 +31,10 @@ namespace my_app
 				return m_Id;
 			}
 
+			inline Shader* getShader() {
+				return m_Shader;
+			}
+
 			inline std::vector<Renderable2D*>& getRenderables() {
 				return m_Renderables;
 			}

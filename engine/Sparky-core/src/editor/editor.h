@@ -35,6 +35,10 @@ namespace my_app { namespace editor {
 			return m_Window;
 		}
 
+		inline DocumentHandler* getDocumentHandler() {
+			return m_DocumentHandler;
+		}
+
 		void onUpdate();
 	};
 
