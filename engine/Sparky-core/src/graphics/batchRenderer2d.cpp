@@ -1,6 +1,6 @@
 #include "batchRenderer2d.h"
 
-namespace sparky { namespace graphics {
+namespace my_app { namespace graphics {
 
 	BatchRenderer2D::BatchRenderer2D() {
 		init();
@@ -61,31 +61,6 @@ namespace sparky { namespace graphics {
 #else
 		m_Buffer = (VertexData*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
 #endif
-	}
-
-	void BatchRenderer2D::submit(const Renderable2D* renderable) {
-		// TODO: fix when texture handling will be implemented
-		//float textureSlot = 0.0f;
-		//if (tid > 0) {
-		//	bool found = false;
-		//	for (int i = 0; i < m_TextureSlots.size(); i++) {
-		//		if (m_TextureSlots[i] == tid) {
-		//			textureSlot = (float) (i + 1);
-		//			found = true;
-		//			break;
-		//		}
-		//	}
-
-		//	if (!found) {
-		//		if (m_TextureSlots.size() >= 32) {
-		//			end();
-		//			flush();
-		//			begin();
-		//		}
-		//		m_TextureSlots.push_back(tid);
-		//		textureSlot = (float)(m_TextureSlots.size() - 1);
-		//	}
-		//}
 	}
 
 	void BatchRenderer2D::end()

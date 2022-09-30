@@ -1,6 +1,6 @@
 #include "group.h"
 
-namespace sparky { namespace graphics {
+namespace my_app { namespace graphics {
 	Group::Group(const maths::Mat4& transform) : m_TransformationMatrix(transform)
 	{
 	}

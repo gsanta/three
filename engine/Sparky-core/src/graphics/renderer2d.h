@@ -6,7 +6,7 @@
 #include <vector>
 #include "./renderer/vertex_data.h"
 
-namespace sparky { namespace graphics {
+namespace my_app { namespace graphics {
 	class Renderable2D;
 
 	class Renderer2D {
@@ -55,10 +55,9 @@ namespace sparky { namespace graphics {
 			m_IndexCount = indexCount;
 		}
 
-		virtual void submit(const Renderable2D* renderable) = 0;
 		virtual void flush() = 0;
 		virtual void begin() {}
 		virtual void end() {}
-		virtual VertexData* getBuffer() = 0;
+		virtual VertexData*& getBuffer() = 0;
 	};
 } }

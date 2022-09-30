@@ -1,6 +1,6 @@
 #include "texture.h"
 
-namespace sparky { namespace graphics {
+namespace my_app { namespace graphics {
 
 	Texture::Texture(const std::string& filename) : m_Filename(filename) {
 		m_TID = load();

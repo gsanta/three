@@ -1,6 +1,6 @@
 #include "vec3.h"
 
-namespace sparky { namespace maths {
+namespace my_app { namespace maths {
 
 	Vec3::Vec3() {
 		x = 0.0f;

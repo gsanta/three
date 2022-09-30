@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace sparky {
+namespace my_app {
 
 	class FileUtils {
 	public:

@@ -7,7 +7,7 @@
 #include "../maths/mat4.h"
 #include "../maths/vec2.h"
 
-namespace sparky { namespace graphics {
+namespace my_app { namespace graphics {
 
 	class Shader {
 	public:

@@ -11,7 +11,7 @@ namespace my_app { namespace editor { namespace tool {
 	private:
 		DocumentHandler* m_documentHandler;
 		EditorConfig m_EditorConfig;
-		sparky::graphics::Sprite* sprite;
+		my_app::graphics::Sprite* sprite;
 
 	public:
 		BrushTool(DocumentHandler* documentHandler, EditorConfig& editorConfig);

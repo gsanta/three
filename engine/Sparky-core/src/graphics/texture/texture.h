@@ -5,7 +5,7 @@
 #include <FreeImage.h>
 #include "../texture/imageLoad.h"
 
-namespace sparky { namespace graphics {
+namespace my_app { namespace graphics {
 
 	class Texture {
 	private:

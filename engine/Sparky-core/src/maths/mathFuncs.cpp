@@ -1,6 +1,6 @@
 #include "mathFuncs.h"
 
- namespace sparky { namespace maths {
+ namespace my_app { namespace maths {
 
 	float toRadians(float degrees) {
 		return degrees * (M_PI / 180.0f);

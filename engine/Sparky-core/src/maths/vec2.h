@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-namespace sparky {
+namespace my_app {
 	namespace maths {
 
 		struct Vec2 {

@@ -4,7 +4,7 @@
 #include "vec4.h"
 #include "mathFuncs.h"
 
-namespace sparky { namespace maths {
+namespace my_app { namespace maths {
 	struct Mat4
 	{
 		union {

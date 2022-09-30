@@ -1,6 +1,6 @@
 #include "mat4.h"
 
-namespace sparky { namespace maths {
+namespace my_app { namespace maths {
 
 	Mat4::Mat4() {
 		for (int i = 0; i < 16; i++) {

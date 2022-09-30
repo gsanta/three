@@ -1,9 +1,9 @@
 #include "layer.h"
 
-namespace sparky { namespace graphics {
+namespace my_app { namespace graphics {
 
-	Layer::Layer(Renderer2D* renderer, Shader* shader, maths::Mat4 projectionMatrix)
-		: m_Renderer(renderer), m_Shader(shader), m_ProjectionMatrix(projectionMatrix) {
+	Layer::Layer(std::string id, Renderer2D* renderer, Shader* shader, maths::Mat4 projectionMatrix)
+		: m_Id(id), m_Renderer(renderer), m_Shader(shader), m_ProjectionMatrix(projectionMatrix) {
 
 		m_Shader->enable();
 		m_Shader->setUniformMat4("pr_matrix", m_ProjectionMatrix);

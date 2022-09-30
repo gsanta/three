@@ -1,6 +1,6 @@
 #include "vertexArray.h"
 
-namespace sparky { namespace graphics {
+namespace my_app { namespace graphics {
 	VertexArray::VertexArray()
 	{
 		glGenVertexArrays(1, &m_arrayID);

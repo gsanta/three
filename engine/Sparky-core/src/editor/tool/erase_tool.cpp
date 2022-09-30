@@ -15,15 +15,15 @@ namespace my_app { namespace editor { namespace tool {
 	{
 		Document* activeDocument = m_DocumentHandler->getActiveDocument();
 
-		sparky::maths::Vec2 down = pointerInfo.down;
-		sparky::maths::Vec2 curr = pointerInfo.curr;
+		my_app::maths::Vec2 down = pointerInfo.down;
+		my_app::maths::Vec2 curr = pointerInfo.curr;
 
 		float startX = down.x < curr.x ? down.x : curr.x;
 		float endX = down.x < curr.x ? curr.x : down.x;
 		float startY = down.y < curr.y ? down.y : curr.y;
 		float endY = down.y < curr.y ? curr.y : down.y;
 
-		Layer* layer = activeDocument->getActiveTileLayer();
+		Layer* layer = dynamic_cast<TileLayer*>(activeDocument->getActiveLayer());
 
 		auto it = layer->getRenderables().begin();
 		while (it != layer->getRenderables().end()) {
@@ -31,7 +31,8 @@ namespace my_app { namespace editor { namespace tool {
 
 			if (bounds->minX > startX && bounds->maxX < endX && bounds->minY > startY && bounds->maxY < endY) {
 				layer->remove(*it);
-			} else {
+			}
+			else {
 				++it;
 			}
 		}
@@ -39,21 +40,21 @@ namespace my_app { namespace editor { namespace tool {
 
 	void EraseTool::pointerMove(PointerInfo& pointerInfo)
 	{
-		 if (!pointerInfo.isDown) {
-		 	return;
-		 }
+		if (!pointerInfo.isDown) {
+			return;
+		}
 
-		 auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getTempLayer();
-		 tempLayer->clear();
-		
-		 for (Sprite* sprite : sprites) {
-		 	delete sprite;
-		 }
+		auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayer(DEFAULT_TEMP_LAYER_ID);
+		tempLayer->clear();
 
-		 sprites.clear();
+		for (Sprite* sprite : sprites) {
+			delete sprite;
+		}
 
-		 sparky::maths::Vec2 down = pointerInfo.down;
-		 sparky::maths::Vec2 curr = pointerInfo.curr;
+		sprites.clear();
+
+		my_app::maths::Vec2 down = pointerInfo.down;
+		my_app::maths::Vec2 curr = pointerInfo.curr;
 
 		 float startX = down.x < curr.x ? down.x : curr.x;
 		 float endX = down.x < curr.x ? curr.x : down.x;
