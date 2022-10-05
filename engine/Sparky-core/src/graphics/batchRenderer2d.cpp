@@ -77,7 +77,6 @@ namespace my_app { namespace graphics {
 
 	void BatchRenderer2D::flush()
 	{
-
 		for (int i = 0; i < m_TextureSlots.size(); i++) {
 			glActiveTexture(GL_TEXTURE0 + i);
 			glBindTexture(GL_TEXTURE_2D, m_TextureSlots[i]);

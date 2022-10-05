@@ -78,10 +78,26 @@ namespace my_app { namespace maths {
 	{
 		return left.multiply(right);
 	}
+	
+	Vec2 operator*(Vec2 left, const float right)
+	{
+		left.x *= right;
+		left.y *= right;
+
+		return left;
+	}
 
 	Vec2 operator/(Vec2 left, const Vec2& right)
 	{
 		return left.divide(right);
+	}
+	
+	Vec2 operator/(Vec2 left, const float right)
+	{
+		left.x /= right;
+		left.y /= right;
+
+		return left;
 	}
 
 	std::ostream& operator<<(std::ostream& stream, const Vec2 vec) {

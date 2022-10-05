@@ -19,6 +19,7 @@
 #include "src/graphics/layers/tileLayer.h"
 #include "src/graphics/groups/group.h"
 #include "src/editor/editor.h"
+#include "src/editor/feature/canvas/cursor_light.h"
 
 //#define SPARKY_EMSCRIPTEN 0
 
@@ -74,6 +75,7 @@ static void dispatch_main(void *fp)
 int main()
 {
 	editor = new my_app::editor::Editor();
+	editor->getCanvasListenerHandler()->addListener(new my_app_editor::feature::canvas::CursorLight(editor));
 	window = editor->getWindow();
 
 	// Group* group = new Group(Mat4::translation(maths::Vec3(-5.0f, 5.0f, 0.0f)));

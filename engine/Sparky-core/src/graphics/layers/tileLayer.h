@@ -13,7 +13,7 @@ namespace my_app { namespace graphics {
 		float m_TileSize = 0.5;
 		my_app::graphics::Bounds m_Bounds;
 	public:
-		TileLayer(std::string id, Shader* shader);
+		TileLayer(std::string id, Shader* shader, Renderer2D* renderer);
 		virtual ~TileLayer();
 
 		my_app::maths::Vec2 getTilePos(my_app::maths::Vec2 pointer);

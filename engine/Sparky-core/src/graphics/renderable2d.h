@@ -20,8 +20,7 @@ namespace my_app { namespace graphics {
 		Renderable2D() {
 			setUVDefaults();
 		}
-		maths::Vec3 m_Position;
-		maths::Vec2 m_Size;
+
 		int m_VertexCount;
 		unsigned int m_Color;
 		my_app::graphics::Bounds* m_bounds;
@@ -30,8 +29,7 @@ namespace my_app { namespace graphics {
 		Texture* m_Texture;
 #endif
 	public:
-		Renderable2D(maths::Vec3 position, maths::Vec2 size, unsigned int color)
-			: m_Position(position), m_Size(size), m_Color(color)
+		Renderable2D(unsigned int color) : m_Color(color)
 		{
 			setUVDefaults();
 		}
@@ -50,15 +48,10 @@ namespace my_app { namespace graphics {
 			m_Color = a << 24 | b << 16 | g << 8 | r;
 		}
 
-		void setSize(maths::Vec2 size);
-		void setPosition(maths::Vec3 position);
-
 		inline const my_app::graphics::Bounds* getBounds() const {
 			return m_bounds;
 		}
 
-		inline const maths::Vec3& getPosition() const { return m_Position; }
-		inline const maths::Vec2& getSize() const { return m_Size; }
 		inline int getVertexCount() const { return m_VertexCount; }
 		inline const unsigned int getColor() const { return m_Color; }
 		inline const std::vector<maths::Vec2>& getUV() const { return m_UV; }

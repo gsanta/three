@@ -2,8 +2,8 @@
 
 namespace my_app { namespace graphics {
 
-	TileLayer::TileLayer(std::string id, Shader* shader)
-		: Layer(id, new BatchRenderer2D(), shader, maths::Mat4::otrthographic(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f)) {
+	TileLayer::TileLayer(std::string id, Shader* shader, Renderer2D* renderer)
+		: Layer(id, renderer, shader, maths::Mat4::otrthographic(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f)) {
 
 		m_Bounds.minX = -10;
 		m_Bounds.maxX = 10;

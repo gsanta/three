@@ -3,25 +3,28 @@
 namespace my_app { namespace editor {
 	editor::Editor::Editor()
 	{
-		this->m_Window = new Window("Editor", 800, 600);
-		this->m_DocumentHandler = new DocumentHandler();
-		this->m_DocumentHandler->createDocument();
-		this->m_toolHandler = new ToolHandler(this->m_Window, this->m_DocumentHandler, this->editorConfig);
+		m_Window = new Window("Editor", 800, 600);
+		m_DocumentHandler = new DocumentHandler();
+		m_DocumentHandler->createDocument();
+		m_CanvasListenerHandler = new core::CanvasListenerHandler();
+		m_Window->getInputHandler()->registerListener(m_CanvasListenerHandler);
+
+		m_toolHandler = new ToolHandler(m_Window, m_DocumentHandler, editorConfig);
 		
-		this->m_Window->onUpdate(std::bind(&Editor::onUpdate, this));
+		m_Window->onUpdate(std::bind(&Editor::onUpdate, this));
 	}
 
 	editor::Editor::~Editor()
 	{
-		delete this->m_toolHandler;
-		delete this->m_Window;
-		delete this->m_DocumentHandler;
+		delete m_toolHandler;
+		delete m_Window;
+		delete m_DocumentHandler;
 	}
 
 	void Editor::onUpdate()
 	{
-		if (this->m_DocumentHandler->hasActiveDocument()) {
-			this->m_DocumentHandler->getActiveDocument()->render();
+		if (m_DocumentHandler->hasActiveDocument()) {
+			m_DocumentHandler->getActiveDocument()->render();
 		}
 	}
 }}

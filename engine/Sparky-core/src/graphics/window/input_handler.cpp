@@ -27,7 +27,6 @@ namespace my_app { namespace graphics {
 
 	void InputHandler::emitMouseMove(double x, double y)
 	{
-		std::cout << "X: " << x << std::endl;
 		for (InputListener* listener : m_Listeners) {
 			double xPos = x * 32.0f / m_Window->getWidth() - 16.0f;
 			double yPos = 9.0f - y * 18.0f / m_Window->getHeight();
@@ -56,6 +55,6 @@ namespace my_app { namespace graphics {
 		float xPos = (screenPos.x + 16.0f) * m_Window->getWidth() / 32.0f;
 		float yPos = (9.0f - screenPos.y) * m_Window->getHeight() / 18.0f;
 
-		return new my_app::maths::Vec2(xPos, yPos);
+		return my_app::maths::Vec2(xPos, yPos);
  	}
 }}

@@ -75,9 +75,6 @@
     <ClCompile Include="src\graphics\sprite.cpp">
       <Filter>Source Files\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\staticSprite.cpp">
-      <Filter>Source Files\graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\graphics\texture\texture.cpp">
       <Filter>Source Files\graphics</Filter>
     </ClCompile>
@@ -147,6 +144,9 @@
     <ClCompile Include="src\editor\feature\canvas\cursor_light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\renderable\line_shape.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\window\window.h">
@@ -168,9 +168,6 @@
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\sprite.h">
-      <Filter>Header Files\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\graphics\staticSprite.h">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\texture\texture.h">
@@ -279,6 +276,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\editor\feature\canvas\cursor_light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\renderable\line_shape.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,7 +2,7 @@
 
 namespace my_app { namespace graphics {
 	Sprite::Sprite(float x, float y, float width, float height, unsigned int  color)
-		: Renderable2D(maths::Vec3(x, y, 0), maths::Vec2(width, height), color)
+		: m_Position(maths::Vec3(x, y, 0)), m_Size(maths::Vec2(width, height)), Renderable2D(color)
 	{
 		m_bounds = new my_app::graphics::Bounds();
 		m_bounds->minX = x - width / 2;
@@ -15,16 +15,26 @@ namespace my_app { namespace graphics {
 
 #ifndef SPARKY_EMSCRIPTEN
 	Sprite::Sprite(float x, float y, float width, float height, Texture* texture)
-		: Renderable2D(maths::Vec3(x, y, 0), maths::Vec2(width, height), 0xffffffff)
+		: m_Position(maths::Vec3(x, y, 0)), m_Size(maths::Vec2(width, height)), Renderable2D(0xffffffff)
 	{
 		m_Texture = texture;
 	}
 #endif
 
+	void Sprite::setSize(maths::Vec2 size)
+	{
+		this->m_Size = size;
+	}
+
+	void Sprite::setPosition(maths::Vec3 position)
+	{
+		this->m_Position = position;
+	}
+
 	void Sprite::submit(Renderer2D* renderer) const {
 		VertexData*& buffer = renderer->getBuffer();
 		const maths::Mat4* transformation = renderer->getTransformation();
-		buffer->vertex = *renderer->getTransformation() * m_Position;
+		buffer->vertex = *transformation * m_Position;
 		buffer->uv = m_UV[0];
 		buffer->tid = 0.0f;
 		buffer->color = m_Color;
