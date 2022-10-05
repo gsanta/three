@@ -3,7 +3,8 @@
 layout (location = 0) out vec4 color;
 
 uniform vec4 col;
-uniform vec2 light_pos;
+
+uniform vec2 light_pos = vec2(1.0, 1.0);
 
 in DATA {
 	vec4 pos;

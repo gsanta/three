@@ -19,7 +19,9 @@ namespace my_app {
 			friend Vec2 operator+(Vec2 left, const Vec2& right);
 			friend Vec2 operator-(Vec2 left, const Vec2& right);
 			friend Vec2 operator*(Vec2 left, const Vec2& right);
+			friend Vec2 operator*(Vec2 left, const float right);
 			friend Vec2 operator/(Vec2 left, const Vec2& right);
+			friend Vec2 operator/(Vec2 left, const float right);
 			friend std::ostream& operator<<(std::ostream& stream, const Vec2 vec);
 
 			bool operator==(const Vec2& other);

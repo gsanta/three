@@ -3,6 +3,9 @@
 #include "document.h"
 #include "../../graphics/layers/tileLayer.h"
 #include "../../graphics/shader.h"
+#include "../../graphics/batchRenderer2d.h"
+#include "../../graphics/renderable/line_shape.h"
+#include "../../graphics/sprite.h"
 
 namespace my_app { namespace editor { namespace document {
 	using namespace std;

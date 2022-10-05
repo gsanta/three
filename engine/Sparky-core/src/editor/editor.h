@@ -4,6 +4,7 @@
 #include "tool/tool_handler.h"
 #include "document/document_handler.h"
 #include "editor_config.h"
+#include "core/canvas/canvas_listener_handler.h"
 
 namespace my_app { namespace editor {
 
@@ -15,6 +16,7 @@ namespace my_app { namespace editor {
 	private:
 		Window* m_Window;
 		ToolHandler* m_toolHandler;
+		core::CanvasListenerHandler* m_CanvasListenerHandler;
 		DocumentHandler* m_DocumentHandler;
 		EditorConfig editorConfig;
 
@@ -37,6 +39,10 @@ namespace my_app { namespace editor {
 
 		inline DocumentHandler* getDocumentHandler() {
 			return m_DocumentHandler;
+		}
+
+		inline core::CanvasListenerHandler* getCanvasListenerHandler() {
+			return m_CanvasListenerHandler;
 		}
 
 		void onUpdate();

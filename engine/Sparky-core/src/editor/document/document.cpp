@@ -15,9 +15,10 @@ namespace my_app { namespace editor { namespace document {
 	Document::~Document() {
 		std::vector<my_app::graphics::Layer*>::iterator it;
 
-		for (it = m_Layers.begin(); it != m_Layers.end(); ) {
-			delete *it;
-		}
+		// TODO fix it
+		//for (it = m_Layers.begin(); it != m_Layers.end(); ) {
+		//	delete *it;
+		//}
 	}
 
 	my_app::graphics::Layer* Document::getLayer(std::string id)

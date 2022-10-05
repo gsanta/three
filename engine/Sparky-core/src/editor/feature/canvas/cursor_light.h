@@ -5,7 +5,7 @@
 
 namespace my_app_editor { namespace feature { namespace canvas {
 
-	class CursorLight : public CanvasListener {
+	class CursorLight : public my_app::editor::core::CanvasListener {
 	private:
 		my_app::editor::Editor* m_Editor;
 
