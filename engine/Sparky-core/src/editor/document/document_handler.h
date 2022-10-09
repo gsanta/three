@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "document.h"
+#include "checkerboard.h"
 #include "../../graphics/layers/tileLayer.h"
 #include "../../graphics/shader.h"
 #include "../../graphics/batchRenderer2d.h"

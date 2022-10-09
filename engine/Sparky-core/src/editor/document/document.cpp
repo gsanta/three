@@ -2,14 +2,13 @@
 
 namespace my_app { namespace editor { namespace document {
 
-	Document::Document(std::vector<my_app::graphics::Layer*> layers)
-		: m_Layers(layers)
+	Document::Document(my_app_editor::document::Dimensions dimensions) : dimensions(dimensions)
 	{
-		auto it = find_if(m_Layers.begin(), m_Layers.end(), [](my_app::graphics::Layer* layer) {
-			return layer->getId().rfind(USER_LAYER_ID_PREFIX, 0) != std::string::npos; 
-		});
+		//auto it = find_if(m_Layers.begin(), m_Layers.end(), [](my_app::graphics::Layer* layer) {
+		//	return layer->getId().rfind(USER_LAYER_ID_PREFIX, 0) != std::string::npos; 
+		//});
 
-		m_ActiveLayer = *it;
+		//m_ActiveLayer = *it;
 	}
 
 	Document::~Document() {
@@ -26,6 +25,16 @@ namespace my_app { namespace editor { namespace document {
 		auto it = find_if(m_Layers.begin(), m_Layers.end(), [&id](my_app::graphics::Layer* layer) { return layer->getId() == id; });
 
 		return *it;
+	}
+
+	void Document::addLayer(my_app::graphics::Layer* layer)
+	{
+		m_Layers.push_back(layer);
+	}
+
+	void Document::setActiveLayer(std::string id)
+	{
+		m_ActiveLayer = getLayer(id);
 	}
 
 	void Document::render()
