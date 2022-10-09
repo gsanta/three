@@ -18,13 +18,28 @@ namespace my_app { namespace editor { namespace document {
 		my_app::graphics::Shader* shader = new my_app::graphics::Shader("src/shaders/basic.vert", "src/shaders/basic.frag");
 		my_app::graphics::Shader* shaderUnlit = new my_app::graphics::Shader("src/shaders/basic.vert", "src/shaders/unlit.frag");
 #endif
+		my_app_editor::document::Dimensions dimensions(-16.0f, 16.0f, -9.0f, 9.0f);
+		Document* document = new Document(dimensions);
 
-		my_app::graphics::TileLayer* layer = new my_app::graphics::TileLayer(USER_LAYER_ID_PREFIX + "1", shader, new my_app::graphics::BatchRenderer2D());
-		my_app::graphics::TileLayer* tempLayer = new my_app::graphics::TileLayer(DEFAULT_TEMP_LAYER_ID, shaderUnlit, new my_app::graphics::BatchRenderer2D());
-		my_app::graphics::TileLayer* backgroundLayer = new my_app::graphics::TileLayer(DEFAULT_BACKGROUND_LAYER_ID, shaderUnlit, new my_app::graphics::BatchRenderer2D());
+		maths::Mat4 projection = maths::Mat4::otrthographic(dimensions.left, dimensions.right, dimensions.bottom, dimensions.top, -1.0f, 1.0f);
+		
+		std::string userLayer1Id = USER_LAYER_ID_PREFIX + "1";
+		my_app::graphics::TileLayer* userLayer1 = new my_app::graphics::TileLayer(userLayer1Id, projection, shader, new my_app::graphics::BatchRenderer2D());
+		my_app::graphics::TileLayer* tempLayer = new my_app::graphics::TileLayer(DEFAULT_TEMP_LAYER_ID, projection, shaderUnlit, new my_app::graphics::BatchRenderer2D());
+		my_app::graphics::TileLayer* backgroundLayer = new my_app::graphics::TileLayer(DEFAULT_BACKGROUND_LAYER_ID, projection, shaderUnlit, new my_app::graphics::BatchRenderer2D());
+
+		document->addLayer(userLayer1);
+		document->addLayer(tempLayer);
+		document->addLayer(backgroundLayer);
+
+		document->setActiveLayer(userLayer1Id);
+
+		my_app_editor::document::Checkerboard checkerboard;
+
+		checkerboard.create(document);
+
 		backgroundLayer->add(new my_app_engine::graphics::LineShape(5.0f, 5.0f, 0, 0, 0.5f, 0Xffff00ff));
 
-		Document* document = new Document(std::vector<my_app::graphics::Layer*> { layer, tempLayer, backgroundLayer });
 		m_documents.push_back(document);
 		m_ActiveDocument = document;
 	}

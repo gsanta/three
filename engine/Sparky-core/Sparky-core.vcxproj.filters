@@ -147,6 +147,12 @@
     <ClCompile Include="src\graphics\renderable\line_shape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\editor\document\checkerboard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\editor\document\dimensions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\window\window.h">
@@ -272,13 +278,16 @@
     <ClInclude Include="src\editor\core\canvas\canvas_listener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\editor\feature\canvas\checkerboard\checkerboard.h">
+    <ClInclude Include="src\editor\document\checkerboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\editor\feature\canvas\cursor_light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\renderable\line_shape.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\editor\document\dimensions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

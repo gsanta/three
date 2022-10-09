@@ -3,7 +3,7 @@
 #include <vector>
 #include "../../graphics/layers/layer.h"
 #include "../../graphics/layers/tileLayer.h"
-
+#include "dimensions.h"
 
 namespace my_app { namespace editor { namespace document {
 
@@ -22,14 +22,20 @@ namespace my_app { namespace editor { namespace document {
 		my_app::graphics::Layer* m_ActiveLayer;
 
 	public:
-		Document(std::vector<my_app::graphics::Layer*> layers);
+		Document(my_app_editor::document::Dimensions dimensions);
 		~Document();
 
+		my_app_editor::document::Dimensions dimensions;
+
 		my_app::graphics::Layer* getLayer(std::string id);
+
+		void addLayer(my_app::graphics::Layer* layer);
 
 		inline my_app::graphics::Layer* getActiveLayer() {
 			return m_ActiveLayer;
 		}
+
+		void setActiveLayer(std::string id);
 
 		void render();
 	};
