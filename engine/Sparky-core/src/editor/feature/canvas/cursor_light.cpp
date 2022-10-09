@@ -7,8 +7,9 @@ namespace my_app_editor { namespace feature { namespace canvas {
 
 	void CursorLight::pointerMove(my_app::editor::tool::PointerInfo& pointerInfo) {
 		my_app::maths::Vec2 lightPos = m_Editor->getWindow()->getInputHandler()->screenToCanvasPos(pointerInfo.curr);
-		m_Editor->getDocumentHandler()->getActiveDocument()->getActiveLayer()->getShader()->enable();
-		m_Editor->getDocumentHandler()->getActiveDocument()->getActiveLayer()->getShader()->setUniform2f("light_pos", pointerInfo.curr);
-		m_Editor->getDocumentHandler()->getActiveDocument()->getActiveLayer()->getShader()->disable();
+		my_app::editor::Layer* backgroundLayer = m_Editor->getDocumentHandler()->getActiveDocument()->getLayer(my_app::editor::document::DEFAULT_BACKGROUND_LAYER_ID);
+		backgroundLayer->getShader()->enable();
+		backgroundLayer->getShader()->setUniform2f("light_pos", pointerInfo.curr);
+		backgroundLayer->getShader()->disable();
 	}
 }}}

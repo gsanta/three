@@ -24,13 +24,13 @@ namespace my_app { namespace editor { namespace document {
 		maths::Mat4 projection = maths::Mat4::otrthographic(dimensions.left, dimensions.right, dimensions.bottom, dimensions.top, -1.0f, 1.0f);
 		
 		std::string userLayer1Id = USER_LAYER_ID_PREFIX + "1";
-		my_app::graphics::TileLayer* userLayer1 = new my_app::graphics::TileLayer(userLayer1Id, projection, shader, new my_app::graphics::BatchRenderer2D());
+		my_app::graphics::TileLayer* userLayer1 = new my_app::graphics::TileLayer(userLayer1Id, projection, shaderUnlit, new my_app::graphics::BatchRenderer2D());
 		my_app::graphics::TileLayer* tempLayer = new my_app::graphics::TileLayer(DEFAULT_TEMP_LAYER_ID, projection, shaderUnlit, new my_app::graphics::BatchRenderer2D());
 		my_app::graphics::TileLayer* backgroundLayer = new my_app::graphics::TileLayer(DEFAULT_BACKGROUND_LAYER_ID, projection, shaderUnlit, new my_app::graphics::BatchRenderer2D());
 
+		document->addLayer(backgroundLayer);
 		document->addLayer(userLayer1);
 		document->addLayer(tempLayer);
-		document->addLayer(backgroundLayer);
 
 		document->setActiveLayer(userLayer1Id);
 
