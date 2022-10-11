@@ -2,11 +2,11 @@
 #include <vector>
 #include "document.h"
 #include "checkerboard.h"
-#include "../../graphics/layers/tileLayer.h"
-#include "../../graphics/shader.h"
-#include "../../graphics/batchRenderer2d.h"
-#include "../../graphics/renderable/line_shape.h"
-#include "../../graphics/sprite.h"
+#include "../../engine/graphics/layer/tileLayer.h"
+#include "../../engine/graphics/shader/shader.h"
+#include "../../engine/graphics/renderer/batchRenderer2d.h"
+#include "../../engine/graphics/renderable/line_shape.h"
+#include "../../engine/graphics/renderable/sprite.h"
 
 namespace my_app { namespace editor { namespace document {
 	using namespace std;

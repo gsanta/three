@@ -3,7 +3,7 @@
 namespace my_app { namespace editor {
 	editor::Editor::Editor()
 	{
-		m_Window = new Window("Editor", 800, 600);
+		m_Window = new my_app_engine::system::Window("Editor", 800, 600);
 		m_DocumentHandler = new DocumentHandler();
 		m_DocumentHandler->createDocument();
 		m_CanvasListenerHandler = new core::CanvasListenerHandler();

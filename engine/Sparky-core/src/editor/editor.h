@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../graphics/window/window.h"
+#include "../engine/system/window/window.h"
 #include "tool/tool_handler.h"
 #include "document/document_handler.h"
 #include "editor_config.h"
@@ -8,13 +8,12 @@
 
 namespace my_app { namespace editor {
 
-	using namespace graphics;
 	using namespace tool;
 	using namespace document;
 
 	class Editor {
 	private:
-		Window* m_Window;
+		my_app_engine::system::Window* m_Window;
 		ToolHandler* m_toolHandler;
 		core::CanvasListenerHandler* m_CanvasListenerHandler;
 		DocumentHandler* m_DocumentHandler;
@@ -33,7 +32,7 @@ namespace my_app { namespace editor {
 			 m_Window->getInputHandler()->unRegisterListener(m_toolHandler);
 		}
 
-		inline Window* getWindow() const {
+		inline my_app_engine::system::Window* getWindow() const {
 			return m_Window;
 		}
 

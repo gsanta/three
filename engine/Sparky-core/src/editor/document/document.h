@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
-#include "../../graphics/layers/layer.h"
-#include "../../graphics/layers/tileLayer.h"
+#include "../../engine/graphics/layer/layer.h"
+#include "../../engine/graphics/layer/tileLayer.h"
 #include "dimensions.h"
 
 namespace my_app { namespace editor { namespace document {
@@ -14,12 +14,12 @@ namespace my_app { namespace editor { namespace document {
 	class Document
 	{
 	private:
-		//my_app::graphics::Layer* m_TempLayer;
-		//my_app::graphics::TileLayer* m_BackgroundLayer;
-		//my_app::graphics::TileLayer* m_TileLayer;
-		std::vector<my_app::graphics::Layer*> m_Layers;
+		//my_app_engine::graphics::Layer* m_TempLayer;
+		//my_app_engine::graphics::TileLayer* m_BackgroundLayer;
+		//my_app_engine::graphics::TileLayer* m_TileLayer;
+		std::vector<my_app_engine::graphics::Layer*> m_Layers;
 
-		my_app::graphics::Layer* m_ActiveLayer;
+		my_app_engine::graphics::Layer* m_ActiveLayer;
 
 	public:
 		Document(my_app_editor::document::Dimensions dimensions);
@@ -27,11 +27,11 @@ namespace my_app { namespace editor { namespace document {
 
 		my_app_editor::document::Dimensions dimensions;
 
-		my_app::graphics::Layer* getLayer(std::string id);
+		my_app_engine::graphics::Layer* getLayer(std::string id);
 
-		void addLayer(my_app::graphics::Layer* layer);
+		void addLayer(my_app_engine::graphics::Layer* layer);
 
-		inline my_app::graphics::Layer* getActiveLayer() {
+		inline my_app_engine::graphics::Layer* getActiveLayer() {
 			return m_ActiveLayer;
 		}
 

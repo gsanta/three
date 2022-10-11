@@ -3,12 +3,12 @@
 #include <vector>
 #include "canvas_listener.h"
 #include "../../tool/pointer_info.h"
-#include "../../../graphics/window/input_listener.h"
+#include "../../../engine/system/window/input_listener.h"
 #include "../../tool/pointer_info.h"
 
 namespace my_app { namespace editor { namespace core {
 
-	class CanvasListenerHandler : public my_app::graphics::InputListener {
+	class CanvasListenerHandler : public my_app_engine::system::InputListener {
 	private:
 		std::vector<CanvasListener*> m_Listeners;
 		my_app::editor::tool::PointerInfo m_PointerInfo;
