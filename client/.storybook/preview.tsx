@@ -20,8 +20,6 @@ export const parameters = {
 export const decorators = [
   (storyFn: () => JSX.Element) => {
     queryClient.clear();
-    // const editor = new Editor(canvas, canvasContext, webGLContext);
-
     return (
       <QueryClientProvider client={queryClient}>
         <ChakraProvider theme={theme} cssVarsRoot="body">
