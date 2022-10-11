@@ -5,15 +5,14 @@ import Layout from './layout/Layout';
 import Box from './box/Box';
 import ExternalTool from '@/services/tool/ExternalTool';
 import ToolStore from '@/services/tool/ToolStore';
-import Toolbar from '../toolbar/Toolbar';
+import Toolbar from '../panels/toolbar/Toolbar';
 import theme from './theme';
 import ToolName from '@/services/tool/ToolName';
+import Split from 'react-split';
 
 const App = () => {
   const [isModuleSet, setIsModuleSet] = useState(false);
   const [toolStore, setToolStore] = useState<ToolStore | undefined>();
-
-  console.log('rendering app');
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -60,9 +59,15 @@ const App = () => {
         <Box width="50px">
           <Toolbar toolStore={toolStore} />
         </Box>
-        <Box ref={contentRef} sx={{ width: 'calc(100% - 40px)' }}>
-          <canvas id="canvas"></canvas>
-        </Box>
+        <Split className="split" direction="horizontal" sizes={[75, 25]}>
+          <Box ref={contentRef}>
+            box1
+            <canvas id="canvas">efgh</canvas>
+          </Box>
+          <Box height="100%" width="100%">
+            abcd
+          </Box>
+        </Split>
       </Layout>
     </ChakraProvider>
   );
