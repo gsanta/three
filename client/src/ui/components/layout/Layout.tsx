@@ -10,9 +10,7 @@ export type LayoutProps = {
 const Layout = ({ header, footer, children }: LayoutProps) => (
   <Box display="grid" gridTemplateRows="auto 1fr auto" flexDir="column" minH="100%">
     {header && <Box id="header">{header}</Box>}
-    <Box display="flex" flexDir="row">
-      {children}
-    </Box>
+    {children}
     {footer && <Box id="footer">{footer}</Box>}
   </Box>
 );

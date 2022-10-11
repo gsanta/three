@@ -56,18 +56,19 @@ const App = () => {
           </Box>
         }
       >
-        <Box width="50px">
-          <Toolbar toolStore={toolStore} />
+        <Box display="flex" flexDirection="row">
+          <Box width="50px">
+            <Toolbar toolStore={toolStore} />
+          </Box>
+          <Split className="split" direction="horizontal" sizes={[75, 25]}>
+            <Box ref={contentRef}>
+              box1
+              <canvas id="canvas">efgh</canvas>
+            </Box>
+            <Box height="100%">
+            </Box>
+          </Split>
         </Box>
-        <Split className="split" direction="horizontal" sizes={[75, 25]}>
-          <Box ref={contentRef}>
-            box1
-            <canvas id="canvas">efgh</canvas>
-          </Box>
-          <Box height="100%" width="100%">
-            abcd
-          </Box>
-        </Split>
       </Layout>
     </ChakraProvider>
   );
