@@ -1,29 +1,29 @@
-#include "src/graphics/window/window.h"
-#include "src/maths/vec2.h"
-#include "src/maths/mat4.h"
+#include "src/engine/system/window/window.h"
+#include "src/engine/maths/vec2.h"
+#include "src/engine/maths/mat4.h"
 //#include "src/utils/timer.h"
-#include "src/utils/fileUtils.h"
-#include "src/graphics/shader.h"
-#include "src/graphics/buffers/buffer.h"
-#include "src/graphics/buffers/indexBuffer.h"
-#include "src/graphics/buffers/vertexArray.h"
+#include "src/engine/system/utils/fileUtils.h"
+#include "src/engine/graphics/shader/shader.h"
+#include "src/engine/graphics/buffer/buffer.h"
+#include "src/engine/graphics/buffer/indexBuffer.h"
+#include "src/engine/graphics/buffer/vertexArray.h"
 
-#include "src/graphics/renderer2d.h"
-#include "src/graphics/renderable2d.h"
-#include "src/graphics/Sprite.h"
-#include "src/graphics/batchRenderer2D.h"
+#include "src/engine/graphics/renderer/renderer2d.h"
+#include "src/engine/graphics/renderable/renderable2d.h"
+#include "src/engine/graphics/renderable/Sprite.h"
+#include "src/engine/graphics/renderer/batchRenderer2D.h"
 
 #include <vector>
 
 #include <time.h>
-#include "src/graphics/layers/tileLayer.h"
-#include "src/graphics/groups/group.h"
+#include "src/engine/graphics/layer/tileLayer.h"
+#include "src/engine/graphics/renderable/group.h"
 #include "src/editor/editor.h"
 #include "src/editor/feature/canvas/cursor_light.h"
 
 //#define SPARKY_EMSCRIPTEN 0
 
-Window *window = nullptr;
+my_app_engine::system::Window *window = nullptr;
 my_app::editor::Editor *editor = nullptr;
 
 #ifdef SPARKY_EMSCRIPTEN
@@ -57,7 +57,7 @@ EMSCRIPTEN_BINDINGS(editor)
 }
 
 #else
-#include "src/graphics/texture/texture.h"
+#include "src/engine/graphics/texture/texture.h"
 #endif
 
 #define BATCH_RENDERER 1

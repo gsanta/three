@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../../graphics/sprite.h"
+#include "../../engine/graphics/renderable/sprite.h"
 #include "tool.h"
 #include "../document/document_handler.h"
-#include "../../maths/vec2.h"
-#include "../../maths/vec3.h"
+#include "../../engine/maths/vec2.h"
+#include "../../engine/maths/vec3.h"
 
 namespace my_app { namespace editor { namespace tool {
 
@@ -14,7 +14,7 @@ namespace my_app { namespace editor { namespace tool {
 	private:
 		DocumentHandler* m_DocumentHandler;
 		float m_Size = 10;
-		my_app::graphics::Sprite* m_Rect = nullptr;
+		my_app_engine::graphics::Sprite* m_Rect = nullptr;
 
 	public:
 		RectangleTool(DocumentHandler* documentHandler);

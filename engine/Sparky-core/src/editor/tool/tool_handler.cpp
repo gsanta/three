@@ -2,7 +2,7 @@
 
 namespace my_app { namespace editor { namespace tool {
 	
-	ToolHandler::ToolHandler(Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig) : m_Window(window), m_EditorConfig(editorConfig)
+	ToolHandler::ToolHandler(my_app_engine::system::Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig) : m_Window(window), m_EditorConfig(editorConfig)
 	{
 		window->getInputHandler()->registerListener(this);
 

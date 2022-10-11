@@ -1,7 +1,7 @@
 #pragma once
 
 #include "document.h"
-#include "../../graphics/sprite.h"
+#include "../../engine/graphics/renderable/sprite.h"
 
 namespace my_app_editor { namespace document {
 
