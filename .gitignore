@@ -59,6 +59,7 @@ yarn-debug.log*
 *.wasm
 
 engine/Sparky-core/Debug
+engine/bin
 engine/Debug
 engine/bin/Debug
 engine/bin/intermediates
