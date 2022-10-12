@@ -38,8 +38,6 @@ namespace my_app { namespace editor { namespace document {
 
 		checkerboard.create(document);
 
-		backgroundLayer->add(new my_app_engine::graphics::LineShape(5.0f, 5.0f, 0, 0, 0.5f, 0Xffff00ff));
-
 		m_documents.push_back(document);
 		m_ActiveDocument = document;
 	}

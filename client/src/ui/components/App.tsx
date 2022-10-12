@@ -9,15 +9,25 @@ import Toolbar from '../panels/toolbar/Toolbar';
 import theme from './theme';
 import ToolName from '@/services/tool/ToolName';
 import Split from 'react-split';
+import { useResizeObserver } from '../hooks/useResizeObserver';
 
 const App = () => {
   const [isModuleSet, setIsModuleSet] = useState(false);
   const [toolStore, setToolStore] = useState<ToolStore | undefined>();
+  const [canvasNode, setCanvasNode] = useState<HTMLElement | undefined>(undefined);
+
+  const setWindowSize = () => {
+    if (canvasNode && isModuleSet) {
+      const rect = canvasNode.getBoundingClientRect();
+      window.Module.setWindowSize(rect.width, rect.height);
+    }
+  };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (window?.Module?.isRuntimeInitialize && !isModuleSet) {
       setIsModuleSet(true);
+      setWindowSize();
 
       const tools = [
         new ExternalTool(ToolName.Brush, 'BiPencil', Module),
@@ -29,18 +39,13 @@ const App = () => {
     }
   });
 
-  const contentRef = useCallback(
-    (node: HTMLDivElement) => {
-      if (node) {
-        const rect = node.getBoundingClientRect();
+  const contentRef = useCallback((node: HTMLDivElement) => {
+    if (node) {
+      setCanvasNode(node);
+    }
+  }, []);
 
-        if (isModuleSet) {
-          window.Module.setWindowSize(rect.width, rect.height);
-        }
-      }
-    },
-    [isModuleSet],
-  );
+  useResizeObserver(canvasNode, setWindowSize);
 
   return (
     <ChakraProvider theme={theme} cssVarsRoot="body">
@@ -62,12 +67,9 @@ const App = () => {
           </Box>
           <Split className="split" direction="horizontal" sizes={[75, 25]}>
             <Box ref={contentRef}>
-              box1
               <canvas id="canvas">efgh</canvas>
             </Box>
-            <Box height="100%">
-              <iframe src="./iframe.html" />
-            </Box>
+            <Box height="100%"></Box>
           </Split>
         </Box>
       </Layout>

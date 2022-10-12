@@ -23,10 +23,23 @@ namespace my_app { namespace editor { namespace tool {
 	void RectangleTool::pointerMove(PointerInfo& pointerInfo)
 	{
 		if (pointerInfo.isDown) {
+
+			my_app_engine::graphics::TileLayer* tileLayer = dynamic_cast<my_app_engine::graphics::TileLayer*>(m_DocumentHandler->getActiveDocument()->getActiveLayer());
+			my_app_engine::maths::Vec2 downTilePos = tileLayer->getTilePos(pointerInfo.down);
+			my_app_engine::maths::Vec2 currTilePos = tileLayer->getTilePos(pointerInfo.curr);
+
+			float left = downTilePos.x < currTilePos.x ? downTilePos.x : currTilePos.x;
+			float right = downTilePos.x > currTilePos.x ? downTilePos.x : currTilePos.x;
+			float bottom = downTilePos.y < currTilePos.y ? downTilePos.y : currTilePos.y;
+			float top = downTilePos.y > currTilePos.y ? downTilePos.y : currTilePos.y;
+
+
+
 			float width = pointerInfo.curr.x - pointerInfo.down.x;
 			float height = pointerInfo.curr.y - pointerInfo.down.y;
 			std::cout << width << std::endl;
-			this->m_Rect->setSize(my_app_engine::maths::Vec2(width, height));
+			this->m_Rect->setPosition(my_app_engine::maths::Vec3(left, bottom, 0));
+			this->m_Rect->setSize(my_app_engine::maths::Vec2(right - left, top - bottom));
 		}
 	}
 
