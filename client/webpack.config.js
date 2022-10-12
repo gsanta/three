@@ -19,6 +19,7 @@ module.exports = (env) => {
   return {
     entry: {
       app: './src/index.tsx',
+      iframe: './src/iframe.tsx',
     },
     module: {
       rules: [

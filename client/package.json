@@ -9,7 +9,6 @@
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "scripts": {
-    "dev": "cross-env NEXT_PUBLIC_API_MOCKING=true next dev -p 3005",
     "build": "webpack",
     "start": "node app",
     "start:dev": "webpack-dev-server",
