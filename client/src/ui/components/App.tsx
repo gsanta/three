@@ -66,6 +66,7 @@ const App = () => {
               <canvas id="canvas">efgh</canvas>
             </Box>
             <Box height="100%">
+              <iframe src="./iframe.html" />
             </Box>
           </Split>
         </Box>

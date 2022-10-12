@@ -1,53 +1,71 @@
 module.exports = {
-  parser: '@typescript-eslint/parser'
+  parser: '@typescript-eslint/parser',
   /* Parser with TypeScript support */
-  ,
   parserOptions: {
     ecmaFeatures: {
-      jsx: true
-    }
+      jsx: true,
+    },
     /* Enables JSX usage */
-    ,
     ecmaVersion: 2018,
     sourceType: 'module',
     project: ['./tsconfig.json'],
-    tsconfigRootDir: __dirname
+    tsconfigRootDir: __dirname,
   },
   env: {
     browser: true,
     es6: true,
-    jest: true
+    jest: true,
   },
   settings: {
     jest: {
-      version: 'detect'
+      version: 'detect',
     },
     react: {
-      version: 'detect'
-    }
+      version: 'detect',
+    },
   },
-  extends: ['airbnb/hooks', 'plugin:@typescript-eslint/recommended', 'airbnb-typescript', 'plugin:jest/recommended', 'plugin:jest/style', 'plugin:prettier/recommended', 'prettier/prettier', 'plugin:storybook/recommended'],
+  extends: [
+    'airbnb/hooks',
+    'plugin:@typescript-eslint/recommended',
+    'airbnb-typescript',
+    'plugin:jest/recommended',
+    'plugin:jest/style',
+    'plugin:prettier/recommended',
+    'prettier/prettier',
+    'plugin:storybook/recommended',
+  ],
   plugins: [
-  /*** Uncommented plugins are here for clarity, DON'T remove them!!! ***/
+    /*** Uncommented plugins are here for clarity, DON'T remove them!!! ***/
 
-  /* eslint-config-airbnb already defines these plugins */
-  'import', 'react', 'react-hooks' // 'jsx-a11y',
+    /* eslint-config-airbnb already defines these plugins */
+    'import',
+    'react',
+    'react-hooks', // 'jsx-a11y',
 
-  /* @typescript-eslint/eslint-plugin already defines this plugin */
-  // '@typescript-eslint',
+    /* @typescript-eslint/eslint-plugin already defines this plugin */
+    // '@typescript-eslint',
 
-  /* eslint-plugin-jest already defines this plugin */
-  // 'jest',
+    /* eslint-plugin-jest already defines this plugin */
+    // 'jest',
 
-  /* eslint-plugin-prettier already defines this plugin */
-  // 'prettier',
+    /* eslint-plugin-prettier already defines this plugin */
+    // 'prettier',
   ],
   rules: {
     /*** Import related rules ***/
     'import/extensions': 'off',
-    'import/no-extraneous-dependencies': ['error', {
-      devDependencies: ['**/*.stories.tsx', '**/*.test.tsx', '**/*.test.ts', './webpack.config.js', './app/javascript/utils/testcases.ts', './spec/typescript/*']
-    }],
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: [
+          '**/*.stories.tsx',
+          '**/*.test.tsx',
+          '**/*.test.ts',
+          'client/webpack.config.js',
+          './spec/typescript/*',
+        ],
+      },
+    ],
 
     /*** Export related rules ***/
     'import/prefer-default-export': 'off',
@@ -65,29 +83,42 @@ module.exports = {
     /*** TypeScript related rules  ***/
 
     /* Ban React.FC and FunctionComponent to avoid double typing */
-    '@typescript-eslint/ban-types': ['error', {
-      types: {
-        'React.FC': "Use an arrow-function with JSX.Element return type instead. If you need the children property, you have to explicitly define it on your component's prop-type interface.",
-        FunctionComponent: "Use an arrow-function with JSX.Element return type instead. If you need the children property, you have to explicitly define it on your component's prop-type interface."
-      }
-    }],
+    '@typescript-eslint/ban-types': [
+      'error',
+      {
+        types: {
+          'React.FC':
+            "Use an arrow-function with JSX.Element return type instead. If you need the children property, you have to explicitly define it on your component's prop-type interface.",
+          FunctionComponent:
+            "Use an arrow-function with JSX.Element return type instead. If you need the children property, you have to explicitly define it on your component's prop-type interface.",
+        },
+      },
+    ],
 
     /* Allow i++ in for loop */
-    'no-plusplus': ['error', {
-      allowForLoopAfterthoughts: true
-    }],
+    'no-plusplus': [
+      'error',
+      {
+        allowForLoopAfterthoughts: true,
+      },
+    ],
 
     /* Force function components to be arrow-functions */
-    'react/function-component-definition': ['error', {
-      namedComponents: 'arrow-function',
-      unnamedComponents: 'arrow-function'
-    }],
-    'jest/expect-expect': 'off'
+    'react/function-component-definition': [
+      'error',
+      {
+        namedComponents: 'arrow-function',
+        unnamedComponents: 'arrow-function',
+      },
+    ],
+    'jest/expect-expect': 'off',
   },
-  overrides: [{
-    files: ['**/*.stories.tsx', '**/*.spec.tsx', '**/*.spec.ts'],
-    rules: {
-      'react/jsx-props-no-spreading': 'off'
-    }
-  }]
+  overrides: [
+    {
+      files: ['**/*.stories.tsx', '**/*.spec.tsx', '**/*.spec.ts'],
+      rules: {
+        'react/jsx-props-no-spreading': 'off',
+      },
+    },
+  ],
 };
