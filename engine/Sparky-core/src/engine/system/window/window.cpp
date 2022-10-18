@@ -12,7 +12,8 @@ namespace my_app_engine { namespace system {
 				glfwTerminate();
 			}
 
-			this->m_InputHandler = new InputHandler(this);
+			m_InputHandler = new InputHandler(this);
+			m_FrameHandler = new FrameHandler();
 
 			for (int i = 0; i < MAX_KEYS; i++) {
 				m_Keys[i] = false;
@@ -25,6 +26,7 @@ namespace my_app_engine { namespace system {
 		Window::~Window()
 		{
 			delete m_InputHandler;
+			delete m_FrameHandler;
 			glfwTerminate();
 		}
 
@@ -88,6 +90,11 @@ namespace my_app_engine { namespace system {
 			return this->m_InputHandler;
 		}
 
+		FrameHandler* Window::getFrameHandler() const
+		{
+			return m_FrameHandler;
+		}
+
 		void Window::mouse_input_callback(GLFWwindow* window, int button, int action, int mods) {
 			Window* win = (Window*)glfwGetWindowUserPointer(window);
 
@@ -121,8 +128,13 @@ namespace my_app_engine { namespace system {
 		}
 
 		void Window::update() {
+			float currentFrame = glfwGetTime();
+			float deltaTime = currentFrame - lastFrame;
+			lastFrame = currentFrame;
+			m_FrameHandler->emitUpdate(deltaTime);
+
 			if (this->m_Callback != nullptr) {
-				this->m_Callback();
+				this->m_Callback(deltaTime);
 			}
 			GLenum error = glGetError();
 
@@ -135,7 +147,7 @@ namespace my_app_engine { namespace system {
 			glfwSwapBuffers(m_Window);
 		}
 
-		void Window::onUpdate(std::function<void()> callback)
+		void Window::onUpdate(std::function<void(float)> callback)
 		{
 			m_Callback = callback;
 		}

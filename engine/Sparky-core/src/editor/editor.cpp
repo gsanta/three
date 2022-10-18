@@ -11,17 +11,18 @@ namespace my_app { namespace editor {
 
 		m_toolHandler = new ToolHandler(m_Window, m_DocumentHandler, editorConfig);
 		
-		m_Window->onUpdate(std::bind(&Editor::onUpdate, this));
+		m_Window->getFrameHandler()->registerListener(this);
 	}
 
 	editor::Editor::~Editor()
 	{
+		m_Window->getFrameHandler()->unRegisterListener(this);
 		delete m_toolHandler;
 		delete m_Window;
 		delete m_DocumentHandler;
 	}
 
-	void Editor::onUpdate()
+	void Editor::onUpdate(float deltaTime)
 	{
 		if (m_DocumentHandler->hasActiveDocument()) {
 			m_DocumentHandler->getActiveDocument()->render();

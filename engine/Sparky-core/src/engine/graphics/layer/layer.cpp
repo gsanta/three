@@ -2,8 +2,8 @@
 
 namespace my_app_engine { namespace graphics {
 
-	Layer::Layer(std::string id, Renderer2D* renderer, Shader* shader, my_app_engine::maths::Mat4 projectionMatrix)
-		: m_Id(id), m_Renderer(renderer), m_Shader(shader), m_ProjectionMatrix(projectionMatrix) {
+	Layer::Layer(std::string id, Renderer2D* renderer, Shader* shader, my_app_engine::maths::Mat4 projectionMatrix, Camera* camera)
+		: m_Id(id), m_Renderer(renderer), m_Shader(shader), m_ProjectionMatrix(projectionMatrix), m_Camera(camera) {
 
 		m_Shader->enable();
 		m_Shader->setUniformMat4("pr_matrix", m_ProjectionMatrix);
@@ -41,10 +41,12 @@ namespace my_app_engine { namespace graphics {
 		m_Shader->enable();
 
 		m_Renderer->begin();
+		m_Renderer->push(m_Camera->getView());
 		for (const my_app_engine::graphics::Renderable2D* renderable : m_Renderables) {
 			renderable->submit(m_Renderer);
 		}
 		m_Renderer->end();
+		m_Renderer->pop();
 
 		m_Renderer->flush();
 	}

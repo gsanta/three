@@ -8,6 +8,18 @@ namespace my_app_engine { namespace maths {
 		}
 	}
 
+	Mat4::Mat4(const float *elements) {
+		memcpy(this->elements, elements, 4 * 4 * sizeof(float));
+	}
+
+	Mat4::Mat4(const Vec4& col1, const Vec4& col2, const Vec4& col3, const Vec4& col4)
+	{
+		memcpy(columns, &col1, 4 * sizeof(float));
+		memcpy(columns + 4, &col1, 4 * sizeof(float));
+		memcpy(columns + 8, &col1, 4 * sizeof(float));
+		memcpy(columns + 12, &col1, 4 * sizeof(float));
+	}
+
 	Mat4::Mat4(float diagonal) {
 		for (int i = 0; i < 16; i++) {
 			elements[i] = 0.0f;
@@ -57,6 +69,10 @@ namespace my_app_engine { namespace maths {
 			columns[0].y * other.x + columns[1].y * other.y + columns[2].y * other.z + columns[3].y,
 			columns[0].z * other.x + columns[1].z * other.y + columns[2].z * other.z + columns[3].z
 		);
+	}
+
+	void Mat4::setElements(float* newElements) {
+		memcpy(elements, newElements, 4 * 4 * sizeof(float));
 	}
 
 	Mat4 operator*(Mat4 left, const Mat4& right) {
@@ -122,6 +138,24 @@ namespace my_app_engine { namespace maths {
 		result.elements[2 + 2 * 4] = scale.z;
 
 		return result;
+	}
+
+	Mat4 Mat4::lookAt(const Vec3& eye, const Vec3& at, const Vec3& up)
+	{
+		Vec3 zaxis = Vec3::subtract(at, eye).normalize();
+		Vec3 xaxis = Vec3::cross(zaxis, up).normalize();
+		Vec3 yaxis = Vec3::cross(xaxis, zaxis);
+
+		zaxis.negate();
+
+		Mat4 viewMatrix = {
+		  Vec4(xaxis.x, xaxis.y, xaxis.z, -xaxis.dot(eye)),
+		  Vec4(yaxis.x, yaxis.y, yaxis.z, -yaxis.dot(eye)),
+		  Vec4(zaxis.x, zaxis.y, zaxis.z, -zaxis.dot(eye)),
+		  Vec4(0, 0, 0, 1)
+		};
+
+		return viewMatrix;
 	}
 
 	Mat4 Mat4::rotation(float angle, const Vec3& axis) {

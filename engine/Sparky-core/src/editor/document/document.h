@@ -3,6 +3,7 @@
 #include <vector>
 #include "../../engine/graphics/layer/layer.h"
 #include "../../engine/graphics/layer/tileLayer.h"
+#include "../../engine/graphics/camera/camera.h"
 #include "dimensions.h"
 
 namespace my_app { namespace editor { namespace document {
@@ -21,6 +22,8 @@ namespace my_app { namespace editor { namespace document {
 
 		my_app_engine::graphics::Layer* m_ActiveLayer;
 
+		my_app_engine::graphics::Camera* m_Camera;
+
 	public:
 		Document(my_app_editor::document::Dimensions dimensions);
 		~Document();
@@ -33,6 +36,10 @@ namespace my_app { namespace editor { namespace document {
 
 		inline my_app_engine::graphics::Layer* getActiveLayer() {
 			return m_ActiveLayer;
+		}
+
+		inline my_app_engine::graphics::Camera* getCamera() {
+			return m_Camera;
 		}
 
 		void setActiveLayer(std::string id);

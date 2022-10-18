@@ -2,8 +2,8 @@
 
 namespace my_app_engine { namespace graphics {
 
-	TileLayer::TileLayer(std::string id, my_app_engine::maths::Mat4 projection, Shader* shader, Renderer2D* renderer)
-		: Layer(id, renderer, shader, projection) {
+	TileLayer::TileLayer(std::string id, my_app_engine::maths::Mat4 projection, Shader* shader, Renderer2D* renderer, Camera* camera)
+		: Layer(id, renderer, shader, projection, camera) {
 
 		m_Bounds.minX = -10;
 		m_Bounds.maxX = 10;

@@ -3,6 +3,7 @@
 #include <string>
 #include "../renderable/renderable2d.h"
 #include "../renderer/renderer2d.h"
+#include "../camera/camera.h";
 
 namespace my_app_engine
 {
@@ -15,10 +16,11 @@ namespace my_app_engine
 			std::vector <my_app_engine::graphics::Renderable2D*> m_Renderables;
 			Shader *m_Shader;
 			my_app_engine::maths::Mat4 m_ProjectionMatrix;
+			Camera* m_Camera;	
 			std::string m_Id;
 
 		protected:
-			Layer(std::string id, Renderer2D *renderer, Shader *shader, my_app_engine::maths::Mat4 projectionMatrix);
+			Layer(std::string id, Renderer2D *renderer, Shader *shader, my_app_engine::maths::Mat4 projectionMatrix, Camera* camera);
 
 		public:
 			virtual ~Layer();

@@ -9,6 +9,7 @@ namespace my_app { namespace editor { namespace document {
 		//});
 
 		//m_ActiveLayer = *it;
+		m_Camera = new my_app_engine::graphics::Camera();
 	}
 
 	Document::~Document() {
