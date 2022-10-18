@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../engine/system/window/window.h"
+#include "../engine/system/window/frame_listener.h"
 #include "tool/tool_handler.h"
 #include "document/document_handler.h"
 #include "editor_config.h"
@@ -11,7 +12,7 @@ namespace my_app { namespace editor {
 	using namespace tool;
 	using namespace document;
 
-	class Editor {
+	class Editor : my_app_engine::system::FrameListener {
 	private:
 		my_app_engine::system::Window* m_Window;
 		ToolHandler* m_toolHandler;
@@ -44,7 +45,7 @@ namespace my_app { namespace editor {
 			return m_CanvasListenerHandler;
 		}
 
-		void onUpdate();
+		void onUpdate(float deltaTime) override;
 	};
 
 }}

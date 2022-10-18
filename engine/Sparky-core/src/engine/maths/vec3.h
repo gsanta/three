@@ -14,7 +14,17 @@ namespace my_app_engine { namespace maths {
 		Vec3& subtract(const Vec3& other);
 		Vec3& multiply(const Vec3& other);
 		Vec3& divide(const Vec3& other);
+		Vec3& divide(float magnitude);
+		Vec3& normalize();
+		Vec3& negate();
+		
+		float magnitude();
+		float dot(const Vec3& other);
+		Vec3 cross(const Vec3& other);
 	
+		static Vec3 subtract(const Vec3& left, const Vec3& right);
+		static Vec3 cross(const Vec3& left, const Vec3& right);
+
 		friend Vec3 operator+(Vec3 left, const Vec3& right);
 		friend Vec3 operator-(Vec3 left, const Vec3& right);
 		friend Vec3 operator*(Vec3 left, const Vec3& right);

@@ -105,6 +105,7 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <BasicRuntimeChecks>UninitializedLocalUsageCheck</BasicRuntimeChecks>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -125,6 +126,7 @@
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -178,8 +180,10 @@
     <ClCompile Include="src\editor\tool\pointer_info.cpp" />
     <ClCompile Include="src\editor\tool\rectangle_tool.cpp" />
     <ClCompile Include="src\editor\tool\tool.cpp" />
+    <ClCompile Include="src\engine\graphics\camera\camera.cpp" />
     <ClCompile Include="src\engine\graphics\renderable\renderable2d.cpp" />
     <ClCompile Include="src\engine\graphics\renderable\line_shape.cpp" />
+    <ClCompile Include="src\engine\system\window\frame_handler.cpp" />
     <ClCompile Include="src\engine\system\window\input_handler.cpp" />
     <ClCompile Include="src\editor\tool\brush_tool.cpp" />
     <ClCompile Include="src\editor\tool\tool_handler.cpp" />
@@ -218,9 +222,12 @@
     <ClInclude Include="src\editor\tool\paint_bucket_tool.h" />
     <ClInclude Include="src\editor\tool\pointer_info.h" />
     <ClInclude Include="src\editor\tool\rectangle_tool.h" />
+    <ClInclude Include="src\engine\graphics\camera\camera.h" />
     <ClInclude Include="src\engine\graphics\renderable\line_shape.h" />
     <ClInclude Include="src\engine\graphics\renderer\vertex_data.h" />
     <ClInclude Include="src\engine\graphics\renderable\bounds.h" />
+    <ClInclude Include="src\engine\system\window\frame_handler.h" />
+    <ClInclude Include="src\engine\system\window\frame_listener.h" />
     <ClInclude Include="src\engine\system\window\input_handler.h" />
     <ClInclude Include="src\editor\tool\brush_tool.h" />
     <ClInclude Include="src\editor\tool\tool.h" />
