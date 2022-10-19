@@ -14,10 +14,30 @@ namespace my_app_engine { namespace maths {
 
 	Mat4::Mat4(const Vec4& col1, const Vec4& col2, const Vec4& col3, const Vec4& col4)
 	{
-		memcpy(columns, &col1, 4 * sizeof(float));
-		memcpy(columns + 4, &col1, 4 * sizeof(float));
-		memcpy(columns + 8, &col1, 4 * sizeof(float));
-		memcpy(columns + 12, &col1, 4 * sizeof(float));
+		columns[0].x = col1.x;
+		columns[0].y = col1.y;
+		columns[0].z = col1.z;
+		columns[0].w = col1.w;
+
+		columns[1].x = col2.x;
+		columns[1].y = col2.y;
+		columns[1].z = col2.z;
+		columns[1].w = col2.w;
+
+		columns[2].x = col3.x;
+		columns[2].y = col3.y;
+		columns[2].z = col3.z;
+		columns[2].w = col3.w;
+
+		columns[3].x = col4.x;
+		columns[3].y = col4.y;
+		columns[3].z = col4.z;
+		columns[3].w = col4.w;
+
+		//memcpy(columns, &col1, 4 * sizeof(float));
+		//memcpy(columns + 4 * sizeof(float), &col2, 4 * sizeof(float));
+		//memcpy(columns + 8 * sizeof(float), &col3, 4 * sizeof(float));
+		//memcpy(columns + 12 * sizeof(float), &col4, 4 * sizeof(float));
 	}
 
 	Mat4::Mat4(float diagonal) {
@@ -148,12 +168,12 @@ namespace my_app_engine { namespace maths {
 
 		zaxis.negate();
 
-		Mat4 viewMatrix = {
-		  Vec4(xaxis.x, xaxis.y, xaxis.z, -xaxis.dot(eye)),
-		  Vec4(yaxis.x, yaxis.y, yaxis.z, -yaxis.dot(eye)),
-		  Vec4(zaxis.x, zaxis.y, zaxis.z, -zaxis.dot(eye)),
-		  Vec4(0, 0, 0, 1)
-		};
+		Mat4 viewMatrix(
+			Vec4(xaxis.x, yaxis.x, zaxis.x, 0),
+			Vec4(xaxis.y, yaxis.y, zaxis.y, 0),
+			Vec4(xaxis.z, yaxis.z, zaxis.z, 0),
+			Vec4(xaxis.dot(eye.negate()), yaxis.dot(eye.negate()), zaxis.dot(eye.negate()), 1)
+		);
 
 		return viewMatrix;
 	}
