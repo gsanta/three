@@ -62,13 +62,9 @@ namespace my_app_engine
 		return divide(mag);
 	}
 
-	Vec3& Vec3::negate()
+	Vec3 Vec3::negate() const
 	{
-		x = -x;
-		y = -y;
-		z = -z;
-
-		return *this;
+		return Vec3(-x, -y, -z);
 	}
 
 	float Vec3::magnitude()

@@ -4,7 +4,7 @@ namespace my_app_engine { namespace graphics {
 	
 	Camera::Camera()
 	{
-		m_View = maths::Mat4::lookAt(maths::Vec3(0, 1, 0), maths::Vec3(0, 0, 0), maths::Vec3(0, 1, 0));
+		m_View = maths::Mat4::lookAt(maths::Vec3(0, 0, 0.5f), maths::Vec3(0, 0, 0), maths::Vec3(0, 1, 0));
 	}
 
 	void Camera::translate2D(my_app_engine::maths::Vec2 translate)

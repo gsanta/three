@@ -16,7 +16,7 @@ namespace my_app_engine { namespace maths {
 		Vec3& divide(const Vec3& other);
 		Vec3& divide(float magnitude);
 		Vec3& normalize();
-		Vec3& negate();
+		Vec3 negate() const;
 		
 		float magnitude();
 		float dot(const Vec3& other);
