@@ -67,9 +67,11 @@ const App = () => {
           </Box>
           <Split className="split" direction="horizontal" sizes={[75, 25]}>
             <Box ref={contentRef}>
-              <canvas id="canvas">efgh</canvas>
+              <canvas id="canvas"></canvas>
             </Box>
-            <Box height="100%"></Box>
+            <Box height="100%">
+              <iframe src="iframe.html" height="500px" width="500px" />
+            </Box>
           </Split>
         </Box>
       </Layout>

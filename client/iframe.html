@@ -19,7 +19,7 @@
     var Module = {
       onRuntimeInitialized: function () {
         Module.isRuntimeInitialize = true;
-        // renderApp();
+        renderApp();
       },
       isRuntimeInitialize: false,
       preRun: [],
@@ -36,7 +36,6 @@
         return canvas;
       })(),
       setStatus: function (text) {
-        x
 
       },
       totalDependencies: 0,
@@ -46,8 +45,7 @@
     };
     window.onerror = function (event) {
       // TODO: do not warn on ok events like simulating an infinite loop or exitStatus
-      Module.setStatus('Exception thrown, see JavaScript console');
-      spinnerElement.style.display = 'none';
+      Module.setStatus('Exception thrown from iframe, see JavaScript console');
       Module.setStatus = function (text) {
         if (text) console.error('[post-exception status] ' + text);
       };
