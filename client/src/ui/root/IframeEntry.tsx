@@ -29,9 +29,8 @@ const IframeEntry = () => {
 
   return (
     <ChakraProvider theme={theme} cssVarsRoot="body">
-      <Box ref={contentRef}>
-        The iframe
-        {/* <canvas id="canvas">efgh</canvas> */}
+      <Box ref={contentRef} width="500px" height="500px">
+        <canvas width="500px" height="500px" id="canvas"></canvas>
       </Box>
     </ChakraProvider>
   );

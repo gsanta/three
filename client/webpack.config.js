@@ -89,7 +89,7 @@ module.exports = (env) => {
     externals: {
       babylonjs: 'BABYLON',
     },
-    devtool: 'eval',
+    devtool: 'eval-source-map',
     mode: 'development',
     optimization: {
       usedExports: true,
