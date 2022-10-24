@@ -32,6 +32,13 @@ namespace my_app_engine { namespace graphics {
 		this->m_Position = position;
 	}
 
+	std::string Sprite::getJson()
+	{
+		std::string a = "{ \"x\": ";
+		std::string b = "2 }";
+		return  a + b;
+	}
+
 	void Sprite::submit(my_app_engine::graphics::Renderer2D* renderer) const {
 		my_app_engine::graphics::VertexData*& buffer = renderer->getBuffer();
 		const my_app_engine::maths::Mat4* transformation = renderer->getTransformation();

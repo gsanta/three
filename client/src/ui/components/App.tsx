@@ -69,8 +69,8 @@ const App = () => {
             <Box ref={contentRef}>
               <canvas id="canvas"></canvas>
             </Box>
-            <Box height="100%">
-              <iframe src="iframe.html" height="500px" width="500px" />
+            <Box height="100%" display="flex">
+              <Box as="iframe" src="iframe.html" flex="1" />
             </Box>
           </Split>
         </Box>

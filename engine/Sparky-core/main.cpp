@@ -49,11 +49,21 @@ void setActiveTool(std::string toolName)
 EMSCRIPTEN_BINDINGS(engine2)
 {
 	emscripten::function("setWindowSize", &setWindowSize);
+	emscripten::function("setActiveTool", &setActiveTool);
+
+}
+
+std::string getEngineData() {
+	if (editor != nullptr) {
+		my_app_engine::graphics::Renderable2D* sp = editor->getDocumentHandler()->getActiveDocument()->getActiveLayer()->getRenderables()[0];
+
+		return sp->getJson();
+	}
 }
 
 EMSCRIPTEN_BINDINGS(editor)
 {
-	emscripten::function("setActiveTool", &setActiveTool);
+	emscripten::function("getEngineData", &getEngineData);
 }
 
 #else
