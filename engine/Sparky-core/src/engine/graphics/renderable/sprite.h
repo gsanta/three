@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string.h>
 #include "renderable2d.h"
 #include "../renderer/vertex_data.h"
 
@@ -17,6 +18,8 @@ namespace my_app_engine { namespace graphics {
 
 		void setSize(my_app_engine::maths::Vec2 size);
 		void setPosition(my_app_engine::maths::Vec3 position);
+
+		virtual std::string getJson();
 
 		virtual void submit(my_app_engine::graphics::Renderer2D* renderer) const override;
 	};

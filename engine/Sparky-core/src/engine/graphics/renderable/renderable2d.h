@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string.h>
 #include "../buffer/buffer.h"
 #include "../buffer/indexBuffer.h"
 #include "../buffer/vertexArray.h"
@@ -55,6 +56,8 @@ namespace my_app_engine { namespace graphics {
 		inline int getVertexCount() const { return m_VertexCount; }
 		inline const unsigned int getColor() const { return m_Color; }
 		inline const std::vector<my_app_engine::maths::Vec2>& getUV() const { return m_UV; }
+
+		virtual std::string getJson() = 0;
 #ifdef SPARKY_EMSCRIPTEN
 		inline const GLuint getTID() const { return 0; }
 #else
