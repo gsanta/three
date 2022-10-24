@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 
 export interface ResizeObserverEntry {
   target: Element;
@@ -26,12 +26,20 @@ export const useResizeObserver = (node?: HTMLElement, callback?: (entry: DOMRect
     [callback],
   );
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!node) {
       return;
     }
 
-    const observer = new ResizeObserver((entries: ResizeObserverEntry[]) => handleResize(entries));
+    const observer = new ResizeObserver((entries: ResizeObserverEntry[]) => {
+      // https://stackoverflow.com/questions/49384120/resizeobserver-loop-limit-exceeded
+      window.requestAnimationFrame(() => {
+        if (!Array.isArray(entries) || !entries.length) {
+          return;
+        }
+        handleResize(entries);
+      });
+    });
     observer.observe(node);
 
     return () => {

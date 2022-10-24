@@ -14,7 +14,7 @@ namespace my_app_engine { namespace graphics {
 		std::vector<my_app_engine::maths::Mat4> m_TransformationStack;
 		const my_app_engine::maths::Mat4* m_TransformationBack;
 
-		GLsizei m_IndexCount;
+		GLsizei m_IndexCount = 0;
 
 		Renderer2D() {
 			m_TransformationStack.push_back(my_app_engine::maths::Mat4::identity());

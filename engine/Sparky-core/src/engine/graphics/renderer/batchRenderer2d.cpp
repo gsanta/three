@@ -51,40 +51,40 @@ namespace my_app_engine { namespace graphics {
 		
 		glBindVertexArray(0);
 
-#ifdef SPARKY_EMSCRIPTEN
+//#ifdef SPARKY_EMSCRIPTEN
 		m_BufferBase = new VertexData[RENDERER_MAX_SPRITES * 4];
-#endif
+//#endif
 	}
 
 	void BatchRenderer2D::begin()
 	{	
 		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 
-#ifdef SPARKY_EMSCRIPTEN
+//#ifdef SPARKY_EMSCRIPTEN
 		m_Buffer = m_BufferBase;
-#else
-		m_Buffer = (VertexData*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-#endif
+//#else
+//		m_Buffer = (VertexData*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+//#endif
 	}
 
 	void BatchRenderer2D::end()
 	{
-#ifdef SPARKY_EMSCRIPTEN
-		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+//#ifdef SPARKY_EMSCRIPTEN
+		//glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, (m_Buffer - m_BufferBase) * RENDERER_VERTEX_SIZE, m_BufferBase);
 		m_Buffer = m_BufferBase;
-#else
-		glUnmapBuffer(GL_ARRAY_BUFFER);
-#endif
+//#else
+//		glUnmapBuffer(GL_ARRAY_BUFFER);
+//#endif
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
 	void BatchRenderer2D::flush()
 	{
-		for (int i = 0; i < m_TextureSlots.size(); i++) {
-			glActiveTexture(GL_TEXTURE0 + i);
-			glBindTexture(GL_TEXTURE_2D, m_TextureSlots[i]);
-		}
+		//for (int i = 0; i < m_TextureSlots.size(); i++) {
+		//	glActiveTexture(GL_TEXTURE0 + i);
+		//	glBindTexture(GL_TEXTURE_2D, m_TextureSlots[i]);
+		//}
 
 		glBindVertexArray(m_VAO);
 		m_IBO->bind();
