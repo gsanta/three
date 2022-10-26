@@ -29,6 +29,9 @@ namespace my_app_engine
 			virtual void clear();
 			virtual void remove(my_app_engine::graphics::Renderable2D* renderable);
 
+			virtual std::string getJson() = 0;
+			virtual void setJson(std::string json) = 0;
+
 			inline std::string getId() {
 				return m_Id;
 			}

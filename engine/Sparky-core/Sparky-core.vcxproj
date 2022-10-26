@@ -72,14 +72,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\ext\freetype\include;$(SolutionDir)/Dependencies\FreeImage\include;$(SolutionDir)/Dependencies\GLEW\include;$(SolutionDir)/Dependencies\GLFW\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Dependencies\nlohmann\include;$(SolutionDir)\ext\freetype\include;$(SolutionDir)/Dependencies\FreeImage\include;$(SolutionDir)/Dependencies\GLEW\include;$(SolutionDir)/Dependencies\GLFW\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)/Dependencies\FreeImage\lib;$(SolutionDir)/Dependencies\GLEW\lib;$(SolutionDir)/Dependencies\GLFW\lib-vc2019;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\bin\$(ConfigurationDir)\</OutDir>
     <IntDir>$(SolutionDir)\bin\$(ConfigurationDir)\intermediates\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)\ext\freetype\include;$(SolutionDir)/Dependencies\FreeImage\include;$(SolutionDir)/Dependencies\GLEW\include;$(SolutionDir)/Dependencies\GLFW\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Dependencies\nlohmann\include;$(SolutionDir)\ext\freetype\include;$(SolutionDir)/Dependencies\FreeImage\include;$(SolutionDir)/Dependencies\GLEW\include;$(SolutionDir)/Dependencies\GLFW\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)/Dependencies\FreeImage\lib;$(SolutionDir)/Dependencies\GLEW\lib;$(SolutionDir)/Dependencies\GLFW\lib-vc2019;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\bin\$(ConfigurationDir)\</OutDir>
     <IntDir>$(SolutionDir)\bin\$(ConfigurationDir)\intermediates\</IntDir>

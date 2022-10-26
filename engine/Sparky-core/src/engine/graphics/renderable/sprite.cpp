@@ -32,11 +32,17 @@ namespace my_app_engine { namespace graphics {
 		this->m_Position = position;
 	}
 
-	std::string Sprite::getJson()
+	nlohmann::json Sprite::getJson()
 	{
-		std::string a = "{ \"x\": ";
-		std::string b = "2 }";
-		return  a + b;
+		nlohmann::json json = {
+			{"posX", m_Position.x},
+			{"posY", m_Position.y},
+			{"posZ", m_Position.z},
+			{"sizeX", m_Size.x},
+			{"sizeY", m_Size.y},
+		};
+
+		return json;
 	}
 
 	void Sprite::submit(my_app_engine::graphics::Renderer2D* renderer) const {
