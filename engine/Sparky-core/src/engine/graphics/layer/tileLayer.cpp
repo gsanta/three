@@ -25,4 +25,32 @@ namespace my_app_engine { namespace graphics {
 
 		return my_app_engine::maths::Vec2(x, y);
 	}
+
+	std::string TileLayer::getJson()
+	{
+		nlohmann::json json;
+
+		for (Renderable2D* renderable : m_Renderables) {
+			json += renderable->getJson();
+		}
+
+		return json.dump();
+	}
+
+	void TileLayer::setJson(std::string json)
+	{
+		nlohmann::json parsedJson = nlohmann::json::parse(json);
+
+		for (nlohmann::json j : parsedJson)
+		{
+			float posX = j["posX"];
+			float posY = j["posY"];
+			float posZ = j["posZ"];
+			float sizeX = j["sizeX"];
+			float sizeY = j["sizeY"];
+
+			my_app_engine::graphics::Sprite* sprite = new my_app_engine::graphics::Sprite(posX, posY, sizeX, sizeY, 0xff0000ff);
+			add(sprite);
+		}
+	}
 }}

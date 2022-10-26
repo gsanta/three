@@ -7,6 +7,9 @@ declare global {
     isRuntimeInitialize: boolean;
 
     setActiveTool(name: string);
+
+    getEngineData();
+    setEngineData(data: string);
   };
 }
 

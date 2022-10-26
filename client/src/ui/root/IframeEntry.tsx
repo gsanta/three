@@ -1,4 +1,6 @@
 import { ChakraProvider } from '@chakra-ui/react';
+import { createServer } from 'really-simple-xdm';
+
 import React, { useCallback, useEffect, useState } from 'react';
 import '../../app.scss';
 import Box from '../components/box/Box';
@@ -8,6 +10,16 @@ import { useResizeObserver } from '../hooks/useResizeObserver';
 const IframeEntry = () => {
   const [isModuleSet, setIsModuleSet] = useState(false);
   const [canvasNode, setCanvasNode] = useState<HTMLElement | undefined>(undefined);
+  // const [server, setServer] = useState<any>();
+
+  useEffect(() => {
+    const a = {
+      testFunc: (data: string) => window.Module.setEngineData(data),
+    };
+
+    const newServer = createServer({ serviceObject: a, targetOrigin: '*' });
+    newServer.serve();
+  }, []);
 
   const setWindowSize = () => {
     if (canvasNode && isModuleSet) {

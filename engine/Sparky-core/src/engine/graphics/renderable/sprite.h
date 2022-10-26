@@ -3,6 +3,9 @@
 #include <string.h>
 #include "renderable2d.h"
 #include "../renderer/vertex_data.h"
+#include <nlohmann/json.hpp>
+
+using namespace std::string_literals;
 
 namespace my_app_engine { namespace graphics {
 
@@ -19,7 +22,7 @@ namespace my_app_engine { namespace graphics {
 		void setSize(my_app_engine::maths::Vec2 size);
 		void setPosition(my_app_engine::maths::Vec3 position);
 
-		virtual std::string getJson();
+		virtual nlohmann::json getJson();
 
 		virtual void submit(my_app_engine::graphics::Renderer2D* renderer) const override;
 	};

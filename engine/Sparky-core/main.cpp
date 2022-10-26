@@ -55,15 +55,21 @@ EMSCRIPTEN_BINDINGS(engine2)
 
 std::string getEngineData() {
 	if (editor != nullptr) {
-		my_app_engine::graphics::Renderable2D* sp = editor->getDocumentHandler()->getActiveDocument()->getActiveLayer()->getRenderables()[0];
-
-		return sp->getJson();
+		return editor->getDocumentHandler()->getActiveDocument()->getActiveLayer()->getJson();
 	}
 }
+
+void setEngineData(std::string json) {
+	if (editor != nullptr) {
+		editor->getDocumentHandler()->getActiveDocument()->getActiveLayer()->setJson(json);
+	}
+}
+
 
 EMSCRIPTEN_BINDINGS(editor)
 {
 	emscripten::function("getEngineData", &getEngineData);
+	emscripten::function("setEngineData", &setEngineData);
 }
 
 #else

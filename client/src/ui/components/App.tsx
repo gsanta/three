@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { createClient } from 'really-simple-xdm';
 import { ChakraProvider } from '@chakra-ui/react';
 import '../../app.scss';
 import Layout from './layout/Layout';
@@ -22,6 +23,17 @@ const App = () => {
       window.Module.setWindowSize(rect.width, rect.height);
     }
   };
+
+  useEffect(() => {
+    const iframeElement = document.getElementById('test-iframe') as HTMLIFrameElement; // the id of the frame containing the `Math` object to be called
+    const promise = createClient({ targetWindow: iframeElement?.contentWindow as Window, targetOrigin: '*' }); // 'mathProxyPromise' is a promise which resolves with the proxy of 'Math'
+
+    setTimeout(() => {
+      promise.then((mathProxy) => {
+        mathProxy.testFunc(window.Module.getEngineData());
+      });
+    }, 15000);
+  });
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -70,7 +82,7 @@ const App = () => {
               <canvas id="canvas"></canvas>
             </Box>
             <Box height="100%" display="flex">
-              <Box as="iframe" src="iframe.html" flex="1" />
+              <Box as="iframe" id="test-iframe" src="iframe.html" flex="1" />
             </Box>
           </Split>
         </Box>

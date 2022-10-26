@@ -3,6 +3,7 @@
 #include <string>
 #include "layer.h"
 #include "../renderer/batchRenderer2d.h"
+#include "../renderable/sprite.h"
 #include "../../maths/vec2_int.h"
 #include "../renderable/bounds.h"
 #include "../../maths/mat4.h"
@@ -19,7 +20,10 @@ namespace my_app_engine { namespace graphics {
 		virtual ~TileLayer();
 
 		my_app_engine::maths::Vec2 getTilePos(my_app_engine::maths::Vec2 pointer);
-	
+
+		virtual std::string getJson();
+		virtual void setJson(std::string json);
+
 		inline float getTileSize() const
 		{
 			return m_TileSize;
