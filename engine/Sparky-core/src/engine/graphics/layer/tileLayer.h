@@ -21,7 +21,7 @@ namespace my_app_engine { namespace graphics {
 
 		my_app_engine::maths::Vec2 getTilePos(my_app_engine::maths::Vec2 pointer);
 
-		virtual std::string getJson();
+		virtual nlohmann::json getJson() override;
 		virtual void setJson(std::string json);
 
 		inline float getTileSize() const

@@ -9,7 +9,7 @@ namespace my_app { namespace editor {
 		m_CanvasListenerHandler = new core::CanvasListenerHandler();
 		m_Window->getInputHandler()->registerListener(m_CanvasListenerHandler);
 
-		m_toolHandler = new ToolHandler(m_Window, m_DocumentHandler, editorConfig);
+		m_toolHandler = new ToolHandler(m_Window, m_DocumentHandler, editorConfig, editorState);
 		
 		m_Window->getFrameHandler()->registerListener(this);
 	}

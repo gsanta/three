@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <nlohmann/json.hpp>
 #include "../renderable/renderable2d.h"
 #include "../renderer/renderer2d.h"
 #include "../camera/camera.h";
@@ -29,7 +30,7 @@ namespace my_app_engine
 			virtual void clear();
 			virtual void remove(my_app_engine::graphics::Renderable2D* renderable);
 
-			virtual std::string getJson() = 0;
+			virtual nlohmann::json getJson() = 0;
 			virtual void setJson(std::string json) = 0;
 
 			inline std::string getId() {

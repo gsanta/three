@@ -1,17 +1,16 @@
 import ToolName from '@/services/tool/ToolName';
-import ToolStore from '@/services/tool/ToolStore';
 import { observer } from 'mobx-react-lite';
-import React from 'react';
+import React, { useContext } from 'react';
 import Box from '../../components/box/Box';
 import Button from '../../components/button/Button';
+import ColorPicker from '@/ui/components/color_picker/ColorPicker';
+import EditorContext from '@/ui/context/EditorContext';
 
-type ToolbarProps = {
-  toolStore?: ToolStore;
-};
+const Toolbar = observer(() => {
+  const { toolStore, editorStore } = useContext(EditorContext);
 
-const Toolbar = observer(({ toolStore }: ToolbarProps) => {
   const handleSelectTool = (name: string) => {
-    toolStore?.setSelectedTool(name as ToolName);
+    toolStore.setSelectedTool(name as ToolName);
   };
 
   return (
@@ -29,6 +28,8 @@ const Toolbar = observer(({ toolStore }: ToolbarProps) => {
         const toggle = name === toolStore.getSelectedTool()?.name ? 'on' : 'off';
         return <Button key={name} iconName={iconName} toggle={toggle} onToggle={() => handleSelectTool(name)} />;
       })}
+
+      <ColorPicker editorStore={editorStore} />
     </Box>
   );
 });

@@ -1,29 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { createClient } from 'really-simple-xdm';
 import { ChakraProvider } from '@chakra-ui/react';
 import '../../app.scss';
 import Layout from './layout/Layout';
 import Box from './box/Box';
-import ExternalTool from '@/services/tool/ExternalTool';
-import ToolStore from '@/services/tool/ToolStore';
 import Toolbar from '../panels/toolbar/Toolbar';
 import theme from './theme';
-import ToolName from '@/services/tool/ToolName';
 import Split from 'react-split';
-import { useResizeObserver } from '../hooks/useResizeObserver';
+import Canvas from '../panels/canvas/Canvas';
 
 const App = () => {
-  const [isModuleSet, setIsModuleSet] = useState(false);
-  const [toolStore, setToolStore] = useState<ToolStore | undefined>();
-  const [canvasNode, setCanvasNode] = useState<HTMLElement | undefined>(undefined);
-
-  const setWindowSize = () => {
-    if (canvasNode && isModuleSet) {
-      const rect = canvasNode.getBoundingClientRect();
-      window.Module.setWindowSize(rect.width, rect.height);
-    }
-  };
-
   useEffect(() => {
     const iframeElement = document.getElementById('test-iframe') as HTMLIFrameElement; // the id of the frame containing the `Math` object to be called
     const promise = createClient({ targetWindow: iframeElement?.contentWindow as Window, targetOrigin: '*' }); // 'mathProxyPromise' is a promise which resolves with the proxy of 'Math'
@@ -34,30 +20,6 @@ const App = () => {
       });
     }, 15000);
   });
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (window?.Module?.isRuntimeInitialize && !isModuleSet) {
-      setIsModuleSet(true);
-      setWindowSize();
-
-      const tools = [
-        new ExternalTool(ToolName.Brush, 'BiPencil', Module),
-        new ExternalTool(ToolName.Rectangle, 'BiRectangle', Module),
-        new ExternalTool(ToolName.SelectionRectangle, 'BiBorderRadius', Module),
-        new ExternalTool(ToolName.Erase, 'BiEraser', Module),
-      ];
-      setToolStore(new ToolStore(tools));
-    }
-  });
-
-  const contentRef = useCallback((node: HTMLDivElement) => {
-    if (node) {
-      setCanvasNode(node);
-    }
-  }, []);
-
-  useResizeObserver(canvasNode, setWindowSize);
 
   return (
     <ChakraProvider theme={theme} cssVarsRoot="body">
@@ -75,14 +37,15 @@ const App = () => {
       >
         <Box display="flex" flexDirection="row">
           <Box width="50px">
-            <Toolbar toolStore={toolStore} />
+            <Toolbar />
           </Box>
           <Split className="split" direction="horizontal" sizes={[75, 25]}>
-            <Box ref={contentRef}>
-              <canvas id="canvas"></canvas>
+            <Box>
+              <Canvas />
             </Box>
-            <Box height="100%" display="flex">
-              <Box as="iframe" id="test-iframe" src="iframe.html" flex="1" />
+            <Box height="100%" display="flex" flexDir="column">
+              <Box flex="1"></Box>
+              <Box as="iframe" marginInline="15px" height="50%" id="test-iframe" src="iframe.html" />
             </Box>
           </Split>
         </Box>

@@ -65,11 +65,18 @@ void setEngineData(std::string json) {
 	}
 }
 
+void setColor(unsigned int color) {
+	if (editor != nullptr) {
+		editor->getEditorState().color = color;
+	}
+}
+
 
 EMSCRIPTEN_BINDINGS(editor)
 {
 	emscripten::function("getEngineData", &getEngineData);
 	emscripten::function("setEngineData", &setEngineData);
+	emscripten::function("setColor", &setColor);
 }
 
 #else
@@ -94,6 +101,8 @@ int main()
 	editor->getCanvasListenerHandler()->addListener(new my_app_editor::feature::canvas::CursorLight(editor));
 	window = editor->getWindow();
 
+
+	editor->getEditorState().color = 4287490895;
 	// Group* group = new Group(Mat4::translation(maths::Vec3(-5.0f, 5.0f, 0.0f)));
 	// group->add(new Sprite(0, 0, 6, 3, maths::Vec4(1, 1, 1, 1)));
 	// group->add(new Sprite(0.5f, 0.5f, 0.5f, 2.0f, maths::Vec4(1, 0, 1, 1)));
