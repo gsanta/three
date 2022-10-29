@@ -10,6 +10,8 @@ declare global {
 
     getEngineData();
     setEngineData(data: string);
+
+    setColor(color: number);
   };
 }
 

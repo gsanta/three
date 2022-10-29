@@ -6,6 +6,7 @@
 #include "document/document_handler.h"
 #include "editor_config.h"
 #include "core/canvas/canvas_listener_handler.h"
+#include "editor_state.h"
 
 namespace my_app { namespace editor {
 
@@ -19,11 +20,16 @@ namespace my_app { namespace editor {
 		core::CanvasListenerHandler* m_CanvasListenerHandler;
 		DocumentHandler* m_DocumentHandler;
 		EditorConfig editorConfig;
+		EditorState editorState;
 
 	public:
 
 		Editor();
 		~Editor();
+
+		inline EditorState& getEditorState() {
+			return editorState;
+		}
 
 		inline ToolHandler* getToolHandler() const {
 			return m_toolHandler;

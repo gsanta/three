@@ -3,7 +3,7 @@ import { makeObservable, observable, action } from 'mobx';
 import ToolName from './ToolName';
 
 class ToolStore {
-  tools: Tool[];
+  tools: Tool[] = [];
 
   selectedTool?: Tool;
 
@@ -11,15 +11,16 @@ class ToolStore {
     return this.selectedTool;
   }
 
-  constructor(tools: Tool[]) {
+  constructor() {
     makeObservable(this, {
       tools: observable,
       selectedTool: observable,
       setSelectedTool: action,
     });
+  }
 
-    this.tools = tools;
-    this.setSelectedTool(tools[0].name);
+  addTool(tool: Tool) {
+    this.tools.push(tool);
   }
 
   setSelectedTool(toolName: ToolName) {

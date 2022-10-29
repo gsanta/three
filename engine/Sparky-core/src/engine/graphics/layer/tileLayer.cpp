@@ -26,7 +26,7 @@ namespace my_app_engine { namespace graphics {
 		return my_app_engine::maths::Vec2(x, y);
 	}
 
-	std::string TileLayer::getJson()
+	nlohmann::json TileLayer::getJson()
 	{
 		nlohmann::json json;
 
@@ -34,7 +34,7 @@ namespace my_app_engine { namespace graphics {
 			json += renderable->getJson();
 		}
 
-		return json.dump();
+		return json;
 	}
 
 	void TileLayer::setJson(std::string json)
