@@ -9,8 +9,14 @@ namespace my_app { namespace editor {
 		m_CanvasListenerHandler = new core::CanvasListenerHandler();
 		m_Window->getInputHandler()->registerListener(m_CanvasListenerHandler);
 
-		m_toolHandler = new ToolHandler(m_Window, m_DocumentHandler, editorConfig, editorState);
-		
+		m_Services = new my_app_editor::EditorServices();
+
+		m_toolHandler = new ToolHandler(m_Window, m_DocumentHandler, editorConfig);
+		m_toolHandler->addTool(new BrushTool(m_DocumentHandler, editorConfig, m_Services));
+		m_toolHandler->addTool(new RectangleTool(m_DocumentHandler));
+		m_toolHandler->addTool(new EraseTool(m_DocumentHandler));
+		m_toolHandler->setActiveTool("brush");
+
 		m_Window->getFrameHandler()->registerListener(this);
 	}
 
@@ -20,6 +26,7 @@ namespace my_app { namespace editor {
 		delete m_toolHandler;
 		delete m_Window;
 		delete m_DocumentHandler;
+		delete m_Services;
 	}
 
 	void Editor::onUpdate(float deltaTime)

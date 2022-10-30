@@ -21,10 +21,12 @@ namespace my_app { namespace editor { namespace tool {
 		PointerInfo m_pointerInfo;
 		EditorConfig m_EditorConfig;
 	public:
-		ToolHandler(my_app_engine::system::Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, EditorState& editorState);
+		ToolHandler(my_app_engine::system::Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig);
 		virtual void onMouseUp(int button) override;
 		virtual void onMouseDown(int button) override;
 		virtual void onMouseMove(double x, double y) override;
+
+		void addTool(Tool* tool);
 
 		Tool* getTool(string name) const;
 

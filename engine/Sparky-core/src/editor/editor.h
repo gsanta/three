@@ -6,7 +6,7 @@
 #include "document/document_handler.h"
 #include "editor_config.h"
 #include "core/canvas/canvas_listener_handler.h"
-#include "editor_state.h"
+#include "./service/editor_services.h"
 
 namespace my_app { namespace editor {
 
@@ -20,15 +20,15 @@ namespace my_app { namespace editor {
 		core::CanvasListenerHandler* m_CanvasListenerHandler;
 		DocumentHandler* m_DocumentHandler;
 		EditorConfig editorConfig;
-		EditorState editorState;
+		my_app_editor::EditorServices* m_Services;
 
 	public:
 
 		Editor();
 		~Editor();
 
-		inline EditorState& getEditorState() {
-			return editorState;
+		inline my_app_editor::EditorServices* getServices() {
+			return m_Services;
 		}
 
 		inline ToolHandler* getToolHandler() const {

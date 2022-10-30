@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { createClient } from 'really-simple-xdm';
 import { ChakraProvider } from '@chakra-ui/react';
 import '../../app.scss';
@@ -21,6 +21,10 @@ const App = () => {
     }, 15000);
   });
 
+  const [canvasContainer, setCanvasContainer] = useState<HTMLDivElement | undefined>();
+
+  const canvasRef = useCallback((node: HTMLDivElement) => node && setCanvasContainer(node), []);
+
   return (
     <ChakraProvider theme={theme} cssVarsRoot="body">
       <Layout
@@ -40,10 +44,10 @@ const App = () => {
             <Toolbar />
           </Box>
           <Split className="split" direction="horizontal" sizes={[75, 25]}>
-            <Box>
-              <Canvas />
+            <Box ref={canvasRef}>
+              <Canvas container={canvasContainer} />
             </Box>
-            <Box height="100%" display="flex" flexDir="column">
+            <Box display="flex" flexDir="column">
               <Box flex="1"></Box>
               <Box as="iframe" marginInline="15px" height="50%" id="test-iframe" src="iframe.html" />
             </Box>
