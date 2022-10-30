@@ -13,6 +13,11 @@ declare global {
 
     setColor(color: number);
   };
+
+  // eslint-disable-next-line no-var
+  var Listener: {
+    onDataChange(): number;
+  };
 }
 
 export {};

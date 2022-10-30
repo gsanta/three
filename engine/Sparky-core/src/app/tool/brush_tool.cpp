@@ -2,7 +2,7 @@
 
 namespace spright_app { namespace tool {
 
-	BrushTool::BrushTool(DocumentHandler *documentHandler, EditorConfig &editorConfig, spright_app::EditorServices* services)
+	BrushTool::BrushTool(DocumentHandler *documentHandler, EditorConfig &editorConfig, spright_app::Services* services)
 			: m_documentHandler(documentHandler), m_EditorConfig(editorConfig), m_Services(services), Tool("brush")
 	{
 	}
@@ -15,5 +15,9 @@ namespace spright_app { namespace tool {
 		int color = m_Services->getColorPalette()->color;
 		spright_engine::graphics::Sprite *sprite = new spright_engine::graphics::Sprite(tilePos.x, tilePos.y, tileLayer->getTileSize(), tileLayer->getTileSize(), color);
 		tileLayer->add(sprite);
+#ifdef SPARKY_EMSCRIPTEN
+		emscripten::val Listener = emscripten::val::global("Listener");
+		Listener.call<emscripten::val>("onDataChange");
+#endif
 	}
 }}

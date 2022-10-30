@@ -3,8 +3,10 @@
 #include "../document/document_handler.h"
 #include "../../engine/graphics/renderable/sprite.h"
 #include "../editor_config.h"
-#include "../service/editor_services.h"
-
+#include "../service/services.h"
+#ifdef SPARKY_EMSCRIPTEN
+#include <emscripten/val.h>
+#endif
 namespace spright_app { namespace tool {
 	using namespace document;
 
@@ -13,11 +15,11 @@ namespace spright_app { namespace tool {
 	private:
 		DocumentHandler *m_documentHandler;
 		EditorConfig m_EditorConfig;
-		spright_app::EditorServices* m_Services;
+		spright_app::Services* m_Services;
 		spright_engine::graphics::Sprite *sprite;
 
 	public:
-		BrushTool(DocumentHandler *documentHandler, EditorConfig &editorConfig, spright_app::EditorServices* services);
+		BrushTool(DocumentHandler *documentHandler, EditorConfig &editorConfig, spright_app::Services* services);
 
 	private:
 		void pointerDown(PointerInfo &pointerInfo) override;

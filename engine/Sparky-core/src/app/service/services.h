@@ -3,13 +3,13 @@
 
 namespace spright_app {
 
-	class EditorServices {
+	class Services {
 	private:
 		ColorPalette* colorPalette;
 
 	public:
-		EditorServices();
-		~EditorServices();
+		Services();
+		~Services();
 		ColorPalette* getColorPalette();
 	};
 }
