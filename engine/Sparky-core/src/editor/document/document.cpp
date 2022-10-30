@@ -1,6 +1,6 @@
 #include "document.h"
 
-namespace my_app { namespace editor { namespace document {
+namespace my_app_editor { namespace document {
 
 	Document::Document(my_app_editor::document::Dimensions dimensions) : dimensions(dimensions)
 	{
@@ -44,4 +44,4 @@ namespace my_app { namespace editor { namespace document {
 			layer->render();
 		}
 	}
-}}}
+}}

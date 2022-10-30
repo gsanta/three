@@ -1,7 +1,7 @@
 #include "editor.h"
 
-namespace my_app { namespace editor {
-	editor::Editor::Editor()
+namespace my_app_editor {
+	Editor::Editor()
 	{
 		m_Window = new my_app_engine::system::Window("Editor", 800, 600);
 		m_DocumentHandler = new DocumentHandler();
@@ -20,7 +20,7 @@ namespace my_app { namespace editor {
 		m_Window->getFrameHandler()->registerListener(this);
 	}
 
-	editor::Editor::~Editor()
+	Editor::~Editor()
 	{
 		m_Window->getFrameHandler()->unRegisterListener(this);
 		delete m_toolHandler;
@@ -35,4 +35,4 @@ namespace my_app { namespace editor {
 			m_DocumentHandler->getActiveDocument()->render();
 		}
 	}
-}}
+}

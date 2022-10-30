@@ -5,7 +5,7 @@
 #include "../editor_config.h"
 #include "../service/editor_services.h"
 
-namespace my_app { namespace editor { namespace tool {
+namespace my_app_editor { namespace tool {
 	using namespace document;
 
 	class BrushTool : public Tool
@@ -22,4 +22,4 @@ namespace my_app { namespace editor { namespace tool {
 	private:
 		void pointerDown(PointerInfo &pointerInfo) override;
 	};
-}}}
+}}

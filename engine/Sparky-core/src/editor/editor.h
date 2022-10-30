@@ -8,7 +8,7 @@
 #include "core/canvas/canvas_listener_handler.h"
 #include "./service/editor_services.h"
 
-namespace my_app { namespace editor {
+namespace my_app_editor {
 
 	using namespace tool;
 	using namespace document;
@@ -54,4 +54,4 @@ namespace my_app { namespace editor {
 		void onUpdate(float deltaTime) override;
 	};
 
-}}
+}

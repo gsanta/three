@@ -1,6 +1,6 @@
 #include "rectangle_tool.h"
 
-namespace my_app { namespace editor { namespace tool {
+namespace my_app_editor { namespace tool {
 
 	RectangleTool::RectangleTool(DocumentHandler* documentHandler) : m_DocumentHandler(documentHandler), Tool("rectangle") {
 
@@ -42,5 +42,4 @@ namespace my_app { namespace editor { namespace tool {
 			this->m_Rect->setSize(my_app_engine::maths::Vec2(right - left, top - bottom));
 		}
 	}
-
-}}}
+}}

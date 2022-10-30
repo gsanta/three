@@ -9,7 +9,7 @@
 #include "../editor_config.h"
 
 
-namespace my_app { namespace editor { namespace tool {
+namespace my_app_editor { namespace tool {
 
 	using namespace std;
 
@@ -38,4 +38,4 @@ namespace my_app { namespace editor { namespace tool {
 			m_ActiveTool = getTool(name);
 		}
 	};
-} } }
+} }

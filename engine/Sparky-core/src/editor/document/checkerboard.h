@@ -8,6 +8,6 @@ namespace my_app_editor { namespace document {
 	class Checkerboard {
 
 	public:
-		void create(my_app::editor::document::Document* document);
+		void create(my_app_editor::document::Document* document);
 	};
 }}

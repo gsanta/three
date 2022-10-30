@@ -1,7 +1,7 @@
 
 #include "canvas_listener_handler.h"
 
-namespace my_app { namespace editor { namespace core {
+namespace my_app_editor { namespace core {
 	void CanvasListenerHandler::onMouseUp(int button)
 	{
 		m_PointerInfo.isDown = false;
@@ -44,4 +44,4 @@ namespace my_app { namespace editor { namespace core {
 			m_Listeners.erase(it);
 		}
 	}
-}}}
+}}

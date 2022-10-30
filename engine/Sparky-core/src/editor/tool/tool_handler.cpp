@@ -1,6 +1,6 @@
 #include "tool_handler.h"
 
-namespace my_app { namespace editor { namespace tool {
+namespace my_app_editor { namespace tool {
 	
 	ToolHandler::ToolHandler(my_app_engine::system::Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig) : m_Window(window), m_EditorConfig(editorConfig)
 	{
@@ -39,5 +39,5 @@ namespace my_app { namespace editor { namespace tool {
 		return *it;
 	}
 
-} } }
+} }
 

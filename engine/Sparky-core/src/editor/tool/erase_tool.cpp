@@ -1,6 +1,6 @@
 #include "erase_tool.h"
 
-namespace my_app { namespace editor { namespace tool {
+namespace my_app_editor { namespace tool {
 
 	EraseTool::EraseTool(DocumentHandler* documentHandler) : m_DocumentHandler(documentHandler), Tool("erase")
 	{
@@ -88,5 +88,4 @@ namespace my_app { namespace editor { namespace tool {
 
 		 std::cout << "size: " << sprites.size() << std::endl;
 	}
-
-}}}
+}}

@@ -2,7 +2,7 @@
 #include <string>
 #include "pointer_info.h"
 
-namespace my_app { namespace editor { namespace tool {
+namespace my_app_editor { namespace tool {
 	using namespace std;
 
 	class Tool {
@@ -18,4 +18,4 @@ namespace my_app { namespace editor { namespace tool {
 			return this->name;
 		}
 	};
-}}}
+}}

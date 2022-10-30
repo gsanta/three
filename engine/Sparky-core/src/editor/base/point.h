@@ -1,6 +1,6 @@
 #pragma once
 
-namespace my_app { namespace editor { namespace base {
+namespace my_app_editor { namespace base {
 
 	class Point {
 	public:
@@ -8,4 +8,4 @@ namespace my_app { namespace editor { namespace base {
 		float y;
 	};
 
-}}}
+}}
