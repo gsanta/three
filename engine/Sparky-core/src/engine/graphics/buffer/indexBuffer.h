@@ -2,7 +2,7 @@
 
 #include <GL/glew.h>
 
-namespace my_app_engine {
+namespace spright_engine {
 	namespace graphics {
 		class IndexBuffer {
 		private:

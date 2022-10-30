@@ -1,10 +1,10 @@
 
 #include "checkerboard.h"
 
-namespace my_app_editor { namespace document {
-	void document::Checkerboard::create(my_app_editor::document::Document* document)
+namespace spright_app { namespace document {
+	void document::Checkerboard::create(spright_app::document::Document* document)
 	{
-		my_app_engine::graphics::Layer* layer = document->getLayer(my_app_editor::document::DEFAULT_BACKGROUND_LAYER_ID);
+		spright_engine::graphics::Layer* layer = document->getLayer(spright_app::document::DEFAULT_BACKGROUND_LAYER_ID);
 	
 		float left = document->dimensions.left;
 		float right = document->dimensions.right;
@@ -17,7 +17,7 @@ namespace my_app_editor { namespace document {
 			for (float j = bottom; j < top; j += 0.5) {
 				counter++;
 				int color = counter % 2 == 0 ? 0Xff787878 : 0XffE0E0E0;
-				layer->add(new my_app_engine::graphics::Sprite(i, j, 0.5f, 0.5f, color));
+				layer->add(new spright_engine::graphics::Sprite(i, j, 0.5f, 0.5f, color));
 			}
 
 			counter = 1;

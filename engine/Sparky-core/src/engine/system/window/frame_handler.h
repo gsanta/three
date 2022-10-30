@@ -3,7 +3,7 @@
 #include "frame_listener.h"
 #include <vector>;
 
-namespace my_app_engine { namespace system {
+namespace spright_engine { namespace system {
 
 	class FrameHandler {
 	private:

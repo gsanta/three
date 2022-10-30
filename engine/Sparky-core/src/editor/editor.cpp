@@ -1,15 +1,15 @@
 #include "editor.h"
 
-namespace my_app_editor {
+namespace spright_app {
 	Editor::Editor()
 	{
-		m_Window = new my_app_engine::system::Window("Editor", 800, 600);
+		m_Window = new spright_engine::system::Window("Editor", 800, 600);
 		m_DocumentHandler = new DocumentHandler();
 		m_DocumentHandler->createDocument();
 		m_CanvasListenerHandler = new core::CanvasListenerHandler();
 		m_Window->getInputHandler()->registerListener(m_CanvasListenerHandler);
 
-		m_Services = new my_app_editor::EditorServices();
+		m_Services = new spright_app::EditorServices();
 
 		m_toolHandler = new ToolHandler(m_Window, m_DocumentHandler, editorConfig);
 		m_toolHandler->addTool(new BrushTool(m_DocumentHandler, editorConfig, m_Services));

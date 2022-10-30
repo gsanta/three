@@ -5,7 +5,7 @@
 #include <FreeImage.h>
 #include "../texture/imageLoad.h"
 
-namespace my_app_engine { namespace graphics {
+namespace spright_engine { namespace graphics {
 
 	class Texture {
 	private:

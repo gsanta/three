@@ -15,7 +15,7 @@
 	#include "../../../engine/graphics/texture/texture.h"
 #endif
 #include "bounds.h"
-namespace my_app_engine { namespace graphics {
+namespace spright_engine { namespace graphics {
 	class Renderable2D {
 
 	protected:
@@ -25,10 +25,10 @@ namespace my_app_engine { namespace graphics {
 
 		int m_VertexCount;
 		unsigned int m_Color;
-		my_app_engine::graphics::Bounds* m_bounds;
-		std::vector<my_app_engine::maths::Vec2> m_UV;
+		spright_engine::graphics::Bounds* m_bounds;
+		std::vector<spright_engine::maths::Vec2> m_UV;
 #ifndef SPARKY_EMSCRIPTEN
-		my_app_engine::graphics::Texture* m_Texture;
+		spright_engine::graphics::Texture* m_Texture;
 #endif
 	public:
 		Renderable2D(unsigned int color) : m_Color(color)
@@ -38,10 +38,10 @@ namespace my_app_engine { namespace graphics {
 
 		virtual ~Renderable2D() {}
 
-		virtual void submit(my_app_engine::graphics::Renderer2D* renderer) const = 0;
+		virtual void submit(spright_engine::graphics::Renderer2D* renderer) const = 0;
 
 		void setColor(unsigned int color) { m_Color = color; }
-		void setColor(const my_app_engine:: maths::Vec4& color) {
+		void setColor(const spright_engine:: maths::Vec4& color) {
 			int r = (color.x * 255.0f);
 			int g = (color.y * 255.0f);
 			int b = (color.z * 255.0f);
@@ -50,13 +50,13 @@ namespace my_app_engine { namespace graphics {
 			m_Color = a << 24 | b << 16 | g << 8 | r;
 		}
 
-		inline const my_app_engine::graphics::Bounds* getBounds() const {
+		inline const spright_engine::graphics::Bounds* getBounds() const {
 			return m_bounds;
 		}
 
 		inline int getVertexCount() const { return m_VertexCount; }
 		inline const unsigned int getColor() const { return m_Color; }
-		inline const std::vector<my_app_engine::maths::Vec2>& getUV() const { return m_UV; }
+		inline const std::vector<spright_engine::maths::Vec2>& getUV() const { return m_UV; }
 
 		virtual nlohmann::json getJson() = 0;
 #ifdef SPARKY_EMSCRIPTEN
@@ -66,10 +66,10 @@ namespace my_app_engine { namespace graphics {
 #endif
 	private:
 		void setUVDefaults() {
-			m_UV.push_back(my_app_engine::maths::Vec2(0, 0));
-			m_UV.push_back(my_app_engine::maths::Vec2(0, 1));
-			m_UV.push_back(my_app_engine::maths::Vec2(1, 1));
-			m_UV.push_back(my_app_engine::maths::Vec2(1, 0));
+			m_UV.push_back(spright_engine::maths::Vec2(0, 0));
+			m_UV.push_back(spright_engine::maths::Vec2(0, 1));
+			m_UV.push_back(spright_engine::maths::Vec2(1, 1));
+			m_UV.push_back(spright_engine::maths::Vec2(1, 0));
 		}
 	};
 } }

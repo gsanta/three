@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace my_app_engine { namespace system {
+namespace spright_engine { namespace system {
 	class FileUtils {
 	public:
 		static std::string read_file(const char* filePath) {

@@ -3,7 +3,7 @@
 #include <string>
 #include <FreeImage.h>
 
-namespace my_app_engine {
+namespace spright_engine {
 
 	static BYTE* load_image(const char* filename, GLsizei* width, GLsizei* height) {
 		FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;

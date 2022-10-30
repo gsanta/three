@@ -2,7 +2,7 @@
 #include <string>
 #include "pointer_info.h"
 
-namespace my_app_editor { namespace tool {
+namespace spright_app { namespace tool {
 	using namespace std;
 
 	class Tool {

@@ -6,7 +6,7 @@
 #include "../../engine/graphics/camera/camera.h"
 #include "dimensions.h"
 
-namespace my_app_editor { namespace document {
+namespace spright_app { namespace document {
 
 	const std::string USER_LAYER_ID_PREFIX("user_layer_");
 	const std::string DEFAULT_TEMP_LAYER_ID("temp_layer_1");
@@ -15,30 +15,30 @@ namespace my_app_editor { namespace document {
 	class Document
 	{
 	private:
-		//my_app_engine::graphics::Layer* m_TempLayer;
-		//my_app_engine::graphics::TileLayer* m_BackgroundLayer;
-		//my_app_engine::graphics::TileLayer* m_TileLayer;
-		std::vector<my_app_engine::graphics::Layer*> m_Layers;
+		//spright_engine::graphics::Layer* m_TempLayer;
+		//spright_engine::graphics::TileLayer* m_BackgroundLayer;
+		//spright_engine::graphics::TileLayer* m_TileLayer;
+		std::vector<spright_engine::graphics::Layer*> m_Layers;
 
-		my_app_engine::graphics::Layer* m_ActiveLayer;
+		spright_engine::graphics::Layer* m_ActiveLayer;
 
-		my_app_engine::graphics::Camera* m_Camera;
+		spright_engine::graphics::Camera* m_Camera;
 
 	public:
-		Document(my_app_editor::document::Dimensions dimensions);
+		Document(spright_app::document::Dimensions dimensions);
 		~Document();
 
-		my_app_editor::document::Dimensions dimensions;
+		spright_app::document::Dimensions dimensions;
 
-		my_app_engine::graphics::Layer* getLayer(std::string id);
+		spright_engine::graphics::Layer* getLayer(std::string id);
 
-		void addLayer(my_app_engine::graphics::Layer* layer);
+		void addLayer(spright_engine::graphics::Layer* layer);
 
-		inline my_app_engine::graphics::Layer* getActiveLayer() {
+		inline spright_engine::graphics::Layer* getActiveLayer() {
 			return m_ActiveLayer;
 		}
 
-		inline my_app_engine::graphics::Camera* getCamera() {
+		inline spright_engine::graphics::Camera* getCamera() {
 			return m_Camera;
 		}
 

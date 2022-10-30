@@ -1,8 +1,8 @@
 #include "layer.h"
 
-namespace my_app_engine { namespace graphics {
+namespace spright_engine { namespace graphics {
 
-	Layer::Layer(std::string id, Renderer2D* renderer, Shader* shader, my_app_engine::maths::Mat4 projectionMatrix, Camera* camera)
+	Layer::Layer(std::string id, Renderer2D* renderer, Shader* shader, spright_engine::maths::Mat4 projectionMatrix, Camera* camera)
 		: m_Id(id), m_Renderer(renderer), m_Shader(shader), m_ProjectionMatrix(projectionMatrix), m_Camera(camera) {
 
 		m_Shader->enable();
@@ -19,11 +19,11 @@ namespace my_app_engine { namespace graphics {
 		}
 	}
 
-	void Layer::add(my_app_engine::graphics::Renderable2D* renderable) {
+	void Layer::add(spright_engine::graphics::Renderable2D* renderable) {
 		m_Renderables.push_back(renderable);
 	}
 
-	void Layer::remove(my_app_engine::graphics::Renderable2D* renderable)
+	void Layer::remove(spright_engine::graphics::Renderable2D* renderable)
 	{
 		auto it = std::find(m_Renderables.begin(), m_Renderables.end(), renderable);
 
@@ -42,7 +42,7 @@ namespace my_app_engine { namespace graphics {
 
 		m_Renderer->begin();
 		m_Renderer->push(m_Camera->getView());
-		for (const my_app_engine::graphics::Renderable2D* renderable : m_Renderables) {
+		for (const spright_engine::graphics::Renderable2D* renderable : m_Renderables) {
 			renderable->submit(m_Renderer);
 		}
 		m_Renderer->end();

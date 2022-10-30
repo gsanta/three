@@ -5,7 +5,7 @@
 #include "../editor_config.h"
 #include "../service/editor_services.h"
 
-namespace my_app_editor { namespace tool {
+namespace spright_app { namespace tool {
 	using namespace document;
 
 	class BrushTool : public Tool
@@ -13,11 +13,11 @@ namespace my_app_editor { namespace tool {
 	private:
 		DocumentHandler *m_documentHandler;
 		EditorConfig m_EditorConfig;
-		my_app_editor::EditorServices* m_Services;
-		my_app_engine::graphics::Sprite *sprite;
+		spright_app::EditorServices* m_Services;
+		spright_engine::graphics::Sprite *sprite;
 
 	public:
-		BrushTool(DocumentHandler *documentHandler, EditorConfig &editorConfig, my_app_editor::EditorServices* services);
+		BrushTool(DocumentHandler *documentHandler, EditorConfig &editorConfig, spright_app::EditorServices* services);
 
 	private:
 		void pointerDown(PointerInfo &pointerInfo) override;

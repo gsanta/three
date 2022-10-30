@@ -8,7 +8,7 @@
 #include "../../engine/graphics/renderable/line_shape.h"
 #include "../../engine/graphics/renderable/sprite.h"
 
-namespace my_app_editor { namespace document {
+namespace spright_app { namespace document {
 	using namespace std;
 
 	class DocumentHandler {

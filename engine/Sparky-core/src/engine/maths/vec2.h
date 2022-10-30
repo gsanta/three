@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-namespace my_app_engine { namespace maths {
+namespace spright_engine { namespace maths {
 
 	struct Vec2 {
 		float x, y;

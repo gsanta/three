@@ -1,6 +1,6 @@
 #pragma once
 
-namespace my_app_editor { namespace base {
+namespace spright_app { namespace base {
 
 	class Point {
 	public:

@@ -3,7 +3,7 @@
 #include "tool.h"
 #include "../document/document_handler.h"
 
-namespace my_app_editor { namespace tool {
+namespace spright_app { namespace tool {
     class PaintBucketTool : public Tool
     {
     private:

@@ -1,7 +1,7 @@
 #pragma once
 #include "color_palette.h"
 
-namespace my_app_editor {
+namespace spright_app {
 
 	class EditorServices {
 	private:

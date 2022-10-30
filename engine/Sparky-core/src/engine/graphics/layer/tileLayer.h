@@ -9,17 +9,17 @@
 #include "../../maths/mat4.h"
 #include "../camera/camera.h"
 
-namespace my_app_engine { namespace graphics {
+namespace spright_engine { namespace graphics {
 	class TileLayer : public Layer
 	{
 	private:
 		float m_TileSize = 0.5;
-		my_app_engine::graphics::Bounds m_Bounds;
+		spright_engine::graphics::Bounds m_Bounds;
 	public:
-		TileLayer(std::string id, my_app_engine::maths::Mat4, my_app_engine::graphics::Shader* shader, my_app_engine::graphics::Renderer2D* renderer, Camera* camera);
+		TileLayer(std::string id, spright_engine::maths::Mat4, spright_engine::graphics::Shader* shader, spright_engine::graphics::Renderer2D* renderer, Camera* camera);
 		virtual ~TileLayer();
 
-		my_app_engine::maths::Vec2 getTilePos(my_app_engine::maths::Vec2 pointer);
+		spright_engine::maths::Vec2 getTilePos(spright_engine::maths::Vec2 pointer);
 
 		virtual nlohmann::json getJson() override;
 		virtual void setJson(std::string json);

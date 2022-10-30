@@ -6,7 +6,7 @@
 #include "../../engine/maths/vec2.h"
 #include "../../engine/maths/vec3.h"
 
-namespace my_app_editor { namespace tool {
+namespace spright_app { namespace tool {
 
 	using namespace document;
 
@@ -14,7 +14,7 @@ namespace my_app_editor { namespace tool {
 	private:
 		DocumentHandler* m_DocumentHandler;
 		float m_Size = 10;
-		my_app_engine::graphics::Sprite* m_Rect = nullptr;
+		spright_engine::graphics::Sprite* m_Rect = nullptr;
 
 	public:
 		RectangleTool(DocumentHandler* documentHandler);

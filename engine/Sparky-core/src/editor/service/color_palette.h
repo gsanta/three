@@ -1,6 +1,6 @@
 #pragma once
 
-namespace my_app_editor {
+namespace spright_app {
 
 	struct ColorPalette {
 

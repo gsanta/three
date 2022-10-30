@@ -23,8 +23,8 @@
 
 //#define SPARKY_EMSCRIPTEN 0
 
-my_app_engine::system::Window *window = nullptr;
-my_app_editor::Editor *editor = nullptr;
+spright_engine::system::Window *window = nullptr;
+spright_app::Editor *editor = nullptr;
 
 #ifdef SPARKY_EMSCRIPTEN
 #include <emscripten/emscripten.h>
@@ -97,8 +97,8 @@ static void dispatch_main(void *fp)
 
 int main()
 {
-	editor = new my_app_editor::Editor();
-	editor->getCanvasListenerHandler()->addListener(new my_app_editor::feature::canvas::CursorLight(editor));
+	editor = new spright_app::Editor();
+	editor->getCanvasListenerHandler()->addListener(new spright_app::feature::canvas::CursorLight(editor));
 	window = editor->getWindow();
 
 	// Group* group = new Group(Mat4::translation(maths::Vec3(-5.0f, 5.0f, 0.0f)));

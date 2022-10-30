@@ -1,8 +1,8 @@
 #include "tool_handler.h"
 
-namespace my_app_editor { namespace tool {
+namespace spright_app { namespace tool {
 	
-	ToolHandler::ToolHandler(my_app_engine::system::Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig) : m_Window(window), m_EditorConfig(editorConfig)
+	ToolHandler::ToolHandler(spright_engine::system::Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig) : m_Window(window), m_EditorConfig(editorConfig)
 	{
 		window->getInputHandler()->registerListener(this);
 	}

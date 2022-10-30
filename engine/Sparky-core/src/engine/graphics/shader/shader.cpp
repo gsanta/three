@@ -1,6 +1,6 @@
 #include "shader.h"
 
-namespace my_app_engine { namespace graphics {
+namespace spright_engine { namespace graphics {
 	
 	Shader::Shader(const char* vertPath, const char* fragPath)
 		: m_VertPath(vertPath), m_FragPath(fragPath)
@@ -32,22 +32,22 @@ namespace my_app_engine { namespace graphics {
 		glUniform1iv(getUniformLocation(name), count, value);
 	}
 
-	void Shader::setUniform2f(const GLchar* name, const my_app_engine::maths::Vec2& vector)
+	void Shader::setUniform2f(const GLchar* name, const spright_engine::maths::Vec2& vector)
 	{
 		glUniform2f(getUniformLocation(name), vector.x, vector.y);
 	}
 
-	void Shader::setUniform3f(const GLchar* name, const my_app_engine::maths::Vec3& vector)
+	void Shader::setUniform3f(const GLchar* name, const spright_engine::maths::Vec3& vector)
 	{
 		glUniform3f(getUniformLocation(name), vector.x, vector.y, vector.z);
 	}
 
-	void Shader::setUniform4f(const GLchar* name, const my_app_engine::maths::Vec4& vector)
+	void Shader::setUniform4f(const GLchar* name, const spright_engine::maths::Vec4& vector)
 	{
 		glUniform4f(getUniformLocation(name), vector.x, vector.y, vector.z, vector.w);
 	}
 
-	void Shader::setUniformMat4(const GLchar* name, const my_app_engine::maths::Mat4& matrix)
+	void Shader::setUniformMat4(const GLchar* name, const spright_engine::maths::Mat4& matrix)
 	{
 		glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, matrix.elements);
 	}
@@ -57,8 +57,8 @@ namespace my_app_engine { namespace graphics {
 		GLuint vertex = glCreateShader(GL_VERTEX_SHADER);
 		GLuint fragment = glCreateShader(GL_FRAGMENT_SHADER);
 
-		const std::string vertSourceString = my_app_engine::system::FileUtils::read_file(m_VertPath);
-		const std::string fragSourceString = my_app_engine::system::FileUtils::read_file(m_FragPath);
+		const std::string vertSourceString = spright_engine::system::FileUtils::read_file(m_VertPath);
+		const std::string fragSourceString = spright_engine::system::FileUtils::read_file(m_FragPath);
 
 		const char* vertSource = vertSourceString.c_str();
 		const char* fragSource = fragSourceString.c_str();

@@ -1,6 +1,6 @@
 #include "./buffer.h"
 
-namespace my_app_engine { namespace graphics {
+namespace spright_engine { namespace graphics {
 
 	Buffer::Buffer(GLfloat* data, GLsizei count, GLuint componentCount)
 		: m_ComponentCount(componentCount)

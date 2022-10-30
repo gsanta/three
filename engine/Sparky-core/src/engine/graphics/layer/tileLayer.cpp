@@ -1,8 +1,8 @@
 #include "tileLayer.h"
 
-namespace my_app_engine { namespace graphics {
+namespace spright_engine { namespace graphics {
 
-	TileLayer::TileLayer(std::string id, my_app_engine::maths::Mat4 projection, Shader* shader, Renderer2D* renderer, Camera* camera)
+	TileLayer::TileLayer(std::string id, spright_engine::maths::Mat4 projection, Shader* shader, Renderer2D* renderer, Camera* camera)
 		: Layer(id, renderer, shader, projection, camera) {
 
 		m_Bounds.minX = -10;
@@ -13,7 +13,7 @@ namespace my_app_engine { namespace graphics {
 
 	TileLayer::~TileLayer() {}
 
-	my_app_engine::maths::Vec2 TileLayer::getTilePos(my_app_engine::maths::Vec2 pointer)
+	spright_engine::maths::Vec2 TileLayer::getTilePos(spright_engine::maths::Vec2 pointer)
 	{
 		int tileX = (int)(pointer.x / m_TileSize);
 		tileX = tileX < 0 ? tileX - 1 : tileX;
@@ -23,7 +23,7 @@ namespace my_app_engine { namespace graphics {
 		float x = static_cast<float>(tileX) * m_TileSize;
 		float y = static_cast<float>(tileY) * m_TileSize;
 
-		return my_app_engine::maths::Vec2(x, y);
+		return spright_engine::maths::Vec2(x, y);
 	}
 
 	nlohmann::json TileLayer::getJson()
@@ -49,7 +49,7 @@ namespace my_app_engine { namespace graphics {
 			float sizeX = j["sizeX"];
 			float sizeY = j["sizeY"];
 
-			my_app_engine::graphics::Sprite* sprite = new my_app_engine::graphics::Sprite(posX, posY, sizeX, sizeY, 0xff0000ff);
+			spright_engine::graphics::Sprite* sprite = new spright_engine::graphics::Sprite(posX, posY, sizeX, sizeY, 0xff0000ff);
 			add(sprite);
 		}
 	}

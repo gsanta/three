@@ -1,6 +1,6 @@
 #include "./indexBuffer.h"
 
-namespace my_app_engine {
+namespace spright_engine {
 	namespace graphics {
 
 		IndexBuffer::IndexBuffer(GLushort* data, GLsizei count)

@@ -1,19 +1,19 @@
 #include "document.h"
 
-namespace my_app_editor { namespace document {
+namespace spright_app { namespace document {
 
-	Document::Document(my_app_editor::document::Dimensions dimensions) : dimensions(dimensions)
+	Document::Document(spright_app::document::Dimensions dimensions) : dimensions(dimensions)
 	{
-		//auto it = find_if(m_Layers.begin(), m_Layers.end(), [](my_app_engine::graphics::Layer* layer) {
+		//auto it = find_if(m_Layers.begin(), m_Layers.end(), [](spright_engine::graphics::Layer* layer) {
 		//	return layer->getId().rfind(USER_LAYER_ID_PREFIX, 0) != std::string::npos; 
 		//});
 
 		//m_ActiveLayer = *it;
-		m_Camera = new my_app_engine::graphics::Camera();
+		m_Camera = new spright_engine::graphics::Camera();
 	}
 
 	Document::~Document() {
-		std::vector<my_app_engine::graphics::Layer*>::iterator it;
+		std::vector<spright_engine::graphics::Layer*>::iterator it;
 
 		// TODO fix it
 		//for (it = m_Layers.begin(); it != m_Layers.end(); ) {
@@ -21,14 +21,14 @@ namespace my_app_editor { namespace document {
 		//}
 	}
 
-	my_app_engine::graphics::Layer* Document::getLayer(std::string id)
+	spright_engine::graphics::Layer* Document::getLayer(std::string id)
 	{
-		auto it = find_if(m_Layers.begin(), m_Layers.end(), [&id](my_app_engine::graphics::Layer* layer) { return layer->getId() == id; });
+		auto it = find_if(m_Layers.begin(), m_Layers.end(), [&id](spright_engine::graphics::Layer* layer) { return layer->getId() == id; });
 
 		return *it;
 	}
 
-	void Document::addLayer(my_app_engine::graphics::Layer* layer)
+	void Document::addLayer(spright_engine::graphics::Layer* layer)
 	{
 		m_Layers.push_back(layer);
 	}
@@ -40,7 +40,7 @@ namespace my_app_editor { namespace document {
 
 	void Document::render()
 	{
-		for (my_app_engine::graphics::Layer* layer : m_Layers) {
+		for (spright_engine::graphics::Layer* layer : m_Layers) {
 			layer->render();
 		}
 	}
