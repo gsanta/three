@@ -1,18 +1,24 @@
 import Box from '@/ui/components/box/Box';
 import { useResizeObserver } from '@/ui/hooks/useResizeObserver';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import useInitExternalModule from './hooks/useInitExternalModule';
 import setWindowSize from './utils/setWindowSize';
 
-const Canvas = () => {
-  const [canvasNode, setCanvasNode] = useState<HTMLElement | undefined>(undefined);
+type CanvasProps = {
+  container?: HTMLDivElement;
+};
 
-  const canvasRef = useCallback((node: HTMLElement) => node && setCanvasNode(node), []);
+const Canvas = ({ container }: CanvasProps) => {
+  const { isModuleInitialized } = useInitExternalModule(() => setWindowSize(true, container));
 
-  const { isModuleInitialized } = useInitExternalModule(() => setWindowSize(true, canvasNode));
-  useResizeObserver(canvasNode, () => setWindowSize(isModuleInitialized, canvasNode));
+  const updateWindowSize = useCallback(
+    () => setWindowSize(isModuleInitialized, container),
+    [container, isModuleInitialized],
+  );
 
-  return <Box as="canvas" ref={canvasRef as any} id="canvas" width="100%" height="100%"></Box>;
+  useResizeObserver(container, updateWindowSize);
+
+  return <Box as="canvas" id="canvas"></Box>;
 };
 
 export default Canvas;

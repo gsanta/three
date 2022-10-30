@@ -174,8 +174,9 @@
     <ClCompile Include="src\editor\document\document_handler.cpp" />
     <ClCompile Include="src\editor\editor.cpp" />
     <ClCompile Include="src\editor\editor_config.h" />
-    <ClCompile Include="src\editor\editor_state.cpp" />
+    <ClCompile Include="src\editor\service\color_palette.cpp" />
     <ClCompile Include="src\editor\feature\canvas\cursor_light.cpp" />
+    <ClCompile Include="src\editor\service\editor_services.cpp" />
     <ClCompile Include="src\editor\tool\erase_tool.cpp" />
     <ClCompile Include="src\editor\tool\paint_bucket_tool.cpp" />
     <ClCompile Include="src\editor\tool\pointer_info.cpp" />
@@ -216,9 +217,10 @@
     <ClInclude Include="src\editor\document\document_handler.h" />
     <ClInclude Include="src\editor\editor.h" />
     <ClInclude Include="src\editor\document\checkerboard.h" />
-    <ClInclude Include="src\editor\editor_state.h" />
+    <ClInclude Include="src\editor\service\color_palette.h" />
     <ClInclude Include="src\editor\feature\canvas\cursor_light.h" />
     <ClInclude Include="src\editor\pointer\pointer_utils.h" />
+    <ClInclude Include="src\editor\service\editor_services.h" />
     <ClInclude Include="src\editor\tool\erase_tool.h" />
     <ClInclude Include="src\editor\tool\flood_fill.h" />
     <ClInclude Include="src\editor\tool\paint_bucket_tool.h" />

@@ -9,20 +9,22 @@ export const useResizeObserver = (node?: HTMLElement, callback?: (entry: DOMRect
   const [width, setWidth] = useState<number>();
   const [height, setHeight] = useState<number>();
 
-  const handleResize = useCallback((entries: ResizeObserverEntry[]) => {
-    if (!Array.isArray(entries)) {
-      return;
-    }
+  const handleResize = useCallback(
+    (entries: ResizeObserverEntry[]) => {
+      if (!Array.isArray(entries)) {
+        return;
+      }
 
-    const entry = entries[0];
-    setWidth(entry.contentRect.width);
-    setHeight(entry.contentRect.height);
+      const entry = entries[0];
+      setWidth(entry.contentRect.width);
+      setHeight(entry.contentRect.height);
 
-    if (callback) {
-      callback(entry.contentRect);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      if (callback) {
+        callback(entry.contentRect);
+      }
+    },
+    [callback],
+  );
 
   useEffect(() => {
     if (!node) {

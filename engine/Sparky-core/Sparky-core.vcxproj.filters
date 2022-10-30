@@ -159,7 +159,10 @@
     <ClCompile Include="src\engine\graphics\camera\camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\editor\editor_state.cpp">
+    <ClCompile Include="src\editor\service\color_palette.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\editor\service\editor_services.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -308,7 +311,10 @@
     <ClInclude Include="src\engine\graphics\camera\camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\editor\editor_state.h">
+    <ClInclude Include="src\editor\service\color_palette.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\editor\service\editor_services.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

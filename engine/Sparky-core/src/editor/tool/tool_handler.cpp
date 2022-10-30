@@ -2,14 +2,9 @@
 
 namespace my_app { namespace editor { namespace tool {
 	
-	ToolHandler::ToolHandler(my_app_engine::system::Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, EditorState& editorState) : m_Window(window), m_EditorConfig(editorConfig)
+	ToolHandler::ToolHandler(my_app_engine::system::Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig) : m_Window(window), m_EditorConfig(editorConfig)
 	{
 		window->getInputHandler()->registerListener(this);
-
-		this->tools.push_back(new BrushTool(documentHandler, editorConfig, editorState));
-		this->tools.push_back(new RectangleTool(documentHandler));
-		this->tools.push_back(new EraseTool(documentHandler));
-		this->m_ActiveTool = this->getTool("brush");
 	}
 
 	void ToolHandler::onMouseUp(int button) {
@@ -30,6 +25,11 @@ namespace my_app { namespace editor { namespace tool {
 		this->m_pointerInfo.curr.x = x;
 		this->m_pointerInfo.curr.y = y;
 		this->m_ActiveTool->pointerMove(this->m_pointerInfo);
+	}
+
+	void ToolHandler::addTool(Tool* tool)
+	{
+		tools.push_back(tool);
 	}
 
 	Tool* ToolHandler::getTool(string name) const
