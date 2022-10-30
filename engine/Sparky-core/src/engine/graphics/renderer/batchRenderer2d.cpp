@@ -1,6 +1,6 @@
 #include "batchRenderer2d.h"
 
-namespace my_app_engine { namespace graphics {
+namespace spright_engine { namespace graphics {
 
 	BatchRenderer2D::BatchRenderer2D() {
 		init();

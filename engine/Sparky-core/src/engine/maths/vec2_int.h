@@ -1,6 +1,6 @@
 
 
-namespace my_app_engine { namespace maths {
+namespace spright_engine { namespace maths {
 
     class Vec2Int {
     public:

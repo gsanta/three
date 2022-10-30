@@ -1,6 +1,6 @@
 #include "tool.h"
 
-namespace my_app_editor { namespace tool {
+namespace spright_app { namespace tool {
 
 	Tool::Tool(const string name)
 	{

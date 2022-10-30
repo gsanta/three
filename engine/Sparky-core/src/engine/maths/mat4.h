@@ -4,7 +4,7 @@
 #include "vec4.h"
 #include "mathFuncs.h"
 
-namespace my_app_engine { namespace maths {
+namespace spright_engine { namespace maths {
 	struct Mat4
 	{
 		union {

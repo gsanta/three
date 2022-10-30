@@ -1,6 +1,6 @@
 
 
-namespace my_app_editor { namespace document {
+namespace spright_app { namespace document {
 
 	struct Dimensions {
 		float left;

@@ -9,19 +9,19 @@
 #include "../editor_config.h"
 
 
-namespace my_app_editor { namespace tool {
+namespace spright_app { namespace tool {
 
 	using namespace std;
 
-	class ToolHandler : public my_app_engine::system::InputListener {
+	class ToolHandler : public spright_engine::system::InputListener {
 	private:
-		my_app_engine::system::Window* m_Window;
+		spright_engine::system::Window* m_Window;
 		vector<Tool*> tools;
 		Tool* m_ActiveTool;
 		PointerInfo m_pointerInfo;
 		EditorConfig m_EditorConfig;
 	public:
-		ToolHandler(my_app_engine::system::Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig);
+		ToolHandler(spright_engine::system::Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig);
 		virtual void onMouseUp(int button) override;
 		virtual void onMouseDown(int button) override;
 		virtual void onMouseMove(double x, double y) override;

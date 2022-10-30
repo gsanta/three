@@ -1,7 +1,7 @@
 #include "editor_services.h"
 
 
-namespace my_app_editor {
+namespace spright_app {
 
 	EditorServices::EditorServices()
 	{

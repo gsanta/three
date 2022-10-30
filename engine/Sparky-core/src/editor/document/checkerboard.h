@@ -3,11 +3,11 @@
 #include "document.h"
 #include "../../engine/graphics/renderable/sprite.h"
 
-namespace my_app_editor { namespace document {
+namespace spright_app { namespace document {
 
 	class Checkerboard {
 
 	public:
-		void create(my_app_editor::document::Document* document);
+		void create(spright_app::document::Document* document);
 	};
 }}

@@ -1,7 +1,7 @@
 
 #include "canvas_listener_handler.h"
 
-namespace my_app_editor { namespace core {
+namespace spright_app { namespace core {
 	void CanvasListenerHandler::onMouseUp(int button)
 	{
 		m_PointerInfo.isDown = false;

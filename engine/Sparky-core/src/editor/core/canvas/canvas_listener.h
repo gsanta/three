@@ -2,12 +2,12 @@
 
 #include "../../tool/pointer_info.h"
 
-namespace my_app_editor { namespace core {
+namespace spright_app { namespace core {
 	class CanvasListener
 	{
 	public:
-		inline virtual void pointerDown(my_app_editor::tool::PointerInfo& pointerInfo) {}
-		inline virtual void pointerUp(my_app_editor::tool::PointerInfo& pointerInfo) {}
-		inline virtual void pointerMove(my_app_editor::tool::PointerInfo& pointerInfo) {}
+		inline virtual void pointerDown(spright_app::tool::PointerInfo& pointerInfo) {}
+		inline virtual void pointerUp(spright_app::tool::PointerInfo& pointerInfo) {}
+		inline virtual void pointerMove(spright_app::tool::PointerInfo& pointerInfo) {}
 	};
 }}

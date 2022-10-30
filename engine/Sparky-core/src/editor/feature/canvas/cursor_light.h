@@ -3,14 +3,14 @@
 #include "../../core/canvas/canvas_listener.h"
 #include "../../editor.h"
 
-namespace my_app_editor { namespace feature { namespace canvas {
+namespace spright_app { namespace feature { namespace canvas {
 
-	class CursorLight : public my_app_editor::core::CanvasListener {
+	class CursorLight : public spright_app::core::CanvasListener {
 	private:
-		my_app_editor::Editor* m_Editor;
+		spright_app::Editor* m_Editor;
 
 	public:
-		CursorLight(my_app_editor::Editor* editor);
-		void pointerMove(my_app_editor::tool::PointerInfo& pointerInfo) override;
+		CursorLight(spright_app::Editor* editor);
+		void pointerMove(spright_app::tool::PointerInfo& pointerInfo) override;
 	};
 }}}

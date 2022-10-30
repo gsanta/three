@@ -2,7 +2,7 @@
 
 #include <GL/glew.h>
 
-namespace my_app_engine { namespace graphics {
+namespace spright_engine { namespace graphics {
 	class Buffer {
 	private:
 		GLuint m_BufferID;

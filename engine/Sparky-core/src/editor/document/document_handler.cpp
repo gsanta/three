@@ -1,6 +1,6 @@
 #include "document_handler.h"
 
-namespace my_app_editor { namespace document {
+namespace spright_app { namespace document {
 	
 	DocumentHandler::~DocumentHandler()
 	{
@@ -12,21 +12,21 @@ namespace my_app_editor { namespace document {
 	void DocumentHandler::createDocument()
 	{
 #ifdef SPARKY_EMSCRIPTEN
-		my_app_engine::graphics::Shader* shader = new my_app_engine::graphics::Shader("res/shaders/basic.es3.vert", "res/shaders/basic.es3.frag");
-		my_app_engine::graphics::Shader* shaderUnlit = new my_app_engine::graphics::Shader("res/shaders/basic.es3.vert", "res/shaders/basic_unlit.es3.frag");
+		spright_engine::graphics::Shader* shader = new spright_engine::graphics::Shader("res/shaders/basic.es3.vert", "res/shaders/basic.es3.frag");
+		spright_engine::graphics::Shader* shaderUnlit = new spright_engine::graphics::Shader("res/shaders/basic.es3.vert", "res/shaders/basic_unlit.es3.frag");
 #else
-		my_app_engine::graphics::Shader* shader = new my_app_engine::graphics::Shader("src/shaders/basic.vert", "src/shaders/basic.frag");
-		my_app_engine::graphics::Shader* shaderUnlit = new my_app_engine::graphics::Shader("src/shaders/basic.vert", "src/shaders/unlit.frag");
+		spright_engine::graphics::Shader* shader = new spright_engine::graphics::Shader("src/shaders/basic.vert", "src/shaders/basic.frag");
+		spright_engine::graphics::Shader* shaderUnlit = new spright_engine::graphics::Shader("src/shaders/basic.vert", "src/shaders/unlit.frag");
 #endif
-		my_app_editor::document::Dimensions dimensions(-16.0f, 16.0f, -9.0f, 9.0f);
+		spright_app::document::Dimensions dimensions(-16.0f, 16.0f, -9.0f, 9.0f);
 		Document* document = new Document(dimensions);
 
-		my_app_engine::maths::Mat4 projection = my_app_engine::maths::Mat4::otrthographic(dimensions.left, dimensions.right, dimensions.bottom, dimensions.top, -1.0f, 1.0f);
+		spright_engine::maths::Mat4 projection = spright_engine::maths::Mat4::otrthographic(dimensions.left, dimensions.right, dimensions.bottom, dimensions.top, -1.0f, 1.0f);
 		
 		std::string userLayer1Id = USER_LAYER_ID_PREFIX + "1";
-		my_app_engine::graphics::TileLayer* userLayer1 = new my_app_engine::graphics::TileLayer(userLayer1Id, projection, shaderUnlit, new my_app_engine::graphics::BatchRenderer2D(), document->getCamera());
-		my_app_engine::graphics::TileLayer* tempLayer = new my_app_engine::graphics::TileLayer(DEFAULT_TEMP_LAYER_ID, projection, shaderUnlit, new my_app_engine::graphics::BatchRenderer2D(), document->getCamera());
-		my_app_engine::graphics::TileLayer* backgroundLayer = new my_app_engine::graphics::TileLayer(DEFAULT_BACKGROUND_LAYER_ID, projection, shaderUnlit, new my_app_engine::graphics::BatchRenderer2D(), document->getCamera());
+		spright_engine::graphics::TileLayer* userLayer1 = new spright_engine::graphics::TileLayer(userLayer1Id, projection, shaderUnlit, new spright_engine::graphics::BatchRenderer2D(), document->getCamera());
+		spright_engine::graphics::TileLayer* tempLayer = new spright_engine::graphics::TileLayer(DEFAULT_TEMP_LAYER_ID, projection, shaderUnlit, new spright_engine::graphics::BatchRenderer2D(), document->getCamera());
+		spright_engine::graphics::TileLayer* backgroundLayer = new spright_engine::graphics::TileLayer(DEFAULT_BACKGROUND_LAYER_ID, projection, shaderUnlit, new spright_engine::graphics::BatchRenderer2D(), document->getCamera());
 
 		document->addLayer(backgroundLayer);
 		document->addLayer(userLayer1);
@@ -34,7 +34,7 @@ namespace my_app_editor { namespace document {
 
 		document->setActiveLayer(userLayer1Id);
 
-		my_app_editor::document::Checkerboard checkerboard;
+		spright_app::document::Checkerboard checkerboard;
 
 		checkerboard.create(document);
 

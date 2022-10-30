@@ -1,6 +1,6 @@
 #pragma once
 
-namespace my_app_engine { namespace graphics {
+namespace spright_engine { namespace graphics {
 
 	class Bounds {
 

@@ -7,7 +7,7 @@
 #include "../../maths/mat4.h"
 #include "../../maths/vec2.h"
 
-namespace my_app_engine { namespace graphics {
+namespace spright_engine { namespace graphics {
 
 	class Shader {
 	public:
@@ -22,10 +22,10 @@ namespace my_app_engine { namespace graphics {
 		void setUniform1i(const GLchar* name, int value);
 		void setUniform1iv(const GLchar* name, int* value, int count);
 		void setUniform1fv(const GLchar* name, float* value, int count);
-		void setUniform2f(const GLchar* name, const my_app_engine::maths::Vec2& vector);
-		void setUniform3f(const GLchar* name, const my_app_engine::maths::Vec3& vector);
-		void setUniform4f(const GLchar* name, const my_app_engine::maths::Vec4& vector);
-		void setUniformMat4(const GLchar* name, const my_app_engine::maths::Mat4& matrix);
+		void setUniform2f(const GLchar* name, const spright_engine::maths::Vec2& vector);
+		void setUniform3f(const GLchar* name, const spright_engine::maths::Vec3& vector);
+		void setUniform4f(const GLchar* name, const spright_engine::maths::Vec4& vector);
+		void setUniformMat4(const GLchar* name, const spright_engine::maths::Mat4& matrix);
 
 		void enable() const;
 		void disable() const;

@@ -1,7 +1,7 @@
 #include "dimensions.h"
 
 
-namespace my_app_editor { namespace document {
+namespace spright_app { namespace document {
 
 	document::Dimensions::Dimensions(float left, float right, float bottom, float top): left(left), right(right), bottom(bottom), top(top)
 	{
