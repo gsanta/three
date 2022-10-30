@@ -24,7 +24,7 @@
 //#define SPARKY_EMSCRIPTEN 0
 
 my_app_engine::system::Window *window = nullptr;
-my_app::editor::Editor *editor = nullptr;
+my_app_editor::Editor *editor = nullptr;
 
 #ifdef SPARKY_EMSCRIPTEN
 #include <emscripten/emscripten.h>
@@ -97,7 +97,7 @@ static void dispatch_main(void *fp)
 
 int main()
 {
-	editor = new my_app::editor::Editor();
+	editor = new my_app_editor::Editor();
 	editor->getCanvasListenerHandler()->addListener(new my_app_editor::feature::canvas::CursorLight(editor));
 	window = editor->getWindow();
 

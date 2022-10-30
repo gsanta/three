@@ -1,9 +1,7 @@
 #pragma once
 #include "../../engine/maths/vec2.h"
 
-namespace my_app { namespace editor { namespace tool {
-
-	using namespace my_app;
+namespace my_app_editor { namespace tool {
 
 	struct PointerInfo {
 	public:
@@ -13,4 +11,4 @@ namespace my_app { namespace editor { namespace tool {
 	public:
 		PointerInfo();
 	};
-}}}
+}}

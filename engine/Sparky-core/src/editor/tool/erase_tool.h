@@ -5,7 +5,7 @@
 #include "../document/document_handler.h"
 #include "tool.h"
 
-namespace my_app { namespace editor { namespace tool {
+namespace my_app_editor { namespace tool {
 
 	using namespace document;
 
@@ -22,4 +22,4 @@ namespace my_app { namespace editor { namespace tool {
 		void pointerUp(PointerInfo& pointerInfo) override;
 		void pointerMove(PointerInfo& pointerInfo) override;
 	};
-}}}
+}}

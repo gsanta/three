@@ -1,6 +1,6 @@
 #include "document_handler.h"
 
-namespace my_app { namespace editor { namespace document {
+namespace my_app_editor { namespace document {
 	
 	DocumentHandler::~DocumentHandler()
 	{
@@ -41,4 +41,4 @@ namespace my_app { namespace editor { namespace document {
 		m_documents.push_back(document);
 		m_ActiveDocument = document;
 	}
-}}}
+}}

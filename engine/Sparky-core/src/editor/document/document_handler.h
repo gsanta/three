@@ -8,7 +8,7 @@
 #include "../../engine/graphics/renderable/line_shape.h"
 #include "../../engine/graphics/renderable/sprite.h"
 
-namespace my_app { namespace editor { namespace document {
+namespace my_app_editor { namespace document {
 	using namespace std;
 
 	class DocumentHandler {
@@ -26,4 +26,4 @@ namespace my_app { namespace editor { namespace document {
 			return m_ActiveDocument != nullptr;
 		}
 	};
-}}}
+}}

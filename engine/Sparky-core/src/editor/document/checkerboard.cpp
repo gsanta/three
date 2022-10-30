@@ -2,9 +2,9 @@
 #include "checkerboard.h"
 
 namespace my_app_editor { namespace document {
-	void document::Checkerboard::create(my_app::editor::document::Document* document)
+	void document::Checkerboard::create(my_app_editor::document::Document* document)
 	{
-		my_app_engine::graphics::Layer* layer = document->getLayer(my_app::editor::document::DEFAULT_BACKGROUND_LAYER_ID);
+		my_app_engine::graphics::Layer* layer = document->getLayer(my_app_editor::document::DEFAULT_BACKGROUND_LAYER_ID);
 	
 		float left = document->dimensions.left;
 		float right = document->dimensions.right;

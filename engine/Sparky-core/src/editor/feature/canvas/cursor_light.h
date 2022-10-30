@@ -5,12 +5,12 @@
 
 namespace my_app_editor { namespace feature { namespace canvas {
 
-	class CursorLight : public my_app::editor::core::CanvasListener {
+	class CursorLight : public my_app_editor::core::CanvasListener {
 	private:
-		my_app::editor::Editor* m_Editor;
+		my_app_editor::Editor* m_Editor;
 
 	public:
-		CursorLight(my_app::editor::Editor* editor);
-		void pointerMove(my_app::editor::tool::PointerInfo& pointerInfo) override;
+		CursorLight(my_app_editor::Editor* editor);
+		void pointerMove(my_app_editor::tool::PointerInfo& pointerInfo) override;
 	};
 }}}

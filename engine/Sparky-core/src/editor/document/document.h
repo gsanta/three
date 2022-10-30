@@ -6,7 +6,7 @@
 #include "../../engine/graphics/camera/camera.h"
 #include "dimensions.h"
 
-namespace my_app { namespace editor { namespace document {
+namespace my_app_editor { namespace document {
 
 	const std::string USER_LAYER_ID_PREFIX("user_layer_");
 	const std::string DEFAULT_TEMP_LAYER_ID("temp_layer_1");
@@ -46,6 +46,6 @@ namespace my_app { namespace editor { namespace document {
 
 		void render();
 	};
-}}}
+}}
 
 
