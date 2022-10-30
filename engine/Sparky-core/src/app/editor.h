@@ -6,7 +6,7 @@
 #include "document/document_handler.h"
 #include "editor_config.h"
 #include "core/canvas/canvas_listener_handler.h"
-#include "./service/editor_services.h"
+#include "./service/services.h"
 
 namespace spright_app {
 
@@ -20,14 +20,14 @@ namespace spright_app {
 		core::CanvasListenerHandler* m_CanvasListenerHandler;
 		DocumentHandler* m_DocumentHandler;
 		EditorConfig editorConfig;
-		spright_app::EditorServices* m_Services;
+		spright_app::Services* m_Services;
 
 	public:
 
 		Editor();
 		~Editor();
 
-		inline spright_app::EditorServices* getServices() {
+		inline spright_app::Services* getServices() {
 			return m_Services;
 		}
 

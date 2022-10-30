@@ -2,6 +2,13 @@ import React from 'react';
 import { createRoot, Root } from 'react-dom/client';
 import App from './ui/components/App';
 
+window.Listener = {
+  onDataChange() {
+    console.log('onDataChange was called from c++!');
+    return 12;
+  },
+};
+
 let root: Root;
 
 function renderApp() {

@@ -18,8 +18,8 @@
 #include <time.h>
 #include "src/engine/graphics/layer/tileLayer.h"
 #include "src/engine/graphics/renderable/group.h"
-#include "src/editor/editor.h"
-#include "src/editor/feature/canvas/cursor_light.h"
+#include "src/app/editor.h"
+#include "src/app/feature/canvas/cursor_light.h"
 
 //#define SPARKY_EMSCRIPTEN 0
 
@@ -28,6 +28,7 @@ spright_app::Editor *editor = nullptr;
 
 #ifdef SPARKY_EMSCRIPTEN
 #include <emscripten/emscripten.h>
+#include <emscripten/val.h>
 #include <emscripten/bind.h>
 
 void setWindowSize(int width, int height)

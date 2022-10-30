@@ -2,20 +2,22 @@
 
 namespace spright_app { namespace tool {
 
-	RectangleTool::RectangleTool(DocumentHandler* documentHandler) : m_DocumentHandler(documentHandler), Tool("rectangle") {
+	RectangleTool::RectangleTool(DocumentHandler* documentHandler, Services* services) : m_DocumentHandler(documentHandler), m_Services(services), Tool("rectangle") {
 
 	}
 
 	void RectangleTool::pointerDown(PointerInfo& pointerInfo)
 	{
-		this->m_Rect = new spright_engine::graphics::Sprite(pointerInfo.curr.x, pointerInfo.curr.y, 0.1f, 0.1f, 0xff0000ff);
+		int color = m_Services->getColorPalette()->color;
+		this->m_Rect = new spright_engine::graphics::Sprite(pointerInfo.curr.x, pointerInfo.curr.y, 0.1f, 0.1f, color);
 		this->m_DocumentHandler->getActiveDocument()->getActiveLayer()->add(m_Rect);
 	}
 
 	void RectangleTool::pointerUp(PointerInfo& pointerInfo)
 	{
 		if (!pointerInfo.isDown) {
-			this->m_Rect = new spright_engine::graphics::Sprite(pointerInfo.curr.x, pointerInfo.curr.y - m_Size, m_Size, m_Size, 0xff0000ff);
+			int color = m_Services->getColorPalette()->color;
+			this->m_Rect = new spright_engine::graphics::Sprite(pointerInfo.curr.x, pointerInfo.curr.y - m_Size, m_Size, m_Size, color);
 			this->m_DocumentHandler->getActiveDocument()->getActiveLayer()->add(m_Rect);
 		}
 	}

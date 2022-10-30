@@ -96,61 +96,61 @@
     <ClCompile Include="src\engine\graphics\layer\layer.cpp">
       <Filter>Source Files\graphics\layers</Filter>
     </ClCompile>
-    <ClCompile Include="src\editor\tool\brush_tool.cpp">
+    <ClCompile Include="src\app\tool\brush_tool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\editor\tool\tool_handler.cpp">
+    <ClCompile Include="src\app\tool\tool_handler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\system\window\input_handler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\editor\editor.cpp">
+    <ClCompile Include="src\app\editor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\editor\tool\tool.cpp">
+    <ClCompile Include="src\app\tool\tool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\editor\document\document.cpp">
+    <ClCompile Include="src\app\document\document.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\editor\document\document_handler.cpp">
+    <ClCompile Include="src\app\document\document_handler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\editor\tool\pointer_info.cpp">
+    <ClCompile Include="src\app\tool\pointer_info.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\editor\editor_config.h">
+    <ClCompile Include="src\app\editor_config.h">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\editor\tool\rectangle_tool.cpp">
+    <ClCompile Include="src\app\tool\rectangle_tool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\graphics\renderable\renderable2d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\editor\tool\erase_tool.cpp">
+    <ClCompile Include="src\app\tool\erase_tool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\editor\tool\paint_bucket_tool.cpp">
+    <ClCompile Include="src\app\tool\paint_bucket_tool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\maths\vec2_int.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\editor\core\canvas\canvas_listener_handler.cpp">
+    <ClCompile Include="src\app\core\canvas\canvas_listener_handler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\editor\feature\canvas\cursor_light.cpp">
+    <ClCompile Include="src\app\feature\canvas\cursor_light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\graphics\renderable\line_shape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\editor\document\checkerboard.cpp">
+    <ClCompile Include="src\app\document\checkerboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\editor\document\dimensions.cpp">
+    <ClCompile Include="src\app\document\dimensions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\system\window\frame_handler.cpp">
@@ -159,10 +159,10 @@
     <ClCompile Include="src\engine\graphics\camera\camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\editor\service\color_palette.cpp">
+    <ClCompile Include="src\app\service\color_palette.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\editor\service\editor_services.cpp">
+    <ClCompile Include="src\app\service\services.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -230,13 +230,13 @@
     <ClInclude Include="src\engine\graphics\layer\tileLayer.h">
       <Filter>Header Files\graphics\layers</Filter>
     </ClInclude>
-    <ClInclude Include="src\editor\tool\brush_tool.h">
+    <ClInclude Include="src\app\tool\brush_tool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\editor\tool\tool_handler.h">
+    <ClInclude Include="src\app\tool\tool_handler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\editor\tool\tool.h">
+    <ClInclude Include="src\app\tool\tool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\system\window\input_handler.h">
@@ -245,25 +245,25 @@
     <ClInclude Include="src\engine\system\window\input_listener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\editor\editor.h">
+    <ClInclude Include="src\app\editor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\editor\document\document.h">
+    <ClInclude Include="src\app\document\document.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\editor\document\document_handler.h">
+    <ClInclude Include="src\app\document\document_handler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\editor\tool\pointer_info.h">
+    <ClInclude Include="src\app\tool\pointer_info.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\editor\tool\rectangle_tool.h">
+    <ClInclude Include="src\app\tool\rectangle_tool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\editor\base\point.h">
+    <ClInclude Include="src\app\base\point.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\editor\tool\erase_tool.h">
+    <ClInclude Include="src\app\tool\erase_tool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\graphics\renderable\bounds.h">
@@ -272,34 +272,34 @@
     <ClInclude Include="src\engine\maths\vec2_int.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\editor\tool\flood_fill.h">
+    <ClInclude Include="src\app\tool\flood_fill.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\editor\tool\paint_bucket_tool.h">
+    <ClInclude Include="src\app\tool\paint_bucket_tool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\editor\pointer\pointer_utils.h">
+    <ClInclude Include="src\app\pointer\pointer_utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\graphics\renderer\vertex_data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\editor\core\canvas\canvas_listener_handler.h">
+    <ClInclude Include="src\app\core\canvas\canvas_listener_handler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\editor\core\canvas\canvas_listener.h">
+    <ClInclude Include="src\app\core\canvas\canvas_listener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\editor\document\checkerboard.h">
+    <ClInclude Include="src\app\document\checkerboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\editor\feature\canvas\cursor_light.h">
+    <ClInclude Include="src\app\feature\canvas\cursor_light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\graphics\renderable\line_shape.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\editor\document\dimensions.h">
+    <ClInclude Include="src\app\document\dimensions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\system\window\frame_listener.h">
@@ -311,10 +311,10 @@
     <ClInclude Include="src\engine\graphics\camera\camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\editor\service\color_palette.h">
+    <ClInclude Include="src\app\service\color_palette.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\editor\service\editor_services.h">
+    <ClInclude Include="src\app\service\services.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
