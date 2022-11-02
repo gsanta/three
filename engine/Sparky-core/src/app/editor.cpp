@@ -9,11 +9,12 @@ namespace spright_app {
 		m_CanvasListenerHandler = new core::CanvasListenerHandler();
 		m_Window->getInputHandler()->registerListener(m_CanvasListenerHandler);
 
-		m_Services = new spright_app::
-			Services();
+		m_Services = new spright_app::Services();
+		m_Services->setEmService(new EmService(m_Services->getEventHandler())
+		);
 
 		m_toolHandler = new ToolHandler(m_Window, m_DocumentHandler, editorConfig);
-		m_toolHandler->addTool(new BrushTool(m_DocumentHandler, editorConfig, m_Services));
+		m_toolHandler->addTool(new BrushTool(m_DocumentHandler, editorConfig, m_Services, m_Services->getEventHandler()));
 		m_toolHandler->addTool(new RectangleTool(m_DocumentHandler, m_Services));
 		m_toolHandler->addTool(new EraseTool(m_DocumentHandler));
 		m_toolHandler->setActiveTool("brush");

@@ -15,8 +15,8 @@ declare global {
   };
 
   // eslint-disable-next-line no-var
-  var Listener: {
-    onDataChange(): number;
+  var ExternalEventHandler: {
+    emitDataChange(): void;
   };
 }
 
