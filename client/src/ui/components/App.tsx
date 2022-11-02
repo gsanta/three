@@ -8,10 +8,12 @@ import Toolbar from '../panels/toolbar/Toolbar';
 import theme from './theme';
 import Split from 'react-split';
 import Canvas from '../panels/canvas/Canvas';
-import EditorContext from '../context/EditorContext';
+import AppContext, { AppContextType } from '../context/AppContext';
 import ToolStore from '@/services/tool/ToolStore';
 import EditorStore from '@/services/EditorStore';
-import ExternalEventHandler from '@/services/ExternalEventHandler';
+import CanvasEventHandler from '@/services/canvas/CanvasEventHandler';
+import ModuleManager from '@/global/ModuleManager';
+import PreviewModule from '@/services/preview/PreviewModule';
 
 const App = () => {
   useEffect(() => {
@@ -29,18 +31,27 @@ const App = () => {
 
   const canvasRef = useCallback((node: HTMLDivElement) => node && setCanvasContainer(node), []);
 
-  const editorContext = useMemo(
+  const appContext = useMemo<AppContextType>(
     () => ({
       toolStore: new ToolStore(),
       editorStore: new EditorStore(),
-      externalEventHandler: window.ExternalEventHandler as ExternalEventHandler,
+      externalEventHandler: window.CanvasEventHandler as CanvasEventHandler,
+      canvasService: window.Module,
+      moduleManager: new ModuleManager(),
     }),
     [],
   );
 
+  useEffect(() => {
+    const { moduleManager } = appContext;
+    moduleManager.addModule(new PreviewModule(appContext));
+
+    moduleManager.start();
+  }, [appContext]);
+
   return (
     <ChakraProvider theme={theme} cssVarsRoot="body">
-      <EditorContext.Provider value={editorContext}>
+      <AppContext.Provider value={appContext}>
         <Layout
           header={
             <Box bgColor="blackAlpha.800" height="40px">
@@ -68,7 +79,7 @@ const App = () => {
             </Split>
           </Box>
         </Layout>
-      </EditorContext.Provider>
+      </AppContext.Provider>
     </ChakraProvider>
   );
 };

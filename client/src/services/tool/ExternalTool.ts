@@ -1,5 +1,5 @@
 import { IconName } from '@/ui/components/icon/Icon';
-import { ExternalModule } from '../ExternalModule';
+import { CanvasService } from '../CanvasService';
 import Tool from './Tool';
 import ToolName from './ToolName';
 
@@ -8,9 +8,9 @@ class ExternalTool implements Tool {
 
   iconName: IconName;
 
-  private module: ExternalModule;
+  private module: CanvasService;
 
-  constructor(name: ToolName, iconName: IconName, module: ExternalModule) {
+  constructor(name: ToolName, iconName: IconName, module: CanvasService) {
     this.name = name;
     this.iconName = iconName;
     this.module = module;

@@ -15,7 +15,7 @@ declare global {
   };
 
   // eslint-disable-next-line no-var
-  var ExternalEventHandler: {
+  var CanvasEventHandler: {
     emitDataChange(): void;
   };
 }
