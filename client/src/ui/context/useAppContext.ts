@@ -1,8 +1,8 @@
 import { useContext } from 'react';
-import EditorContext from './EditorContext';
+import AppContext from './AppContext';
 
 const useAppContext = () => {
-  const appContext = useContext(EditorContext);
+  const appContext = useContext(AppContext);
   if (!appContext) throw new Error('No appContext.Provider found when calling useAppContext.');
   return appContext;
 };

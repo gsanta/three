@@ -1,9 +1,9 @@
 import React from 'react';
 import { createRoot, Root } from 'react-dom/client';
-import ExternalEventHandler from './services/ExternalEventHandler';
+import CanvasEventHandler from './services/canvas/CanvasEventHandler';
 import App from './ui/components/App';
 
-window.ExternalEventHandler = new ExternalEventHandler();
+window.CanvasEventHandler = new CanvasEventHandler();
 
 let root: Root;
 
