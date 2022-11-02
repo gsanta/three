@@ -1,13 +1,13 @@
 import ToolName from '@/services/tool/ToolName';
 import { observer } from 'mobx-react-lite';
-import React, { useContext } from 'react';
+import React from 'react';
 import Box from '../../components/box/Box';
 import Button from '../../components/button/Button';
 import ColorPicker from '@/ui/components/color_picker/ColorPicker';
-import EditorContext from '@/ui/context/EditorContext';
+import useAppContext from '@/ui/context/useAppContext';
 
 const Toolbar = observer(() => {
-  const { toolStore, editorStore } = useContext(EditorContext);
+  const { toolStore, editorStore } = useAppContext();
 
   const handleSelectTool = (name: string) => {
     toolStore.setSelectedTool(name as ToolName);

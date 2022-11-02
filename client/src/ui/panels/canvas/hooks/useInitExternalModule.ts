@@ -1,12 +1,12 @@
 import ExternalTool from '@/services/tool/ExternalTool';
 import ToolName from '@/services/tool/ToolName';
-import EditorContext from '@/ui/context/EditorContext';
-import { useContext, useEffect, useState } from 'react';
+import useAppContext from '@/ui/context/useAppContext';
+import { useEffect, useState } from 'react';
 
 const useInitExternalModule = (onInitialized: () => void) => {
   const [isModuleInitialized, setIsModuleInitialized] = useState(false);
 
-  const { toolStore } = useContext(EditorContext);
+  const { toolStore } = useAppContext();
 
   useEffect(() => {
     if (window?.Module?.isRuntimeInitialize && !isModuleInitialized) {

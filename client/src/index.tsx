@@ -1,13 +1,9 @@
 import React from 'react';
 import { createRoot, Root } from 'react-dom/client';
+import ExternalEventHandler from './services/ExternalEventHandler';
 import App from './ui/components/App';
 
-window.Listener = {
-  onDataChange() {
-    console.log('onDataChange was called from c++!');
-    return 12;
-  },
-};
+window.ExternalEventHandler = new ExternalEventHandler();
 
 let root: Root;
 

@@ -16,10 +16,11 @@ namespace spright_app { namespace tool {
 		DocumentHandler *m_documentHandler;
 		EditorConfig m_EditorConfig;
 		spright_app::Services* m_Services;
+		EventHandler* m_EventHandler;
 		spright_engine::graphics::Sprite *sprite;
 
 	public:
-		BrushTool(DocumentHandler *documentHandler, EditorConfig &editorConfig, spright_app::Services* services);
+		BrushTool(DocumentHandler *documentHandler, EditorConfig &editorConfig, spright_app::Services* services, EventHandler* eventHandler);
 
 	private:
 		void pointerDown(PointerInfo &pointerInfo) override;
