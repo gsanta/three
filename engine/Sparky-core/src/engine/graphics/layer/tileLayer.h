@@ -16,7 +16,7 @@ namespace spright_engine { namespace graphics {
 		float m_TileSize = 0.5;
 		spright_engine::graphics::Bounds m_Bounds;
 	public:
-		TileLayer(std::string id, spright_engine::maths::Mat4, spright_engine::graphics::Shader* shader, spright_engine::graphics::Renderer2D* renderer, Camera* camera);
+		TileLayer(std::string id, spright_engine::graphics::Shader* shader, spright_engine::graphics::Renderer2D* renderer, Camera* camera);
 		virtual ~TileLayer();
 
 		spright_engine::maths::Vec2 getTilePos(spright_engine::maths::Vec2 pointer);

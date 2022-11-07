@@ -48,6 +48,7 @@ namespace spright_engine { namespace system {
 			glfwSetKeyCallback(m_Window, key_callback);
 			glfwSetMouseButtonCallback(m_Window, mouse_input_callback);
 			glfwSetCursorPosCallback(m_Window, cursor_position_callback);
+			glfwSetScrollCallback(m_Window, scroll_callback);
 			glfwSwapInterval(0);
 
 			if (glewInit() != GLEW_OK) {
@@ -120,6 +121,13 @@ namespace spright_engine { namespace system {
 			win->m_y = ypos;
 
 			win->getInputHandler()->emitMouseMove(xpos, ypos);
+		}
+
+		void Window::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+		{
+			Window* win = (Window*)glfwGetWindowUserPointer(window);
+
+			win->getInputHandler()->emitScroll(xoffset, yoffset);
 		}
 
 		void Window::clear() const

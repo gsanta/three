@@ -21,12 +21,10 @@ namespace spright_app { namespace document {
 		spright_app::document::Dimensions dimensions(-16.0f, 16.0f, -9.0f, 9.0f);
 		Document* document = new Document(dimensions);
 
-		spright_engine::maths::Mat4 projection = spright_engine::maths::Mat4::otrthographic(dimensions.left, dimensions.right, dimensions.bottom, dimensions.top, -1.0f, 1.0f);
-		
 		std::string userLayer1Id = USER_LAYER_ID_PREFIX + "1";
-		spright_engine::graphics::TileLayer* userLayer1 = new spright_engine::graphics::TileLayer(userLayer1Id, projection, shaderUnlit, new spright_engine::graphics::BatchRenderer2D(), document->getCamera());
-		spright_engine::graphics::TileLayer* tempLayer = new spright_engine::graphics::TileLayer(DEFAULT_TEMP_LAYER_ID, projection, shaderUnlit, new spright_engine::graphics::BatchRenderer2D(), document->getCamera());
-		spright_engine::graphics::TileLayer* backgroundLayer = new spright_engine::graphics::TileLayer(DEFAULT_BACKGROUND_LAYER_ID, projection, shaderUnlit, new spright_engine::graphics::BatchRenderer2D(), document->getCamera());
+		spright_engine::graphics::TileLayer* userLayer1 = new spright_engine::graphics::TileLayer(userLayer1Id, shaderUnlit, new spright_engine::graphics::BatchRenderer2D(), document->getCamera());
+		spright_engine::graphics::TileLayer* tempLayer = new spright_engine::graphics::TileLayer(DEFAULT_TEMP_LAYER_ID, shaderUnlit, new spright_engine::graphics::BatchRenderer2D(), document->getCamera());
+		spright_engine::graphics::TileLayer* backgroundLayer = new spright_engine::graphics::TileLayer(DEFAULT_BACKGROUND_LAYER_ID, shaderUnlit, new spright_engine::graphics::BatchRenderer2D(), document->getCamera());
 
 		document->addLayer(backgroundLayer);
 		document->addLayer(userLayer1);

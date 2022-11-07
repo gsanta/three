@@ -16,6 +16,7 @@ namespace spright_app { namespace core {
 		this->m_PointerInfo.down.x = this->m_PointerInfo.curr.x;
 		this->m_PointerInfo.down.y = this->m_PointerInfo.curr.y;
 
+
 		for (CanvasListener* listener : m_Listeners) {
 			listener->pointerDown(m_PointerInfo);
 		}

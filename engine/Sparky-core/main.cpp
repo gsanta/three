@@ -56,7 +56,7 @@ EMSCRIPTEN_BINDINGS(engine2)
 
 std::string getEngineData() {
 	if (editor != nullptr) {
-		return editor->getDocumentHandler()->getActiveDocument()->getActiveLayer()->getJson();
+		return editor->getDocumentHandler()->getActiveDocument()->getJson();
 	}
 }
 
@@ -99,7 +99,6 @@ static void dispatch_main(void *fp)
 int main()
 {
 	editor = new spright_app::Editor();
-	editor->getCanvasListenerHandler()->addListener(new spright_app::feature::canvas::CursorLight(editor));
 	window = editor->getWindow();
 
 	// Group* group = new Group(Mat4::translation(maths::Vec3(-5.0f, 5.0f, 0.0f)));

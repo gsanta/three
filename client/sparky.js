@@ -6617,10 +6617,7 @@ var ASM_CONSTS = {
         GL.recordError(0x502/*GL_INVALID_OPERATION*/);
       }
     }
-  function _glUniform2f(location, v0, v1) {
-      GLctx.uniform2f(webglGetUniformLocation(location), v0, v1);
-    }
-
+  
   var miniTempWebGLFloatBuffers = [];
   function _glUniformMatrix4fv(location, count, transpose, value) {
   
@@ -7654,6 +7651,10 @@ var ASM_CONSTS = {
 
   function _glfwSetMouseButtonCallback(winid, cbfun) {
       return GLFW.setMouseButtonCallback(winid, cbfun);
+    }
+
+  function _glfwSetScrollCallback(winid, cbfun) {
+      return GLFW.setScrollCallback(winid, cbfun);
     }
 
   function _glfwSetWindowSize(winid, width, height) {
@@ -8697,7 +8698,6 @@ var asmLibraryArg = {
   "glGetUniformLocation": _glGetUniformLocation,
   "glLinkProgram": _glLinkProgram,
   "glShaderSource": _glShaderSource,
-  "glUniform2f": _glUniform2f,
   "glUniformMatrix4fv": _glUniformMatrix4fv,
   "glUseProgram": _glUseProgram,
   "glValidateProgram": _glValidateProgram,
@@ -8715,6 +8715,7 @@ var asmLibraryArg = {
   "glfwSetFramebufferSizeCallback": _glfwSetFramebufferSizeCallback,
   "glfwSetKeyCallback": _glfwSetKeyCallback,
   "glfwSetMouseButtonCallback": _glfwSetMouseButtonCallback,
+  "glfwSetScrollCallback": _glfwSetScrollCallback,
   "glfwSetWindowSize": _glfwSetWindowSize,
   "glfwSetWindowUserPointer": _glfwSetWindowUserPointer,
   "glfwSwapBuffers": _glfwSwapBuffers,
@@ -8794,7 +8795,7 @@ var dynCall_iiiiijj = Module["dynCall_iiiiijj"] = createExportWrapper("dynCall_i
 /** @type {function(...*):?} */
 var dynCall_iiiiiijj = Module["dynCall_iiiiiijj"] = createExportWrapper("dynCall_iiiiiijj");
 
-var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 13792;
+var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 18012;
 
 
 

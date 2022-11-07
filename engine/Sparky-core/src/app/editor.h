@@ -3,6 +3,7 @@
 #include "../engine/system/window/window.h"
 #include "../engine/system/window/frame_listener.h"
 #include "tool/tool_handler.h"
+#include "tool/pan_tool.h"
 #include "document/document_handler.h"
 #include "editor_config.h"
 #include "core/canvas/canvas_listener_handler.h"

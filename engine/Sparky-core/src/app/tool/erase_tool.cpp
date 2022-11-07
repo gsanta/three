@@ -2,7 +2,7 @@
 
 namespace spright_app { namespace tool {
 
-	EraseTool::EraseTool(DocumentHandler* documentHandler) : m_DocumentHandler(documentHandler), Tool("erase")
+	EraseTool::EraseTool(DocumentHandler* documentHandler, EventHandler* eventHandler) : m_DocumentHandler(documentHandler), m_EventHandler(eventHandler), Tool("erase")
 	{
 
 	}
@@ -39,6 +39,8 @@ namespace spright_app { namespace tool {
 
 		auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayer(DEFAULT_TEMP_LAYER_ID);
 		tempLayer->clear();
+
+		m_EventHandler->emitDataChange();
 	}
 
 	void EraseTool::pointerMove(PointerInfo& pointerInfo)

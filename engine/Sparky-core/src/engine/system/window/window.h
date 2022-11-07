@@ -56,6 +56,7 @@ namespace spright_engine { namespace system {
 		void static key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		void static mouse_input_callback(GLFWwindow* window, int button, int action, int mods);
 		void static cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
+		void static scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 	};
 }}
 

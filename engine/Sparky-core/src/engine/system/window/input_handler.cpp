@@ -34,6 +34,13 @@ namespace spright_engine { namespace system {
 		}
 	}
 
+	void InputHandler::emitScroll(double x, double y)
+	{
+		for (InputListener* listener : m_Listeners) {
+			listener->onScroll(x, y);
+		}
+	}
+
 	void InputHandler::registerListener(InputListener* inputListener)
 	{
 		m_Listeners.push_back(inputListener);
