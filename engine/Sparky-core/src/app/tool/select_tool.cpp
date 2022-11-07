@@ -1,31 +1,17 @@
-#include "erase_tool.h"
+#include "select_tool.h"
 
-namespace spright_app { namespace tool {
+namespace spright_app {
 
-	EraseTool::EraseTool(DocumentHandler* documentHandler, EventHandler* eventHandler) : m_DocumentHandler(documentHandler), m_EventHandler(eventHandler), Tool("erase")
+	SelectTool::SelectTool(DocumentHandler* documentHandler, EventHandler* eventHandler) : m_DocumentHandler(documentHandler), m_EventHandler(eventHandler), Tool("select")
 	{
 
 	}
 
-	void EraseTool::pointerDown(PointerInfo& pointerInfo)
+	void SelectTool::pointerDown(tool::PointerInfo& pointerInfo)
 	{
-		Document* activeDocument = m_DocumentHandler->getActiveDocument();
-		spright_engine::graphics::Layer* layer = dynamic_cast<spright_engine::graphics::TileLayer*>(activeDocument->getActiveLayer());
-
-		auto it = layer->getRenderables().begin();
-		while (it != layer->getRenderables().end()) {
-			const spright_engine::graphics::Bounds* bounds = (*it)->getBounds();
-
-			if (dynamic_cast<spright_engine::graphics::Sprite*>(*it)->contains(pointerInfo.down)) {
-				m_IsMoveSelection = true;
-				return;
-			}
-		}
-
-		m_IsMoveSelection = false;
 	}
 
-	void EraseTool::pointerUp(PointerInfo& pointerInfo)
+	void SelectTool::pointerUp(tool::PointerInfo& pointerInfo)
 	{
 		Document* activeDocument = m_DocumentHandler->getActiveDocument();
 
@@ -44,35 +30,22 @@ namespace spright_app { namespace tool {
 			const spright_engine::graphics::Bounds* bounds = (*it)->getBounds();
 
 			if (bounds->minX > startX && bounds->maxX < endX && bounds->minY > startY && bounds->maxY < endY) {
-				layer->remove(*it);
+				m_PixelSprites.push_back(*it);
 			}
 			else {
 				++it;
 			}
 		}
 
-		auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayer(DEFAULT_TEMP_LAYER_ID);
-		tempLayer->clear();
-
 		m_EventHandler->emitDataChange();
 	}
 
-	void EraseTool::pointerMove(PointerInfo& pointerInfo)
+	void SelectTool::pointerMove(tool::PointerInfo& pointerInfo)
 	{
 		if (!pointerInfo.isDown) {
 			return;
 		}
 
-		if (m_IsMoveSelection) {
-			move(pointerInfo);
-		}
-		else {
-			select(pointerInfo);
-		}
-	}
-
-	void EraseTool::select(PointerInfo& pointerInfo)
-	{
 		auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayer(DEFAULT_TEMP_LAYER_ID);
 		tempLayer->clear();
 
@@ -112,10 +85,6 @@ namespace spright_app { namespace tool {
 			m_SelectionSprites.push_back(sprite2);
 		}
 
+		std::cout << "size: " << m_SelectionSprites.size() << std::endl;
 	}
-
-	void EraseTool::move(PointerInfo& pointerInfo)
-	{
-
-	}
-}}
+}

@@ -1,36 +1,43 @@
 #include "sprite.h"
 
-namespace spright_engine { namespace graphics {
-	Sprite::Sprite(float x, float y, float width, float height, unsigned int  color)
-		: m_Position(spright_engine::maths::Vec3(x, y, 0)), m_Size(spright_engine::maths::Vec2(width, height)), spright_engine::graphics::Renderable2D(color)
-	{
-		m_bounds = new spright_engine::graphics::Bounds();
-		m_bounds = new spright_engine::graphics::Bounds();
-		m_bounds->minX = x - width / 2;
-		m_bounds->maxX = x + width / 2;
-		m_bounds->minY = y - width / 2;
-		m_bounds->maxY = y + width / 2;
+namespace spright_engine {
+	namespace graphics {
+		Sprite::Sprite(float x, float y, float width, float height, unsigned int  color)
+			: m_Position(spright_engine::maths::Vec3(x, y, 0)), m_Size(spright_engine::maths::Vec2(width, height)), spright_engine::graphics::Renderable2D(color)
+		{
+			m_bounds = new spright_engine::graphics::Bounds();
+			m_bounds = new spright_engine::graphics::Bounds();
+			m_bounds->minX = x - width / 2;
+			m_bounds->maxX = x + width / 2;
+			m_bounds->minY = y - width / 2;
+			m_bounds->maxY = y + width / 2;
 
-		m_VertexCount = 4;
-	}
+			m_VertexCount = 4;
+		}
 
 #ifndef SPARKY_EMSCRIPTEN
-	Sprite::Sprite(float x, float y, float width, float height, spright_engine::graphics::Texture* texture)
-		: m_Position(spright_engine::maths::Vec3(x, y, 0)), m_Size(spright_engine::maths::Vec2(width, height)), spright_engine::graphics::Renderable2D(0xffffffff)
-	{
-		m_Texture = texture;
-	}
+		Sprite::Sprite(float x, float y, float width, float height, spright_engine::graphics::Texture* texture)
+			: m_Position(spright_engine::maths::Vec3(x, y, 0)), m_Size(spright_engine::maths::Vec2(width, height)), spright_engine::graphics::Renderable2D(0xffffffff)
+		{
+			m_Texture = texture;
+		}
 #endif
 
-	void Sprite::setSize(spright_engine::maths::Vec2 size)
-	{
-		this->m_Size = size;
-	}
+		void Sprite::setSize(spright_engine::maths::Vec2 size)
+		{
+			this->m_Size = size;
+		}
 
-	void Sprite::setPosition(spright_engine::maths::Vec3 position)
-	{
-		this->m_Position = position;
-	}
+		void Sprite::setPosition(spright_engine::maths::Vec3 position)
+		{
+			this->m_Position = position;
+		}
+
+		bool Sprite::contains(spright_engine::maths::Vec2 point)
+		{
+			const Bounds* bounds = getBounds();
+			return point.x > bounds->minX && point.x < bounds->maxX&& point.y > bounds->minY && point.y < bounds->maxY;
+		}
 
 	nlohmann::json Sprite::getJson()
 	{

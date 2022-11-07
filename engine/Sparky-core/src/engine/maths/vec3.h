@@ -17,7 +17,7 @@ namespace spright_engine { namespace maths {
 		Vec3& divide(float magnitude);
 		Vec3& normalize();
 		Vec3 negate() const;
-		
+
 		float magnitude();
 		float dot(const Vec3& other);
 		Vec3 cross(const Vec3& other);
