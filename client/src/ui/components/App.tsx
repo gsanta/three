@@ -45,6 +45,8 @@ const App = () => {
   const canvasService = useCanvasService(appContext);
 
   useEffect(() => {
+    const { moduleManager } = appContext;
+    moduleManager.addModule(new PreviewModule(appContext));
     if (canvasService) {
       moduleManager.start();
     }
