@@ -20,11 +20,21 @@ namespace spright_app { namespace tool {
 		this->m_ActiveTool->pointerDown(this->m_pointerInfo);
 	}
 
+
 	void ToolHandler::onMouseMove(double x, double y)
 	{
+		this->m_pointerInfo.prev.x = m_pointerInfo.curr.x;
+		this->m_pointerInfo.prev.y = m_pointerInfo.curr.y;
 		this->m_pointerInfo.curr.x = x;
 		this->m_pointerInfo.curr.y = y;
 		this->m_ActiveTool->pointerMove(this->m_pointerInfo);
+	}
+
+	void ToolHandler::onScroll(double x, double y)
+	{
+		m_pointerInfo.scroll.x = x;
+		m_pointerInfo.scroll.y = y;
+		this->m_ActiveTool->scroll(this->m_pointerInfo);
 	}
 
 	void ToolHandler::addTool(Tool* tool)

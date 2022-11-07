@@ -2,8 +2,8 @@
 
 namespace spright_engine { namespace graphics {
 
-	TileLayer::TileLayer(std::string id, spright_engine::maths::Mat4 projection, Shader* shader, Renderer2D* renderer, Camera* camera)
-		: Layer(id, renderer, shader, projection, camera) {
+	TileLayer::TileLayer(std::string id, Shader* shader, Renderer2D* renderer, Camera* camera)
+		: Layer(id, renderer, shader, camera) {
 
 		m_Bounds.minX = -10;
 		m_Bounds.maxX = 10;
@@ -40,6 +40,8 @@ namespace spright_engine { namespace graphics {
 	void TileLayer::setJson(std::string json)
 	{
 		nlohmann::json parsedJson = nlohmann::json::parse(json);
+
+		this->clear();
 
 		for (nlohmann::json j : parsedJson)
 		{

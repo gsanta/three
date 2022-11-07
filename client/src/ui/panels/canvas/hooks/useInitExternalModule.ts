@@ -1,6 +1,6 @@
 import ExternalTool from '@/services/tool/ExternalTool';
 import ToolName from '@/services/tool/ToolName';
-import useAppContext from '@/ui/context/useAppContext';
+import useAppContext from '@/ui/hooks/useAppContext';
 import { useEffect, useState } from 'react';
 
 const useInitExternalModule = (onInitialized: () => void) => {
@@ -17,6 +17,7 @@ const useInitExternalModule = (onInitialized: () => void) => {
       toolStore.addTool(new ExternalTool(ToolName.Rectangle, 'BiRectangle', Module));
       toolStore.addTool(new ExternalTool(ToolName.SelectionRectangle, 'BiBorderRadius', Module));
       toolStore.addTool(new ExternalTool(ToolName.Erase, 'BiEraser', Module));
+      toolStore.addTool(new ExternalTool(ToolName.Pan, 'BiMove', Module));
     }
   }, [isModuleInitialized, onInitialized, toolStore]);
 

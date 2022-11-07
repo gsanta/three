@@ -16,12 +16,11 @@ namespace spright_engine
 			Renderer2D *m_Renderer;
 			std::vector <spright_engine::graphics::Renderable2D*> m_Renderables;
 			Shader *m_Shader;
-			spright_engine::maths::Mat4 m_ProjectionMatrix;
 			Camera* m_Camera;	
 			std::string m_Id;
 
 		protected:
-			Layer(std::string id, Renderer2D *renderer, Shader *shader, spright_engine::maths::Mat4 projectionMatrix, Camera* camera);
+			Layer(std::string id, Renderer2D *renderer, Shader *shader, Camera* camera);
 
 		public:
 			virtual ~Layer();

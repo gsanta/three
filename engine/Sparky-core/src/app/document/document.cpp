@@ -10,6 +10,7 @@ namespace spright_app { namespace document {
 
 		//m_ActiveLayer = *it;
 		m_Camera = new spright_engine::graphics::Camera();
+		m_Camera->setProjectionInfo(spright_engine::graphics::OrthoProjectionInfo(dimensions.left, dimensions.right, dimensions.bottom, dimensions.top));
 	}
 
 	Document::~Document() {
@@ -31,6 +32,13 @@ namespace spright_app { namespace document {
 	void Document::addLayer(spright_engine::graphics::Layer* layer)
 	{
 		m_Layers.push_back(layer);
+	}
+
+	std::string Document::getJson()
+	{
+		nlohmann::json json = getActiveLayer()->getJson();
+
+		return json.dump();
 	}
 
 	void Document::setActiveLayer(std::string id)

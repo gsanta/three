@@ -2,12 +2,8 @@
 
 namespace spright_engine { namespace graphics {
 
-	Layer::Layer(std::string id, Renderer2D* renderer, Shader* shader, spright_engine::maths::Mat4 projectionMatrix, Camera* camera)
-		: m_Id(id), m_Renderer(renderer), m_Shader(shader), m_ProjectionMatrix(projectionMatrix), m_Camera(camera) {
-
-		m_Shader->enable();
-		m_Shader->setUniformMat4("pr_matrix", m_ProjectionMatrix);
-		m_Shader->disable();
+	Layer::Layer(std::string id, Renderer2D* renderer, Shader* shader, Camera* camera)
+		: m_Id(id), m_Renderer(renderer), m_Shader(shader), m_Camera(camera) {
 	}
 
 	Layer::~Layer() {
@@ -39,6 +35,8 @@ namespace spright_engine { namespace graphics {
 
 	void Layer::render() {
 		m_Shader->enable();
+
+		m_Shader->setUniformMat4("pr_matrix", m_Camera->getProjectionMatrix());
 
 		m_Renderer->begin();
 		m_Renderer->push(m_Camera->getView());

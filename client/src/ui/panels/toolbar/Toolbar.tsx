@@ -4,7 +4,7 @@ import React from 'react';
 import Box from '../../components/box/Box';
 import Button from '../../components/button/Button';
 import ColorPicker from '@/ui/components/color_picker/ColorPicker';
-import useAppContext from '@/ui/context/useAppContext';
+import useAppContext from '@/ui/hooks/useAppContext';
 
 const Toolbar = observer(() => {
   const { toolStore, editorStore } = useAppContext();

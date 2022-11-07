@@ -8,12 +8,13 @@ import Toolbar from '../panels/toolbar/Toolbar';
 import theme from './theme';
 import Split from 'react-split';
 import Canvas from '../panels/canvas/Canvas';
-import AppContext, { AppContextType } from '../context/AppContext';
+import AppContext, { AppContextType } from '../../core/AppContext';
 import ToolStore from '@/services/tool/ToolStore';
 import EditorStore from '@/services/EditorStore';
 import CanvasEventHandler from '@/services/canvas/CanvasEventHandler';
-import ModuleManager from '@/global/ModuleManager';
+import ModuleManager from '@/core/ModuleManager';
 import PreviewModule from '@/services/preview/PreviewModule';
+import useCanvasService from '../hooks/useCanvasService';
 
 const App = () => {
   useEffect(() => {
@@ -35,19 +36,19 @@ const App = () => {
     () => ({
       toolStore: new ToolStore(),
       editorStore: new EditorStore(),
-      externalEventHandler: window.CanvasEventHandler as CanvasEventHandler,
-      canvasService: window.Module,
+      canvasEventHandler: window.CanvasEventHandler as CanvasEventHandler,
       moduleManager: new ModuleManager(),
     }),
     [],
   );
 
-  useEffect(() => {
-    const { moduleManager } = appContext;
-    moduleManager.addModule(new PreviewModule(appContext));
+  const canvasService = useCanvasService(appContext);
 
-    moduleManager.start();
-  }, [appContext]);
+  useEffect(() => {
+    if (canvasService) {
+      moduleManager.start();
+    }
+  }, [appContext, canvasService]);
 
   return (
     <ChakraProvider theme={theme} cssVarsRoot="body">

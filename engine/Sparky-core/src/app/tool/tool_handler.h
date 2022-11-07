@@ -25,6 +25,7 @@ namespace spright_app { namespace tool {
 		virtual void onMouseUp(int button) override;
 		virtual void onMouseDown(int button) override;
 		virtual void onMouseMove(double x, double y) override;
+		virtual void onScroll(double x, double y) override;
 
 		void addTool(Tool* tool);
 

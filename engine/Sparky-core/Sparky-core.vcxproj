@@ -182,10 +182,12 @@
     <ClCompile Include="src\app\service\services.cpp" />
     <ClCompile Include="src\app\tool\erase_tool.cpp" />
     <ClCompile Include="src\app\tool\paint_bucket_tool.cpp" />
+    <ClCompile Include="src\app\tool\pan_tool.cpp" />
     <ClCompile Include="src\app\tool\pointer_info.cpp" />
     <ClCompile Include="src\app\tool\rectangle_tool.cpp" />
     <ClCompile Include="src\app\tool\tool.cpp" />
     <ClCompile Include="src\engine\graphics\camera\camera.cpp" />
+    <ClCompile Include="src\engine\graphics\camera\ortho_projection_info.cpp" />
     <ClCompile Include="src\engine\graphics\renderable\renderable2d.cpp" />
     <ClCompile Include="src\engine\graphics\renderable\line_shape.cpp" />
     <ClCompile Include="src\engine\system\window\frame_handler.cpp" />
@@ -233,7 +235,9 @@
     <ClInclude Include="src\app\tool\paint_bucket_tool.h" />
     <ClInclude Include="src\app\tool\pointer_info.h" />
     <ClInclude Include="src\app\tool\rectangle_tool.h" />
+    <ClInclude Include="src\app\tool\pan_tool.h" />
     <ClInclude Include="src\engine\graphics\camera\camera.h" />
+    <ClInclude Include="src\engine\graphics\camera\ortho_projection_info.h" />
     <ClInclude Include="src\engine\graphics\renderable\line_shape.h" />
     <ClInclude Include="src\engine\graphics\renderer\vertex_data.h" />
     <ClInclude Include="src\engine\graphics\renderable\bounds.h" />

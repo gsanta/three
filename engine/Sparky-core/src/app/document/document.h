@@ -4,6 +4,7 @@
 #include "../../engine/graphics/layer/layer.h"
 #include "../../engine/graphics/layer/tileLayer.h"
 #include "../../engine/graphics/camera/camera.h"
+#include "../../engine/graphics/camera/ortho_projection_info.h"
 #include "dimensions.h"
 
 namespace spright_app { namespace document {
@@ -41,6 +42,8 @@ namespace spright_app { namespace document {
 		inline spright_engine::graphics::Camera* getCamera() {
 			return m_Camera;
 		}
+
+		std::string getJson();
 
 		void setActiveLayer(std::string id);
 

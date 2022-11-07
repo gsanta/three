@@ -4,9 +4,7 @@
 #include "../../engine/graphics/renderable/sprite.h"
 #include "../editor_config.h"
 #include "../service/services.h"
-#ifdef SPARKY_EMSCRIPTEN
-#include <emscripten/val.h>
-#endif
+
 namespace spright_app { namespace tool {
 	using namespace document;
 

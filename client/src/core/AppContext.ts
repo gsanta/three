@@ -2,14 +2,12 @@ import EditorStore from '@/services/EditorStore';
 import CanvasEventHandler from '@/services/canvas/CanvasEventHandler';
 import ToolStore from '@/services/tool/ToolStore';
 import { createContext } from 'react';
-import { CanvasService } from '@/services/CanvasService';
-import ModuleManager from '@/global/ModuleManager';
+import ModuleManager from '@/core/ModuleManager';
 
 export type AppContextType = {
   toolStore: ToolStore;
   editorStore: EditorStore;
-  canvasService: CanvasService;
-  externalEventHandler: CanvasEventHandler;
+  canvasEventHandler: CanvasEventHandler;
   moduleManager: ModuleManager;
 };
 

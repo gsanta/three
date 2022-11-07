@@ -23,6 +23,7 @@ namespace spright_engine { namespace system {
 		void emitMouseDown(int button);
 		void emitMouseUp(int button);
 		void emitMouseMove(double x, double y);
+		void emitScroll(double x, double y);
 
 		void registerListener(InputListener* inputListener);
 		void unRegisterListener(InputListener* inputListener);

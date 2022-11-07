@@ -2,7 +2,7 @@
 
 namespace spright_app { namespace tool {
 
-	RectangleTool::RectangleTool(DocumentHandler* documentHandler, Services* services) : m_DocumentHandler(documentHandler), m_Services(services), Tool("rectangle") {
+	RectangleTool::RectangleTool(DocumentHandler* documentHandler, Services* services, EventHandler* eventHandler) : m_DocumentHandler(documentHandler), m_Services(services), m_EventHandler(eventHandler), Tool("rectangle") {
 
 	}
 
@@ -19,6 +19,8 @@ namespace spright_app { namespace tool {
 			int color = m_Services->getColorPalette()->color;
 			this->m_Rect = new spright_engine::graphics::Sprite(pointerInfo.curr.x, pointerInfo.curr.y - m_Size, m_Size, m_Size, color);
 			this->m_DocumentHandler->getActiveDocument()->getActiveLayer()->add(m_Rect);
+		
+			m_EventHandler->emitDataChange();
 		}
 	}
 
