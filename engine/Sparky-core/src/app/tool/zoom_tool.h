@@ -7,15 +7,15 @@
 
 namespace spright_app {
 
-	class PanTool : public tool::Tool
+	class ZoomTool : public tool::Tool
 	{
 	private:
 		spright_engine::graphics::Camera* m_Camera;
 		float m_ZoomFactor = 1.0f;
 
 	public:
-		PanTool(spright_engine::graphics::Camera* camera);
+		ZoomTool(spright_engine::graphics::Camera* camera);
 	private:
-		void pointerMove(tool::PointerInfo& pointerInfo) override;
+		void scroll(tool::PointerInfo& pointerInfo) override;
 	};
 }
