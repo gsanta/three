@@ -5,6 +5,7 @@ import Box from '../../components/box/Box';
 import Button from '../../components/button/Button';
 import ColorPicker from '@/ui/components/color_picker/ColorPicker';
 import useAppContext from '@/ui/hooks/useAppContext';
+import { Tooltip } from '@chakra-ui/react';
 
 const Toolbar = observer(() => {
   const { toolStore, editorStore } = useAppContext();
@@ -26,7 +27,11 @@ const Toolbar = observer(() => {
     >
       {toolStore?.tools.map(({ iconName, name }) => {
         const toggle = name === toolStore.getSelectedTool()?.name ? 'on' : 'off';
-        return <Button key={name} iconName={iconName} toggle={toggle} onToggle={() => handleSelectTool(name)} />;
+        return (
+          <Tooltip label="hello" placement="right">
+            <Button key={name} iconName={iconName} toggle={toggle} onToggle={() => handleSelectTool(name)} />
+          </Tooltip>
+        );
       })}
 
       <ColorPicker editorStore={editorStore} />
