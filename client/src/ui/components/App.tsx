@@ -42,6 +42,25 @@ const App = () => {
     [],
   );
 
+  useEffect(() => {
+    /* code to prevent emscripten compiled code from eating key input */
+    window.addEventListener(
+      'keydown',
+      function (event) {
+        event.stopImmediatePropagation();
+      },
+      true,
+    );
+
+    window.addEventListener(
+      'keyup',
+      function (event) {
+        event.stopImmediatePropagation();
+      },
+      true,
+    );
+  }, []);
+
   const canvasService = useCanvasService(appContext);
 
   useEffect(() => {
