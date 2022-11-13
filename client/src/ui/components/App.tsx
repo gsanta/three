@@ -14,7 +14,10 @@ import EditorStore from '@/services/EditorStore';
 import CanvasEventHandler from '@/services/canvas/CanvasEventHandler';
 import ModuleManager from '@/core/ModuleManager';
 import PreviewModule from '@/services/preview/PreviewModule';
-import useCanvasService from '../hooks/useCanvasService';
+import KeyboardHandler from '@/services/keyboard/KeyboardHandler';
+import LifeCycleEventHandler from '@/services/core/LifeCycleEventHandler';
+import useInitApp from '../panels/canvas/hooks/useInitExternalModule';
+import WindowHandler from '@/services/core/WindowHandler';
 
 const App = () => {
   useEffect(() => {
@@ -37,16 +40,22 @@ const App = () => {
       toolStore: new ToolStore(),
       editorStore: new EditorStore(),
       canvasEventHandler: window.CanvasEventHandler as CanvasEventHandler,
+      lifeCycleEventHandler: new LifeCycleEventHandler(),
       moduleManager: new ModuleManager(),
+      keyboardHandler: new KeyboardHandler(),
+      windowHandler: new WindowHandler(),
     }),
     [],
   );
+
+  useInitApp(appContext, canvasContainer);
 
   useEffect(() => {
     /* code to prevent emscripten compiled code from eating key input */
     window.addEventListener(
       'keydown',
       function (event) {
+        appContext.keyboardHandler.emitKeyDown(event);
         event.stopImmediatePropagation();
       },
       true,
@@ -55,13 +64,13 @@ const App = () => {
     window.addEventListener(
       'keyup',
       function (event) {
+        console.log('keyup');
         event.stopImmediatePropagation();
       },
       true,
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const canvasService = useCanvasService(appContext);
 
   useEffect(() => {
     const { moduleManager } = appContext;

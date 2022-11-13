@@ -1,18 +1,15 @@
-import { AppContextType } from '@/core/AppContext';
 import AppModule from '@/core/AppModule';
+import CanvasEventHandler from '../canvas/CanvasEventHandler';
 import PreviewDataProvider from './PreviewDataProvider';
 
 class PreviewModule extends AppModule {
-  private appContext: AppContextType;
-
   private previewDataProvider: PreviewDataProvider;
 
-  constructor(appContext: AppContextType) {
+  constructor(canvasEventWHandler: CanvasEventHandler) {
     super();
-    this.appContext = appContext;
 
     this.previewDataProvider = new PreviewDataProvider();
-    this.appContext.canvasEventHandler.addListener(this.previewDataProvider);
+    canvasEventWHandler.addListener(this.previewDataProvider);
   }
 }
 
