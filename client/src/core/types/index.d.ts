@@ -1,7 +1,8 @@
+/* eslint-disable no-var */
+
 declare global {
   function renderApp(): void;
 
-  // eslint-disable-next-line no-var
   var Module: {
     setWindowSize(width: number, height: number);
     isRuntimeInitialize: boolean;
@@ -12,9 +13,10 @@ declare global {
     setEngineData(data: string);
 
     setColor(color: number);
+
+    canvasNode?: HTMLElement;
   };
 
-  // eslint-disable-next-line no-var
   var CanvasEventHandler: {
     emitDataChange(): void;
   };
