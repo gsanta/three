@@ -7,7 +7,13 @@ import ToolSelectionEvent from '../tool/ToolSelectionEvents';
 import LifeCycleEventListener from './LifeCycleEventListener';
 
 class DependencyInjector implements LifeCycleEventListener {
-  onCanvasInitialized({ canvasEventHandler, toolStore, keyboardHandler, moduleManager }: AppContextType) {
+  onCanvasInitialized({
+    canvasEventHandler,
+    canvasService,
+    toolStore,
+    keyboardHandler,
+    moduleManager,
+  }: AppContextType) {
     toolStore.addTool(
       new ExternalTool(
         ToolName.Brush,
@@ -20,7 +26,7 @@ class DependencyInjector implements LifeCycleEventListener {
     toolStore.addTool(new ExternalTool(ToolName.SelectionRectangle, 'BiBorderRadius', Module));
     toolStore.addTool(new ExternalTool(ToolName.Erase, 'BiEraser', Module));
     toolStore.addTool(new ExternalTool(ToolName.Pan, 'BiMove', Module));
-    moduleManager.addModule(new PreviewModule(canvasEventHandler));
+    moduleManager.addModule(new PreviewModule(canvasEventHandler, canvasService));
 
     moduleManager.start();
 

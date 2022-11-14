@@ -20,8 +20,8 @@ namespace spright_engine { namespace system {
 	public:
 		InputHandler(Window* window);
 		~InputHandler();
-		void emitMouseDown(int button);
-		void emitMouseUp(int button);
+		void emitMouseDown(bool buttons[3]);
+		void emitMouseUp(bool buttons[3]);
 		void emitMouseMove(double x, double y);
 		void emitScroll(double x, double y);
 

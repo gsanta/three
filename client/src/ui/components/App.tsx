@@ -13,11 +13,10 @@ import ToolStore from '@/services/tool/ToolStore';
 import EditorStore from '@/services/EditorStore';
 import CanvasEventHandler from '@/services/canvas/CanvasEventHandler';
 import ModuleManager from '@/core/ModuleManager';
-import PreviewModule from '@/services/preview/PreviewModule';
 import KeyboardHandler from '@/services/keyboard/KeyboardHandler';
 import LifeCycleEventHandler from '@/services/core/LifeCycleEventHandler';
-import useInitApp from '../panels/canvas/hooks/useInitExternalModule';
 import WindowHandler from '@/services/core/WindowHandler';
+import useInitApp from '../panels/canvas/hooks/useInitApp';
 
 const App = () => {
   useEffect(() => {
@@ -71,14 +70,6 @@ const App = () => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    const { moduleManager } = appContext;
-    moduleManager.addModule(new PreviewModule(appContext));
-    if (canvasService) {
-      moduleManager.start();
-    }
-  }, [appContext, canvasService]);
 
   return (
     <ChakraProvider theme={theme} cssVarsRoot="body">

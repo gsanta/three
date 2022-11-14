@@ -2,8 +2,7 @@
 
 namespace spright_app { namespace tool {
 
-	PointerInfo::PointerInfo() {
-
+	PointerInfo::PointerInfo(): buttons { false, false, false} {
 	}
 
 }}

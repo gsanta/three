@@ -1,16 +1,16 @@
 import { AppContextType } from '@/core/AppContext';
-import useAppContext from '@/ui/hooks/useAppContext';
+import DependencyInjector from '@/services/core/DependencyInjector';
 import { useEffect, useState } from 'react';
 
 const useInitApp = (appContext: AppContextType, canvasNode?: HTMLDivElement) => {
   const [isModuleInitialized, setIsModuleInitialized] = useState(false);
 
-  const { toolStore } = useAppContext();
-
   useEffect(() => {
     appContext.lifeCycleEventHandler.addListener(appContext.windowHandler);
+    appContext.lifeCycleEventHandler.addListener(new DependencyInjector());
   }, [appContext.lifeCycleEventHandler, appContext.windowHandler]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (window?.Module?.isRuntimeInitialize && !isModuleInitialized) {
       window.Module.canvasNode = canvasNode;
@@ -18,7 +18,7 @@ const useInitApp = (appContext: AppContextType, canvasNode?: HTMLDivElement) => 
       setIsModuleInitialized(true);
       appContext.lifeCycleEventHandler.emitCanvasInitialized(appContext);
     }
-  }, [appContext, canvasNode, isModuleInitialized, toolStore]);
+  });
 
   return {
     isModuleInitialized,

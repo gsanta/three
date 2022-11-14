@@ -1,6 +1,7 @@
 #include "src/engine/system/window/window.h"
 #include "src/engine/maths/vec2.h"
 #include "src/engine/maths/mat4.h"
+#include "src/engine/maths/mathFuncs.h"
 //#include "src/utils/timer.h"
 #include "src/engine/system/utils/fileUtils.h"
 #include "src/engine/graphics/shader/shader.h"
@@ -39,18 +40,27 @@ void setWindowSize(int width, int height)
 	}
 }
 
-void setActiveTool(std::string toolName)
+void addActiveTool(std::string toolName)
 {
 	if (editor != nullptr)
 	{
-		editor->getToolHandler()->setActiveTool(toolName);
+		editor->getToolHandler()->addActiveTool(toolName);
+	}
+}
+
+void removeActiveTool(std::string toolName)
+{
+	if (editor != nullptr)
+	{
+		editor->getToolHandler()->removeActiveTool(toolName);
 	}
 }
 
 EMSCRIPTEN_BINDINGS(engine2)
 {
 	emscripten::function("setWindowSize", &setWindowSize);
-	emscripten::function("setActiveTool", &setActiveTool);
+	emscripten::function("addActiveTool", &addActiveTool);
+	emscripten::function("removeActiveTool", &removeActiveTool);
 
 }
 
@@ -98,6 +108,16 @@ static void dispatch_main(void *fp)
 
 int main()
 {
+	spright_engine::maths::Vec3 la = spright_engine::maths::Vec3(-3, 0, -5);
+	spright_engine::maths::Vec3 lb = spright_engine::maths::Vec3(3, 3, 0);
+	spright_engine::maths::Vec3 p1 = spright_engine::maths::Vec3(-1, 1, 0);
+	spright_engine::maths::Vec3 p2 = spright_engine::maths::Vec3(1, 1, 0);
+	spright_engine::maths::Vec3 p3 = spright_engine::maths::Vec3(0, -1, 0);
+
+	spright_engine::maths::Vec3 res = spright_engine::maths::linePlaneIntersection(la, lb, p1, p2, p3);
+
+
+
 	editor = new spright_app::Editor();
 	window = editor->getWindow();
 

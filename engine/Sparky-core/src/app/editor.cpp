@@ -16,7 +16,9 @@ namespace spright_app {
 		m_toolHandler->addTool(new EraseTool(m_DocumentHandler, m_Services->getEventHandler()));
 		m_toolHandler->addTool(new PanTool(m_DocumentHandler->getActiveDocument()->getCamera()));
 		m_toolHandler->addTool(new ZoomTool(m_DocumentHandler->getActiveDocument()->getCamera()));
-		m_toolHandler->setActiveTool("zoom");
+		m_toolHandler->addActiveTool("zoom");
+		m_toolHandler->addActiveTool("pan");
+		m_toolHandler->addActiveTool("brush");
 
 		m_Window->getFrameHandler()->registerListener(this);
 	}

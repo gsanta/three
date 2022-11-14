@@ -30,7 +30,11 @@ class ExternalTool implements Tool {
   }
 
   activate(): void {
-    this.canvasService.setActiveTool(this.name);
+    this.canvasService.addActiveTool(this.name);
+  }
+
+  deActivate(): void {
+    this.canvasService.removeActiveTool(this.name);
   }
 }
 

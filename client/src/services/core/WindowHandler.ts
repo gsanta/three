@@ -1,7 +1,7 @@
 import { AppContextType } from '@/core/AppContext';
 import LifeCycleEventListener from './LifeCycleEventListener';
 
-class WindowHandler extends LifeCycleEventListener {
+class WindowHandler implements LifeCycleEventListener {
   private context?: AppContextType;
 
   onCanvasInitialized(context: AppContextType): void {

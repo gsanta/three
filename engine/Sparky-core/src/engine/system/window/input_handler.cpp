@@ -11,17 +11,17 @@ namespace spright_engine { namespace system {
 	{
 	}
 
-	void InputHandler::emitMouseDown(int button)
+	void InputHandler::emitMouseDown(bool buttons[3])
 	{
 		for (InputListener* listener : m_Listeners) {
-			listener->onMouseDown(button);
+			listener->onMouseDown(buttons);
 		}
 	}
 
-	void InputHandler::emitMouseUp(int button)
+	void InputHandler::emitMouseUp(bool buttons[3])
 	{
 		for (InputListener* listener : m_Listeners) {
-			listener->onMouseUp(button);
+			listener->onMouseUp(buttons);
 		}
 	}
 

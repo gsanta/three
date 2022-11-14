@@ -66,7 +66,6 @@ namespace spright_engine { namespace system {
 
 		bool Window::isKeyPressed(unsigned int keycode) const
 		{
-			// TODO: log this
 			if (keycode >= MAX_KEYS) {
 				return false;
 			}
@@ -74,7 +73,6 @@ namespace spright_engine { namespace system {
 		}
 
 		bool Window::isMouseButtonPressed(unsigned int button) const {
-			// TODO: log this
 			if (button >= MAX_BUTTONS) {
 				return false;
 			}
@@ -99,13 +97,14 @@ namespace spright_engine { namespace system {
 		void Window::mouse_input_callback(GLFWwindow* window, int button, int action, int mods) {
 			Window* win = (Window*)glfwGetWindowUserPointer(window);
 
+			win->m_MouseButtons[button] = action != GLFW_RELEASE;
+
 			if (action == GLFW_PRESS) {
-				win->getInputHandler()->emitMouseDown(button);
+				win->getInputHandler()->emitMouseDown(win->m_MouseButtons);
 			}
 			else {
-				win->getInputHandler()->emitMouseUp(button);
+				win->getInputHandler()->emitMouseUp(win->m_MouseButtons);
 			}
-			win->m_MouseButtons[button] = action != GLFW_RELEASE;
 		}
 
 

@@ -2,7 +2,7 @@
 #include "canvas_listener_handler.h"
 
 namespace spright_app { namespace core {
-	void CanvasListenerHandler::onMouseUp(int button)
+	void CanvasListenerHandler::onMouseUp(bool buttons[3])
 	{
 		m_PointerInfo.isDown = false;
 	
@@ -11,7 +11,7 @@ namespace spright_app { namespace core {
 		}
 	}
 
-	void CanvasListenerHandler::onMouseDown(int button) {
+	void CanvasListenerHandler::onMouseDown(bool buttons[3]) {
 		this->m_PointerInfo.isDown = true;
 		this->m_PointerInfo.down.x = this->m_PointerInfo.curr.x;
 		this->m_PointerInfo.down.y = this->m_PointerInfo.curr.y;
