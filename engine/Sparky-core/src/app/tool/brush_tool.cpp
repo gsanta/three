@@ -9,8 +9,26 @@ namespace spright_app { namespace tool {
 
 	void BrushTool::pointerDown(PointerInfo &pointerInfo)
 	{
+		if (pointerInfo.isLeftButtonDown() == false) {
+			return;
+		}
+
+		spright_engine::graphics::Camera* camera = m_documentHandler->getActiveDocument()->getCamera();
+		
+		spright_engine::maths::Vec2 center2D = camera->getCenter2D();
+
+		float zoom = camera->getZoom();
+
+		spright_engine::maths::Vec3 la = spright_engine::maths::Vec3(center2D.x * zoom + pointerInfo.curr.x, center2D.y * zoom + pointerInfo.curr.y, 0.5f);
+		spright_engine::maths::Vec3 lb = spright_engine::maths::Vec3(center2D.x * zoom + pointerInfo.curr.x, center2D.y * zoom + pointerInfo.curr.y, 0);
+		spright_engine::maths::Vec3 p1 = spright_engine::maths::Vec3(-1, 1, 0);
+		spright_engine::maths::Vec3 p2 = spright_engine::maths::Vec3(1, 1, 0);
+		spright_engine::maths::Vec3 p3 = spright_engine::maths::Vec3(0, -1, 0);
+
+		spright_engine::maths::Vec3 intersection = spright_engine::maths::linePlaneIntersection(la, lb, p1, p2, p3);
+
 		spright_engine::graphics::TileLayer *tileLayer = dynamic_cast<spright_engine::graphics::TileLayer *>(m_documentHandler->getActiveDocument()->getActiveLayer());
-		spright_engine::maths::Vec2 tilePos = tileLayer->getTilePos(pointerInfo.curr);
+		spright_engine::maths::Vec2 tilePos = tileLayer->getTilePos(spright_engine::maths::Vec2(intersection.x, intersection.y));
 
 		int color = m_Services->getColorPalette()->color;
 		spright_engine::graphics::Sprite *sprite = new spright_engine::graphics::Sprite(tilePos.x, tilePos.y, tileLayer->getTileSize(), tileLayer->getTileSize(), color);

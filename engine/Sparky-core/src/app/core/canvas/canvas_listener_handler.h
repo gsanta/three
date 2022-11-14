@@ -13,8 +13,8 @@ namespace spright_app { namespace core {
 		std::vector<CanvasListener*> m_Listeners;
 		spright_app::tool::PointerInfo m_PointerInfo;
 	public:
-		virtual void onMouseUp(int button) override;
-		virtual void onMouseDown(int button) override;
+		virtual void onMouseUp(bool buttons[3]) override;
+		virtual void onMouseDown(bool buttons[3]) override;
 		virtual void onMouseMove(double x, double y) override;
 
 

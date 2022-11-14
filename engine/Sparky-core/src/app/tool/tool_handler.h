@@ -17,13 +17,14 @@ namespace spright_app { namespace tool {
 	private:
 		spright_engine::system::Window* m_Window;
 		vector<Tool*> tools;
-		Tool* m_ActiveTool;
+		vector<Tool*>* m_ActiveTools;
 		PointerInfo m_pointerInfo;
 		EditorConfig m_EditorConfig;
 	public:
 		ToolHandler(spright_engine::system::Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig);
-		virtual void onMouseUp(int button) override;
-		virtual void onMouseDown(int button) override;
+		// TODO: destructor
+		virtual void onMouseUp(bool buttons[3]) override;
+		virtual void onMouseDown(bool buttons[3]) override;
 		virtual void onMouseMove(double x, double y) override;
 		virtual void onScroll(double x, double y) override;
 
@@ -31,12 +32,20 @@ namespace spright_app { namespace tool {
 
 		Tool* getTool(string name) const;
 
-		inline Tool* getActiveTool() const {
-			return m_ActiveTool;
+		inline vector<Tool*>* getActiveTool() const {
+			return m_ActiveTools;
 		}
 
-		inline void setActiveTool(string name) {
-			m_ActiveTool = getTool(name);
+		inline void addActiveTool(string name) {
+			m_ActiveTools->push_back(getTool(name));
+		}
+
+		inline void removeActiveTool(string name) {
+			auto it = find(m_ActiveTools->begin(), m_ActiveTools->end(), getTool(name));
+
+			if (it != m_ActiveTools->end()) {
+				m_ActiveTools->erase(it);
+			}
 		}
 	};
 } }

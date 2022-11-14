@@ -7,6 +7,10 @@ namespace spright_app {
 
 	void PanTool::pointerMove(tool::PointerInfo& pointerInfo)
 	{
+		if (pointerInfo.isMiddleButtonDown() == false) {
+			return;
+		}
+
 		if (pointerInfo.isDown) {
 			m_Camera->translate2D(pointerInfo.prev - pointerInfo.curr);
 		}

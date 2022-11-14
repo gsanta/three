@@ -11,7 +11,7 @@ namespace spright_app { namespace document {
 		float bottom = document->dimensions.bottom;
 		float top = document->dimensions.top;
 
-		int counter = 0;
+		int counter = 1;
 		bool even = false;
 		for (float i = left; i < right; i += 0.5) {
 			for (float j = bottom; j < top; j += 0.5) {

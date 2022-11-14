@@ -26,6 +26,9 @@ class ToolStore {
   setSelectedTool(toolName: ToolName) {
     const selectedTool = this.tools.find((tool) => tool.name === toolName);
     if (selectedTool) {
+      if (this.selectedTool) {
+        this.selectedTool.deActivate();
+      }
       this.selectedTool = selectedTool;
       this.selectedTool.activate();
     }

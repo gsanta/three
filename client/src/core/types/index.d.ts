@@ -7,7 +7,8 @@ declare global {
     setWindowSize(width: number, height: number);
     isRuntimeInitialize: boolean;
 
-    setActiveTool(name: string);
+    addActiveTool(name: string);
+    removeActiveTool(name: string);
 
     getEngineData();
     setEngineData(data: string);

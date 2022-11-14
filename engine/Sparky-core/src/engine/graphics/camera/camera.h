@@ -14,6 +14,8 @@ namespace spright_engine { namespace graphics {
 		spright_engine::maths::Mat4 m_View;
 		spright_engine::maths::Vec2 m_Center2D;
 		float z = 0.5f;
+		float m_InitialWidth;
+		float m_Zoom = 1.0f;
 		OrthoProjectionInfo m_ProjectionInfo;
 		float aspectRatio;
 	public:
@@ -32,6 +34,13 @@ namespace spright_engine { namespace graphics {
 		}
 		inline spright_engine::maths::Mat4& getView() {
 			return m_View;
+		}
+		inline spright_engine::maths::Vec2 getCenter2D() {
+			return m_Center2D;
+		}
+
+		inline float getZoom() {
+			return m_Zoom;
 		}
 
 	private:

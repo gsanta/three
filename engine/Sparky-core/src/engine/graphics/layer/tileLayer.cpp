@@ -15,10 +15,11 @@ namespace spright_engine { namespace graphics {
 
 	spright_engine::maths::Vec2 TileLayer::getTilePos(spright_engine::maths::Vec2 pointer)
 	{
-		int tileX = (int)(pointer.x / m_TileSize);
-		tileX = tileX < 0 ? tileX - 1 : tileX;
-		int tileY = (int)(pointer.y / m_TileSize);
-		tileY = tileY < 0 ? tileY - 1 : tileY;
+		float tileSize = m_TileSize * m_Camera->getZoom();
+		int tileX = (int)(pointer.x / tileSize);
+		tileX = pointer.x < 0 ? tileX - 1 : tileX;
+		int tileY = (int)(pointer.y / tileSize);
+		tileY = pointer.y < 0 ? tileY - 1 : tileY;
 
 		float x = static_cast<float>(tileX) * m_TileSize;
 		float y = static_cast<float>(tileY) * m_TileSize;

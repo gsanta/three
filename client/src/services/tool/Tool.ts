@@ -7,6 +7,7 @@ interface Tool {
   iconName: IconName;
 
   activate(): void;
+  deActivate(): void;
   getShortCut(): ToolSelectionEvent | undefined;
 }
 

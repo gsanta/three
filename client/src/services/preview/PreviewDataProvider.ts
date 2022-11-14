@@ -1,14 +1,18 @@
-import { AppContextType } from '@/core/AppContext';
 import { createClient } from 'really-simple-xdm';
 import CanvasEventListener from '../canvas/CanvasEventListener';
 import { CanvasService } from '../CanvasService';
-import LifeCycleEventListener from '../core/LifeCycleEventListener';
 
-class PreviewDataProvider extends CanvasEventListener implements LifeCycleEventListener {
+class PreviewDataProvider extends CanvasEventListener {
   // TODO: add type
   private previewProxy: any;
 
   private canvasService?: CanvasService;
+
+  constructor(canvasService?: CanvasService) {
+    super();
+    this.canvasService = canvasService;
+    this.init();
+  }
 
   onDataChange(): void {
     if (!this.previewProxy) {
@@ -16,17 +20,6 @@ class PreviewDataProvider extends CanvasEventListener implements LifeCycleEventL
     }
 
     this.previewProxy.testFunc(this.canvasService?.getEngineData());
-  }
-
-  onCanvasInitialized(context: AppContextType): void {
-    this.canvasService = context.canvasService;
-    this.init();
-  }
-
-  onCanvasReady(canvasService: CanvasService): void {
-    this.canvasService = canvasService;
-
-    this.init();
   }
 
   private async init() {
