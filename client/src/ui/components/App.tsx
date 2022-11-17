@@ -17,6 +17,8 @@ import KeyboardHandler from '@/services/keyboard/KeyboardHandler';
 import LifeCycleEventHandler from '@/services/core/LifeCycleEventHandler';
 import WindowHandler from '@/services/core/WindowHandler';
 import useInitApp from '../panels/canvas/hooks/useInitApp';
+import LayerPanel from '../panels/layer/components/LayerPanel';
+import LayerHandler from '../panels/layer/LayerHandler';
 
 const App = () => {
   useEffect(() => {
@@ -43,6 +45,7 @@ const App = () => {
       moduleManager: new ModuleManager(),
       keyboardHandler: new KeyboardHandler(),
       windowHandler: new WindowHandler(),
+      layerHandler: new LayerHandler(),
     }),
     [],
   );
@@ -94,9 +97,11 @@ const App = () => {
               <Box ref={canvasRef}>
                 <Canvas container={canvasContainer} />
               </Box>
-              <Box display="flex" flexDir="column">
-                <Box flex="1"></Box>
-                <Box as="iframe" marginInline="15px" height="50%" id="test-iframe" src="iframe.html" />
+              <Box display="flex" flexDir="column" bgColor="blackAlpha.800">
+                <Box flex="1">
+                  <LayerPanel />
+                </Box>
+                <Box as="iframe" height="50%" id="test-iframe" src="iframe.html" />
               </Box>
             </Split>
           </Box>

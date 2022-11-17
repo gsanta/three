@@ -53,7 +53,7 @@ const Dialog = ({
         {variant !== 'empty' && (
           <>
             <ModalHeader>
-              <Text as="h1" size="5">
+              <Text as="h1" color="gray.300" size="3" textTransform="uppercase">
                 {title}
               </Text>
             </ModalHeader>

@@ -8,7 +8,7 @@ import DialogFooter from './DialogFooter';
 const Template: ComponentStory<typeof Dialog> = (props) => {
   return (
     <div>
-      <Dialog {...props}>
+      <Dialog {...props} title="Dialog title">
         <DialogBody>Dialog body</DialogBody>
         <DialogFooter>
           <Button variant="action">Approve</Button>
