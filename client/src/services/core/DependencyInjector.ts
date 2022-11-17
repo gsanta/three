@@ -12,6 +12,7 @@ class DependencyInjector implements LifeCycleEventListener {
     canvasService,
     toolStore,
     keyboardHandler,
+    layerHandler,
     moduleManager,
   }: AppContextType) {
     toolStore.addTool(
@@ -29,6 +30,8 @@ class DependencyInjector implements LifeCycleEventListener {
     moduleManager.addModule(new PreviewModule(canvasEventHandler, canvasService));
 
     moduleManager.start();
+
+    layerHandler.init();
 
     toolStore.tools.forEach((tool) => {
       const shortCut = tool.getShortCut();

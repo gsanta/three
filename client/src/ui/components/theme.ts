@@ -3,8 +3,16 @@ import Checkbox from './checkbox/Checkbox.theme';
 import Select from './select/Select.theme';
 import Button from './button/Button.theme';
 import Tooltip from './tooltip/Tooltip.theme';
+import Dialog from './dialog/Dialog.theme';
 
 const theme = extendTheme({
+  styles: {
+    global: {
+      'html, body': {
+        color: 'gray.50',
+      },
+    },
+  },
   config: {
     cssVarPrefix: '',
   },
@@ -19,6 +27,7 @@ const theme = extendTheme({
     Select,
     Button,
     Tooltip,
+    Modal: Dialog,
   },
 });
 

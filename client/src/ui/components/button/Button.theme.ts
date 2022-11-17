@@ -19,6 +19,9 @@ const ButtonTheme: ComponentStyleConfig = {
     },
   },
   variants: {
+    'secondary-default': {
+      bgColor: 'inherit',
+    },
     'primary-action': {
       bgColor: 'orange.500',
       color: 'gray.50',

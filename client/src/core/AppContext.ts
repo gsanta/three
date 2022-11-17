@@ -7,6 +7,7 @@ import KeyboardHandler from '@/services/keyboard/KeyboardHandler';
 import LifeCycleEventHandler from '@/services/core/LifeCycleEventHandler';
 import { CanvasService } from '@/services/CanvasService';
 import WindowHandler from '@/services/core/WindowHandler';
+import LayerHandler from '@/ui/panels/layer/LayerHandler';
 
 export type AppContextType = {
   canvasService?: CanvasService;
@@ -17,6 +18,7 @@ export type AppContextType = {
   moduleManager: ModuleManager;
   keyboardHandler: KeyboardHandler;
   windowHandler: WindowHandler;
+  layerHandler: LayerHandler;
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
