@@ -5,8 +5,10 @@ import { List, Box, Tooltip, Input } from '@chakra-ui/react';
 import { useBoolean } from 'usehooks-ts';
 import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
-import LayerItem from '../LayerItem';
+import LayerItem from './LayerItem';
 import LayerDialog from './LayerDialog';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 const LayerPanel = observer(() => {
   const { value: isAddPanelOpen, setTrue: setOpenAddPanel, setFalse: setCloseAddPanel } = useBoolean(false);
@@ -22,17 +24,19 @@ const LayerPanel = observer(() => {
         </Panel.Header>
       }
     >
-      <Box paddingInline="2" paddingBlock="3">
-        <List spacing={3} display="flex" flexDir="column" justifyContent="space-between">
-          {layerHandler.getLayers().map((layerAdapter) => (
-            <LayerItem
-              layerAdapter={layerAdapter}
-              isActive={layerAdapter === layerHandler.getActiveLayer()}
-              setActiveLayer={() => layerHandler.setActiveLayer(layerAdapter)}
-            />
-          ))}
-        </List>
-      </Box>
+      <DndProvider backend={HTML5Backend}>
+        <Box paddingInline="2" paddingBlock="3">
+          <List spacing={3} display="flex" flexDir="column" justifyContent="space-between">
+            {layerHandler.getLayers().map((layerAdapter) => (
+              <LayerItem
+                layerAdapter={layerAdapter}
+                isActive={layerAdapter === layerHandler.getActiveLayer()}
+                setActiveLayer={() => layerHandler.setActiveLayer(layerAdapter)}
+              />
+            ))}
+          </List>
+        </Box>
+      </DndProvider>
       <LayerDialog isOpen={isAddPanelOpen} onClose={setCloseAddPanel} />
     </Panel>
   );
