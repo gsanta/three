@@ -1,4 +1,4 @@
-import { action, makeObservable, observable } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
 import LayerAdapter from './LayerAdapter';
 
 class LayerHandler {
@@ -10,7 +10,9 @@ class LayerHandler {
     makeObservable<LayerHandler, 'layers' | 'activeLayer'>(this, {
       activeLayer: observable,
       addLayer: action,
+      getLayerIndex: action,
       init: action,
+      insertLayer: action,
       layers: observable,
       removeLayer: action,
       setActiveLayer: action,
@@ -36,6 +38,14 @@ class LayerHandler {
 
   addLayer(layer: LayerAdapter) {
     this.layers.push(layer);
+  }
+
+  insertLayer(layer: LayerAdapter, position: number) {
+    this.layers.splice(position, 0, layer);
+  }
+
+  getLayerIndex(layer: LayerAdapter) {
+    return this.layers.indexOf(layer);
   }
 
   removeLayer(layer: LayerAdapter) {
