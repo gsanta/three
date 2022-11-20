@@ -2,6 +2,16 @@
 
 namespace spright_app { namespace document {
 
+	spright_engine::graphics::Layer* findLayer(std::string id, std::vector<spright_engine::graphics::Layer*>& layers) {
+		auto it = find_if(layers.begin(), layers.end(), [&id](spright_engine::graphics::Layer* layer) { return layer->getId() == id; });
+
+		if (it != layers.end()) {
+			return *it;
+		}
+
+		return nullptr;
+	}
+
 	Document::Document(spright_app::document::Dimensions dimensions) : dimensions(dimensions)
 	{
 		//auto it = find_if(m_Layers.begin(), m_Layers.end(), [](spright_engine::graphics::Layer* layer) {
@@ -24,14 +34,40 @@ namespace spright_app { namespace document {
 
 	spright_engine::graphics::Layer* Document::getLayer(std::string id)
 	{
-		auto it = find_if(m_Layers.begin(), m_Layers.end(), [&id](spright_engine::graphics::Layer* layer) { return layer->getId() == id; });
+		spright_engine::graphics::Layer* layer = findLayer(id, m_Layers);
 
-		return *it;
+		if (layer != nullptr) {
+			return layer;
+		}
+
+		layer = findLayer(id, m_BeforeLayers);
+
+		if (layer != nullptr) {
+			return layer;
+		}
+
+		layer = findLayer(id, m_AfterLayers);
+
+		if (layer != nullptr) {
+			return layer;
+		}
 	}
 
-	void Document::addLayer(spright_engine::graphics::Layer* layer)
+	void Document::addUserLayer(spright_engine::graphics::Layer* layer)
 	{
 		m_Layers.push_back(layer);
+	}
+
+	void Document::addBeforeLayer(spright_engine::graphics::Layer* layer) {
+		m_BeforeLayers.push_back(layer);
+	}
+
+	void Document::addAfterLayer(spright_engine::graphics::Layer* layer) {
+		m_AfterLayers.push_back(layer);
+	}
+
+	std::vector<spright_engine::graphics::Layer*>& Document::getUserLayers() {
+		return m_Layers;
 	}
 
 	std::string Document::getJson()
@@ -48,7 +84,15 @@ namespace spright_app { namespace document {
 
 	void Document::render()
 	{
+		for (spright_engine::graphics::Layer* layer : m_BeforeLayers) {
+			layer->render();
+		}
+
 		for (spright_engine::graphics::Layer* layer : m_Layers) {
+			layer->render();
+		}
+
+		for (spright_engine::graphics::Layer* layer : m_AfterLayers) {
 			layer->render();
 		}
 	}

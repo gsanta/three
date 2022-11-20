@@ -20,6 +20,8 @@ namespace spright_app { namespace document {
 		//spright_engine::graphics::TileLayer* m_BackgroundLayer;
 		//spright_engine::graphics::TileLayer* m_TileLayer;
 		std::vector<spright_engine::graphics::Layer*> m_Layers;
+		std::vector<spright_engine::graphics::Layer*> m_BeforeLayers;
+		std::vector<spright_engine::graphics::Layer*> m_AfterLayers;
 
 		spright_engine::graphics::Layer* m_ActiveLayer;
 
@@ -33,7 +35,11 @@ namespace spright_app { namespace document {
 
 		spright_engine::graphics::Layer* getLayer(std::string id);
 
-		void addLayer(spright_engine::graphics::Layer* layer);
+		void addUserLayer(spright_engine::graphics::Layer* layer);
+		void addBeforeLayer(spright_engine::graphics::Layer* layer);
+		void addAfterLayer(spright_engine::graphics::Layer* layer);
+
+		std::vector<spright_engine::graphics::Layer*>& getUserLayers();
 
 		inline spright_engine::graphics::Layer* getActiveLayer() {
 			return m_ActiveLayer;
