@@ -2,8 +2,8 @@ import { useDrag } from 'react-dnd';
 import LayerAdapter from '../LayerAdapter';
 import layerDragType from '../types/layerDragType';
 
-const useDragLayerItem = (layerAdapter: LayerAdapter) => {
-  const [{ opacity }, source] = useDrag(
+const useDragLayer = (layerAdapter: LayerAdapter) => {
+  const [{ opacity }, ref] = useDrag(
     () => ({
       type: layerDragType,
       item: { layerAdapter },
@@ -16,8 +16,8 @@ const useDragLayerItem = (layerAdapter: LayerAdapter) => {
 
   return {
     opacity,
-    source,
+    ref,
   };
 };
 
-export default useDragLayerItem;
+export default useDragLayer;

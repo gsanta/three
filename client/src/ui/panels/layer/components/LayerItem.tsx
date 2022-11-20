@@ -3,8 +3,7 @@ import useAppContext from '@/ui/hooks/useAppContext';
 import { ListItem } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import useDragLayerItem from '../hooks/useDragLayerItem';
-import useDropLayerItem from '../hooks/useDropLayerItem';
+import useDragLayer from '../hooks/useDragLayer';
 import LayerAdapter from '../LayerAdapter';
 
 type LayerItemProps = {
@@ -18,16 +17,10 @@ const LayerItem = observer(({ isActive, layerAdapter, setActiveLayer }: LayerIte
 
   const handleLayerDelete = () => layerHandler.removeLayer(layerAdapter);
 
-  const { opacity, source: drag } = useDragLayerItem(layerAdapter);
-  const { source: drop } = useDropLayerItem(layerAdapter, layerHandler);
-
-  function attachRef(el: HTMLElement | null) {
-    drag(el);
-    drop(el);
-  }
+  const { opacity, ref } = useDragLayer(layerAdapter);
 
   return (
-    <ListItem ref={attachRef} display="flex" gap="2" sx={{ opacity }}>
+    <ListItem ref={ref} display="flex" gap="2" sx={{ opacity }}>
       <Button
         iconName="BsFillEyeFill"
         toggle={layerAdapter.isVisible() ? 'on' : 'off'}
