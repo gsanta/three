@@ -18,9 +18,11 @@ namespace spright_engine
 			Shader *m_Shader;
 			Camera* m_Camera;	
 			std::string m_Id;
+			std::string m_Name;
+			bool m_IsEnabled = false;
 
 		protected:
-			Layer(std::string id, Renderer2D *renderer, Shader *shader, Camera* camera);
+			Layer(std::string name, std::string id, Renderer2D *renderer, Shader *shader, Camera* camera);
 
 		public:
 			virtual ~Layer();
@@ -29,8 +31,18 @@ namespace spright_engine
 			virtual void clear();
 			virtual void remove(spright_engine::graphics::Renderable2D* renderable);
 
+			nlohmann::json getLayerDescription();
+
 			virtual nlohmann::json getJson() = 0;
 			virtual void setJson(std::string json) = 0;
+
+			inline void setEnabled(bool isEnabled) {
+				m_IsEnabled = isEnabled;
+			}
+
+			inline bool isEnabled() {
+				return m_IsEnabled;
+			}
 
 			inline std::string getId() {
 				return m_Id;

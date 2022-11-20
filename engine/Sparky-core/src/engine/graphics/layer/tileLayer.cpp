@@ -2,8 +2,8 @@
 
 namespace spright_engine { namespace graphics {
 
-	TileLayer::TileLayer(std::string id, Shader* shader, Renderer2D* renderer, Camera* camera)
-		: Layer(id, renderer, shader, camera) {
+	TileLayer::TileLayer(std::string name, std::string id, Shader* shader, Renderer2D* renderer, Camera* camera)
+		: Layer(name, id, renderer, shader, camera) {
 
 		m_Bounds.minX = -10;
 		m_Bounds.maxX = 10;

@@ -9,6 +9,12 @@ namespace spright_app { namespace tool {
 
 	void BrushTool::pointerDown(PointerInfo &pointerInfo)
 	{
+		std::string userLayer1Id = USER_LAYER_ID_PREFIX + "1";
+		std::string userLayer2Id = USER_LAYER_ID_PREFIX + "2";
+
+		std::string layerId;
+		std::string otherLayerId;
+
 		if (pointerInfo.isLeftButtonDown() == false) {
 			return;
 		}
