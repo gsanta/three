@@ -14,7 +14,7 @@ const IframeEntry = () => {
 
   useEffect(() => {
     const a = {
-      testFunc: (data: string) => window.Module.setEngineData(data),
+      testFunc: (data: string) => window.Module?.setEngineData(data),
     };
 
     const newServer = createServer({ serviceObject: a, targetOrigin: '*' });
@@ -24,13 +24,13 @@ const IframeEntry = () => {
   const setWindowSize = () => {
     if (canvasNode && isModuleSet) {
       const rect = canvasNode.getBoundingClientRect();
-      window.Module.setWindowSize(rect.width, rect.height);
+      window.Module?.setWindowSize(rect.width, rect.height);
     }
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    if (window?.Module?.isRuntimeInitialize && !isModuleSet) {
+    if (window?.Module?.isRuntimeInitialized && !isModuleSet) {
       setIsModuleSet(true);
       setWindowSize();
     }

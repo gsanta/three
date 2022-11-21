@@ -1,15 +1,15 @@
 import AppModule from '@/core/AppModule';
 import CanvasEventHandler from '../canvas/CanvasEventHandler';
-import { CanvasService } from '../CanvasService';
+import EditorApi from '../api/EditorApi';
 import PreviewDataProvider from './PreviewDataProvider';
 
 class PreviewModule extends AppModule {
   private previewDataProvider: PreviewDataProvider;
 
-  constructor(canvasEventWHandler: CanvasEventHandler, canvasService?: CanvasService) {
+  constructor(canvasEventWHandler: CanvasEventHandler, editorApi?: EditorApi) {
     super();
 
-    this.previewDataProvider = new PreviewDataProvider(canvasService);
+    this.previewDataProvider = new PreviewDataProvider(editorApi);
     canvasEventWHandler.addListener(this.previewDataProvider);
   }
 }

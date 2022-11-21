@@ -3,10 +3,13 @@ import { action, makeObservable, observable } from 'mobx';
 class LayerAdapter {
   private name: string;
 
+  private id: string;
+
   private visible = true;
 
-  constructor(name: string) {
+  constructor(name: string, id: string) {
     this.name = name;
+    this.id = id;
 
     makeObservable<LayerAdapter, 'name' | 'visible'>(this, {
       name: observable,
@@ -18,6 +21,10 @@ class LayerAdapter {
 
   setName(name: string) {
     this.name = name;
+  }
+
+  getId() {
+    return this.id;
   }
 
   getName(): string {

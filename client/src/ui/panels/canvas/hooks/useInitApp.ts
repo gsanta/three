@@ -12,9 +12,8 @@ const useInitApp = (appContext: AppContextType, canvasNode?: HTMLDivElement) => 
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    if (window?.Module?.isRuntimeInitialize && !isModuleInitialized) {
-      window.Module.canvasNode = canvasNode;
-      appContext.canvasService = window.Module;
+    if (window?.Module?.isRuntimeInitialized && !isModuleInitialized) {
+      appContext.editorApi.canvasNode = canvasNode;
       setIsModuleInitialized(true);
       appContext.lifeCycleEventHandler.emitCanvasInitialized(appContext);
     }
