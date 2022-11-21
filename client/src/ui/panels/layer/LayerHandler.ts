@@ -1,15 +1,20 @@
-import { action, computed, makeObservable, observable } from 'mobx';
+import EditorApi from '@/services/api/EditorApi';
+import { action, makeObservable, observable } from 'mobx';
 import LayerAdapter from './LayerAdapter';
+import { v4 as uuidv4 } from 'uuid';
 
 class LayerHandler {
   private layers: LayerAdapter[] = [];
 
   private activeLayer: LayerAdapter | undefined;
 
-  constructor() {
+  private editorApi: EditorApi;
+
+  constructor(editorApi: EditorApi) {
+    this.editorApi = editorApi;
     makeObservable<LayerHandler, 'layers' | 'activeLayer'>(this, {
       activeLayer: observable,
-      addLayer: action,
+      createLayer: action,
       getLayerIndex: action,
       init: action,
       insertLayer: action,
@@ -20,10 +25,7 @@ class LayerHandler {
   }
 
   init() {
-    this.addLayer(new LayerAdapter('layer 1'));
-    this.addLayer(new LayerAdapter('layer 2'));
-    this.addLayer(new LayerAdapter('layer 3'));
-    this.addLayer(new LayerAdapter('layer 4'));
+    this.editorApi.getLayers().forEach((layer) => this.addLayer(new LayerAdapter(layer.name, layer.id)));
 
     this.setActiveLayer(this.layers[0]);
   }
@@ -36,8 +38,10 @@ class LayerHandler {
     return this.activeLayer;
   }
 
-  addLayer(layer: LayerAdapter) {
-    this.layers.push(layer);
+  createLayer(layerName: string) {
+    const layer = new LayerAdapter(layerName, uuidv4());
+    this.editorApi.createLayer(layer.getName(), layer.getId());
+    this.addLayer(layer);
   }
 
   insertLayer(layer: LayerAdapter, position: number) {
@@ -61,6 +65,10 @@ class LayerHandler {
 
   getLayers() {
     return this.layers;
+  }
+
+  private addLayer(layer: LayerAdapter) {
+    this.layers.push(layer);
   }
 }
 

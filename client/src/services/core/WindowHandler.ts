@@ -10,12 +10,12 @@ class WindowHandler implements LifeCycleEventListener {
   }
 
   updateWindowSize() {
-    const canvasNode = this.context?.canvasService?.canvasNode;
+    const canvasNode = this.context?.editorApi?.canvasNode;
     if (canvasNode) {
       canvasNode.removeAttribute('width');
       canvasNode.removeAttribute('height');
       const rect = canvasNode.getBoundingClientRect();
-      this.context?.canvasService?.setWindowSize(rect.width, rect.height);
+      this.context?.editorApi?.setWindowSize(rect.width, rect.height);
     }
   }
 }

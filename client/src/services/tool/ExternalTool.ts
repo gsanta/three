@@ -1,5 +1,5 @@
 import { IconName } from '@/ui/components/icon/Icon';
-import { CanvasService } from '../CanvasService';
+import EditorApi from '../api/EditorApi';
 import Tool from './Tool';
 import ToolName from './ToolName';
 import ToolSelectionEvent from './ToolSelectionEvents';
@@ -9,19 +9,14 @@ class ExternalTool implements Tool {
 
   iconName: IconName;
 
-  private canvasService: CanvasService;
+  private editorApi: EditorApi;
 
   private toolSelectionEvent?: ToolSelectionEvent;
 
-  constructor(
-    name: ToolName,
-    iconName: IconName,
-    canvasService: CanvasService,
-    toolSelectionEvent?: ToolSelectionEvent,
-  ) {
+  constructor(name: ToolName, iconName: IconName, editorApi: EditorApi, toolSelectionEvent?: ToolSelectionEvent) {
     this.name = name;
     this.iconName = iconName;
-    this.canvasService = canvasService;
+    this.editorApi = editorApi;
     this.toolSelectionEvent = toolSelectionEvent;
   }
 
@@ -30,11 +25,11 @@ class ExternalTool implements Tool {
   }
 
   activate(): void {
-    this.canvasService.addActiveTool(this.name);
+    this.editorApi.addActiveTool(this.name);
   }
 
   deActivate(): void {
-    this.canvasService.removeActiveTool(this.name);
+    this.editorApi.removeActiveTool(this.name);
   }
 }
 

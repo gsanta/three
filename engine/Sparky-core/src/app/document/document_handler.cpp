@@ -9,6 +9,16 @@ namespace spright_app { namespace document {
 		}
 	}
 
+	void DocumentHandler::createUserLayer(std::string name, std::string id) {
+#ifdef SPARKY_EMSCRIPTEN
+		spright_engine::graphics::Shader* shaderUnlit = new spright_engine::graphics::Shader("res/shaders/basic.es3.vert", "res/shaders/basic_unlit.es3.frag");
+#else
+		spright_engine::graphics::Shader* shaderUnlit = new spright_engine::graphics::Shader("src/shaders/basic.vert", "src/shaders/unlit.frag");
+#endif
+		spright_engine::graphics::TileLayer* userLayer1 = new spright_engine::graphics::TileLayer(name, id, shaderUnlit, new spright_engine::graphics::BatchRenderer2D(), getActiveDocument()->getCamera());
+
+	}
+
 	void DocumentHandler::createDocument()
 	{
 #ifdef SPARKY_EMSCRIPTEN

@@ -18,6 +18,7 @@ namespace spright_app { namespace document {
 	public:
 		~DocumentHandler();
 		void createDocument();
+		void createUserLayer(std::string name, std::string id);
 		inline Document* getActiveDocument() const {
 			return m_ActiveDocument;
 		}

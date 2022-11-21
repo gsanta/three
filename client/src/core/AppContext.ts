@@ -5,12 +5,12 @@ import { createContext } from 'react';
 import ModuleManager from '@/core/ModuleManager';
 import KeyboardHandler from '@/services/keyboard/KeyboardHandler';
 import LifeCycleEventHandler from '@/services/core/LifeCycleEventHandler';
-import { CanvasService } from '@/services/CanvasService';
+import EditorApi from '@/services/api/EditorApi';
 import WindowHandler from '@/services/core/WindowHandler';
 import LayerHandler from '@/ui/panels/layer/LayerHandler';
 
 export type AppContextType = {
-  canvasService?: CanvasService;
+  editorApi: EditorApi;
   toolStore: ToolStore;
   editorStore: EditorStore;
   canvasEventHandler: CanvasEventHandler;

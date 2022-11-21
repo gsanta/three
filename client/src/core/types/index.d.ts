@@ -3,20 +3,26 @@
 declare global {
   function renderApp(): void;
 
-  var Module: {
-    setWindowSize(width: number, height: number);
-    isRuntimeInitialize: boolean;
+  var Module:
+    | {
+        setWindowSize(width: number, height: number);
+        isRuntimeInitialized: boolean;
 
-    addActiveTool(name: string);
-    removeActiveTool(name: string);
+        addActiveTool(name: string);
+        removeActiveTool(name: string);
 
-    getEngineData();
-    setEngineData(data: string);
+        getEngineData();
+        setEngineData(data: string);
 
-    setColor(color: number);
+        setColor(color: number);
 
-    canvasNode?: HTMLElement;
-  };
+        getLayers(): any;
+
+        createLayer(name: string, id: string): void;
+
+        canvasNode?: HTMLElement;
+      }
+    | undefined;
 
   var CanvasEventHandler: {
     emitDataChange(): void;

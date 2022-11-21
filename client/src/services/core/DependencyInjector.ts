@@ -9,7 +9,7 @@ import LifeCycleEventListener from './LifeCycleEventListener';
 class DependencyInjector implements LifeCycleEventListener {
   onCanvasInitialized({
     canvasEventHandler,
-    canvasService,
+    editorApi,
     toolStore,
     keyboardHandler,
     layerHandler,
@@ -19,15 +19,15 @@ class DependencyInjector implements LifeCycleEventListener {
       new ExternalTool(
         ToolName.Brush,
         'BiPencil',
-        Module,
+        editorApi,
         new ToolSelectionEvent(toolStore, ToolName.Brush, KeyCode.b),
       ),
     );
-    toolStore.addTool(new ExternalTool(ToolName.Rectangle, 'BiRectangle', Module));
-    toolStore.addTool(new ExternalTool(ToolName.SelectionRectangle, 'BiBorderRadius', Module));
-    toolStore.addTool(new ExternalTool(ToolName.Erase, 'BiEraser', Module));
-    toolStore.addTool(new ExternalTool(ToolName.Pan, 'BiMove', Module));
-    moduleManager.addModule(new PreviewModule(canvasEventHandler, canvasService));
+    toolStore.addTool(new ExternalTool(ToolName.Rectangle, 'BiRectangle', editorApi));
+    toolStore.addTool(new ExternalTool(ToolName.SelectionRectangle, 'BiBorderRadius', editorApi));
+    toolStore.addTool(new ExternalTool(ToolName.Erase, 'BiEraser', editorApi));
+    toolStore.addTool(new ExternalTool(ToolName.Pan, 'BiMove', editorApi));
+    moduleManager.addModule(new PreviewModule(canvasEventHandler, editorApi));
 
     moduleManager.start();
 

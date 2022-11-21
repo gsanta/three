@@ -56,12 +56,31 @@ void removeActiveTool(std::string toolName)
 	}
 }
 
+std::vector<std::string> getLayers() {
+	std::vector<spright_engine::graphics::Layer*>& layers = editor->getDocumentHandler()->getActiveDocument()->getUserLayers();
+
+	std::vector<std::string> target;
+
+	for (spright_engine::graphics::Layer* layer : layers) {
+		target.push_back(layer->getLayerDescription().dump());
+	}
+
+	return target;
+}
+
+void createLayer(std::string name, std::string id) {
+	editor->getDocumentHandler()->createUserLayer(name, id);
+}
+
 EMSCRIPTEN_BINDINGS(engine2)
 {
+	emscripten::register_vector<std::string>("VectorString");
+
 	emscripten::function("setWindowSize", &setWindowSize);
 	emscripten::function("addActiveTool", &addActiveTool);
 	emscripten::function("removeActiveTool", &removeActiveTool);
-
+	emscripten::function("getLayers", &getLayers);
+	emscripten::function("createLayer", &createLayer);
 }
 
 std::string getEngineData() {

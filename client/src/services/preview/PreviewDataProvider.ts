@@ -1,16 +1,16 @@
 import { createClient } from 'really-simple-xdm';
 import CanvasEventListener from '../canvas/CanvasEventListener';
-import { CanvasService } from '../CanvasService';
+import EditorApi from '../api/EditorApi';
 
 class PreviewDataProvider extends CanvasEventListener {
   // TODO: add type
   private previewProxy: any;
 
-  private canvasService?: CanvasService;
+  private editorApi?: EditorApi;
 
-  constructor(canvasService?: CanvasService) {
+  constructor(editorApi?: EditorApi) {
     super();
-    this.canvasService = canvasService;
+    this.editorApi = editorApi;
     this.init();
   }
 
@@ -19,7 +19,7 @@ class PreviewDataProvider extends CanvasEventListener {
       return;
     }
 
-    this.previewProxy.testFunc(this.canvasService?.getEngineData());
+    this.previewProxy.testFunc(this.editorApi?.getEngineData());
   }
 
   private async init() {
