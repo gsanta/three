@@ -11,12 +11,11 @@ namespace spright_app { namespace tool {
 		m_ActiveTools = new vector<Tool*>();
 	}
 
-	ToolHandler::~ToolHandler() {
-		m_Window->getInputHandler()->unRegisterListener(this);
-	}
+	ToolHandler::~ToolHandler() {}
 
 	ToolHandler& ToolHandler::operator=(const ToolHandler& toolHandler)
 	{
+		m_Window = toolHandler.m_Window;
 		tools = toolHandler.tools;
 		m_ActiveTools = toolHandler.m_ActiveTools;
 		m_EditorConfig = toolHandler.m_EditorConfig;

@@ -43,7 +43,7 @@ namespace spright_engine { namespace graphics {
 	}
 
 	void Layer::render() {
-		if (m_IsEnabled) {
+		if (!m_IsEnabled) {
 			return;
 		}
 

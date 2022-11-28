@@ -54,6 +54,18 @@ class EditorApi {
     window.Module?.createLayer(name, id);
   }
 
+  enableLayer(id: string) {
+    window.Module?.enableLayer(id);
+  }
+
+  disableLayer(id: string) {
+    window.Module?.disableLayer(id);
+  }
+
+  setActiveLayer(id: string) {
+    window.Module?.setActiveLayer(id);
+  }
+
   set canvasNode(canvas: HTMLElement | undefined) {
     this._canvasNode = canvas;
   }

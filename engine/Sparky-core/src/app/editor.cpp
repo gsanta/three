@@ -10,17 +10,18 @@ namespace spright_app {
 		m_Services = new spright_app::Services();
 		m_Services->setEmService(new EmService(m_Services->getEventHandler()));
 
-		ToolHandler toolHandler(m_Window, m_DocumentHandler, editorConfig);
-		toolHandler.addTool(new BrushTool(m_DocumentHandler, editorConfig, m_Services, m_Services->getEventHandler()));
-		toolHandler.addTool(new RectangleTool(m_DocumentHandler, m_Services, m_Services->getEventHandler()));
-		toolHandler.addTool(new EraseTool(m_DocumentHandler, m_Services->getEventHandler()));
-		toolHandler.addTool(new PanTool(m_DocumentHandler->getActiveDocument()->getCamera()));
-		toolHandler.addTool(new ZoomTool(m_DocumentHandler->getActiveDocument()->getCamera()));
-		toolHandler.addActiveTool("zoom");
-		toolHandler.addActiveTool("pan");
-		toolHandler.addActiveTool("brush");
+		ToolHandler tmpToolHandler(m_Window, m_DocumentHandler, editorConfig);
+		tmpToolHandler.addTool(new BrushTool(m_DocumentHandler, editorConfig, m_Services, m_Services->getEventHandler()));
+		tmpToolHandler.addTool(new RectangleTool(m_DocumentHandler, m_Services, m_Services->getEventHandler()));
+		tmpToolHandler.addTool(new EraseTool(m_DocumentHandler, m_Services->getEventHandler()));
+		tmpToolHandler.addTool(new PanTool(m_DocumentHandler->getActiveDocument()->getCamera()));
+		tmpToolHandler.addTool(new ZoomTool(m_DocumentHandler->getActiveDocument()->getCamera()));
+		tmpToolHandler.addActiveTool("zoom");
+		tmpToolHandler.addActiveTool("pan");
+		tmpToolHandler.addActiveTool("brush");
 
-		m_toolHandler = toolHandler;
+		m_toolHandler = tmpToolHandler;
+		m_Window->getInputHandler()->unRegisterListener(&tmpToolHandler);
 
 		m_Window->getFrameHandler()->registerListener(this);
 	}

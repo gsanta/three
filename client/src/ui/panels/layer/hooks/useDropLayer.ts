@@ -12,13 +12,7 @@ const useDropLayer = (layerIndex: number, layerHandler: LayerHandler) => {
     },
 
     drop: (item: LayerItemDragType) => {
-      const sourceLayer = item.layerAdapter;
-      const sourceLayerIndex = layerHandler.getLayerIndex(sourceLayer);
-      if (layerIndex !== layerHandler.getLayerIndex(item.layerAdapter)) {
-        layerHandler.removeLayer(sourceLayer);
-        const targetIndex = sourceLayerIndex < layerIndex ? layerIndex - 1 : layerIndex;
-        layerHandler.insertLayer(sourceLayer, targetIndex);
-      }
+      layerHandler.moveLayer(item.layerAdapter, layerIndex);
     },
 
     collect: (monitor) => ({

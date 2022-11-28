@@ -25,12 +25,15 @@ class LayerHandler {
   }
 
   init() {
-    this.editorApi.getLayers().forEach((layer) => this.addLayer(new LayerAdapter(layer.name, layer.id)));
+    this.editorApi
+      .getLayers()
+      .forEach((layer) => this.addLayer(new LayerAdapter(layer.name, layer.id, this.editorApi)));
 
     this.setActiveLayer(this.layers[0]);
   }
 
   setActiveLayer(layer: LayerAdapter) {
+    this.editorApi.setActiveLayer(layer.getId());
     this.activeLayer = layer;
   }
 
@@ -39,13 +42,26 @@ class LayerHandler {
   }
 
   createLayer(layerName: string) {
-    const layer = new LayerAdapter(layerName, uuidv4());
+    const layer = new LayerAdapter(layerName, uuidv4(), this.editorApi);
     this.editorApi.createLayer(layer.getName(), layer.getId());
     this.addLayer(layer);
   }
 
   insertLayer(layer: LayerAdapter, position: number) {
     this.layers.splice(position, 0, layer);
+  }
+
+  moveLayer(layer: LayerAdapter, newLayerIndex: number) {
+    const currentLayerIndex = this.getLayerIndex(layer);
+
+    if (currentLayerIndex == -1 || currentLayerIndex == newLayerIndex) {
+      return;
+    }
+
+    const finalLayerIndex = currentLayerIndex < newLayerIndex ? newLayerIndex - 1 : newLayerIndex;
+
+    this.layers.splice(this.layers.indexOf(layer), 1);
+    this.layers.splice(finalLayerIndex, 0, layer);
   }
 
   getLayerIndex(layer: LayerAdapter) {
