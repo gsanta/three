@@ -18,7 +18,7 @@ namespace spright_app {
 	class Editor : spright_engine::system::FrameListener {
 	private:
 		spright_engine::system::Window* m_Window;
-		ToolHandler* m_toolHandler;
+		ToolHandler m_toolHandler;
 		core::CanvasListenerHandler* m_CanvasListenerHandler;
 		DocumentHandler* m_DocumentHandler;
 		EditorConfig editorConfig;
@@ -33,12 +33,12 @@ namespace spright_app {
 			return m_Services;
 		}
 
-		inline ToolHandler* getToolHandler() const {
+		inline ToolHandler& getToolHandler() {
 			return m_toolHandler;
 		}
 
 		inline void cleanup() {
-			 m_Window->getInputHandler()->unRegisterListener(m_toolHandler);
+			 m_Window->getInputHandler()->unRegisterListener(&m_toolHandler);
 		}
 
 		inline spright_engine::system::Window* getWindow() const {

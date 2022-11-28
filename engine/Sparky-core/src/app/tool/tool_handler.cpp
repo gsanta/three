@@ -1,11 +1,29 @@
 #include "tool_handler.h"
 
 namespace spright_app { namespace tool {
-	
+	ToolHandler::ToolHandler()
+	{
+	}
+
 	ToolHandler::ToolHandler(spright_engine::system::Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig) : m_Window(window), m_EditorConfig(editorConfig)
 	{
 		window->getInputHandler()->registerListener(this);
 		m_ActiveTools = new vector<Tool*>();
+	}
+
+	ToolHandler::~ToolHandler() {
+		m_Window->getInputHandler()->unRegisterListener(this);
+	}
+
+	ToolHandler& ToolHandler::operator=(const ToolHandler& toolHandler)
+	{
+		tools = toolHandler.tools;
+		m_ActiveTools = toolHandler.m_ActiveTools;
+		m_EditorConfig = toolHandler.m_EditorConfig;
+
+		m_Window->getInputHandler()->registerListener(this);
+
+		return *this;
 	}
 
 	void ToolHandler::onMouseUp(bool buttons[3]) {

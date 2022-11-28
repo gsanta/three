@@ -6,8 +6,6 @@ import { Input } from '@chakra-ui/react';
 import Button from '@/ui/components/button/Button';
 import { observer } from 'mobx-react-lite';
 import useAppContext from '@/ui/hooks/useAppContext';
-import LayerAdapter from '../LayerAdapter';
-import { v4 as uuidv4 } from 'uuid';
 
 type LayerDialogProps = {
   isOpen: boolean;

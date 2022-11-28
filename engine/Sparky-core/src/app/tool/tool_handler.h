@@ -21,7 +21,12 @@ namespace spright_app { namespace tool {
 		PointerInfo m_pointerInfo;
 		EditorConfig m_EditorConfig;
 	public:
+		ToolHandler();
 		ToolHandler(spright_engine::system::Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig);
+		~ToolHandler();
+
+		ToolHandler& operator=(const ToolHandler& toolHandler);
+
 		// TODO: destructor
 		virtual void onMouseUp(bool buttons[3]) override;
 		virtual void onMouseDown(bool buttons[3]) override;
