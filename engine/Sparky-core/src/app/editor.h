@@ -37,6 +37,7 @@ namespace spright_app {
 			return m_toolHandler;
 		}
 
+
 		inline void cleanup() {
 			 m_Window->getInputHandler()->unRegisterListener(&m_toolHandler);
 		}

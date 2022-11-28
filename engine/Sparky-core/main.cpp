@@ -44,7 +44,7 @@ void addActiveTool(std::string toolName)
 {
 	if (editor != nullptr)
 	{
-		editor->getToolHandler()->addActiveTool(toolName);
+		editor->getToolHandler().addActiveTool(toolName);
 	}
 }
 
@@ -52,7 +52,7 @@ void removeActiveTool(std::string toolName)
 {
 	if (editor != nullptr)
 	{
-		editor->getToolHandler()->removeActiveTool(toolName);
+		editor->getToolHandler().removeActiveTool(toolName);
 	}
 }
 
@@ -72,6 +72,26 @@ void createLayer(std::string name, std::string id) {
 	editor->getDocumentHandler()->createUserLayer(name, id);
 }
 
+void enableLayer(std::string id) {
+	spright_engine::graphics::Layer* layer = editor->getDocumentHandler()->getActiveDocument()->getLayer(id);
+
+	if (layer != nullptr) {
+		layer->setEnabled(true);
+	}
+}
+
+void disableLayer(std::string id) {
+	spright_engine::graphics::Layer* layer = editor->getDocumentHandler()->getActiveDocument()->getLayer(id);
+
+	if (layer != nullptr) {
+		layer->setEnabled(false);
+	}
+}
+
+void setActiveLayer(std::string id) {
+	editor->getDocumentHandler()->getActiveDocument()->setActiveLayer(id);
+}
+
 EMSCRIPTEN_BINDINGS(engine2)
 {
 	emscripten::register_vector<std::string>("VectorString");
@@ -81,6 +101,9 @@ EMSCRIPTEN_BINDINGS(engine2)
 	emscripten::function("removeActiveTool", &removeActiveTool);
 	emscripten::function("getLayers", &getLayers);
 	emscripten::function("createLayer", &createLayer);
+	emscripten::function("enableLayer", &enableLayer);
+	emscripten::function("disableLayer", &disableLayer);
+	emscripten::function("setActiveLayer", &setActiveLayer);
 }
 
 std::string getEngineData() {

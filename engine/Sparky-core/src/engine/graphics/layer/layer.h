@@ -19,7 +19,7 @@ namespace spright_engine
 			Camera* m_Camera;	
 			std::string m_Id;
 			std::string m_Name;
-			bool m_IsEnabled = false;
+			bool m_IsEnabled = true;
 
 		protected:
 			Layer(std::string name, std::string id, Renderer2D *renderer, Shader *shader, Camera* camera);

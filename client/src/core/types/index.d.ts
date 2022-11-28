@@ -17,8 +17,10 @@ declare global {
         setColor(color: number);
 
         getLayers(): any;
-
         createLayer(name: string, id: string): void;
+        enableLayer(id: string);
+        disableLayer(id: string);
+        setActiveLayer(id: string);
 
         canvasNode?: HTMLElement;
       }

@@ -1,3 +1,4 @@
+import EditorApi from '@/services/api/EditorApi';
 import { action, makeObservable, observable } from 'mobx';
 
 class LayerAdapter {
@@ -7,9 +8,12 @@ class LayerAdapter {
 
   private visible = true;
 
-  constructor(name: string, id: string) {
+  private editorApi: EditorApi;
+
+  constructor(name: string, id: string, editorApi: EditorApi) {
     this.name = name;
     this.id = id;
+    this.editorApi = editorApi;
 
     makeObservable<LayerAdapter, 'name' | 'visible'>(this, {
       name: observable,
@@ -32,6 +36,12 @@ class LayerAdapter {
   }
 
   setVisible(isVisible: boolean) {
+    if (isVisible) {
+      this.editorApi.enableLayer(this.id);
+    } else {
+      this.editorApi.disableLayer(this.id);
+    }
+
     this.visible = isVisible;
   }
 
