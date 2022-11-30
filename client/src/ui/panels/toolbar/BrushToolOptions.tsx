@@ -1,13 +1,21 @@
+import useAppContext from '@/ui/hooks/useAppContext';
 import { FormControl, FormLabel, Input } from '@chakra-ui/react';
-import React from 'react';
+import { observer } from 'mobx-react-lite';
+import React, { ChangeEvent } from 'react';
 
-const BrushToolOptions = () => {
+const BrushToolOptions = observer(() => {
+  const { editorApi } = useAppContext();
+
+  const handleSizeChange = (e: ChangeEvent<HTMLInputElement>) => {
+    editorApi.setBrushSize(parseInt(e.target.value, 10));
+  };
+
   return (
     <FormControl>
       <FormLabel>Size:</FormLabel>
-      <Input size="xs" width="12" />
+      <Input size="xs" width="12" onChange={handleSizeChange} />
     </FormControl>
   );
-};
+});
 
 export default BrushToolOptions;
