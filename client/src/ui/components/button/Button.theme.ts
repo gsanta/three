@@ -17,6 +17,10 @@ const ButtonTheme: ComponentStyleConfig = {
       paddingY: '1px',
       paddingX: '2px',
     },
+    _focusVisible: {
+      boxShadow: '0 0 0 1px red',
+      borderColor: 'teal.500',
+    },
   },
   variants: {
     'secondary-default': {

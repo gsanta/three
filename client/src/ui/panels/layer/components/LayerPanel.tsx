@@ -19,7 +19,7 @@ const LayerPanel = observer(() => {
     <Panel
       header={
         <Panel.Header title="layers">
-          <Tooltip label="add">
+          <Tooltip label="new layer">
             <Button iconName="BiPlus" level="secondary" onClick={setOpenAddPanel} />
           </Tooltip>
         </Panel.Header>

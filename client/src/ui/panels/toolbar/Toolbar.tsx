@@ -28,7 +28,7 @@ const Toolbar = observer(() => {
       {toolStore?.tools.map(({ iconName, name }) => {
         const toggle = name === toolStore.getSelectedTool()?.name ? 'on' : 'off';
         return (
-          <Tooltip label="hello" placement="right">
+          <Tooltip label={name} placement="right">
             <Button key={name} iconName={iconName} toggle={toggle} onToggle={() => handleSelectTool(name)} />
           </Tooltip>
         );

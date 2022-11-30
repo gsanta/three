@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, FormControl, FormLabel, Input } from '@chakra-ui/react';
 import '../../app.scss';
 import Layout from './layout/Layout';
 import Box from './box/Box';
@@ -19,6 +19,7 @@ import useInitApp from '../panels/canvas/hooks/useInitApp';
 import LayerPanel from '../panels/layer/components/LayerPanel';
 import LayerHandler from '../panels/layer/LayerHandler';
 import EditorApi from '@/services/api/EditorApi';
+import ToolOptionsBar from '../panels/toolbar/ToolOptionsBar';
 
 const App = () => {
   const [canvasContainer, setCanvasContainer] = useState<HTMLDivElement | undefined>();
@@ -70,15 +71,11 @@ const App = () => {
       <AppContext.Provider value={appContext}>
         <Layout
           header={
-            <Box bgColor="blackAlpha.800" height="40px">
-              Header
+            <Box bgColor="blackAlpha.800" paddingInlineStart="12" height="40px">
+              <ToolOptionsBar />
             </Box>
           }
-          footer={
-            <Box bgColor="blackAlpha.800" height="40px">
-              Footer
-            </Box>
-          }
+          footer={<Box bgColor="blackAlpha.800" height="40px"></Box>}
         >
           <Box display="flex" flexDirection="row">
             <Box width="50px">

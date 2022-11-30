@@ -6,3 +6,4 @@ export { BiMove } from 'react-icons/bi';
 export { BsFillEyeFill } from 'react-icons/bs';
 export { BiPlus } from 'react-icons/bi';
 export { BiTrashAlt } from 'react-icons/bi';
+export { BiColorFill } from 'react-icons/bi';
