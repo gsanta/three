@@ -92,6 +92,12 @@ void setActiveLayer(std::string id) {
 	editor->getDocumentHandler()->getActiveDocument()->setActiveLayer(id);
 }
 
+void setBrushSize(int size) {
+	spright_app::tool::BrushTool* brushTool = dynamic_cast<spright_app::tool::BrushTool*>(editor->getToolHandler().getTool("brush"));
+
+	brushTool->setSize(size);
+}
+
 EMSCRIPTEN_BINDINGS(engine2)
 {
 	emscripten::register_vector<std::string>("VectorString");
@@ -104,6 +110,7 @@ EMSCRIPTEN_BINDINGS(engine2)
 	emscripten::function("enableLayer", &enableLayer);
 	emscripten::function("disableLayer", &disableLayer);
 	emscripten::function("setActiveLayer", &setActiveLayer);
+	emscripten::function("setBrushSize", &setBrushSize);
 }
 
 std::string getEngineData() {

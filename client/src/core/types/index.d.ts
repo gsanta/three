@@ -22,6 +22,8 @@ declare global {
         disableLayer(id: string);
         setActiveLayer(id: string);
 
+        setBrushSize(size: number);
+
         canvasNode?: HTMLElement;
       }
     | undefined;

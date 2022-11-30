@@ -66,6 +66,10 @@ class EditorApi {
     window.Module?.setActiveLayer(id);
   }
 
+  setBrushSize(size: number) {
+    window.Module?.setBrushSize(size);
+  }
+
   set canvasNode(canvas: HTMLElement | undefined) {
     this._canvasNode = canvas;
   }

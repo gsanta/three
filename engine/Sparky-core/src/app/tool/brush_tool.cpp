@@ -7,6 +7,11 @@ namespace spright_app { namespace tool {
 	{
 	}
 
+	void BrushTool::setSize(int size)
+	{
+		m_Size = size;
+	}
+
 	void BrushTool::pointerDown(PointerInfo &pointerInfo)
 	{
 		std::string userLayer1Id = USER_LAYER_ID_PREFIX + "1";
@@ -34,11 +39,19 @@ namespace spright_app { namespace tool {
 		spright_engine::maths::Vec3 intersection = spright_engine::maths::linePlaneIntersection(la, lb, p1, p2, p3);
 
 		spright_engine::graphics::TileLayer *tileLayer = dynamic_cast<spright_engine::graphics::TileLayer *>(m_documentHandler->getActiveDocument()->getActiveLayer());
-		spright_engine::maths::Vec2 tilePos = tileLayer->getTilePos(spright_engine::maths::Vec2(intersection.x, intersection.y));
 
-		int color = m_Services->getColorPalette()->color;
-		spright_engine::graphics::Sprite *sprite = new spright_engine::graphics::Sprite(tilePos.x, tilePos.y, tileLayer->getTileSize(), tileLayer->getTileSize(), color);
-		tileLayer->add(sprite);
+		spright_engine::maths::Vec2 tilePos = tileLayer->getTilePos(spright_engine::maths::Vec2(intersection.x, intersection.y));
+		
+		for (int i = 0; i < m_Size; i++) {
+			for (int j = 0; j < m_Size; j++) {
+
+				spright_engine::maths::Vec2 actTilePos = spright_engine::maths::Vec2(tilePos.x, tilePos.y).subtract(spright_engine::maths::Vec2(i * tileLayer->getTileSize(), j * tileLayer->getTileSize()));
+
+				int color = m_Services->getColorPalette()->color;
+				spright_engine::graphics::Sprite *sprite = new spright_engine::graphics::Sprite(actTilePos.x, actTilePos.y, tileLayer->getTileSize(), tileLayer->getTileSize(), color);
+				tileLayer->add(sprite);
+			}
+		}
 
 		m_EventHandler->emitDataChange();
 	}
