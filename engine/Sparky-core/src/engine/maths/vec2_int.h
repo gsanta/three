@@ -8,6 +8,9 @@ namespace spright_engine { namespace maths {
         int y;
 
     public:
+        Vec2Int();
         Vec2Int(int x, int y);
+
+        Vec2Int operator+(const Vec2Int& right);
     };
  }}

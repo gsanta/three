@@ -12,7 +12,7 @@ namespace spright_app { namespace document {
 		return nullptr;
 	}
 
-	Document::Document(spright_app::document::Dimensions dimensions) : dimensions(dimensions)
+	Document::Document(spright_engine::graphics::Dimensions dimensions) : dimensions(dimensions)
 	{
 		//auto it = find_if(m_Layers.begin(), m_Layers.end(), [](spright_engine::graphics::Layer* layer) {
 		//	return layer->getId().rfind(USER_LAYER_ID_PREFIX, 0) != std::string::npos; 

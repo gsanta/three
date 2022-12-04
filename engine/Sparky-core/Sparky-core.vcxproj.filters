@@ -150,9 +150,6 @@
     <ClCompile Include="src\app\document\checkerboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\app\document\dimensions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\engine\system\window\frame_handler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -184,6 +181,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\app\tool\select_tool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\tool\paint_bucket\flood_fill_range_queue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\graphics\layer\dimensions.cpp">
+      <Filter>Source Files\graphics\layers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\graphics\renderable\bounds.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -320,9 +326,6 @@
     <ClInclude Include="src\engine\graphics\renderable\line_shape.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\app\document\dimensions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\system\window\frame_listener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -361,6 +364,18 @@
     </ClInclude>
     <ClInclude Include="src\app\tool\select_tool.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\tool\paint_bucket\flood_fill_range_queue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\tool\paint_bucket\flood_fill_range.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\tool\paint_bucket\queue_linear_flood_filler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\graphics\layer\dimensions.h">
+      <Filter>Header Files\graphics\layers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

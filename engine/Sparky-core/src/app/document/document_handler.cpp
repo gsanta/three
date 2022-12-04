@@ -15,28 +15,27 @@ namespace spright_app { namespace document {
 #else
 		spright_engine::graphics::Shader* shaderUnlit = new spright_engine::graphics::Shader("src/shaders/basic.vert", "src/shaders/unlit.frag");
 #endif
-		spright_engine::graphics::TileLayer* userLayer1 = new spright_engine::graphics::TileLayer(name, id, shaderUnlit, new spright_engine::graphics::BatchRenderer2D(), getActiveDocument()->getCamera());
-
+		TileLayer* userLayer1 = new TileLayer(name, id, shaderUnlit, new BatchRenderer2D(), getActiveDocument()->getCamera(), getActiveDocument()->dimensions);
 	}
 
 	void DocumentHandler::createDocument()
 	{
 #ifdef SPARKY_EMSCRIPTEN
-		spright_engine::graphics::Shader* shader = new spright_engine::graphics::Shader("res/shaders/basic.es3.vert", "res/shaders/basic.es3.frag");
-		spright_engine::graphics::Shader* shaderUnlit = new spright_engine::graphics::Shader("res/shaders/basic.es3.vert", "res/shaders/basic_unlit.es3.frag");
+		Shader* shader = new Shader("res/shaders/basic.es3.vert", "res/shaders/basic.es3.frag");
+		Shader* shaderUnlit = new Shader("res/shaders/basic.es3.vert", "res/shaders/basic_unlit.es3.frag");
 #else
-		spright_engine::graphics::Shader* shader = new spright_engine::graphics::Shader("src/shaders/basic.vert", "src/shaders/basic.frag");
-		spright_engine::graphics::Shader* shaderUnlit = new spright_engine::graphics::Shader("src/shaders/basic.vert", "src/shaders/unlit.frag");
+		Shader* shader = new Shader("src/shaders/basic.vert", "src/shaders/basic.frag");
+		Shader* shaderUnlit = new Shader("src/shaders/basic.vert", "src/shaders/unlit.frag");
 #endif
-		spright_app::document::Dimensions dimensions(-16.0f, 16.0f, -9.0f, 9.0f);
+		Dimensions dimensions(-16.0f, 16.0f, -9.0f, 9.0f);
 		Document* document = new Document(dimensions);
 
 		std::string userLayer1Id = USER_LAYER_ID_PREFIX + "1";
 		std::string userLayer2Id = USER_LAYER_ID_PREFIX + "2";
-		spright_engine::graphics::TileLayer* userLayer1 = new spright_engine::graphics::TileLayer("layer1", userLayer1Id, shaderUnlit, new spright_engine::graphics::BatchRenderer2D(), document->getCamera());
-		spright_engine::graphics::TileLayer* userLayer2 = new spright_engine::graphics::TileLayer("layer2", userLayer2Id, shaderUnlit, new spright_engine::graphics::BatchRenderer2D(), document->getCamera());
-		spright_engine::graphics::TileLayer* tempLayer = new spright_engine::graphics::TileLayer("", DEFAULT_TEMP_LAYER_ID, shaderUnlit, new spright_engine::graphics::BatchRenderer2D(), document->getCamera());
-		spright_engine::graphics::TileLayer* backgroundLayer = new spright_engine::graphics::TileLayer("", DEFAULT_BACKGROUND_LAYER_ID, shaderUnlit, new spright_engine::graphics::BatchRenderer2D(), document->getCamera());
+		TileLayer* userLayer1 = new TileLayer("layer1", userLayer1Id, shaderUnlit, new BatchRenderer2D(), document->getCamera(), dimensions);
+		TileLayer* userLayer2 = new TileLayer("layer2", userLayer2Id, shaderUnlit, new BatchRenderer2D(), document->getCamera(), dimensions);
+		TileLayer* tempLayer = new TileLayer("", DEFAULT_TEMP_LAYER_ID, shaderUnlit, new BatchRenderer2D(), document->getCamera(), dimensions);
+		TileLayer* backgroundLayer = new TileLayer("", DEFAULT_BACKGROUND_LAYER_ID, shaderUnlit, new BatchRenderer2D(), document->getCamera(), dimensions);
 
 		document->addBeforeLayer(backgroundLayer);
 		document->addUserLayer(userLayer1);

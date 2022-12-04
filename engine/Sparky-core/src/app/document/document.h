@@ -5,7 +5,7 @@
 #include "../../engine/graphics/layer/tileLayer.h"
 #include "../../engine/graphics/camera/camera.h"
 #include "../../engine/graphics/camera/ortho_projection_info.h"
-#include "dimensions.h"
+#include "../../engine/graphics/layer/dimensions.h"
 
 namespace spright_app { namespace document {
 
@@ -28,10 +28,10 @@ namespace spright_app { namespace document {
 		spright_engine::graphics::Camera* m_Camera;
 
 	public:
-		Document(spright_app::document::Dimensions dimensions);
+		Document(spright_engine::graphics::Dimensions dimensions);
 		~Document();
 
-		spright_app::document::Dimensions dimensions;
+		spright_engine::graphics::Dimensions dimensions;
 
 		spright_engine::graphics::Layer* getLayer(std::string id);
 

@@ -5,6 +5,7 @@
 #include "../renderable/renderable2d.h"
 #include "../renderer/renderer2d.h"
 #include "../camera/camera.h";
+#include "dimensions.h"
 
 namespace spright_engine
 {
@@ -20,9 +21,10 @@ namespace spright_engine
 			std::string m_Id;
 			std::string m_Name;
 			bool m_IsEnabled = true;
+			Dimensions m_Dimensions;
 
 		protected:
-			Layer(std::string name, std::string id, Renderer2D *renderer, Shader *shader, Camera* camera);
+			Layer(std::string name, std::string id, Renderer2D *renderer, Shader *shader, Camera* camera, Dimensions dimensions);
 
 		public:
 			virtual ~Layer();
