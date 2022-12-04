@@ -3,6 +3,7 @@
 #include "document.h"
 #include "checkerboard.h"
 #include "../../engine/graphics/layer/tileLayer.h"
+#include "../../engine/graphics/layer/dimensions.h"
 #include "../../engine/graphics/shader/shader.h"
 #include "../../engine/graphics/renderer/batchRenderer2d.h"
 #include "../../engine/graphics/renderable/line_shape.h"
@@ -10,6 +11,7 @@
 
 namespace spright_app { namespace document {
 	using namespace std;
+	using namespace spright_engine::graphics;
 
 	class DocumentHandler {
 	private:

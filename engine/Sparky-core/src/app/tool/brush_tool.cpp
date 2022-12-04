@@ -40,7 +40,7 @@ namespace spright_app { namespace tool {
 
 		spright_engine::graphics::TileLayer *tileLayer = dynamic_cast<spright_engine::graphics::TileLayer *>(m_documentHandler->getActiveDocument()->getActiveLayer());
 
-		spright_engine::maths::Vec2 tilePos = tileLayer->getTilePos(spright_engine::maths::Vec2(intersection.x, intersection.y));
+		spright_engine::maths::Vec2 tilePos = tileLayer->getBottomLeftPos(spright_engine::maths::Vec2(intersection.x, intersection.y));
 		
 		for (int i = 0; i < m_Size; i++) {
 			for (int j = 0; j < m_Size; j++) {

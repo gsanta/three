@@ -1,6 +1,6 @@
+#pragma once
 
-
-namespace spright_app { namespace document {
+namespace spright_engine { namespace graphics {
 
 	struct Dimensions {
 		float left;
@@ -10,5 +10,4 @@ namespace spright_app { namespace document {
 
 		Dimensions(float left, float right, float bottom, float top);
 	};
-
 }}

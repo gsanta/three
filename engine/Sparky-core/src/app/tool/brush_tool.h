@@ -15,7 +15,7 @@ namespace spright_app { namespace tool {
 		EditorConfig m_EditorConfig;
 		spright_app::Services* m_Services;
 		EventHandler* m_EventHandler;
-		int m_Size = 2;
+		int m_Size = 1;
 		spright_engine::graphics::Sprite *sprite;
 
 	public:

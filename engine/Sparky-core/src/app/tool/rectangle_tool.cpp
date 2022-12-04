@@ -29,8 +29,8 @@ namespace spright_app { namespace tool {
 		if (pointerInfo.isDown) {
 
 			spright_engine::graphics::TileLayer* tileLayer = dynamic_cast<spright_engine::graphics::TileLayer*>(m_DocumentHandler->getActiveDocument()->getActiveLayer());
-			spright_engine::maths::Vec2 downTilePos = tileLayer->getTilePos(pointerInfo.down);
-			spright_engine::maths::Vec2 currTilePos = tileLayer->getTilePos(pointerInfo.curr);
+			spright_engine::maths::Vec2 downTilePos = tileLayer->getBottomLeftPos(pointerInfo.down);
+			spright_engine::maths::Vec2 currTilePos = tileLayer->getBottomLeftPos(pointerInfo.curr);
 
 			float left = downTilePos.x < currTilePos.x ? downTilePos.x : currTilePos.x;
 			float right = downTilePos.x > currTilePos.x ? downTilePos.x : currTilePos.x;

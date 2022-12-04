@@ -1,4 +1,5 @@
 #pragma once
+#include "../../maths/vec2.h"
 
 namespace spright_engine { namespace graphics {
 
@@ -9,6 +10,7 @@ namespace spright_engine { namespace graphics {
 		float maxX;
 		float minY;
 		float maxY;
-	};
 
+		maths::Vec2 getCenter() const;
+	};
 }}
