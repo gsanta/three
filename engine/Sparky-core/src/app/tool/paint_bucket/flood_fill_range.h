@@ -6,5 +6,7 @@ namespace spright_app {
 		int startX;
 		int endX;
 		int y;
+
+		FloodFillRange(int startX, int endX, int y);
 	};
 }

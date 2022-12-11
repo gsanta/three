@@ -16,9 +16,10 @@ namespace spright_app {
 		tmpToolHandler.addTool(new EraseTool(m_DocumentHandler, m_Services->getEventHandler()));
 		tmpToolHandler.addTool(new PanTool(m_DocumentHandler->getActiveDocument()->getCamera()));
 		tmpToolHandler.addTool(new ZoomTool(m_DocumentHandler->getActiveDocument()->getCamera()));
-		tmpToolHandler.addActiveTool("zoom");
-		tmpToolHandler.addActiveTool("pan");
-		tmpToolHandler.addActiveTool("brush");
+		tmpToolHandler.addTool(new PaintBucketTool(m_DocumentHandler));
+		//tmpToolHandler.addActiveTool("zoom");
+		//tmpToolHandler.addActiveTool("pan");
+		tmpToolHandler.addActiveTool("paint_bucket");
 
 		m_toolHandler = tmpToolHandler;
 		m_Window->getInputHandler()->unRegisterListener(&tmpToolHandler);

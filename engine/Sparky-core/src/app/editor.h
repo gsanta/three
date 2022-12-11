@@ -5,6 +5,7 @@
 #include "tool/tool_handler.h"
 #include "tool/pan_tool.h"
 #include "tool/zoom_tool.h"
+#include "tool/paint_bucket/paint_bucket_tool.h"
 #include "document/document_handler.h"
 #include "editor_config.h"
 #include "core/canvas/canvas_listener_handler.h"

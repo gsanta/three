@@ -73,6 +73,18 @@ namespace spright_app { namespace tool {
 		}
 	}
 
+	void ToolHandler::onKeyChange(int key, bool isPressed)
+	{
+		if (key == GLFW_KEY_B && isPressed) {
+			clearActiveTools();
+			addActiveTool("brush");
+		}
+		else if (key == GLFW_KEY_P && isPressed) {
+			clearActiveTools();
+			addActiveTool("paint_bucket");
+		}
+	}
+
 	void ToolHandler::addTool(Tool* tool)
 	{
 		tools.push_back(tool);
@@ -83,6 +95,11 @@ namespace spright_app { namespace tool {
 		auto it = find_if(this->tools.begin(), this->tools.end(), [&name](const Tool* tool) { return tool->getName() == name; });
 	
 		return *it;
+	}
+
+	void ToolHandler::clearActiveTools()
+	{
+		m_ActiveTools->clear();
 	}
 
 } }

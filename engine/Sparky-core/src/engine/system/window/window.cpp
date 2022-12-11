@@ -112,6 +112,8 @@ namespace spright_engine { namespace system {
 		{
 			Window* win = (Window*) glfwGetWindowUserPointer(window);
 			win->m_Keys[key] = action != GLFW_RELEASE;
+
+			win->getInputHandler()->emitKeyChange(key, action != GLFW_RELEASE);
 		}
 
 		void Window::cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {
