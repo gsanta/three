@@ -12,5 +12,6 @@ namespace spright_engine { namespace maths {
         Vec2Int(int x, int y);
 
         Vec2Int operator+(const Vec2Int& right);
+        Vec2Int operator-(const Vec2Int& right);
     };
  }}

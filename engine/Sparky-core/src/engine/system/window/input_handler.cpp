@@ -41,6 +41,13 @@ namespace spright_engine { namespace system {
 		}
 	}
 
+	void InputHandler::emitKeyChange(int key, bool isPressed)
+	{
+		for (InputListener* listener : m_Listeners) {
+			listener->onKeyChange(key, isPressed);
+		}
+	}
+
 	void InputHandler::registerListener(InputListener* inputListener)
 	{
 		m_Listeners.push_back(inputListener);

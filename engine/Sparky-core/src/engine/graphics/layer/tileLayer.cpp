@@ -5,12 +5,15 @@ namespace spright_engine { namespace graphics {
 	TileLayer::TileLayer(std::string name, std::string id, Shader* shader, Renderer2D* renderer, Camera* camera, Dimensions dimensions)
 		: Layer(name, id, renderer, shader, camera, dimensions) {
 	
-		m_TileDimensions = maths::Vec2Int((dimensions.right - dimensions.left) / m_TileSize, (dimensions.top - dimensions.bottom) / m_TileSize);
-		m_IndexSize = m_TileDimensions.x * m_TileDimensions.y;
-		m_TileIndexes = new Renderable2D*[m_IndexSize]();
+		int width = (dimensions.right - dimensions.left) / m_TileSize;
+		int height = (dimensions.top - dimensions.bottom) / m_TileSize;
+		int left = (dimensions.left / m_TileSize) - 1;
+		int bottom = (dimensions.bottom / m_TileSize) - 1;
 
-		m_TileOffsetX = -(dimensions.left / m_TileSize) + 1;
-		m_TileOffsetY = -(dimensions.bottom / m_TileSize) + 1;
+		m_TileBounds = BoundsInt(left, left + width, bottom, bottom + height);
+
+		m_IndexSize = width * height;
+		m_TileIndexes = new Renderable2D*[m_IndexSize]();
 	}
 
 	TileLayer::~TileLayer() {
@@ -22,20 +25,30 @@ namespace spright_engine { namespace graphics {
 
 		maths::Vec2Int tilePos = getTilePos(pointer);
 
-		float x = static_cast<float>(tilePos.x) * m_TileSize;
-		float y = static_cast<float>(tilePos.y) * m_TileSize;
+		float x = static_cast<float>(tilePos.x) * m_TileSize + m_Dimensions.left;
+		float y = static_cast<float>(tilePos.y) * m_TileSize + m_Dimensions.bottom;
 
 		return spright_engine::maths::Vec2(x, y);
 	}
 
+	// TODO: check if it works for both even and odd number of tiles
 	maths::Vec2Int TileLayer::getTilePos(maths::Vec2 pos) {
+		maths::Vec2 adjustedPos(pos.x - m_Dimensions.left, pos.y - m_Dimensions.bottom);
 		float tileSize = m_TileSize * m_Camera->getZoom();
-		int tileX = (int)(pos.x / tileSize);
-		tileX = pos.x < 0 ? tileX - 1 : tileX;
-		int tileY = (int)(pos.y / tileSize);
-		tileY = pos.y < 0 ? tileY - 1 : tileY;
+		int tileX = (int)(adjustedPos.x / tileSize);
+		int tileY = (int)(adjustedPos.y / tileSize);
 
 		return maths::Vec2Int(tileX, tileY);
+	}
+
+	maths::Vec2 TileLayer::getWorldPos(int x, int y)
+	{
+		float tileSize = m_TileSize * m_Camera->getZoom();
+
+		float worldX = x * tileSize + tileSize / 2 + m_Dimensions.left;
+		float worldY = y * tileSize + tileSize / 2 + m_Dimensions.bottom;
+
+		return maths::Vec2(worldX, worldY);
 	}
 
 	nlohmann::json TileLayer::getJson()
@@ -73,27 +86,27 @@ namespace spright_engine { namespace graphics {
 		Layer::add(renderable);
 
 		maths::Vec2 pos = renderable->getBounds()->getCenter();
-		maths::Vec2Int tilePos = getTilePos(pos) + maths::Vec2Int(m_TileOffsetX, m_TileOffsetY);
+		maths::Vec2Int tilePos = getTilePos(pos);
 
-		int index = m_TileDimensions.x * tilePos.y + tilePos.x;
+		int index = m_TileBounds.getWidth() * tilePos.y + tilePos.x;
 		if (m_IndexSize > index) {
 			m_TileIndexes[index] = renderable;
-
-			auto res = getAtTilePos(tilePos.y, tilePos.x);
-			int i = 2;
 		}
 	}
 
 	int TileLayer::getTileIndex(int tileX, int tileY)
 	{
-		return m_TileDimensions.x * tileY + tileX;
+		return m_TileBounds.getWidth() * tileY + tileX;
 	}
 
-	Renderable2D* TileLayer::getAtTilePos(int x, int y)
+	const BoundsInt& TileLayer::getTileBounds() const
 	{
-		int index = getTileIndex(x, y);
+		return m_TileBounds;
+	}
 
-		return m_TileIndexes[index];
+	Renderable2D* TileLayer::getAtTileIndex(int tilePos)
+	{
+		return m_TileIndexes[tilePos];
 	}
 
 }}

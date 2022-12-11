@@ -32,6 +32,7 @@ namespace spright_app { namespace tool {
 		virtual void onMouseDown(bool buttons[3]) override;
 		virtual void onMouseMove(double x, double y) override;
 		virtual void onScroll(double x, double y) override;
+		virtual void onKeyChange(int key, bool isPressed) override;
 
 		void addTool(Tool* tool);
 
@@ -52,5 +53,7 @@ namespace spright_app { namespace tool {
 				m_ActiveTools->erase(it);
 			}
 		}
+
+		void clearActiveTools();
 	};
 } }
