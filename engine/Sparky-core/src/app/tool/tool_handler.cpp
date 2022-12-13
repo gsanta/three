@@ -76,12 +76,10 @@ namespace spright_app { namespace tool {
 	void ToolHandler::onKeyChange(int key, bool isPressed)
 	{
 		if (key == GLFW_KEY_B && isPressed) {
-			clearActiveTools();
-			addActiveTool("brush");
+			setSelectedTool("brush");
 		}
 		else if (key == GLFW_KEY_P && isPressed) {
-			clearActiveTools();
-			addActiveTool("paint_bucket");
+			setSelectedTool("paint_bucket");
 		}
 	}
 
@@ -97,10 +95,32 @@ namespace spright_app { namespace tool {
 		return *it;
 	}
 
-	void ToolHandler::clearActiveTools()
+	Tool* ToolHandler::getSelectedTool()
 	{
-		m_ActiveTools->clear();
+		return m_SelectedTool;
 	}
 
+	void ToolHandler::setSelectedTool(string name)
+	{
+		if (m_SelectedTool != nullptr) {
+			removeActiveTool(m_SelectedTool->getName());
+		}
+
+		if (!isActiveTool(name)) {
+			addActiveTool(name);
+		}
+
+		m_SelectedTool = getTool(name);
+
+	}
+
+	bool ToolHandler::isActiveTool(string name)
+	{
+		Tool* tool = getTool(name);
+
+		auto it = find((*m_ActiveTools).begin(), (*m_ActiveTools).end(), tool);
+
+		return it != (*m_ActiveTools).end();
+	}
 } }
 

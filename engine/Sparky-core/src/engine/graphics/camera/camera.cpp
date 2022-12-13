@@ -38,4 +38,8 @@ namespace spright_engine { namespace graphics {
 	{
 		aspectRatio = (m_ProjectionInfo.right - m_ProjectionInfo.left) / (m_ProjectionInfo.top - m_ProjectionInfo.bottom);
 	}
+
+	maths::Vec2 Camera::screenToModel(maths::Vec2 screen) {
+		return maths::Vec2((screen.x) / getZoom() + m_Center2D.x, (screen.y) / getZoom() + m_Center2D.y);
+	}
 }}

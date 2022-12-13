@@ -27,6 +27,9 @@ class DependencyInjector implements LifeCycleEventListener {
     toolStore.addTool(new ExternalTool(ToolName.SelectionRectangle, 'BiBorderRadius', editorApi));
     toolStore.addTool(new ExternalTool(ToolName.Erase, 'BiEraser', editorApi));
     toolStore.addTool(new ExternalTool(ToolName.Pan, 'BiMove', editorApi));
+    toolStore.addTool(new ExternalTool(ToolName.PaintBucket, 'BiColorFill', editorApi));
+    toolStore.setSelectedTool(ToolName.Brush);
+
     moduleManager.addModule(new PreviewModule(canvasEventHandler, editorApi));
 
     moduleManager.start();

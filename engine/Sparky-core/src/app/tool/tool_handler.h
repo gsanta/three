@@ -18,6 +18,7 @@ namespace spright_app { namespace tool {
 		spright_engine::system::Window* m_Window;
 		vector<Tool*> tools;
 		vector<Tool*>* m_ActiveTools;
+		Tool* m_SelectedTool;
 		PointerInfo m_pointerInfo;
 		EditorConfig m_EditorConfig;
 	public:
@@ -42,6 +43,9 @@ namespace spright_app { namespace tool {
 			return m_ActiveTools;
 		}
 
+		Tool* getSelectedTool();
+		void setSelectedTool(string name);
+
 		inline void addActiveTool(string name) {
 			m_ActiveTools->push_back(getTool(name));
 		}
@@ -54,6 +58,6 @@ namespace spright_app { namespace tool {
 			}
 		}
 
-		void clearActiveTools();
+		bool isActiveTool(string name);
 	};
 } }

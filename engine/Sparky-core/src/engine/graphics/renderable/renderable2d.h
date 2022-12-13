@@ -40,8 +40,8 @@ namespace spright_engine { namespace graphics {
 
 		virtual void submit(spright_engine::graphics::Renderer2D* renderer) const = 0;
 
-		void setColor(unsigned int color) { m_Color = color; }
-		void setColor(const spright_engine:: maths::Vec4& color) {
+		inline void setColor(unsigned int color) { m_Color = color; }
+		inline void setColor(const spright_engine:: maths::Vec4& color) {
 			int r = (color.x * 255.0f);
 			int g = (color.y * 255.0f);
 			int b = (color.z * 255.0f);

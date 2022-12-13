@@ -22,19 +22,28 @@ namespace spright_engine { namespace graphics {
 
 	spright_engine::maths::Vec2 TileLayer::getBottomLeftPos(spright_engine::maths::Vec2 pointer)
 	{
-
 		maths::Vec2Int tilePos = getTilePos(pointer);
 
-		float x = static_cast<float>(tilePos.x) * m_TileSize + m_Dimensions.left;
-		float y = static_cast<float>(tilePos.y) * m_TileSize + m_Dimensions.bottom;
+		float tileSize = m_TileSize;
+
+		float x = static_cast<float>(tilePos.x) * tileSize + m_Dimensions.left;
+		float y = static_cast<float>(tilePos.y) * tileSize + m_Dimensions.bottom;
 
 		return spright_engine::maths::Vec2(x, y);
+	}
+
+	spright_engine::maths::Vec2 TileLayer::getBottomLeftPos(int tileIndex)
+	{
+		int y = tileIndex / m_TileBounds.getWidth();
+		int x = tileIndex % m_TileBounds.getWidth();
+
+		return spright_engine::maths::Vec2(x * m_TileSize + m_Dimensions.left, y * m_TileSize + m_Dimensions.bottom);
 	}
 
 	// TODO: check if it works for both even and odd number of tiles
 	maths::Vec2Int TileLayer::getTilePos(maths::Vec2 pos) {
 		maths::Vec2 adjustedPos(pos.x - m_Dimensions.left, pos.y - m_Dimensions.bottom);
-		float tileSize = m_TileSize * m_Camera->getZoom();
+		float tileSize = m_TileSize;
 		int tileX = (int)(adjustedPos.x / tileSize);
 		int tileY = (int)(adjustedPos.y / tileSize);
 
@@ -43,7 +52,7 @@ namespace spright_engine { namespace graphics {
 
 	maths::Vec2 TileLayer::getWorldPos(int x, int y)
 	{
-		float tileSize = m_TileSize * m_Camera->getZoom();
+		float tileSize = m_TileSize;
 
 		float worldX = x * tileSize + tileSize / 2 + m_Dimensions.left;
 		float worldY = y * tileSize + tileSize / 2 + m_Dimensions.bottom;
@@ -99,6 +108,13 @@ namespace spright_engine { namespace graphics {
 		return m_TileBounds.getWidth() * tileY + tileX;
 	}
 
+	int TileLayer::getTileIndex(maths::Vec2 worldPos)
+	{
+		maths::Vec2Int tilePos = getTilePos(worldPos);
+
+		return getTileIndex(tilePos.x, tilePos.y);
+	}
+
 	const BoundsInt& TileLayer::getTileBounds() const
 	{
 		return m_TileBounds;
@@ -106,6 +122,11 @@ namespace spright_engine { namespace graphics {
 
 	Renderable2D* TileLayer::getAtTileIndex(int tilePos)
 	{
+		for (int i = 0; i < m_IndexSize; i++) {
+			if (m_TileIndexes[i] != nullptr) {
+				int a = 1;
+			}
+		}
 		return m_TileIndexes[tilePos];
 	}
 
