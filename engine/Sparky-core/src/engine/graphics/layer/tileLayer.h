@@ -27,6 +27,7 @@ namespace spright_engine { namespace graphics {
 
 		// TODO: find a better name
 		spright_engine::maths::Vec2 getBottomLeftPos(spright_engine::maths::Vec2 pointer);
+		spright_engine::maths::Vec2 getBottomLeftPos(int tileIndex);
 		maths::Vec2Int getTilePos(maths::Vec2 pos);
 		maths::Vec2 getWorldPos(int x, int y);
 
@@ -35,6 +36,7 @@ namespace spright_engine { namespace graphics {
 		virtual void add(Renderable2D* renderable);
 		Renderable2D* getAtTileIndex(int tileIndex);
 		int getTileIndex(int tileX, int tileY);
+		int getTileIndex(maths::Vec2 worldPos);
 		const BoundsInt& getTileBounds() const;
 
 		inline float getTileSize() const

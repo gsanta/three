@@ -39,6 +39,8 @@ namespace spright_engine { namespace graphics {
 			return m_Center2D;
 		}
 
+		spright_engine::maths::Vec2 screenToModel(maths::Vec2 screen);
+
 		inline float getZoom() {
 			return m_Zoom;
 		}

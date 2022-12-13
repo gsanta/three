@@ -19,7 +19,7 @@ const ColorPicker = observer(({ editorStore }: ColorPickerProps) => {
   return (
     <Popover placement="right">
       <PopoverTrigger>
-        <Button iconName="BiColorFill" />
+        <Button iconName="BiFontColor" />
       </PopoverTrigger>
       <PopoverContent width="250px">
         <PopoverArrow />
