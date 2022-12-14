@@ -23,14 +23,18 @@ namespace spright_engine {
 		}
 #endif
 
+		maths::Vec3 Sprite::getPosition() {
+			return m_Position;
+		}
+
 		void Sprite::setSize(spright_engine::maths::Vec2 size)
 		{
 			this->m_Size = size;
 		}
 
-		void Sprite::setPosition(spright_engine::maths::Vec3 position)
+		void Sprite::setPosition(spright_engine::maths::Vec2 position)
 		{
-			this->m_Position = position;
+			this->m_Position = maths::Vec3(position.x, position.y, m_Position.z);
 		}
 
 		bool Sprite::contains(spright_engine::maths::Vec2 point)

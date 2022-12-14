@@ -44,7 +44,7 @@ void addActiveTool(std::string toolName)
 {
 	if (editor != nullptr)
 	{
-		editor->getToolHandler().addActiveTool(toolName);
+		editor->getToolHandler().setSelectedTool(toolName);
 	}
 }
 

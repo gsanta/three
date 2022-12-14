@@ -19,6 +19,7 @@ namespace spright_app { namespace tool {
 		tools = toolHandler.tools;
 		m_ActiveTools = toolHandler.m_ActiveTools;
 		m_EditorConfig = toolHandler.m_EditorConfig;
+		m_SelectedTool = toolHandler.m_SelectedTool;
 
 		m_Window->getInputHandler()->registerListener(this);
 
@@ -75,12 +76,28 @@ namespace spright_app { namespace tool {
 
 	void ToolHandler::onKeyChange(int key, bool isPressed)
 	{
-		if (key == GLFW_KEY_B && isPressed) {
-			setSelectedTool("brush");
-		}
-		else if (key == GLFW_KEY_P && isPressed) {
-			setSelectedTool("paint_bucket");
-		}
+		//if (!isPressed) {
+		//	return;
+		//}
+
+		//if (key == GLFW_KEY_B) {
+		//	setSelectedTool("brush");
+		//}
+		//else if (key == GLFW_KEY_P) {
+		//	setSelectedTool("paint_bucket");
+		//}
+		//else if (key == GLFW_KEY_S) {
+		//	setSelectedTool("select");
+		//}
+		//else if (key == GLFW_KEY_1) {
+		//	m_Services->getColorPalette()->color = COLOR_RED;
+		//}
+		//else if (key == GLFW_KEY_2) {
+		//	m_Services->getColorPalette()->color = COLOR_GREEN;
+		//}
+		//else if (key == GLFW_KEY_3) {
+		//	m_Services->getColorPalette()->color = COLOR_BLUE;
+		//}
 	}
 
 	void ToolHandler::addTool(Tool* tool)

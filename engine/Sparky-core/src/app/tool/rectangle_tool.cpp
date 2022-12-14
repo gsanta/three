@@ -42,7 +42,7 @@ namespace spright_app { namespace tool {
 			float width = pointerInfo.curr.x - pointerInfo.down.x;
 			float height = pointerInfo.curr.y - pointerInfo.down.y;
 			std::cout << width << std::endl;
-			this->m_Rect->setPosition(spright_engine::maths::Vec3(left, bottom, 0));
+			this->m_Rect->setPosition(spright_engine::maths::Vec2(left, bottom));
 			this->m_Rect->setSize(spright_engine::maths::Vec2(right - left, top - bottom));
 		}
 	}

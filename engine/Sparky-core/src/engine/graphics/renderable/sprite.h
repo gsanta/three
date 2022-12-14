@@ -19,8 +19,9 @@ namespace spright_engine { namespace graphics {
 		Sprite(float x, float y, float width, float height, spright_engine::graphics::Texture * texture);
 #endif
 
+		maths::Vec3 getPosition();
 		void setSize(spright_engine::maths::Vec2 size);
-		void setPosition(spright_engine::maths::Vec3 position);
+		void setPosition(spright_engine::maths::Vec2 position);
 		bool contains(spright_engine::maths::Vec2 point);
 
 		virtual nlohmann::json getJson();
