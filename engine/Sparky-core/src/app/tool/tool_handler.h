@@ -4,6 +4,7 @@
 #include "brush_tool.h"
 #include "rectangle_tool.h"
 #include "erase_tool.h"
+#include "../service/services.h"
 #include "../../engine/system/window/window.h"
 #include "../../engine/system/window/input_listener.h"
 #include "../editor_config.h"
