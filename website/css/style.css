@@ -2,6 +2,14 @@
 :root {
   --orange-1: hsla(47, 55%, 64%, 0.8);
   --orange-2: hsla(44, 86%, 44%, 0.8);
+  --grey-light-1: #f7f7f7;
+  --color-primary-dark: rgb(241, 123, 25);
+  --color-primary-light: rgb(246, 179, 124);
+  --color-black: rgb(0, 0, 0);
+  --color-white: rgb(255, 255, 255);
+
+  --size-gutter-vertical: 2rem;
+  --size-gutter-horizontal: 1rem;
 }
 
 * {
@@ -99,4 +107,123 @@ body {
     opacity: 1;
     transform: translateX(0);
   }
+}
+
+/* Utilities */
+
+.u-center-text {
+  text-align: center;
+}
+
+.u-margin-bottom-big {
+  margin-bottom: 6rem;
+}
+
+.u-margin-bottom-small {
+  margin-bottom: 1rem;
+}
+
+.btn-text {
+  color: var(--color-primary-dark);
+  display: inline-block;
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-primary-dark);
+  padding: 3px;
+  transition: all .2s;
+}
+
+.btn-text:hover {
+  background-color: var(--color-primary-dark);
+  color: white;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, .15);
+  transform: translateY(-3px);
+}
+
+.btn-text:active {
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, .15);
+  transform: translateY(0);
+}
+
+/* About section */
+
+.section-about {
+  background-color: var(--grey-light-1);
+  padding: 25rem 0;
+  margin-top: -25vh;
+}
+
+.heading-secondary {
+  font-size: 2rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  display: inline-block;
+  background-image: linear-gradient(to right, var(--color-primary-light), var(--color-primary-dark));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  letter-spacing: 2px;
+  transition: all .2s;
+}
+
+.heading-secondary:hover {
+  transform: skewY(2deg) skewX(15deg) scale(1.1);
+  text-shadow: 0.2rem 0.5rem 1rem rgba(0, 0, 0, .2);
+}
+
+.heading-tertiary {
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.paragraph:not(:last-child) {
+  margin-bottom: 2.5rem;
+}
+
+/* Grid */
+
+.row {
+  max-width: 71rem;
+  margin: 0 auto;
+}
+
+.row::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.row:not(:last-child) {
+  margin-bottom: var(--size-gutter-vertical);
+}
+
+[class^="col-"] {
+  float: left;
+}
+
+.col-1-of-2 {
+  width: calc((100% - var(--size-gutter-horizontal)) / 2);
+}
+
+[class^="col-"]:not(:last-child) {
+  margin-right: var(--size-gutter-horizontal);
+}
+
+.col-1-of-3 {
+  width: calc((100% - 2 * var(--size-gutter-horizontal)) / 3);
+}
+
+.col-2-of-3 {
+  width: calc((100% - 2 * var(--size-gutter-horizontal)) / 3 * 2 + var(--size-gutter-horizontal));
+}
+
+.col-1-of-4 {
+  width: calc((100% - 3 * var(--size-gutter-horizontal)) / 4);
+}
+
+.col-2-of-4 {
+  width: calc((100% - 3 * var(--size-gutter-horizontal)) / 4 * 2 + var(--size-gutter-horizontal));
+}
+
+.col-3-of-4 {
+  width: calc((100% - 3 * var(--size-gutter-horizontal)) / 4 * 3 + 2 * var(--size-gutter-horizontal));
 }
