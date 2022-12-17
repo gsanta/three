@@ -8,6 +8,7 @@
 #include "../../engine/system/window/window.h"
 #include "../../engine/system/window/input_listener.h"
 #include "../editor_config.h"
+#include "../service/services.h"
 
 
 namespace spright_app { namespace tool {
@@ -22,9 +23,10 @@ namespace spright_app { namespace tool {
 		Tool* m_SelectedTool;
 		PointerInfo m_pointerInfo;
 		EditorConfig m_EditorConfig;
+		Services* m_Services;
 	public:
 		ToolHandler();
-		ToolHandler(spright_engine::system::Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig);
+		ToolHandler(spright_engine::system::Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services);
 		~ToolHandler();
 
 		ToolHandler& operator=(const ToolHandler& toolHandler);

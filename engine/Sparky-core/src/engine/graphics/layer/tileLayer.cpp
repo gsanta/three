@@ -90,17 +90,25 @@ namespace spright_engine { namespace graphics {
 		}
 	}
 
-	void TileLayer::add(Renderable2D* renderable)
+	void TileLayer::add(Sprite* sprite)
 	{
-		Layer::add(renderable);
+		Layer::add(sprite);
 
-		maths::Vec2 pos = renderable->getBounds()->getCenter();
+		maths::Vec2 pos = sprite->getBounds()->getCenter();
 		maths::Vec2Int tilePos = getTilePos(pos);
 
 		int index = m_TileBounds.getWidth() * tilePos.y + tilePos.x;
 		if (m_IndexSize > index) {
-			m_TileIndexes[index] = renderable;
+			m_TileIndexes[index] = sprite;
+			sprite->setTileIndex(index);
 		}
+	}
+
+	void TileLayer::updateTileIndex(int oldIndex, int newIndex) {
+		Sprite* sprite = dynamic_cast<Sprite*>(getAtTileIndex(oldIndex));
+		sprite->setTileIndex(newIndex);
+		m_TileIndexes[oldIndex] = nullptr;
+		m_TileIndexes[newIndex] = sprite;
 	}
 
 	int TileLayer::getTileIndex(int tileX, int tileY)

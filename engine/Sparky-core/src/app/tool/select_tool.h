@@ -20,6 +20,7 @@ namespace spright_app {
 		vector<Vec2> m_OrigPositions;
 
 		float m_DashSize = 0.2f;
+		float m_NoMovementTolerance = 0.1f;
 
 	public:
 		SelectTool(DocumentHandler* documentHandler, EventHandler* eventHandler);
@@ -27,8 +28,9 @@ namespace spright_app {
 		void pointerUp(tool::PointerInfo& pointerInfo) override;
 		void pointerMove(tool::PointerInfo& pointerInfo) override;
 	private:
-		void updateSelectionBox(tool::PointerInfo& pointerInfo);
+		void updateSelectionBox(Vec2 bottomLeft, Vec2 topRight);
 		void makeSelection(tool::PointerInfo& pointerInfo);
+		void makePointSelection(tool::PointerInfo& pointerInfo);
 		void moveSelection(tool::PointerInfo& pointerInfo);
 	};
 }

@@ -33,7 +33,8 @@ namespace spright_engine { namespace graphics {
 
 		virtual nlohmann::json getJson() override;
 		virtual void setJson(std::string json);
-		virtual void add(Renderable2D* renderable);
+		virtual void add(Sprite* sprite);
+		void updateTileIndex(int oldIndex, int newIndex);
 		Renderable2D* getAtTileIndex(int tileIndex);
 		int getTileIndex(int tileX, int tileY);
 		int getTileIndex(maths::Vec2 worldPos);

@@ -13,7 +13,12 @@ namespace spright_app {
 
 	void SelectTool::pointerUp(tool::PointerInfo& pointerInfo)
 	{
-		makeSelection(pointerInfo);
+		if (Vec2::distance(pointerInfo.down, pointerInfo.curr) < m_NoMovementTolerance) {
+			makePointSelection(pointerInfo);
+		}
+		else {
+			makeSelection(pointerInfo);
+		}
 	}
 
 	void SelectTool::pointerMove(tool::PointerInfo& pointerInfo)
@@ -26,11 +31,20 @@ namespace spright_app {
 			moveSelection(pointerInfo);
 		}
 		else {
-			updateSelectionBox(pointerInfo);
+			Document* document = this->m_DocumentHandler->getActiveDocument();
+
+			Vec2 down = document->getCamera()->screenToModel(pointerInfo.down);
+			Vec2 curr = document->getCamera()->screenToModel(pointerInfo.curr);
+			float startX = down.x < curr.x ? down.x : curr.x;
+			float endX = down.x < curr.x ? curr.x : down.x;
+			float startY = down.y < curr.y ? down.y : curr.y;
+			float endY = down.y < curr.y ? curr.y : down.y;
+
+			updateSelectionBox(Vec2(startX, startY), Vec2(endX, endY));
 		}
 	}
 
-	void SelectTool::updateSelectionBox(tool::PointerInfo& pointerInfo) {
+	void SelectTool::updateSelectionBox(Vec2 bottomLeft, Vec2 topRight) {
 		Document* document = this->m_DocumentHandler->getActiveDocument();
 		auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayer(DEFAULT_TEMP_LAYER_ID);
 		tempLayer->clear();
@@ -41,17 +55,9 @@ namespace spright_app {
 
 		m_SelectionSprites.clear();
 
-		Vec2 down = document->getCamera()->screenToModel(pointerInfo.down);
-		Vec2 curr = document->getCamera()->screenToModel(pointerInfo.curr);
-
-		float startX = down.x < curr.x ? down.x : curr.x;
-		float endX = down.x < curr.x ? curr.x : down.x;
-		float startY = down.y < curr.y ? down.y : curr.y;
-		float endY = down.y < curr.y ? curr.y : down.y;
-
-		for (float x = startX; x < endX; x += 2 * m_DashSize) {
-			spright_engine::graphics::Sprite* sprite = new spright_engine::graphics::Sprite(x, startY, m_DashSize, 0.1f, 0xff0000ff);
-			spright_engine::graphics::Sprite* sprite2 = new spright_engine::graphics::Sprite(x, endY, m_DashSize, 0.1f, 0xff0000ff);
+		for (float x = bottomLeft.x; x < topRight.x; x += 2 * m_DashSize) {
+			spright_engine::graphics::Sprite* sprite = new spright_engine::graphics::Sprite(x, bottomLeft.y, m_DashSize, 0.1f, 0xff0000ff);
+			spright_engine::graphics::Sprite* sprite2 = new spright_engine::graphics::Sprite(x, topRight.y, m_DashSize, 0.1f, 0xff0000ff);
 
 			tempLayer->add(sprite);
 			tempLayer->add(sprite2);
@@ -60,9 +66,9 @@ namespace spright_app {
 			m_SelectionSprites.push_back(sprite2);
 		}
 
-		for (float y = startY; y < endY; y += 2 * m_DashSize) {
-			spright_engine::graphics::Sprite* sprite = new spright_engine::graphics::Sprite(startX, y, m_DashSize, 0.1f, 0xff0000ff);
-			spright_engine::graphics::Sprite* sprite2 = new spright_engine::graphics::Sprite(endX, y, m_DashSize, 0.1f, 0xff0000ff);
+		for (float y = bottomLeft.y; y < topRight.y; y += 2 * m_DashSize) {
+			spright_engine::graphics::Sprite* sprite = new spright_engine::graphics::Sprite(bottomLeft.x, y, m_DashSize, 0.1f, 0xff0000ff);
+			spright_engine::graphics::Sprite* sprite2 = new spright_engine::graphics::Sprite(topRight.x, y, m_DashSize, 0.1f, 0xff0000ff);
 
 			tempLayer->add(sprite);
 			tempLayer->add(sprite2);
@@ -121,7 +127,30 @@ namespace spright_app {
 			Vec3 position = sprite->getPosition();
 
 			sprite->setPosition(Vec2(position.x, position.y) + finalMove);
+
+			Vec2Int tilePos = tileLayer->getTilePos(Vec2(position.x, position.y));
+			int newTileIndex = tileLayer->getTileIndex(tilePos.x, tilePos.y);
+			tileLayer->updateTileIndex(sprite->getTileIndex(), newTileIndex);
 		}
 	}
 
+	void SelectTool::makePointSelection(tool::PointerInfo& pointerInfo) {
+		TileLayer* tileLayer = dynamic_cast<TileLayer*>(m_DocumentHandler->getActiveDocument()->getActiveLayer());
+		Camera* camera = m_DocumentHandler->getActiveDocument()->getCamera();
+		Vec2 model = camera->screenToModel(pointerInfo.curr);
+
+		Vec2Int tilePos = tileLayer->getTilePos(model);
+		int tileIndex = tileLayer->getTileIndex(tilePos.x, tilePos.y);
+		Renderable2D* renderable = tileLayer->getAtTileIndex(tileIndex);
+
+		if (renderable != nullptr) {
+			Sprite* sprite = static_cast<Sprite*>(renderable);
+			m_Data.push_back(sprite);
+			m_OrigPositions.push_back(Vec2(sprite->getPosition().x, sprite->getPosition().y));
+			
+			Vec2 spritePos = sprite->getPosition2d();
+			float tileSize = tileLayer->getTileSize();
+			updateSelectionBox(Vec2(spritePos.x, spritePos.y), Vec2(spritePos.x + tileSize, spritePos.y + tileSize));
+		}
+	}
 }

@@ -64,6 +64,12 @@ namespace spright_engine { namespace maths {
 		return !(*this == other);
 	}
 
+	float Vec2::distance(Vec2& left, Vec2& right) {
+		float x = left.x - right.x;
+		float y = left.y - right.y;
+		return sqrt(x * x + y * y);
+	}
+
 	Vec2 operator+(Vec2 left, const Vec2& right)
 	{
 		return left.add(right);
