@@ -29,5 +29,7 @@ namespace spright_engine { namespace maths {
 		Vec2& operator-=(const Vec2& other);
 		Vec2& operator*=(const Vec2& other);
 		Vec2& operator/=(const Vec2& other);
+
+		static float distance(Vec2& left, Vec2& right);
 	};
 }}

@@ -1,3 +1,4 @@
+#pragma once
 #include "tool.h"
 #include "pointer_info.h"
 #include "../document/document_handler.h"

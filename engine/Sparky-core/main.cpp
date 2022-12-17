@@ -44,7 +44,7 @@ void addActiveTool(std::string toolName)
 {
 	if (editor != nullptr)
 	{
-		editor->getToolHandler().setSelectedTool(toolName);
+		editor->getToolHandler()->setSelectedTool(toolName);
 	}
 }
 
@@ -52,7 +52,7 @@ void removeActiveTool(std::string toolName)
 {
 	if (editor != nullptr)
 	{
-		editor->getToolHandler().removeActiveTool(toolName);
+		editor->getToolHandler()->removeActiveTool(toolName);
 	}
 }
 
@@ -93,7 +93,7 @@ void setActiveLayer(std::string id) {
 }
 
 void setBrushSize(int size) {
-	spright_app::tool::BrushTool* brushTool = dynamic_cast<spright_app::tool::BrushTool*>(editor->getToolHandler().getTool("brush"));
+	spright_app::tool::BrushTool* brushTool = dynamic_cast<spright_app::tool::BrushTool*>(editor->getToolHandler()->getTool("brush"));
 
 	brushTool->setSize(size);
 }

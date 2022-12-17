@@ -6,11 +6,7 @@ namespace spright_engine {
 			: m_Position(spright_engine::maths::Vec3(x, y, 0)), m_Size(spright_engine::maths::Vec2(width, height)), spright_engine::graphics::Renderable2D(color)
 		{
 			m_bounds = new spright_engine::graphics::Bounds();
-			m_bounds = new spright_engine::graphics::Bounds();
-			m_bounds->minX = x - width / 2;
-			m_bounds->maxX = x + width / 2;
-			m_bounds->minY = y - width / 2;
-			m_bounds->maxY = y + width / 2;
+			updateBounds(x, y, width, height);
 
 			m_VertexCount = 4;
 		}
@@ -23,8 +19,20 @@ namespace spright_engine {
 		}
 #endif
 
+		int Sprite::getTileIndex() {
+			return m_TileIndex;
+		}
+
+		void Sprite::setTileIndex(int index) {
+			m_TileIndex = index;
+		}
+
 		maths::Vec3 Sprite::getPosition() {
 			return m_Position;
+		}
+
+		maths::Vec2 Sprite::getPosition2d() {
+			return maths::Vec2(m_Position.x, m_Position.y);
 		}
 
 		void Sprite::setSize(spright_engine::maths::Vec2 size)
@@ -35,6 +43,7 @@ namespace spright_engine {
 		void Sprite::setPosition(spright_engine::maths::Vec2 position)
 		{
 			this->m_Position = maths::Vec3(position.x, position.y, m_Position.z);
+			updateBounds(position.x, position.y, m_bounds->getWidth(), m_bounds->getHeight());
 		}
 
 		bool Sprite::contains(spright_engine::maths::Vec2 point)
@@ -84,6 +93,13 @@ namespace spright_engine {
 		buffer++;
 
 		renderer->setIndexCount(renderer->getIndexCount() + 6);
+	}
+
+	void Sprite::updateBounds(float x, float y, float width, float height) {
+		m_bounds->minX = x - width / 2;
+		m_bounds->maxX = x + width / 2;
+		m_bounds->minY = y - width / 2;
+		m_bounds->maxY = y + width / 2;
 	}
 } }
 
