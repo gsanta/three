@@ -4,11 +4,19 @@ namespace spright_app {
 
 	SelectTool::SelectTool(DocumentHandler* documentHandler, EventHandler* eventHandler) : m_DocumentHandler(documentHandler), m_EventHandler(eventHandler), Tool("select")
 	{
-
+		m_SelectionBox = new SelectionBox(m_DocumentHandler);
 	}
 
 	void SelectTool::pointerDown(tool::PointerInfo& pointerInfo)
 	{
+		Document* document = this->m_DocumentHandler->getActiveDocument();
+		Vec2 curr = document->getCamera()->screenToModel(pointerInfo.curr);
+
+		m_IsMove = m_SelectionBox->isInsideSelection(curr);
+
+		if (!m_IsMove) {
+			m_SelectionBox->start(curr);
+		}
 	}
 
 	void SelectTool::pointerUp(tool::PointerInfo& pointerInfo)
@@ -19,6 +27,8 @@ namespace spright_app {
 		else {
 			makeSelection(pointerInfo);
 		}
+
+		m_IsMove = false;
 	}
 
 	void SelectTool::pointerMove(tool::PointerInfo& pointerInfo)
@@ -27,56 +37,62 @@ namespace spright_app {
 			return;
 		}
 
-		if (m_Data.size() > 0) {
+		Document* document = this->m_DocumentHandler->getActiveDocument();
+		Vec2 curr = document->getCamera()->screenToModel(pointerInfo.curr);
+		Vec2 prev = document->getCamera()->screenToModel(pointerInfo.prev);
+
+
+		if (m_IsMove) {
 			moveSelection(pointerInfo);
+			m_SelectionBox->move(curr - prev);
 		}
 		else {
-			Document* document = this->m_DocumentHandler->getActiveDocument();
 
-			Vec2 down = document->getCamera()->screenToModel(pointerInfo.down);
-			Vec2 curr = document->getCamera()->screenToModel(pointerInfo.curr);
-			float startX = down.x < curr.x ? down.x : curr.x;
-			float endX = down.x < curr.x ? curr.x : down.x;
-			float startY = down.y < curr.y ? down.y : curr.y;
-			float endY = down.y < curr.y ? curr.y : down.y;
+			//Vec2 down = document->getCamera()->screenToModel(pointerInfo.down);
+			//float startX = down.x < curr.x ? down.x : curr.x;
+			//float endX = down.x < curr.x ? curr.x : down.x;
+			//float startY = down.y < curr.y ? down.y : curr.y;
+			//float endY = down.y < curr.y ? curr.y : down.y;
 
-			updateSelectionBox(Vec2(startX, startY), Vec2(endX, endY));
+			m_SelectionBox->update(curr);
+
+			//updateSelectionBox(Vec2(startX, startY), Vec2(endX, endY));
 		}
 	}
 
-	void SelectTool::updateSelectionBox(Vec2 bottomLeft, Vec2 topRight) {
-		Document* document = this->m_DocumentHandler->getActiveDocument();
-		auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayer(DEFAULT_TEMP_LAYER_ID);
-		tempLayer->clear();
+	//void SelectTool::updateSelectionBox(Vec2 bottomLeft, Vec2 topRight) {
+	//	Document* document = this->m_DocumentHandler->getActiveDocument();
+	//	auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayer(DEFAULT_TEMP_LAYER_ID);
+	//	tempLayer->clear();
 
-		for (spright_engine::graphics::Sprite* sprite : m_SelectionSprites) {
-			delete sprite;
-		}
+	//	for (spright_engine::graphics::Sprite* sprite : m_SelectionSprites) {
+	//		delete sprite;
+	//	}
 
-		m_SelectionSprites.clear();
+	//	m_SelectionSprites.clear();
 
-		for (float x = bottomLeft.x; x < topRight.x; x += 2 * m_DashSize) {
-			spright_engine::graphics::Sprite* sprite = new spright_engine::graphics::Sprite(x, bottomLeft.y, m_DashSize, 0.1f, 0xff0000ff);
-			spright_engine::graphics::Sprite* sprite2 = new spright_engine::graphics::Sprite(x, topRight.y, m_DashSize, 0.1f, 0xff0000ff);
+	//	for (float x = bottomLeft.x; x < topRight.x; x += 2 * m_DashSize) {
+	//		spright_engine::graphics::Sprite* sprite = new spright_engine::graphics::Sprite(x, bottomLeft.y, m_DashSize, 0.1f, 0xff0000ff);
+	//		spright_engine::graphics::Sprite* sprite2 = new spright_engine::graphics::Sprite(x, topRight.y, m_DashSize, 0.1f, 0xff0000ff);
 
-			tempLayer->add(sprite);
-			tempLayer->add(sprite2);
+	//		tempLayer->add(sprite);
+	//		tempLayer->add(sprite2);
 
-			m_SelectionSprites.push_back(sprite);
-			m_SelectionSprites.push_back(sprite2);
-		}
+	//		m_SelectionSprites.push_back(sprite);
+	//		m_SelectionSprites.push_back(sprite2);
+	//	}
 
-		for (float y = bottomLeft.y; y < topRight.y; y += 2 * m_DashSize) {
-			spright_engine::graphics::Sprite* sprite = new spright_engine::graphics::Sprite(bottomLeft.x, y, m_DashSize, 0.1f, 0xff0000ff);
-			spright_engine::graphics::Sprite* sprite2 = new spright_engine::graphics::Sprite(topRight.x, y, m_DashSize, 0.1f, 0xff0000ff);
+	//	for (float y = bottomLeft.y; y < topRight.y; y += 2 * m_DashSize) {
+	//		spright_engine::graphics::Sprite* sprite = new spright_engine::graphics::Sprite(bottomLeft.x, y, m_DashSize, 0.1f, 0xff0000ff);
+	//		spright_engine::graphics::Sprite* sprite2 = new spright_engine::graphics::Sprite(topRight.x, y, m_DashSize, 0.1f, 0xff0000ff);
 
-			tempLayer->add(sprite);
-			tempLayer->add(sprite2);
+	//		tempLayer->add(sprite);
+	//		tempLayer->add(sprite2);
 
-			m_SelectionSprites.push_back(sprite);
-			m_SelectionSprites.push_back(sprite2);
-		}
-	}
+	//		m_SelectionSprites.push_back(sprite);
+	//		m_SelectionSprites.push_back(sprite2);
+	//	}
+	//}
 
 	void SelectTool::makeSelection(tool::PointerInfo& pointerInfo) {
 		m_Data.clear();
@@ -150,7 +166,7 @@ namespace spright_app {
 			
 			Vec2 spritePos = sprite->getPosition2d();
 			float tileSize = tileLayer->getTileSize();
-			updateSelectionBox(Vec2(spritePos.x, spritePos.y), Vec2(spritePos.x + tileSize, spritePos.y + tileSize));
+			//updateSelectionBox(Vec2(spritePos.x, spritePos.y), Vec2(spritePos.x + tileSize, spritePos.y + tileSize));
 		}
 	}
 }

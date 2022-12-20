@@ -5,8 +5,7 @@ namespace spright_engine {
 		Sprite::Sprite(float x, float y, float width, float height, unsigned int  color)
 			: m_Position(spright_engine::maths::Vec3(x, y, 0)), m_Size(spright_engine::maths::Vec2(width, height)), spright_engine::graphics::Renderable2D(color)
 		{
-			m_bounds = new spright_engine::graphics::Bounds();
-			updateBounds(x, y, width, height);
+			m_bounds = new spright_engine::graphics::Bounds(x, y, width, height);
 
 			m_VertexCount = 4;
 		}
@@ -43,13 +42,20 @@ namespace spright_engine {
 		void Sprite::setPosition(spright_engine::maths::Vec2 position)
 		{
 			this->m_Position = maths::Vec3(position.x, position.y, m_Position.z);
-			updateBounds(position.x, position.y, m_bounds->getWidth(), m_bounds->getHeight());
+			updateBounds();
 		}
 
 		bool Sprite::contains(spright_engine::maths::Vec2 point)
 		{
 			const Bounds* bounds = getBounds();
 			return point.x > bounds->minX && point.x < bounds->maxX&& point.y > bounds->minY && point.y < bounds->maxY;
+		}
+
+		void Sprite::translate(Vec2 vec)
+		{
+			this->m_Position.x += vec.x;
+			this->m_Position.y += vec.y;
+			updateBounds();
 		}
 
 	nlohmann::json Sprite::getJson()
@@ -95,11 +101,11 @@ namespace spright_engine {
 		renderer->setIndexCount(renderer->getIndexCount() + 6);
 	}
 
-	void Sprite::updateBounds(float x, float y, float width, float height) {
-		m_bounds->minX = x - width / 2;
-		m_bounds->maxX = x + width / 2;
-		m_bounds->minY = y - width / 2;
-		m_bounds->maxY = y + width / 2;
+	void Sprite::updateBounds() {
+		m_bounds->minX = m_Position.x - m_bounds->getWidth() / 2;
+		m_bounds->maxX = m_Position.x + m_bounds->getWidth() / 2;
+		m_bounds->minY = m_Position.y - m_bounds->getHeight() / 2;
+		m_bounds->maxY = m_Position.y + m_bounds->getHeight() / 2;
 	}
 } }
 
