@@ -12,6 +12,8 @@ namespace spright_engine { namespace graphics {
 		float minY;
 		float maxY;
 
+		Bounds(float bottomLeftX, float bottomLeftY, float width, float height);
+
 		maths::Vec2 getCenter() const;
 
 		float getWidth() const;

@@ -169,9 +169,11 @@
   <ItemGroup>
     <ClCompile Include="src\app\core\canvas\canvas_listener_handler.cpp" />
     <ClCompile Include="src\app\document\checkerboard.cpp" />
+    <ClCompile Include="src\app\model\rectangle.cpp" />
     <ClCompile Include="src\app\tool\color_picker_tool.cpp" />
     <ClCompile Include="src\app\tool\paint_bucket\flood_fill_range.cpp" />
     <ClCompile Include="src\app\tool\paint_bucket\queue_linear_flood_fill.cpp" />
+    <ClCompile Include="src\app\tool\select_tool\selection_box.cpp" />
     <ClCompile Include="src\engine\graphics\layer\dimensions.cpp" />
     <ClCompile Include="src\app\document\document.cpp" />
     <ClCompile Include="src\app\document\document_handler.cpp" />
@@ -189,7 +191,7 @@
     <ClCompile Include="src\app\tool\pan_tool.cpp" />
     <ClCompile Include="src\app\tool\pointer_info.cpp" />
     <ClCompile Include="src\app\tool\rectangle_tool.cpp" />
-    <ClCompile Include="src\app\tool\select_tool.cpp" />
+    <ClCompile Include="src\app\tool\select_tool\select_tool.cpp" />
     <ClCompile Include="src\app\tool\tool.cpp" />
     <ClCompile Include="src\app\tool\zoom_tool.cpp" />
     <ClCompile Include="src\engine\graphics\camera\camera.cpp" />
@@ -223,10 +225,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\app\core\canvas\canvas_listener.h" />
-    <ClInclude Include="src\app\base\point.h" />
+    <ClInclude Include="src\app\model\point.h" />
     <ClInclude Include="src\app\core\canvas\canvas_listener_handler.h" />
+    <ClInclude Include="src\app\model\rectangle.h" />
     <ClInclude Include="src\app\tool\color_picker_tool.h" />
     <ClInclude Include="src\app\tool\paint_bucket\queue_linear_flood_fill.h" />
+    <ClInclude Include="src\app\tool\select_tool\selection_box.h" />
     <ClInclude Include="src\engine\graphics\layer\dimensions.h" />
     <ClInclude Include="src\app\document\document.h" />
     <ClInclude Include="src\app\document\document_handler.h" />
@@ -249,7 +253,7 @@
     <ClInclude Include="src\app\tool\pointer_info.h" />
     <ClInclude Include="src\app\tool\rectangle_tool.h" />
     <ClInclude Include="src\app\tool\pan_tool.h" />
-    <ClInclude Include="src\app\tool\select_tool.h" />
+    <ClInclude Include="src\app\tool\select_tool\select_tool.h" />
     <ClInclude Include="src\app\tool\zoom_tool.h" />
     <ClInclude Include="src\engine\graphics\camera\camera.h" />
     <ClInclude Include="src\engine\graphics\camera\ortho_projection_info.h" />

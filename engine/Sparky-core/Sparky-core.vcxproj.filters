@@ -180,7 +180,7 @@
     <ClCompile Include="src\app\tool\zoom_tool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\app\tool\select_tool.cpp">
+    <ClCompile Include="src\app\tool\select_tool\select_tool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\app\tool\paint_bucket\flood_fill_range_queue.cpp">
@@ -202,6 +202,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\app\tool\color_picker_tool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\tool\select_tool\selection_box.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\model\rectangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -299,7 +305,7 @@
     <ClInclude Include="src\app\tool\rectangle_tool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\app\base\point.h">
+    <ClInclude Include="src\app\model\point.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\app\tool\erase_tool.h">
@@ -374,7 +380,7 @@
     <ClInclude Include="src\app\tool\zoom_tool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\app\tool\select_tool.h">
+    <ClInclude Include="src\app\tool\select_tool\select_tool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\app\tool\paint_bucket\flood_fill_range_queue.h">
@@ -396,6 +402,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\app\tool\color_picker_tool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\tool\select_tool\selection_box.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\model\rectangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

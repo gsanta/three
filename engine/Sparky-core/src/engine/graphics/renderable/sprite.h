@@ -9,30 +9,31 @@ using namespace std::string_literals;
 
 namespace spright_engine { namespace graphics {
 	using namespace spright_engine::graphics;
+	using namespace spright_engine::maths;
 
-	class Sprite : public spright_engine::graphics::Renderable2D {
+	class Sprite : public Renderable2D {
 	private:
-		spright_engine::maths::Vec3 m_Position;
-		spright_engine::maths::Vec2 m_Size;
+		Vec3 m_Position;
+		Vec2 m_Size;
 		int m_TileIndex = -1;
 	public:
 		Sprite(float x, float y, float width, float height, unsigned int color);
 #ifndef SPARKY_EMSCRIPTEN
-		Sprite(float x, float y, float width, float height, spright_engine::graphics::Texture * texture);
+		Sprite(float x, float y, float width, float height, Texture * texture);
 #endif
 
 		maths::Vec3 getPosition();
 		maths::Vec2 getPosition2d();
 		int getTileIndex();
 		void setTileIndex(int tileIndex);
-		void setSize(spright_engine::maths::Vec2 size);
-		void setPosition(spright_engine::maths::Vec2 position);
-		bool contains(spright_engine::maths::Vec2 point);
-
+		void setSize(Vec2 size);
+		void setPosition(Vec2 position);
+		bool contains(Vec2 point);
+		void translate(Vec2 vec);
 		virtual nlohmann::json getJson();
 
-		virtual void submit(spright_engine::graphics::Renderer2D* renderer) const override;
+		virtual void submit(Renderer2D* renderer) const override;
 	private:
-		void updateBounds(float x, float y, float width, float height);
+		void updateBounds();
 	};
 } }
