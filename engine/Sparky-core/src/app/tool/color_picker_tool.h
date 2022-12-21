@@ -4,11 +4,11 @@
 #include "pointer_info.h"
 #include "tool.h"
 
-namespace spright_app {
+namespace spright {
 	using namespace tool;
-	using namespace spright_app::document;
-	using namespace spright_engine::graphics;
-	using namespace spright_engine::maths;
+	using namespace spright::document;
+	using namespace engine::graphics;
+	using namespace engine::maths;
 
 	class ColorPickerTool : public Tool {
 	private:

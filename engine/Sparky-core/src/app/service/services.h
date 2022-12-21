@@ -3,7 +3,7 @@
 #include "core/event/event_handler.h"
 #include "emscripten/em_service.h"
 
-namespace spright_app {
+namespace spright {
 
 	class Services {
 	private:

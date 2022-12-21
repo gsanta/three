@@ -1,6 +1,6 @@
 #include "em_events.h"
 
-namespace spright_app
+namespace spright
 {
 	void EmEvents::dataChange()
 	{

@@ -7,7 +7,7 @@
 #include "../../engine/maths/vec3.h"
 #include "../service/services.h"
 
-namespace spright_app { namespace tool {
+namespace spright { namespace tool {
 
 	using namespace document;
 
@@ -17,7 +17,7 @@ namespace spright_app { namespace tool {
 		EventHandler* m_EventHandler;
 		Services* m_Services;
 		float m_Size = 10;
-		spright_engine::graphics::Sprite* m_Rect = nullptr;
+		engine::graphics::Sprite* m_Rect = nullptr;
 
 	public:
 		RectangleTool(DocumentHandler* documentHandler, Services* services, EventHandler* eventHandler);

@@ -15,7 +15,7 @@
 	#include "../../../engine/graphics/texture/texture.h"
 #endif
 #include "bounds.h"
-namespace spright_engine { namespace graphics {
+namespace engine { namespace graphics {
 	class Renderable2D {
 
 	protected:
@@ -25,10 +25,10 @@ namespace spright_engine { namespace graphics {
 
 		int m_VertexCount;
 		unsigned int m_Color;
-		spright_engine::graphics::Bounds* m_bounds;
-		std::vector<spright_engine::maths::Vec2> m_UV;
+		engine::graphics::Bounds* m_bounds;
+		std::vector<engine::maths::Vec2> m_UV;
 #ifndef SPARKY_EMSCRIPTEN
-		spright_engine::graphics::Texture* m_Texture;
+		engine::graphics::Texture* m_Texture;
 #endif
 	public:
 		Renderable2D(unsigned int color) : m_Color(color)
@@ -38,10 +38,10 @@ namespace spright_engine { namespace graphics {
 
 		virtual ~Renderable2D() {}
 
-		virtual void submit(spright_engine::graphics::Renderer2D* renderer) const = 0;
+		virtual void submit(engine::graphics::Renderer2D* renderer) const = 0;
 
 		inline void setColor(unsigned int color) { m_Color = color; }
-		inline void setColor(const spright_engine:: maths::Vec4& color) {
+		inline void setColor(const engine:: maths::Vec4& color) {
 			int r = (color.x * 255.0f);
 			int g = (color.y * 255.0f);
 			int b = (color.z * 255.0f);
@@ -50,13 +50,13 @@ namespace spright_engine { namespace graphics {
 			m_Color = a << 24 | b << 16 | g << 8 | r;
 		}
 
-		inline const spright_engine::graphics::Bounds* getBounds() const {
+		inline const engine::graphics::Bounds* getBounds() const {
 			return m_bounds;
 		}
 
 		inline int getVertexCount() const { return m_VertexCount; }
 		inline const unsigned int getColor() const { return m_Color; }
-		inline const std::vector<spright_engine::maths::Vec2>& getUV() const { return m_UV; }
+		inline const std::vector<engine::maths::Vec2>& getUV() const { return m_UV; }
 
 		virtual nlohmann::json getJson() = 0;
 #ifdef SPARKY_EMSCRIPTEN
@@ -66,10 +66,10 @@ namespace spright_engine { namespace graphics {
 #endif
 	private:
 		void setUVDefaults() {
-			m_UV.push_back(spright_engine::maths::Vec2(0, 0));
-			m_UV.push_back(spright_engine::maths::Vec2(0, 1));
-			m_UV.push_back(spright_engine::maths::Vec2(1, 1));
-			m_UV.push_back(spright_engine::maths::Vec2(1, 0));
+			m_UV.push_back(engine::maths::Vec2(0, 0));
+			m_UV.push_back(engine::maths::Vec2(0, 1));
+			m_UV.push_back(engine::maths::Vec2(1, 1));
+			m_UV.push_back(engine::maths::Vec2(1, 0));
 		}
 	};
 } }

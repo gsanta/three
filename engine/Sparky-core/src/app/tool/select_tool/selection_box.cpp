@@ -1,6 +1,6 @@
 #include "selection_box.h"
 
-namespace spright_app {
+namespace spright {
 	SelectionBox::SelectionBox(DocumentHandler* documentHandler) : m_DocumentHandler(documentHandler)
 	{
 	}
@@ -31,8 +31,8 @@ namespace spright_app {
 		clearSprites();
 
 		for (float x = bottomLeft.x; x < topRight.x; x += 2 * m_DashSize) {
-			spright_engine::graphics::Sprite* sprite = new spright_engine::graphics::Sprite(x, bottomLeft.y, m_DashSize, 0.1f, 0xff0000ff);
-			spright_engine::graphics::Sprite* sprite2 = new spright_engine::graphics::Sprite(x, topRight.y, m_DashSize, 0.1f, 0xff0000ff);
+			engine::graphics::Sprite* sprite = new engine::graphics::Sprite(x, bottomLeft.y, m_DashSize, 0.1f, 0xff0000ff);
+			engine::graphics::Sprite* sprite2 = new engine::graphics::Sprite(x, topRight.y, m_DashSize, 0.1f, 0xff0000ff);
 
 			tempLayer->add(sprite);
 			tempLayer->add(sprite2);
@@ -42,8 +42,8 @@ namespace spright_app {
 		}
 
 		for (float y = bottomLeft.y; y < topRight.y; y += 2 * m_DashSize) {
-			spright_engine::graphics::Sprite* sprite = new spright_engine::graphics::Sprite(bottomLeft.x, y, m_DashSize, 0.1f, 0xff0000ff);
-			spright_engine::graphics::Sprite* sprite2 = new spright_engine::graphics::Sprite(topRight.x, y, m_DashSize, 0.1f, 0xff0000ff);
+			engine::graphics::Sprite* sprite = new engine::graphics::Sprite(bottomLeft.x, y, m_DashSize, 0.1f, 0xff0000ff);
+			engine::graphics::Sprite* sprite2 = new engine::graphics::Sprite(topRight.x, y, m_DashSize, 0.1f, 0xff0000ff);
 
 			tempLayer->add(sprite);
 			tempLayer->add(sprite2);

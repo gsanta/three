@@ -7,7 +7,7 @@
 #include "../../engine/graphics/camera/ortho_projection_info.h"
 #include "../../engine/graphics/layer/dimensions.h"
 
-namespace spright_app { namespace document {
+namespace spright { namespace document {
 
 	const std::string USER_LAYER_ID_PREFIX("user_layer_");
 	const std::string DEFAULT_TEMP_LAYER_ID("temp_layer_1");
@@ -16,36 +16,36 @@ namespace spright_app { namespace document {
 	class Document
 	{
 	private:
-		//spright_engine::graphics::Layer* m_TempLayer;
-		//spright_engine::graphics::TileLayer* m_BackgroundLayer;
-		//spright_engine::graphics::TileLayer* m_TileLayer;
-		std::vector<spright_engine::graphics::Layer*> m_Layers;
-		std::vector<spright_engine::graphics::Layer*> m_BeforeLayers;
-		std::vector<spright_engine::graphics::Layer*> m_AfterLayers;
+		//engine::graphics::Layer* m_TempLayer;
+		//engine::graphics::TileLayer* m_BackgroundLayer;
+		//engine::graphics::TileLayer* m_TileLayer;
+		std::vector<engine::graphics::Layer*> m_Layers;
+		std::vector<engine::graphics::Layer*> m_BeforeLayers;
+		std::vector<engine::graphics::Layer*> m_AfterLayers;
 
-		spright_engine::graphics::Layer* m_ActiveLayer;
+		engine::graphics::Layer* m_ActiveLayer;
 
-		spright_engine::graphics::Camera* m_Camera;
+		engine::graphics::Camera* m_Camera;
 
 	public:
-		Document(spright_engine::graphics::Dimensions dimensions);
+		Document(engine::graphics::Dimensions dimensions);
 		~Document();
 
-		spright_engine::graphics::Dimensions dimensions;
+		engine::graphics::Dimensions dimensions;
 
-		spright_engine::graphics::Layer* getLayer(std::string id);
+		engine::graphics::Layer* getLayer(std::string id);
 
-		void addUserLayer(spright_engine::graphics::Layer* layer);
-		void addBeforeLayer(spright_engine::graphics::Layer* layer);
-		void addAfterLayer(spright_engine::graphics::Layer* layer);
+		void addUserLayer(engine::graphics::Layer* layer);
+		void addBeforeLayer(engine::graphics::Layer* layer);
+		void addAfterLayer(engine::graphics::Layer* layer);
 
-		std::vector<spright_engine::graphics::Layer*>& getUserLayers();
+		std::vector<engine::graphics::Layer*>& getUserLayers();
 
-		inline spright_engine::graphics::Layer* getActiveLayer() {
+		inline engine::graphics::Layer* getActiveLayer() {
 			return m_ActiveLayer;
 		}
 
-		inline spright_engine::graphics::Camera* getCamera() {
+		inline engine::graphics::Camera* getCamera() {
 			return m_Camera;
 		}
 

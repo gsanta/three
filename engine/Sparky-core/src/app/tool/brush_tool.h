@@ -7,23 +7,23 @@
 #include "../editor_config.h"
 #include "../service/services.h"
 
-namespace spright_app { namespace tool {
+namespace spright { namespace tool {
 	using namespace document;
-	using namespace spright_engine::maths;
-	using namespace spright_engine::graphics;
+	using namespace engine::maths;
+	using namespace engine::graphics;
 
 	class BrushTool : public Tool
 	{
 	private:
 		DocumentHandler *m_documentHandler;
 		EditorConfig m_EditorConfig;
-		spright_app::Services* m_Services;
+		spright::Services* m_Services;
 		EventHandler* m_EventHandler;
 		int m_Size = 1;
-		spright_engine::graphics::Sprite *sprite;
+		engine::graphics::Sprite *sprite;
 
 	public:
-		BrushTool(DocumentHandler *documentHandler, EditorConfig &editorConfig, spright_app::Services* services, EventHandler* eventHandler);
+		BrushTool(DocumentHandler *documentHandler, EditorConfig &editorConfig, spright::Services* services, EventHandler* eventHandler);
 
 		void setSize(int size);
 

@@ -1,7 +1,7 @@
 #include "paint_bucket_tool.h"
 #include "paint_bucket_tool.h"
 
-namespace spright_app
+namespace spright
 {
 
 	PaintBucketTool::PaintBucketTool(document::DocumentHandler *documentHandler, Services *services) : m_DocumentHandler(documentHandler), m_Services(services), Tool("paint_bucket")
@@ -12,7 +12,7 @@ namespace spright_app
 	{
 		Camera *camera = m_DocumentHandler->getActiveDocument()->getCamera();
 		TileLayer *tileLayer = dynamic_cast<TileLayer *>(m_DocumentHandler->getActiveDocument()->getActiveLayer());
-		spright_engine::maths::Vec2Int tilePos = tileLayer->getTilePos(camera->screenToModel(pointerInfo.curr));
+		engine::maths::Vec2Int tilePos = tileLayer->getTilePos(camera->screenToModel(pointerInfo.curr));
 
 		m_FloodFill.floodFill(tileLayer, tilePos.x, tilePos.y, m_Services->getColorPalette()->color);
 	}

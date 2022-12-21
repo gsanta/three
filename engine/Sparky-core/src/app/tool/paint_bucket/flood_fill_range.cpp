@@ -1,7 +1,7 @@
 #include "flood_fill_range.h"
 
 
-namespace spright_app {
+namespace spright {
 
 	FloodFillRange::FloodFillRange(int startX, int endX, int y): startX(startX), endX(endX), y(y)
 	{

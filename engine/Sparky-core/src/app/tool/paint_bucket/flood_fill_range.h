@@ -1,6 +1,6 @@
 #pragma once
 
-namespace spright_app {
+namespace spright {
 	
 	struct FloodFillRange {
 		int startX;

@@ -5,15 +5,15 @@
 #include "../../document/document_handler.h"
 #include "../../model/rectangle.h"
 
-namespace spright_app {
+namespace spright {
 	using namespace document;
-	using namespace spright_engine::maths;
-	using namespace spright_engine::graphics;
+	using namespace engine::maths;
+	using namespace engine::graphics;
 
 	class SelectionBox {
 	private:
 		DocumentHandler* m_DocumentHandler;
-		vector<spright_engine::graphics::Sprite*> m_SelectionSprites;
+		vector<engine::graphics::Sprite*> m_SelectionSprites;
 
 		float m_DashSize = 0.2f;
 

@@ -1,7 +1,7 @@
 #include "services.h"
 
 
-namespace spright_app {
+namespace spright {
 
 	Services::Services()
 	{

@@ -1,6 +1,6 @@
 #include "pointer_info.h"
 
-namespace spright_app { namespace tool {
+namespace spright { namespace tool {
 
 	PointerInfo::PointerInfo(): buttons { false, false, false} {
 	}

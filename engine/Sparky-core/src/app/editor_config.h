@@ -1,6 +1,6 @@
 #pragma once
 
-namespace spright_app {
+namespace spright {
 
 	class EditorConfig {
 	public:

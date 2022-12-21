@@ -2,16 +2,16 @@
 
 #include "renderable2D.h"
 
-namespace spright_engine { namespace graphics  {
+namespace engine { namespace graphics  {
 
-	class Group : public spright_engine::graphics::Renderable2D {
+	class Group : public engine::graphics::Renderable2D {
 	private:
-		std::vector<spright_engine::graphics::Renderable2D*> m_Renderables;
-		spright_engine::maths::Mat4 m_TransformationMatrix;
+		std::vector<engine::graphics::Renderable2D*> m_Renderables;
+		engine::maths::Mat4 m_TransformationMatrix;
 	public:
-		Group(const spright_engine::maths::Mat4& transform);
+		Group(const engine::maths::Mat4& transform);
 		~Group();
-		void add(spright_engine::graphics::Renderable2D* renderable);
+		void add(engine::graphics::Renderable2D* renderable);
 		void submit(Renderer2D* renderer) const override;
 	};
 

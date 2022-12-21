@@ -13,27 +13,27 @@
 #include "core/canvas/canvas_listener_handler.h"
 #include "./service/services.h"
 
-namespace spright_app
+namespace spright
 {
 
 	using namespace tool;
 	using namespace document;
 
-	class Editor : spright_engine::system::FrameListener
+	class Editor : engine::system::FrameListener
 	{
 	private:
-		spright_engine::system::Window *m_Window;
+		engine::system::Window *m_Window;
 		ToolHandler* m_toolHandler;
 		core::CanvasListenerHandler *m_CanvasListenerHandler;
 		DocumentHandler *m_DocumentHandler;
 		EditorConfig editorConfig;
-		spright_app::Services *m_Services;
+		spright::Services *m_Services;
 
 	public:
 		Editor();
 		~Editor();
 
-		inline spright_app::Services *getServices()
+		inline spright::Services *getServices()
 		{
 			return m_Services;
 		}
@@ -48,7 +48,7 @@ namespace spright_app
 			m_Window->getInputHandler()->unRegisterListener(m_toolHandler);
 		}
 
-		inline spright_engine::system::Window *getWindow() const
+		inline engine::system::Window *getWindow() const
 		{
 			return m_Window;
 		}

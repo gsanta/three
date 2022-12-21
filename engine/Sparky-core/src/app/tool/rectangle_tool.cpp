@@ -1,6 +1,6 @@
 #include "rectangle_tool.h"
 
-namespace spright_app { namespace tool {
+namespace spright { namespace tool {
 
 	RectangleTool::RectangleTool(DocumentHandler* documentHandler, Services* services, EventHandler* eventHandler) : m_DocumentHandler(documentHandler), m_Services(services), m_EventHandler(eventHandler), Tool("rectangle") {
 
@@ -9,7 +9,7 @@ namespace spright_app { namespace tool {
 	void RectangleTool::pointerDown(PointerInfo& pointerInfo)
 	{
 		int color = m_Services->getColorPalette()->color;
-		this->m_Rect = new spright_engine::graphics::Sprite(pointerInfo.curr.x, pointerInfo.curr.y, 0.1f, 0.1f, color);
+		this->m_Rect = new engine::graphics::Sprite(pointerInfo.curr.x, pointerInfo.curr.y, 0.1f, 0.1f, color);
 		this->m_DocumentHandler->getActiveDocument()->getActiveLayer()->add(m_Rect);
 	}
 
@@ -17,7 +17,7 @@ namespace spright_app { namespace tool {
 	{
 		if (!pointerInfo.isDown) {
 			int color = m_Services->getColorPalette()->color;
-			this->m_Rect = new spright_engine::graphics::Sprite(pointerInfo.curr.x, pointerInfo.curr.y - m_Size, m_Size, m_Size, color);
+			this->m_Rect = new engine::graphics::Sprite(pointerInfo.curr.x, pointerInfo.curr.y - m_Size, m_Size, m_Size, color);
 			this->m_DocumentHandler->getActiveDocument()->getActiveLayer()->add(m_Rect);
 		
 			m_EventHandler->emitDataChange();
@@ -28,9 +28,9 @@ namespace spright_app { namespace tool {
 	{
 		if (pointerInfo.isDown) {
 
-			spright_engine::graphics::TileLayer* tileLayer = dynamic_cast<spright_engine::graphics::TileLayer*>(m_DocumentHandler->getActiveDocument()->getActiveLayer());
-			spright_engine::maths::Vec2 downTilePos = tileLayer->getBottomLeftPos(pointerInfo.down);
-			spright_engine::maths::Vec2 currTilePos = tileLayer->getBottomLeftPos(pointerInfo.curr);
+			engine::graphics::TileLayer* tileLayer = dynamic_cast<engine::graphics::TileLayer*>(m_DocumentHandler->getActiveDocument()->getActiveLayer());
+			engine::maths::Vec2 downTilePos = tileLayer->getBottomLeftPos(pointerInfo.down);
+			engine::maths::Vec2 currTilePos = tileLayer->getBottomLeftPos(pointerInfo.curr);
 
 			float left = downTilePos.x < currTilePos.x ? downTilePos.x : currTilePos.x;
 			float right = downTilePos.x > currTilePos.x ? downTilePos.x : currTilePos.x;
@@ -42,8 +42,8 @@ namespace spright_app { namespace tool {
 			float width = pointerInfo.curr.x - pointerInfo.down.x;
 			float height = pointerInfo.curr.y - pointerInfo.down.y;
 			std::cout << width << std::endl;
-			this->m_Rect->setPosition(spright_engine::maths::Vec2(left, bottom));
-			this->m_Rect->setSize(spright_engine::maths::Vec2(right - left, top - bottom));
+			this->m_Rect->setPosition(engine::maths::Vec2(left, bottom));
+			this->m_Rect->setSize(engine::maths::Vec2(right - left, top - bottom));
 		}
 	}
 }}

@@ -1,7 +1,7 @@
 #pragma once
 #include "../../maths/vec2.h"
 
-namespace spright_engine { namespace graphics {
+namespace engine { namespace graphics {
 	using namespace maths;
 
 	class Bounds {

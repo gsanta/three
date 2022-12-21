@@ -1,6 +1,6 @@
 #include "bounds.h"
 
-namespace spright_engine { namespace graphics {
+namespace engine { namespace graphics {
     Bounds::Bounds(float bottomLeftX, float bottomLeftY, float width, float height)
     {
         minX = bottomLeftX;

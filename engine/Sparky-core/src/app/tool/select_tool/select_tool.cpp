@@ -1,6 +1,6 @@
 #include "select_tool.h"
 
-namespace spright_app {
+namespace spright {
 
 	SelectTool::SelectTool(DocumentHandler* documentHandler, EventHandler* eventHandler) : m_DocumentHandler(documentHandler), m_EventHandler(eventHandler), Tool("select")
 	{
@@ -65,15 +65,15 @@ namespace spright_app {
 	//	auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayer(DEFAULT_TEMP_LAYER_ID);
 	//	tempLayer->clear();
 
-	//	for (spright_engine::graphics::Sprite* sprite : m_SelectionSprites) {
+	//	for (engine::graphics::Sprite* sprite : m_SelectionSprites) {
 	//		delete sprite;
 	//	}
 
 	//	m_SelectionSprites.clear();
 
 	//	for (float x = bottomLeft.x; x < topRight.x; x += 2 * m_DashSize) {
-	//		spright_engine::graphics::Sprite* sprite = new spright_engine::graphics::Sprite(x, bottomLeft.y, m_DashSize, 0.1f, 0xff0000ff);
-	//		spright_engine::graphics::Sprite* sprite2 = new spright_engine::graphics::Sprite(x, topRight.y, m_DashSize, 0.1f, 0xff0000ff);
+	//		engine::graphics::Sprite* sprite = new engine::graphics::Sprite(x, bottomLeft.y, m_DashSize, 0.1f, 0xff0000ff);
+	//		engine::graphics::Sprite* sprite2 = new engine::graphics::Sprite(x, topRight.y, m_DashSize, 0.1f, 0xff0000ff);
 
 	//		tempLayer->add(sprite);
 	//		tempLayer->add(sprite2);
@@ -83,8 +83,8 @@ namespace spright_app {
 	//	}
 
 	//	for (float y = bottomLeft.y; y < topRight.y; y += 2 * m_DashSize) {
-	//		spright_engine::graphics::Sprite* sprite = new spright_engine::graphics::Sprite(bottomLeft.x, y, m_DashSize, 0.1f, 0xff0000ff);
-	//		spright_engine::graphics::Sprite* sprite2 = new spright_engine::graphics::Sprite(topRight.x, y, m_DashSize, 0.1f, 0xff0000ff);
+	//		engine::graphics::Sprite* sprite = new engine::graphics::Sprite(bottomLeft.x, y, m_DashSize, 0.1f, 0xff0000ff);
+	//		engine::graphics::Sprite* sprite2 = new engine::graphics::Sprite(topRight.x, y, m_DashSize, 0.1f, 0xff0000ff);
 
 	//		tempLayer->add(sprite);
 	//		tempLayer->add(sprite2);
@@ -108,11 +108,11 @@ namespace spright_app {
 		float startY = down.y < curr.y ? down.y : curr.y;
 		float endY = down.y < curr.y ? curr.y : down.y;
 
-		spright_engine::graphics::Layer* layer = dynamic_cast<spright_engine::graphics::TileLayer*>(document->getActiveLayer());
+		engine::graphics::Layer* layer = dynamic_cast<engine::graphics::TileLayer*>(document->getActiveLayer());
 
 		auto it = layer->getRenderables().begin();
 		while (it != layer->getRenderables().end()) {
-			const spright_engine::graphics::Bounds* bounds = (*it)->getBounds();
+			const engine::graphics::Bounds* bounds = (*it)->getBounds();
 
 			if (bounds->minX > startX && bounds->maxX < endX && bounds->minY > startY && bounds->maxY < endY) {
 				Sprite* sprite = static_cast<Sprite*>(*it);
@@ -127,7 +127,7 @@ namespace spright_app {
 
 	void SelectTool::moveSelection(tool::PointerInfo& pointerInfo) {
 		Document* document = m_DocumentHandler->getActiveDocument();
-		spright_engine::graphics::TileLayer* tileLayer = dynamic_cast<spright_engine::graphics::TileLayer*>(document->getActiveLayer());
+		engine::graphics::TileLayer* tileLayer = dynamic_cast<engine::graphics::TileLayer*>(document->getActiveLayer());
 
 		Vec2 down = document->getCamera()->screenToModel(pointerInfo.down);
 		Vec2 curr = document->getCamera()->screenToModel(pointerInfo.curr);

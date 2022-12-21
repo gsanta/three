@@ -1,6 +1,6 @@
 #include "camera.h"
 
-namespace spright_engine { namespace graphics {
+namespace engine { namespace graphics {
 	
 	Camera::Camera(): m_ProjectionInfo(-16.0f, 16.0f, -9.0f, 9.0f)
 	{
@@ -9,7 +9,7 @@ namespace spright_engine { namespace graphics {
 		updateAspectRatio();
 	}
 
-	void Camera::translate2D(spright_engine::maths::Vec2 translate)
+	void Camera::translate2D(engine::maths::Vec2 translate)
 	{
 		maths::Vec3 eye(m_Center2D.x + translate.x, m_Center2D.y + translate.y, z);
 		maths::Vec3 at(m_Center2D.x + translate.x, m_Center2D.y + translate.y, 0);
@@ -32,7 +32,7 @@ namespace spright_engine { namespace graphics {
 		m_Zoom = m_InitialWidth / width;
 		m_ProjectionInfo = projectionInfo;
 		updateAspectRatio();
-		m_ProjectionMatrix = spright_engine::maths::Mat4::otrthographic(m_ProjectionInfo.left, m_ProjectionInfo.right, m_ProjectionInfo.bottom, m_ProjectionInfo.top, -1.0f, 1.0f);
+		m_ProjectionMatrix = engine::maths::Mat4::otrthographic(m_ProjectionInfo.left, m_ProjectionInfo.right, m_ProjectionInfo.bottom, m_ProjectionInfo.top, -1.0f, 1.0f);
 	}
 	void Camera::updateAspectRatio()
 	{

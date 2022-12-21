@@ -1,6 +1,6 @@
 #include "vec3.h"
 
-namespace spright_engine
+namespace engine
 { namespace maths {
 
 	Vec3::Vec3() {

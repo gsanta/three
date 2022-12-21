@@ -1,15 +1,15 @@
 #pragma once
 #include "../../engine/maths/vec2.h"
 
-namespace spright_app { namespace tool {
+namespace spright { namespace tool {
 
 	struct PointerInfo {
 	public:
 		bool isDown = false;
-		spright_engine::maths::Vec2 prev;
-		spright_engine::maths::Vec2 curr;
-		spright_engine::maths::Vec2 down;
-		spright_engine::maths::Vec2 scroll;
+		engine::maths::Vec2 prev;
+		engine::maths::Vec2 curr;
+		engine::maths::Vec2 down;
+		engine::maths::Vec2 scroll;
 		bool buttons[3];
 	public:
 		PointerInfo();

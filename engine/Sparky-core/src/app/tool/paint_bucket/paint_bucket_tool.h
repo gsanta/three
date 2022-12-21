@@ -6,8 +6,8 @@
 #include "queue_linear_flood_fill.h"
 #include "../../service/services.h"
 
-namespace spright_app {
-    using namespace spright_engine::graphics;
+namespace spright {
+    using namespace engine::graphics;
 
     class PaintBucketTool : public tool::Tool
     {

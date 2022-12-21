@@ -3,7 +3,7 @@
 #include "flood_fill_range.h"
 #include <vector>
 
-namespace spright_app {
+namespace spright {
 
 	class FloodFillRangeQueue {
 	private:

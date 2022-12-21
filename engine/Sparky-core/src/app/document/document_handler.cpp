@@ -1,6 +1,6 @@
 #include "document_handler.h"
 
-namespace spright_app { namespace document {
+namespace spright { namespace document {
 	
 	DocumentHandler::~DocumentHandler()
 	{
@@ -11,9 +11,9 @@ namespace spright_app { namespace document {
 
 	void DocumentHandler::createUserLayer(std::string name, std::string id) {
 #ifdef SPARKY_EMSCRIPTEN
-		spright_engine::graphics::Shader* shaderUnlit = new spright_engine::graphics::Shader("res/shaders/basic.es3.vert", "res/shaders/basic_unlit.es3.frag");
+		engine::graphics::Shader* shaderUnlit = new engine::graphics::Shader("res/shaders/basic.es3.vert", "res/shaders/basic_unlit.es3.frag");
 #else
-		spright_engine::graphics::Shader* shaderUnlit = new spright_engine::graphics::Shader("src/shaders/basic.vert", "src/shaders/unlit.frag");
+		engine::graphics::Shader* shaderUnlit = new engine::graphics::Shader("src/shaders/basic.vert", "src/shaders/unlit.frag");
 #endif
 		TileLayer* userLayer1 = new TileLayer(name, id, shaderUnlit, new BatchRenderer2D(), getActiveDocument()->getCamera(), getActiveDocument()->dimensions);
 	}
@@ -44,7 +44,7 @@ namespace spright_app { namespace document {
 
 		document->setActiveLayer(userLayer1Id);
 
-		spright_app::document::Checkerboard checkerboard;
+		spright::document::Checkerboard checkerboard;
 
 		checkerboard.create(document);
 

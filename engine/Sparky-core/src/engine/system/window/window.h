@@ -7,7 +7,7 @@
 #include "frame_handler.h"
 #include <functional>
 
-namespace spright_engine { namespace system {
+namespace engine { namespace system {
 
 #define MAX_KEYS 1024
 #define MAX_BUTTONS 3

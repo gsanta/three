@@ -1,6 +1,6 @@
 #include "vec2_int.h"
 
-namespace spright_engine { namespace maths {
+namespace engine { namespace maths {
 	Vec2Int::Vec2Int()
 	{
 	}

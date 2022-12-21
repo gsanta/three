@@ -24,8 +24,8 @@
 
 //#define SPARKY_EMSCRIPTEN 0
 
-spright_engine::system::Window *window = nullptr;
-spright_app::Editor *editor = nullptr;
+engine::system::Window *window = nullptr;
+spright::Editor *editor = nullptr;
 
 #ifdef SPARKY_EMSCRIPTEN
 #include <emscripten/emscripten.h>
@@ -57,11 +57,11 @@ void removeActiveTool(std::string toolName)
 }
 
 std::vector<std::string> getLayers() {
-	std::vector<spright_engine::graphics::Layer*>& layers = editor->getDocumentHandler()->getActiveDocument()->getUserLayers();
+	std::vector<engine::graphics::Layer*>& layers = editor->getDocumentHandler()->getActiveDocument()->getUserLayers();
 
 	std::vector<std::string> target;
 
-	for (spright_engine::graphics::Layer* layer : layers) {
+	for (engine::graphics::Layer* layer : layers) {
 		target.push_back(layer->getLayerDescription().dump());
 	}
 
@@ -73,7 +73,7 @@ void createLayer(std::string name, std::string id) {
 }
 
 void enableLayer(std::string id) {
-	spright_engine::graphics::Layer* layer = editor->getDocumentHandler()->getActiveDocument()->getLayer(id);
+	engine::graphics::Layer* layer = editor->getDocumentHandler()->getActiveDocument()->getLayer(id);
 
 	if (layer != nullptr) {
 		layer->setEnabled(true);
@@ -81,7 +81,7 @@ void enableLayer(std::string id) {
 }
 
 void disableLayer(std::string id) {
-	spright_engine::graphics::Layer* layer = editor->getDocumentHandler()->getActiveDocument()->getLayer(id);
+	engine::graphics::Layer* layer = editor->getDocumentHandler()->getActiveDocument()->getLayer(id);
 
 	if (layer != nullptr) {
 		layer->setEnabled(false);
@@ -93,7 +93,7 @@ void setActiveLayer(std::string id) {
 }
 
 void setBrushSize(int size) {
-	spright_app::tool::BrushTool* brushTool = dynamic_cast<spright_app::tool::BrushTool*>(editor->getToolHandler()->getTool("brush"));
+	spright::tool::BrushTool* brushTool = dynamic_cast<spright::tool::BrushTool*>(editor->getToolHandler()->getTool("brush"));
 
 	brushTool->setSize(size);
 }
@@ -157,17 +157,17 @@ static void dispatch_main(void *fp)
 
 int main()
 {
-	spright_engine::maths::Vec3 la = spright_engine::maths::Vec3(-3, 0, -5);
-	spright_engine::maths::Vec3 lb = spright_engine::maths::Vec3(3, 3, 0);
-	spright_engine::maths::Vec3 p1 = spright_engine::maths::Vec3(-1, 1, 0);
-	spright_engine::maths::Vec3 p2 = spright_engine::maths::Vec3(1, 1, 0);
-	spright_engine::maths::Vec3 p3 = spright_engine::maths::Vec3(0, -1, 0);
+	engine::maths::Vec3 la = engine::maths::Vec3(-3, 0, -5);
+	engine::maths::Vec3 lb = engine::maths::Vec3(3, 3, 0);
+	engine::maths::Vec3 p1 = engine::maths::Vec3(-1, 1, 0);
+	engine::maths::Vec3 p2 = engine::maths::Vec3(1, 1, 0);
+	engine::maths::Vec3 p3 = engine::maths::Vec3(0, -1, 0);
 
-	spright_engine::maths::Vec3 res = spright_engine::maths::linePlaneIntersection(la, lb, p1, p2, p3);
+	engine::maths::Vec3 res = engine::maths::linePlaneIntersection(la, lb, p1, p2, p3);
 
 
 
-	editor = new spright_app::Editor();
+	editor = new spright::Editor();
 	window = editor->getWindow();
 
 	// Group* group = new Group(Mat4::translation(maths::Vec3(-5.0f, 5.0f, 0.0f)));
