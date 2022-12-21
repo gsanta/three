@@ -5,15 +5,16 @@
 #include "../../maths/vec3.h"
 
 namespace engine { namespace graphics {
+	using namespace spright::maths;
 
 	class LineShape : public engine::graphics::Renderable2D {
 	private:
-		engine::maths::Vec2 m_Start;
-		engine::maths::Vec2 m_End;
+		Vec2 m_Start;
+		Vec2 m_End;
 		float m_Thickness;
 		float m_Length;
-		engine::maths::Vec2 m_Dir;
-		engine::maths::Vec2 m_Normal;
+		Vec2 m_Dir;
+		Vec2 m_Normal;
 		engine::maths::Vec3 m_Coords[4];
 	public:
 		LineShape(float x1, float y1, float x2, float y2, float thickness, unsigned int color);

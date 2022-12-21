@@ -1,8 +1,8 @@
 #pragma once
-#include "../../maths/vec2.h"
+#include "../../../maths/vec2.h"
 
 namespace engine { namespace graphics {
-	using namespace maths;
+	using namespace spright::maths;
 
 	class Bounds {
 
@@ -14,7 +14,7 @@ namespace engine { namespace graphics {
 
 		Bounds(float bottomLeftX, float bottomLeftY, float width, float height);
 
-		maths::Vec2 getCenter() const;
+		Vec2 getCenter() const;
 
 		float getWidth() const;
 		float getHeight() const;

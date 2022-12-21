@@ -29,8 +29,8 @@ namespace spright { namespace tool {
 	{
 		Document* activeDocument = m_DocumentHandler->getActiveDocument();
 
-		engine::maths::Vec2 down = pointerInfo.down;
-		engine::maths::Vec2 curr = pointerInfo.curr;
+		Vec2 down = pointerInfo.down;
+		Vec2 curr = pointerInfo.curr;
 
 		float startX = down.x < curr.x ? down.x : curr.x;
 		float endX = down.x < curr.x ? curr.x : down.x;
@@ -82,8 +82,8 @@ namespace spright { namespace tool {
 
 		m_SelectionSprites.clear();
 
-		engine::maths::Vec2 down = pointerInfo.down;
-		engine::maths::Vec2 curr = pointerInfo.curr;
+		Vec2 down = pointerInfo.down;
+		Vec2 curr = pointerInfo.curr;
 
 		float startX = down.x < curr.x ? down.x : curr.x;
 		float endX = down.x < curr.x ? curr.x : down.x;

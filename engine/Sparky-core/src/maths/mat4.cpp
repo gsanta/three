@@ -1,6 +1,6 @@
 #include "mat4.h"
 
-namespace engine { namespace maths {
+namespace spright { namespace maths {
 
 	Mat4::Mat4() {
 		for (int i = 0; i < 16; i++) {

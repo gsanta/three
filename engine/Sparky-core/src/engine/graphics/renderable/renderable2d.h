@@ -6,7 +6,7 @@
 #include "../buffer/indexBuffer.h"
 #include "../buffer/vertexArray.h"
 #include "../../maths/vec3.h"
-#include "../../maths/vec2.h"
+#include "../../../maths/vec2.h"
 #include "../../maths/vec4.h"
 #include "../renderer/vertex_data.h"
 #include "../renderer/renderer2d.h"
@@ -26,7 +26,7 @@ namespace engine { namespace graphics {
 		int m_VertexCount;
 		unsigned int m_Color;
 		engine::graphics::Bounds* m_bounds;
-		std::vector<engine::maths::Vec2> m_UV;
+		std::vector<Vec2> m_UV;
 #ifndef SPARKY_EMSCRIPTEN
 		engine::graphics::Texture* m_Texture;
 #endif
@@ -56,7 +56,7 @@ namespace engine { namespace graphics {
 
 		inline int getVertexCount() const { return m_VertexCount; }
 		inline const unsigned int getColor() const { return m_Color; }
-		inline const std::vector<engine::maths::Vec2>& getUV() const { return m_UV; }
+		inline const std::vector<Vec2>& getUV() const { return m_UV; }
 
 		virtual nlohmann::json getJson() = 0;
 #ifdef SPARKY_EMSCRIPTEN
@@ -66,10 +66,10 @@ namespace engine { namespace graphics {
 #endif
 	private:
 		void setUVDefaults() {
-			m_UV.push_back(engine::maths::Vec2(0, 0));
-			m_UV.push_back(engine::maths::Vec2(0, 1));
-			m_UV.push_back(engine::maths::Vec2(1, 1));
-			m_UV.push_back(engine::maths::Vec2(1, 0));
+			m_UV.push_back(Vec2(0, 0));
+			m_UV.push_back(Vec2(0, 1));
+			m_UV.push_back(Vec2(1, 1));
+			m_UV.push_back(Vec2(1, 0));
 		}
 	};
 } }

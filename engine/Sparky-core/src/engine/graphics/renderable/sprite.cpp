@@ -3,7 +3,7 @@
 namespace engine {
 	namespace graphics {
 		Sprite::Sprite(float x, float y, float width, float height, unsigned int  color)
-			: m_Position(engine::maths::Vec3(x, y, 0)), m_Size(engine::maths::Vec2(width, height)), engine::graphics::Renderable2D(color)
+			: m_Position(engine::maths::Vec3(x, y, 0)), m_Size(Vec2(width, height)), engine::graphics::Renderable2D(color)
 		{
 			m_bounds = new engine::graphics::Bounds(x, y, width, height);
 
@@ -12,7 +12,7 @@ namespace engine {
 
 #ifndef SPARKY_EMSCRIPTEN
 		Sprite::Sprite(float x, float y, float width, float height, engine::graphics::Texture* texture)
-			: m_Position(engine::maths::Vec3(x, y, 0)), m_Size(engine::maths::Vec2(width, height)), engine::graphics::Renderable2D(0xffffffff)
+			: m_Position(engine::maths::Vec3(x, y, 0)), m_Size(Vec2(width, height)), engine::graphics::Renderable2D(0xffffffff)
 		{
 			m_Texture = texture;
 		}
@@ -30,22 +30,22 @@ namespace engine {
 			return m_Position;
 		}
 
-		maths::Vec2 Sprite::getPosition2d() {
-			return maths::Vec2(m_Position.x, m_Position.y);
+		Vec2 Sprite::getPosition2d() {
+			return Vec2(m_Position.x, m_Position.y);
 		}
 
-		void Sprite::setSize(engine::maths::Vec2 size)
+		void Sprite::setSize(Vec2 size)
 		{
 			this->m_Size = size;
 		}
 
-		void Sprite::setPosition(engine::maths::Vec2 position)
+		void Sprite::setPosition(Vec2 position)
 		{
 			this->m_Position = maths::Vec3(position.x, position.y, m_Position.z);
 			updateBounds();
 		}
 
-		bool Sprite::contains(engine::maths::Vec2 point)
+		bool Sprite::contains(Vec2 point)
 		{
 			const Bounds* bounds = getBounds();
 			return point.x > bounds->minX && point.x < bounds->maxX&& point.y > bounds->minY && point.y < bounds->maxY;
@@ -73,7 +73,7 @@ namespace engine {
 
 	void Sprite::submit(engine::graphics::Renderer2D* renderer) const {
 		engine::graphics::VertexData*& buffer = renderer->getBuffer();
-		const engine::maths::Mat4* transformation = renderer->getTransformation();
+		const Mat4* transformation = renderer->getTransformation();
 		buffer->vertex = *transformation * m_Position;
 		buffer->uv = m_UV[0];
 		buffer->tid = 0.0f;

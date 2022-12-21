@@ -5,14 +5,16 @@
 #include "../renderer/batchRenderer2d.h"
 #include "../renderable/sprite.h"
 #include "../../maths/vec2_int.h"
-#include "../../maths/vec2.h"
+#include "../../../maths/vec2.h"
 #include "../renderable/bounds.h"
 #include "../renderable/bounds_int.h"
-#include "../../maths/mat4.h"
+#include "../../../maths/mat4.h"
 #include "../camera/camera.h"
 #include "dimensions.h"
 
 namespace engine { namespace graphics {
+	using namespace spright::maths;
+
 	class TileLayer : public Layer
 	{
 	private:
@@ -26,10 +28,10 @@ namespace engine { namespace graphics {
 		virtual ~TileLayer();
 
 		// TODO: find a better name
-		engine::maths::Vec2 getBottomLeftPos(engine::maths::Vec2 pointer);
-		engine::maths::Vec2 getBottomLeftPos(int tileIndex);
-		maths::Vec2Int getTilePos(maths::Vec2 pos);
-		maths::Vec2 getWorldPos(int x, int y);
+		Vec2 getBottomLeftPos(Vec2 pointer);
+		Vec2 getBottomLeftPos(int tileIndex);
+		maths::Vec2Int getTilePos(Vec2 pos);
+		Vec2 getWorldPos(int x, int y);
 
 		virtual nlohmann::json getJson() override;
 		virtual void setJson(std::string json);
@@ -37,7 +39,7 @@ namespace engine { namespace graphics {
 		void updateTileIndex(int oldIndex, int newIndex);
 		Renderable2D* getAtTileIndex(int tileIndex);
 		int getTileIndex(int tileX, int tileY);
-		int getTileIndex(maths::Vec2 worldPos);
+		int getTileIndex(Vec2 worldPos);
 		const BoundsInt& getTileBounds() const;
 
 		inline float getTileSize() const

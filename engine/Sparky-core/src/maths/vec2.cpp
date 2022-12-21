@@ -1,6 +1,6 @@
 #include "vec2.h"
 
-namespace engine { namespace maths {
+namespace spright { namespace maths {
 
 	Vec2::Vec2() {
 		x = 0.0f;

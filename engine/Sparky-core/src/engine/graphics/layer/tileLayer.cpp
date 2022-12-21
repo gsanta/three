@@ -20,7 +20,7 @@ namespace engine { namespace graphics {
 		delete[] m_TileIndexes;
 	}
 
-	engine::maths::Vec2 TileLayer::getBottomLeftPos(engine::maths::Vec2 pointer)
+	Vec2 TileLayer::getBottomLeftPos(Vec2 pointer)
 	{
 		maths::Vec2Int tilePos = getTilePos(pointer);
 
@@ -29,20 +29,20 @@ namespace engine { namespace graphics {
 		float x = static_cast<float>(tilePos.x) * tileSize + m_Dimensions.left;
 		float y = static_cast<float>(tilePos.y) * tileSize + m_Dimensions.bottom;
 
-		return engine::maths::Vec2(x, y);
+		return Vec2(x, y);
 	}
 
-	engine::maths::Vec2 TileLayer::getBottomLeftPos(int tileIndex)
+	Vec2 TileLayer::getBottomLeftPos(int tileIndex)
 	{
 		int y = tileIndex / m_TileBounds.getWidth();
 		int x = tileIndex % m_TileBounds.getWidth();
 
-		return engine::maths::Vec2(x * m_TileSize + m_Dimensions.left, y * m_TileSize + m_Dimensions.bottom);
+		return Vec2(x * m_TileSize + m_Dimensions.left, y * m_TileSize + m_Dimensions.bottom);
 	}
 
 	// TODO: check if it works for both even and odd number of tiles
-	maths::Vec2Int TileLayer::getTilePos(maths::Vec2 pos) {
-		maths::Vec2 adjustedPos(pos.x - m_Dimensions.left, pos.y - m_Dimensions.bottom);
+	maths::Vec2Int TileLayer::getTilePos(Vec2 pos) {
+		Vec2 adjustedPos(pos.x - m_Dimensions.left, pos.y - m_Dimensions.bottom);
 		float tileSize = m_TileSize;
 		int tileX = (int)(adjustedPos.x / tileSize);
 		int tileY = (int)(adjustedPos.y / tileSize);
@@ -50,14 +50,14 @@ namespace engine { namespace graphics {
 		return maths::Vec2Int(tileX, tileY);
 	}
 
-	maths::Vec2 TileLayer::getWorldPos(int x, int y)
+	Vec2 TileLayer::getWorldPos(int x, int y)
 	{
 		float tileSize = m_TileSize;
 
 		float worldX = x * tileSize + tileSize / 2 + m_Dimensions.left;
 		float worldY = y * tileSize + tileSize / 2 + m_Dimensions.bottom;
 
-		return maths::Vec2(worldX, worldY);
+		return Vec2(worldX, worldY);
 	}
 
 	nlohmann::json TileLayer::getJson()
@@ -94,7 +94,7 @@ namespace engine { namespace graphics {
 	{
 		Layer::add(sprite);
 
-		maths::Vec2 pos = sprite->getBounds()->getCenter();
+		Vec2 pos = sprite->getBounds()->getCenter();
 		maths::Vec2Int tilePos = getTilePos(pos);
 
 		int index = m_TileBounds.getWidth() * tilePos.y + tilePos.x;
@@ -116,7 +116,7 @@ namespace engine { namespace graphics {
 		return m_TileBounds.getWidth() * tileY + tileX;
 	}
 
-	int TileLayer::getTileIndex(maths::Vec2 worldPos)
+	int TileLayer::getTileIndex(Vec2 worldPos)
 	{
 		maths::Vec2Int tilePos = getTilePos(worldPos);
 

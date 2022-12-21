@@ -35,7 +35,7 @@ namespace spright { namespace tool {
 
 		engine::graphics::Camera* camera = m_documentHandler->getActiveDocument()->getCamera();
 
-		engine::maths::Vec2 center2D = camera->getCenter2D();
+		Vec2 center2D = camera->getCenter2D();
 
 		float zoom = camera->getZoom();
 
@@ -49,11 +49,11 @@ namespace spright { namespace tool {
 
 		engine::graphics::TileLayer* tileLayer = dynamic_cast<engine::graphics::TileLayer*>(m_documentHandler->getActiveDocument()->getActiveLayer());
 
-		engine::maths::Vec2 tilePos = tileLayer->getBottomLeftPos(engine::maths::Vec2(intersection.x, intersection.y));
+		Vec2 tilePos = tileLayer->getBottomLeftPos(Vec2(intersection.x, intersection.y));
 
 		for (int i = 0; i < m_Size; i++) {
 			for (int j = 0; j < m_Size; j++) {
-				engine::maths::Vec2 model = camera->screenToModel(pointerInfo.curr);
+				Vec2 model = camera->screenToModel(pointerInfo.curr);
 				engine::maths::Vec2Int tilePos = tileLayer->getTilePos(model);
 
 				setColor(tileLayer, tilePos);
@@ -71,7 +71,7 @@ namespace spright { namespace tool {
 		Renderable2D* renderable = tileLayer->getAtTileIndex(tileIndex);
 
 		if (renderable == nullptr) {
-			engine::maths::Vec2 worldPos = tileLayer->getBottomLeftPos(tileIndex);
+			Vec2 worldPos = tileLayer->getBottomLeftPos(tileIndex);
 			engine::graphics::Sprite* sprite = new engine::graphics::Sprite(worldPos.x, worldPos.y, tileLayer->getTileSize(), tileLayer->getTileSize(), color);
 			tileLayer->add(sprite);
 		}

@@ -2,26 +2,28 @@
 
 //#include "renderable2d.h"
 #include <GL/glew.h>
-#include "../../maths/mat4.h"
+#include "../../../maths/mat4.h"
 #include <vector>
 #include "vertex_data.h"
 
 namespace engine { namespace graphics {
+	using namespace spright::maths;
+	
 	class Renderable2D;
 
 	class Renderer2D {
 	protected:
-		std::vector<engine::maths::Mat4> m_TransformationStack;
-		const engine::maths::Mat4* m_TransformationBack;
+		std::vector<Mat4> m_TransformationStack;
+		const Mat4* m_TransformationBack;
 
 		GLsizei m_IndexCount = 0;
 
 		Renderer2D() {
-			m_TransformationStack.push_back(engine::maths::Mat4::identity());
+			m_TransformationStack.push_back(Mat4::identity());
 			m_TransformationBack = &m_TransformationStack.back();
 		}
 	public:
-		void push(const engine::maths::Mat4& matrix, bool override = false) {
+		void push(const Mat4& matrix, bool override = false) {
 			if (override) {
 				m_TransformationStack.push_back(matrix);
 			}
@@ -42,7 +44,7 @@ namespace engine { namespace graphics {
 			// TODO: Add to log!
 		}
 
-		const engine::maths::Mat4* getTransformation() {
+		const spright::maths::Mat4* getTransformation() {
 			return m_TransformationBack;
 		}
 

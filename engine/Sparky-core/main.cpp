@@ -1,6 +1,6 @@
 #include "src/engine/system/window/window.h"
-#include "src/engine/maths/vec2.h"
-#include "src/engine/maths/mat4.h"
+#include "src/maths/vec2.h"
+#include "src/maths/mat4.h"
 #include "src/engine/maths/mathFuncs.h"
 //#include "src/utils/timer.h"
 #include "src/engine/system/utils/fileUtils.h"

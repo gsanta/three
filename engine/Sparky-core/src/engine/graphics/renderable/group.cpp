@@ -1,7 +1,7 @@
 #include "group.h"
 
 namespace engine { namespace graphics {
-	Group::Group(const engine::maths::Mat4& transform) : m_TransformationMatrix(transform)
+	Group::Group(const Mat4& transform) : m_TransformationMatrix(transform)
 	{
 	}
 
