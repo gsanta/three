@@ -1,6 +1,6 @@
 #include "texture.h"
 
-namespace spright_engine { namespace graphics {
+namespace engine { namespace graphics {
 
 	Texture::Texture(const std::string& filename) : m_Filename(filename) {
 		m_TID = load();

@@ -1,6 +1,6 @@
 #include "queue_linear_flood_fill.h"
 
-namespace spright_app {
+namespace spright {
 
     void QueueLinearFloodFill::floodFill(TileLayer* layer, int x, int y, int color) {
         layer->getAtTileIndex(1851);

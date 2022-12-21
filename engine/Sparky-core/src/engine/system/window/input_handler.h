@@ -7,7 +7,7 @@
 
 using namespace std;
 
-namespace spright_engine { namespace system {
+namespace engine { namespace system {
 
 	class Window;
 
@@ -29,7 +29,7 @@ namespace spright_engine { namespace system {
 		void registerListener(InputListener* inputListener);
 		void unRegisterListener(InputListener* inputListener);
 	
-		spright_engine::maths::Vec2 screenToCanvasPos(spright_engine::maths::Vec2 screenPos);
+		engine::maths::Vec2 screenToCanvasPos(engine::maths::Vec2 screenPos);
 	};
 
 }}

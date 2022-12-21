@@ -1,7 +1,7 @@
 #include "input_handler.h"
 
 
-namespace spright_engine { namespace system {
+namespace engine { namespace system {
 	InputHandler::InputHandler(Window* window) : m_Window(window)
 	{
 		
@@ -64,11 +64,11 @@ namespace spright_engine { namespace system {
 		}
 	}
 
-	spright_engine::maths::Vec2 InputHandler::screenToCanvasPos(spright_engine::maths::Vec2 screenPos)
+	engine::maths::Vec2 InputHandler::screenToCanvasPos(engine::maths::Vec2 screenPos)
 	{
 		float xPos = (screenPos.x + 16.0f) * m_Window->getWidth() / 32.0f;
 		float yPos = (9.0f - screenPos.y) * m_Window->getHeight() / 18.0f;
 
-		return spright_engine::maths::Vec2(xPos, yPos);
+		return engine::maths::Vec2(xPos, yPos);
  	}
 }}

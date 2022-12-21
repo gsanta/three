@@ -1,11 +1,11 @@
 #include "tool_handler.h"
 
-namespace spright_app { namespace tool {
+namespace spright { namespace tool {
 	ToolHandler::ToolHandler()
 	{
 	}
 
-	ToolHandler::ToolHandler(spright_engine::system::Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services) : m_Window(window), m_EditorConfig(editorConfig), m_Services(services)
+	ToolHandler::ToolHandler(engine::system::Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services) : m_Window(window), m_EditorConfig(editorConfig), m_Services(services)
 	{
 		window->getInputHandler()->registerListener(this);
 		m_ActiveTools = new vector<Tool*>();

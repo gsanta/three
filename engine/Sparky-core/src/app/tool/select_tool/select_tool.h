@@ -7,10 +7,10 @@
 #include "../../service/core/event/event_handler.h"
 #include "selection_box.h"
 
-namespace spright_app {
+namespace spright {
 	using namespace document;
-	using namespace spright_engine::maths;
-	using namespace spright_engine::graphics;
+	using namespace engine::maths;
+	using namespace engine::graphics;
 
 	class SelectTool : public tool::Tool {
 	private:
@@ -18,8 +18,8 @@ namespace spright_app {
 		EventHandler* m_EventHandler;
 		SelectionBox* m_SelectionBox;
 
-		//vector<spright_engine::graphics::Sprite*> m_SelectionSprites;
-		vector<spright_engine::graphics::Sprite*> m_Data;
+		//vector<engine::graphics::Sprite*> m_SelectionSprites;
+		vector<engine::graphics::Sprite*> m_Data;
 		vector<Vec2> m_OrigPositions;
 
 		//float m_DashSize = 0.2f;

@@ -7,7 +7,7 @@
 #include "../camera/camera.h";
 #include "dimensions.h"
 
-namespace spright_engine
+namespace engine
 {
 	namespace graphics
 	{
@@ -15,7 +15,7 @@ namespace spright_engine
 		{
 		protected:
 			Renderer2D *m_Renderer;
-			std::vector <spright_engine::graphics::Renderable2D*> m_Renderables;
+			std::vector <engine::graphics::Renderable2D*> m_Renderables;
 			Shader *m_Shader;
 			Camera* m_Camera;	
 			std::string m_Id;
@@ -28,10 +28,10 @@ namespace spright_engine
 
 		public:
 			virtual ~Layer();
-			virtual void add(spright_engine::graphics::Renderable2D *renderable);
+			virtual void add(engine::graphics::Renderable2D *renderable);
 			virtual void render();
 			virtual void clear();
-			virtual void remove(spright_engine::graphics::Renderable2D* renderable);
+			virtual void remove(engine::graphics::Renderable2D* renderable);
 
 			nlohmann::json getLayerDescription();
 
@@ -54,7 +54,7 @@ namespace spright_engine
 				return m_Shader;
 			}
 
-			inline std::vector<spright_engine::graphics::Renderable2D*>& getRenderables() {
+			inline std::vector<engine::graphics::Renderable2D*>& getRenderables() {
 				return m_Renderables;
 			}
 		};

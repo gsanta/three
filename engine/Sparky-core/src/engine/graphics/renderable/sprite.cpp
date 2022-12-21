@@ -1,18 +1,18 @@
 #include "sprite.h"
 
-namespace spright_engine {
+namespace engine {
 	namespace graphics {
 		Sprite::Sprite(float x, float y, float width, float height, unsigned int  color)
-			: m_Position(spright_engine::maths::Vec3(x, y, 0)), m_Size(spright_engine::maths::Vec2(width, height)), spright_engine::graphics::Renderable2D(color)
+			: m_Position(engine::maths::Vec3(x, y, 0)), m_Size(engine::maths::Vec2(width, height)), engine::graphics::Renderable2D(color)
 		{
-			m_bounds = new spright_engine::graphics::Bounds(x, y, width, height);
+			m_bounds = new engine::graphics::Bounds(x, y, width, height);
 
 			m_VertexCount = 4;
 		}
 
 #ifndef SPARKY_EMSCRIPTEN
-		Sprite::Sprite(float x, float y, float width, float height, spright_engine::graphics::Texture* texture)
-			: m_Position(spright_engine::maths::Vec3(x, y, 0)), m_Size(spright_engine::maths::Vec2(width, height)), spright_engine::graphics::Renderable2D(0xffffffff)
+		Sprite::Sprite(float x, float y, float width, float height, engine::graphics::Texture* texture)
+			: m_Position(engine::maths::Vec3(x, y, 0)), m_Size(engine::maths::Vec2(width, height)), engine::graphics::Renderable2D(0xffffffff)
 		{
 			m_Texture = texture;
 		}
@@ -34,18 +34,18 @@ namespace spright_engine {
 			return maths::Vec2(m_Position.x, m_Position.y);
 		}
 
-		void Sprite::setSize(spright_engine::maths::Vec2 size)
+		void Sprite::setSize(engine::maths::Vec2 size)
 		{
 			this->m_Size = size;
 		}
 
-		void Sprite::setPosition(spright_engine::maths::Vec2 position)
+		void Sprite::setPosition(engine::maths::Vec2 position)
 		{
 			this->m_Position = maths::Vec3(position.x, position.y, m_Position.z);
 			updateBounds();
 		}
 
-		bool Sprite::contains(spright_engine::maths::Vec2 point)
+		bool Sprite::contains(engine::maths::Vec2 point)
 		{
 			const Bounds* bounds = getBounds();
 			return point.x > bounds->minX && point.x < bounds->maxX&& point.y > bounds->minY && point.y < bounds->maxY;
@@ -71,28 +71,28 @@ namespace spright_engine {
 		return json;
 	}
 
-	void Sprite::submit(spright_engine::graphics::Renderer2D* renderer) const {
-		spright_engine::graphics::VertexData*& buffer = renderer->getBuffer();
-		const spright_engine::maths::Mat4* transformation = renderer->getTransformation();
+	void Sprite::submit(engine::graphics::Renderer2D* renderer) const {
+		engine::graphics::VertexData*& buffer = renderer->getBuffer();
+		const engine::maths::Mat4* transformation = renderer->getTransformation();
 		buffer->vertex = *transformation * m_Position;
 		buffer->uv = m_UV[0];
 		buffer->tid = 0.0f;
 		buffer->color = m_Color;
 		buffer++;
 
-		buffer->vertex = *transformation * spright_engine::maths::Vec3(m_Position.x, m_Position.y + m_Size.y, m_Position.z);
+		buffer->vertex = *transformation * engine::maths::Vec3(m_Position.x, m_Position.y + m_Size.y, m_Position.z);
 		buffer->uv = m_UV[1];
 		buffer->tid = 0.0f;
 		buffer->color = m_Color;
 		buffer++;
 
-		buffer->vertex = *transformation * spright_engine::maths::Vec3(m_Position.x + m_Size.x, m_Position.y + m_Size.y, m_Position.z);
+		buffer->vertex = *transformation * engine::maths::Vec3(m_Position.x + m_Size.x, m_Position.y + m_Size.y, m_Position.z);
 		buffer->uv = m_UV[2];
 		buffer->tid = 0.0f;
 		buffer->color = m_Color;
 		buffer++;
 
-		buffer->vertex = *transformation * spright_engine::maths::Vec3(m_Position.x + m_Size.x, m_Position.y, m_Position.z);
+		buffer->vertex = *transformation * engine::maths::Vec3(m_Position.x + m_Size.x, m_Position.y, m_Position.z);
 		buffer->uv = m_UV[3];
 		buffer->tid = 0.0f;
 		buffer->color = m_Color;

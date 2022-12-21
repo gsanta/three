@@ -6,22 +6,22 @@
 #include <vector>
 #include "vertex_data.h"
 
-namespace spright_engine { namespace graphics {
+namespace engine { namespace graphics {
 	class Renderable2D;
 
 	class Renderer2D {
 	protected:
-		std::vector<spright_engine::maths::Mat4> m_TransformationStack;
-		const spright_engine::maths::Mat4* m_TransformationBack;
+		std::vector<engine::maths::Mat4> m_TransformationStack;
+		const engine::maths::Mat4* m_TransformationBack;
 
 		GLsizei m_IndexCount = 0;
 
 		Renderer2D() {
-			m_TransformationStack.push_back(spright_engine::maths::Mat4::identity());
+			m_TransformationStack.push_back(engine::maths::Mat4::identity());
 			m_TransformationBack = &m_TransformationStack.back();
 		}
 	public:
-		void push(const spright_engine::maths::Mat4& matrix, bool override = false) {
+		void push(const engine::maths::Mat4& matrix, bool override = false) {
 			if (override) {
 				m_TransformationStack.push_back(matrix);
 			}
@@ -42,7 +42,7 @@ namespace spright_engine { namespace graphics {
 			// TODO: Add to log!
 		}
 
-		const spright_engine::maths::Mat4* getTransformation() {
+		const engine::maths::Mat4* getTransformation() {
 			return m_TransformationBack;
 		}
 

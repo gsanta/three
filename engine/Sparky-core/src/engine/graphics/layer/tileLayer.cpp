@@ -1,6 +1,6 @@
 #include "tileLayer.h"
 
-namespace spright_engine { namespace graphics {
+namespace engine { namespace graphics {
 
 	TileLayer::TileLayer(std::string name, std::string id, Shader* shader, Renderer2D* renderer, Camera* camera, Dimensions dimensions)
 		: Layer(name, id, renderer, shader, camera, dimensions) {
@@ -20,7 +20,7 @@ namespace spright_engine { namespace graphics {
 		delete[] m_TileIndexes;
 	}
 
-	spright_engine::maths::Vec2 TileLayer::getBottomLeftPos(spright_engine::maths::Vec2 pointer)
+	engine::maths::Vec2 TileLayer::getBottomLeftPos(engine::maths::Vec2 pointer)
 	{
 		maths::Vec2Int tilePos = getTilePos(pointer);
 
@@ -29,15 +29,15 @@ namespace spright_engine { namespace graphics {
 		float x = static_cast<float>(tilePos.x) * tileSize + m_Dimensions.left;
 		float y = static_cast<float>(tilePos.y) * tileSize + m_Dimensions.bottom;
 
-		return spright_engine::maths::Vec2(x, y);
+		return engine::maths::Vec2(x, y);
 	}
 
-	spright_engine::maths::Vec2 TileLayer::getBottomLeftPos(int tileIndex)
+	engine::maths::Vec2 TileLayer::getBottomLeftPos(int tileIndex)
 	{
 		int y = tileIndex / m_TileBounds.getWidth();
 		int x = tileIndex % m_TileBounds.getWidth();
 
-		return spright_engine::maths::Vec2(x * m_TileSize + m_Dimensions.left, y * m_TileSize + m_Dimensions.bottom);
+		return engine::maths::Vec2(x * m_TileSize + m_Dimensions.left, y * m_TileSize + m_Dimensions.bottom);
 	}
 
 	// TODO: check if it works for both even and odd number of tiles
@@ -85,7 +85,7 @@ namespace spright_engine { namespace graphics {
 			float sizeX = j["sizeX"];
 			float sizeY = j["sizeY"];
 
-			spright_engine::graphics::Sprite* sprite = new spright_engine::graphics::Sprite(posX, posY, sizeX, sizeY, 0xff0000ff);
+			engine::graphics::Sprite* sprite = new engine::graphics::Sprite(posX, posY, sizeX, sizeY, 0xff0000ff);
 			add(sprite);
 		}
 	}

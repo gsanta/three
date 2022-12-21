@@ -1,6 +1,6 @@
 #include "event_handler.h"
 
-namespace spright_app {
+namespace spright {
 	void EventHandler::emitDataChange()
 	{
 		for (EventListener* listener : m_Listeners) {

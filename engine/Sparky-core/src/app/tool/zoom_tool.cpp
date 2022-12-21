@@ -1,13 +1,13 @@
 #include "zoom_tool.h"
 
-namespace spright_app {
-	ZoomTool::ZoomTool(spright_engine::graphics::Camera* camera) : m_Camera(camera), Tool("zoom")
+namespace spright {
+	ZoomTool::ZoomTool(engine::graphics::Camera* camera) : m_Camera(camera), Tool("zoom")
 	{
 	}
 
 	void ZoomTool::scroll(tool::PointerInfo& pointerInfo)
 	{
-		const spright_engine::graphics::OrthoProjectionInfo& projInfo = m_Camera->getProjectionInfo();
+		const engine::graphics::OrthoProjectionInfo& projInfo = m_Camera->getProjectionInfo();
 
 		float horizontal = m_ZoomFactor;
 		float vertical = horizontal / m_Camera->getAspectRatio();
@@ -17,7 +17,7 @@ namespace spright_app {
 			vertical *= -1;
 		}
 
-		const spright_engine::graphics::OrthoProjectionInfo newProjInfo(projInfo.left - horizontal, projInfo.right + horizontal, projInfo.bottom - vertical, projInfo.top + vertical);
+		const engine::graphics::OrthoProjectionInfo newProjInfo(projInfo.left - horizontal, projInfo.right + horizontal, projInfo.bottom - vertical, projInfo.top + vertical);
 
 		m_Camera->setProjectionInfo(newProjInfo);
 	}

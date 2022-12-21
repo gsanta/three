@@ -8,7 +8,7 @@
 #include "../../../engine/graphics/renderable/renderable2d.h"
 #include "../../../engine/maths/vec2.h"
 
-namespace spright_app {
+namespace spright {
 
 	//type FillerData = {
  // width: number;
@@ -26,8 +26,8 @@ namespace spright_app {
  // selectionThreshold ? : number;
 	//};
 
-	using namespace spright_engine::graphics;
-	using namespace spright_engine::maths;
+	using namespace engine::graphics;
+	using namespace engine::maths;
 
 
 	struct FloodFillData {

@@ -5,16 +5,16 @@
 #include "../../engine/graphics/camera/ortho_projection_info.h"
 #include "pointer_info.h"
 
-namespace spright_app {
+namespace spright {
 
 	class PanTool : public tool::Tool
 	{
 	private:
-		spright_engine::graphics::Camera* m_Camera;
+		engine::graphics::Camera* m_Camera;
 		float m_ZoomFactor = 1.0f;
 
 	public:
-		PanTool(spright_engine::graphics::Camera* camera);
+		PanTool(engine::graphics::Camera* camera);
 	private:
 		void pointerMove(tool::PointerInfo& pointerInfo) override;
 	};

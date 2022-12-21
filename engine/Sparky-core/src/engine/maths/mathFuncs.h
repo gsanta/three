@@ -4,7 +4,7 @@
 #include <math.h>
 #include "mat4.h"
 
-namespace spright_engine { namespace maths {
+namespace engine { namespace maths {
 
 	float toRadians(float degrees);
 

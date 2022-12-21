@@ -9,9 +9,9 @@
 #include "../../engine/graphics/renderable/line_shape.h"
 #include "../../engine/graphics/renderable/sprite.h"
 
-namespace spright_app { namespace document {
+namespace spright { namespace document {
 	using namespace std;
-	using namespace spright_engine::graphics;
+	using namespace engine::graphics;
 
 	class DocumentHandler {
 	private:

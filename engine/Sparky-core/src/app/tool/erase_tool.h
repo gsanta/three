@@ -6,7 +6,7 @@
 #include "tool.h"
 #include "../service/core/event/event_handler.h"
 
-namespace spright_app { namespace tool {
+namespace spright { namespace tool {
 
 	using namespace document;
 
@@ -14,7 +14,7 @@ namespace spright_app { namespace tool {
 	private:
 		DocumentHandler* m_DocumentHandler;
 		EventHandler* m_EventHandler;
-		vector<spright_engine::graphics::Sprite*> m_SelectionSprites;
+		vector<engine::graphics::Sprite*> m_SelectionSprites;
 
 		float m_DashSize = 0.2f;
 		bool m_IsMoveSelection = false;

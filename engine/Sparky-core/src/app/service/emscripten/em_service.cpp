@@ -1,6 +1,6 @@
 #include "em_service.h"
 
-namespace spright_app {
+namespace spright {
 	EmService::EmService(EventHandler* eventHandler)
 	{
 #ifdef SPARKY_EMSCRIPTEN

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace spright_app {
+namespace spright {
 	// alpha, blue, green, red
 #define COLOR_RED 0xff0000ff
 #define COLOR_GREEN 0xff00ff00

@@ -2,7 +2,7 @@
 #include "../core/event/event_handler.h"
 #include "em_events.h"
 
-namespace spright_app {
+namespace spright {
 
 	class EmService {
 	private:

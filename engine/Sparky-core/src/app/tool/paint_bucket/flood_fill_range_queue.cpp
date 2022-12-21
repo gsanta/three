@@ -1,6 +1,6 @@
 #include "flood_fill_range_queue.h"
 
-namespace spright_app {
+namespace spright {
 	size_t FloodFillRangeQueue::getCount()
 	{
 		return m_Ranges.size();

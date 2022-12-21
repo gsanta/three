@@ -1,6 +1,6 @@
 #pragma once
 
-namespace spright_app { namespace base {
+namespace spright { namespace base {
 
 	class Point {
 	public:

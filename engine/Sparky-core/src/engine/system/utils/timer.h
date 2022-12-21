@@ -2,7 +2,7 @@
 
 #include <Windows.h>
 
-namespace spright_engine { namespace system {
+namespace engine { namespace system {
 
 	class Timer {
 	private:

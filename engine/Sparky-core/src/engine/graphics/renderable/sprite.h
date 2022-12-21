@@ -7,9 +7,9 @@
 
 using namespace std::string_literals;
 
-namespace spright_engine { namespace graphics {
-	using namespace spright_engine::graphics;
-	using namespace spright_engine::maths;
+namespace engine { namespace graphics {
+	using namespace engine::graphics;
+	using namespace engine::maths;
 
 	class Sprite : public Renderable2D {
 	private:

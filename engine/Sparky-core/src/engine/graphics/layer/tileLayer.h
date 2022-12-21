@@ -12,7 +12,7 @@
 #include "../camera/camera.h"
 #include "dimensions.h"
 
-namespace spright_engine { namespace graphics {
+namespace engine { namespace graphics {
 	class TileLayer : public Layer
 	{
 	private:
@@ -22,12 +22,12 @@ namespace spright_engine { namespace graphics {
 		BoundsInt m_TileBounds;
 
 	public:
-		TileLayer(std::string name, std::string id, spright_engine::graphics::Shader* shader, spright_engine::graphics::Renderer2D* renderer, Camera* camera, Dimensions dimensions);
+		TileLayer(std::string name, std::string id, engine::graphics::Shader* shader, engine::graphics::Renderer2D* renderer, Camera* camera, Dimensions dimensions);
 		virtual ~TileLayer();
 
 		// TODO: find a better name
-		spright_engine::maths::Vec2 getBottomLeftPos(spright_engine::maths::Vec2 pointer);
-		spright_engine::maths::Vec2 getBottomLeftPos(int tileIndex);
+		engine::maths::Vec2 getBottomLeftPos(engine::maths::Vec2 pointer);
+		engine::maths::Vec2 getBottomLeftPos(int tileIndex);
 		maths::Vec2Int getTilePos(maths::Vec2 pos);
 		maths::Vec2 getWorldPos(int x, int y);
 

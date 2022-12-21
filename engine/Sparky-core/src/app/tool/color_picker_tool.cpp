@@ -1,6 +1,6 @@
 #include "color_picker_tool.h"
 
-namespace spright_app {
+namespace spright {
 
 	ColorPickerTool::ColorPickerTool(DocumentHandler* documentHandler, Services* services): m_DocumentHandler(documentHandler), m_Services(services), Tool("color_picker") {
 

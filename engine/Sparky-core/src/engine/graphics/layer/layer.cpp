@@ -1,6 +1,6 @@
 #include "layer.h"
 
-namespace spright_engine { namespace graphics {
+namespace engine { namespace graphics {
 
 	Layer::Layer(std::string name, std::string id, Renderer2D* renderer, Shader* shader, Camera* camera, Dimensions dimensions)
 		: m_Name(name), m_Id(id), m_Renderer(renderer), m_Shader(shader), m_Camera(camera), m_Dimensions(dimensions) {
@@ -15,11 +15,11 @@ namespace spright_engine { namespace graphics {
 		}
 	}
 
-	void Layer::add(spright_engine::graphics::Renderable2D* renderable) {
+	void Layer::add(engine::graphics::Renderable2D* renderable) {
 		m_Renderables.push_back(renderable);
 	}
 
-	void Layer::remove(spright_engine::graphics::Renderable2D* renderable)
+	void Layer::remove(engine::graphics::Renderable2D* renderable)
 	{
 		auto it = std::find(m_Renderables.begin(), m_Renderables.end(), renderable);
 
@@ -53,7 +53,7 @@ namespace spright_engine { namespace graphics {
 
 		m_Renderer->begin();
 		m_Renderer->push(m_Camera->getView());
-		for (const spright_engine::graphics::Renderable2D* renderable : m_Renderables) {
+		for (const engine::graphics::Renderable2D* renderable : m_Renderables) {
 			renderable->submit(m_Renderer);
 		}
 		m_Renderer->end();

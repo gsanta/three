@@ -2,7 +2,7 @@
 #include <vector>
 #include "event_listener.h"
 
-namespace spright_app {
+namespace spright {
 
 	class EventHandler {
 	private:

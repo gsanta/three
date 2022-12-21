@@ -11,13 +11,13 @@
 #include "../service/services.h"
 
 
-namespace spright_app { namespace tool {
+namespace spright { namespace tool {
 
 	using namespace std;
 
-	class ToolHandler : public spright_engine::system::InputListener {
+	class ToolHandler : public engine::system::InputListener {
 	private:
-		spright_engine::system::Window* m_Window;
+		engine::system::Window* m_Window;
 		vector<Tool*> tools;
 		vector<Tool*>* m_ActiveTools;
 		Tool* m_SelectedTool;
@@ -26,7 +26,7 @@ namespace spright_app { namespace tool {
 		Services* m_Services;
 	public:
 		ToolHandler();
-		ToolHandler(spright_engine::system::Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services);
+		ToolHandler(engine::system::Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services);
 		~ToolHandler();
 
 		ToolHandler& operator=(const ToolHandler& toolHandler);

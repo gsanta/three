@@ -7,7 +7,7 @@
 #include "../renderable/renderable2d.h"
 #include "vertex_data.h"
 
-namespace spright_engine
+namespace engine
 {
 	namespace graphics
 	{

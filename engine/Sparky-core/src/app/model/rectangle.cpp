@@ -1,6 +1,6 @@
 #include "rectangle.h"
 
-namespace spright_app {
+namespace spright {
 
 	Rectangle::Rectangle(Vec2 bottomLeft, Vec2 topRight) : bottomLeft(bottomLeft), topRight(topRight)
 	{

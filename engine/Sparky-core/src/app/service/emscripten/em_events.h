@@ -6,7 +6,7 @@
 #include <emscripten/val.h>
 #endif
 
-namespace spright_app {
+namespace spright {
 	class EmEvents : public EventListener {
 
 	public:

@@ -1,13 +1,13 @@
 #include "editor.h"
 
-namespace spright_app {
+namespace spright {
 	Editor::Editor()
 	{
-		m_Window = new spright_engine::system::Window("Editor", 800, 600);
+		m_Window = new engine::system::Window("Editor", 800, 600);
 		m_DocumentHandler = new DocumentHandler();
 		m_DocumentHandler->createDocument();
 
-		m_Services = new spright_app::Services();
+		m_Services = new spright::Services();
 		m_Services->setEmService(new EmService(m_Services->getEventHandler()));
 
 		m_toolHandler = new ToolHandler(m_Window, m_DocumentHandler, editorConfig, m_Services);

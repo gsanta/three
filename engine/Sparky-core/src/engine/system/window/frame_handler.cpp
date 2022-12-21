@@ -1,6 +1,6 @@
 #include "frame_handler.h"
 
-namespace spright_engine { namespace system {
+namespace engine { namespace system {
 	void FrameHandler::emitUpdate(float deltaTime)
 	{
 		for (FrameListener* listener : m_Listeners) {

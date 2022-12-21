@@ -1,6 +1,6 @@
 #include "window.h"
 
-namespace spright_engine { namespace system {
+namespace engine { namespace system {
 
 		void window_resize(GLFWwindow* window, int width, int height);
 

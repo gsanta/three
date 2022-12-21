@@ -1,6 +1,6 @@
 #include "bounds_int.h"
 
-namespace spright_engine { namespace graphics {
+namespace engine { namespace graphics {
 
 	BoundsInt::BoundsInt() {}
 
