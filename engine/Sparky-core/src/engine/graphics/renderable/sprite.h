@@ -23,7 +23,7 @@ namespace engine { namespace graphics {
 #endif
 
 		maths::Vec3 getPosition();
-		maths::Vec2 getPosition2d();
+		Vec2 getPosition2d();
 		int getTileIndex();
 		void setTileIndex(int tileIndex);
 		void setSize(Vec2 size);

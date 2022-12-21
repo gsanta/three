@@ -1,16 +1,17 @@
-#include "../../engine/maths/vec2.h"
+#pragma once
+
+#include "../../maths/vec2.h"
 
 namespace spright {
-	using namespace engine::maths;
 
 	struct Rectangle {
-		Vec2 bottomLeft;
-		Vec2 topRight;
+		maths::Vec2 bottomLeft;
+		maths::Vec2 topRight;
 
-		Rectangle(Vec2 bottomLeft, Vec2 topRight);
+		Rectangle(maths::Vec2 bottomLeft, maths::Vec2 topRight);
 		Rectangle();
 
-		bool contains(Vec2 point);
+		bool contains(maths::Vec2 point);
 	};
 
 }

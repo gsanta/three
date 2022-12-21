@@ -3,7 +3,7 @@
 #include "../../engine/graphics/renderable/sprite.h"
 #include "tool.h"
 #include "../document/document_handler.h"
-#include "../../engine/maths/vec2.h"
+#include "../../maths/vec2.h"
 #include "../../engine/maths/vec3.h"
 #include "../service/services.h"
 

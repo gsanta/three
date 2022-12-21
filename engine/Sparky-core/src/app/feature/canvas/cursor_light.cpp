@@ -6,7 +6,7 @@ namespace spright { namespace feature { namespace canvas {
 	}
 
 	void CursorLight::pointerMove(spright::tool::PointerInfo& pointerInfo) {
-		engine::maths::Vec2 lightPos = m_Editor->getWindow()->getInputHandler()->screenToCanvasPos(pointerInfo.curr);
+		Vec2 lightPos = m_Editor->getWindow()->getInputHandler()->screenToCanvasPos(pointerInfo.curr);
 		engine::graphics::Layer* backgroundLayer = m_Editor->getDocumentHandler()->getActiveDocument()->getLayer(spright::document::DEFAULT_BACKGROUND_LAYER_ID);
 		backgroundLayer->getShader()->enable();
 		backgroundLayer->getShader()->setUniform2f("light_pos", pointerInfo.curr);

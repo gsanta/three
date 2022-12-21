@@ -215,10 +215,10 @@
     <ClCompile Include="src\engine\graphics\shader\shader.cpp" />
     <ClCompile Include="src\engine\graphics\renderable\sprite.cpp" />
     <ClCompile Include="src\engine\graphics\texture\texture.cpp" />
-    <ClCompile Include="src\engine\maths\mat4.cpp" />
+    <ClCompile Include="src\maths\mat4.cpp" />
     <ClCompile Include="src\engine\system\window\window.cpp" />
     <ClCompile Include="src\engine\maths\mathFuncs.cpp" />
-    <ClCompile Include="src\engine\maths\vec2.cpp" />
+    <ClCompile Include="src\maths\vec2.cpp" />
     <ClCompile Include="src\engine\maths\vec2_int.cpp" />
     <ClCompile Include="src\engine\maths\vec3.cpp" />
     <ClCompile Include="src\engine\maths\vec4.cpp" />
@@ -281,10 +281,10 @@
     <ClInclude Include="src\engine\graphics\texture\imageLoad.h" />
     <ClInclude Include="src\engine\graphics\texture\texture.h" />
     <ClInclude Include="src\engine\system\window\input_listener.h" />
-    <ClInclude Include="src\engine\maths\mat4.h" />
+    <ClInclude Include="src\maths\mat4.h" />
     <ClInclude Include="src\engine\system\window\window.h" />
     <ClInclude Include="src\engine\maths\mathFuncs.h" />
-    <ClInclude Include="src\engine\maths\vec2.h" />
+    <ClInclude Include="src\maths\vec2.h" />
     <ClInclude Include="src\engine\maths\vec2_int.h" />
     <ClInclude Include="src\engine\maths\vec3.h" />
     <ClInclude Include="src\engine\maths\vec4.h" />

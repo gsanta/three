@@ -64,11 +64,11 @@ namespace engine { namespace system {
 		}
 	}
 
-	engine::maths::Vec2 InputHandler::screenToCanvasPos(engine::maths::Vec2 screenPos)
+	Vec2 InputHandler::screenToCanvasPos(Vec2 screenPos)
 	{
 		float xPos = (screenPos.x + 16.0f) * m_Window->getWidth() / 32.0f;
 		float yPos = (9.0f - screenPos.y) * m_Window->getHeight() / 18.0f;
 
-		return engine::maths::Vec2(xPos, yPos);
+		return Vec2(xPos, yPos);
  	}
 }}

@@ -2,7 +2,7 @@
 
 namespace spright {
 
-	Rectangle::Rectangle(Vec2 bottomLeft, Vec2 topRight) : bottomLeft(bottomLeft), topRight(topRight)
+	Rectangle::Rectangle(maths::Vec2 bottomLeft, maths::Vec2 topRight) : bottomLeft(bottomLeft), topRight(topRight)
 	{
 	}
 
@@ -10,7 +10,7 @@ namespace spright {
 	{
 	}
 
-	bool Rectangle::contains(Vec2 point)
+	bool Rectangle::contains(maths::Vec2 point)
 	{
 		bool ret = point.x > bottomLeft.x && point.x < topRight.x && point.y > bottomLeft.y && point.y < topRight.y;
 		return ret;

@@ -32,7 +32,7 @@ namespace engine { namespace graphics {
 		glUniform1iv(getUniformLocation(name), count, value);
 	}
 
-	void Shader::setUniform2f(const GLchar* name, const engine::maths::Vec2& vector)
+	void Shader::setUniform2f(const GLchar* name, const Vec2& vector)
 	{
 		glUniform2f(getUniformLocation(name), vector.x, vector.y);
 	}
@@ -47,7 +47,7 @@ namespace engine { namespace graphics {
 		glUniform4f(getUniformLocation(name), vector.x, vector.y, vector.z, vector.w);
 	}
 
-	void Shader::setUniformMat4(const GLchar* name, const engine::maths::Mat4& matrix)
+	void Shader::setUniformMat4(const GLchar* name, const Mat4& matrix)
 	{
 		glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, matrix.elements);
 	}

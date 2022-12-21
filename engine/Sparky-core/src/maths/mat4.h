@@ -1,10 +1,12 @@
 #pragma once
 
-#include "vec3.h"
-#include "vec4.h"
-#include "mathFuncs.h"
+#include "../engine/maths/vec3.h"
+#include "../engine/maths/vec4.h"
+#include "../engine/maths/mathFuncs.h"
 
-namespace engine { namespace maths {
+namespace spright { namespace maths {
+	using namespace engine::maths;
+
 	struct Mat4
 	{
 		union {

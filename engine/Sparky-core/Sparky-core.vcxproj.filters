@@ -45,7 +45,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\engine\maths\vec2.cpp">
+    <ClCompile Include="src\maths\vec2.cpp">
       <Filter>Source Files\maths</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\maths\vec3.cpp">
@@ -54,7 +54,7 @@
     <ClCompile Include="src\engine\maths\vec4.cpp">
       <Filter>Source Files\maths</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\maths\mat4.cpp">
+    <ClCompile Include="src\maths\mat4.cpp">
       <Filter>Source Files\maths</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\maths\mathFuncs.cpp">
@@ -248,13 +248,13 @@
     <ClInclude Include="src\engine\maths\vec4.h">
       <Filter>Header Files\maths</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\maths\mat4.h">
+    <ClInclude Include="src\maths\mat4.h">
       <Filter>Header Files\maths</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\maths\mathFuncs.h">
       <Filter>Header Files\maths</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\maths\vec2.h">
+    <ClInclude Include="src\maths\vec2.h">
       <Filter>Header Files\maths</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\maths\vec3.h">

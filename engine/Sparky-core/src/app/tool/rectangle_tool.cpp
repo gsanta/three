@@ -29,8 +29,8 @@ namespace spright { namespace tool {
 		if (pointerInfo.isDown) {
 
 			engine::graphics::TileLayer* tileLayer = dynamic_cast<engine::graphics::TileLayer*>(m_DocumentHandler->getActiveDocument()->getActiveLayer());
-			engine::maths::Vec2 downTilePos = tileLayer->getBottomLeftPos(pointerInfo.down);
-			engine::maths::Vec2 currTilePos = tileLayer->getBottomLeftPos(pointerInfo.curr);
+			maths::Vec2 downTilePos = tileLayer->getBottomLeftPos(pointerInfo.down);
+			maths::Vec2 currTilePos = tileLayer->getBottomLeftPos(pointerInfo.curr);
 
 			float left = downTilePos.x < currTilePos.x ? downTilePos.x : currTilePos.x;
 			float right = downTilePos.x > currTilePos.x ? downTilePos.x : currTilePos.x;
@@ -42,8 +42,8 @@ namespace spright { namespace tool {
 			float width = pointerInfo.curr.x - pointerInfo.down.x;
 			float height = pointerInfo.curr.y - pointerInfo.down.y;
 			std::cout << width << std::endl;
-			this->m_Rect->setPosition(engine::maths::Vec2(left, bottom));
-			this->m_Rect->setSize(engine::maths::Vec2(right - left, top - bottom));
+			this->m_Rect->setPosition(maths::Vec2(left, bottom));
+			this->m_Rect->setSize(maths::Vec2(right - left, top - bottom));
 		}
 	}
 }}

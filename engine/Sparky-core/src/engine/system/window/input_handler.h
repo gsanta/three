@@ -3,11 +3,12 @@
 #include <vector>
 #include "input_listener.h"
 #include "window.h"
-#include "../../maths/vec2.h"
+#include "../../../maths/vec2.h"
 
 using namespace std;
 
 namespace engine { namespace system {
+	using namespace spright::maths;
 
 	class Window;
 
@@ -29,7 +30,7 @@ namespace engine { namespace system {
 		void registerListener(InputListener* inputListener);
 		void unRegisterListener(InputListener* inputListener);
 	
-		engine::maths::Vec2 screenToCanvasPos(engine::maths::Vec2 screenPos);
+		Vec2 screenToCanvasPos(Vec2 screenPos);
 	};
 
 }}

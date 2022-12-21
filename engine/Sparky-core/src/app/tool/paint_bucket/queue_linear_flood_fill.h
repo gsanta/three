@@ -6,7 +6,7 @@
 #include "../../../engine/graphics/layer/tileLayer.h"
 #include "../../../engine/graphics/renderable/sprite.h"
 #include "../../../engine/graphics/renderable/renderable2d.h"
-#include "../../../engine/maths/vec2.h"
+#include "../../../maths/vec2.h"
 
 namespace spright {
 

@@ -7,7 +7,7 @@
 #include "../service/core/event/event_handler.h"
 
 namespace spright { namespace tool {
-
+	using namespace spright::maths;
 	using namespace document;
 
 	class EraseTool : public Tool {

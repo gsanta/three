@@ -2,18 +2,18 @@
 
 namespace engine { namespace graphics {
 	LineShape::LineShape(float x1, float y1, float x2, float y2, float thickness, unsigned int color): 
-		m_Start(engine::maths::Vec2(x1, y1)), m_End(engine::maths::Vec2(x2, y2)), m_Thickness(thickness), engine::graphics::Renderable2D(color) {
+		m_Start(Vec2(x1, y1)), m_End(Vec2(x2, y2)), m_Thickness(thickness), engine::graphics::Renderable2D(color) {
 	
-		engine::maths::Vec2 vec = m_End - m_Start;
+		Vec2 vec = m_End - m_Start;
 		m_Length = sqrt(vec.x * vec.x + vec.y * vec.y);
 		m_Dir = (m_End - m_Start) / m_Length;
-		m_Normal = engine::maths::Vec2(-m_Dir.y, m_Dir.x);
+		m_Normal = Vec2(-m_Dir.y, m_Dir.x);
 
 
-		engine::maths::Vec2 coord0 = m_Start + m_Normal * m_Thickness;
-		engine::maths::Vec2 coord1 = m_Start - m_Normal * m_Thickness;
-		engine::maths::Vec2 coord2 = m_End - m_Normal * m_Thickness;
-		engine::maths::Vec2 coord3 = m_End + m_Normal * m_Thickness;
+		Vec2 coord0 = m_Start + m_Normal * m_Thickness;
+		Vec2 coord1 = m_Start - m_Normal * m_Thickness;
+		Vec2 coord2 = m_End - m_Normal * m_Thickness;
+		Vec2 coord3 = m_End + m_Normal * m_Thickness;
 
 		m_Coords[0] = engine::maths::Vec3(coord0.x, coord0.y, 0);
 		m_Coords[1] = engine::maths::Vec3(coord1.x, coord1.y, 0);
@@ -23,7 +23,7 @@ namespace engine { namespace graphics {
 
 	void LineShape::submit(engine::graphics::Renderer2D* renderer) const {
 		engine::graphics::VertexData*& buffer = renderer->getBuffer();
-		const engine::maths::Mat4* transformation = renderer->getTransformation();
+		const Mat4* transformation = renderer->getTransformation();
 		buffer->vertex = *transformation * m_Coords[0];
 		buffer->uv = m_UV[0];
 		buffer->tid = 0.0f;

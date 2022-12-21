@@ -2,7 +2,7 @@
 
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include "mat4.h"
+#include "../../maths/mat4.h"
 
 namespace engine { namespace maths {
 

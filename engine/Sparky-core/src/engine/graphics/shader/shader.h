@@ -4,10 +4,11 @@
 #include <iostream>
 #include <GL/glew.h>
 #include "../../system/utils/fileUtils.h"
-#include "../../maths/mat4.h"
-#include "../../maths/vec2.h"
+#include "../../../maths/vec2.h"
+#include "../../../maths/mat4.h"
 
 namespace engine { namespace graphics {
+	using namespace spright::maths;
 
 	class Shader {
 	public:
@@ -22,10 +23,10 @@ namespace engine { namespace graphics {
 		void setUniform1i(const GLchar* name, int value);
 		void setUniform1iv(const GLchar* name, int* value, int count);
 		void setUniform1fv(const GLchar* name, float* value, int count);
-		void setUniform2f(const GLchar* name, const engine::maths::Vec2& vector);
+		void setUniform2f(const GLchar* name, const Vec2& vector);
 		void setUniform3f(const GLchar* name, const engine::maths::Vec3& vector);
 		void setUniform4f(const GLchar* name, const engine::maths::Vec4& vector);
-		void setUniformMat4(const GLchar* name, const engine::maths::Mat4& matrix);
+		void setUniformMat4(const GLchar* name, const Mat4& matrix);
 
 		void enable() const;
 		void disable() const;
