@@ -14,6 +14,7 @@ jobs:
       - image: cimg/ruby:2.7.1-node
     steps:
       - checkout
+      - setup_remote_docker
       - run:
           name: Compile cpp with emscripten
           command: |
