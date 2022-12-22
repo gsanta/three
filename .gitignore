@@ -71,3 +71,5 @@ engine/x64/Debug
 engine/Web/bin
 
 enc_temp_folder
+
+client/sparky.js
