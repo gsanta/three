@@ -60,7 +60,6 @@ module.exports = (env) => {
       new MiniCssExtractPlugin({
         filename: '[name].css',
       }),
-      // new webpack.EnvironmentPlugin(['BACKEND_TYPE']),
       new webpack.DefinePlugin({
         DEBUG: env === 'debug' ? true : false,
         BACKEND_TYPE: JSON.stringify(process.env.BACKEND_TYPE),
@@ -74,6 +73,11 @@ module.exports = (env) => {
       new HtmlWebpackPlugin({
         template: 'index.html',
         filename: 'index.html',
+        inject: false,
+      }),
+      new HtmlWebpackPlugin({
+        template: 'iframe.html',
+        filename: 'iframe.html',
         inject: false,
       }),
     ],
