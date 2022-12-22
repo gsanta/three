@@ -18,6 +18,7 @@ jobs:
           name: Compile cpp with emscripten
           command: |
             set -x
+            cd engine
             docker-compose up
   # test_frontend:
   #   working_directory: ~/client
