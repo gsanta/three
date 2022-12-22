@@ -1,0 +1,7 @@
+version: "3.7"
+services:
+  compiler:
+    build: .
+    volumes:
+      - .:/src
+    command: sh -c "mkdir -p Web/bin && cd Web/bin && emcmake cmake .. && cmake --build ."
