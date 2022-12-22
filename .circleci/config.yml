@@ -8,124 +8,135 @@ orbs:
   rubocop: hanachin/rubocop@0.0.6
 
 jobs:
-  test_frontend:
-    working_directory: ~/client
+  build_cpp:
+    working_directory: ~/engine
     docker:
-      - image: cimg/node:16.15.0
+      - image: cimg/base:2022.04
     steps:
-      - checkout
-      - run:
-          name: Install Dependencies
-          command: cd client && npm i
-      - run:
-          name: Run Tests
-          command: cd client && npm test
-  build:
-    docker:
-      - image: cimg/ruby:2.7.6
-    steps:
-      - checkout
-      - ruby/install-deps
-  test_backend:  # our next job, called "test"
-    # we run "parallel job containers" to enable speeding up our tests;
-    # this splits our tests across multiple containers.
-    parallelism: 3
-    # here we set TWO docker images.
-    docker:
-      - image: cimg/ruby:2.7.6 # this is our primary docker image, where step commands run.
-        auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
-      - image: cimg/postgres:14.0
-        auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
-        environment:
-          POSTGRES_USER: gsanta
-          POSTGRES_DB: gamedis_test
-          POSTGRES_PORT: 5412
-          POSTGRES_PASSWORD: "santag"
-    environment:
-      # BUNDLE_JOBS: "3"
-      # BUNDLE_RETRY: "3"
-      PGHOST: 127.0.0.1
-      # PGUSER: gsanta
-      # PGPASSWORD: "santag"
-      RAILS_ENV: test
-    # A series of steps to run, some are similar to those in "build".
-    steps:
-      - checkout
-      - ruby/install-deps
-      # Here we make sure that the secondary container boots
-      # up before we run operations on the database.
-      - run:
-          name: Wait for DB
-          command: dockerize -wait tcp://localhost:5432 -timeout 1m
-      - run:
-          name: Database setup
-          command: bundle exec rails db:schema:load --trace
-      - ruby/rspec-test
-      - codecov/upload:
-          file: './public/coverage/codecov-result.json'
-      # - ruby/rspec-test
-  deploy-backend:
-    machine:
-        enabled: true
-    # working_directory: ~/circleci-demo-workflows
-    environment:
-      HEROKU_APP: "gamedis"
-    steps:
-      - checkout
-      - run:
-          name: Setup Heroku
-          command: bash .circleci/setup-heroku.sh
-
-      - run:
+      - build:
+          name: Compile cpp with emscripten
           command: |
-            git push heroku master
-  deploy-frontend:
-    machine:
-        enabled: true
-    # working_directory: ~/circleci-demo-workflows
-    environment:
-      HEROKU_APP: "cryptic-chamber-32314"
-    steps:
-      - checkout
-      - run:
-          name: Setup Heroku
-          command: bash .circleci/setup-heroku.sh
+            set -x
+            docker-compose up
+  # test_frontend:
+  #   working_directory: ~/client
+  #   docker:
+  #     - image: cimg/node:16.15.0
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Install Dependencies
+  #         command: cd client && npm i
+  #     - run:
+  #         name: Run Tests
+  #         command: cd client && npm test
+  # build:
+  #   docker:
+  #     - image: cimg/ruby:2.7.6
+  #   steps:
+  #     - checkout
+  #     - ruby/install-deps
+  # test_backend: # our next job, called "test"
+  #   # we run "parallel job containers" to enable speeding up our tests;
+  #   # this splits our tests across multiple containers.
+  #   parallelism: 3
+  #   # here we set TWO docker images.
+  #   docker:
+  #     - image: cimg/ruby:2.7.6 # this is our primary docker image, where step commands run.
+  #       auth:
+  #         username: mydockerhub-user
+  #         password: $DOCKERHUB_PASSWORD # context / project UI env-var reference
+  #     - image: cimg/postgres:14.0
+  #       auth:
+  #         username: mydockerhub-user
+  #         password: $DOCKERHUB_PASSWORD # context / project UI env-var reference
+  #       environment:
+  #         POSTGRES_USER: gsanta
+  #         POSTGRES_DB: gamedis_test
+  #         POSTGRES_PORT: 5412
+  #         POSTGRES_PASSWORD: "santag"
+  #   environment:
+  #     # BUNDLE_JOBS: "3"
+  #     # BUNDLE_RETRY: "3"
+  #     PGHOST: 127.0.0.1
+  #     # PGUSER: gsanta
+  #     # PGPASSWORD: "santag"
+  #     RAILS_ENV: test
+  #   # A series of steps to run, some are similar to those in "build".
+  #   steps:
+  #     - checkout
+  #     - ruby/install-deps
+  #     # Here we make sure that the secondary container boots
+  #     # up before we run operations on the database.
+  #     - run:
+  #         name: Wait for DB
+  #         command: dockerize -wait tcp://localhost:5432 -timeout 1m
+  #     - run:
+  #         name: Database setup
+  #         command: bundle exec rails db:schema:load --trace
+  #     - ruby/rspec-test
+  #     - codecov/upload:
+  #         file: "./public/coverage/codecov-result.json"
+  #     # - ruby/rspec-test
+  # deploy-backend:
+  #   machine:
+  #     enabled: true
+  #   # working_directory: ~/circleci-demo-workflows
+  #   environment:
+  #     HEROKU_APP: "gamedis"
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Setup Heroku
+  #         command: bash .circleci/setup-heroku.sh
 
-      - run:
-          command: |
-            git push heroku master
+  #     - run:
+  #         command: |
+  #           git push heroku master
+  # deploy-frontend:
+  #   machine:
+  #     enabled: true
+  #   # working_directory: ~/circleci-demo-workflows
+  #   environment:
+  #     HEROKU_APP: "cryptic-chamber-32314"
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Setup Heroku
+  #         command: bash .circleci/setup-heroku.sh
+
+  #     - run:
+  #         command: |
+  #           git push heroku master
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   build-test-and-deploy: # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
     jobs:
+      - build_cpp
       # - build
-      - test_backend:
-          name: 'Test Backend'
-      - test_frontend:
-          name: 'Test Frontend'
-      - rubocop/rubocop:
-          name: 'Lint Backend'
-      # - codecov/upload:
+      # - test_backend:
+      #     name: "Test Backend"
+      # - test_frontend:
+      #     name: "Test Frontend"
+      # - rubocop/rubocop:
+      #     name: "Lint Backend"
+      # # - codecov/upload:
+      # #     requires:
+      # #       # - build
+      # #       - 'Test Backend'
+      # #       - 'Test Frontend'
+      # # - rubocop/rubocop:
+      # #     version: 0.71.0
+      # - deploy-backend:
+      #     name: "Deploy Backend"
       #     requires:
       #       # - build
-      #       - 'Test Backend'
-      #       - 'Test Frontend'
-      # - rubocop/rubocop:
-      #     version: 0.71.0
-      - deploy-backend:
-          name: 'Deploy Backend'
-          requires:
-            # - build
-            - 'Test Backend'
-            - 'Test Frontend'
-            - 'Lint Backend'
-      - deploy-frontend:
-          name: 'Deploy Frontend'
-          requires:
-            - 'Deploy Backend'
+      #       - "Test Backend"
+      #       - "Test Frontend"
+      #       - "Lint Backend"
+      # - deploy-frontend:
+      #     name: "Deploy Frontend"
+      #     requires:
+      #       - "Deploy Backend"
