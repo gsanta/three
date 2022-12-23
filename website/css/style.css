@@ -9,7 +9,7 @@
   --color-white: rgb(255, 255, 255);
 
   --size-gutter-vertical: 2rem;
-  --size-gutter-horizontal: 1rem;
+  --size-gutter-horizontal: 4rem;
 }
 
 * {
@@ -179,6 +179,47 @@ body {
   margin-bottom: 2.5rem;
 }
 
+.composition {
+  position: relative;
+}
+
+.composition__photo {
+  width: 55%;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, .4);
+  border-radius: 2px;
+  position: absolute;
+  z-index: 10;
+  transition: all .1s;
+  outline-offset: 1.5rem;
+}
+
+.composition__photo:hover {
+  transform: scale(1.05) translateY(-.3rem);
+  box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.5);
+  z-index: 20;
+  outline: 1rem solid var(--color-primary-dark)
+}
+
+.composition:hover .composition__photo:not(:hover) {
+  transform: scale(.95);
+}
+
+
+.composition__photo--p1 {
+  left: 0;
+  top: -1.5rem;
+}
+
+.composition__photo--p2 {
+  right: 0;
+  top: 1.5rem;
+}
+
+.composition__photo--p3 {
+  left: 20%;
+  top: 8rem;
+}
+
 /* Grid */
 
 .row {
@@ -226,4 +267,63 @@ body {
 
 .col-3-of-4 {
   width: calc((100% - 3 * var(--size-gutter-horizontal)) / 4 * 3 + 2 * var(--size-gutter-horizontal));
+}
+
+/* section-features */
+
+.section-features {
+  padding: 20rem;
+  background-image: linear-gradient(to right bottom, var(--orange-1), var(--orange-2)), url(../img/nat-4.jpg);
+  background-size: cover;
+
+  transform: skewY(-7deg);
+  margin-top: -8rem;
+}
+
+.section-features > * {
+  transform: skewY(7deg);
+}
+
+.feature-box {
+  background-color: rgba(255, 255, 255, .8);
+  padding: 2rem;
+  text-align: center;
+  border-radius: 3px;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.15);
+  transition: transform .2s;
+}
+
+.feature-box:hover {
+  transform: translateY(-1rem) scale(1.03);
+}
+
+.feature-box__icon {
+  font-size: 5rem;
+  margin-bottom: 0.25rem;
+  display: inline-block;
+  background-image: linear-gradient(to right, var(--color-primary-light), var(--color-primary-dark));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* section tours */
+
+.section-tours {
+  background-color: var(--grey-light-1);
+  padding: 25rem 0 50rem 0;
+  margin-top: -8rem; 
+}
+
+.card {
+  perspective: 120rem;
+  -moz-perspective: 120rem;
+  
+  background-color: orangered;
+  height: 40rem;
+  transition: all .8s;
+}
+
+.card:hover {
+  transform: rotateY(180deg);
 }
