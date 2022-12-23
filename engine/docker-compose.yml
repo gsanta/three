@@ -4,4 +4,4 @@ services:
     build: .
     volumes:
       - .:/src
-    command: sh -c "mkdir -p Web/bin && cd Web/bin && emcmake cmake .. && cmake --build ."
+    command: sh -c "mkdir -p Web/bin && cd Web && ls -la && cd bin && emcmake cmake .. && cmake --build ."

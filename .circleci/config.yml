@@ -17,7 +17,6 @@ jobs:
           command: |
             set -x
             cd engine
-            docker-compose up
             docker-compose run --rm compiler; echo $?
       - persist_to_workspace:
           root: workspace
