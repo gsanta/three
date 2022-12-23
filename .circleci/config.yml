@@ -18,6 +18,12 @@ jobs:
             set -x
             cd engine
             docker-compose up
+            docker-compose run --rm compiler; echo $?
+      - persist_to_workspace:
+          root: workspace
+          # Must be relative path from root
+          paths:
+            - echo-output
   build_client:
     working_directory: ~/client
     docker:
