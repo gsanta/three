@@ -1,4 +1,4 @@
-import { AppContextType } from '@/core/AppContext';
+import { App } from '@/core/App';
 import KeyCode from '../keyboard/KeyCode';
 import PreviewModule from '../preview/PreviewModule';
 import ExternalTool from '../tool/ExternalTool';
@@ -7,14 +7,7 @@ import ToolSelectionEvent from '../tool/ToolSelectionEvents';
 import LifeCycleEventListener from './LifeCycleEventListener';
 
 class DependencyInjector implements LifeCycleEventListener {
-  onCanvasInitialized({
-    canvasEventHandler,
-    editorApi,
-    toolStore,
-    keyboardHandler,
-    layerHandler,
-    moduleManager,
-  }: AppContextType) {
+  onCanvasInitialized({ canvasEventHandler, editorApi, toolStore, keyboardHandler, layerHandler, moduleManager }: App) {
     toolStore.addTool(
       new ExternalTool(
         ToolName.Brush,

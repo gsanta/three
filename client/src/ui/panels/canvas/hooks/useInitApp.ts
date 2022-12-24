@@ -1,8 +1,8 @@
-import { AppContextType } from '@/core/AppContext';
+import { App } from '@/core/App';
 import DependencyInjector from '@/services/core/DependencyInjector';
 import { useEffect, useState } from 'react';
 
-const useInitApp = (appContext: AppContextType, canvasNode?: HTMLDivElement) => {
+const useInitApp = (appContext: App, canvasNode?: HTMLDivElement) => {
   const [isModuleInitialized, setIsModuleInitialized] = useState(false);
 
   useEffect(() => {

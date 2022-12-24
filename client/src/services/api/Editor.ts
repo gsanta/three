@@ -1,7 +1,8 @@
+import NativeSettings from '../NativeSettings';
 import ToolName from '../tool/ToolName';
 import ToolDescription from './ToolDescription';
 
-class EditorApi {
+class Editor implements NativeSettings {
   private _canvasNode: HTMLElement | undefined;
 
   setWindowSize(width: number, height: number) {
@@ -83,4 +84,4 @@ class EditorApi {
   }
 }
 
-export default EditorApi;
+export default Editor;

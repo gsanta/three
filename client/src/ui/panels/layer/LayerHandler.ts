@@ -1,4 +1,4 @@
-import EditorApi from '@/services/api/EditorApi';
+import Editor from '@/services/api/Editor';
 import { action, makeObservable, observable } from 'mobx';
 import LayerAdapter from './LayerAdapter';
 import { v4 as uuidv4 } from 'uuid';
@@ -8,9 +8,9 @@ class LayerHandler {
 
   private activeLayer: LayerAdapter | undefined;
 
-  private editorApi: EditorApi;
+  private editorApi: Editor;
 
-  constructor(editorApi: EditorApi) {
+  constructor(editorApi: Editor) {
     this.editorApi = editorApi;
     makeObservable<LayerHandler, 'layers' | 'activeLayer'>(this, {
       activeLayer: observable,

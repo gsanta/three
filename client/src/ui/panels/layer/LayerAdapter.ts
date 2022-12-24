@@ -1,4 +1,4 @@
-import EditorApi from '@/services/api/EditorApi';
+import Editor from '@/services/api/Editor';
 import { action, makeObservable, observable } from 'mobx';
 
 class LayerAdapter {
@@ -8,9 +8,9 @@ class LayerAdapter {
 
   private visible = true;
 
-  private editorApi: EditorApi;
+  private editorApi: Editor;
 
-  constructor(name: string, id: string, editorApi: EditorApi) {
+  constructor(name: string, id: string, editorApi: Editor) {
     this.name = name;
     this.id = id;
     this.editorApi = editorApi;

@@ -1,10 +1,10 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import App from '@/ui/components/App';
+import Root from '@/ui/components/AppContainer';
 
 describe('Index page', () => {
   it('renders the page', () => {
-    render(<App />);
+    render(<Root />);
 
     expect(screen.getByTestId('editor-canvas')).toBeInTheDocument();
   });
