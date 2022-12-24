@@ -41,5 +41,8 @@
         "memory_resource": "cpp",
         "locale": "cpp",
         "mutex": "cpp"
-    }
+    },
+    "cSpell.words": [
+        "Chakra"
+    ]
 }

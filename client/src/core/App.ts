@@ -1,18 +1,18 @@
-import EditorStore from '@/services/EditorStore';
+import Settings from '@/services/Settings';
 import CanvasEventHandler from '@/services/canvas/CanvasEventHandler';
 import ToolStore from '@/services/tool/ToolStore';
 import { createContext } from 'react';
 import ModuleManager from '@/core/ModuleManager';
 import KeyboardHandler from '@/services/keyboard/KeyboardHandler';
 import LifeCycleEventHandler from '@/services/core/LifeCycleEventHandler';
-import EditorApi from '@/services/api/EditorApi';
+import Editor from '@/services/api/Editor';
 import WindowHandler from '@/services/core/WindowHandler';
 import LayerHandler from '@/ui/panels/layer/LayerHandler';
 
-export type AppContextType = {
-  editorApi: EditorApi;
+export type App = {
+  editorApi: Editor;
   toolStore: ToolStore;
-  editorStore: EditorStore;
+  editorStore: Settings;
   canvasEventHandler: CanvasEventHandler;
   lifeCycleEventHandler: LifeCycleEventHandler;
   moduleManager: ModuleManager;
@@ -21,6 +21,6 @@ export type AppContextType = {
   layerHandler: LayerHandler;
 };
 
-const AppContext = createContext<AppContextType | undefined>(undefined);
+const AppContext = createContext<App | undefined>(undefined);
 
 export default AppContext;

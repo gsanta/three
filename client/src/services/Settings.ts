@@ -1,13 +1,13 @@
 import { makeObservable, observable } from 'mobx';
-import EditorApi from './api/EditorApi';
+import NativeSettings from './NativeSettings';
 
-class EditorStore {
+class Settings {
   color = '#000000';
 
-  private editorApi: EditorApi;
+  private _settings: NativeSettings;
 
-  constructor(editorApi: EditorApi) {
-    this.editorApi = editorApi;
+  constructor(settings: NativeSettings) {
+    this._settings = settings;
     makeObservable(this, {
       color: observable,
       setColor: observable,
@@ -21,8 +21,8 @@ class EditorStore {
     const g = this.color.substring(3, 5);
     const b = this.color.substring(5, 7);
     const hexColor = Number('0xff' + b + g + r);
-    this.editorApi.setColor(hexColor);
+    this._settings.setColor(hexColor);
   }
 }
 
-export default EditorStore;
+export default Settings;

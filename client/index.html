@@ -25,9 +25,6 @@
         renderApp();
       },
       isRuntimeInitialized: false,
-      preRun: [],
-      postRun: [],
-      print: function () { },
       canvas: (function () {
         var canvas = document.getElementById('canvas');
 
@@ -38,13 +35,6 @@
 
         return canvas;
       })(),
-      setStatus: function (text) {
-
-      },
-      totalDependencies: 0,
-      monitorRunDependencies: function (left) {
-
-      }
     };
     window.onerror = function (event) {
       // TODO: do not warn on ok events like simulating an infinite loop or exitStatus

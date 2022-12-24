@@ -1,10 +1,10 @@
-import { AppContextType } from '@/core/AppContext';
+import { App } from '@/core/App';
 import LifeCycleEventListener from './LifeCycleEventListener';
 
 class LifeCycleEventHandler {
   private listeners: LifeCycleEventListener[] = [];
 
-  emitCanvasInitialized(context: AppContextType) {
+  emitCanvasInitialized(context: App) {
     this.listeners.forEach((listener) => listener.onCanvasInitialized(context));
   }
 

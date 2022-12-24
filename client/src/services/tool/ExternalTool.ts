@@ -1,5 +1,5 @@
 import { IconName } from '@/ui/components/icon/Icon';
-import EditorApi from '../api/EditorApi';
+import Editor from '../api/Editor';
 import Tool from './Tool';
 import ToolName from './ToolName';
 import ToolSelectionEvent from './ToolSelectionEvents';
@@ -9,11 +9,11 @@ class ExternalTool implements Tool {
 
   iconName: IconName;
 
-  private editorApi: EditorApi;
+  private editorApi: Editor;
 
   private toolSelectionEvent?: ToolSelectionEvent;
 
-  constructor(name: ToolName, iconName: IconName, editorApi: EditorApi, toolSelectionEvent?: ToolSelectionEvent) {
+  constructor(name: ToolName, iconName: IconName, editorApi: Editor, toolSelectionEvent?: ToolSelectionEvent) {
     this.name = name;
     this.iconName = iconName;
     this.editorApi = editorApi;
