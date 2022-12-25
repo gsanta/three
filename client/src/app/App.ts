@@ -1,11 +1,10 @@
-import CanvasEventHandler from '@/services/canvas/CanvasEventHandler';
+import EditorEvents from '@/services/editor/EditorEvents';
 import ToolStore from '@/panels/toolbar/ToolStore';
 import { createContext } from 'react';
-import ModuleManager from '@/core/ModuleManager';
+import ModuleManager from '@/app/ModuleManager';
 import KeyboardHandler from '@/services/keyboard/KeyboardHandler';
-import LifeCycleEventHandler from '@/services/core/LifeCycleEventHandler';
-import Editor from '@/services/native/Editor';
-import WindowHandler from '@/services/core/WindowHandler';
+import Editor from '@/services/editor/Editor';
+import WindowHandler from '@/services/editor/WindowHandler';
 import LayerHandler from '@/panels/layer/model/LayerHandler';
 import Settings from '@/services/settings/Settings';
 
@@ -13,8 +12,7 @@ export type App = {
   editorApi: Editor;
   toolStore: ToolStore;
   editorStore: Settings;
-  canvasEventHandler: CanvasEventHandler;
-  lifeCycleEventHandler: LifeCycleEventHandler;
+  editorEvents: EditorEvents;
   moduleManager: ModuleManager;
   keyboardHandler: KeyboardHandler;
   windowHandler: WindowHandler;

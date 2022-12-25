@@ -1,8 +1,8 @@
+import { EditorEventListener } from '@/services/editor/EditorEvents';
 import { createClient } from 'really-simple-xdm';
-import CanvasEventListener from '../../services/canvas/CanvasEventListener';
-import Editor from '../../services/native/Editor';
+import Editor from '../../services/editor/Editor';
 
-class PreviewDataProvider extends CanvasEventListener {
+class PreviewDataProvider extends EditorEventListener {
   // TODO: add type
   private previewProxy: any;
 

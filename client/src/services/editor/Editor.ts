@@ -1,9 +1,10 @@
-import NativeApi from './NativeApi';
-import NativeRuntime from './NativeRuntime';
+import EditorApi from './EditorApi';
+import EditorRuntime from './EditorRuntime';
 
-type Editor = NativeRuntime & NativeApi;
+type Editor = EditorRuntime & EditorApi;
 
-// window.Module = new NativeRuntime() as Editor
+export const editor = new EditorRuntime() as Editor;
+window.Module = editor;
 
 // class Editor implements NativeSettings {
 // getLayers(): ToolDescription[] {

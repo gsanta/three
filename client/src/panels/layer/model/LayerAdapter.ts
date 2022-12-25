@@ -1,4 +1,4 @@
-import Editor from '@/services/native/Editor';
+import Editor from '@/services/editor/Editor';
 import { action, makeObservable, observable } from 'mobx';
 
 class LayerAdapter {
