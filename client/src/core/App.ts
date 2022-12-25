@@ -1,13 +1,13 @@
-import Settings from '@/services/Settings';
 import CanvasEventHandler from '@/services/canvas/CanvasEventHandler';
-import ToolStore from '@/services/tool/ToolStore';
+import ToolStore from '@/panels/toolbar/ToolStore';
 import { createContext } from 'react';
 import ModuleManager from '@/core/ModuleManager';
 import KeyboardHandler from '@/services/keyboard/KeyboardHandler';
 import LifeCycleEventHandler from '@/services/core/LifeCycleEventHandler';
-import Editor from '@/services/api/Editor';
+import Editor from '@/services/native/Editor';
 import WindowHandler from '@/services/core/WindowHandler';
-import LayerHandler from '@/ui/panels/layer/LayerHandler';
+import LayerHandler from '@/panels/layer/model/LayerHandler';
+import Settings from '@/services/settings/Settings';
 
 export type App = {
   editorApi: Editor;
@@ -21,6 +21,6 @@ export type App = {
   layerHandler: LayerHandler;
 };
 
-const AppContext = createContext<App | undefined>(undefined);
+export const AppContext = createContext<App | undefined>(undefined);
 
-export default AppContext;
+export default App;

@@ -1,6 +1,6 @@
 import AppModule from '@/core/AppModule';
-import CanvasEventHandler from '../canvas/CanvasEventHandler';
-import Editor from '../api/Editor';
+import Editor from '@/services/native/Editor';
+import CanvasEventHandler from '@/services/canvas/CanvasEventHandler';
 import PreviewDataProvider from './PreviewDataProvider';
 
 class PreviewModule extends AppModule {

@@ -1,6 +1,6 @@
+import LayerAdapter from '@/panels/layer/model/LayerAdapter';
 import { useDrag } from 'react-dnd';
-import LayerAdapter from '../LayerAdapter';
-import layerDragType from '../types/layerDragType';
+import layerDragType from '../../model/layerDragType';
 
 const useDragLayer = (layerAdapter: LayerAdapter) => {
   const [{ opacity }, ref] = useDrag(

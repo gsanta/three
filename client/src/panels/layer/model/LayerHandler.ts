@@ -1,7 +1,8 @@
-import Editor from '@/services/api/Editor';
+import Editor from '@/services/native/Editor';
 import { action, makeObservable, observable } from 'mobx';
 import LayerAdapter from './LayerAdapter';
 import { v4 as uuidv4 } from 'uuid';
+import ToolDescription from '@/services/native/ToolDescription';
 
 class LayerHandler {
   private layers: LayerAdapter[] = [];
@@ -25,9 +26,10 @@ class LayerHandler {
   }
 
   init() {
-    this.editorApi
-      .getLayers()
-      .forEach((layer) => this.addLayer(new LayerAdapter(layer.name, layer.id, this.editorApi)));
+    const layersList = this.editorApi.getLayers();
+    const layersString = new Array<string>(layersList.size()).fill('').map((_, id) => layersList.get(id));
+    const layers = layersString.map<ToolDescription>((layerString) => JSON.parse(layerString));
+    layers.forEach((layer) => this.addLayer(new LayerAdapter(layer.name, layer.id, this.editorApi)));
 
     this.setActiveLayer(this.layers[0]);
   }

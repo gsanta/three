@@ -1,6 +1,6 @@
-import Tool from './Tool';
+import Tool from './model/Tool';
 import { makeObservable, observable, action } from 'mobx';
-import ToolName from './ToolName';
+import ToolName from './model/ToolName';
 
 class ToolStore {
   tools: Tool[] = [];

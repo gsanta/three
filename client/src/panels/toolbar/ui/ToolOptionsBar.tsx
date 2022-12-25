@@ -1,4 +1,4 @@
-import ToolName from '@/services/tool/ToolName';
+import ToolName from '@/panels/toolbar/model/ToolName';
 import useAppContext from '@/ui/hooks/useAppContext';
 import { Flex } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';

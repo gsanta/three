@@ -1,5 +1,5 @@
 import { IconName } from '@/ui/components/icon/Icon';
-import Editor from '../api/Editor';
+import Editor from '../../../services/native/Editor';
 import Tool from './Tool';
 import ToolName from './ToolName';
 import ToolSelectionEvent from './ToolSelectionEvents';

@@ -16,33 +16,33 @@
   </div>
   <script src="./iframe.js"></script>
   <script type='text/javascript'>
-    var Module = {
-      onRuntimeInitialized: function () {
-        Module.isRuntimeInitialized = true;
-        renderApp();
-      },
-      isRuntimeInitialized: false,
-      preRun: [],
-      postRun: [],
-      print: function () { },
-      canvas: (function () {
-        var canvas = document.getElementById('canvas');
+    // var Module = {
+    //   onRuntimeInitialized: function () {
+    //     Module.isRuntimeInitialized = true;
+    //     renderApp();
+    //   },
+    //   isRuntimeInitialized: false,
+    //   preRun: [],
+    //   postRun: [],
+    //   print: function () { },
+    //   canvas: (function () {
+    //     var canvas = document.getElementById('canvas');
 
-        // As a default initial behavior, pop up an alert when webgl context is lost. To make your
-        // application robust, you may want to override this behavior before shipping!
-        // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
-        canvas.addEventListener("webglcontextlost", function (e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
+    //     // As a default initial behavior, pop up an alert when webgl context is lost. To make your
+    //     // application robust, you may want to override this behavior before shipping!
+    //     // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
+    //     canvas.addEventListener("webglcontextlost", function (e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
 
-        return canvas;
-      })(),
-      setStatus: function (text) {
+    //     return canvas;
+    //   })(),
+    //   setStatus: function (text) {
 
-      },
-      totalDependencies: 0,
-      monitorRunDependencies: function (left) {
+    //   },
+    //   totalDependencies: 0,
+    //   monitorRunDependencies: function (left) {
 
-      }
-    };
+    //   }
+    // };
     window.onerror = function (event) {
       // TODO: do not warn on ok events like simulating an infinite loop or exitStatus
       Module.setStatus('Exception thrown from iframe, see JavaScript console');
