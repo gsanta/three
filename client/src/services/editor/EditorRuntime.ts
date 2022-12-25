@@ -1,4 +1,4 @@
-class NativeRuntime {
+class EditorRuntime {
   isRuntimeInitialized = false;
 
   private _canvasNode: HTMLElement | undefined;
@@ -16,6 +16,8 @@ class NativeRuntime {
     return this._canvasNode;
   }
 
+  canvas?: HTMLCanvasElement;
+
   // canvas: (function () {
   //   var canvas = document.getElementById('canvas');
 
@@ -28,4 +30,4 @@ class NativeRuntime {
   // })(),
 }
 
-export default NativeRuntime;
+export default EditorRuntime;

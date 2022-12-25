@@ -1,21 +1,22 @@
-import { App } from '@/core/App';
-import DependencyInjector from '@/services/core/DependencyInjector';
+import { App } from '@/app/App';
+import DependencyInjector from '@/app/DependencyInjector';
 import { useEffect, useState } from 'react';
 
-const useInitApp = (appContext: App, canvasNode?: HTMLDivElement) => {
+const useInitApp = (appContext: App, canvasNode?: HTMLCanvasElement) => {
   const [isModuleInitialized, setIsModuleInitialized] = useState(false);
 
   useEffect(() => {
-    appContext.lifeCycleEventHandler.addListener(appContext.windowHandler);
-    appContext.lifeCycleEventHandler.addListener(new DependencyInjector());
-  }, [appContext.lifeCycleEventHandler, appContext.windowHandler]);
+    appContext.editorEvents.addListener(appContext.windowHandler);
+    appContext.editorEvents.addListener(new DependencyInjector());
+  }, [appContext.editorEvents, appContext.windowHandler]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
+    appContext.editorApi.canvas = canvasNode;
     if (window?.Module?.isRuntimeInitialized && !isModuleInitialized) {
-      appContext.editorApi.canvasNode = canvasNode;
+      appContext.editorApi.canvasNode = canvasNode?.parentElement as HTMLDivElement;
       setIsModuleInitialized(true);
-      appContext.lifeCycleEventHandler.emitCanvasInitialized(appContext);
+      appContext.editorEvents.emitEditorInitialized(appContext);
     }
   });
 

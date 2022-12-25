@@ -1,27 +1,21 @@
 import React from 'react';
 import { createRoot, Root } from 'react-dom/client';
-import App from './core/App';
-import ModuleManager from './core/ModuleManager';
-import Editor from './services/native/Editor';
-import CanvasEventHandler from './services/canvas/CanvasEventHandler';
-import LifeCycleEventHandler from './services/core/LifeCycleEventHandler';
-import WindowHandler from './services/core/WindowHandler';
+import { editor } from './services/editor/Editor';
+import EditorEvents from './services/editor/EditorEvents';
+import WindowHandler from './services/editor/WindowHandler';
 import KeyboardHandler from './services/keyboard/KeyboardHandler';
 import ToolStore from './panels/toolbar/ToolStore';
 import AppContainer from './ui/components/AppContainer';
 import LayerHandler from './panels/layer/model/LayerHandler';
 import Settings from './services/settings/Settings';
-
-window.CanvasEventHandler = new CanvasEventHandler();
-
-const editor: Editor = window.Module;
+import App from './app/App';
+import ModuleManager from './app/ModuleManager';
 
 const app: App = {
   editorApi: editor,
   toolStore: new ToolStore(),
   editorStore: new Settings(editor),
-  canvasEventHandler: window.CanvasEventHandler as CanvasEventHandler,
-  lifeCycleEventHandler: new LifeCycleEventHandler(),
+  editorEvents: new EditorEvents(),
   moduleManager: new ModuleManager(),
   keyboardHandler: new KeyboardHandler(),
   windowHandler: new WindowHandler(),

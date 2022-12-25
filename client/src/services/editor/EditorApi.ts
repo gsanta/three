@@ -1,4 +1,4 @@
-interface NativeApi {
+interface EditorApi {
   setWindowSize(width: number, height: number): void;
 
   isRuntimeInitialized: boolean;
@@ -20,4 +20,4 @@ interface NativeApi {
   setBrushSize(size: number): void;
 }
 
-export default NativeApi;
+export default EditorApi;

@@ -1,10 +1,10 @@
-import { App } from '@/core/App';
-import LifeCycleEventListener from './LifeCycleEventListener';
+import { App } from '@/app/App';
+import { EditorEventListener } from './EditorEvents';
 
-class WindowHandler implements LifeCycleEventListener {
+class WindowHandler extends EditorEventListener {
   private context?: App;
 
-  onCanvasInitialized(context: App): void {
+  onEditorInitialized(context: App): void {
     this.context = context;
     this.updateWindowSize();
   }

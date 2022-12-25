@@ -1,13 +1,13 @@
-import { App } from '@/core/App';
-import KeyCode from '../keyboard/KeyCode';
-import ExternalTool from '../../panels/toolbar/model/ExternalTool';
-import ToolName from '../../panels/toolbar/model/ToolName';
-import ToolSelectionEvent from '../../panels/toolbar/model/ToolSelectionEvents';
-import LifeCycleEventListener from './LifeCycleEventListener';
+import { App } from '@/app/App';
+import KeyCode from '../services/keyboard/KeyCode';
+import ExternalTool from '../panels/toolbar/model/ExternalTool';
+import ToolName from '../panels/toolbar/model/ToolName';
+import ToolSelectionEvent from '../panels/toolbar/model/ToolSelectionEvents';
 import PreviewModule from '@/panels/preview/PreviewModule';
+import { EditorEventListener } from '../services/editor/EditorEvents';
 
-class DependencyInjector implements LifeCycleEventListener {
-  onCanvasInitialized({ canvasEventHandler, editorApi, toolStore, keyboardHandler, layerHandler, moduleManager }: App) {
+class DependencyInjector extends EditorEventListener {
+  onEditorInitialized({ editorEvents, editorApi, toolStore, keyboardHandler, layerHandler, moduleManager }: App) {
     toolStore.addTool(
       new ExternalTool(
         ToolName.Brush,
@@ -24,7 +24,7 @@ class DependencyInjector implements LifeCycleEventListener {
     toolStore.addTool(new ExternalTool(ToolName.ColorPicker, 'BiHighlight', editorApi));
     toolStore.setSelectedTool(ToolName.Brush);
 
-    moduleManager.addModule(new PreviewModule(canvasEventHandler, editorApi));
+    moduleManager.addModule(new PreviewModule(editorEvents, editorApi));
 
     moduleManager.start();
 

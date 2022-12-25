@@ -6,7 +6,7 @@ import Box from './box/Box';
 import theme from './theme';
 import Split from 'react-split';
 import Canvas from '../panels/canvas/Canvas';
-import App, { AppContext } from '../../core/App';
+import App, { AppContext } from '../../app/App';
 import useInitApp from '../panels/canvas/hooks/useInitApp';
 import LayerPanel from '../../panels/layer/ui/components/LayerPanel';
 import ToolOptionsBar from '@/panels/toolbar/ui/ToolOptionsBar';
@@ -17,9 +17,9 @@ type AppContainerProps = {
 };
 
 const AppContainer = ({ app }: AppContainerProps) => {
-  const [canvasContainer, setCanvasContainer] = useState<HTMLDivElement | undefined>();
+  const [canvasContainer, setCanvasContainer] = useState<HTMLCanvasElement | undefined>();
 
-  const canvasRef = useCallback((node: HTMLDivElement) => node && setCanvasContainer(node), []);
+  const canvasRef = useCallback((node: HTMLCanvasElement) => node && setCanvasContainer(node), []);
 
   useInitApp(app, canvasContainer);
 
@@ -61,8 +61,8 @@ const AppContainer = ({ app }: AppContainerProps) => {
               <Toolbar />
             </Box>
             <Split className="split" direction="horizontal" sizes={[75, 25]}>
-              <Box ref={canvasRef}>
-                <Canvas container={canvasContainer} />
+              <Box>
+                <Canvas container={canvasContainer} ref={canvasRef} />
               </Box>
               <Box display="flex" flexDir="column" bgColor="blackAlpha.800">
                 <Box flex="1">
