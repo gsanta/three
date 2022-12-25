@@ -1,8 +1,8 @@
+import useDropLayer from '@/panels/layer/ui/hooks/useDropLayer';
 import useAppContext from '@/ui/hooks/useAppContext';
 import { Box, Divider } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import useDropLayer from '../hooks/useDropLayer';
 
 type LayerDropTargetProps = {
   layerIndex: number;

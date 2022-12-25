@@ -1,16 +1,16 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { ChakraProvider, FormControl, FormLabel, Input } from '@chakra-ui/react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { ChakraProvider } from '@chakra-ui/react';
 import '../../app.scss';
 import Layout from './layout/Layout';
 import Box from './box/Box';
-import Toolbar from '../panels/toolbar/Toolbar';
 import theme from './theme';
 import Split from 'react-split';
 import Canvas from '../panels/canvas/Canvas';
-import AppContext, { App } from '../../core/App';
+import App, { AppContext } from '../../core/App';
 import useInitApp from '../panels/canvas/hooks/useInitApp';
-import LayerPanel from '../panels/layer/components/LayerPanel';
-import ToolOptionsBar from '../panels/toolbar/ToolOptionsBar';
+import LayerPanel from '../../panels/layer/ui/components/LayerPanel';
+import ToolOptionsBar from '@/panels/toolbar/ui/ToolOptionsBar';
+import Toolbar from '@/panels/toolbar/ui/Toolbar';
 
 type AppContainerProps = {
   app: App;
@@ -68,7 +68,7 @@ const AppContainer = ({ app }: AppContainerProps) => {
                 <Box flex="1">
                   <LayerPanel />
                 </Box>
-                <Box as="iframe" height="50%" id="test-iframe" src="iframe.html" />
+                {/* <Box as="iframe" height="50%" id="test-iframe" src="iframe.html" /> */}
               </Box>
             </Split>
           </Box>

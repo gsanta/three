@@ -1,11 +1,11 @@
-import ToolName from '@/services/tool/ToolName';
+import ToolName from '@/panels/toolbar/model/ToolName';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import Box from '../../components/box/Box';
-import Button from '../../components/button/Button';
 import ColorPicker from '@/ui/components/color_picker/ColorPicker';
 import useAppContext from '@/ui/hooks/useAppContext';
 import { Tooltip } from '@chakra-ui/react';
+import Box from '@/ui/components/box/Box';
+import Button from '@/ui/components/button/Button';
 
 const Toolbar = observer(() => {
   const { toolStore, editorStore } = useAppContext();

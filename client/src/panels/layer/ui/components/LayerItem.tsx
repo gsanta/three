@@ -1,10 +1,10 @@
+import LayerAdapter from '@/panels/layer/model/LayerAdapter';
 import Button from '@/ui/components/button/Button';
 import useAppContext from '@/ui/hooks/useAppContext';
 import { ListItem } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import useDragLayer from '../hooks/useDragLayer';
-import LayerAdapter from '../LayerAdapter';
 
 type LayerItemProps = {
   layerAdapter: LayerAdapter;

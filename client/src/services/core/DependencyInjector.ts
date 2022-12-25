@@ -1,10 +1,10 @@
 import { App } from '@/core/App';
 import KeyCode from '../keyboard/KeyCode';
-import PreviewModule from '../preview/PreviewModule';
-import ExternalTool from '../tool/ExternalTool';
-import ToolName from '../tool/ToolName';
-import ToolSelectionEvent from '../tool/ToolSelectionEvents';
+import ExternalTool from '../../panels/toolbar/model/ExternalTool';
+import ToolName from '../../panels/toolbar/model/ToolName';
+import ToolSelectionEvent from '../../panels/toolbar/model/ToolSelectionEvents';
 import LifeCycleEventListener from './LifeCycleEventListener';
+import PreviewModule from '@/panels/preview/PreviewModule';
 
 class DependencyInjector implements LifeCycleEventListener {
   onCanvasInitialized({ canvasEventHandler, editorApi, toolStore, keyboardHandler, layerHandler, moduleManager }: App) {

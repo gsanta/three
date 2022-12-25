@@ -1,7 +1,7 @@
-import KeyCode from '../keyboard/KeyCode';
-import KeyEvent from '../keyboard/KeyEvent';
+import KeyCode from '../../../services/keyboard/KeyCode';
+import KeyEvent from '../../../services/keyboard/KeyEvent';
 import ToolName from './ToolName';
-import ToolStore from './ToolStore';
+import ToolStore from '../ToolStore';
 
 class ToolSelectionEvent extends KeyEvent {
   private toolStore: ToolStore;

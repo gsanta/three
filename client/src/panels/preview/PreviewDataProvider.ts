@@ -1,6 +1,6 @@
 import { createClient } from 'really-simple-xdm';
-import CanvasEventListener from '../canvas/CanvasEventListener';
-import Editor from '../api/Editor';
+import CanvasEventListener from '../../services/canvas/CanvasEventListener';
+import Editor from '../../services/native/Editor';
 
 class PreviewDataProvider extends CanvasEventListener {
   // TODO: add type

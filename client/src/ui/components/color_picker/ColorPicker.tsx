@@ -1,4 +1,4 @@
-import Settings from '@/services/Settings';
+import Settings from '@/services/settings/Settings';
 import { Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
