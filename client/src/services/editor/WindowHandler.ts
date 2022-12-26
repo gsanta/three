@@ -10,13 +10,13 @@ class WindowHandler extends EditorEventListener {
   }
 
   updateWindowSize() {
-    const canvasNode = this.context?.editorApi?.canvasNode;
-    if (canvasNode) {
-      canvasNode.removeAttribute('width');
-      canvasNode.removeAttribute('height');
-      const rect = canvasNode.getBoundingClientRect();
-      this.context?.editorApi?.setWindowSize(rect.width, rect.height);
-    }
+    //   const canvasNode = this.context?.editorApi?.canvasNode;
+    //   if (canvasNode) {
+    //     canvasNode.removeAttribute('width');
+    //     canvasNode.removeAttribute('height');
+    //     const rect = canvasNode.getBoundingClientRect();
+    //     this.context?.editorApi?.setWindowSize(rect.width, rect.height);
+    //   }
   }
 }
 

@@ -4,7 +4,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "input_handler.h"
-#include "frame_handler.h"
 #include <functional>
 
 namespace engine { namespace system {
@@ -19,7 +18,6 @@ namespace engine { namespace system {
 		friend struct GLFWwindow;
 
 		InputHandler* m_InputHandler;
-		FrameHandler* m_FrameHandler;
 
 		int m_Width, m_Height;
 		const char* m_Title;
@@ -30,14 +28,12 @@ namespace engine { namespace system {
 		bool m_MouseButtons[MAX_BUTTONS];
 		double m_x, m_y;
 		float lastFrame;
-
-		std::function<void(float)> m_Callback = nullptr;
 	public:
 		Window(const char* title, int width, int height);
 		~Window();
 		void clear() const;
-		void update();
-		void onUpdate(std::function<void(float)> callback);
+		float beforeRender();
+		void afterRender();
 		bool closed() const;
 
 		inline int getWidth() const { return m_Width; }
@@ -49,7 +45,6 @@ namespace engine { namespace system {
 		void getMousePosition(double& x, double& y) const;
 
 		InputHandler* getInputHandler() const;
-		FrameHandler* getFrameHandler() const;
 	private:
 		bool init();
 		friend void window_resize(GLFWwindow* window, int width, int height);

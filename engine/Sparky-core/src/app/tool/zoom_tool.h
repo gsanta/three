@@ -6,15 +6,16 @@
 #include "pointer_info.h"
 
 namespace spright {
+	using namespace ::engine::graphics;
 
 	class ZoomTool : public tool::Tool
 	{
 	private:
-		engine::graphics::Camera* m_Camera;
+		Camera* m_Camera;
 		float m_ZoomFactor = 1.0f;
 
 	public:
-		ZoomTool(engine::graphics::Camera* camera);
+		ZoomTool(Camera* camera);
 	private:
 		void scroll(tool::PointerInfo& pointerInfo) override;
 	};

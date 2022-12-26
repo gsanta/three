@@ -25,6 +25,6 @@ namespace engine { namespace graphics {
 		inline const unsigned int getHeight() const { return m_Height; }
 		inline const unsigned int getId() const { return m_TID;  }
 	private:
-		GLuint load();
+		GLuint init();
 	};
 } }

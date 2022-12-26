@@ -14,10 +14,11 @@
 namespace spright { namespace tool {
 
 	using namespace std;
+	using namespace ::engine::system;
 
-	class ToolHandler : public engine::system::InputListener {
+	class ToolHandler : public InputListener {
 	private:
-		engine::system::Window* m_Window;
+		Window* m_Window;
 		vector<Tool*> tools;
 		vector<Tool*>* m_ActiveTools;
 		Tool* m_SelectedTool;
@@ -26,7 +27,7 @@ namespace spright { namespace tool {
 		Services* m_Services;
 	public:
 		ToolHandler();
-		ToolHandler(engine::system::Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services);
+		ToolHandler(Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services);
 		~ToolHandler();
 
 		ToolHandler& operator=(const ToolHandler& toolHandler);

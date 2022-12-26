@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../engine/system/window/window.h"
-#include "../engine/system/window/frame_listener.h"
 #include "tool/tool_handler.h"
 #include "tool/pan_tool.h"
 #include "tool/zoom_tool.h"
@@ -12,20 +11,23 @@
 #include "editor_config.h"
 #include "core/canvas/canvas_listener_handler.h"
 #include "./service/services.h"
+#include "./rendering.h"
 
 namespace spright
 {
 
 	using namespace tool;
 	using namespace document;
+	using namespace ::engine::system;
 
-	class Editor : engine::system::FrameListener
+	class Editor
 	{
 	private:
-		engine::system::Window *m_Window;
+		Window *m_Window;
 		ToolHandler* m_toolHandler;
 		core::CanvasListenerHandler *m_CanvasListenerHandler;
 		DocumentHandler *m_DocumentHandler;
+		Rendering* m_Rendering;
 		EditorConfig editorConfig;
 		spright::Services *m_Services;
 
@@ -48,7 +50,7 @@ namespace spright
 			m_Window->getInputHandler()->unRegisterListener(m_toolHandler);
 		}
 
-		inline engine::system::Window *getWindow() const
+		inline Window *getWindow() const
 		{
 			return m_Window;
 		}
@@ -58,12 +60,13 @@ namespace spright
 			return m_DocumentHandler;
 		}
 
+		Rendering* getRendering();
+
 		inline core::CanvasListenerHandler *getCanvasListenerHandler()
 		{
 			return m_CanvasListenerHandler;
 		}
 
-		void onUpdate(float deltaTime) override;
 	};
 
 }

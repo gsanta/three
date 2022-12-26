@@ -31,11 +31,7 @@ namespace engine { namespace graphics {
 		engine::graphics::Texture* m_Texture;
 #endif
 	public:
-		Renderable2D(unsigned int color) : m_Color(color)
-		{
-			setUVDefaults();
-		}
-
+		Renderable2D(unsigned int color);
 		virtual ~Renderable2D() {}
 
 		virtual void submit(engine::graphics::Renderer2D* renderer) const = 0;
@@ -65,11 +61,6 @@ namespace engine { namespace graphics {
 		inline const GLuint getTID() const { return m_Texture == nullptr ? 0 : m_Texture->getId(); }
 #endif
 	private:
-		void setUVDefaults() {
-			m_UV.push_back(Vec2(0, 0));
-			m_UV.push_back(Vec2(0, 1));
-			m_UV.push_back(Vec2(1, 1));
-			m_UV.push_back(Vec2(1, 0));
-		}
+		void setUVDefaults();
 	};
 } }
