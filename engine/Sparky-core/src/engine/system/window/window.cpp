@@ -13,7 +13,6 @@ namespace engine { namespace system {
 			}
 
 			m_InputHandler = new InputHandler(this);
-			m_FrameHandler = new FrameHandler();
 
 			for (int i = 0; i < MAX_KEYS; i++) {
 				m_Keys[i] = false;
@@ -26,7 +25,6 @@ namespace engine { namespace system {
 		Window::~Window()
 		{
 			delete m_InputHandler;
-			delete m_FrameHandler;
 			glfwTerminate();
 		}
 
@@ -89,11 +87,6 @@ namespace engine { namespace system {
 			return this->m_InputHandler;
 		}
 
-		FrameHandler* Window::getFrameHandler() const
-		{
-			return m_FrameHandler;
-		}
-
 		void Window::mouse_input_callback(GLFWwindow* window, int button, int action, int mods) {
 			Window* win = (Window*)glfwGetWindowUserPointer(window);
 
@@ -136,31 +129,25 @@ namespace engine { namespace system {
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		}
 
-		void Window::update() {
+		float Window::beforeRender() {
 			float currentFrame = glfwGetTime();
 			float deltaTime = currentFrame - lastFrame;
 			lastFrame = currentFrame;
-			m_FrameHandler->emitUpdate(deltaTime);
-
-			if (this->m_Callback != nullptr) {
-				this->m_Callback(deltaTime);
-			}
 			GLenum error = glGetError();
 
 			if (error != GL_NO_ERROR) {
 				std::cout << "OpenGL error: " << error << std::endl;
 			}
 
+			return deltaTime;
+		}
+
+		void Window::afterRender() {
 			glfwPollEvents();
 			glfwGetFramebufferSize(m_Window, &m_Width, &m_Height);
 			glfwSwapBuffers(m_Window);
 		}
 
-		void Window::onUpdate(std::function<void(float)> callback)
-		{
-			m_Callback = callback;
-		}
-		
 		bool Window::closed() const
 		{
 			return glfwWindowShouldClose(m_Window) == 1;

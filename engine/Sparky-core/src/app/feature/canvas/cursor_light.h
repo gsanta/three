@@ -4,6 +4,7 @@
 #include "../../editor.h"
 
 namespace spright { namespace feature { namespace canvas {
+	using namespace ::engine::graphics;
 
 	class CursorLight : public spright::core::CanvasListener {
 	private:

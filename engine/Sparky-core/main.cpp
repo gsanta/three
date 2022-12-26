@@ -12,7 +12,7 @@
 #include "src/engine/graphics/renderer/renderer2d.h"
 #include "src/engine/graphics/renderable/renderable2d.h"
 #include "src/engine/graphics/renderable/sprite.h"
-#include "src/engine/graphics/renderer/batchRenderer2D.h"
+#include "src/engine/graphics/renderer/batchRenderer2d.h"
 
 #include <vector>
 
@@ -201,7 +201,7 @@ int main()
 		// shader->disable();
 		// layer.render();
 
-		editor->getWindow()->update();
+		editor->getRendering()->render();
 		frames++;
 		// if (time.elapsed() - timer > 1.0f) {
 		//	timer += 1.0f;

@@ -3,21 +3,21 @@
 namespace engine { namespace graphics {
 
 	Texture::Texture(const std::string& filename) : m_Filename(filename) {
-		m_TID = load();
+		m_TID = init();
 	}
 
 	Texture::~Texture() {
 
 	}
 
-	GLuint Texture::load() {
-		BYTE* pixels = load_image(m_Filename.c_str(), &m_Width, &m_Height);
+	GLuint Texture::init() {
+		//BYTE* pixels = load_image(m_Filename.c_str(), &m_Width, &m_Height);
 		GLuint result;
 		glGenTextures(1, &result);
 		glBindTexture(GL_TEXTURE_2D, result);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_Width, m_Height, 0, GL_BGR, GL_UNSIGNED_BYTE, pixels);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_Width, m_Height, 0, GL_BGR, GL_UNSIGNED_BYTE, nullptr);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 		return result;

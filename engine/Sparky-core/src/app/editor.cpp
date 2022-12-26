@@ -3,9 +3,11 @@
 namespace spright {
 	Editor::Editor()
 	{
-		m_Window = new engine::system::Window("Editor", 800, 600);
+		m_Window = new Window("Editor", 800, 600);
 		m_DocumentHandler = new DocumentHandler();
 		m_DocumentHandler->createDocument();
+
+		m_Rendering = new Rendering(m_Window, m_DocumentHandler);
 
 		m_Services = new spright::Services();
 		m_Services->setEmService(new EmService(m_Services->getEventHandler()));
@@ -22,22 +24,18 @@ namespace spright {
 		m_toolHandler->addActiveTool("zoom");
 		m_toolHandler->addActiveTool("pan");
 		m_toolHandler->setSelectedTool("brush");
-
-		m_Window->getFrameHandler()->registerListener(this);
 	}
 
 	Editor::~Editor()
 	{
-		m_Window->getFrameHandler()->unRegisterListener(this);
+		delete m_Rendering;
 		delete m_Window;
 		delete m_DocumentHandler;
 		delete m_Services;
 	}
 
-	void Editor::onUpdate(float deltaTime)
+	Rendering* Editor::getRendering()
 	{
-		if (m_DocumentHandler->hasActiveDocument()) {
-			m_DocumentHandler->getActiveDocument()->render();
-		}
+		return m_Rendering;
 	}
 }
