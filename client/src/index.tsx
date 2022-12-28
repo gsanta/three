@@ -11,11 +11,14 @@ import Settings from './services/settings/Settings';
 import App from './app/App';
 import ModuleManager from './app/ModuleManager';
 
+// embinds uses this global state
+window.EditorEvents = new EditorEvents();
+
 const app: App = {
   editorApi: editor,
   toolStore: new ToolStore(),
   editorStore: new Settings(editor),
-  editorEvents: new EditorEvents(),
+  editorEvents: window.EditorEvents,
   moduleManager: new ModuleManager(),
   keyboardHandler: new KeyboardHandler(),
   windowHandler: new WindowHandler(),

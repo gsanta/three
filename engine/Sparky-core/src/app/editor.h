@@ -12,6 +12,7 @@
 #include "core/canvas/canvas_listener_handler.h"
 #include "./service/services.h"
 #include "./rendering.h"
+#include "./service/io/image_export.h"
 
 namespace spright
 {
@@ -30,6 +31,7 @@ namespace spright
 		Rendering* m_Rendering;
 		EditorConfig editorConfig;
 		spright::Services *m_Services;
+		ImageExport* m_ImageExport;
 
 	public:
 		Editor();
@@ -67,6 +69,7 @@ namespace spright
 			return m_CanvasListenerHandler;
 		}
 
+		ImageExport* getImageExport();
 	};
 
 }

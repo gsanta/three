@@ -16,6 +16,8 @@ class EditorRuntime {
     return this._canvasNode;
   }
 
+  setStatus() {}
+
   canvas?: HTMLCanvasElement;
 
   // canvas: (function () {

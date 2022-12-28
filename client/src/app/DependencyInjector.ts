@@ -1,4 +1,4 @@
-import { App } from '@/app/App';
+import { App } from './App';
 import KeyCode from '../services/keyboard/KeyCode';
 import ExternalTool from '../panels/toolbar/model/ExternalTool';
 import ToolName from '../panels/toolbar/model/ToolName';

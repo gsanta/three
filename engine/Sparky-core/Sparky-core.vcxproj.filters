@@ -225,6 +225,9 @@
     <ClCompile Include="src\engine\graphics\renderer\default_render_target.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\app\service\io\image_data.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\system\window\window.h">
@@ -438,6 +441,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\graphics\renderer\default_render_target.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image_write.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\service\io\image_data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

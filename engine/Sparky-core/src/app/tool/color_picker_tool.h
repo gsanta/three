@@ -7,8 +7,8 @@
 namespace spright {
 	using namespace tool;
 	using namespace spright::document;
-	using namespace engine::graphics;
-	using namespace engine::maths;
+	using namespace ::engine::graphics;
+	using namespace ::engine::maths;
 
 	class ColorPickerTool : public Tool {
 	private:

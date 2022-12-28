@@ -1,4 +1,4 @@
-import AppModule from '@/app/AppModule';
+import AppModule from '../../app/AppModule';
 import Editor from '@/services/editor/Editor';
 import EditorEvents from '@/services/editor/EditorEvents';
 import PreviewDataProvider from './PreviewDataProvider';

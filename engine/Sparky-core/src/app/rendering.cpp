@@ -34,9 +34,9 @@ namespace spright {
 
 	void Rendering::disableImageTarget()
 	{
-		if (m_ActiveRenderTarget == m_ImageRenderTarget) {
 			m_ActiveRenderTarget = m_DefaultRenderTarget;
 			m_ImageRenderTarget->disable();
+		if (m_ActiveRenderTarget == m_ImageRenderTarget) {
 			m_DefaultRenderTarget->enable();
 		}
 	}

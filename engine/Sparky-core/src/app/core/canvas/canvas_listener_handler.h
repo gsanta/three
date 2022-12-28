@@ -7,8 +7,9 @@
 #include "../../tool/pointer_info.h"
 
 namespace spright { namespace core {
+	using namespace ::engine::system;
 
-	class CanvasListenerHandler : public engine::system::InputListener {
+	class CanvasListenerHandler : public InputListener {
 	private:
 		std::vector<CanvasListener*> m_Listeners;
 		spright::tool::PointerInfo m_PointerInfo;

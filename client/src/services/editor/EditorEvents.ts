@@ -1,4 +1,4 @@
-import App from '@/app/App';
+import App from '../../app/App';
 
 export abstract class EditorEventListener {
   onDataChange(): void {}

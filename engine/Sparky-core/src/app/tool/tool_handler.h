@@ -9,7 +9,7 @@
 #include "../../engine/system/window/input_listener.h"
 #include "../editor_config.h"
 #include "../service/services.h"
-
+#include "../service/io/image_export.h"
 
 namespace spright { namespace tool {
 
@@ -25,9 +25,11 @@ namespace spright { namespace tool {
 		PointerInfo m_pointerInfo;
 		EditorConfig m_EditorConfig;
 		Services* m_Services;
+		DocumentHandler* m_DocumentHandler;
+		ImageExport* m_ImageExport;
 	public:
 		ToolHandler();
-		ToolHandler(Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services);
+		ToolHandler(Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services, ImageExport* m_ImageExport);
 		~ToolHandler();
 
 		ToolHandler& operator=(const ToolHandler& toolHandler);

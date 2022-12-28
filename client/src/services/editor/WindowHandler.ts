@@ -1,4 +1,4 @@
-import { App } from '@/app/App';
+import { App } from '../../app/App';
 import { EditorEventListener } from './EditorEvents';
 
 class WindowHandler extends EditorEventListener {

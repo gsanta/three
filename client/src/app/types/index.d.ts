@@ -5,9 +5,7 @@ declare global {
 
   var Module: Editor | undefined;
 
-  var CanvasEventHandler: {
-    emitDataChange(): void;
-  };
+  var EditorEvents: EditorEvents;
 }
 
 export {};

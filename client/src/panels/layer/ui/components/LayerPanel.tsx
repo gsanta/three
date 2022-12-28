@@ -28,17 +28,16 @@ const LayerPanel = observer(() => {
       <DndProvider backend={HTML5Backend}>
         <Box paddingInline="2" paddingBlock="3">
           <List display="flex" flexDir="column" justifyContent="space-between">
-            <LayerDropTarget key={0} layerIndex={0} />
+            <LayerDropTarget layerIndex={0} />
             {layerHandler.getLayers().map((layerAdapter, index) => (
-              <>
+              <React.Fragment key={layerAdapter.getName()}>
                 <LayerItem
                   isActive={layerAdapter === layerHandler.getActiveLayer()}
-                  key={layerAdapter.getName()}
                   layerAdapter={layerAdapter}
                   setActiveLayer={() => layerHandler.setActiveLayer(layerAdapter)}
                 />
-                <LayerDropTarget key={index} layerIndex={index + 1} />
-              </>
+                <LayerDropTarget layerIndex={index + 1} />
+              </React.Fragment>
             ))}
           </List>
         </Box>

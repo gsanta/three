@@ -11,7 +11,7 @@ class PreviewDataProvider extends EditorEventListener {
   constructor(editorApi?: Editor) {
     super();
     this.editorApi = editorApi;
-    this.init();
+    // this.init();
   }
 
   onDataChange(): void {
@@ -19,7 +19,7 @@ class PreviewDataProvider extends EditorEventListener {
       return;
     }
 
-    this.previewProxy.testFunc(this.editorApi?.getEngineData());
+    // this.previewProxy.testFunc(this.editorApi?.getEngineData());
   }
 
   private async init() {
