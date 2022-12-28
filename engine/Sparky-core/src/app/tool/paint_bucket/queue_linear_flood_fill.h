@@ -26,8 +26,8 @@ namespace spright {
  // selectionThreshold ? : number;
 	//};
 
-	using namespace engine::graphics;
-	using namespace engine::maths;
+	using namespace ::engine::graphics;
+	using namespace ::engine::maths;
 
 
 	struct FloodFillData {

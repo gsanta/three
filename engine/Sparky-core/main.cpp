@@ -1,3 +1,7 @@
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+
+#include <cstdint>
+#include <stddef.h>
 #include "src/engine/system/window/window.h"
 #include "src/maths/vec2.h"
 #include "src/maths/mat4.h"
@@ -98,6 +102,18 @@ void setBrushSize(int size) {
 	brushTool->setSize(size);
 }
 
+int exportImage() {
+	return editor->getImageExport()->exportImage(editor->getDocumentHandler()->getActiveDocument());
+}
+
+int getImageData() {
+	reinterpret_cast<int>(editor->getImageExport()->getData());
+}
+
+size_t getImageSize() {
+	editor->getImageExport()->getSize();
+}
+
 EMSCRIPTEN_BINDINGS(engine2)
 {
 	emscripten::register_vector<std::string>("VectorString");
@@ -111,6 +127,9 @@ EMSCRIPTEN_BINDINGS(engine2)
 	emscripten::function("disableLayer", &disableLayer);
 	emscripten::function("setActiveLayer", &setActiveLayer);
 	emscripten::function("setBrushSize", &setBrushSize);
+	emscripten::function("exportImage", &exportImage);
+	emscripten::function("getImageData", &getImageData);
+	emscripten::function("getImageSize", &getImageSize);
 }
 
 std::string getEngineData() {

@@ -13,6 +13,7 @@ class ToolStore {
 
   constructor() {
     makeObservable(this, {
+      addTool: action,
       tools: observable,
       selectedTool: observable,
       setSelectedTool: action,

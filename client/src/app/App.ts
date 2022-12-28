@@ -1,7 +1,7 @@
 import EditorEvents from '@/services/editor/EditorEvents';
 import ToolStore from '@/panels/toolbar/ToolStore';
 import { createContext } from 'react';
-import ModuleManager from '@/app/ModuleManager';
+import ModuleManager from './ModuleManager';
 import KeyboardHandler from '@/services/keyboard/KeyboardHandler';
 import Editor from '@/services/editor/Editor';
 import WindowHandler from '@/services/editor/WindowHandler';

@@ -9,8 +9,8 @@
 
 namespace spright {
 	using namespace document;
-	using namespace engine::maths;
-	using namespace engine::graphics;
+	using namespace ::engine::maths;
+	using namespace ::engine::graphics;
 
 	class SelectTool : public tool::Tool {
 	private:
@@ -19,7 +19,7 @@ namespace spright {
 		SelectionBox* m_SelectionBox;
 
 		//vector<engine::graphics::Sprite*> m_SelectionSprites;
-		vector<engine::graphics::Sprite*> m_Data;
+		vector<Sprite*> m_Data;
 		vector<Vec2> m_OrigPositions;
 
 		//float m_DashSize = 0.2f;

@@ -18,6 +18,11 @@ interface EditorApi {
   setActiveLayer(id: string): void;
 
   setBrushSize(size: number): void;
+
+  //image export
+  exportImage(): void;
+  getImageData(): any;
+  getImageSize(): number;
 }
 
 export default EditorApi;

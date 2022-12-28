@@ -13,5 +13,4 @@ namespace spright {
 		void addListener(EventListener* listener);
 		void removeListener(EventListener* listener);
 	};
-
 }

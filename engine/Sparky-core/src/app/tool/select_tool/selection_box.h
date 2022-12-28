@@ -7,13 +7,13 @@
 
 namespace spright {
 	using namespace document;
-	using namespace engine::maths;
-	using namespace engine::graphics;
+	using namespace ::engine::maths;
+	using namespace ::engine::graphics;
 
 	class SelectionBox {
 	private:
 		DocumentHandler* m_DocumentHandler;
-		vector<engine::graphics::Sprite*> m_SelectionSprites;
+		vector<Sprite*> m_SelectionSprites;
 
 		float m_DashSize = 0.2f;
 

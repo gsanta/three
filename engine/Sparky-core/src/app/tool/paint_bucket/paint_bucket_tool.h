@@ -7,7 +7,7 @@
 #include "../../service/services.h"
 
 namespace spright {
-    using namespace engine::graphics;
+    using namespace ::engine::graphics;
 
     class PaintBucketTool : public tool::Tool
     {

@@ -1,5 +1,5 @@
-import { App } from '@/app/App';
-import DependencyInjector from '@/app/DependencyInjector';
+import { App } from '../../../../app/App';
+import DependencyInjector from '../../../../app/DependencyInjector';
 import { useEffect, useState } from 'react';
 
 const useInitApp = (appContext: App, canvasNode?: HTMLCanvasElement) => {
