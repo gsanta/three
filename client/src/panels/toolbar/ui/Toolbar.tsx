@@ -7,6 +7,27 @@ import { Tooltip } from '@chakra-ui/react';
 import Box from '@/ui/components/box/Box';
 import Button from '@/ui/components/button/Button';
 
+const downloadURL = function (data: string, fileName: string) {
+  const a: HTMLAnchorElement = document.createElement('a');
+  a.href = data;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.setAttribute('style', 'display: none');
+  a.click();
+  a.remove();
+};
+
+const downloadBlob = (data: ArrayBufferLike, fileName = 'spright.png', mimeType = 'application/octet-stream') => {
+  const blob = new Blob([data], {
+    type: mimeType,
+  });
+  const url = window.URL.createObjectURL(blob);
+  downloadURL(url, fileName);
+  setTimeout(function () {
+    return window.URL.revokeObjectURL(url);
+  }, 1000);
+};
+
 const Toolbar = observer(() => {
   const { toolStore, editorStore, editorApi } = useAppContext();
 
@@ -15,7 +36,11 @@ const Toolbar = observer(() => {
   };
 
   const handleClick = () => {
-    const data = editorApi.exportImage();
+    editorApi.exportImage();
+    const data = editorApi.getImageData();
+    const size = editorApi.getImageSize();
+    const buffer = new Uint8Array(Module.HEAPU8.buffer, data, size);
+    downloadBlob(buffer);
     // const data = editorApi.getImageData();
   };
 

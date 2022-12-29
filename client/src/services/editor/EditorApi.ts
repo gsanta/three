@@ -21,7 +21,7 @@ interface EditorApi {
 
   //image export
   exportImage(): void;
-  getImageData(): any;
+  getImageData(): number;
   getImageSize(): number;
 }
 

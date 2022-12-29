@@ -102,16 +102,16 @@ void setBrushSize(int size) {
 	brushTool->setSize(size);
 }
 
-int exportImage() {
-	return editor->getImageExport()->exportImage(editor->getDocumentHandler()->getActiveDocument());
+void exportImage() {
+	editor->getImageExport()->exportImage(editor->getDocumentHandler()->getActiveDocument());
 }
 
 int getImageData() {
-	reinterpret_cast<int>(editor->getImageExport()->getData());
+	return reinterpret_cast<int>(editor->getImageExport()->getImageData());
 }
 
 size_t getImageSize() {
-	editor->getImageExport()->getSize();
+	return editor->getImageExport()->getImageSize();
 }
 
 EMSCRIPTEN_BINDINGS(engine2)
