@@ -9,14 +9,17 @@ namespace spright {
 	class ImageExport {
 	private:
 		Rendering* m_Rendering;
-		ImageData* m_ImageData;
+		
+		unsigned char* m_Data;
+		size_t m_Size;
+	
 	public:
 		ImageExport(Rendering* rendering);
-		int exportImage(Document* document);
-		unsigned char* getData();
-		size_t getSize();
-		ImageData* getImageData();
+		~ImageExport();
+		void exportImage(Document* document);
+		unsigned char* getImageData();
+		size_t getImageSize();
 	private:
-		int writeImageData();
+		void writeImageData();
 	};
 }
