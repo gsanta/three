@@ -1,7 +1,8 @@
 import LayerAdapter from '@/panels/layer/model/LayerAdapter';
-import Button from '@/ui/components/button/Button';
+import ToggleButton from '@/ui/components/button/ToggleButton';
+import Icon from '@/ui/components/icon/Icon';
 import useAppContext from '@/ui/hooks/useAppContext';
-import { ListItem } from '@chakra-ui/react';
+import { Button, ListItem } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import useDragLayer from '../hooks/useDragLayer';
@@ -21,15 +22,19 @@ const LayerItem = observer(({ isActive, layerAdapter, setActiveLayer }: LayerIte
 
   return (
     <ListItem ref={ref} display="flex" gap="2" sx={{ opacity }}>
-      <Button
-        iconName="BsFillEyeFill"
-        toggle={layerAdapter.isVisible() ? 'on' : 'off'}
+      <ToggleButton
+        className="iconOnly"
+        toggle={layerAdapter.isVisible()}
         onToggle={() => layerAdapter.setVisible(!layerAdapter.isVisible())}
-      />
-      <Button toggle={isActive ? 'on' : 'off'} onToggle={setActiveLayer} width="100%">
+      >
+        <Icon name="BsFillEyeFill" />
+      </ToggleButton>
+      <ToggleButton toggle={isActive} onToggle={setActiveLayer} width="100%">
         {layerAdapter.getName()}
+      </ToggleButton>
+      <Button className="iconOnly" onClick={handleLayerDelete}>
+        <Icon name="BiTrashAlt" />
       </Button>
-      <Button iconName="BiTrashAlt" onClick={handleLayerDelete} />
     </ListItem>
   );
 });

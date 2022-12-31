@@ -9,3 +9,4 @@ export { BiTrashAlt } from 'react-icons/bi';
 export { BiColorFill } from 'react-icons/bi';
 export { BiFontColor } from 'react-icons/bi';
 export { BiHighlight } from 'react-icons/bi';
+export { CiSettings } from 'react-icons/ci';

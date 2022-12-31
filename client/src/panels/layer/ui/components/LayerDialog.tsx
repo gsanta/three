@@ -2,8 +2,8 @@ import Dialog from '@/ui/components/dialog/Dialog';
 import DialogFooter from '@/ui/components/dialog/DialogFooter';
 import DialogBody from '@/ui/components/dialog/DialogBody';
 import React, { useState } from 'react';
-import { Input } from '@chakra-ui/react';
-import Button from '@/ui/components/button/Button';
+import { Button, Input } from '@chakra-ui/react';
+import ToggleButton from '@/ui/components/button/ToggleButton';
 import { observer } from 'mobx-react-lite';
 import useAppContext from '@/ui/hooks/useAppContext';
 
@@ -29,9 +29,7 @@ const LayerDialog = observer(({ isOpen, onClose }: LayerDialogProps) => {
       </DialogBody>
       <DialogFooter>
         <Button onClick={onClose}>Cancel</Button>
-        <Button variant="action" onClick={handleAddLayer}>
-          Add
-        </Button>
+        <Button onClick={handleAddLayer}>Add</Button>
       </DialogFooter>
     </Dialog>
   );

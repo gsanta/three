@@ -1,7 +1,6 @@
-import Button from '@/ui/components/button/Button';
 import Panel from '@/ui/components/panel/Panel';
 import useAppContext from '@/ui/hooks/useAppContext';
-import { List, Box, Tooltip } from '@chakra-ui/react';
+import { List, Box, Tooltip, Button } from '@chakra-ui/react';
 import { useBoolean } from 'usehooks-ts';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
@@ -10,6 +9,7 @@ import LayerDialog from './LayerDialog';
 import LayerDropTarget from './LayerDropTarget';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import Icon from '@/ui/components/icon/Icon';
 
 const LayerPanel = observer(() => {
   const { value: isAddPanelOpen, setTrue: setOpenAddPanel, setFalse: setCloseAddPanel } = useBoolean(false);
@@ -20,7 +20,9 @@ const LayerPanel = observer(() => {
       header={
         <Panel.Header title="layers">
           <Tooltip label="new layer">
-            <Button iconName="BiPlus" level="secondary" onClick={setOpenAddPanel} />
+            <Button className="iconOnly" onClick={setOpenAddPanel}>
+              <Icon name="BiPlus" />
+            </Button>
           </Tooltip>
         </Panel.Header>
       }

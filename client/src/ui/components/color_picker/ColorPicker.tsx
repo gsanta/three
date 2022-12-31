@@ -1,9 +1,9 @@
 import Settings from '@/services/settings/Settings';
-import { Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger } from '@chakra-ui/react';
+import { Button, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
 import { ChromePicker } from 'react-color';
-import Button from '../button/Button';
+import Icon from '../icon/Icon';
 
 type ColorPickerProps = {
   editorStore: Settings;
@@ -19,7 +19,9 @@ const ColorPicker = observer(({ editorStore }: ColorPickerProps) => {
   return (
     <Popover placement="right">
       <PopoverTrigger>
-        <Button iconName="BiFontColor" />
+        <Button className="iconOnly">
+          <Icon name="BiFontColor" />
+        </Button>
       </PopoverTrigger>
       <PopoverContent width="250px">
         <PopoverArrow />

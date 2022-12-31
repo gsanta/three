@@ -1,6 +1,6 @@
+import { Button } from '@chakra-ui/react';
 import { ComponentStory } from '@storybook/react';
 import React from 'react';
-import Button from '../button/Button';
 import Dialog from './Dialog';
 import DialogBody from './DialogBody';
 import DialogFooter from './DialogFooter';
@@ -11,7 +11,7 @@ const Template: ComponentStory<typeof Dialog> = (props) => {
       <Dialog {...props} title="Dialog title">
         <DialogBody>Dialog body</DialogBody>
         <DialogFooter>
-          <Button variant="action">Approve</Button>
+          <Button>Approve</Button>
           <Button>Cancel</Button>
         </DialogFooter>
       </Dialog>
