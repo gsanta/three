@@ -2,6 +2,11 @@
 
 namespace spright { namespace document {
 	
+	DocumentHandler::DocumentHandler(Window* window) : m_Window(window) {
+
+
+	}
+
 	DocumentHandler::~DocumentHandler()
 	{
 		for (Document* document : m_documents) {
@@ -27,8 +32,9 @@ namespace spright { namespace document {
 		Shader* shader = new Shader("src/shaders/basic.vert", "src/shaders/basic.frag");
 		Shader* shaderUnlit = new Shader("src/shaders/basic.vert", "src/shaders/unlit.frag");
 #endif
-		Dimensions dimensions(-16.0f, 16.0f, -9.0f, 9.0f);
-		Document* document = new Document(dimensions);
+		Dimensions dimensions(-16.0f, 16.0f, -16.0f, 16.0f);
+		Camera* camera = new Camera(m_Window, engine::graphics::OrthoProjectionInfo(dimensions.left, dimensions.right, dimensions.bottom, dimensions.top));
+		Document* document = new Document(dimensions, camera);
 
 		std::string userLayer1Id = USER_LAYER_ID_PREFIX + "1";
 		std::string userLayer2Id = USER_LAYER_ID_PREFIX + "2";

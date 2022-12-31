@@ -12,5 +12,9 @@ namespace engine { namespace graphics {
 		float far = 1.0f;
 	public:
 		OrthoProjectionInfo(float left, float right, float bottom, float top);
+		OrthoProjectionInfo();
+
+		float getWidth();
+		float getHeight();
 	};
 }}

@@ -2,11 +2,11 @@
 
 namespace engine { namespace graphics {
 	
-	Camera::Camera(): m_ProjectionInfo(-16.0f, 16.0f, -9.0f, 9.0f)
+	Camera::Camera(Window* window, OrthoProjectionInfo initialProjectionInfo) : m_Window(window), m_InitialProjectionInfo(initialProjectionInfo)
 	{
-		m_InitialWidth = m_ProjectionInfo.right - m_ProjectionInfo.left;
+		m_InitialWidth = initialProjectionInfo.right - initialProjectionInfo.left;
 		m_View = Mat4::lookAt(maths::Vec3(0, 0, z), maths::Vec3(0, 0, 0), maths::Vec3(0, 1, 0));
-		updateAspectRatio();
+		setProjectionInfo(initialProjectionInfo);
 	}
 
 	void Camera::translate2D(Vec2 translate)
@@ -41,5 +41,14 @@ namespace engine { namespace graphics {
 
 	Vec2 Camera::screenToModel(Vec2 screen) {
 		return Vec2((screen.x) / getZoom() + m_Center2D.x, (screen.y) / getZoom() + m_Center2D.y);
+	}
+
+	Vec2 Camera::screenToCameraPos(double x, double y) {
+		float w = m_InitialProjectionInfo.getWidth();
+		float h = m_InitialProjectionInfo.getHeight();
+		float xPos = x * w / m_Window->getWidth() - w / 2;
+		float yPos = h / 2 - y * h / m_Window->getHeight();
+
+		return Vec2(xPos, yPos);
 	}
 }}

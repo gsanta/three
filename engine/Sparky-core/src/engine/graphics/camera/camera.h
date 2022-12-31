@@ -5,9 +5,11 @@
 #include "../../maths/vec3.h"
 #include "../../maths/mathFuncs.h"
 #include "./ortho_projection_info.h";
+#include "../../system/window/window.h"
 
 namespace engine { namespace graphics {
 	using namespace spright::maths;
+	using namespace ::engine::system;
 
 	class Camera {
 	private:
@@ -17,10 +19,12 @@ namespace engine { namespace graphics {
 		float z = 0.5f;
 		float m_InitialWidth;
 		float m_Zoom = 1.0f;
+		OrthoProjectionInfo m_InitialProjectionInfo;
 		OrthoProjectionInfo m_ProjectionInfo;
 		float aspectRatio;
+		Window* m_Window;
 	public:
-		Camera();
+		Camera(Window* window, OrthoProjectionInfo initialProjectionInfo);
 		void translate2D(Vec2 pos);
 		void translateZ(float val);
 		void setProjectionInfo(OrthoProjectionInfo projectionInfo);
@@ -41,6 +45,9 @@ namespace engine { namespace graphics {
 		}
 
 		Vec2 screenToModel(Vec2 screen);
+
+		// TODO merge this with screenToModel
+		Vec2 screenToCameraPos(double x, double y);
 
 		inline float getZoom() {
 			return m_Zoom;

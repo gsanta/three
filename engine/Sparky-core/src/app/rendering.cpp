@@ -3,7 +3,7 @@
 namespace spright {
 	Rendering::Rendering(Window* window, DocumentHandler* documentHandler) : m_Window(window), m_DocumentHandler(documentHandler)
 	{
-		m_ImageRenderTarget = new ImageRenderTarget();
+		m_ImageRenderTarget = new ImageRenderTarget(window);
 		m_DefaultRenderTarget = new DefaultRenderTarget();
 		m_ActiveRenderTarget = m_DefaultRenderTarget;
 	}

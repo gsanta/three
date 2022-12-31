@@ -24,7 +24,6 @@
 #include "src/engine/graphics/layer/tileLayer.h"
 #include "src/engine/graphics/renderable/group.h"
 #include "src/app/editor.h"
-#include "src/app/feature/canvas/cursor_light.h"
 
 //#define SPARKY_EMSCRIPTEN 0
 

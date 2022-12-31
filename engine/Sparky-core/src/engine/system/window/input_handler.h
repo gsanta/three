@@ -29,8 +29,6 @@ namespace engine { namespace system {
 
 		void registerListener(InputListener* inputListener);
 		void unRegisterListener(InputListener* inputListener);
-	
-		Vec2 screenToCanvasPos(Vec2 screenPos);
 	};
 
 }}

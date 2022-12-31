@@ -5,4 +5,14 @@ namespace engine { namespace graphics {
 	{
 
 	}
+
+	OrthoProjectionInfo::OrthoProjectionInfo() {}
+
+	float OrthoProjectionInfo::getWidth() {
+		return right - left;
+	}
+
+	float OrthoProjectionInfo::getHeight() {
+		return top - bottom;
+	}
 }}

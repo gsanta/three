@@ -70,7 +70,7 @@ const AppContainer = ({ app }: AppContainerProps) => {
               <Toolbar />
             </Box>
             <Split className="split" direction="horizontal" sizes={[75, 25]}>
-              <Box>
+              <Box display="flex" justifyContent="space-around">
                 <Canvas container={canvasContainer} ref={canvasRef} />
               </Box>
               <Box display="flex" flexDir="column">

@@ -183,7 +183,6 @@
     <ClCompile Include="src\app\editor.cpp" />
     <ClCompile Include="src\app\editor_config.h" />
     <ClCompile Include="src\app\service\color_palette.cpp" />
-    <ClCompile Include="src\app\feature\canvas\cursor_light.cpp" />
     <ClCompile Include="src\app\service\core\event\event_handler.cpp" />
     <ClCompile Include="src\app\service\emscripten\em_events.cpp" />
     <ClCompile Include="src\app\service\emscripten\em_service.cpp" />
@@ -246,7 +245,6 @@
     <ClInclude Include="src\app\editor.h" />
     <ClInclude Include="src\app\document\checkerboard.h" />
     <ClInclude Include="src\app\service\color_palette.h" />
-    <ClInclude Include="src\app\feature\canvas\cursor_light.h" />
     <ClInclude Include="src\app\pointer\pointer_utils.h" />
     <ClInclude Include="src\app\service\core\event\event_handler.h" />
     <ClInclude Include="src\app\service\core\event\event_listener.h" />

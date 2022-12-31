@@ -9,6 +9,8 @@
 
 namespace spright { namespace document {
 
+	using namespace ::engine::graphics;
+
 	const std::string USER_LAYER_ID_PREFIX("user_layer_");
 	const std::string DEFAULT_TEMP_LAYER_ID("temp_layer_1");
 	const std::string DEFAULT_BACKGROUND_LAYER_ID("background_layer_1");
@@ -25,10 +27,10 @@ namespace spright { namespace document {
 
 		engine::graphics::Layer* m_ActiveLayer;
 
-		engine::graphics::Camera* m_Camera;
+		Camera* m_Camera;
 
 	public:
-		Document(engine::graphics::Dimensions dimensions);
+		Document(engine::graphics::Dimensions dimensions, Camera* camera);
 		~Document();
 
 		engine::graphics::Dimensions dimensions;
