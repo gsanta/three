@@ -1,6 +1,6 @@
+import { Button } from '@chakra-ui/react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
-import Button from '../button/Button';
 import Tooltip from './Tooltip';
 
 export default {

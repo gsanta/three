@@ -3,9 +3,10 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import ColorPicker from '@/ui/components/color_picker/ColorPicker';
 import useAppContext from '@/ui/hooks/useAppContext';
-import { Tooltip } from '@chakra-ui/react';
+import { Button, Tooltip } from '@chakra-ui/react';
 import Box from '@/ui/components/box/Box';
-import Button from '@/ui/components/button/Button';
+import ToggleButton from '@/ui/components/button/ToggleButton';
+import Icon from '@/ui/components/icon/Icon';
 
 const downloadURL = function (data: string, fileName: string) {
   const a: HTMLAnchorElement = document.createElement('a');
@@ -46,7 +47,6 @@ const Toolbar = observer(() => {
 
   return (
     <Box
-      bgColor="blackAlpha.800"
       height="100%"
       paddingBlockStart="1"
       paddingBlockEnd="1"
@@ -56,10 +56,17 @@ const Toolbar = observer(() => {
       alignItems="center"
     >
       {toolStore?.tools.map(({ iconName, name }) => {
-        const toggle = name === toolStore.getSelectedTool()?.name ? 'on' : 'off';
+        const toggle = name === toolStore.getSelectedTool()?.name;
         return (
           <Tooltip key={name} label={name} placement="right">
-            <Button iconName={iconName} toggle={toggle} onToggle={() => handleSelectTool(name)} />
+            <ToggleButton
+              className="iconOnly"
+              toggle={toggle}
+              onToggle={() => handleSelectTool(name)}
+              variant="outline"
+            >
+              <Icon name={iconName} />
+            </ToggleButton>
           </Tooltip>
         );
       })}
