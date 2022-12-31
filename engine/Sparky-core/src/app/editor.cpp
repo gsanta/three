@@ -3,8 +3,8 @@
 namespace spright {
 	Editor::Editor()
 	{
-		m_Window = new Window("Editor", 800, 600);
-		m_DocumentHandler = new DocumentHandler();
+		m_Window = new Window("Editor", 800, 800);
+		m_DocumentHandler = new DocumentHandler(m_Window);
 		m_DocumentHandler->createDocument();
 
 		m_Rendering = new Rendering(m_Window, m_DocumentHandler);
@@ -12,7 +12,7 @@ namespace spright {
 		m_Services = new spright::Services();
 		m_Services->setEmService(new EmService(m_Services->getEventHandler()));
 
-		m_ImageExport = new ImageExport(m_Rendering);
+		m_ImageExport = new ImageExport(m_Window, m_Rendering);
 
 		m_toolHandler = new ToolHandler(m_Window, m_DocumentHandler, editorConfig, m_Services, m_ImageExport);
 		m_toolHandler->addTool(new BrushTool(m_DocumentHandler, editorConfig, m_Services, m_Services->getEventHandler()));

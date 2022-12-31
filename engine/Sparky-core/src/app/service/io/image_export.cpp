@@ -1,7 +1,7 @@
 #include "image_export.h"
 
 namespace spright {
-	ImageExport::ImageExport(Rendering* rendering) : m_Rendering(rendering)
+	ImageExport::ImageExport(Window* window, Rendering* rendering) : m_Window(window), m_Rendering(rendering)
 	{
 	}
 
@@ -17,8 +17,8 @@ namespace spright {
 		document->render();
 		m_Rendering->getImageTarget();
 
-		int width = 800;
-		int height = 600;
+		int width = m_Window->getWidth();
+		int height = m_Window->getHeight();
 
 		writeImageData();
 

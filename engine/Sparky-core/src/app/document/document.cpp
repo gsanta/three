@@ -12,20 +12,19 @@ namespace spright { namespace document {
 		return nullptr;
 	}
 
-	Document::Document(engine::graphics::Dimensions dimensions) : dimensions(dimensions)
+	Document::Document(engine::graphics::Dimensions dimensions, Camera* camera) : dimensions(dimensions), m_Camera(camera)
 	{
 		//auto it = find_if(m_Layers.begin(), m_Layers.end(), [](engine::graphics::Layer* layer) {
 		//	return layer->getId().rfind(USER_LAYER_ID_PREFIX, 0) != std::string::npos; 
 		//});
 
 		//m_ActiveLayer = *it;
-		m_Camera = new engine::graphics::Camera();
-		m_Camera->setProjectionInfo(engine::graphics::OrthoProjectionInfo(dimensions.left, dimensions.right, dimensions.bottom, dimensions.top));
 	}
 
 	Document::~Document() {
 		std::vector<engine::graphics::Layer*>::iterator it;
 
+		delete m_Camera;
 		// TODO fix it
 		//for (it = m_Layers.begin(); it != m_Layers.end(); ) {
 		//	delete *it;

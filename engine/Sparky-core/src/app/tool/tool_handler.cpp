@@ -55,10 +55,11 @@ namespace spright { namespace tool {
 
 	void ToolHandler::onMouseMove(double x, double y)
 	{
+		Vec2 pos = m_DocumentHandler->getActiveDocument()->getCamera()->screenToCameraPos(x, y);
 		this->m_pointerInfo.prev.x = m_pointerInfo.curr.x;
 		this->m_pointerInfo.prev.y = m_pointerInfo.curr.y;
-		this->m_pointerInfo.curr.x = x;
-		this->m_pointerInfo.curr.y = y;
+		this->m_pointerInfo.curr.x = pos.x;
+		this->m_pointerInfo.curr.y = pos.y;
 		
 		for (Tool* tool : *m_ActiveTools) {
 			tool->pointerMove(this->m_pointerInfo);
