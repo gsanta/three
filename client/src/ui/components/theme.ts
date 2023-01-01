@@ -48,8 +48,8 @@ const theme = extendTheme({
     Menu: MenuTheme,
     Modal: Dialog,
     Input: inputTheme,
-    Form: FormControl,
-    FormLabel: formLabelTheme,
+    // Form: FormControl,
+    // FormLabel: formLabelTheme,
   },
 });
 

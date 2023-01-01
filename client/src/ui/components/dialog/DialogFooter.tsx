@@ -5,10 +5,8 @@ export type DialogFooterProps = ModalFooterProps;
 
 const DialogFooter = ({ children, ...rest }: DialogFooterProps) => {
   return (
-    <ModalFooter {...rest}>
-      <HStack spacing="2" justifyContent="end">
-        {children}
-      </HStack>
+    <ModalFooter paddingInline="2" {...rest}>
+      <HStack justifyContent="end">{children}</HStack>
     </ModalFooter>
   );
 };

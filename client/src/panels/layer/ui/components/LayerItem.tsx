@@ -24,15 +24,16 @@ const LayerItem = observer(({ isActive, layerAdapter, setActiveLayer }: LayerIte
     <ListItem ref={ref} display="flex" gap="2" sx={{ opacity }}>
       <ToggleButton
         className="iconOnly"
+        size="sm"
         toggle={layerAdapter.isVisible()}
         onToggle={() => layerAdapter.setVisible(!layerAdapter.isVisible())}
       >
         <Icon name="BsFillEyeFill" />
       </ToggleButton>
-      <ToggleButton toggle={isActive} onToggle={setActiveLayer} width="100%">
+      <ToggleButton toggle={isActive} onToggle={setActiveLayer} size="sm" width="100%">
         {layerAdapter.getName()}
       </ToggleButton>
-      <Button className="iconOnly" onClick={handleLayerDelete}>
+      <Button className="iconOnly" onClick={handleLayerDelete} size="sm">
         <Icon name="BiTrashAlt" />
       </Button>
     </ListItem>
