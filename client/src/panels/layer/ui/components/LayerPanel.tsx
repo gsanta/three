@@ -5,7 +5,7 @@ import { useBoolean } from 'usehooks-ts';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import LayerItem from './LayerItem';
-import LayerDialog from './LayerDialog';
+import AddLayerDialog from './AddLayerDialog';
 import LayerDropTarget from './LayerDropTarget';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -20,7 +20,7 @@ const LayerPanel = observer(() => {
       header={
         <Panel.Header title="layers">
           <Tooltip label="new layer">
-            <Button className="iconOnly" onClick={setOpenAddPanel}>
+            <Button className="iconOnly" onClick={setOpenAddPanel} size="sm">
               <Icon name="BiPlus" />
             </Button>
           </Tooltip>
@@ -28,7 +28,7 @@ const LayerPanel = observer(() => {
       }
     >
       <DndProvider backend={HTML5Backend}>
-        <Box paddingInline="2" paddingBlock="3">
+        <Box paddingInline="2">
           <List display="flex" flexDir="column" justifyContent="space-between">
             <LayerDropTarget layerIndex={0} />
             {layerHandler.getLayers().map((layerAdapter, index) => (
@@ -44,7 +44,7 @@ const LayerPanel = observer(() => {
           </List>
         </Box>
       </DndProvider>
-      <LayerDialog isOpen={isAddPanelOpen} onClose={setCloseAddPanel} />
+      <AddLayerDialog isOpen={isAddPanelOpen} onClose={setCloseAddPanel} />
     </Panel>
   );
 });

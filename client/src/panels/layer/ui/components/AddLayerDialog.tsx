@@ -3,7 +3,6 @@ import DialogFooter from '@/ui/components/dialog/DialogFooter';
 import DialogBody from '@/ui/components/dialog/DialogBody';
 import React, { useState } from 'react';
 import { Button, Input } from '@chakra-ui/react';
-import ToggleButton from '@/ui/components/button/ToggleButton';
 import { observer } from 'mobx-react-lite';
 import useAppContext from '@/ui/hooks/useAppContext';
 
@@ -12,7 +11,7 @@ type LayerDialogProps = {
   onClose(): void;
 };
 
-const LayerDialog = observer(({ isOpen, onClose }: LayerDialogProps) => {
+const AddLayerDialog = observer(({ isOpen, onClose }: LayerDialogProps) => {
   const [layerName, setLayerName] = useState('');
   const { layerHandler } = useAppContext();
 
@@ -28,11 +27,15 @@ const LayerDialog = observer(({ isOpen, onClose }: LayerDialogProps) => {
         <Input onChange={(e) => setLayerName(e.target.value)} placeholder="Layer name" value={layerName} />
       </DialogBody>
       <DialogFooter>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={handleAddLayer}>Add</Button>
+        <Button onClick={onClose} size="sm">
+          Close
+        </Button>
+        <Button onClick={handleAddLayer} size="sm" colorScheme="orange">
+          Add
+        </Button>
       </DialogFooter>
     </Dialog>
   );
 });
 
-export default LayerDialog;
+export default AddLayerDialog;

@@ -10,15 +10,7 @@ const SettingsPanel = () => {
   return (
     <Box>
       <Menu>
-        <MenuButton
-          as={IconButton}
-          aria-label="Options"
-          colorScheme="brand"
-          icon={<Icon name="CiSettings" />}
-          size="sm"
-          variant="solid"
-          level="primary"
-        />
+        <MenuButton as={IconButton} aria-label="Options" icon={<Icon name="CiSettings" />} size="sm" variant="solid" />
         <MenuList>
           <MenuItem onClick={openExportDialog}>Export</MenuItem>
           <MenuItem>Export 2</MenuItem>

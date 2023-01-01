@@ -4,11 +4,12 @@ import { createMultiStyleConfigHelpers, defineStyle } from '@chakra-ui/styled-sy
 const { defineMultiStyleConfig } = createMultiStyleConfigHelpers(parts.keys);
 
 const baseStyle = defineStyle((props) => {
+  const { colorScheme: c = 'whiteAlpha' } = props;
+
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
   const style = theme.components.Menu.baseStyle?.(props)!;
-  style.list.bg = 'brand.background';
-  style.item._active.bg = 'gray.400';
-  style.item._focus.bg = 'gray.400';
+  style.item._active.bg = `${c}.400`;
+  style.item._focus.bg = `${c}.400`;
   return style;
 });
 

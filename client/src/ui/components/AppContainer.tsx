@@ -52,6 +52,8 @@ const AppContainer = ({ app }: AppContainerProps) => {
         <Layout
           header={
             <Box
+              borderBottom="1px solid"
+              borderColor="gray.600"
               display="flex"
               justifyContent="space-between"
               height="40px"

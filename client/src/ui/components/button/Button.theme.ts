@@ -8,7 +8,7 @@ import { mode } from '@chakra-ui/theme-tools';
 
 const variantOutline = defineStyle((props) => {
   const { colorScheme: c } = props;
-  const defaultTheme = theme.components.Button.variants?.ghost(props);
+  const defaultTheme = theme.components.Button.variants?.outline(props);
 
   if (c === 'gray') {
     return { ...defaultTheme };
@@ -31,6 +31,23 @@ const variantOutline = defineStyle((props) => {
   };
 });
 
+const variantSolid = defineStyle((props) => {
+  const { colorScheme: c } = props;
+  const defaultTheme = theme.components.Button.variants?.solid(props);
+
+  return {
+    ...defaultTheme,
+    bg: mode(`${c}.200`, `${c}.600`)(props),
+    color: 'white',
+    _hover: {
+      bg: mode(`${c}.50`, `${c}.500`)(props),
+    },
+    _active: {
+      bg: mode(`${c}.100`, `${c}.500`)(props),
+    },
+  };
+});
+
 const ButtonTheme: ComponentStyleConfig = {
   baseStyle: {
     '.chakra-button__icon': {
@@ -49,6 +66,7 @@ const ButtonTheme: ComponentStyleConfig = {
   },
   variants: {
     outline: variantOutline,
+    solid: variantSolid,
     // 'secondary-default': {
     //   bgColor: 'inherit',
     // },
