@@ -9,8 +9,9 @@
 
 namespace spright { namespace tool {
 	using namespace document;
-	using namespace engine::maths;
-	using namespace engine::graphics;
+	using namespace ::engine::maths;
+	using namespace spright::maths;
+	using namespace ::engine::graphics;
 
 	class BrushTool : public Tool
 	{
@@ -20,7 +21,7 @@ namespace spright { namespace tool {
 		spright::Services* m_Services;
 		EventHandler* m_EventHandler;
 		int m_Size = 1;
-		engine::graphics::Sprite *sprite;
+		Sprite *sprite;
 
 	public:
 		BrushTool(DocumentHandler *documentHandler, EditorConfig &editorConfig, spright::Services* services, EventHandler* eventHandler);

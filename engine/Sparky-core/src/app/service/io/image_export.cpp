@@ -31,8 +31,8 @@ namespace spright {
 			delete[] m_Data;
 		}
 
-		int width = 800;
-		int height = 600;
+		int width = m_Window->getWidth();
+		int height = m_Window->getHeight();
 
 		ImageData* image = new ImageData(4 * width * height);
 		

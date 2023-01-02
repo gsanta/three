@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 #include "../../system/utils/fileUtils.h"
 #include "../../../maths/vec2.h"
+#include "../../../maths/vec3.h"
 #include "../../../maths/mat4.h"
 
 namespace engine { namespace graphics {
@@ -24,7 +25,7 @@ namespace engine { namespace graphics {
 		void setUniform1iv(const GLchar* name, int* value, int count);
 		void setUniform1fv(const GLchar* name, float* value, int count);
 		void setUniform2f(const GLchar* name, const Vec2& vector);
-		void setUniform3f(const GLchar* name, const engine::maths::Vec3& vector);
+		void setUniform3f(const GLchar* name, const Vec3& vector);
 		void setUniform4f(const GLchar* name, const engine::maths::Vec4& vector);
 		void setUniformMat4(const GLchar* name, const Mat4& matrix);
 

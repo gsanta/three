@@ -10,12 +10,12 @@ type PanelProps = {
 const Panel = ({ children, header }: PanelProps) => (
   <section>
     {header}
-    <div>{children}</div>
+    <Box paddingInline="2">{children}</Box>
   </section>
 );
 
 type PanelHeaderProps = {
-  children: ReactNode;
+  children?: ReactNode;
   title: string;
 };
 

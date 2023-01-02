@@ -37,7 +37,7 @@ namespace engine { namespace graphics {
 		glUniform2f(getUniformLocation(name), vector.x, vector.y);
 	}
 
-	void Shader::setUniform3f(const GLchar* name, const engine::maths::Vec3& vector)
+	void Shader::setUniform3f(const GLchar* name, const Vec3& vector)
 	{
 		glUniform3f(getUniformLocation(name), vector.x, vector.y, vector.z);
 	}

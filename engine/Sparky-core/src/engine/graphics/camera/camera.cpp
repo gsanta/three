@@ -5,25 +5,25 @@ namespace engine { namespace graphics {
 	Camera::Camera(Window* window, OrthoProjectionInfo initialProjectionInfo) : m_Window(window), m_InitialProjectionInfo(initialProjectionInfo)
 	{
 		m_InitialWidth = initialProjectionInfo.right - initialProjectionInfo.left;
-		m_View = Mat4::lookAt(maths::Vec3(0, 0, z), maths::Vec3(0, 0, 0), maths::Vec3(0, 1, 0));
+		m_View = Mat4::lookAt(Vec3(0, 0, z), Vec3(0, 0, 0), Vec3(0, 1, 0));
 		setProjectionInfo(initialProjectionInfo);
 	}
 
 	void Camera::translate2D(Vec2 translate)
 	{
-		maths::Vec3 eye(m_Center2D.x + translate.x, m_Center2D.y + translate.y, z);
-		maths::Vec3 at(m_Center2D.x + translate.x, m_Center2D.y + translate.y, 0);
+		Vec3 eye(m_Center2D.x + translate.x, m_Center2D.y + translate.y, z);
+		Vec3 at(m_Center2D.x + translate.x, m_Center2D.y + translate.y, 0);
 		m_Center2D.x = eye.x;
 		m_Center2D.y = eye.y;
-		m_View  = Mat4::lookAt(eye, at, maths::Vec3(0, 1, 0));
+		m_View  = Mat4::lookAt(eye, at, Vec3(0, 1, 0));
 	}
 
 	void Camera::translateZ(float val)
 	{
 		z += val / 10.0f;
-		maths::Vec3 eye(m_Center2D.x, m_Center2D.y, z);
-		maths::Vec3 at(m_Center2D.x, m_Center2D.y, 0);
-		m_View = Mat4::lookAt(eye, at, maths::Vec3(0, 1, 0));
+		Vec3 eye(m_Center2D.x, m_Center2D.y, z);
+		Vec3 at(m_Center2D.x, m_Center2D.y, 0);
+		m_View = Mat4::lookAt(eye, at, Vec3(0, 1, 0));
 	}
 
 	void Camera::setProjectionInfo(OrthoProjectionInfo projectionInfo)

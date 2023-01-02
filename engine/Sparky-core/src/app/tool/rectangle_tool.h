@@ -4,7 +4,7 @@
 #include "tool.h"
 #include "../document/document_handler.h"
 #include "../../maths/vec2.h"
-#include "../../engine/maths/vec3.h"
+#include "../../maths/vec3.h"
 #include "../service/services.h"
 
 namespace spright { namespace tool {

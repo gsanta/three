@@ -225,8 +225,8 @@
     <ClCompile Include="src\engine\maths\mathFuncs.cpp" />
     <ClCompile Include="src\maths\vec2.cpp" />
     <ClCompile Include="src\engine\maths\vec2_int.cpp" />
-    <ClCompile Include="src\engine\maths\vec3.cpp" />
-    <ClCompile Include="src\engine\maths\vec4.cpp" />
+    <ClCompile Include="src\maths\vec3.cpp" />
+    <ClCompile Include="src\maths\vec4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\app\core\canvas\canvas_listener.h" />
@@ -296,8 +296,8 @@
     <ClInclude Include="src\engine\maths\mathFuncs.h" />
     <ClInclude Include="src\maths\vec2.h" />
     <ClInclude Include="src\engine\maths\vec2_int.h" />
-    <ClInclude Include="src\engine\maths\vec3.h" />
-    <ClInclude Include="src\engine\maths\vec4.h" />
+    <ClInclude Include="src\maths\vec3.h" />
+    <ClInclude Include="src\maths\vec4.h" />
     <ClInclude Include="src\engine\system\utils\fileUtils.h" />
     <ClInclude Include="src\engine\system\utils\timer.h" />
     <ClInclude Include="stb_image_write.h" />

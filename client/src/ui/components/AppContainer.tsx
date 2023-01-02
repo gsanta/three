@@ -9,9 +9,9 @@ import Canvas from '../panels/canvas/Canvas';
 import App, { AppContext } from '../../app/App';
 import useInitApp from '../panels/canvas/hooks/useInitApp';
 import LayerPanel from '../../panels/layer/ui/components/LayerPanel';
-import ToolOptionsBar from '@/panels/toolbar/ui/ToolOptionsBar';
 import Toolbar from '@/panels/toolbar/ui/Toolbar';
 import SettingsPanel from '@/panels/settings/SettingsPanel';
+import ToolOptionsPanel from '@/panels/tool_options/ui/ToolOptionsPanel';
 
 type AppContainerProps = {
   app: App;
@@ -57,11 +57,9 @@ const AppContainer = ({ app }: AppContainerProps) => {
               display="flex"
               justifyContent="space-between"
               height="40px"
-              paddingInlineStart="12"
-              paddingInlineEnd="2"
+              paddingInline="1"
               paddingBlock="1"
             >
-              <ToolOptionsBar />
               <SettingsPanel />
             </Box>
           }
@@ -75,12 +73,12 @@ const AppContainer = ({ app }: AppContainerProps) => {
               <Box display="flex" justifyContent="space-around">
                 <Canvas container={canvasContainer} ref={canvasRef} />
               </Box>
-              <Box display="flex" flexDir="column">
-                <Box flex="1">
-                  <LayerPanel />
-                </Box>
-                {/* <Box as="iframe" height="50%" id="test-iframe" src="iframe.html" /> */}
-              </Box>
+              <Split className="split-vertical" direction="vertical" sizes={[50, 50]}>
+                <LayerPanel />
+                <ToolOptionsPanel />
+              </Split>
+
+              {/* <Box as="iframe" height="50%" id="test-iframe" src="iframe.html" /> */}
             </Split>
           </Box>
         </Layout>

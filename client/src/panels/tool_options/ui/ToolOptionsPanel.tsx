@@ -1,11 +1,11 @@
 import ToolName from '@/panels/toolbar/model/ToolName';
+import BrushToolOptions from './BrushToolOptions';
+import Panel from '@/ui/components/panel/Panel';
 import useAppContext from '@/ui/hooks/useAppContext';
-import { Flex } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import BrushToolOptions from './BrushToolOptions';
 
-const ToolOptionsBar = observer(() => {
+const ToolOptionsPanel = observer(() => {
   const { toolStore } = useAppContext();
 
   const getOptions = () => {
@@ -17,11 +17,7 @@ const ToolOptionsBar = observer(() => {
     }
   };
 
-  return (
-    <Flex alignItems="center" height="100%">
-      {getOptions()}
-    </Flex>
-  );
+  return <Panel header={<Panel.Header title="tool options"></Panel.Header>}>{getOptions()}</Panel>;
 });
 
-export default ToolOptionsBar;
+export default ToolOptionsPanel;

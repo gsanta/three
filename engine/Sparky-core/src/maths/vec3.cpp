@@ -1,7 +1,6 @@
 #include "vec3.h"
 
-namespace engine
-{ namespace maths {
+namespace spright { namespace maths {
 
 	Vec3::Vec3() {
 		x = 0.0f;

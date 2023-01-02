@@ -175,13 +175,13 @@ static void dispatch_main(void *fp)
 
 int main()
 {
-	engine::maths::Vec3 la = engine::maths::Vec3(-3, 0, -5);
-	engine::maths::Vec3 lb = engine::maths::Vec3(3, 3, 0);
-	engine::maths::Vec3 p1 = engine::maths::Vec3(-1, 1, 0);
-	engine::maths::Vec3 p2 = engine::maths::Vec3(1, 1, 0);
-	engine::maths::Vec3 p3 = engine::maths::Vec3(0, -1, 0);
+	spright::maths::Vec3 la = spright::maths::Vec3(-3, 0, -5);
+	spright::maths::Vec3 lb = spright::maths::Vec3(3, 3, 0);
+	spright::maths::Vec3 p1 = spright::maths::Vec3(-1, 1, 0);
+	spright::maths::Vec3 p2 = spright::maths::Vec3(1, 1, 0);
+	spright::maths::Vec3 p3 = spright::maths::Vec3(0, -1, 0);
 
-	engine::maths::Vec3 res = engine::maths::linePlaneIntersection(la, lb, p1, p2, p3);
+	spright::maths::Vec3 res = engine::maths::linePlaneIntersection(la, lb, p1, p2, p3);
 
 
 

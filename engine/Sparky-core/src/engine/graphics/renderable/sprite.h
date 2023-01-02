@@ -9,7 +9,7 @@ using namespace std::string_literals;
 
 namespace engine { namespace graphics {
 	using namespace engine::graphics;
-	using namespace engine::maths;
+	using namespace spright::maths;
 
 	class Sprite : public Renderable2D {
 	private:
@@ -22,7 +22,7 @@ namespace engine { namespace graphics {
 		Sprite(float x, float y, float width, float height, Texture * texture);
 #endif
 
-		maths::Vec3 getPosition();
+		Vec3 getPosition();
 		Vec2 getPosition2d();
 		int getTileIndex();
 		void setTileIndex(int tileIndex);

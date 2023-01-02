@@ -1,6 +1,6 @@
 import Panel from '@/ui/components/panel/Panel';
 import useAppContext from '@/ui/hooks/useAppContext';
-import { List, Box, Tooltip, Button } from '@chakra-ui/react';
+import { List, Tooltip, Button } from '@chakra-ui/react';
 import { useBoolean } from 'usehooks-ts';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
@@ -28,21 +28,19 @@ const LayerPanel = observer(() => {
       }
     >
       <DndProvider backend={HTML5Backend}>
-        <Box paddingInline="2">
-          <List display="flex" flexDir="column" justifyContent="space-between">
-            <LayerDropTarget layerIndex={0} />
-            {layerHandler.getLayers().map((layerAdapter, index) => (
-              <React.Fragment key={layerAdapter.getName()}>
-                <LayerItem
-                  isActive={layerAdapter === layerHandler.getActiveLayer()}
-                  layerAdapter={layerAdapter}
-                  setActiveLayer={() => layerHandler.setActiveLayer(layerAdapter)}
-                />
-                <LayerDropTarget layerIndex={index + 1} />
-              </React.Fragment>
-            ))}
-          </List>
-        </Box>
+        <List display="flex" flexDir="column" justifyContent="space-between">
+          <LayerDropTarget layerIndex={0} />
+          {layerHandler.getLayers().map((layerAdapter, index) => (
+            <React.Fragment key={layerAdapter.getName()}>
+              <LayerItem
+                isActive={layerAdapter === layerHandler.getActiveLayer()}
+                layerAdapter={layerAdapter}
+                setActiveLayer={() => layerHandler.setActiveLayer(layerAdapter)}
+              />
+              <LayerDropTarget layerIndex={index + 1} />
+            </React.Fragment>
+          ))}
+        </List>
       </DndProvider>
       <AddLayerDialog isOpen={isAddPanelOpen} onClose={setCloseAddPanel} />
     </Panel>

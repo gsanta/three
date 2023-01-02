@@ -48,10 +48,10 @@
     <ClCompile Include="src\maths\vec2.cpp">
       <Filter>Source Files\maths</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\maths\vec3.cpp">
+    <ClCompile Include="src\maths\vec3.cpp">
       <Filter>Source Files\maths</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\maths\vec4.cpp">
+    <ClCompile Include="src\maths\vec4.cpp">
       <Filter>Source Files\maths</Filter>
     </ClCompile>
     <ClCompile Include="src\maths\mat4.cpp">
@@ -260,7 +260,7 @@
     <ClInclude Include="src\engine\system\utils\timer.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\maths\vec4.h">
+    <ClInclude Include="src\maths\vec4.h">
       <Filter>Header Files\maths</Filter>
     </ClInclude>
     <ClInclude Include="src\maths\mat4.h">
@@ -272,7 +272,7 @@
     <ClInclude Include="src\maths\vec2.h">
       <Filter>Header Files\maths</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\maths\vec3.h">
+    <ClInclude Include="src\maths\vec3.h">
       <Filter>Header Files\maths</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\graphics\buffer\buffer.h">
