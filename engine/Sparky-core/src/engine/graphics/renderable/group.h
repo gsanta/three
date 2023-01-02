@@ -3,7 +3,7 @@
 #include "renderable2D.h"
 
 namespace engine { namespace graphics  {
-	using namespace engine::maths;
+	using namespace ::engine::maths;
 
 	class Group : public engine::graphics::Renderable2D {
 	private:

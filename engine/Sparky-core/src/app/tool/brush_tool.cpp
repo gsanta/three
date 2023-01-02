@@ -39,13 +39,13 @@ namespace spright { namespace tool {
 
 		float zoom = camera->getZoom();
 
-		engine::maths::Vec3 la = engine::maths::Vec3(center2D.x * zoom + pointerInfo.curr.x, center2D.y * zoom + pointerInfo.curr.y, 0.5f);
-		engine::maths::Vec3 lb = engine::maths::Vec3(center2D.x * zoom + pointerInfo.curr.x, center2D.y * zoom + pointerInfo.curr.y, 0);
-		engine::maths::Vec3 p1 = engine::maths::Vec3(-1, 1, 0);
-		engine::maths::Vec3 p2 = engine::maths::Vec3(1, 1, 0);
-		engine::maths::Vec3 p3 = engine::maths::Vec3(0, -1, 0);
+		Vec3 la = Vec3(center2D.x * zoom + pointerInfo.curr.x, center2D.y * zoom + pointerInfo.curr.y, 0.5f);
+		Vec3 lb = Vec3(center2D.x * zoom + pointerInfo.curr.x, center2D.y * zoom + pointerInfo.curr.y, 0);
+		Vec3 p1 = Vec3(-1, 1, 0);
+		Vec3 p2 = Vec3(1, 1, 0);
+		Vec3 p3 = Vec3(0, -1, 0);
 
-		engine::maths::Vec3 intersection = engine::maths::linePlaneIntersection(la, lb, p1, p2, p3);
+		Vec3 intersection = engine::maths::linePlaneIntersection(la, lb, p1, p2, p3);
 
 		engine::graphics::TileLayer* tileLayer = dynamic_cast<engine::graphics::TileLayer*>(m_documentHandler->getActiveDocument()->getActiveLayer());
 

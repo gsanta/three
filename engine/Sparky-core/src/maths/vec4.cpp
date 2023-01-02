@@ -1,6 +1,6 @@
 #include "vec4.h"
 
-namespace engine { namespace maths {
+namespace spright { namespace maths {
 
 	Vec4::Vec4() {
 		x = 0.0f;

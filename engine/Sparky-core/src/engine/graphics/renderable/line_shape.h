@@ -2,7 +2,7 @@
 
 #include "renderable2d.h"
 #include "../renderer/renderer2d.h"
-#include "../../maths/vec3.h"
+#include "../../../maths/vec3.h"
 
 namespace engine { namespace graphics {
 	using namespace spright::maths;
@@ -15,7 +15,7 @@ namespace engine { namespace graphics {
 		float m_Length;
 		Vec2 m_Dir;
 		Vec2 m_Normal;
-		engine::maths::Vec3 m_Coords[4];
+		Vec3 m_Coords[4];
 	public:
 		LineShape(float x1, float y1, float x2, float y2, float thickness, unsigned int color);
 

@@ -15,10 +15,10 @@ namespace engine { namespace graphics {
 		Vec2 coord2 = m_End - m_Normal * m_Thickness;
 		Vec2 coord3 = m_End + m_Normal * m_Thickness;
 
-		m_Coords[0] = engine::maths::Vec3(coord0.x, coord0.y, 0);
-		m_Coords[1] = engine::maths::Vec3(coord1.x, coord1.y, 0);
-		m_Coords[2] = engine::maths::Vec3(coord2.x, coord2.y, 0);
-		m_Coords[3] = engine::maths::Vec3(coord3.x, coord3.y, 0);
+		m_Coords[0] = Vec3(coord0.x, coord0.y, 0);
+		m_Coords[1] = Vec3(coord1.x, coord1.y, 0);
+		m_Coords[2] = Vec3(coord2.x, coord2.y, 0);
+		m_Coords[3] = Vec3(coord3.x, coord3.y, 0);
 	}
 
 	void LineShape::submit(engine::graphics::Renderer2D* renderer) const {

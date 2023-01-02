@@ -2,13 +2,13 @@
 
 #include "../../../maths/mat4.h"
 #include "../../../maths/vec2.h"
-#include "../../maths/vec3.h"
+#include "../../../maths/vec3.h"
 #include "../../maths/mathFuncs.h"
 #include "./ortho_projection_info.h";
 #include "../../system/window/window.h"
 
 namespace engine { namespace graphics {
-	using namespace spright::maths;
+	using namespace ::spright::maths;
 	using namespace ::engine::system;
 
 	class Camera {

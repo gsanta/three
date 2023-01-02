@@ -11,8 +11,8 @@ const BrushToolOptions = observer(() => {
   };
 
   return (
-    <FormControl>
-      <FormLabel>Size:</FormLabel>
+    <FormControl display="flex" flexDirection="row">
+      <FormLabel size="xs">Size:</FormLabel>
       <Input size="xs" width="12" onChange={handleSizeChange} />
     </FormControl>
   );

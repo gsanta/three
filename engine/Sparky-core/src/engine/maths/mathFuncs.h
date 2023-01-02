@@ -3,8 +3,10 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "../../maths/mat4.h"
+#include "../../maths/vec3.h"
 
 namespace engine { namespace maths {
+	using namespace spright::maths;
 
 	float toRadians(float degrees);
 

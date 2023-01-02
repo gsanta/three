@@ -3,7 +3,7 @@
 namespace engine {
 	namespace graphics {
 		Sprite::Sprite(float x, float y, float width, float height, unsigned int  color)
-			: m_Position(engine::maths::Vec3(x, y, 0)), m_Size(Vec2(width, height)), engine::graphics::Renderable2D(color)
+			: m_Position(Vec3(x, y, 0)), m_Size(Vec2(width, height)), engine::graphics::Renderable2D(color)
 		{
 			m_bounds = new engine::graphics::Bounds(x, y, width, height);
 
@@ -12,7 +12,7 @@ namespace engine {
 
 #ifndef SPARKY_EMSCRIPTEN
 		Sprite::Sprite(float x, float y, float width, float height, engine::graphics::Texture* texture)
-			: m_Position(engine::maths::Vec3(x, y, 0)), m_Size(Vec2(width, height)), engine::graphics::Renderable2D(0xffffffff)
+			: m_Position(Vec3(x, y, 0)), m_Size(Vec2(width, height)), engine::graphics::Renderable2D(0xffffffff)
 		{
 			m_Texture = texture;
 		}
@@ -26,7 +26,7 @@ namespace engine {
 			m_TileIndex = index;
 		}
 
-		maths::Vec3 Sprite::getPosition() {
+		Vec3 Sprite::getPosition() {
 			return m_Position;
 		}
 
@@ -41,7 +41,7 @@ namespace engine {
 
 		void Sprite::setPosition(Vec2 position)
 		{
-			this->m_Position = maths::Vec3(position.x, position.y, m_Position.z);
+			this->m_Position = Vec3(position.x, position.y, m_Position.z);
 			updateBounds();
 		}
 
@@ -80,19 +80,19 @@ namespace engine {
 		buffer->color = m_Color;
 		buffer++;
 
-		buffer->vertex = *transformation * engine::maths::Vec3(m_Position.x, m_Position.y + m_Size.y, m_Position.z);
+		buffer->vertex = *transformation * Vec3(m_Position.x, m_Position.y + m_Size.y, m_Position.z);
 		buffer->uv = m_UV[1];
 		buffer->tid = 0.0f;
 		buffer->color = m_Color;
 		buffer++;
 
-		buffer->vertex = *transformation * engine::maths::Vec3(m_Position.x + m_Size.x, m_Position.y + m_Size.y, m_Position.z);
+		buffer->vertex = *transformation * Vec3(m_Position.x + m_Size.x, m_Position.y + m_Size.y, m_Position.z);
 		buffer->uv = m_UV[2];
 		buffer->tid = 0.0f;
 		buffer->color = m_Color;
 		buffer++;
 
-		buffer->vertex = *transformation * engine::maths::Vec3(m_Position.x + m_Size.x, m_Position.y, m_Position.z);
+		buffer->vertex = *transformation * Vec3(m_Position.x + m_Size.x, m_Position.y, m_Position.z);
 		buffer->uv = m_UV[3];
 		buffer->tid = 0.0f;
 		buffer->color = m_Color;
