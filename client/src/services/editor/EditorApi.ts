@@ -14,6 +14,8 @@ interface EditorApi {
   getLayers(): any;
   createLayer(name: string, id: string): void;
   enableLayer(id: string): void;
+  setLayerIndex(id: string, index: number): void;
+  removeLayer(id: string): void;
   disableLayer(id: string): void;
   setActiveLayer(id: string): void;
 

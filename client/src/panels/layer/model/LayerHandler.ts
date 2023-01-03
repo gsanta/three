@@ -53,7 +53,7 @@ class LayerHandler {
     this.layers.splice(position, 0, layer);
   }
 
-  moveLayer(layer: LayerAdapter, newLayerIndex: number) {
+  setLayerIndex(layer: LayerAdapter, newLayerIndex: number) {
     const currentLayerIndex = this.getLayerIndex(layer);
 
     if (currentLayerIndex == -1 || currentLayerIndex == newLayerIndex) {
@@ -64,6 +64,8 @@ class LayerHandler {
 
     this.layers.splice(this.layers.indexOf(layer), 1);
     this.layers.splice(finalLayerIndex, 0, layer);
+
+    this.editorApi.setLayerIndex(layer.getId(), newLayerIndex);
   }
 
   getLayerIndex(layer: LayerAdapter) {
@@ -79,6 +81,7 @@ class LayerHandler {
     if (this.activeLayer === layer) {
       this.activeLayer = this.layers[0];
     }
+    this.editorApi.removeLayer(layer.getId());
   }
 
   getLayers() {

@@ -13,6 +13,7 @@
 #include "./service/services.h"
 #include "./rendering.h"
 #include "./service/io/image_export.h"
+#include "./service/io/json/json_export.h"
 
 namespace spright
 {
@@ -32,6 +33,7 @@ namespace spright
 		EditorConfig editorConfig;
 		spright::Services *m_Services;
 		ImageExport* m_ImageExport;
+		std::unique_ptr<JsonExport> m_JsonExport;
 
 	public:
 		Editor();
@@ -70,6 +72,8 @@ namespace spright
 		}
 
 		ImageExport* getImageExport();
+	
+		JsonExport* getJsonExport();
 	};
 
 }
