@@ -65,7 +65,7 @@ namespace engine { namespace graphics {
 		nlohmann::json json;
 
 		for (Renderable2D* renderable : m_Renderables) {
-			json += renderable->getJson();
+			json["tiles"] += renderable->getJson();
 		}
 
 		return json;
@@ -136,6 +136,10 @@ namespace engine { namespace graphics {
 			}
 		}
 		return m_TileIndexes[tilePos];
+	}
+
+	int TileLayer::getIndexSize() const {
+		return m_IndexSize;
 	}
 
 }}

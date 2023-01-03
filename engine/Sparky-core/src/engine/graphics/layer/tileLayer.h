@@ -40,8 +40,9 @@ namespace engine { namespace graphics {
 		Renderable2D* getAtTileIndex(int tileIndex);
 		int getTileIndex(int tileX, int tileY);
 		int getTileIndex(Vec2 worldPos);
-		const BoundsInt& getTileBounds() const;
 
+		const BoundsInt& getTileBounds() const;
+		int getIndexSize() const;
 		inline float getTileSize() const
 		{
 			return m_TileSize;

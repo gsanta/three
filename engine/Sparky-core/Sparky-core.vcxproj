@@ -169,10 +169,13 @@
   <ItemGroup>
     <ClCompile Include="src\app\core\canvas\canvas_listener_handler.cpp" />
     <ClCompile Include="src\app\document\checkerboard.cpp" />
+    <ClCompile Include="src\app\editor_api.cpp" />
     <ClCompile Include="src\app\model\rectangle.cpp" />
     <ClCompile Include="src\app\rendering.cpp" />
     <ClCompile Include="src\app\service\io\image_data.cpp" />
     <ClCompile Include="src\app\service\io\image_export.cpp" />
+    <ClCompile Include="src\app\service\io\json\json_export.cpp" />
+    <ClCompile Include="src\app\service\io\json\tile_layer_export.cpp" />
     <ClCompile Include="src\app\tool\color_picker_tool.cpp" />
     <ClCompile Include="src\app\tool\paint_bucket\flood_fill_range.cpp" />
     <ClCompile Include="src\app\tool\paint_bucket\queue_linear_flood_fill.cpp" />
@@ -230,12 +233,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\app\core\canvas\canvas_listener.h" />
+    <ClInclude Include="src\app\editor_api.h" />
     <ClInclude Include="src\app\model\point.h" />
     <ClInclude Include="src\app\core\canvas\canvas_listener_handler.h" />
     <ClInclude Include="src\app\model\rectangle.h" />
     <ClInclude Include="src\app\rendering.h" />
     <ClInclude Include="src\app\service\io\image_data.h" />
     <ClInclude Include="src\app\service\io\image_export.h" />
+    <ClInclude Include="src\app\service\io\json\json_export.h" />
+    <ClInclude Include="src\app\service\io\json\tile_layer_export.h" />
     <ClInclude Include="src\app\tool\color_picker_tool.h" />
     <ClInclude Include="src\app\tool\paint_bucket\queue_linear_flood_fill.h" />
     <ClInclude Include="src\app\tool\select_tool\selection_box.h" />

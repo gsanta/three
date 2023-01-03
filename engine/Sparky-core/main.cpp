@@ -24,10 +24,13 @@
 #include "src/engine/graphics/layer/tileLayer.h"
 #include "src/engine/graphics/renderable/group.h"
 #include "src/app/editor.h"
-
+#include "src/app/editor_api.h"
 //#define SPARKY_EMSCRIPTEN 0
 
-engine::system::Window *window = nullptr;
+using namespace ::engine::graphics;
+using namespace ::engine::system;
+
+Window *window = nullptr;
 spright::Editor *editor = nullptr;
 
 #ifdef SPARKY_EMSCRIPTEN
@@ -60,11 +63,11 @@ void removeActiveTool(std::string toolName)
 }
 
 std::vector<std::string> getLayers() {
-	std::vector<engine::graphics::Layer*>& layers = editor->getDocumentHandler()->getActiveDocument()->getUserLayers();
+	std::vector<Layer*>& layers = editor->getDocumentHandler()->getActiveDocument()->getUserLayers();
 
 	std::vector<std::string> target;
 
-	for (engine::graphics::Layer* layer : layers) {
+	for (Layer* layer : layers) {
 		target.push_back(layer->getLayerDescription().dump());
 	}
 
@@ -76,7 +79,7 @@ void createLayer(std::string name, std::string id) {
 }
 
 void enableLayer(std::string id) {
-	engine::graphics::Layer* layer = editor->getDocumentHandler()->getActiveDocument()->getLayer(id);
+	Layer* layer = editor->getDocumentHandler()->getActiveDocument()->getLayer(id);
 
 	if (layer != nullptr) {
 		layer->setEnabled(true);
@@ -84,7 +87,7 @@ void enableLayer(std::string id) {
 }
 
 void disableLayer(std::string id) {
-	engine::graphics::Layer* layer = editor->getDocumentHandler()->getActiveDocument()->getLayer(id);
+	Layer* layer = editor->getDocumentHandler()->getActiveDocument()->getLayer(id);
 
 	if (layer != nullptr) {
 		layer->setEnabled(false);
@@ -181,7 +184,7 @@ int main()
 	spright::maths::Vec3 p2 = spright::maths::Vec3(1, 1, 0);
 	spright::maths::Vec3 p3 = spright::maths::Vec3(0, -1, 0);
 
-	spright::maths::Vec3 res = engine::maths::linePlaneIntersection(la, lb, p1, p2, p3);
+	spright::maths::Vec3 res = ::engine::maths::linePlaneIntersection(la, lb, p1, p2, p3);
 
 
 

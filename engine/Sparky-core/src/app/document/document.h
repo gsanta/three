@@ -21,39 +21,43 @@ namespace spright { namespace document {
 		//engine::graphics::Layer* m_TempLayer;
 		//engine::graphics::TileLayer* m_BackgroundLayer;
 		//engine::graphics::TileLayer* m_TileLayer;
-		std::vector<engine::graphics::Layer*> m_Layers;
-		std::vector<engine::graphics::Layer*> m_BeforeLayers;
-		std::vector<engine::graphics::Layer*> m_AfterLayers;
+		std::vector<Layer*> m_Layers;
+		std::vector<Layer*> m_BeforeLayers;
+		std::vector<Layer*> m_AfterLayers;
 
-		engine::graphics::Layer* m_ActiveLayer;
+		Layer* m_ActiveLayer;
 
 		Camera* m_Camera;
 
 	public:
-		Document(engine::graphics::Dimensions dimensions, Camera* camera);
+		Document(Dimensions dimensions, Camera* camera);
 		~Document();
 
-		engine::graphics::Dimensions dimensions;
+		Dimensions dimensions;
 
-		engine::graphics::Layer* getLayer(std::string id);
+		Layer* getLayer(std::string id);
 
-		void addUserLayer(engine::graphics::Layer* layer);
-		void addBeforeLayer(engine::graphics::Layer* layer);
-		void addAfterLayer(engine::graphics::Layer* layer);
+		void addUserLayer(Layer* layer);
+		void addBeforeLayer(Layer* layer);
+		void addAfterLayer(Layer* layer);
 
-		std::vector<engine::graphics::Layer*>& getUserLayers();
+		std::vector<Layer*>& getUserLayers();
 
-		inline engine::graphics::Layer* getActiveLayer() {
+		void setLayerIndex(std::string layerId, int newIndex);
+		int getLayerIndex(std::string layerId);
+		void removeLayer(std::string layerId);
+
+		inline Layer* getActiveLayer() {
 			return m_ActiveLayer;
 		}
 
-		inline engine::graphics::Camera* getCamera() {
+		inline Camera* getCamera() {
 			return m_Camera;
 		}
 
 		std::string getJson();
 
-		void setActiveLayer(std::string id);
+		void setActiveLayer(std::string layerId);
 
 		void render();
 	};

@@ -5,7 +5,8 @@ namespace spright { namespace tool {
 	{
 	}
 
-	ToolHandler::ToolHandler(Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services, ImageExport* imageExport) : m_Window(window), m_DocumentHandler(documentHandler), m_EditorConfig(editorConfig), m_Services(services), m_ImageExport(imageExport)
+	ToolHandler::ToolHandler(Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services, ImageExport* imageExport, JsonExport* jsonExport) 
+		: m_Window(window), m_DocumentHandler(documentHandler), m_EditorConfig(editorConfig), m_Services(services), m_ImageExport(imageExport)
 	{
 		window->getInputHandler()->registerListener(this);
 		m_ActiveTools = new vector<Tool*>();
@@ -104,7 +105,7 @@ namespace spright { namespace tool {
 			m_Services->getColorPalette()->color = COLOR_BLUE;
 		}
 		else if (key == GLFW_KEY_E) {
-			m_ImageExport->exportImage(m_DocumentHandler->getActiveDocument());
+			auto json = m_JsonExport->exportDocument(m_DocumentHandler->getActiveDocument());
 		}
 	}
 

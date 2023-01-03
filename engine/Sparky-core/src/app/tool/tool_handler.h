@@ -1,3 +1,4 @@
+#pragma once
 #include <vector>
 #include <iostream>
 #include "tool.h"
@@ -10,6 +11,7 @@
 #include "../editor_config.h"
 #include "../service/services.h"
 #include "../service/io/image_export.h"
+#include "../service/io/json/json_export.h"
 
 namespace spright { namespace tool {
 
@@ -27,9 +29,10 @@ namespace spright { namespace tool {
 		Services* m_Services;
 		DocumentHandler* m_DocumentHandler;
 		ImageExport* m_ImageExport;
+		JsonExport* m_JsonExport;
 	public:
 		ToolHandler();
-		ToolHandler(Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services, ImageExport* m_ImageExport);
+		ToolHandler(Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services, ImageExport* m_ImageExport, JsonExport* jsonExport);
 		~ToolHandler();
 
 		ToolHandler& operator=(const ToolHandler& toolHandler);

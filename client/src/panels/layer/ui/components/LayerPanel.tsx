@@ -37,7 +37,7 @@ const LayerPanel = observer(() => {
                 layerAdapter={layerAdapter}
                 setActiveLayer={() => layerHandler.setActiveLayer(layerAdapter)}
               />
-              <LayerDropTarget layerIndex={index + 1} />
+              <LayerDropTarget key={index + 1} layerIndex={index + 1} />
             </React.Fragment>
           ))}
         </List>
