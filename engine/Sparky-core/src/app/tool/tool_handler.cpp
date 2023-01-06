@@ -6,7 +6,7 @@ namespace spright { namespace tool {
 	}
 
 	ToolHandler::ToolHandler(Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services, ImageExport* imageExport, JsonExport* jsonExport) 
-		: m_Window(window), m_DocumentHandler(documentHandler), m_EditorConfig(editorConfig), m_Services(services), m_ImageExport(imageExport)
+		: m_Window(window), m_DocumentHandler(documentHandler), m_EditorConfig(editorConfig), m_Services(services), m_ImageExport(imageExport), m_JsonExport(jsonExport)
 	{
 		window->getInputHandler()->registerListener(this);
 		m_ActiveTools = new vector<Tool*>();
@@ -105,8 +105,10 @@ namespace spright { namespace tool {
 			m_Services->getColorPalette()->color = COLOR_BLUE;
 		}
 		else if (key == GLFW_KEY_E) {
-			auto json = m_JsonExport->exportDocument(m_DocumentHandler->getActiveDocument());
+			m_JsonExport->importDocument("{ \"tiles\": [ {\"i\": 1, \"c\": \"black\"} ] }");
+			//m_JsonExport->importDocument("{ \"a\": 2 }");
 		}
+
 	}
 
 	void ToolHandler::addTool(Tool* tool)

@@ -5,7 +5,10 @@ namespace spright {
 	{
 		m_Window = new Window("Editor", 800, 800);
 		m_DocumentHandler = new DocumentHandler(m_Window);
+
 		m_DocumentHandler->createDocument();
+		m_DocumentHandler->createUserLayer("layer1", USER_LAYER_ID_PREFIX + "1");
+		m_DocumentHandler->createUserLayer("layer2", USER_LAYER_ID_PREFIX + "2");
 
 		m_Rendering = new Rendering(m_Window, m_DocumentHandler);
 
@@ -14,7 +17,7 @@ namespace spright {
 
 		m_ImageExport = new ImageExport(m_Window, m_Rendering);
 
-		m_JsonExport = std::make_unique<JsonExport>();
+		m_JsonExport = std::make_unique<JsonExport>(m_DocumentHandler);
 
 		m_toolHandler = new ToolHandler(m_Window, m_DocumentHandler, editorConfig, m_Services, m_ImageExport, getJsonExport());
 		m_toolHandler->addTool(new BrushTool(m_DocumentHandler, editorConfig, m_Services, m_Services->getEventHandler()));

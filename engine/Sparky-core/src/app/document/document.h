@@ -48,6 +48,10 @@ namespace spright { namespace document {
 		void removeLayer(std::string layerId);
 
 		inline Layer* getActiveLayer() {
+			if (m_ActiveLayer == nullptr) {
+				throw "No active layer for the current document";
+			}
+
 			return m_ActiveLayer;
 		}
 
