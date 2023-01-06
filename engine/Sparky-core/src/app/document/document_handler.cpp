@@ -20,7 +20,13 @@ namespace spright { namespace document {
 #else
 		engine::graphics::Shader* shaderUnlit = new engine::graphics::Shader("src/shaders/basic.vert", "src/shaders/unlit.frag");
 #endif
-		TileLayer* userLayer1 = new TileLayer(name, id, shaderUnlit, new BatchRenderer2D(), getActiveDocument()->getCamera(), getActiveDocument()->dimensions);
+		TileLayer* layer = new TileLayer(name, id, shaderUnlit, new BatchRenderer2D(), getActiveDocument()->getCamera(), getActiveDocument()->dimensions);
+
+		m_ActiveDocument->addUserLayer(layer);
+
+		if (m_ActiveDocument->getUserLayers().size() == 1) {
+			m_ActiveDocument->setActiveLayer(layer->getId());
+		}
 	}
 
 	void DocumentHandler::createDocument()
@@ -36,19 +42,11 @@ namespace spright { namespace document {
 		Camera* camera = new Camera(m_Window, engine::graphics::OrthoProjectionInfo(dimensions.left, dimensions.right, dimensions.bottom, dimensions.top));
 		Document* document = new Document(dimensions, camera);
 
-		std::string userLayer1Id = USER_LAYER_ID_PREFIX + "1";
-		std::string userLayer2Id = USER_LAYER_ID_PREFIX + "2";
-		TileLayer* userLayer1 = new TileLayer("layer1", userLayer1Id, shaderUnlit, new BatchRenderer2D(), document->getCamera(), dimensions);
-		TileLayer* userLayer2 = new TileLayer("layer2", userLayer2Id, shaderUnlit, new BatchRenderer2D(), document->getCamera(), dimensions);
 		TileLayer* tempLayer = new TileLayer("", DEFAULT_TEMP_LAYER_ID, shaderUnlit, new BatchRenderer2D(), document->getCamera(), dimensions);
 		TileLayer* backgroundLayer = new TileLayer("", DEFAULT_BACKGROUND_LAYER_ID, shaderUnlit, new BatchRenderer2D(), document->getCamera(), dimensions);
 
 		document->addBeforeLayer(backgroundLayer);
-		document->addUserLayer(userLayer1);
-		document->addUserLayer(userLayer2);
 		document->addAfterLayer(tempLayer);
-
-		document->setActiveLayer(userLayer1Id);
 
 		spright::document::Checkerboard checkerboard;
 

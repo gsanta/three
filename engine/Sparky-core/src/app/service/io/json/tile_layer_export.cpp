@@ -2,6 +2,10 @@
 
 namespace spright {
 
+	TileLayerExport::TileLayerExport(DocumentHandler* documentHandler) : m_DocumentHandler(documentHandler) {
+
+	}
+
 	nlohmann::json TileLayerExport::exportLayer(TileLayer* layer) {
 		nlohmann::json json;
 
@@ -20,9 +24,15 @@ namespace spright {
 	}
 
 
-	//TileLayer* TileLayerExport::importLayer(std::string str) {
-	//	nlohmann::json json = nlohmann::json::parse(str);
+	TileLayer* TileLayerExport::importLayer(nlohmann::json json) {
+		m_DocumentHandler->createUserLayer(json["name"], json["id"]);
+		
+		TileLayer* layer = dynamic_cast<TileLayer*>(m_DocumentHandler->getActiveDocument()->getLayer(json["id"]));
 
-	//	new TileLayer()
-	//}
+		int tileCount = json["tiles"].size();
+
+		for (int i = 0; i < tileCount; i++) {
+			layer->add(new Sprite());
+		}
+	}
 }
