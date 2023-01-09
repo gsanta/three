@@ -17,9 +17,9 @@ namespace spright {
 
 		m_ImageExport = new ImageExport(m_Window, m_Rendering);
 
-		m_JsonExport = std::make_unique<JsonExport>(m_DocumentHandler);
+		m_JsonExport = std::make_unique<JsonIO>();
 
-		m_toolHandler = new ToolHandler(m_Window, m_DocumentHandler, editorConfig, m_Services, m_ImageExport, getJsonExport());
+		m_toolHandler = new ToolHandler(m_Window, m_DocumentHandler, editorConfig, m_Services, m_ImageExport, getJsonIO());
 		m_toolHandler->addTool(new BrushTool(m_DocumentHandler, editorConfig, m_Services, m_Services->getEventHandler()));
 		m_toolHandler->addTool(new RectangleTool(m_DocumentHandler, m_Services, m_Services->getEventHandler()));
 		m_toolHandler->addTool(new EraseTool(m_DocumentHandler, m_Services->getEventHandler()));
@@ -50,7 +50,7 @@ namespace spright {
 		return m_ImageExport;
 	}
 
-	JsonExport* Editor::getJsonExport() {
+	JsonIO* Editor::getJsonIO() {
 		return m_JsonExport.get();
 	}
 }

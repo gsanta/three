@@ -8,15 +8,14 @@
 namespace spright {
 	using namespace document;
 
-	class JsonExport {
+	class JsonIO {
 	private:
-		TileLayerExport m_TileLayerExport;
-		DocumentHandler* m_DocumentHandler;
+		TileLayerExport* m_TileLayerExport;
 		int m_i;
 
 	public:
-		JsonExport(DocumentHandler* documentHandler);
-		nlohmann::json exportDocument(Document* document);
-		void importDocument(std::string string);
+		JsonIO();
+		std::string exportDocument(Document* document);
+		void importDocument(DocumentHandler* documentHandler, std::string string);
 	};
 }

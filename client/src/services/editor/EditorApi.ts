@@ -21,10 +21,12 @@ interface EditorApi {
 
   setBrushSize(size: number): void;
 
-  //image export
+  //io
   exportImage(): void;
   getImageData(): number;
   getImageSize(): number;
+
+  exportDocument(): string;
 }
 
 export default EditorApi;

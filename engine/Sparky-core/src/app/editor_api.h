@@ -13,5 +13,6 @@ using namespace spright;
 
 void setLayerIndex(std::string layerId, int newIndex);
 void removeLayer(std::string layerId);
+std::string exportDocument();
 
 #endif
