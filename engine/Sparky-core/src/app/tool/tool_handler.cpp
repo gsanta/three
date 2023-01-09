@@ -5,7 +5,7 @@ namespace spright { namespace tool {
 	{
 	}
 
-	ToolHandler::ToolHandler(Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services, ImageExport* imageExport, JsonExport* jsonExport) 
+	ToolHandler::ToolHandler(Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services, ImageExport* imageExport, JsonIO* jsonExport) 
 		: m_Window(window), m_DocumentHandler(documentHandler), m_EditorConfig(editorConfig), m_Services(services), m_ImageExport(imageExport), m_JsonExport(jsonExport)
 	{
 		window->getInputHandler()->registerListener(this);
@@ -105,7 +105,9 @@ namespace spright { namespace tool {
 			m_Services->getColorPalette()->color = COLOR_BLUE;
 		}
 		else if (key == GLFW_KEY_E) {
-			m_JsonExport->importDocument("{ \"tiles\": [ {\"i\": 1, \"c\": \"black\"} ] }");
+			std::string str = m_JsonExport->exportDocument(m_DocumentHandler->getActiveDocument());
+			m_JsonExport->importDocument(m_DocumentHandler, str);
+			//m_JsonExport->importDocument("{ \"tiles\": [ {\"i\": 1, \"c\": \"black\"} ] }");
 			//m_JsonExport->importDocument("{ \"a\": 2 }");
 		}
 

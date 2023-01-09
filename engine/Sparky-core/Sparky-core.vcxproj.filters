@@ -228,7 +228,7 @@
     <ClCompile Include="src\app\service\io\json\tile_layer_export.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\app\service\io\json\json_export.cpp">
+    <ClCompile Include="src\app\service\io\json\json_io.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\app\editor_api.cpp">
@@ -455,7 +455,7 @@
     <ClInclude Include="src\app\service\io\json\tile_layer_export.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\app\service\io\json\json_export.h">
+    <ClInclude Include="src\app\service\io\json\json_io.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\app\editor_api.h">

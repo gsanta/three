@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Dialog, { DialogProps } from '@/ui/components/dialog/Dialog';
 import DialogBody from '@/ui/components/dialog/DialogBody';
 import DialogFooter from '@/ui/components/dialog/DialogFooter';
 import { Button, FormControl, FormLabel, Select } from '@chakra-ui/react';
-import downloadBlob from './utils/downloadBlob';
+import downloadBlob, { downloadString } from '../utils/downloadBlob';
 import useAppContext from '@/ui/hooks/useAppContext';
+import FileType, { getFileTypes } from './FileType';
 
 const ExportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children'>) => {
   const { editorApi } = useAppContext();
+  const [selectedFileType, setSelectedFileType] = useState<FileType>(FileType.json);
 
-  const handleExportImage = () => {
+  const exportImage = () => {
     editorApi.exportImage();
     const data = editorApi.getImageData();
     const size = editorApi.getImageSize();
@@ -17,13 +19,38 @@ const ExportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children
     downloadBlob(buffer);
   };
 
+  const exportDocument = () => {
+    const doc = editorApi.exportDocument();
+    downloadString(doc, 'spright.json');
+  };
+
+  const handleExport = () => {
+    switch (selectedFileType) {
+      case FileType.png:
+        exportImage();
+        break;
+      case FileType.json:
+      default:
+        exportDocument();
+        break;
+    }
+  };
+
+  const handleFileTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedFileType(e.target.value as FileType);
+  };
+
   return (
     <Dialog isOpen={isOpen} onClose={onClose} title="Export">
       <DialogBody>
         <FormControl>
           <FormLabel>Type</FormLabel>
-          <Select>
-            <option value="option1">PNG</option>
+          <Select onChange={handleFileTypeChange}>
+            {getFileTypes().map((fileType) => (
+              <option value={fileType} selected={fileType === selectedFileType}>
+                {fileType}
+              </option>
+            ))}
           </Select>
         </FormControl>
       </DialogBody>
@@ -31,7 +58,7 @@ const ExportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children
         <Button size="sm" onClick={onClose}>
           Close
         </Button>
-        <Button size="sm" colorScheme="orange" onClick={handleExportImage}>
+        <Button size="sm" colorScheme="orange" onClick={handleExport}>
           Export
         </Button>
       </DialogFooter>

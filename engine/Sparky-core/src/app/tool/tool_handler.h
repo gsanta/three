@@ -11,7 +11,7 @@
 #include "../editor_config.h"
 #include "../service/services.h"
 #include "../service/io/image_export.h"
-#include "../service/io/json/json_export.h"
+#include "../service/io/json/json_io.h"
 
 namespace spright { namespace tool {
 
@@ -29,10 +29,10 @@ namespace spright { namespace tool {
 		Services* m_Services;
 		DocumentHandler* m_DocumentHandler;
 		ImageExport* m_ImageExport;
-		JsonExport* m_JsonExport;
+		JsonIO* m_JsonExport;
 	public:
 		ToolHandler();
-		ToolHandler(Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services, ImageExport* m_ImageExport, JsonExport* jsonExport);
+		ToolHandler(Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services, ImageExport* m_ImageExport, JsonIO* jsonExport);
 		~ToolHandler();
 
 		ToolHandler& operator=(const ToolHandler& toolHandler);

@@ -1,6 +1,7 @@
 #pragma once
 #include <nlohmann/json.hpp>
 #include "../../../../engine/graphics/layer/tileLayer.h"
+#include "../../../document/document.h"
 #include "../../../document/document_handler.h"
 
 namespace spright {
@@ -8,11 +9,8 @@ namespace spright {
 	using namespace document;
 
 	class TileLayerExport {
-		DocumentHandler* m_DocumentHandler;
-
 	public:
-		TileLayerExport(DocumentHandler* documentHandler);
-		nlohmann::json exportLayer(TileLayer* layer);
-		TileLayer* importLayer(nlohmann::json json);
+		nlohmann::json exportLayer(Document* document, std::string layerId);
+		TileLayer* importLayer(DocumentHandler* documentHandler, nlohmann::json json);
 	};
 }
