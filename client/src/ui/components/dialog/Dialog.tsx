@@ -30,7 +30,7 @@ const Dialog = ({ children, isOpen, onClose, title }: DialogProps) => {
       trapFocus={true}
     >
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent bgColor="chakra-body-bg">
         <ModalHeader>
           <Text as="h1" color="gray.300" size="3" textTransform="uppercase">
             {title}
