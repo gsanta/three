@@ -1,23 +1,25 @@
 import Box from '@/ui/components/box/Box';
 import Icon from '@/ui/components/icon/Icon';
-import { IconButton, Menu, MenuButton, MenuItem, MenuList, useBoolean } from '@chakra-ui/react';
-import React from 'react';
+import { IconButton, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
+import React, { useState } from 'react';
 import ExportDialog from './io/ExportDialog';
+import ImportDialog from './io/import/ImportDialog';
 
 const SettingsPanel = () => {
-  const [isExportDialogOpen, { on: openExportDialog, off: closeExportDialog }] = useBoolean(false);
+  const [isExportDialogOpen, setExportDialogOpen] = useState(false);
+  const [isImportDialogOpen, setImportDialogOpen] = useState(false);
 
   return (
     <Box>
       <Menu>
         <MenuButton as={IconButton} aria-label="Options" icon={<Icon name="CiSettings" />} size="sm" variant="solid" />
         <MenuList>
-          <MenuItem onClick={openExportDialog}>Export</MenuItem>
-          <MenuItem>Export 2</MenuItem>
+          <MenuItem onClick={() => setImportDialogOpen(true)}>Import</MenuItem>
+          <MenuItem onClick={() => setExportDialogOpen(true)}>Export</MenuItem>
         </MenuList>
       </Menu>
-
-      <ExportDialog isOpen={isExportDialogOpen} onClose={closeExportDialog} />
+      <ImportDialog isOpen={isImportDialogOpen} onClose={() => setImportDialogOpen(false)} />
+      <ExportDialog isOpen={isExportDialogOpen} onClose={() => setExportDialogOpen(false)} />
     </Box>
   );
 };

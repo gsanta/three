@@ -8,7 +8,11 @@ const downloadURL = function (data: string, fileName: string) {
   a.remove();
 };
 
-const downloadBlob = (data: ArrayBufferLike, fileName = 'spright.png', mimeType = 'application/octet-stream') => {
+export const downloadBlob = (
+  data: ArrayBufferLike,
+  fileName = 'spright.png',
+  mimeType = 'application/octet-stream',
+) => {
   const blob = new Blob([data], {
     type: mimeType,
   });
@@ -20,16 +24,5 @@ const downloadBlob = (data: ArrayBufferLike, fileName = 'spright.png', mimeType 
 };
 
 export const downloadString = (str: string, fileName: string) => {
-  const element = document.createElement('a');
-  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(str));
-  element.setAttribute('download', fileName);
-
-  element.style.display = 'none';
-  document.body.appendChild(element);
-
-  element.click();
-
-  document.body.removeChild(element);
+  downloadURL('data:text/plain;charset=utf-8,' + encodeURIComponent(str), fileName);
 };
-
-export default downloadBlob;

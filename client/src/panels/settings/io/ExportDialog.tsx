@@ -3,7 +3,7 @@ import Dialog, { DialogProps } from '@/ui/components/dialog/Dialog';
 import DialogBody from '@/ui/components/dialog/DialogBody';
 import DialogFooter from '@/ui/components/dialog/DialogFooter';
 import { Button, FormControl, FormLabel, Select } from '@chakra-ui/react';
-import downloadBlob, { downloadString } from '../utils/downloadBlob';
+import { downloadBlob, downloadString } from '../utils/fileUtils';
 import useAppContext from '@/ui/hooks/useAppContext';
 import FileType, { getFileTypes } from './FileType';
 
