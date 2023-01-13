@@ -27,6 +27,7 @@ interface EditorApi {
   getImageSize(): number;
 
   exportDocument(): string;
+  importDocument(document: string): void;
 }
 
 export default EditorApi;

@@ -47,7 +47,7 @@ const theme = extendTheme({
     Tooltip,
     Menu: MenuTheme,
     Modal: Dialog,
-    Input: inputTheme,
+    // Input: inputTheme,
     // Form: FormControl,
     // FormLabel: formLabelTheme,
   },

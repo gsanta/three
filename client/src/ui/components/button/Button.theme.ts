@@ -34,13 +34,17 @@ const variantOutline = defineStyle((props) => {
 const variantSolid = defineStyle((props) => {
   const { colorScheme: c } = props;
   const defaultTheme = theme.components.Button.variants?.solid(props);
+  const bg = mode(`${c}.200`, `${c}.600`)(props);
 
   return {
     ...defaultTheme,
-    bg: mode(`${c}.200`, `${c}.600`)(props),
+    bg,
     color: 'white',
     _hover: {
       bg: mode(`${c}.50`, `${c}.500`)(props),
+      _disabled: {
+        bg,
+      },
     },
     _active: {
       bg: mode(`${c}.100`, `${c}.500`)(props),
@@ -62,6 +66,11 @@ const ButtonTheme: ComponentStyleConfig = {
     },
     _active: {
       bg: 'gray.400',
+    },
+    _disabled: {
+      opacity: 0.4,
+      cursor: 'not-allowed',
+      boxShadow: 'none',
     },
   },
   variants: {
