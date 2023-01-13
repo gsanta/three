@@ -4,6 +4,7 @@ import { Box, Text } from '@chakra-ui/react';
 type BannerProps = {
   onClick(): void;
   onDrop(file: File): void;
+  fileName?: string;
 };
 
 const BannerText = ({ children }: { children: ReactNode }) => (
@@ -12,7 +13,7 @@ const BannerText = ({ children }: { children: ReactNode }) => (
   </Text>
 );
 
-const DropZoneBanner = ({ onClick, onDrop }: BannerProps) => {
+const DropZoneBanner = ({ onClick, onDrop, fileName }: BannerProps) => {
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -40,9 +41,18 @@ const DropZoneBanner = ({ onClick, onDrop }: BannerProps) => {
       marginBottom="1rem"
       w="100%"
     >
-      <BannerText>Click to Add file </BannerText>
-      <BannerText>Or</BannerText>
-      <BannerText>Drag and Drop file</BannerText>
+      {fileName ? (
+        <>
+          <BannerText>File to upload</BannerText>
+          <BannerText>{fileName}</BannerText>
+        </>
+      ) : (
+        <>
+          <BannerText>Click to Add file </BannerText>
+          <BannerText>Or</BannerText>
+          <BannerText>Drag and Drop file</BannerText>
+        </>
+      )}
     </Box>
   );
 };

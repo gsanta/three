@@ -16,10 +16,15 @@ std::string exportDocument() {
 	return editor->getJsonIO()->exportDocument(editor->getDocumentHandler()->getActiveDocument());
 }
 
+void importDocument(std::string json) {
+	return editor->getJsonIO()->importDocument(editor->getDocumentHandler(), json);
+}
+
 EMSCRIPTEN_BINDINGS(spright) {
 	emscripten::function("setLayerIndex", &setLayerIndex);
 	emscripten::function("removeLayer", &removeLayer);
 	emscripten::function("exportDocument", &exportDocument);
+	emscripten::function("importDocument", &importDocument);
 }
 
 #endif

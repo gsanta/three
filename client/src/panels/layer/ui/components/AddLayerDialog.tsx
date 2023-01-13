@@ -24,13 +24,19 @@ const AddLayerDialog = observer(({ isOpen, onClose }: LayerDialogProps) => {
   return (
     <Dialog isOpen={isOpen} onClose={onClose} title="Add layer">
       <DialogBody>
-        <Input onChange={(e) => setLayerName(e.target.value)} placeholder="Layer name" value={layerName} />
+        <Input
+          autoFocus
+          onChange={(e) => setLayerName(e.target.value)}
+          placeholder="Layer name"
+          value={layerName}
+          variant="filled"
+        />
       </DialogBody>
       <DialogFooter>
         <Button onClick={onClose} size="sm">
           Close
         </Button>
-        <Button onClick={handleAddLayer} size="sm" colorScheme="orange">
+        <Button onClick={handleAddLayer} size="sm" colorScheme="orange" isDisabled={!layerName}>
           Add
         </Button>
       </DialogFooter>

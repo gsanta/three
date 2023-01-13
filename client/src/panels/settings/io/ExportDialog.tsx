@@ -6,8 +6,9 @@ import { Button, FormControl, FormLabel, Select } from '@chakra-ui/react';
 import { downloadBlob, downloadString } from '../utils/fileUtils';
 import useAppContext from '@/ui/hooks/useAppContext';
 import FileType, { getFileTypes } from './FileType';
+import { observer } from 'mobx-react-lite';
 
-const ExportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children'>) => {
+const ExportDialog = observer(({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children'>) => {
   const { editorApi } = useAppContext();
   const [selectedFileType, setSelectedFileType] = useState<FileType>(FileType.json);
 
@@ -17,11 +18,13 @@ const ExportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children
     const size = editorApi.getImageSize();
     const buffer = new Uint8Array(Module.HEAPU8.buffer, data, size);
     downloadBlob(buffer);
+    onClose();
   };
 
   const exportDocument = () => {
     const doc = editorApi.exportDocument();
     downloadString(doc, 'spright.json');
+    onClose();
   };
 
   const handleExport = () => {
@@ -64,6 +67,6 @@ const ExportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children
       </DialogFooter>
     </Dialog>
   );
-};
+});
 
 export default ExportDialog;

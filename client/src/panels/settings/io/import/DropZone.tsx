@@ -2,7 +2,12 @@ import { Box, Input } from '@chakra-ui/react';
 import React, { ChangeEvent, useRef } from 'react';
 import DropZoneBanner from './DropZoneBanner';
 
-const DropZone = () => {
+type DropZoneProps = {
+  fileName?: string;
+  setFile(fileName: string, fileContent: string): void;
+};
+
+const DropZone = ({ fileName, setFile }: DropZoneProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {
@@ -12,7 +17,7 @@ const DropZone = () => {
   const readFile = (file: File) => {
     const fileReader = new FileReader();
     fileReader.onload = function () {
-      console.log(fileReader.result);
+      setFile(file.name, fileReader.result as string);
     };
 
     fileReader.readAsText(file);
@@ -31,7 +36,7 @@ const DropZone = () => {
 
   return (
     <Box display="flex" flexDir="column" alignItems="center" justifyContent="center" width="100%">
-      <DropZoneBanner onClick={handleClick} onDrop={handleDrop} />
+      <DropZoneBanner fileName={fileName} onClick={handleClick} onDrop={handleDrop} />
       <Input
         accept=".json,application/json"
         aria-label="add file"
