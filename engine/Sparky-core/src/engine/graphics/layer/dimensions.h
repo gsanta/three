@@ -9,5 +9,9 @@ namespace engine { namespace graphics {
 		float top;
 
 		Dimensions(float left, float right, float bottom, float top);
+	
+		float getWidth();
+		float getHeight();
+		float getRatio();
 	};
 }}

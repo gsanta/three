@@ -53,6 +53,9 @@ namespace engine { namespace graphics {
 			return m_Zoom;
 		}
 
+		void updateWindowSize(OrthoProjectionInfo initialProjectionInfo);
+
+
 	private:
 		void updateAspectRatio();
 	};

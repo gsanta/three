@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "document.h"
+#include "canvas.h"
 #include "checkerboard.h"
 #include "../../engine/graphics/layer/tileLayer.h"
 #include "../../engine/graphics/layer/dimensions.h"
@@ -31,5 +32,6 @@ namespace spright { namespace document {
 		inline bool hasActiveDocument() const {
 			return m_ActiveDocument != nullptr;
 		}
+		Dimensions getCameraDimensions(Dimensions documentDimensions);
 	};
 }}

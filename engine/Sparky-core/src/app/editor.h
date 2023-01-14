@@ -34,6 +34,7 @@ namespace spright
 		spright::Services *m_Services;
 		ImageExport* m_ImageExport;
 		std::unique_ptr<JsonIO> m_JsonExport;
+		std::unique_ptr<Canvas> m_Canvas;
 
 	public:
 		Editor();

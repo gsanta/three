@@ -17,6 +17,7 @@
 #include "src/engine/graphics/renderable/renderable2d.h"
 #include "src/engine/graphics/renderable/sprite.h"
 #include "src/engine/graphics/renderer/batchRenderer2d.h"
+#include "src/engine/graphics/layer/dimensions.h"
 
 #include <vector>
 
@@ -43,6 +44,9 @@ void setWindowSize(int width, int height)
 	if (window != nullptr)
 	{
 		window->setSize(width, height);
+		Dimensions newDim = editor->getDocumentHandler()->getCameraDimensions(editor->getDocumentHandler()->getActiveDocument()->dimensions);
+
+		editor->getDocumentHandler()->getActiveDocument()->getCamera()->updateWindowSize(OrthoProjectionInfo(newDim.left, newDim.right, newDim.bottom, newDim.top));
 	}
 }
 

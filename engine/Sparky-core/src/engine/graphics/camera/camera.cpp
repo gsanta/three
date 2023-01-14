@@ -39,6 +39,13 @@ namespace engine { namespace graphics {
 		aspectRatio = (m_ProjectionInfo.right - m_ProjectionInfo.left) / (m_ProjectionInfo.top - m_ProjectionInfo.bottom);
 	}
 
+	void Camera::updateWindowSize(OrthoProjectionInfo initialProjectionInfo)
+	{
+		m_InitialWidth = initialProjectionInfo.right - initialProjectionInfo.left;
+		m_View = Mat4::lookAt(Vec3(0, 0, z), Vec3(0, 0, 0), Vec3(0, 1, 0));
+		setProjectionInfo(initialProjectionInfo);
+	}
+
 	Vec2 Camera::screenToModel(Vec2 screen) {
 		return Vec2((screen.x) / getZoom() + m_Center2D.x, (screen.y) / getZoom() + m_Center2D.y);
 	}
@@ -51,4 +58,6 @@ namespace engine { namespace graphics {
 
 		return Vec2(xPos, yPos);
 	}
+
+
 }}

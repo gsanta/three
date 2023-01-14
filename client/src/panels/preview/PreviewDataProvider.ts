@@ -2,14 +2,13 @@ import { EditorEventListener } from '@/services/editor/EditorEvents';
 import { createClient } from 'really-simple-xdm';
 import Editor from '../../services/editor/Editor';
 
-class PreviewDataProvider extends EditorEventListener {
+class PreviewDataProvider implements EditorEventListener {
   // TODO: add type
   private previewProxy: any;
 
   private editorApi?: Editor;
 
   constructor(editorApi?: Editor) {
-    super();
     this.editorApi = editorApi;
     // this.init();
   }

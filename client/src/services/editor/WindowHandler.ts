@@ -1,11 +1,7 @@
-import { App } from '../../app/App';
 import { EditorEventListener } from './EditorEvents';
 
-class WindowHandler extends EditorEventListener {
-  private context?: App;
-
-  onEditorInitialized(context: App): void {
-    this.context = context;
+class WindowHandler implements EditorEventListener {
+  onEditorInitialized(): void {
     this.updateWindowSize();
   }
 

@@ -6,8 +6,16 @@ import ToolSelectionEvent from '../panels/toolbar/model/ToolSelectionEvents';
 import PreviewModule from '@/panels/preview/PreviewModule';
 import { EditorEventListener } from '../services/editor/EditorEvents';
 
-class DependencyInjector extends EditorEventListener {
-  onEditorInitialized({ editorEvents, editorApi, toolStore, keyboardHandler, layerHandler, moduleManager }: App) {
+class DependencyInjector implements EditorEventListener {
+  private app: App;
+
+  constructor(app: App) {
+    this.app = app;
+  }
+
+  onEditorInitialized() {
+    const { toolStore, editorApi, moduleManager, editorEvents, layerHandler, keyboardHandler } = this.app;
+
     toolStore.addTool(
       new ExternalTool(
         ToolName.Brush,

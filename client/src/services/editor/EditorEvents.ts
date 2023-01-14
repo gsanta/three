@@ -1,21 +1,20 @@
 import App from '../../app/App';
 
-export abstract class EditorEventListener {
-  onDataChange(): void {}
+export interface EditorEventListener {
+  onDataChange?(): void;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onEditorInitialized(_context: App): void {}
+  onEditorInitialized?(): void;
 }
 
 class EditorEvents {
   private listeners: EditorEventListener[] = [];
 
   emitDataChange() {
-    this.listeners.forEach((listener) => listener.onDataChange());
+    this.listeners.forEach((listener) => listener.onDataChange?.());
   }
 
-  emitEditorInitialized(context: App) {
-    this.listeners.forEach((listener) => listener.onEditorInitialized(context));
+  emitEditorInitialized() {
+    this.listeners.forEach((listener) => listener.onEditorInitialized?.());
   }
 
   public addListener(listener: EditorEventListener): void {

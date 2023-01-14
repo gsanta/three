@@ -3,6 +3,7 @@
 namespace spright {
 	Editor::Editor()
 	{
+		m_Canvas = std::make_unique<Canvas>(1500, 800);
 		m_Window = new Window("Editor", 800, 800);
 		m_DocumentHandler = new DocumentHandler(m_Window);
 
@@ -19,7 +20,7 @@ namespace spright {
 
 		m_JsonExport = std::make_unique<JsonIO>();
 
-		m_toolHandler = new ToolHandler(m_Window, m_DocumentHandler, editorConfig, m_Services, m_ImageExport, getJsonIO());
+		m_toolHandler = new ToolHandler(m_Window, m_DocumentHandler, editorConfig, m_Services, m_DocumentHandler->getActiveDocument()->getCamera());
 		m_toolHandler->addTool(new BrushTool(m_DocumentHandler, editorConfig, m_Services, m_Services->getEventHandler()));
 		m_toolHandler->addTool(new RectangleTool(m_DocumentHandler, m_Services, m_Services->getEventHandler()));
 		m_toolHandler->addTool(new EraseTool(m_DocumentHandler, m_Services->getEventHandler()));
