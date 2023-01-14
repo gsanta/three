@@ -12,7 +12,7 @@ namespace spright { namespace document {
 		return nullptr;
 	}
 
-	Document::Document(engine::graphics::Dimensions dimensions, Camera* camera) : dimensions(dimensions), m_Camera(camera)
+	Document::Document(engine::graphics::Dimensions dimensions, Camera* camera, Canvas* canvas) : dimensions(dimensions), m_Camera(camera), m_Canvas(canvas)
 	{
 		//auto it = find_if(m_Layers.begin(), m_Layers.end(), [](engine::graphics::Layer* layer) {
 		//	return layer->getId().rfind(USER_LAYER_ID_PREFIX, 0) != std::string::npos; 
@@ -25,6 +25,7 @@ namespace spright { namespace document {
 		std::vector<engine::graphics::Layer*>::iterator it;
 
 		delete m_Camera;
+		delete m_Canvas;
 		// TODO fix it
 		//for (it = m_Layers.begin(); it != m_Layers.end(); ) {
 		//	delete *it;

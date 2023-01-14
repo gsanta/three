@@ -7,4 +7,17 @@ namespace engine { namespace graphics {
 	{
 	}
 
+	float Dimensions::getWidth()
+	{
+		return right - left;
+	}
+
+	float Dimensions::getHeight()
+	{
+		return top - bottom;
+	}
+
+	float Dimensions::getRatio() {
+		return getWidth() / getHeight();
+	}
 }}

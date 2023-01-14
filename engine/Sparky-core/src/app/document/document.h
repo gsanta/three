@@ -6,6 +6,7 @@
 #include "../../engine/graphics/camera/camera.h"
 #include "../../engine/graphics/camera/ortho_projection_info.h"
 #include "../../engine/graphics/layer/dimensions.h"
+#include "canvas.h"
 
 namespace spright { namespace document {
 
@@ -18,9 +19,6 @@ namespace spright { namespace document {
 	class Document
 	{
 	private:
-		//engine::graphics::Layer* m_TempLayer;
-		//engine::graphics::TileLayer* m_BackgroundLayer;
-		//engine::graphics::TileLayer* m_TileLayer;
 		std::vector<Layer*> m_Layers;
 		std::vector<Layer*> m_BeforeLayers;
 		std::vector<Layer*> m_AfterLayers;
@@ -29,8 +27,10 @@ namespace spright { namespace document {
 
 		Camera* m_Camera;
 
+		Canvas* m_Canvas;
+
 	public:
-		Document(Dimensions dimensions, Camera* camera);
+		Document(Dimensions dimensions, Camera* camera, Canvas* canvas);
 		~Document();
 
 		Dimensions dimensions;

@@ -7,8 +7,8 @@ const useInitApp = (appContext: App, canvasNode?: HTMLCanvasElement) => {
 
   useEffect(() => {
     appContext.editorEvents.addListener(appContext.windowHandler);
-    appContext.editorEvents.addListener(new DependencyInjector());
-  }, [appContext.editorEvents, appContext.windowHandler]);
+    appContext.editorEvents.addListener(new DependencyInjector(appContext));
+  }, [appContext, appContext.editorEvents, appContext.windowHandler]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -16,7 +16,7 @@ const useInitApp = (appContext: App, canvasNode?: HTMLCanvasElement) => {
     if (window?.Module?.isRuntimeInitialized && !isModuleInitialized) {
       appContext.editorApi.canvasNode = canvasNode?.parentElement as HTMLDivElement;
       setIsModuleInitialized(true);
-      appContext.editorEvents.emitEditorInitialized(appContext);
+      appContext.editorEvents.emitEditorInitialized();
     }
   });
 

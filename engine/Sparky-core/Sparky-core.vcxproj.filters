@@ -234,6 +234,9 @@
     <ClCompile Include="src\app\editor_api.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\app\document\canvas.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\system\window\window.h">
@@ -459,6 +462,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\app\editor_api.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\document\canvas.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

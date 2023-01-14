@@ -168,6 +168,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\app\core\canvas\canvas_listener_handler.cpp" />
+    <ClCompile Include="src\app\document\canvas.cpp" />
     <ClCompile Include="src\app\document\checkerboard.cpp" />
     <ClCompile Include="src\app\editor_api.cpp" />
     <ClCompile Include="src\app\model\rectangle.cpp" />
@@ -233,6 +234,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\app\core\canvas\canvas_listener.h" />
+    <ClInclude Include="src\app\document\canvas.h" />
     <ClInclude Include="src\app\editor_api.h" />
     <ClInclude Include="src\app\model\point.h" />
     <ClInclude Include="src\app\core\canvas\canvas_listener_handler.h" />

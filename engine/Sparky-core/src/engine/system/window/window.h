@@ -43,6 +43,7 @@ namespace engine { namespace system {
 		bool isKeyPressed(unsigned int keycode) const;
 		bool isMouseButtonPressed(unsigned int button) const;
 		void getMousePosition(double& x, double& y) const;
+		float getRatio();
 
 		InputHandler* getInputHandler() const;
 	private:

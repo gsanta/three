@@ -8,10 +8,11 @@
 #include "../service/services.h"
 #include "../../engine/system/window/window.h"
 #include "../../engine/system/window/input_listener.h"
+#include "../../engine/graphics/layer/dimensions.h"
+#include "../../engine/graphics/camera/camera.h"
+#include "../../engine/graphics/camera/ortho_projection_info.h"
 #include "../editor_config.h"
 #include "../service/services.h"
-#include "../service/io/image_export.h"
-#include "../service/io/json/json_io.h"
 
 namespace spright { namespace tool {
 
@@ -28,11 +29,10 @@ namespace spright { namespace tool {
 		EditorConfig m_EditorConfig;
 		Services* m_Services;
 		DocumentHandler* m_DocumentHandler;
-		ImageExport* m_ImageExport;
-		JsonIO* m_JsonExport;
+		Camera* m_Camera;
 	public:
 		ToolHandler();
-		ToolHandler(Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services, ImageExport* m_ImageExport, JsonIO* jsonExport);
+		ToolHandler(Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services, Camera* camera);
 		~ToolHandler();
 
 		ToolHandler& operator=(const ToolHandler& toolHandler);

@@ -5,8 +5,8 @@ namespace spright { namespace tool {
 	{
 	}
 
-	ToolHandler::ToolHandler(Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services, ImageExport* imageExport, JsonIO* jsonExport) 
-		: m_Window(window), m_DocumentHandler(documentHandler), m_EditorConfig(editorConfig), m_Services(services), m_ImageExport(imageExport), m_JsonExport(jsonExport)
+	ToolHandler::ToolHandler(Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services, Camera* camera) 
+		: m_Window(window), m_DocumentHandler(documentHandler), m_EditorConfig(editorConfig), m_Services(services), m_Camera(camera)
 	{
 		window->getInputHandler()->registerListener(this);
 		m_ActiveTools = new vector<Tool*>();
@@ -105,8 +105,16 @@ namespace spright { namespace tool {
 			m_Services->getColorPalette()->color = COLOR_BLUE;
 		}
 		else if (key == GLFW_KEY_E) {
-			std::string str = m_JsonExport->exportDocument(m_DocumentHandler->getActiveDocument());
-			m_JsonExport->importDocument(m_DocumentHandler, str);
+			if (m_Window->getWidth() == 800) {
+				m_Window->setSize(1500, 1000);
+			}
+			else {
+				m_Window->setSize(800, 1100);
+			}
+			Dimensions newDim = m_DocumentHandler->getCameraDimensions(m_DocumentHandler->getActiveDocument()->dimensions);
+			m_Camera->updateWindowSize(OrthoProjectionInfo(newDim.left, newDim.right, newDim.bottom, newDim.top));
+			//std::string str = m_JsonExport->exportDocument(m_DocumentHandler->getActiveDocument());
+			//m_JsonExport->importDocument(m_DocumentHandler, str);
 			//m_JsonExport->importDocument("{ \"tiles\": [ {\"i\": 1, \"c\": \"black\"} ] }");
 			//m_JsonExport->importDocument("{ \"a\": 2 }");
 		}

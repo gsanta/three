@@ -82,6 +82,11 @@ namespace engine { namespace system {
 			y = m_y;
 		}
 
+		float Window::getRatio()
+		{
+			return (float) m_Width / (float) m_Height;
+		}
+
 		InputHandler* Window::getInputHandler() const
 		{
 			return this->m_InputHandler;

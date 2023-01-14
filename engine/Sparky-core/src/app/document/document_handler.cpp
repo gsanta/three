@@ -29,6 +29,25 @@ namespace spright { namespace document {
 		}
 	}
 
+	Dimensions DocumentHandler::getCameraDimensions(Dimensions docDimensions)
+	{
+		float ratio = m_Window->getRatio();
+		
+		float width;
+		float height;
+
+		if (docDimensions.getWidth() / ratio > docDimensions.getHeight()) {
+			width = docDimensions.getWidth();
+			height = width / ratio;
+		}
+		else {
+			height = docDimensions.getHeight();
+			width = height * ratio; //docDimensions.getRatio();
+		}
+		
+		return Dimensions(-width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f);
+	}
+
 	void DocumentHandler::createDocument()
 	{
 #ifdef SPARKY_EMSCRIPTEN
@@ -38,9 +57,13 @@ namespace spright { namespace document {
 		Shader* shader = new Shader("src/shaders/basic.vert", "src/shaders/basic.frag");
 		Shader* shaderUnlit = new Shader("src/shaders/basic.vert", "src/shaders/unlit.frag");
 #endif
-		Dimensions dimensions(-16.0f, 16.0f, -16.0f, 16.0f);
-		Camera* camera = new Camera(m_Window, engine::graphics::OrthoProjectionInfo(dimensions.left, dimensions.right, dimensions.bottom, dimensions.top));
-		Document* document = new Document(dimensions, camera);
+		float pixelCount = 32.0f;
+		float height = 1.0f / m_Window->getRatio() * pixelCount;
+		Dimensions dimensions(-pixelCount / 2.0f, pixelCount / 2.0f, -pixelCount / 2.0f, pixelCount / 2.0f);
+		Dimensions cameraDimensions = getCameraDimensions(dimensions);
+		Canvas* canvas = new Canvas(pixelCount * 2.0f, pixelCount * 2.0f);
+		Camera* camera = new Camera(m_Window, engine::graphics::OrthoProjectionInfo(cameraDimensions.left, cameraDimensions.right, cameraDimensions.bottom, cameraDimensions.top));
+		Document* document = new Document(dimensions, camera, canvas);
 
 		TileLayer* tempLayer = new TileLayer("", DEFAULT_TEMP_LAYER_ID, shaderUnlit, new BatchRenderer2D(), document->getCamera(), dimensions);
 		TileLayer* backgroundLayer = new TileLayer("", DEFAULT_BACKGROUND_LAYER_ID, shaderUnlit, new BatchRenderer2D(), document->getCamera(), dimensions);
