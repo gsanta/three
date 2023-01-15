@@ -27,12 +27,6 @@ namespace spright { namespace tool {
 			return;
 		}
 
-		std::string userLayer1Id = USER_LAYER_ID_PREFIX + "1";
-		std::string userLayer2Id = USER_LAYER_ID_PREFIX + "2";
-
-		std::string layerId;
-		std::string otherLayerId;
-
 		engine::graphics::Camera* camera = m_documentHandler->getActiveDocument()->getCamera();
 
 		Vec2 center2D = camera->getCenter2D();

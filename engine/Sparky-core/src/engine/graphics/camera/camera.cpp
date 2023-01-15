@@ -41,8 +41,12 @@ namespace engine { namespace graphics {
 
 	void Camera::updateWindowSize(OrthoProjectionInfo initialProjectionInfo)
 	{
+		m_InitialProjectionInfo = initialProjectionInfo;
 		m_InitialWidth = initialProjectionInfo.right - initialProjectionInfo.left;
 		m_View = Mat4::lookAt(Vec3(0, 0, z), Vec3(0, 0, 0), Vec3(0, 1, 0));
+		m_Zoom = 1.0f;
+		m_Center2D.x = 0;
+		m_Center2D.y = 0;
 		setProjectionInfo(initialProjectionInfo);
 	}
 
@@ -58,6 +62,4 @@ namespace engine { namespace graphics {
 
 		return Vec2(xPos, yPos);
 	}
-
-
 }}
