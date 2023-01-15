@@ -8,10 +8,20 @@ export type LayoutProps = {
 };
 
 const Layout = ({ header, footer, children }: LayoutProps) => (
-  <Box display="grid" gridTemplateRows="auto 1fr auto" flexDir="column" minH="100%">
-    {header && <Box id="header">{header}</Box>}
-    {children}
-    {footer && <Box id="footer">{footer}</Box>}
+  <Box display="grid" gridTemplateRows="auto 1fr auto" height="100%">
+    {header && (
+      <Box as="header" id="header">
+        {header}
+      </Box>
+    )}
+    <Box as="main" display="flex" flexDirection="row" minH="0">
+      {children}
+    </Box>
+    {footer && (
+      <Box as="footer" id="footer">
+        {footer}
+      </Box>
+    )}
   </Box>
 );
 

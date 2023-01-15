@@ -1,26 +1,42 @@
 import Box from '@/ui/components/box/Box';
 import useAppContext from '@/ui/hooks/useAppContext';
+import useEditorInitialized from '@/ui/hooks/useEditorInitialized';
 import { useResizeObserver } from '@/ui/hooks/useResizeObserver';
 import { forwardRef } from '@chakra-ui/react';
-import React from 'react';
-import { useEffectOnce } from 'usehooks-ts';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useDebounce } from 'usehooks-ts';
 
-type CanvasProps = {
-  container?: HTMLCanvasElement;
-};
-
-const Canvas = forwardRef(({ container }: CanvasProps, ref) => {
+const Canvas = forwardRef((_props, ref) => {
   const { editorApi } = useAppContext();
+  const [width, setWidth] = useState(100);
+  const [height, setHeight] = useState(100);
+  const debouncedWidth = useDebounce(width, 200);
+  const debouncedHeight = useDebounce(height, 200);
 
-  useEffectOnce(() => {
-    setTimeout(() => {
-      editorApi.setWindowSize(1500, 1000);
-    }, 1000);
-  });
+  const canvasParentRef = useRef<HTMLDivElement>(null);
 
-  useResizeObserver(container?.parentElement as HTMLDivElement, () => {});
+  const resize = useCallback(() => {
+    if (canvasParentRef.current) {
+      setWidth(canvasParentRef.current.offsetWidth);
+      setHeight(canvasParentRef.current.offsetHeight);
+    }
+  }, []);
 
-  return <Box as="canvas" id="canvas" ref={ref}></Box>;
+  useEffect(() => {
+    if (editorApi.isRuntimeInitialized) {
+      editorApi.setWindowSize(debouncedWidth, debouncedHeight);
+    }
+  }, [editorApi, debouncedWidth, debouncedHeight]);
+
+  useEditorInitialized(resize);
+
+  useResizeObserver(canvasParentRef.current, resize);
+
+  return (
+    <Box display="flex" height="100%" justifyContent="space-around" overflow="hidden" ref={canvasParentRef}>
+      <Box as="canvas" id="canvas" ref={ref} width={debouncedWidth} height={debouncedHeight}></Box>
+    </Box>
+  );
 });
 
 export default Canvas;

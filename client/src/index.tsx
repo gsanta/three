@@ -28,7 +28,7 @@ const app: App = {
 let root: Root;
 
 function renderApp() {
-  const container = document.getElementById('root');
+  const container = document.getElementsByTagName('body')[0];
 
   if (!container) {
     throw new Error('Container does not exists');
