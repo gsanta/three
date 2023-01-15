@@ -38,7 +38,6 @@ const AppContainer = ({ app }: AppContainerProps) => {
     window.addEventListener(
       'keyup',
       function (event) {
-        console.log('keyup');
         event.stopImmediatePropagation();
       },
       true,
@@ -65,24 +64,18 @@ const AppContainer = ({ app }: AppContainerProps) => {
           }
           footer={<Box bgColor="orange.400" height="40px"></Box>}
         >
-          <Box display="flex" flexDirection="row">
-            <Box width="50px">
-              <Toolbar />
-            </Box>
-            <Split className="split" direction="horizontal" sizes={[75, 25]}>
-              <Box display="flex" justifyContent="space-around" overflowX="auto">
-                <Canvas container={canvasContainer} ref={canvasRef} />
-              </Box>
-              <Split className="split-vertical" direction="vertical" sizes={[50, 50]}>
-                <Box overflowY="auto">
-                  <LayerPanel />
-                </Box>
-                <ToolOptionsPanel />
-              </Split>
-
-              {/* <Box as="iframe" height="50%" id="test-iframe" src="iframe.html" /> */}
-            </Split>
+          <Box width="50px">
+            <Toolbar />
           </Box>
+          <Split className="split" direction="horizontal" sizes={[75, 25]}>
+            <Canvas ref={canvasRef} />
+            <Split className="split-vertical" direction="vertical" sizes={[50, 50]}>
+              <Box overflowY="auto">
+                <LayerPanel />
+              </Box>
+              <ToolOptionsPanel />
+            </Split>
+          </Split>
         </Layout>
       </AppContext.Provider>
     </ChakraProvider>

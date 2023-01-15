@@ -5,7 +5,7 @@ export interface ResizeObserverEntry {
   contentRect: DOMRectReadOnly;
 }
 
-export const useResizeObserver = (node?: HTMLElement, callback?: (entry: DOMRectReadOnly) => void) => {
+export const useResizeObserver = (node: HTMLElement | null, callback?: (entry: DOMRectReadOnly) => void) => {
   const [width, setWidth] = useState<number>();
   const [height, setHeight] = useState<number>();
 
