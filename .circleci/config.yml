@@ -16,6 +16,7 @@ jobs:
           name: Compile cpp with emscripten
           command: |
             set -x
+            cd engine
             docker-compose run --rm compiler; echo $?
             cd Web
             cd bin
