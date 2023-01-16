@@ -19,7 +19,6 @@ module.exports = (env) => {
   return {
     entry: {
       app: './src/index.tsx',
-      iframe: './src/iframe.tsx',
     },
     module: {
       rules: [
@@ -73,11 +72,6 @@ module.exports = (env) => {
       new HtmlWebpackPlugin({
         template: 'index.html',
         filename: 'index.html',
-        inject: false,
-      }),
-      new HtmlWebpackPlugin({
-        template: 'iframe.html',
-        filename: 'iframe.html',
         inject: false,
       }),
     ],
