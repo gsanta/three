@@ -16,10 +16,12 @@ jobs:
           name: Compile cpp with emscripten
           command: |
             set -x
-            cd engine
             docker-compose run --rm compiler; echo $?
+            cd Web
+            cd bin
+            pwd
       - persist_to_workspace:
-          root: Web/bin
+          root: engine/Web/bin
           # Must be relative path from root
           paths:
             - sparky.js
@@ -76,11 +78,11 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build_cpp
-      - build_client
-      - assemble_frontend:
-          requires:
-            - build_cpp
-            - build_client
+      # - build_client
+      # - assemble_frontend:
+      #     requires:
+      #       - build_cpp
+      #       - build_client
       # - build
       # - test_backend:
       #     name: "Test Backend"
