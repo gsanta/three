@@ -19,10 +19,11 @@ jobs:
             cd engine
             docker-compose run --rm compiler; echo $?
       - persist_to_workspace:
-          root: workspace
+          root: Web/bin
           # Must be relative path from root
           paths:
-            - echo-output
+            - sparky.js
+            - sparky.wasm
   build_client:
     working_directory: ~/client
     docker:
@@ -40,12 +41,19 @@ jobs:
       - image: cimg/node:16.15.0
     steps:
       - checkout
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: /tmp/Web/bin
       - run:
           name: Copy files
-          command: cp ./engine/Web/bin/{sparky.js,sparky.wasm} ./client/dist
-      - run:
-          name: Check
-          command: cd client/dist && ls -la
+          command: |
+            mkdir dist
+            cp /tmp/Web/bin/* dist
+            cd dist
+            ls -la
+      # - run:
+      #     name: Check
+      #     command: cd client/dist && ls -la
   # deploy-frontend:
   #   machine:
   #     enabled: true
