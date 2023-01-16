@@ -46,12 +46,12 @@ jobs:
       - checkout
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
-          at: /tmp/Web/bin
+          at: /tmp/engine/Web/bin
       - run:
           name: Copy files
           command: |
             mkdir dist
-            cp /tmp/Web/bin/* dist
+            cp /tmp/engine/Web/bin/* dist
             cd dist
             ls -la
       # - run:
@@ -79,11 +79,11 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build_cpp
-      # - build_client
-      # - assemble_frontend:
-      #     requires:
-      #       - build_cpp
-      #       - build_client
+      - build_client
+      - assemble_frontend:
+          requires:
+            - build_cpp
+            - build_client
       # - build
       # - test_backend:
       #     name: "Test Backend"
