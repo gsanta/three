@@ -23,7 +23,6 @@ jobs:
             pwd
       - persist_to_workspace:
           root: engine/Web/bin
-          # Must be relative path from root
           paths:
             - sparky.js
             - sparky.wasm
@@ -39,6 +38,10 @@ jobs:
       - run:
           name: Build
           command: cd client && npm run build
+      - persist_to_workspace:
+          root: client
+          paths:
+            - dist
   assemble_frontend:
     docker:
       - image: cimg/node:16.15.0
@@ -51,6 +54,7 @@ jobs:
           name: Copy files
           command: |
             mkdir dist
+            ls -la  /tmp/client/dist
             cp /tmp/engine/Web/bin/* dist
             cd dist
             ls -la
