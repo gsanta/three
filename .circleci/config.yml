@@ -47,6 +47,9 @@ jobs:
       - image: cimg/node:16.15.0
     steps:
       - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "dc:92:64:8c:74:1a:84:49:fd:90:ba:7c:5a:0a:50:ec"
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: /tmp/engine/Web/bin
@@ -56,11 +59,14 @@ jobs:
       - run:
           name: Copy files
           command: |
-            mkdir dist
-            cp -r /tmp/engine/Web/bin/* dist
-            cp -r /tmp/client/dist* dist
-            cd dist
-            ls -la
+            mkdir static
+            cp -r /tmp/engine/Web/bin/* static
+            cp -r /tmp/client/dist* static
+            git config user.email "santagergely90@gmail.com"
+            git config user.name "CircleCI Job"
+            git add -a
+            git commit --allow-empty -am "Automatic commit from CircleCI [skip ci]"
+            git push origin master
       # - run:
       #     name: Check
       #     command: cd client/dist && ls -la

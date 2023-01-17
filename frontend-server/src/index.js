@@ -4,5 +4,5 @@ var { resolve } = require('path');
 
 
 connect()
-  .use(serveStatic(resolve(__dirname, '../dist/website')))
+  .use(serveStatic(resolve(__dirname, '../static')))
   .listen(8080, () => console.log('Server running on 8080...'));
