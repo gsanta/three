@@ -34,10 +34,6 @@ jobs:
       - run:
           name: Build
           command: cd client && npm run build
-      - persist_to_workspace:
-          root: client
-          paths:
-            - dist
   assemble_frontend:
     docker:
       - image: cimg/node:16.15.0
@@ -48,8 +44,6 @@ jobs:
             - "dc:92:64:8c:74:1a:84:49:fd:90:ba:7c:5a:0a:50:ec"
       - attach_workspace:
           at: /tmp/engine/Web/bin
-      - attach_workspace:
-          at: /tmp/client
       - run:
           name: Copy files
           command: |
@@ -62,10 +56,10 @@ jobs:
             git push origin master
   deploy:
     docker:
-      - image: ubuntu-2004:current
+      - image: cimg/node:16.15.0
     steps:
       - run:
-          name: Copy files
+          name: Trigger deploy
           command: |
             curl $RENDER_DEPLOY_HOOK_FRONTEND
 workflows:

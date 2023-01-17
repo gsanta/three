@@ -56,7 +56,6 @@ yarn-debug.log*
 .yarn-integrity
 
 *.o
-*.wasm
 
 engine/Sparky-core/Debug
 engine/bin
