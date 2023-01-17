@@ -1,9 +1,5 @@
 version: 2.1
 
-orbs:
-  ruby: circleci/ruby@1.1.0
-  node: circleci/node@2
-
 jobs:
   build_cpp:
     working_directory: ~/engine
@@ -51,10 +47,8 @@ jobs:
           fingerprints:
             - "dc:92:64:8c:74:1a:84:49:fd:90:ba:7c:5a:0a:50:ec"
       - attach_workspace:
-          # Must be absolute path or relative path from working_directory
           at: /tmp/engine/Web/bin
       - attach_workspace:
-          # Must be absolute path or relative path from working_directory
           at: /tmp/client
       - run:
           name: Copy files
@@ -68,35 +62,14 @@ jobs:
             git push origin master
   deploy:
     docker:
-      - image: cimg/node:16.15.0
+      - image: ubuntu-2004:current
     steps:
       - run:
           name: Copy files
           command: |
-            curl https://api.render.com/deploy/srv-cehq74hgp3jvlf0b57s0?key=jBlgcbKFLjA
-      # - run:
-      #     name: Check
-      #     command: cd client/dist && ls -la
-  # deploy-frontend:
-  #   machine:
-  #     enabled: true
-  #   # working_directory: ~/circleci-demo-workflows
-  #   environment:
-  #     HEROKU_APP: "cryptic-chamber-32314"
-  #   steps:
-  #     - checkout
-  #     - run:
-  #         name: Setup Heroku
-  #         command: bash .circleci/setup-heroku.sh
-
-  #     - run:
-  #         command: |
-  #           git push heroku master
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+            curl $RENDER_DEPLOY_HOOK_FRONTEND
 workflows:
-  build-test-and-deploy: # This is the name of the workflow, feel free to change it to better match your workflow.
-    # Inside the workflow, you define the jobs you want to run.
+  build-test-and-deploy:
     jobs:
       - build_cpp
       - build_client
@@ -107,28 +80,3 @@ workflows:
       - deploy:
           requires:
             - "assemble_frontend"
-      # - build
-      # - test_backend:
-      #     name: "Test Backend"
-      # - test_frontend:
-      #     name: "Test Frontend"
-      # - rubocop/rubocop:
-      #     name: "Lint Backend"
-      # # - codecov/upload:
-      # #     requires:
-      # #       # - build
-      # #       - 'Test Backend'
-      # #       - 'Test Frontend'
-      # # - rubocop/rubocop:
-      # #     version: 0.71.0
-      # - deploy-backend:
-      #     name: "Deploy Backend"
-      #     requires:
-      #       # - build
-      #       - "Test Backend"
-      #       - "Test Frontend"
-      #       - "Lint Backend"
-      # - deploy-frontend:
-      #     name: "Deploy Frontend"
-      #     requires:
-      #       - "Deploy Backend"
