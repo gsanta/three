@@ -59,6 +59,7 @@ jobs:
       - run:
           name: Copy files
           command: |
+            mkdir -p client/static
             cp -r /tmp/engine/Web/bin/* client/static
             git config user.email "santagergely90@gmail.com"
             git config user.name "CircleCI Job"
