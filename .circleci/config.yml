@@ -50,12 +50,15 @@ jobs:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: /tmp/engine/Web/bin
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: /tmp/client
       - run:
           name: Copy files
           command: |
             mkdir dist
-            ls -la  /tmp/client/dist
-            cp /tmp/engine/Web/bin/* dist
+            cp -r /tmp/engine/Web/bin/* dist
+            cp -r /tmp/client/dist* dist
             cd dist
             ls -la
       # - run:
