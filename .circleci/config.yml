@@ -50,6 +50,9 @@ jobs:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: /tmp/engine/Web/bin
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: /tmp/client
       - run:
           name: Copy files
           command: |
