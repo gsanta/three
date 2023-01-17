@@ -57,8 +57,8 @@ jobs:
           name: Copy files
           command: |
             mkdir dist
-            ls -la  /tmp/client/dist
-            cp /tmp/engine/Web/bin/* dist
+            cp -r /tmp/engine/Web/bin/* dist
+            cp -r /tmp/client/dist* dist
             cd dist
             ls -la
       # - run:
