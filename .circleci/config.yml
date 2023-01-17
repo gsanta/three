@@ -66,6 +66,14 @@ jobs:
             git add -A
             git commit --allow-empty -am "Automatic commit from CircleCI [skip ci]"
             git push origin master
+    deploy:
+      docker:
+        - image: cimg/node:16.15.0
+      steps:
+        - run:
+          name: Copy files
+          command: |
+            curl https://api.render.com/deploy/srv-cehq74hgp3jvlf0b57s0?key=jBlgcbKFLjA
       # - run:
       #     name: Check
       #     command: cd client/dist && ls -la
@@ -96,6 +104,9 @@ workflows:
           requires:
             - build_cpp
             - build_client
+      - deploy:
+          requires:
+            - "assemble_frontend"
       # - build
       # - test_backend:
       #     name: "Test Backend"
