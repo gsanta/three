@@ -72,5 +72,6 @@ engine/Web/bin
 
 enc_temp_folder
 
-sparky.js
-sparky.wasm.map
+client/sparky.js
+client/sparky.wasm.map
+client/sparky.wasm

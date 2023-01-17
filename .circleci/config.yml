@@ -59,12 +59,11 @@ jobs:
       - run:
           name: Copy files
           command: |
-            mkdir static
-            cp -r /tmp/engine/Web/bin/* static
-            cp -r /tmp/client/dist* static
+            mkdir -p client/static
+            cp -r /tmp/engine/Web/bin/* client/static
             git config user.email "santagergely90@gmail.com"
             git config user.name "CircleCI Job"
-            git add -a
+            git add -A
             git commit --allow-empty -am "Automatic commit from CircleCI [skip ci]"
             git push origin master
       # - run:
