@@ -20,7 +20,8 @@ class Settings {
     const r = this.color.substring(1, 3);
     const g = this.color.substring(3, 5);
     const b = this.color.substring(5, 7);
-    const hexColor = Number('0xff' + b + g + r);
+    const a = this.color.substring(7, 9);
+    const hexColor = Number('0x' + a + b + g + r);
     this._settings.setColor(hexColor);
   }
 }

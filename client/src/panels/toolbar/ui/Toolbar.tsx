@@ -1,7 +1,6 @@
 import ToolName from '@/panels/toolbar/model/ToolName';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import ColorPicker from '@/ui/components/color_picker/ColorPicker';
 import useAppContext from '@/ui/hooks/useAppContext';
 import { Tooltip } from '@chakra-ui/react';
 import Box from '@/ui/components/box/Box';
@@ -9,7 +8,7 @@ import ToggleButton from '@/ui/components/button/ToggleButton';
 import Icon from '@/ui/components/icon/Icon';
 
 const Toolbar = observer(() => {
-  const { toolStore, editorStore } = useAppContext();
+  const { toolStore } = useAppContext();
 
   const handleSelectTool = (name: string) => {
     toolStore.setSelectedTool(name as ToolName);
@@ -40,8 +39,6 @@ const Toolbar = observer(() => {
           </Tooltip>
         );
       })}
-
-      <ColorPicker editorStore={editorStore} />
     </Box>
   );
 });
