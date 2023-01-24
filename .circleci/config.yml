@@ -74,3 +74,6 @@ workflows:
       - deploy:
           requires:
             - "assemble_frontend"
+          filters:
+            branches:
+              only: /^master/

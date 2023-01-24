@@ -1,39 +1,24 @@
-import Settings from '@/services/settings/Settings';
-import { Button, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger } from '@chakra-ui/react';
+import { colorToHexString } from '@/panels/tool_options/colorUtils';
+import useAppContext from '@/ui/hooks/useAppContext';
 import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
-import { ChromePicker } from 'react-color';
-import Icon from '../icon/Icon';
+import { ChromePicker, RGBColor } from 'react-color';
 
-type ColorPickerProps = {
-  editorStore: Settings;
-};
+const ColorPicker = observer(() => {
+  const { editorStore } = useAppContext();
 
-const ColorPicker = observer(({ editorStore }: ColorPickerProps) => {
-  const [color, setColor] = useState('#000000');
+  const [color, setColor] = useState<RGBColor>({ r: 255, g: 255, b: 255, a: 1 });
 
   const handleChangeComplete = () => {
-    editorStore.setColor(color);
+    editorStore.setColor(colorToHexString(color));
   };
 
   return (
-    <Popover placement="right">
-      <PopoverTrigger>
-        <Button className="iconOnly">
-          <Icon name="BiFontColor" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent width="250px">
-        <PopoverArrow />
-        <PopoverBody>
-          <ChromePicker
-            color={color}
-            onChange={(newColor) => setColor(newColor.hex)}
-            onChangeComplete={handleChangeComplete}
-          />
-        </PopoverBody>
-      </PopoverContent>
-    </Popover>
+    <ChromePicker
+      color={color}
+      onChange={(newColor) => setColor(newColor.rgb)}
+      onChangeComplete={handleChangeComplete}
+    />
   );
 });
 
