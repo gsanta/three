@@ -94,7 +94,7 @@ module.exports = (env) => {
     },
     context: __dirname,
     devServer: {
-      static: ['../editor/Web/bin'],
+      static: ['../editor/Web'],
       port: 3012,
       proxy: {
         '/users': 'http://localhost:3000',

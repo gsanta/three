@@ -57,9 +57,9 @@ yarn-debug.log*
 
 *.o
 
-client/sparky.js
-client/sparky.wasm.map
-client/sparky.wasm
+client/spright.js
+client/spright.wasm.map
+client/spright.wasm
 
 editor/Web/Makefile
 editor/Web/spright.js
@@ -87,6 +87,52 @@ editor/CmakeCache.txt
 editor/cmake_install.cmake
 editor/.vs
 editor/x64
+
+editor/src/CMakeFiles
+editor/src/spright.dir
+editor/src/_deps
+editor/src/Debug
+editor/src/ALL_BUILD.vcxproj.filters
+editor/src/ALL_BUILD.vcxproj.user
+editor/src/ALL_BUILD.vcxproj
+editor/src/ZERO_CHECK.vcxproj
+editor/src/ZERO_CHECK.vcxproj.filters
+editor/src/ZERO_CHECK.vcxproj.user
+editor/src/INSTALL.vcxproj
+editor/src/INSTALL.vcxproj.filters
+editor/src/INSTALL.vcxproj.user
+editor/src/editor.vcxproj
+editor/src/editor.vcxproj.filters
+editor/src/editor.vcxproj.user
+editor/src/editor.sln
+editor/src/CmakeCache.txt
+editor/src/cmake_install.cmake
+editor/src/.vs
+editor/src/x64
+
+editor/app/CMakeFiles
+editor/app/spright.dir
+editor/app/_deps
+editor/app/Debug
+editor/app/ALL_BUILD.vcxproj.filters
+editor/app/ALL_BUILD.vcxproj.user
+editor/app/ALL_BUILD.vcxproj
+editor/app/ZERO_CHECK.vcxproj
+editor/app/ZERO_CHECK.vcxproj.filters
+editor/app/ZERO_CHECK.vcxproj.user
+editor/app/INSTALL.vcxproj
+editor/app/INSTALL.vcxproj.filters
+editor/app/INSTALL.vcxproj.user
+editor/app/spright.vcxproj
+editor/app/spright.vcxproj.filters
+editor/app/spright.vcxproj.user
+editor/app/Spright.sln
+editor/app/CmakeCache.txt
+editor/app/cmake_install.cmake
+editor/app/.vs
+editor/app/x64
+
+editor/src/editor.dir
 
 editor/Web/_deps
 editor/Web/CMakeFiles
