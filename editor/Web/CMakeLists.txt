@@ -19,12 +19,12 @@ endif()
 
 
 file(GLOB_RECURSE SOURCES "../src/*.cpp")
+file(GLOB_RECURSE APP_SOURCES "../app/*.cpp")
 
-add_executable(spright ${SOURCES})
+add_executable(spright ${SOURCES} ${APP_SOURCES})
 
 target_link_libraries(spright nlohmann_json::nlohmann_json)
 
 set_target_properties(spright PROPERTIES LINK_FLAGS  "-lembind -s ASSERTIONS -s ALLOW_MEMORY_GROWTH -s USE_GLFW=3 -s FULL_ES3=1 -DSPARKY_EMSCRIPTEN=1 --memory-init-file 0 --embed-file resources -gsource-map -g3 -O0")
 
-add_definitions("-std=c++14")
 add_definitions(-DSPARKY_EMSCRIPTEN=1)

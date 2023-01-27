@@ -20,9 +20,9 @@ namespace spright
 		void DocumentHandler::createUserLayer(std::string name, std::string id)
 		{
 #ifdef SPARKY_EMSCRIPTEN
-			engine::graphics::Shader *shaderUnlit = new engine::graphics::Shader("res/shaders/basic.es3.vert", "res/shaders/basic_unlit.es3.frag");
+			engine::graphics::Shader *shaderUnlit = new engine::graphics::Shader("resources/shaders/basic.es3.vert", "resources/shaders/basic_unlit.es3.frag");
 #else
-			engine::graphics::Shader *shaderUnlit = new engine::graphics::Shader("src/shaders/basic.vert", "src/shaders/unlit.frag");
+			engine::graphics::Shader *shaderUnlit = new engine::graphics::Shader("shaders/basic.vert", "shaders/unlit.frag");
 #endif
 			TileLayer *layer = new TileLayer(name, id, shaderUnlit, new BatchRenderer2D(), getActiveDocument()->getCamera(), getActiveDocument()->dimensions);
 
@@ -58,11 +58,11 @@ namespace spright
 		void DocumentHandler::createDocument()
 		{
 #ifdef SPARKY_EMSCRIPTEN
-			Shader *shader = new Shader("res/shaders/basic.es3.vert", "res/shaders/basic.es3.frag");
-			Shader *shaderUnlit = new Shader("res/shaders/basic.es3.vert", "res/shaders/basic_unlit.es3.frag");
+			Shader *shader = new Shader("resources/shaders/basic.es3.vert", "resources/shaders/basic.es3.frag");
+			Shader *shaderUnlit = new Shader("resources/shaders/basic.es3.vert", "resources/shaders/basic_unlit.es3.frag");
 #else
-			Shader *shader = new Shader("src/shaders/basic.vert", "src/shaders/basic.frag");
-			Shader *shaderUnlit = new Shader("src/shaders/basic.vert", "src/shaders/unlit.frag");
+			Shader *shader = new Shader("shaders/basic.vert", "shaders/basic.frag");
+			Shader *shaderUnlit = new Shader("shaders/basic.vert", "shaders/unlit.frag");
 #endif
 			float pixelCount = 32.0f;
 			float height = 1.0f / m_Window->getRatio() * pixelCount;

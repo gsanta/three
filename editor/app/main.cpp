@@ -2,30 +2,30 @@
 
 #include <cstdint>
 #include <stddef.h>
-#include "engine/system/window/window.h"
-#include "maths/vec2.h"
-#include "maths/mat4.h"
-#include "engine/maths/mathFuncs.h"
+#include "../src/engine/system/window/window.h"
+#include "../src/maths/vec2.h"
+#include "../src/maths/mat4.h"
+#include "../src/engine/maths/mathFuncs.h"
 // #include "utils/timer.h"
-#include "engine/system/utils/fileUtils.h"
-#include "engine/graphics/shader/shader.h"
-#include "engine/graphics/buffer/buffer.h"
-#include "engine/graphics/buffer/indexBuffer.h"
-#include "engine/graphics/buffer/vertexArray.h"
+#include "../src/engine/system/utils/fileUtils.h"
+#include "../src/engine/graphics/shader/shader.h"
+#include "../src/engine/graphics/buffer/buffer.h"
+#include "../src/engine/graphics/buffer/indexBuffer.h"
+#include "../src/engine/graphics/buffer/vertexArray.h"
 
-#include "engine/graphics/renderer/renderer2d.h"
-#include "engine/graphics/renderable/renderable2d.h"
-#include "engine/graphics/renderable/sprite.h"
-#include "engine/graphics/renderer/batchRenderer2d.h"
-#include "engine/graphics/layer/dimensions.h"
+#include "../src/engine/graphics/renderer/renderer2d.h"
+#include "../src/engine/graphics/renderable/renderable2d.h"
+#include "../src/engine/graphics/renderable/sprite.h"
+#include "../src/engine/graphics/renderer/batchRenderer2d.h"
+#include "../src/engine/graphics/layer/dimensions.h"
 
 #include <vector>
 
 #include <time.h>
-#include "engine/graphics/layer/tileLayer.h"
-#include "engine/graphics/renderable/group.h"
-#include "app/editor.h"
-#include "app/editor_api.h"
+#include "../src/engine/graphics/layer/tileLayer.h"
+#include "../src/engine/graphics/renderable/group.h"
+#include "../src/app/editor.h"
+#include "../src/app/editor_api.h"
 // #define SPARKY_EMSCRIPTEN 0
 
 using namespace ::engine::graphics;
