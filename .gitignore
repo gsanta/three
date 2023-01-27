@@ -132,6 +132,27 @@ editor/app/cmake_install.cmake
 editor/app/.vs
 editor/app/x64
 
+editor/tests/CMakeFiles
+editor/tests/unit_tests.dir
+editor/tests/_deps
+editor/tests/Debug
+editor/tests/ALL_BUILD.vcxproj.filters
+editor/tests/ALL_BUILD.vcxproj.user
+editor/tests/ALL_BUILD.vcxproj
+editor/tests/ZERO_CHECK.vcxproj
+editor/tests/ZERO_CHECK.vcxproj.filters
+editor/tests/ZERO_CHECK.vcxproj.user
+editor/tests/INSTALL.vcxproj
+editor/tests/INSTALL.vcxproj.filters
+editor/tests/INSTALL.vcxproj.user
+editor/tests/unit_tests.vcxproj
+editor/tests/unit_tests.vcxproj.filters
+editor/tests/unit_tests.vcxproj.user
+editor/tests/CmakeCache.txt
+editor/tests/cmake_install.cmake
+editor/tests/.vs
+editor/tests/x64
+
 editor/src/editor.dir
 
 editor/Web/_deps
