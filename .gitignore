@@ -60,6 +60,7 @@ yarn-debug.log*
 client/spright.js
 client/spright.wasm.map
 client/spright.wasm
+client/deploy
 
 editor/Web/Makefile
 editor/Web/spright.js
