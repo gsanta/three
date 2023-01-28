@@ -33,7 +33,7 @@ jobs:
             cd editor
             docker-compose run --rm unit-test; echo $?
       - store_test_results:
-          path: tests/unit_test_result.xml
+          path: editor/tests/unit_test_result.xml
   build_client:
     working_directory: ~/client
     docker:
