@@ -53,7 +53,7 @@ namespace spright { namespace maths {
 	}
 
 	Vec2& Vec2::operator/=(const Vec2& other) {
-		return subtract(other);
+		return divide(other);
 	}
 
 	bool Vec2::operator==(const Vec2& other) {
