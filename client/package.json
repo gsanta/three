@@ -16,7 +16,7 @@
     "storybook": "start-storybook -p 6006 -c ./.storybook -s .storybook/public",
     "build-storybook": "build-storybook",
     "lint": "eslint",
-    "deploy-build": "./scripts/build.sh",
+    "deploy-build": "npm ci && npm run build && ./scripts/build.sh",
     "deploy-start": "node ./deploy/index.js"
   },
   "author": "Gergely Santa",
