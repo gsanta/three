@@ -2,7 +2,7 @@ version: 2.1
 
 jobs:
   build_cpp:
-    working_directory: ~/engine
+    working_directory: ~/editor
     machine:
       image: ubuntu-2004:current
     resource_class: large
@@ -19,6 +19,19 @@ jobs:
           paths:
             - spright.js
             - spright.wasm
+  cpp_unit_test:
+    working_directory: ~/editor
+    machine:
+      image: ubuntu-2004:current
+    resource_class: large
+    steps:
+      - checkout
+      - run:
+          name: Cpp unit test
+          command: |
+            set -x
+            cd editor
+            docker-compose run --rm unit-test; echo $?
   build_client:
     working_directory: ~/client
     docker:
@@ -63,12 +76,14 @@ jobs:
 workflows:
   build-test-and-deploy:
     jobs:
+      - cpp_unit_test
       - build_cpp
       - build_client
       - assemble_frontend:
           requires:
             - build_cpp
             - build_client
+            - cpp_unit_test
       - deploy:
           requires:
             - "assemble_frontend"
