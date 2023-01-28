@@ -1,6 +1,7 @@
 #pragma once
 
 #include <set>
+#include <algorithm>
 #include "flood_fill_range.h"
 #include "flood_fill_range_queue.h"
 #include "../../../engine/graphics/layer/tileLayer.h"

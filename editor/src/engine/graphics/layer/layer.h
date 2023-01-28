@@ -2,6 +2,7 @@
 
 #include <string>
 #include <nlohmann/json.hpp>
+#include <algorithm>
 #include "../renderable/renderable2d.h"
 #include "../renderer/renderer2d.h"
 #include "../camera/camera.h";

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstring>
 #include "../maths/vec3.h"
 #include "../maths/vec4.h"
 #include "../engine/maths/mathFuncs.h"

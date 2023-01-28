@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <string.h>
 
 namespace engine { namespace system {
 	class FileUtils {

@@ -1,4 +1,6 @@
 #pragma once
+
+#include <cstring>
 #include "../../../stb_image_write.h"
 #include "../../rendering.h"
 #include "../../document/document.h"

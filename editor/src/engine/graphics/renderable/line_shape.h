@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include "renderable2d.h"
 #include "../renderer/renderer2d.h"
 #include "../../../maths/vec3.h"

@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <iostream>
+#include <algorithm>
 #include "tool.h"
 #include "brush_tool.h"
 #include "rectangle_tool.h"
