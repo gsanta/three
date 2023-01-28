@@ -9,7 +9,7 @@ services:
       - .:/src
     working_dir: /src
     command: >
-        bash -c "cmake . && cmake --build ."
+        bash -c "cmake . && cmake --build . && cd tests && ./unit_tests"
   compile-emscripten:
     build:
       context: .
