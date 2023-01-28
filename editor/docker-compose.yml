@@ -7,8 +7,9 @@ services:
       dockerfile: ./docker/desktop.Dockerfile
     volumes:
       - .:/src
-    working_dir: /home/app
-    command: cmake --build .
+    working_dir: /src
+    command: >
+        bash -c "cmake . && cmake --build ."
   compile-emscripten:
     build:
       context: .
