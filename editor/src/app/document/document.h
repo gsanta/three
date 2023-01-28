@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <algorithm>
 #include "../../engine/graphics/layer/layer.h"
 #include "../../engine/graphics/layer/tileLayer.h"
 #include "../../engine/graphics/camera/camera.h"

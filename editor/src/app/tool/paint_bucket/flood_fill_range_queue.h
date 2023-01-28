@@ -2,6 +2,7 @@
 
 #include "flood_fill_range.h"
 #include <vector>
+#include <stddef.h>
 
 namespace spright {
 

@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  test:
+    build: .
+    volumes:
+      - .:/home/app
+    working_dir: /home/app
+    command: cmake --build .
+volumes:
+  myapp:

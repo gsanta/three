@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <algorithm>
 #include "input_listener.h"
 #include "window.h"
 #include "../../../maths/vec2.h"
