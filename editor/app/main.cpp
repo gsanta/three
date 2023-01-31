@@ -68,7 +68,7 @@ void removeActiveTool(std::string toolName)
 
 std::vector<std::string> getLayers()
 {
-	std::vector<Layer *> &layers = editor->getDocumentHandler()->getActiveDocument()->getLayerHandler()->getSortedLayers();
+	std::vector<Layer *> &layers = editor->getDocumentHandler()->getActiveDocument()->getLayerHandler()->getLayers();
 
 	std::vector<std::string> target;
 
