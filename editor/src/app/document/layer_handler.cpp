@@ -32,13 +32,28 @@ namespace spright {
 		}
 	}
 
-	void LayerHandler::addSortedLayer(Layer* layer)
+	TileLayer* LayerHandler::getTileLayer(std::string id) {
+		Layer* layer = getLayer(id);
+
+		if (m_TileLayers.find(layer) != m_TileLayers.end()) {
+			return static_cast<TileLayer*>(layer);
+		}
+
+		return nullptr;
+	}
+
+	void LayerHandler::addLayer(Layer* layer)
 	{
 		m_Layers.push_back(layer);
 	}
+	
+	void LayerHandler::addLayer(TileLayer* layer)
+	{
+		m_Layers.push_back(layer);
+		m_TileLayers.insert(layer);
+	}
 
-
-	std::vector<Layer*>& LayerHandler::getSortedLayers() {
+	std::vector<Layer*>& LayerHandler::getLayers() {
 		return m_Layers;
 	}
 
@@ -59,10 +74,14 @@ namespace spright {
 
 	void LayerHandler::removeLayer(std::string layerId) {
 		int index = getLayerIndex(layerId);
+		Layer* layer = getLayer(layerId);
 
 
 		if (index != -1) {
 			m_Layers.erase(m_Layers.begin() + index);
+			if (m_TileLayers.find(layer) != m_TileLayers.end()) {
+				m_TileLayers.erase(layer);
+			}
 		}
 
 		if (index != -1 && m_Layers.size() > 1) {
@@ -98,12 +117,22 @@ namespace spright {
 		m_BeforeLayers.push_back(layer);
 	}
 
+	void LayerHandler::addBeforeLayer(TileLayer* layer) {
+		addBeforeLayer((Layer*)layer);
+		m_TileLayers.insert(layer);
+	}
+
 	std::vector<Layer*>& LayerHandler::getBeforeLayers() {
 		return m_BeforeLayers;
 	}
 
 	void LayerHandler::addAfterLayer(Layer* layer) {
 		m_AfterLayers.push_back(layer);
+	}
+
+	void LayerHandler::addAfterLayer(TileLayer* layer) {
+		addAfterLayer((Layer*) layer);
+		m_TileLayers.insert(layer);
 	}
 
 	std::vector<Layer*>& LayerHandler::getAfterLayers() {

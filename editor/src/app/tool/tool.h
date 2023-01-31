@@ -14,6 +14,8 @@ namespace spright { namespace tool {
 		inline virtual void pointerUp(PointerInfo& pointerInfo) {}
 		inline virtual void pointerMove(PointerInfo& pointerInfo) {}
 		inline virtual void scroll(PointerInfo& pointerInfo) {}
+		inline virtual void activate() {}
+		inline virtual void deactivate() {}
 	
 		inline string getName() const {
 			return this->name;

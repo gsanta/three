@@ -24,13 +24,18 @@ namespace engine { namespace graphics {
 		BoundsInt m_TileBounds;
 
 	public:
-		TileLayer(std::string name, std::string id, engine::graphics::Shader* shader, engine::graphics::Renderer2D* renderer, Camera* camera, Dimensions dimensions);
+		TileLayer(std::string name, std::string id, engine::graphics::Shader* shader, engine::graphics::Renderer2D* renderer, Camera* camera, Dimensions dimensions, float tileSize = 0.5f);
 		virtual ~TileLayer();
 
 		// TODO: find a better name
 		Vec2 getBottomLeftPos(Vec2 pointer);
 		Vec2 getBottomLeftPos(int tileIndex);
+		Vec2 getCenterPos(int tileIndex);
 		maths::Vec2Int getTilePos(Vec2 pos);
+		maths::Vec2Int getTilePos(int tileIndex);
+		unsigned int getColumn(int tileIndex);
+		unsigned int getRow(int tileIndex);
+
 		Vec2 getWorldPos(int x, int y);
 
 		virtual nlohmann::json getJson() override;

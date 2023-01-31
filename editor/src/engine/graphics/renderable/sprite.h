@@ -25,6 +25,7 @@ namespace engine { namespace graphics {
 		void setTileIndex(int tileIndex);
 		void setSize(Vec2 size);
 		void setPosition(Vec2 position);
+		void setCenterPosition(Vec2 position);
 		bool contains(Vec2 point);
 		void translate(Vec2 vec);
 		virtual nlohmann::json getJson();

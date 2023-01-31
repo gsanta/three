@@ -25,20 +25,20 @@ namespace spright {
 		Vec2 topRight = m_Rect.topRight;
 
 		Document* document = this->m_DocumentHandler->getActiveDocument();
-		auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayerHandler()->getLayer(DEFAULT_TEMP_LAYER_ID);
+		TileLayer* tempLayer = document->getLayerHandler()->getTileLayer(DEFAULT_TEMP_LAYER_ID);
 
-		//float layerSize = tempLayer
+		float tileSize = tempLayer->getTileSize();
 
 		tempLayer->clear();
 		clearSprites();
 
 		unsigned int color = 0xff0099ff;
 
-		float xStart = static_cast<int>(bottomLeft.x / 0.5f) * 0.5f;
-		float xEnd = static_cast<int>(topRight.x / 0.5f) * 0.5f;
+		float xStart = static_cast<int>(bottomLeft.x / tileSize) * tileSize;
+		float xEnd = static_cast<int>(topRight.x / tileSize) * tileSize;
 		float width = xEnd - xStart;
-		float yStart = static_cast<int>(bottomLeft.y / 0.5f) * 0.5f;
-		float yEnd = static_cast<int>(topRight.y / 0.5f) * 0.5f;
+		float yStart = static_cast<int>(bottomLeft.y / tileSize) * tileSize;
+		float yEnd = static_cast<int>(topRight.y / tileSize) * tileSize;
 		float height = yEnd - yStart;
 
 		engine::graphics::Sprite* bottom = new engine::graphics::Sprite(xStart, yStart, width, 0.1f, color);
@@ -59,10 +59,15 @@ namespace spright {
 
 	void SelectionBox::move(Vec2 delta)
 	{
+		Document* document = this->m_DocumentHandler->getActiveDocument();
+		TileLayer* tempLayer = document->getLayerHandler()->getTileLayer(DEFAULT_TEMP_LAYER_ID);
+
+		float tileSize = tempLayer->getTileSize();
+
 		m_AbsoluteDelta += delta;
 
-		float xDelta = static_cast<int>(m_AbsoluteDelta.x / 0.5f) * 0.5f;
-		float yDelta = static_cast<int>(m_AbsoluteDelta.y / 0.5f) * 0.5f;
+		float xDelta = static_cast<int>(m_AbsoluteDelta.x / tileSize) * tileSize;
+		float yDelta = static_cast<int>(m_AbsoluteDelta.y / tileSize) * tileSize;
 
 		for (Sprite* sprite : m_SelectionSprites) {
 			sprite->translate(Vec2(-m_PrevTranslate.x, -m_PrevTranslate.y));

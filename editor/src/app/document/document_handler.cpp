@@ -26,9 +26,9 @@ namespace spright
 #endif
 			TileLayer *layer = new TileLayer(name, id, shaderUnlit, new BatchRenderer2D(), getActiveDocument()->getCamera(), getActiveDocument()->dimensions);
 
-			m_ActiveDocument->getLayerHandler()->addSortedLayer(layer);
+			m_ActiveDocument->getLayerHandler()->addLayer(layer);
 
-			if (m_ActiveDocument->getLayerHandler()->getSortedLayers().size() == 1)
+			if (m_ActiveDocument->getLayerHandler()->getLayers().size() == 1)
 			{
 				m_ActiveDocument->getLayerHandler()->setActiveLayer(layer->getId());
 			}
@@ -73,7 +73,7 @@ namespace spright
 			Document *document = new Document(dimensions, camera, canvas);
 
 			TileLayer *tempLayer = new TileLayer("", DEFAULT_TEMP_LAYER_ID, shaderUnlit, new BatchRenderer2D(), document->getCamera(), dimensions);
-			TileLayer *backgroundLayer = new TileLayer("", DEFAULT_BACKGROUND_LAYER_ID, shaderUnlit, new BatchRenderer2D(), document->getCamera(), dimensions);
+			TileLayer *backgroundLayer = new TileLayer("", DEFAULT_BACKGROUND_LAYER_ID, shaderUnlit, new BatchRenderer2D(), document->getCamera(), dimensions, 2.0f);
 
 			document->getLayerHandler()->addBeforeLayer(backgroundLayer);
 			document->getLayerHandler()->addAfterLayer(tempLayer);
