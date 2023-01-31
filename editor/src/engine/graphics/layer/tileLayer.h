@@ -18,7 +18,7 @@ namespace engine { namespace graphics {
 	class TileLayer : public Layer
 	{
 	private:
-		float m_TileSize = 0.5;
+		float m_TileSize = 0.5f;
 		int m_IndexSize;
 		Renderable2D** m_TileIndexes;
 		BoundsInt m_TileBounds;

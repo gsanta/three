@@ -8,7 +8,7 @@ namespace spright {
 
 	void ColorPickerTool::pointerDown(PointerInfo& pointerInfo) {
 
-		TileLayer* tileLayer = dynamic_cast<TileLayer*>(m_DocumentHandler->getActiveDocument()->getActiveLayer());
+		TileLayer* tileLayer = dynamic_cast<TileLayer*>(m_DocumentHandler->getActiveDocument()->getLayerHandler()->getActiveLayer());
 		Camera* camera = m_DocumentHandler->getActiveDocument()->getCamera();
 		Vec2 model = camera->screenToModel(pointerInfo.curr);
 

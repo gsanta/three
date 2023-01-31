@@ -16,6 +16,8 @@ namespace spright {
 		vector<Sprite*> m_SelectionSprites;
 
 		float m_DashSize = 0.2f;
+		Vec2 m_AbsoluteDelta;
+		Vec2 m_PrevTranslate;
 
 		Vec2 m_Start;
 

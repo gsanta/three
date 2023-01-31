@@ -26,11 +26,11 @@ namespace spright
 #endif
 			TileLayer *layer = new TileLayer(name, id, shaderUnlit, new BatchRenderer2D(), getActiveDocument()->getCamera(), getActiveDocument()->dimensions);
 
-			m_ActiveDocument->addUserLayer(layer);
+			m_ActiveDocument->getLayerHandler()->addSortedLayer(layer);
 
-			if (m_ActiveDocument->getUserLayers().size() == 1)
+			if (m_ActiveDocument->getLayerHandler()->getSortedLayers().size() == 1)
 			{
-				m_ActiveDocument->setActiveLayer(layer->getId());
+				m_ActiveDocument->getLayerHandler()->setActiveLayer(layer->getId());
 			}
 		}
 
@@ -75,8 +75,8 @@ namespace spright
 			TileLayer *tempLayer = new TileLayer("", DEFAULT_TEMP_LAYER_ID, shaderUnlit, new BatchRenderer2D(), document->getCamera(), dimensions);
 			TileLayer *backgroundLayer = new TileLayer("", DEFAULT_BACKGROUND_LAYER_ID, shaderUnlit, new BatchRenderer2D(), document->getCamera(), dimensions);
 
-			document->addBeforeLayer(backgroundLayer);
-			document->addAfterLayer(tempLayer);
+			document->getLayerHandler()->addBeforeLayer(backgroundLayer);
+			document->getLayerHandler()->addAfterLayer(tempLayer);
 
 			spright::document::Checkerboard checkerboard;
 

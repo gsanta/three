@@ -11,7 +11,7 @@ namespace spright
 	void PaintBucketTool::pointerUp(tool::PointerInfo &pointerInfo)
 	{
 		Camera *camera = m_DocumentHandler->getActiveDocument()->getCamera();
-		TileLayer *tileLayer = dynamic_cast<TileLayer *>(m_DocumentHandler->getActiveDocument()->getActiveLayer());
+		TileLayer *tileLayer = dynamic_cast<TileLayer *>(m_DocumentHandler->getActiveDocument()->getLayerHandler()->getActiveLayer());
 		engine::maths::Vec2Int tilePos = tileLayer->getTilePos(camera->screenToModel(pointerInfo.curr));
 
 		m_FloodFill.floodFill(tileLayer, tilePos.x, tilePos.y, m_Services->getColorPalette()->color);

@@ -25,40 +25,52 @@ namespace spright {
 		Vec2 topRight = m_Rect.topRight;
 
 		Document* document = this->m_DocumentHandler->getActiveDocument();
-		auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayer(DEFAULT_TEMP_LAYER_ID);
+		auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayerHandler()->getLayer(DEFAULT_TEMP_LAYER_ID);
+
+		//float layerSize = tempLayer
 
 		tempLayer->clear();
 		clearSprites();
 
-		for (float x = bottomLeft.x; x < topRight.x; x += 2 * m_DashSize) {
-			engine::graphics::Sprite* sprite = new engine::graphics::Sprite(x, bottomLeft.y, m_DashSize, 0.1f, 0xff0000ff);
-			engine::graphics::Sprite* sprite2 = new engine::graphics::Sprite(x, topRight.y, m_DashSize, 0.1f, 0xff0000ff);
+		unsigned int color = 0xff0099ff;
 
-			tempLayer->add(sprite);
-			tempLayer->add(sprite2);
+		float xStart = static_cast<int>(bottomLeft.x / 0.5f) * 0.5f;
+		float xEnd = static_cast<int>(topRight.x / 0.5f) * 0.5f;
+		float width = xEnd - xStart;
+		float yStart = static_cast<int>(bottomLeft.y / 0.5f) * 0.5f;
+		float yEnd = static_cast<int>(topRight.y / 0.5f) * 0.5f;
+		float height = yEnd - yStart;
 
-			m_SelectionSprites.push_back(sprite);
-			m_SelectionSprites.push_back(sprite2);
-		}
+		engine::graphics::Sprite* bottom = new engine::graphics::Sprite(xStart, yStart, width, 0.1f, color);
+		engine::graphics::Sprite* top = new engine::graphics::Sprite(xStart, yEnd, width, 0.1f, color);
+		engine::graphics::Sprite* left = new engine::graphics::Sprite(xStart, yStart, 0.1f, height, color);
+		engine::graphics::Sprite* right = new engine::graphics::Sprite(xEnd, yStart, 0.1f, height, color);
 
-		for (float y = bottomLeft.y; y < topRight.y; y += 2 * m_DashSize) {
-			engine::graphics::Sprite* sprite = new engine::graphics::Sprite(bottomLeft.x, y, m_DashSize, 0.1f, 0xff0000ff);
-			engine::graphics::Sprite* sprite2 = new engine::graphics::Sprite(topRight.x, y, m_DashSize, 0.1f, 0xff0000ff);
+		m_SelectionSprites.push_back(bottom);
+		m_SelectionSprites.push_back(top);
+		m_SelectionSprites.push_back(left);
+		m_SelectionSprites.push_back(right);
 
-			tempLayer->add(sprite);
-			tempLayer->add(sprite2);
-
-			m_SelectionSprites.push_back(sprite);
-			m_SelectionSprites.push_back(sprite2);
-		}
-
+		tempLayer->add(bottom);
+		tempLayer->add(top);
+		tempLayer->add(left);
+		tempLayer->add(right);
 	}
 
 	void SelectionBox::move(Vec2 delta)
 	{
+		m_AbsoluteDelta += delta;
+
+		float xDelta = static_cast<int>(m_AbsoluteDelta.x / 0.5f) * 0.5f;
+		float yDelta = static_cast<int>(m_AbsoluteDelta.y / 0.5f) * 0.5f;
+
 		for (Sprite* sprite : m_SelectionSprites) {
-			sprite->translate(delta);
+			sprite->translate(Vec2(-m_PrevTranslate.x, -m_PrevTranslate.y));
+			sprite->translate(Vec2(xDelta, yDelta));
 		}
+
+		m_PrevTranslate.x = xDelta;
+		m_PrevTranslate.y = yDelta;
 	}
 
 	void SelectionBox::clear()
@@ -88,7 +100,7 @@ namespace spright {
 	void SelectionBox::clearSprites()
 	{
 		Document* document = this->m_DocumentHandler->getActiveDocument();
-		auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayer(DEFAULT_TEMP_LAYER_ID);
+		auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayerHandler()->getLayer(DEFAULT_TEMP_LAYER_ID);
 
 		tempLayer->clear();
 
