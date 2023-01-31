@@ -108,7 +108,7 @@ namespace spright {
 		float startY = down.y < curr.y ? down.y : curr.y;
 		float endY = down.y < curr.y ? curr.y : down.y;
 
-		engine::graphics::Layer* layer = dynamic_cast<engine::graphics::TileLayer*>(document->getActiveLayer());
+		engine::graphics::Layer* layer = dynamic_cast<engine::graphics::TileLayer*>(document->getLayerHandler()->getActiveLayer());
 
 		auto it = layer->getRenderables().begin();
 		while (it != layer->getRenderables().end()) {
@@ -127,7 +127,7 @@ namespace spright {
 
 	void SelectTool::moveSelection(tool::PointerInfo& pointerInfo) {
 		Document* document = m_DocumentHandler->getActiveDocument();
-		engine::graphics::TileLayer* tileLayer = dynamic_cast<engine::graphics::TileLayer*>(document->getActiveLayer());
+		engine::graphics::TileLayer* tileLayer = dynamic_cast<engine::graphics::TileLayer*>(document->getLayerHandler()->getActiveLayer());
 
 		Vec2 down = document->getCamera()->screenToModel(pointerInfo.down);
 		Vec2 curr = document->getCamera()->screenToModel(pointerInfo.curr);
@@ -151,7 +151,7 @@ namespace spright {
 	}
 
 	void SelectTool::makePointSelection(tool::PointerInfo& pointerInfo) {
-		TileLayer* tileLayer = dynamic_cast<TileLayer*>(m_DocumentHandler->getActiveDocument()->getActiveLayer());
+		TileLayer* tileLayer = dynamic_cast<TileLayer*>(m_DocumentHandler->getActiveDocument()->getLayerHandler()->getActiveLayer());
 		Camera* camera = m_DocumentHandler->getActiveDocument()->getCamera();
 		Vec2 model = camera->screenToModel(pointerInfo.curr);
 

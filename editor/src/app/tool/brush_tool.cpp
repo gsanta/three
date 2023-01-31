@@ -41,7 +41,7 @@ namespace spright { namespace tool {
 
 		Vec3 intersection = engine::maths::linePlaneIntersection(la, lb, p1, p2, p3);
 
-		engine::graphics::TileLayer* tileLayer = dynamic_cast<engine::graphics::TileLayer*>(m_documentHandler->getActiveDocument()->getActiveLayer());
+		engine::graphics::TileLayer* tileLayer = dynamic_cast<engine::graphics::TileLayer*>(m_documentHandler->getActiveDocument()->getLayerHandler()->getActiveLayer());
 
 		Vec2 tilePos = tileLayer->getBottomLeftPos(Vec2(intersection.x, intersection.y));
 
@@ -59,7 +59,7 @@ namespace spright { namespace tool {
 
 	void BrushTool::setColor(TileLayer* tileLayer, Vec2Int tilePos)
 	{
-		int color = m_Services->getColorPalette()->color;
+		unsigned int color = m_Services->getColorPalette()->color;
 
 		int tileIndex = tileLayer->getTileIndex(tilePos.x, tilePos.y);
 		Renderable2D* renderable = tileLayer->getAtTileIndex(tileIndex);

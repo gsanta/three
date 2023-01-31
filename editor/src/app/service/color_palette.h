@@ -8,7 +8,7 @@ namespace spright {
 
 	struct ColorPalette {
 
-		unsigned int color = 0xff000000;
+		unsigned int color = 0x8f000000;
 
 	};
 }

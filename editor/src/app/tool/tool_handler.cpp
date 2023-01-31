@@ -122,7 +122,7 @@ namespace spright { namespace tool {
 			//m_JsonExport->importDocument("{ \"a\": 2 }");
 		}
 		else if (key == GLFW_KEY_L) {
-			m_DocumentHandler->getActiveDocument()->setActiveLayer(USER_LAYER_ID_PREFIX + "2");
+			m_DocumentHandler->getActiveDocument()->getLayerHandler()->setActiveLayer(USER_LAYER_ID_PREFIX + "2");
 		}
 
 	}

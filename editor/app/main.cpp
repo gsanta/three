@@ -68,7 +68,7 @@ void removeActiveTool(std::string toolName)
 
 std::vector<std::string> getLayers()
 {
-	std::vector<Layer *> &layers = editor->getDocumentHandler()->getActiveDocument()->getUserLayers();
+	std::vector<Layer *> &layers = editor->getDocumentHandler()->getActiveDocument()->getLayerHandler()->getSortedLayers();
 
 	std::vector<std::string> target;
 
@@ -87,7 +87,7 @@ void createLayer(std::string name, std::string id)
 
 void enableLayer(std::string id)
 {
-	Layer *layer = editor->getDocumentHandler()->getActiveDocument()->getLayer(id);
+	Layer *layer = editor->getDocumentHandler()->getActiveDocument()->getLayerHandler()->getLayer(id);
 
 	if (layer != nullptr)
 	{
@@ -97,7 +97,7 @@ void enableLayer(std::string id)
 
 void disableLayer(std::string id)
 {
-	Layer *layer = editor->getDocumentHandler()->getActiveDocument()->getLayer(id);
+	Layer *layer = editor->getDocumentHandler()->getActiveDocument()->getLayerHandler()->getLayer(id);
 
 	if (layer != nullptr)
 	{
@@ -107,7 +107,7 @@ void disableLayer(std::string id)
 
 void setActiveLayer(std::string id)
 {
-	editor->getDocumentHandler()->getActiveDocument()->setActiveLayer(id);
+	editor->getDocumentHandler()->getActiveDocument()->getLayerHandler()->setActiveLayer(id);
 }
 
 void setBrushSize(int size)
@@ -162,7 +162,7 @@ void setEngineData(std::string json)
 {
 	if (editor != nullptr)
 	{
-		editor->getDocumentHandler()->getActiveDocument()->getActiveLayer()->setJson(json);
+		editor->getDocumentHandler()->getActiveDocument()->getLayerHandler()->getActiveLayer()->setJson(json);
 	}
 }
 

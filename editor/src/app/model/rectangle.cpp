@@ -15,4 +15,12 @@ namespace spright {
 		bool ret = point.x > bottomLeft.x && point.x < topRight.x && point.y > bottomLeft.y && point.y < topRight.y;
 		return ret;
 	}
+
+	float Rectangle::width() {
+		return topRight.x - bottomLeft.x;
+	}
+
+	float Rectangle::height() {
+		return topRight.y - bottomLeft.y;
+	}
 }

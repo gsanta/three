@@ -12,6 +12,8 @@ namespace spright {
 		Rectangle();
 
 		bool contains(maths::Vec2 point);
+		float width();
+		float height();
 	};
 
 }

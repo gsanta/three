@@ -12,7 +12,7 @@ namespace spright {
 			{"layers", {}}
 		};
 
-		for (Layer* layer : document->getUserLayers()) {
+		for (Layer* layer : document->getLayerHandler()->getSortedLayers()) {
 			nlohmann::json jsonLayer = m_TileLayerExport->exportLayer(document, layer->getId());
 			json["layers"] += jsonLayer;
 		}
@@ -31,7 +31,7 @@ namespace spright {
 			nlohmann::json layer = json["layers"][i];
 		
 			TileLayer* tileLayer = m_TileLayerExport->importLayer(documentHandler, layer);
-			documentHandler->getActiveDocument()->addUserLayer(tileLayer);
+			documentHandler->getActiveDocument()->getLayerHandler()->addSortedLayer(tileLayer);
 		}
 	}
 }

@@ -46,7 +46,7 @@ namespace spright { namespace tool {
 		float startY = down.y < curr.y ? down.y : curr.y;
 		float endY = down.y < curr.y ? curr.y : down.y;
 
-		engine::graphics::Layer* layer = dynamic_cast<engine::graphics::TileLayer*>(activeDocument->getActiveLayer());
+		engine::graphics::Layer* layer = dynamic_cast<engine::graphics::TileLayer*>(activeDocument->getLayerHandler()->getActiveLayer());
 
 		auto it = layer->getRenderables().begin();
 		while (it != layer->getRenderables().end()) {
@@ -60,7 +60,7 @@ namespace spright { namespace tool {
 			}
 		}
 
-		auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayer(DEFAULT_TEMP_LAYER_ID);
+		auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayerHandler()->getLayer(DEFAULT_TEMP_LAYER_ID);
 		tempLayer->clear();
 
 		m_EventHandler->emitDataChange();
@@ -69,7 +69,7 @@ namespace spright { namespace tool {
 	void EraseTool::erasePointArea(PointerInfo& pointerInfo) {
 		Document* activeDocument = m_DocumentHandler->getActiveDocument();
 
-		engine::graphics::TileLayer* layer = dynamic_cast<engine::graphics::TileLayer*>(activeDocument->getActiveLayer());
+		engine::graphics::TileLayer* layer = dynamic_cast<engine::graphics::TileLayer*>(activeDocument->getLayerHandler()->getActiveLayer());
 
 		int tileIndex = layer->getTileIndex(activeDocument->getCamera()->screenToModel(pointerInfo.curr));
 
@@ -87,7 +87,7 @@ namespace spright { namespace tool {
 
 	void EraseTool::select(PointerInfo& pointerInfo)
 	{
-		auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayer(DEFAULT_TEMP_LAYER_ID);
+		auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayerHandler()->getLayer(DEFAULT_TEMP_LAYER_ID);
 		tempLayer->clear();
 
 		for (engine::graphics::Sprite* sprite : m_SelectionSprites) {

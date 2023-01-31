@@ -3,7 +3,7 @@
 namespace spright {
 
 	nlohmann::json TileLayerExport::exportLayer(Document* document, std::string layerId) {
-		TileLayer* layer = dynamic_cast<TileLayer*>(document->getLayer(layerId));
+		TileLayer* layer = dynamic_cast<TileLayer*>(document->getLayerHandler()->getLayer(layerId));
 
 		nlohmann::json json;
 
@@ -28,7 +28,7 @@ namespace spright {
 		std::string string = json.dump();
 		documentHandler->createUserLayer(json["name"], json["id"]);
 		
-		TileLayer* layer = dynamic_cast<TileLayer*>(documentHandler->getActiveDocument()->getLayer(json["id"]));
+		TileLayer* layer = dynamic_cast<TileLayer*>(documentHandler->getActiveDocument()->getLayerHandler()->getLayer(json["id"]));
 
 		int tileCount = json["tiles"].size();
 
