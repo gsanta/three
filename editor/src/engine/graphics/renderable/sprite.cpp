@@ -37,6 +37,10 @@ namespace engine {
 			updateBounds();
 		}
 
+		void Sprite::setCenterPosition(Vec2 position) {
+			this->m_Position = Vec3(position.x - m_Size.x / 2.0f, position.y - m_Size.y / 2.0f, m_Position.z);
+		}
+
 		bool Sprite::contains(Vec2 point)
 		{
 			const Bounds* bounds = getBounds();

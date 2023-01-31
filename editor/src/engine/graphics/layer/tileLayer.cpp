@@ -2,8 +2,8 @@
 
 namespace engine { namespace graphics {
 
-	TileLayer::TileLayer(std::string name, std::string id, Shader* shader, Renderer2D* renderer, Camera* camera, Dimensions dimensions)
-		: Layer(name, id, renderer, shader, camera, dimensions) {
+	TileLayer::TileLayer(std::string name, std::string id, Shader* shader, Renderer2D* renderer, Camera* camera, Dimensions dimensions, float tileSize)
+		: Layer(name, id, renderer, shader, camera, dimensions), m_TileSize(tileSize) {
 	
 		int width = (dimensions.right - dimensions.left) / m_TileSize;
 		int height = (dimensions.top - dimensions.bottom) / m_TileSize;
@@ -40,6 +40,14 @@ namespace engine { namespace graphics {
 		return Vec2(x * m_TileSize + m_Dimensions.left, y * m_TileSize + m_Dimensions.bottom);
 	}
 
+	Vec2 TileLayer::getCenterPos(int tileIndex) {
+		Vec2 bottomLeftPos = getBottomLeftPos(tileIndex);
+		bottomLeftPos.x += m_TileSize / 2.0f;
+		bottomLeftPos.y += m_TileSize / 2.0f;
+
+		return bottomLeftPos;
+	}
+
 	// TODO: check if it works for both even and odd number of tiles
 	maths::Vec2Int TileLayer::getTilePos(Vec2 pos) {
 		Vec2 adjustedPos(pos.x - m_Dimensions.left, pos.y - m_Dimensions.bottom);
@@ -48,6 +56,18 @@ namespace engine { namespace graphics {
 		int tileY = (int)(adjustedPos.y / tileSize);
 
 		return maths::Vec2Int(tileX, tileY);
+	}
+
+	maths::Vec2Int TileLayer::getTilePos(int tileIndex) {
+		return maths::Vec2Int(getColumn(tileIndex), getRow(tileIndex));
+	}
+
+	unsigned int TileLayer::getColumn(int tileIndex) {
+		return tileIndex % m_TileBounds.getWidth();
+	}
+	
+	unsigned int TileLayer::getRow(int tileIndex) {
+		return tileIndex / m_TileBounds.getWidth();
 	}
 
 	Vec2 TileLayer::getWorldPos(int x, int y)

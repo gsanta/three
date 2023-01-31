@@ -50,7 +50,7 @@ namespace spright { namespace document {
 			layer->render();
 		}
 
-		for (engine::graphics::Layer* layer : getLayerHandler()->getSortedLayers()) {
+		for (engine::graphics::Layer* layer : getLayerHandler()->getLayers()) {
 			layer->render();
 		}
 

@@ -4,24 +4,22 @@
 namespace spright { namespace document {
 	void document::Checkerboard::create(spright::document::Document* document)
 	{
-		engine::graphics::Layer* layer = document->getLayerHandler()->getLayer(spright::document::DEFAULT_BACKGROUND_LAYER_ID);
+		engine::graphics::TileLayer* layer = document->getLayerHandler()->getTileLayer(spright::document::DEFAULT_BACKGROUND_LAYER_ID);
 	
 		float left = document->dimensions.left;
 		float right = document->dimensions.right;
 		float bottom = document->dimensions.bottom;
 		float top = document->dimensions.top;
 
-		float checkerWidth = 4.0f;
-		float tileSize = 0.5f;
-		float delta = checkerWidth * tileSize;
+		float tileSize = layer->getTileSize();
 
 		int counter = 1;
 		bool even = false;
-		for (float i = left; i < right; i += delta) {
-			for (float j = bottom; j < top; j += delta) {
+		for (float i = left; i < right; i += tileSize) {
+			for (float j = bottom; j < top; j += tileSize) {
 				counter++;
 				int color = counter % 2 == 0 ? 0Xff787878 : 0XffE0E0E0;
-				layer->add(new engine::graphics::Sprite(i, j, delta, delta, color));
+				layer->add(new engine::graphics::Sprite(i, j, tileSize, tileSize, color));
 			}
 
 			counter = 1;

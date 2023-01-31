@@ -148,6 +148,7 @@ namespace spright { namespace tool {
 	{
 		if (m_SelectedTool != nullptr) {
 			removeActiveTool(m_SelectedTool->getName());
+			m_SelectedTool->deactivate();
 		}
 
 		if (!isActiveTool(name)) {
@@ -155,7 +156,7 @@ namespace spright { namespace tool {
 		}
 
 		m_SelectedTool = getTool(name);
-
+		m_SelectedTool->activate();
 	}
 
 	bool ToolHandler::isActiveTool(string name)
