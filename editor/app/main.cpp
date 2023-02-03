@@ -16,7 +16,6 @@
 #include "../src/engine/graphics/renderer/renderer2d.h"
 #include "../src/engine/graphics/renderable/renderable2d.h"
 #include "../src/engine/graphics/renderable/rect2d.h"
-#include "../src/engine/graphics/renderer/batchRenderer2d.h"
 #include "../src/engine/graphics/layer/dimensions.h"
 
 #include <vector>

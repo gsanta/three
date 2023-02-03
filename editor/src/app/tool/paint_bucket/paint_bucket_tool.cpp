@@ -12,7 +12,7 @@ namespace spright
 	{
 		Camera *camera = m_DocumentHandler->getActiveDocument()->getCamera();
 		TileLayer *tileLayer = dynamic_cast<TileLayer *>(m_DocumentHandler->getActiveDocument()->getLayerHandler()->getActiveLayer());
-		engine::maths::Vec2Int tilePos = tileLayer->getTilePos(camera->screenToModel(pointerInfo.curr));
+		Vec2Int tilePos = tileLayer->getTilePos(camera->screenToModel(pointerInfo.curr));
 
 		m_FloodFill.floodFill(tileLayer, tilePos.x, tilePos.y, m_Services->getColorPalette()->color);
 	}

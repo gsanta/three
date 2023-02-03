@@ -10,6 +10,7 @@
 namespace spright { namespace tool {
 
 	using namespace document;
+	using namespace ::engine::graphics;
 
 	class RectangleTool : public Tool {
 	private:
@@ -17,7 +18,7 @@ namespace spright { namespace tool {
 		EventHandler* m_EventHandler;
 		Services* m_Services;
 		float m_Size = 10;
-		engine::graphics::Rect2D* m_Rect = nullptr;
+		Rect2D* m_Rect = nullptr;
 
 	public:
 		RectangleTool(DocumentHandler* documentHandler, Services* services, EventHandler* eventHandler);

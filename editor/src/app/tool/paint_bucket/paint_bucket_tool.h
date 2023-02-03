@@ -8,6 +8,7 @@
 
 namespace spright {
     using namespace ::engine::graphics;
+    using namespace ::engine::maths;
 
     class PaintBucketTool : public tool::Tool
     {

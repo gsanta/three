@@ -41,10 +41,10 @@ namespace spright {
 		float yEnd = static_cast<int>(topRight.y / tileSize) * tileSize;
 		float height = yEnd - yStart;
 
-		engine::graphics::Rect2D* bottom = new engine::graphics::Rect2D(xStart, yStart, width, 0.1f, color);
-		engine::graphics::Rect2D* top = new engine::graphics::Rect2D(xStart, yEnd, width, 0.1f, color);
-		engine::graphics::Rect2D* left = new engine::graphics::Rect2D(xStart, yStart, 0.1f, height, color);
-		engine::graphics::Rect2D* right = new engine::graphics::Rect2D(xEnd, yStart, 0.1f, height, color);
+		Rect2D* bottom = new Rect2D(xStart, yStart, width, 0.1f, color);
+		Rect2D* top = new Rect2D(xStart, yEnd, width, 0.1f, color);
+		Rect2D* left = new Rect2D(xStart, yStart, 0.1f, height, color);
+		Rect2D* right = new Rect2D(xEnd, yStart, 0.1f, height, color);
 
 		m_SelectionSprites.push_back(bottom);
 		m_SelectionSprites.push_back(top);

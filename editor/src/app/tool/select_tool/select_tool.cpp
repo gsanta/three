@@ -65,15 +65,15 @@ namespace spright {
 	//	auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayer(DEFAULT_TEMP_LAYER_ID);
 	//	tempLayer->clear();
 
-	//	for (engine::graphics::Rect2D* sprite : m_SelectionSprites) {
+	//	for (Rect2D* sprite : m_SelectionSprites) {
 	//		delete sprite;
 	//	}
 
 	//	m_SelectionSprites.clear();
 
 	//	for (float x = bottomLeft.x; x < topRight.x; x += 2 * m_DashSize) {
-	//		engine::graphics::Rect2D* sprite = new engine::graphics::Rect2D(x, bottomLeft.y, m_DashSize, 0.1f, 0xff0000ff);
-	//		engine::graphics::Rect2D* sprite2 = new engine::graphics::Rect2D(x, topRight.y, m_DashSize, 0.1f, 0xff0000ff);
+	//		Rect2D* sprite = new Rect2D(x, bottomLeft.y, m_DashSize, 0.1f, 0xff0000ff);
+	//		Rect2D* sprite2 = new Rect2D(x, topRight.y, m_DashSize, 0.1f, 0xff0000ff);
 
 	//		tempLayer->add(sprite);
 	//		tempLayer->add(sprite2);
@@ -83,8 +83,8 @@ namespace spright {
 	//	}
 
 	//	for (float y = bottomLeft.y; y < topRight.y; y += 2 * m_DashSize) {
-	//		engine::graphics::Rect2D* sprite = new engine::graphics::Rect2D(bottomLeft.x, y, m_DashSize, 0.1f, 0xff0000ff);
-	//		engine::graphics::Rect2D* sprite2 = new engine::graphics::Rect2D(topRight.x, y, m_DashSize, 0.1f, 0xff0000ff);
+	//		Rect2D* sprite = new Rect2D(bottomLeft.x, y, m_DashSize, 0.1f, 0xff0000ff);
+	//		Rect2D* sprite2 = new Rect2D(topRight.x, y, m_DashSize, 0.1f, 0xff0000ff);
 
 	//		tempLayer->add(sprite);
 	//		tempLayer->add(sprite2);
@@ -108,11 +108,11 @@ namespace spright {
 		float startY = down.y < curr.y ? down.y : curr.y;
 		float endY = down.y < curr.y ? curr.y : down.y;
 
-		engine::graphics::Layer* layer = dynamic_cast<engine::graphics::TileLayer*>(document->getLayerHandler()->getActiveLayer());
+		Layer* layer = dynamic_cast<TileLayer*>(document->getLayerHandler()->getActiveLayer());
 
 		auto it = layer->getRenderables().begin();
 		while (it != layer->getRenderables().end()) {
-			const engine::graphics::Bounds* bounds = (*it)->getBounds();
+			const Bounds* bounds = (*it)->getBounds();
 
 			if (bounds->minX > startX && bounds->maxX < endX && bounds->minY > startY && bounds->maxY < endY) {
 				Rect2D* sprite = static_cast<Rect2D*>(*it);
@@ -127,7 +127,7 @@ namespace spright {
 
 	void SelectTool::moveSelection(tool::PointerInfo& pointerInfo) {
 		Document* document = m_DocumentHandler->getActiveDocument();
-		engine::graphics::TileLayer* tileLayer = dynamic_cast<engine::graphics::TileLayer*>(document->getLayerHandler()->getActiveLayer());
+		TileLayer* tileLayer = dynamic_cast<TileLayer*>(document->getLayerHandler()->getActiveLayer());
 
 		Vec2 down = document->getCamera()->screenToModel(pointerInfo.down);
 		Vec2 curr = document->getCamera()->screenToModel(pointerInfo.curr);
