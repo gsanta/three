@@ -41,10 +41,10 @@ namespace spright {
 		float yEnd = static_cast<int>(topRight.y / tileSize) * tileSize;
 		float height = yEnd - yStart;
 
-		engine::graphics::Sprite* bottom = new engine::graphics::Sprite(xStart, yStart, width, 0.1f, color);
-		engine::graphics::Sprite* top = new engine::graphics::Sprite(xStart, yEnd, width, 0.1f, color);
-		engine::graphics::Sprite* left = new engine::graphics::Sprite(xStart, yStart, 0.1f, height, color);
-		engine::graphics::Sprite* right = new engine::graphics::Sprite(xEnd, yStart, 0.1f, height, color);
+		engine::graphics::Rect2D* bottom = new engine::graphics::Rect2D(xStart, yStart, width, 0.1f, color);
+		engine::graphics::Rect2D* top = new engine::graphics::Rect2D(xStart, yEnd, width, 0.1f, color);
+		engine::graphics::Rect2D* left = new engine::graphics::Rect2D(xStart, yStart, 0.1f, height, color);
+		engine::graphics::Rect2D* right = new engine::graphics::Rect2D(xEnd, yStart, 0.1f, height, color);
 
 		m_SelectionSprites.push_back(bottom);
 		m_SelectionSprites.push_back(top);
@@ -69,7 +69,7 @@ namespace spright {
 		float xDelta = static_cast<int>(m_AbsoluteDelta.x / tileSize) * tileSize;
 		float yDelta = static_cast<int>(m_AbsoluteDelta.y / tileSize) * tileSize;
 
-		for (Sprite* sprite : m_SelectionSprites) {
+		for (Rect2D* sprite : m_SelectionSprites) {
 			sprite->translate(Vec2(-m_PrevTranslate.x, -m_PrevTranslate.y));
 			sprite->translate(Vec2(xDelta, yDelta));
 		}

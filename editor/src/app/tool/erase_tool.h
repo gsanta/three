@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "../../engine/graphics/renderable/sprite.h"
+#include "../../engine/graphics/renderable/rect2d.h"
 #include "../../engine/graphics/renderable/renderable2d.h"
 #include "../document/document_handler.h"
 #include "tool.h"
@@ -15,12 +15,12 @@ namespace spright { namespace tool {
 	private:
 		DocumentHandler* m_DocumentHandler;
 		EventHandler* m_EventHandler;
-		vector<engine::graphics::Sprite*> m_SelectionSprites;
+		vector<engine::graphics::Rect2D*> m_SelectionSprites;
 
-		Sprite* m_TopLine = nullptr;
-		Sprite* m_RightLine = nullptr;
-		Sprite* m_BottomLine = nullptr;
-		Sprite* m_LeftLine = nullptr;
+		Rect2D* m_TopLine = nullptr;
+		Rect2D* m_RightLine = nullptr;
+		Rect2D* m_BottomLine = nullptr;
+		Rect2D* m_LeftLine = nullptr;
 
 		int m_EraserSize = 3;
 

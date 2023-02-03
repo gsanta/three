@@ -2,7 +2,7 @@
 #include "tool.h"
 #include "pointer_info.h"
 #include "../document/document_handler.h"
-#include "../../engine/graphics/renderable/sprite.h"
+#include "../../engine/graphics/renderable/rect2d.h"
 #include "../../engine/graphics/renderable/renderable2d.h"
 #include "../editor_config.h"
 #include "../service/services.h"
@@ -21,7 +21,7 @@ namespace spright { namespace tool {
 		spright::Services* m_Services;
 		EventHandler* m_EventHandler;
 		int m_Size = 1;
-		Sprite *sprite;
+		Rect2D *sprite;
 
 	public:
 		BrushTool(DocumentHandler *documentHandler, EditorConfig &editorConfig, spright::Services* services, EventHandler* eventHandler);

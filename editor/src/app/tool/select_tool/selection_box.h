@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "../../../engine/graphics/renderable/sprite.h"
+#include "../../../engine/graphics/renderable/rect2d.h"
 #include "../../document/document_handler.h"
 #include "../../model/rectangle.h"
 
@@ -13,7 +13,7 @@ namespace spright {
 	class SelectionBox {
 	private:
 		DocumentHandler* m_DocumentHandler;
-		vector<Sprite*> m_SelectionSprites;
+		vector<Rect2D*> m_SelectionSprites;
 
 		float m_DashSize = 0.2f;
 		Vec2 m_AbsoluteDelta;

@@ -105,12 +105,12 @@ namespace engine { namespace graphics {
 			float sizeX = j["sizeX"];
 			float sizeY = j["sizeY"];
 
-			engine::graphics::Sprite* sprite = new engine::graphics::Sprite(posX, posY, sizeX, sizeY, 0xff0000ff);
+			engine::graphics::Rect2D* sprite = new engine::graphics::Rect2D(posX, posY, sizeX, sizeY, 0xff0000ff);
 			add(sprite);
 		}
 	}
 
-	void TileLayer::add(Sprite* sprite)
+	void TileLayer::add(Rect2D* sprite)
 	{
 		Layer::add(sprite);
 
@@ -125,7 +125,7 @@ namespace engine { namespace graphics {
 	}
 
 	void TileLayer::updateTileIndex(int oldIndex, int newIndex) {
-		Sprite* sprite = dynamic_cast<Sprite*>(getAtTileIndex(oldIndex));
+		Rect2D* sprite = dynamic_cast<Rect2D*>(getAtTileIndex(oldIndex));
 		sprite->setTileIndex(newIndex);
 		m_TileIndexes[oldIndex] = nullptr;
 		m_TileIndexes[newIndex] = sprite;

@@ -8,7 +8,7 @@
 #include "../../engine/graphics/shader/shader.h"
 #include "../../engine/graphics/renderer/batchRenderer2d.h"
 #include "../../engine/graphics/renderable/line_shape.h"
-#include "../../engine/graphics/renderable/sprite.h"
+#include "../../engine/graphics/renderable/rect2d.h"
 #include "../../engine/system/window/window.h"
 
 namespace spright { namespace document {

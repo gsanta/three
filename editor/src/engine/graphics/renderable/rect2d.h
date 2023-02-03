@@ -11,13 +11,13 @@ namespace engine { namespace graphics {
 	using namespace engine::graphics;
 	using namespace spright::maths;
 
-	class Sprite : public Renderable2D {
+	class Rect2D : public Renderable2D {
 	private:
 		Vec3 m_Position;
 		Vec2 m_Size;
 		int m_TileIndex = -1;
 	public:
-		Sprite(float x, float y, float width, float height, unsigned int color);
+		Rect2D(float x, float y, float width, float height, unsigned int color);
 
 		Vec3 getPosition();
 		Vec2 getPosition2d();
