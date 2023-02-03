@@ -66,10 +66,10 @@ namespace spright { namespace tool {
 
 		unsigned int color = 0xff0099ff;
 
-		m_TopLine = new engine::graphics::Rect2D(-eraserSize / 2.0f, eraserSize / 2.0f, eraserSize, 0.1f, color);
-		m_RightLine = new engine::graphics::Rect2D(eraserSize / 2.0f, -eraserSize / 2.0f, 0.1f, eraserSize, color);
-		m_BottomLine = new engine::graphics::Rect2D(-eraserSize / 2.0f, -eraserSize / 2.0f, eraserSize, 0.1f, color);
-		m_LeftLine = new engine::graphics::Rect2D(-eraserSize / 2.0f, -eraserSize / 2.0f, 0.1f, eraserSize, color);
+		m_TopLine = new Rect2D(-eraserSize / 2.0f, eraserSize / 2.0f, eraserSize, 0.1f, color);
+		m_RightLine = new Rect2D(eraserSize / 2.0f, -eraserSize / 2.0f, 0.1f, eraserSize, color);
+		m_BottomLine = new Rect2D(-eraserSize / 2.0f, -eraserSize / 2.0f, eraserSize, 0.1f, color);
+		m_LeftLine = new Rect2D(-eraserSize / 2.0f, -eraserSize / 2.0f, 0.1f, eraserSize, color);
 
 		tempLayer->add(m_TopLine);
 		tempLayer->add(m_RightLine);

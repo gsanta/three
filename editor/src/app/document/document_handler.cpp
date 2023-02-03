@@ -20,11 +20,11 @@ namespace spright
 		void DocumentHandler::createUserLayer(std::string name, std::string id)
 		{
 #ifdef SPARKY_EMSCRIPTEN
-			engine::graphics::Shader *shaderUnlit = new engine::graphics::Shader("resources/shaders/basic.es3.vert", "resources/shaders/basic_unlit.es3.frag");
+			Shader* shaderUnlit *shaderUnlit = new GLShader("resources/shaders/basic.es3.vert", "resources/shaders/basic_unlit.es3.frag");
 #else
-			engine::graphics::Shader *shaderUnlit = new engine::graphics::Shader("shaders/basic.vert", "shaders/unlit.frag");
+			Shader *shaderUnlit = new GLShader("shaders/basic.vert", "shaders/unlit.frag");
 #endif
-			TileLayer *layer = new TileLayer(name, id, shaderUnlit, new BatchRenderer2D(), getActiveDocument()->getCamera(), getActiveDocument()->dimensions);
+			TileLayer *layer = new TileLayer(name, id, shaderUnlit, new GLRenderer2D(), getActiveDocument()->getCamera(), getActiveDocument()->dimensions);
 
 			m_ActiveDocument->getLayerHandler()->addLayer(layer);
 
@@ -58,22 +58,22 @@ namespace spright
 		void DocumentHandler::createDocument()
 		{
 #ifdef SPARKY_EMSCRIPTEN
-			Shader *shader = new Shader("resources/shaders/basic.es3.vert", "resources/shaders/basic.es3.frag");
-			Shader *shaderUnlit = new Shader("resources/shaders/basic.es3.vert", "resources/shaders/basic_unlit.es3.frag");
+			Shader *shader = new GLShader("resources/shaders/basic.es3.vert", "resources/shaders/basic.es3.frag");
+			Shader *shaderUnlit = new GLShader("resources/shaders/basic.es3.vert", "resources/shaders/basic_unlit.es3.frag");
 #else
-			Shader *shader = new Shader("shaders/basic.vert", "shaders/basic.frag");
-			Shader *shaderUnlit = new Shader("shaders/basic.vert", "shaders/unlit.frag");
+			Shader *shader = new GLShader("shaders/basic.vert", "shaders/basic.frag");
+			Shader *shaderUnlit = new GLShader("shaders/basic.vert", "shaders/unlit.frag");
 #endif
 			float pixelCount = 32.0f;
 			float height = 1.0f / m_Window->getRatio() * pixelCount;
 			Dimensions dimensions(-pixelCount / 2.0f, pixelCount / 2.0f, -pixelCount / 2.0f, pixelCount / 2.0f);
 			Dimensions cameraDimensions = getCameraDimensions(dimensions);
 			Canvas *canvas = new Canvas(pixelCount * 2.0f, pixelCount * 2.0f);
-			Camera *camera = new Camera(m_Window, engine::graphics::OrthoProjectionInfo(cameraDimensions.left, cameraDimensions.right, cameraDimensions.bottom, cameraDimensions.top));
+			Camera *camera = new Camera(m_Window, OrthoProjectionInfo(cameraDimensions.left, cameraDimensions.right, cameraDimensions.bottom, cameraDimensions.top));
 			Document *document = new Document(dimensions, camera, canvas);
 
-			TileLayer *tempLayer = new TileLayer("", DEFAULT_TEMP_LAYER_ID, shaderUnlit, new BatchRenderer2D(), document->getCamera(), dimensions);
-			TileLayer *backgroundLayer = new TileLayer("", DEFAULT_BACKGROUND_LAYER_ID, shaderUnlit, new BatchRenderer2D(), document->getCamera(), dimensions, 2.0f);
+			TileLayer *tempLayer = new TileLayer("", DEFAULT_TEMP_LAYER_ID, shaderUnlit, new GLRenderer2D(), document->getCamera(), dimensions);
+			TileLayer *backgroundLayer = new TileLayer("", DEFAULT_BACKGROUND_LAYER_ID, shaderUnlit, new GLRenderer2D(), document->getCamera(), dimensions, 2.0f);
 
 			document->getLayerHandler()->addBeforeLayer(backgroundLayer);
 			document->getLayerHandler()->addAfterLayer(tempLayer);

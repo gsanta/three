@@ -9,13 +9,14 @@
 
 namespace spright { namespace tool {
 	using namespace spright::maths;
+	using namespace ::engine::graphics;
 	using namespace document;
 
 	class EraseTool : public Tool {
 	private:
 		DocumentHandler* m_DocumentHandler;
 		EventHandler* m_EventHandler;
-		vector<engine::graphics::Rect2D*> m_SelectionSprites;
+		vector<Rect2D*> m_SelectionSprites;
 
 		Rect2D* m_TopLine = nullptr;
 		Rect2D* m_RightLine = nullptr;

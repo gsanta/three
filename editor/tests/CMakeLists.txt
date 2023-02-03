@@ -1,5 +1,5 @@
 set(TEST_MAIN "unit_tests")
-set(TEST_SOURCES "main.cpp" "maths/vec2_test.cpp" "src/engine/graphics/renderable/rect2d_test.cpp")
+set(TEST_SOURCES "main.cpp" "src/maths/vec2_test.cpp" "src/engine/graphics/renderable/rect2d_test.cpp")
 set(TEST_INCLUDES "./")
 
 add_executable(${TEST_MAIN} ${TEST_SOURCES})

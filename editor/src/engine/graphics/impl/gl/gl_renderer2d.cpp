@@ -1,17 +1,18 @@
-#include "batchRenderer2d.h"
 
-namespace engine { namespace graphics {
+#include "gl_renderer2d.h"
 
-	BatchRenderer2D::BatchRenderer2D() {
+namespace spright { namespace engine {
+
+	GLRenderer2D::GLRenderer2D() {
 		init();
 	}
 
-	BatchRenderer2D::~BatchRenderer2D() {
+	GLRenderer2D::~GLRenderer2D() {
 		delete m_IBO;
 		glDeleteBuffers(1, &m_VBO);
 	}
 
-	void BatchRenderer2D::init() {
+	void GLRenderer2D::init() {
 		glGenVertexArrays(1, &m_VAO);
 		glGenBuffers(1, &m_VBO);
 		glBindVertexArray(m_VAO);
@@ -56,7 +57,7 @@ namespace engine { namespace graphics {
 //#endif
 	}
 
-	void BatchRenderer2D::begin()
+	void GLRenderer2D::begin()
 	{	
 		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 
@@ -67,7 +68,7 @@ namespace engine { namespace graphics {
 //#endif
 	}
 
-	void BatchRenderer2D::end()
+	void GLRenderer2D::end()
 	{
 //#ifdef SPARKY_EMSCRIPTEN
 		//glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
@@ -79,7 +80,7 @@ namespace engine { namespace graphics {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
-	void BatchRenderer2D::flush()
+	void GLRenderer2D::flush()
 	{
 		//for (int i = 0; i < m_TextureSlots.size(); i++) {
 		//	glActiveTexture(GL_TEXTURE0 + i);
