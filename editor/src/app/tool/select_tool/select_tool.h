@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "../../../engine/graphics/renderable/sprite.h"
+#include "../../../engine/graphics/renderable/rect2d.h"
 #include "../../document/document_handler.h"
 #include "../tool.h"
 #include "../../service/core/event/event_handler.h"
@@ -18,8 +18,8 @@ namespace spright {
 		EventHandler* m_EventHandler;
 		SelectionBox* m_SelectionBox;
 
-		//vector<engine::graphics::Sprite*> m_SelectionSprites;
-		vector<Sprite*> m_Data;
+		//vector<engine::graphics::Rect2D*> m_SelectionSprites;
+		vector<Rect2D*> m_Data;
 		vector<Vec2> m_OrigPositions;
 
 		//float m_DashSize = 0.2f;

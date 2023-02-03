@@ -9,7 +9,7 @@ namespace spright { namespace tool {
 	void RectangleTool::pointerDown(PointerInfo& pointerInfo)
 	{
 		int color = m_Services->getColorPalette()->color;
-		this->m_Rect = new engine::graphics::Sprite(pointerInfo.curr.x, pointerInfo.curr.y, 0.1f, 0.1f, color);
+		this->m_Rect = new engine::graphics::Rect2D(pointerInfo.curr.x, pointerInfo.curr.y, 0.1f, 0.1f, color);
 		this->m_DocumentHandler->getActiveDocument()->getLayerHandler()->getActiveLayer()->add(m_Rect);
 	}
 
@@ -17,7 +17,7 @@ namespace spright { namespace tool {
 	{
 		if (!pointerInfo.isDown) {
 			int color = m_Services->getColorPalette()->color;
-			this->m_Rect = new engine::graphics::Sprite(pointerInfo.curr.x, pointerInfo.curr.y - m_Size, m_Size, m_Size, color);
+			this->m_Rect = new engine::graphics::Rect2D(pointerInfo.curr.x, pointerInfo.curr.y - m_Size, m_Size, m_Size, color);
 			this->m_DocumentHandler->getActiveDocument()->getLayerHandler()->getActiveLayer()->add(m_Rect);
 		
 			m_EventHandler->emitDataChange();

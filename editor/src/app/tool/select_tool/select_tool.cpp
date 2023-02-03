@@ -65,15 +65,15 @@ namespace spright {
 	//	auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayer(DEFAULT_TEMP_LAYER_ID);
 	//	tempLayer->clear();
 
-	//	for (engine::graphics::Sprite* sprite : m_SelectionSprites) {
+	//	for (engine::graphics::Rect2D* sprite : m_SelectionSprites) {
 	//		delete sprite;
 	//	}
 
 	//	m_SelectionSprites.clear();
 
 	//	for (float x = bottomLeft.x; x < topRight.x; x += 2 * m_DashSize) {
-	//		engine::graphics::Sprite* sprite = new engine::graphics::Sprite(x, bottomLeft.y, m_DashSize, 0.1f, 0xff0000ff);
-	//		engine::graphics::Sprite* sprite2 = new engine::graphics::Sprite(x, topRight.y, m_DashSize, 0.1f, 0xff0000ff);
+	//		engine::graphics::Rect2D* sprite = new engine::graphics::Rect2D(x, bottomLeft.y, m_DashSize, 0.1f, 0xff0000ff);
+	//		engine::graphics::Rect2D* sprite2 = new engine::graphics::Rect2D(x, topRight.y, m_DashSize, 0.1f, 0xff0000ff);
 
 	//		tempLayer->add(sprite);
 	//		tempLayer->add(sprite2);
@@ -83,8 +83,8 @@ namespace spright {
 	//	}
 
 	//	for (float y = bottomLeft.y; y < topRight.y; y += 2 * m_DashSize) {
-	//		engine::graphics::Sprite* sprite = new engine::graphics::Sprite(bottomLeft.x, y, m_DashSize, 0.1f, 0xff0000ff);
-	//		engine::graphics::Sprite* sprite2 = new engine::graphics::Sprite(topRight.x, y, m_DashSize, 0.1f, 0xff0000ff);
+	//		engine::graphics::Rect2D* sprite = new engine::graphics::Rect2D(bottomLeft.x, y, m_DashSize, 0.1f, 0xff0000ff);
+	//		engine::graphics::Rect2D* sprite2 = new engine::graphics::Rect2D(topRight.x, y, m_DashSize, 0.1f, 0xff0000ff);
 
 	//		tempLayer->add(sprite);
 	//		tempLayer->add(sprite2);
@@ -115,7 +115,7 @@ namespace spright {
 			const engine::graphics::Bounds* bounds = (*it)->getBounds();
 
 			if (bounds->minX > startX && bounds->maxX < endX && bounds->minY > startY && bounds->maxY < endY) {
-				Sprite* sprite = static_cast<Sprite*>(*it);
+				Rect2D* sprite = static_cast<Rect2D*>(*it);
 				m_Data.push_back(sprite);
 				m_OrigPositions.push_back(Vec2(sprite->getPosition().x, sprite->getPosition().y));
 			}
@@ -137,7 +137,7 @@ namespace spright {
 		Vec2 finalMove(moveTile.x * tileLayer->getTileSize(), moveTile.y * tileLayer->getTileSize());
 
 		for (int i = 0; i < m_Data.size(); i++) {
-			Sprite* sprite = m_Data[i];
+			Rect2D* sprite = m_Data[i];
 			
 			sprite->setPosition(m_OrigPositions[i]);
 			Vec3 position = sprite->getPosition();
@@ -160,7 +160,7 @@ namespace spright {
 		Renderable2D* renderable = tileLayer->getAtTileIndex(tileIndex);
 
 		if (renderable != nullptr) {
-			Sprite* sprite = static_cast<Sprite*>(renderable);
+			Rect2D* sprite = static_cast<Rect2D*>(renderable);
 			m_Data.push_back(sprite);
 			m_OrigPositions.push_back(Vec2(sprite->getPosition().x, sprite->getPosition().y));
 			

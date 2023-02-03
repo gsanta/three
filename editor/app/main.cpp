@@ -15,7 +15,7 @@
 
 #include "../src/engine/graphics/renderer/renderer2d.h"
 #include "../src/engine/graphics/renderable/renderable2d.h"
-#include "../src/engine/graphics/renderable/sprite.h"
+#include "../src/engine/graphics/renderable/rect2d.h"
 #include "../src/engine/graphics/renderer/batchRenderer2d.h"
 #include "../src/engine/graphics/layer/dimensions.h"
 
@@ -209,8 +209,8 @@ int main()
 	window = editor->getWindow();
 
 	// Group* group = new Group(Mat4::translation(maths::Vec3(-5.0f, 5.0f, 0.0f)));
-	// group->add(new Sprite(0, 0, 6, 3, maths::Vec4(1, 1, 1, 1)));
-	// group->add(new Sprite(0.5f, 0.5f, 0.5f, 2.0f, maths::Vec4(1, 0, 1, 1)));
+	// group->add(new Rect2D(0, 0, 6, 3, maths::Vec4(1, 1, 1, 1)));
+	// group->add(new Rect2D(0.5f, 0.5f, 0.5f, 2.0f, maths::Vec4(1, 0, 1, 1)));
 	// layer.add(group);
 
 	GLint textIDs[] = {

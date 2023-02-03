@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../engine/graphics/renderable/sprite.h"
+#include "../../engine/graphics/renderable/rect2d.h"
 #include "tool.h"
 #include "../document/document_handler.h"
 #include "../../maths/vec2.h"
@@ -17,7 +17,7 @@ namespace spright { namespace tool {
 		EventHandler* m_EventHandler;
 		Services* m_Services;
 		float m_Size = 10;
-		engine::graphics::Sprite* m_Rect = nullptr;
+		engine::graphics::Rect2D* m_Rect = nullptr;
 
 	public:
 		RectangleTool(DocumentHandler* documentHandler, Services* services, EventHandler* eventHandler);

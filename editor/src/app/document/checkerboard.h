@@ -1,7 +1,7 @@
 #pragma once
 
 #include "document.h"
-#include "../../engine/graphics/renderable/sprite.h"
+#include "../../engine/graphics/renderable/rect2d.h"
 
 namespace spright { namespace document {
 

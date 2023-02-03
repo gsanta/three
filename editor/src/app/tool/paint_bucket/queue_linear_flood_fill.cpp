@@ -110,7 +110,7 @@ namespace spright {
         if (renderable == nullptr) {
             Vec2 bottomLeftPos = layer->getBottomLeftPos(tileIndex);
             float tileSize = layer->getTileSize();
-            layer->add(new Sprite(bottomLeftPos.x, bottomLeftPos.y, tileSize, tileSize, color));
+            layer->add(new Rect2D(bottomLeftPos.x, bottomLeftPos.y, tileSize, tileSize, color));
         }
         else {
             renderable->setColor(color);

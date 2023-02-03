@@ -19,7 +19,7 @@ namespace spright { namespace document {
 			for (float j = bottom; j < top; j += tileSize) {
 				counter++;
 				int color = counter % 2 == 0 ? 0Xff787878 : 0XffE0E0E0;
-				layer->add(new engine::graphics::Sprite(i, j, tileSize, tileSize, color));
+				layer->add(new engine::graphics::Rect2D(i, j, tileSize, tileSize, color));
 			}
 
 			counter = 1;

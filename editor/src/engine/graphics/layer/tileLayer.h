@@ -3,7 +3,7 @@
 #include <string>
 #include "layer.h"
 #include "../renderer/batchRenderer2d.h"
-#include "../renderable/sprite.h"
+#include "../renderable/rect2d.h"
 #include "../../maths/vec2_int.h"
 #include "../../../maths/vec2.h"
 #include "../renderable/bounds.h"
@@ -40,7 +40,7 @@ namespace engine { namespace graphics {
 
 		virtual nlohmann::json getJson() override;
 		virtual void setJson(std::string json);
-		virtual void add(Sprite* sprite);
+		virtual void add(Rect2D* sprite);
 		void updateTileIndex(int oldIndex, int newIndex);
 		Renderable2D* getAtTileIndex(int tileIndex);
 		int getTileIndex(int tileX, int tileY);

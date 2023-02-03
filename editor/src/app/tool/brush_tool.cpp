@@ -66,7 +66,7 @@ namespace spright { namespace tool {
 
 		if (renderable == nullptr) {
 			Vec2 worldPos = tileLayer->getBottomLeftPos(tileIndex);
-			engine::graphics::Sprite* sprite = new engine::graphics::Sprite(worldPos.x, worldPos.y, tileLayer->getTileSize(), tileLayer->getTileSize(), color);
+			engine::graphics::Rect2D* sprite = new engine::graphics::Rect2D(worldPos.x, worldPos.y, tileLayer->getTileSize(), tileLayer->getTileSize(), color);
 			tileLayer->add(sprite);
 		}
 		else {

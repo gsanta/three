@@ -37,7 +37,7 @@ namespace spright {
 
 			Vec2 bottomLeftPos = layer->getBottomLeftPos(tile["i"]);
 			float tileSize = layer->getTileSize();
-			layer->add(new Sprite(bottomLeftPos.x, bottomLeftPos.y, tileSize, tileSize, tile["c"]));
+			layer->add(new Rect2D(bottomLeftPos.x, bottomLeftPos.y, tileSize, tileSize, tile["c"]));
 		}
 
 		return layer;

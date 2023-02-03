@@ -5,7 +5,7 @@
 #include "flood_fill_range.h"
 #include "flood_fill_range_queue.h"
 #include "../../../engine/graphics/layer/tileLayer.h"
-#include "../../../engine/graphics/renderable/sprite.h"
+#include "../../../engine/graphics/renderable/rect2d.h"
 #include "../../../engine/graphics/renderable/renderable2d.h"
 #include "../../../maths/vec2.h"
 
