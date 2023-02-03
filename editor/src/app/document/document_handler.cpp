@@ -20,7 +20,7 @@ namespace spright
 		void DocumentHandler::createUserLayer(std::string name, std::string id)
 		{
 #ifdef SPARKY_EMSCRIPTEN
-			Shader* shaderUnlit *shaderUnlit = new GLShader("resources/shaders/basic.es3.vert", "resources/shaders/basic_unlit.es3.frag");
+			Shader *shaderUnlit = new GLShader("resources/shaders/basic.es3.vert", "resources/shaders/basic_unlit.es3.frag");
 #else
 			Shader *shaderUnlit = new GLShader("shaders/basic.vert", "shaders/unlit.frag");
 #endif
