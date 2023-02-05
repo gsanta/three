@@ -28,7 +28,7 @@ namespace spright { namespace maths {
 		void setElements(float *elements);
 
 		static Mat4 otrthographic(float left, float right, float bottom, float top, float near, float far);
-		static Mat4 perspective(float fov, float aspectRatio, float near, float far);
+		static Mat4 perspective(float fov, float m_AspectRatio, float near, float far);
 		
 		static Mat4 translation(const Vec3& translation);
 		static Mat4 rotation(float angle, const Vec3& axis);

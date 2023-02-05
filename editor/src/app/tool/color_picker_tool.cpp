@@ -10,9 +10,7 @@ namespace spright {
 
 		TileLayer* tileLayer = dynamic_cast<TileLayer*>(m_DocumentHandler->getActiveDocument()->getLayerHandler()->getActiveLayer());
 		Camera* camera = m_DocumentHandler->getActiveDocument()->getCamera();
-		Vec2 model = camera->screenToModel(pointerInfo.curr);
-
-		Vec2Int tilePos = tileLayer->getTilePos(model);
+		Vec2Int tilePos = tileLayer->getTilePos(pointerInfo.curr);
 		int tileIndex = tileLayer->getTileIndex(tilePos.x, tilePos.y);
 		Renderable2D* renderable = tileLayer->getAtTileIndex(tileIndex);
 

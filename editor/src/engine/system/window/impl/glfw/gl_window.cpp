@@ -1,10 +1,10 @@
-#include "window.h"
+#include "gl_window.h"
 
 namespace engine { namespace system {
 
 		void window_resize(GLFWwindow* window, int width, int height);
 
-		Window::Window(const char* title, int width, int height) {
+		GLWindow::GLWindow(const char* title, int width, int height) {
 			m_Title = title;
 			m_Width = width;
 			m_Height = height;
@@ -22,13 +22,13 @@ namespace engine { namespace system {
 			}
 		}
 
-		Window::~Window()
+		GLWindow::~GLWindow()
 		{
 			delete m_InputHandler;
 			glfwTerminate();
 		}
 
-		bool Window::init() {
+		bool GLWindow::init() {
 
 			if (!glfwInit()) {
 				std::cout << "Failed to initialize GLFW!" << std::endl;
@@ -57,12 +57,12 @@ namespace engine { namespace system {
 			return true;
 		}
 
-		void Window::setSize(int width, int height)
+		void GLWindow::setSize(int width, int height)
 		{
 			glfwSetWindowSize(m_Window, width, height);
 		}
 
-		bool Window::isKeyPressed(unsigned int keycode) const
+		bool GLWindow::isKeyPressed(unsigned int keycode) const
 		{
 			if (keycode >= MAX_KEYS) {
 				return false;
@@ -70,30 +70,30 @@ namespace engine { namespace system {
 			return m_Keys[keycode];
 		}
 
-		bool Window::isMouseButtonPressed(unsigned int button) const {
+		bool GLWindow::isMouseButtonPressed(unsigned int button) const {
 			if (button >= MAX_BUTTONS) {
 				return false;
 			}
 			return m_MouseButtons[button];
 		}
 
-		void Window::getMousePosition(double& x, double& y) const {
+		void GLWindow::getMousePosition(double& x, double& y) const {
 			x = m_x;
 			y = m_y;
 		}
 
-		float Window::getRatio()
+		float GLWindow::getRatio()
 		{
-			return (float) m_Width / (float) m_Height;
+			return (float)m_Width / (float)m_Height;
 		}
 
-		InputHandler* Window::getInputHandler() const
+		InputHandler* GLWindow::getInputHandler() const
 		{
 			return this->m_InputHandler;
 		}
 
-		void Window::mouse_input_callback(GLFWwindow* window, int button, int action, int mods) {
-			Window* win = (Window*)glfwGetWindowUserPointer(window);
+		void GLWindow::mouse_input_callback(GLFWwindow* window, int button, int action, int mods) {
+			GLWindow* win = (GLWindow*)glfwGetWindowUserPointer(window);
 
 			win->m_MouseButtons[button] = action != GLFW_RELEASE;
 
@@ -106,35 +106,34 @@ namespace engine { namespace system {
 		}
 
 
-		void Window::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-		{
-			Window* win = (Window*) glfwGetWindowUserPointer(window);
+		void GLWindow::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+			GLWindow* win = (GLWindow*)glfwGetWindowUserPointer(window);
 			win->m_Keys[key] = action != GLFW_RELEASE;
 
 			win->getInputHandler()->emitKeyChange(key, action != GLFW_RELEASE);
 		}
 
-		void Window::cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {
-			Window* win = (Window*)glfwGetWindowUserPointer(window);
+		void GLWindow::cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {
+			GLWindow* win = (GLWindow*)glfwGetWindowUserPointer(window);
 			win->m_x = xpos;
 			win->m_y = ypos;
 
 			win->getInputHandler()->emitMouseMove(xpos, ypos);
 		}
 
-		void Window::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+		void GLWindow::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 		{
-			Window* win = (Window*)glfwGetWindowUserPointer(window);
+			GLWindow* win = (GLWindow*)glfwGetWindowUserPointer(window);
 
 			win->getInputHandler()->emitScroll(xoffset, yoffset);
 		}
 
-		void Window::clear() const
+		void GLWindow::clear() const
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		}
 
-		float Window::beforeRender() {
+		float GLWindow::beforeRender() {
 			float currentFrame = glfwGetTime();
 			float deltaTime = currentFrame - lastFrame;
 			lastFrame = currentFrame;
@@ -147,13 +146,13 @@ namespace engine { namespace system {
 			return deltaTime;
 		}
 
-		void Window::afterRender() {
+		void GLWindow::afterRender() {
 			glfwPollEvents();
 			glfwGetFramebufferSize(m_Window, &m_Width, &m_Height);
 			glfwSwapBuffers(m_Window);
 		}
 
-		bool Window::closed() const
+		bool GLWindow::closed() const
 		{
 			return glfwWindowShouldClose(m_Window) == 1;
 		}
@@ -161,7 +160,7 @@ namespace engine { namespace system {
 		void window_resize(GLFWwindow* window, int width, int height)
 		{
 			glViewport(0, 0, width, height);
-			Window* win = (Window*)glfwGetWindowUserPointer(window);
+			GLWindow* win = (GLWindow*)glfwGetWindowUserPointer(window);
 			win->m_Width = width;
 			win->m_Height = height;
 		}
@@ -172,5 +171,4 @@ namespace engine { namespace system {
 		//	win->m_Width = width;
 		//	win->m_Height = height;
 		//}
-	}
-}
+}}

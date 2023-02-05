@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../engine/system/window/window.h"
+#include "../engine/system/window/impl/glfw/gl_window.h"
 #include "tool/tool_handler.h"
 #include "tool/pan_tool.h"
 #include "tool/zoom_tool.h"

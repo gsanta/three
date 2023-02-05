@@ -10,12 +10,11 @@ namespace spright {
 	void SelectTool::pointerDown(tool::PointerInfo& pointerInfo)
 	{
 		Document* document = this->m_DocumentHandler->getActiveDocument();
-		Vec2 curr = document->getCamera()->screenToModel(pointerInfo.curr);
-
-		m_IsMove = m_SelectionBox->isInsideSelection(curr);
+		
+		m_IsMove = m_SelectionBox->isInsideSelection(pointerInfo.curr);
 
 		if (!m_IsMove) {
-			m_SelectionBox->start(curr);
+			m_SelectionBox->start(pointerInfo.curr);
 		}
 	}
 
@@ -38,13 +37,11 @@ namespace spright {
 		}
 
 		Document* document = this->m_DocumentHandler->getActiveDocument();
-		Vec2 curr = document->getCamera()->screenToModel(pointerInfo.curr);
-		Vec2 prev = document->getCamera()->screenToModel(pointerInfo.prev);
 
 
 		if (m_IsMove) {
 			moveSelection(pointerInfo);
-			m_SelectionBox->move(curr - prev);
+			m_SelectionBox->move(pointerInfo.curr - pointerInfo.prev);
 		}
 		else {
 
@@ -54,7 +51,7 @@ namespace spright {
 			//float startY = down.y < curr.y ? down.y : curr.y;
 			//float endY = down.y < curr.y ? curr.y : down.y;
 
-			m_SelectionBox->update(curr);
+			m_SelectionBox->update(pointerInfo.curr);
 
 			//updateSelectionBox(Vec2(startX, startY), Vec2(endX, endY));
 		}
@@ -100,8 +97,8 @@ namespace spright {
 
 		Document* document = m_DocumentHandler->getActiveDocument();
 
-		Vec2 down = document->getCamera()->screenToModel(pointerInfo.down);
-		Vec2 curr = document->getCamera()->screenToModel(pointerInfo.curr);
+		Vec2 down = pointerInfo.down;
+		Vec2 curr = pointerInfo.curr;
 
 		float startX = down.x < curr.x ? down.x : curr.x;
 		float endX = down.x < curr.x ? curr.x : down.x;
@@ -129,8 +126,8 @@ namespace spright {
 		Document* document = m_DocumentHandler->getActiveDocument();
 		TileLayer* tileLayer = dynamic_cast<TileLayer*>(document->getLayerHandler()->getActiveLayer());
 
-		Vec2 down = document->getCamera()->screenToModel(pointerInfo.down);
-		Vec2 curr = document->getCamera()->screenToModel(pointerInfo.curr);
+		Vec2 down = pointerInfo.down;
+		Vec2 curr = pointerInfo.curr;
 
 		Vec2 move(curr - down);
 		Vec2Int moveTile(move.x / tileLayer->getTileSize(), move.y / tileLayer->getTileSize());

@@ -124,11 +124,11 @@ namespace spright { namespace maths {
 		return result;
 	}
 	
-	Mat4 Mat4::perspective(float fov, float aspectRatio, float near, float far) {
+	Mat4 Mat4::perspective(float fov, float m_AspectRatio, float near, float far) {
 		Mat4 result(1.0f);
 
 		float q = 1.0f / (float)tan(engine::maths::toRadians(0.5f * fov));
-		float a = q / aspectRatio;
+		float a = q / m_AspectRatio;
 
 		float b = (near + far) / (near - far);
 		float c = (2 * near * far) / (near - far);
