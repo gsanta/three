@@ -43,9 +43,7 @@ void setWindowSize(int width, int height)
 	if (window != nullptr)
 	{
 		window->setSize(width, height);
-		Dimensions newDim = editor->getDocumentHandler()->getCameraDimensions(editor->getDocumentHandler()->getActiveDocument()->dimensions);
-
-		editor->getDocumentHandler()->getActiveDocument()->getCamera()->updateWindowSize(OrthoProjectionInfo(newDim.left, newDim.right, newDim.bottom, newDim.top));
+		editor->getDocumentHandler()->getActiveDocument()->getCamera()->updateWindowSize(width, height);
 	}
 }
 

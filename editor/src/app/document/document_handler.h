@@ -35,6 +35,5 @@ namespace spright { namespace document {
 		inline bool hasActiveDocument() const {
 			return m_ActiveDocument != nullptr;
 		}
-		Dimensions getCameraDimensions(Dimensions documentDimensions);
 	};
 }}

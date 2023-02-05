@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../layer/dimensions.h"
+
 namespace engine { namespace graphics {
 
 	class OrthoProjectionInfo {
@@ -8,13 +10,15 @@ namespace engine { namespace graphics {
 		float right;
 		float bottom;
 		float top;
-		float near = -1.0f;
-		float far = 1.0f;
+		float near;
+		float far;
 	public:
-		OrthoProjectionInfo(float left, float right, float bottom, float top);
+		OrthoProjectionInfo(Dimensions dimensions, float near, float far);
 		OrthoProjectionInfo();
 
-		float getWidth();
-		float getHeight();
+		float getWidth() const;
+		float getHeight() const;
+
+		void setSize(float newWidth, float newHeigt);
 	};
 }}

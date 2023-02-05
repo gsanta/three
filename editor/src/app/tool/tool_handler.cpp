@@ -114,8 +114,7 @@ namespace spright { namespace tool {
 			else {
 				m_Window->setSize(800, 1100);
 			}
-			Dimensions newDim = m_DocumentHandler->getCameraDimensions(m_DocumentHandler->getActiveDocument()->dimensions);
-			m_Camera->updateWindowSize(OrthoProjectionInfo(newDim.left, newDim.right, newDim.bottom, newDim.top));
+			m_Camera->updateWindowSize(m_Window->getWidth(), m_Window->getHeight());
 			//std::string str = m_JsonExport->exportDocument(m_DocumentHandler->getActiveDocument());
 			//m_JsonExport->importDocument(m_DocumentHandler, str);
 			//m_JsonExport->importDocument("{ \"tiles\": [ {\"i\": 1, \"c\": \"black\"} ] }");

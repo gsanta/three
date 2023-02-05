@@ -4,7 +4,7 @@ namespace spright {
 	Editor::Editor()
 	{
 		m_Canvas = std::make_unique<Canvas>(1500, 800);
-		m_Window = new Window("Editor", 800, 800);
+		m_Window = new GLWindow("Editor", 800, 800);
 		m_DocumentHandler = new DocumentHandler(m_Window);
 
 		m_DocumentHandler->createDocument();

@@ -47,8 +47,7 @@ namespace spright { namespace tool {
 
 		for (int i = 0; i < m_Size; i++) {
 			for (int j = 0; j < m_Size; j++) {
-				Vec2 model = camera->screenToModel(pointerInfo.curr);
-				Vec2Int tilePos = tileLayer->getTilePos(model);
+				Vec2Int tilePos = tileLayer->getTilePos(pointerInfo.curr);
 
 				setColor(tileLayer, tilePos);
 			}

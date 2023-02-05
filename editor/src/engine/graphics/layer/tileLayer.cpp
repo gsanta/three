@@ -50,7 +50,7 @@ namespace engine { namespace graphics {
 
 	// TODO: check if it works for both even and odd number of tiles
 	maths::Vec2Int TileLayer::getTilePos(Vec2 pos) {
-		Vec2 adjustedPos(pos.x - m_Dimensions.left, pos.y - m_Dimensions.bottom);
+		Vec2 adjustedPos(pos.x - m_Camera->getDimensions().left, pos.y - m_Camera->getDimensions().bottom);
 		float tileSize = m_TileSize;
 		int tileX = (int)(adjustedPos.x / tileSize);
 		int tileY = (int)(adjustedPos.y / tileSize);
