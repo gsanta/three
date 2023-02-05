@@ -8755,6 +8755,12 @@ function unexportedRuntimeSymbol(sym) {
       GLFW.active = null;
     }
 
+  function _glfwWindowShouldClose(winid) {
+      var win = GLFW.WindowFromId(winid);
+      if (!win) return 0;
+      return win.shouldClose;
+    }
+
   function __isLeapYear(year) {
         return year%4 === 0 && (year%100 !== 0 || year%400 === 0);
     }
@@ -9496,6 +9502,7 @@ var wasmImports = {
   "glfwSwapBuffers": _glfwSwapBuffers,
   "glfwSwapInterval": _glfwSwapInterval,
   "glfwTerminate": _glfwTerminate,
+  "glfwWindowShouldClose": _glfwWindowShouldClose,
   "strftime_l": _strftime_l
 };
 var asm = createWasm();
@@ -9558,7 +9565,7 @@ var dynCall_iiiiij = Module["dynCall_iiiiij"] = createExportWrapper("dynCall_iii
 var dynCall_iiiiijj = Module["dynCall_iiiiijj"] = createExportWrapper("dynCall_iiiiijj");
 /** @type {function(...*):?} */
 var dynCall_iiiiiijj = Module["dynCall_iiiiiijj"] = createExportWrapper("dynCall_iiiiiijj");
-var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 83328;
+var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 83520;
 
 // include: postamble.js
 // === Auto-generated postamble setup entry stuff ===
