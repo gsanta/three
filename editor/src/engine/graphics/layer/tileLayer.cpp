@@ -26,8 +26,8 @@ namespace engine { namespace graphics {
 
 		float tileSize = m_TileSize;
 
-		float x = static_cast<float>(tilePos.x) * tileSize + m_Dimensions.left;
-		float y = static_cast<float>(tilePos.y) * tileSize + m_Dimensions.bottom;
+		float x = static_cast<float>(tilePos.x) * tileSize + m_CameraDim.left;
+		float y = static_cast<float>(tilePos.y) * tileSize + m_CameraDim.bottom;
 
 		return Vec2(x, y);
 	}
@@ -37,7 +37,7 @@ namespace engine { namespace graphics {
 		int y = tileIndex / m_TileBounds.getWidth();
 		int x = tileIndex % m_TileBounds.getWidth();
 
-		return Vec2(x * m_TileSize + m_Dimensions.left, y * m_TileSize + m_Dimensions.bottom);
+		return Vec2(x * m_TileSize + m_CameraDim.left, y * m_TileSize + m_CameraDim.bottom);
 	}
 
 	Vec2 TileLayer::getCenterPos(int tileIndex) {
@@ -50,9 +50,10 @@ namespace engine { namespace graphics {
 
 	// TODO: check if it works for both even and odd number of tiles
 	maths::Vec2Int TileLayer::getTilePos(Vec2 pos) {
-		Vec2 adjustedPos(pos.x - m_Camera->getDimensions().left, pos.y - m_Camera->getDimensions().bottom);
+		Vec2 adjustedPos(pos.x - m_CameraDim.left, pos.y - m_CameraDim.bottom);
 		float tileSize = m_TileSize;
 		int tileX = (int)(adjustedPos.x / tileSize);
+
 		int tileY = (int)(adjustedPos.y / tileSize);
 
 		return maths::Vec2Int(tileX, tileY);
@@ -74,8 +75,8 @@ namespace engine { namespace graphics {
 	{
 		float tileSize = m_TileSize;
 
-		float worldX = x * tileSize + tileSize / 2 + m_Dimensions.left;
-		float worldY = y * tileSize + tileSize / 2 + m_Dimensions.bottom;
+		float worldX = x * tileSize + tileSize / 2 + m_CameraDim.left;
+		float worldY = y * tileSize + tileSize / 2 + m_CameraDim.bottom;
 
 		return Vec2(worldX, worldY);
 	}

@@ -22,7 +22,7 @@ namespace engine
 			std::string m_Id;
 			std::string m_Name;
 			bool m_IsEnabled = true;
-			Dimensions m_Dimensions;
+			Dimensions m_CameraDim;
 
 		protected:
 			Layer(std::string name, std::string id, Renderer2D *renderer, Shader *shader, Camera* camera, Dimensions dimensions);

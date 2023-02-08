@@ -27,11 +27,11 @@ namespace engine { namespace graphics {
 
 	void Camera::zoom(float deltaWidth)
 	{
-		float newWidth = m_Dimensions.getWidth() + deltaWidth;
+		float newWidth = m_CameraDim.getWidth() + deltaWidth;
 		float newHeight = newWidth / getAspectRatio();
 
 		m_Zoom = m_InitialWidth / newWidth;
-		m_Dimensions.setSize(newWidth, newHeight);
+		m_CameraDim.setSize(newWidth, newHeight);
 		updateAspectRatio();
 	}
 
@@ -42,7 +42,7 @@ namespace engine { namespace graphics {
 
 	const Dimensions& Camera::getDimensions() const
 	{
-		return m_Dimensions;
+		return m_CameraDim;
 	}
 
 	Mat4 Camera::getProjectionMatrix() {
@@ -65,9 +65,9 @@ namespace engine { namespace graphics {
 	{
 		m_WindowWidth = windowWidth;
 		m_WindowHeight = windowHeight;
-		m_Dimensions = getCameraDimensions();
+		m_CameraDim = getCameraDimensions();
 
-		m_InitialWidth = m_Dimensions.right - m_Dimensions.left;
+		m_InitialWidth = m_CameraDim.right - m_CameraDim.left;
 		m_View = Mat4::lookAt(Vec3(0, 0, z), Vec3(0, 0, 0), Vec3(0, 1, 0));
 		m_Zoom = 1.0f;
 		m_Translate.x = 0;
@@ -78,8 +78,8 @@ namespace engine { namespace graphics {
 
 	void Camera::updateAspectRatio()
 	{
-		m_AspectRatio = (m_Dimensions.right - m_Dimensions.left) / (m_Dimensions.top - m_Dimensions.bottom);
-		m_ProjectionMatrix = Mat4::otrthographic(m_Dimensions.left, m_Dimensions.right, m_Dimensions.bottom, m_Dimensions.top, m_Near, m_Far);
+		m_AspectRatio = (m_CameraDim.right - m_CameraDim.left) / (m_CameraDim.top - m_CameraDim.bottom);
+		m_ProjectionMatrix = Mat4::otrthographic(m_CameraDim.left, m_CameraDim.right, m_CameraDim.bottom, m_CameraDim.top, m_Near, m_Far);
 	}
 
 	Vec2 Camera::screenToModel(Vec2 screen) {
@@ -87,12 +87,20 @@ namespace engine { namespace graphics {
 	}
 
 	Vec2 Camera::screenToCameraPos(double x, double y) {
-		float w = m_Dimensions.getWidth();
-		float h = m_Dimensions.getHeight();
-		float xPos = x * w / m_WindowWidth - w / 2;
-		float yPos = h / 2 - y * h / m_WindowHeight;
+		float w = m_CameraDim.getWidth();
+		float h = m_CameraDim.getHeight();
 
-		return Vec2(xPos / getZoom() + m_Translate.x, yPos / getZoom() + m_Translate.y);
+		Mat4 mat4 = Mat4::identity();
+		mat4 = mat4.scale(Vec3(m_CameraDim.getWidth() / m_WindowWidth, m_CameraDim.getHeight() / m_WindowHeight, 1));
+
+		Vec4 result = mat4 * Vec4(x, -y, 0.0f, 1.0f);
+
+		Mat4 mat2 = Mat4::identity();
+		mat2 = mat2.translation(Vec3(m_Translate.x - w / 2.0f, m_Translate.y + h / 2.0f, 0.0f));
+
+		result = mat2 * result;
+
+		return Vec2(result.x, result.y);
 	}
 
 	Dimensions Camera::getCameraDimensions()

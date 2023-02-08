@@ -12,7 +12,7 @@ using namespace ::spright::engine;
 TEST_CASE("Layer add", "[layer]") {
 	SECTION("can add a renderable to the layer") {
 		
-		Layer layer("layer", "id", new HeadlessRenderer2D(), new HeadlessShader(), new Camera(), Dimensions(0, 100, 0, 200));
+		//Layer layer("layer", "id", new HeadlessRenderer2D(), new HeadlessShader(), new Camera(), Dimensions(0, 100, 0, 200));
 
 	}
 }

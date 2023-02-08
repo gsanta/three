@@ -17,7 +17,7 @@ namespace engine { namespace graphics {
 		Mat4 m_ProjectionMatrix;
 		Mat4 m_View;
 		Vec2 m_Translate;
-		Dimensions m_Dimensions;
+		Dimensions m_CameraDim;
 		float m_Near;
 		float m_Far;
 		float z = 0.5f;
