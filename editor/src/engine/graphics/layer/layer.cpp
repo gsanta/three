@@ -3,7 +3,7 @@
 namespace engine { namespace graphics {
 
 	Layer::Layer(std::string name, std::string id, Renderer2D* renderer, Shader* shader, Camera* camera, Dimensions dimensions)
-		: m_Name(name), m_Id(id), m_Renderer(renderer), m_Shader(shader), m_Camera(camera), m_Dimensions(dimensions) {
+		: m_Name(name), m_Id(id), m_Renderer(renderer), m_Shader(shader), m_Camera(camera), m_CameraDim(dimensions) {
 	}
 
 	Layer::~Layer() {

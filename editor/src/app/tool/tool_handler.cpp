@@ -1,5 +1,8 @@
 #include "tool_handler.h"
 
+int x_tmp;
+int y_tmp;
+
 namespace spright { namespace tool {
 	ToolHandler::ToolHandler()
 	{
@@ -41,6 +44,8 @@ namespace spright { namespace tool {
 
 	void ToolHandler::onMouseDown(bool buttons[3])
 	{
+		Vec2 pos = m_DocumentHandler->getActiveDocument()->getCamera()->screenToCameraPos(x_tmp, y_tmp);
+
 		this->m_pointerInfo.isDown = true;
 		this->m_pointerInfo.down.x = this->m_pointerInfo.curr.x;
 		this->m_pointerInfo.down.y = this->m_pointerInfo.curr.y;
@@ -56,6 +61,7 @@ namespace spright { namespace tool {
 
 	void ToolHandler::onMouseMove(double x, double y)
 	{
+		x_tmp = x; y_tmp = y;
 		Vec2 pos = m_DocumentHandler->getActiveDocument()->getCamera()->screenToCameraPos(x, y);
 		this->m_pointerInfo.prev.x = m_pointerInfo.curr.x;
 		this->m_pointerInfo.prev.y = m_pointerInfo.curr.y;
