@@ -3,7 +3,7 @@
 #include <algorithm>
 #include "event_listener.h"
 
-namespace spright {
+namespace spright { namespace editor {
 
 	class EventHandler {
 	private:
@@ -14,4 +14,4 @@ namespace spright {
 		void addListener(EventListener* listener);
 		void removeListener(EventListener* listener);
 	};
-}
+}}

@@ -3,7 +3,7 @@
 int x_tmp;
 int y_tmp;
 
-namespace spright { namespace tool {
+namespace spright { namespace editor {
 	ToolHandler::ToolHandler()
 	{
 	}

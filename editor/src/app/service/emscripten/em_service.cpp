@@ -1,6 +1,6 @@
 #include "em_service.h"
 
-namespace spright {
+namespace spright { namespace editor {
 	EmService::EmService(EventHandler* eventHandler)
 	{
 #ifdef SPARKY_EMSCRIPTEN
@@ -14,4 +14,4 @@ namespace spright {
 		delete m_EmEvents;
 #endif
 	}
-}
+}}

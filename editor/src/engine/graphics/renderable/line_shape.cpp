@@ -1,8 +1,8 @@
 #include "line_shape.h"
 
-namespace engine { namespace graphics {
+namespace spright { namespace engine {
 	LineShape::LineShape(float x1, float y1, float x2, float y2, float thickness, unsigned int color): 
-		m_Start(Vec2(x1, y1)), m_End(Vec2(x2, y2)), m_Thickness(thickness), engine::graphics::Renderable2D(color) {
+		m_Start(Vec2(x1, y1)), m_End(Vec2(x2, y2)), m_Thickness(thickness), Renderable2D(color) {
 	
 		Vec2 vec = m_End - m_Start;
 		m_Length = sqrt(vec.x * vec.x + vec.y * vec.y);
@@ -21,8 +21,8 @@ namespace engine { namespace graphics {
 		m_Coords[3] = Vec3(coord3.x, coord3.y, 0);
 	}
 
-	void LineShape::submit(engine::graphics::Renderer2D* renderer) const {
-		engine::graphics::VertexData*& buffer = renderer->getBuffer();
+	void LineShape::submit(Renderer2D* renderer) const {
+		VertexData*& buffer = renderer->getBuffer();
 		const Mat4* transformation = renderer->getTransformation();
 		buffer->vertex = *transformation * m_Coords[0];
 		buffer->uv = m_UV[0];

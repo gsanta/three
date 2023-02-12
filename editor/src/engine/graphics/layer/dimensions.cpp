@@ -1,7 +1,7 @@
 #include "dimensions.h"
 
 
-namespace engine { namespace graphics {
+namespace spright { namespace engine {
 
 	Dimensions::Dimensions(float left, float right, float bottom, float top): left(left), right(right), bottom(bottom), top(top)
 	{

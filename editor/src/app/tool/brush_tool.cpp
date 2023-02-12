@@ -1,8 +1,8 @@
 #include "brush_tool.h"
 
-namespace spright { namespace tool {
+namespace spright { namespace editor {
 
-	BrushTool::BrushTool(DocumentHandler *documentHandler, EditorConfig &editorConfig, spright::Services* services, EventHandler* eventHandler)
+	BrushTool::BrushTool(DocumentHandler *documentHandler, EditorConfig &editorConfig, Services* services, EventHandler* eventHandler)
 			: m_documentHandler(documentHandler), m_EditorConfig(editorConfig), m_Services(services), m_EventHandler(eventHandler), Tool("brush")
 	{
 	}

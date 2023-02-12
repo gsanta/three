@@ -7,16 +7,16 @@
 #include "../../../engine/system/window/window.h"
 #include "./image_data.h"
 
-namespace spright {
+namespace spright { namespace editor {
 
 	class ImageExport {
 	private:
 		Rendering* m_Rendering;
 		Window* m_Window;
-		
+
 		unsigned char* m_Data;
 		size_t m_Size;
-	
+
 	public:
 		ImageExport(Window* window, Rendering* rendering);
 		~ImageExport();
@@ -26,4 +26,4 @@ namespace spright {
 	private:
 		void writeImageData();
 	};
-}
+}}

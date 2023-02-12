@@ -5,7 +5,6 @@
 #include "../../system/window/window.h"
 
 namespace spright { namespace engine {
-	using namespace ::engine::system;
 
 	class ImageRenderTarget : public RenderTarget {
 	private:

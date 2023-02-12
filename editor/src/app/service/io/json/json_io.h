@@ -5,8 +5,7 @@
 #include "tile_layer_export.h"
 #include "../../../document/document_handler.h"
 
-namespace spright {
-	using namespace document;
+namespace spright { namespace editor {
 
 	class JsonIO {
 	private:
@@ -18,4 +17,4 @@ namespace spright {
 		std::string exportDocument(Document* document);
 		void importDocument(DocumentHandler* documentHandler, std::string string);
 	};
-}
+}}

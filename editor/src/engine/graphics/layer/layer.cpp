@@ -1,11 +1,10 @@
 #include "layer.h"
 
-namespace engine { namespace graphics {
+namespace spright { namespace engine {
 
-	Layer::Layer(std::string name, std::string id, Renderer2D* renderer, Shader* shader, Camera* camera, Dimensions dimensions)
-		: m_Name(name), m_Id(id), m_Renderer(renderer), m_Shader(shader), m_Camera(camera), m_CameraDim(dimensions) {
+	Layer::Layer(std::string name, std::string id, Container* container, Renderer2D* renderer, Shader* shader, Camera* camera)
+		: m_Name(name), m_Id(id), m_Container(container), m_Renderer(renderer), m_Shader(shader), m_Camera(camera) {
 	}
-
 	Layer::~Layer() {
 		delete m_Shader;
 		delete m_Renderer;
@@ -15,11 +14,11 @@ namespace engine { namespace graphics {
 		}
 	}
 
-	void Layer::add(engine::graphics::Renderable2D* renderable) {
+	void Layer::add(Renderable2D* renderable) {
 		m_Renderables.push_back(renderable);
 	}
 
-	void Layer::remove(engine::graphics::Renderable2D* renderable)
+	void Layer::remove(Renderable2D* renderable)
 	{
 		auto it = std::find(m_Renderables.begin(), m_Renderables.end(), renderable);
 
@@ -53,7 +52,7 @@ namespace engine { namespace graphics {
 
 		m_Renderer->begin();
 		m_Renderer->push(m_Camera->getView());
-		for (const engine::graphics::Renderable2D* renderable : m_Renderables) {
+		for (const Renderable2D* renderable : m_Renderables) {
 			renderable->submit(m_Renderer);
 		}
 		m_Renderer->end();

@@ -7,9 +7,8 @@
 #include "../engine/graphics/renderer/default_render_target.h"
 
 namespace spright {
-	using namespace ::engine::system;
-	using namespace document;
-	using namespace engine;
+	using namespace ::spright::engine;
+	using namespace ::spright::editor;
 
 	class Rendering {
 	private:

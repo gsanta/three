@@ -1,6 +1,6 @@
-#include "./layer_handler.h"
+ #include "./layer_handler.h"
 
-namespace spright {
+namespace spright { namespace editor {
 	Layer* findLayer(std::string id, std::vector<Layer*>& layers) {
 		auto it = find_if(layers.begin(), layers.end(), [&id](Layer* layer) { return layer->getId() == id; });
 
@@ -46,7 +46,7 @@ namespace spright {
 	{
 		m_Layers.push_back(layer);
 	}
-	
+
 	void LayerHandler::addLayer(TileLayer* layer)
 	{
 		m_Layers.push_back(layer);
@@ -131,7 +131,7 @@ namespace spright {
 	}
 
 	void LayerHandler::addAfterLayer(TileLayer* layer) {
-		addAfterLayer((Layer*) layer);
+		addAfterLayer((Layer*)layer);
 		m_TileLayers.insert(layer);
 	}
 
@@ -151,4 +151,4 @@ namespace spright {
 	{
 		m_ActiveLayer = getLayer(id);
 	}
-}
+}}

@@ -2,7 +2,7 @@
 
 #include "../layer/dimensions.h"
 
-namespace engine { namespace graphics {
+namespace spright { namespace engine {
 
 	class OrthoProjectionInfo {
 	public:

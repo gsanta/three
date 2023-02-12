@@ -1,11 +1,11 @@
 #include "pan_tool.h"
 
-namespace spright {
-	PanTool::PanTool(engine::graphics::Camera* camera): m_Camera(camera), Tool("pan")
+namespace spright { namespace editor {
+	PanTool::PanTool(Camera* camera) : m_Camera(camera), Tool("pan")
 	{
 	}
 
-	void PanTool::pointerMove(tool::PointerInfo& pointerInfo)
+	void PanTool::pointerMove(PointerInfo& pointerInfo)
 	{
 		if (pointerInfo.isMiddleButtonDown() == false) {
 			return;
@@ -15,4 +15,4 @@ namespace spright {
 			m_Camera->translate2D(pointerInfo.prev - pointerInfo.curr);
 		}
 	}
-}
+}}

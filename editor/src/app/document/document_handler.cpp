@@ -1,6 +1,6 @@
 #include "document_handler.h"
 
-namespace spright { namespace document {
+namespace spright { namespace editor {
 
 	DocumentHandler::DocumentHandler(Window *window) : m_Window(window)
 	{
@@ -21,7 +21,7 @@ namespace spright { namespace document {
 #else
 		Shader *shaderUnlit = new GLShader("shaders/basic.vert", "shaders/unlit.frag");
 #endif
-		TileLayer *layer = new TileLayer(name, id, shaderUnlit, new GLRenderer2D(), getActiveDocument()->getCamera(), getActiveDocument()->dimensions);
+		TileLayer *layer = new TileLayer(name, id, m_ActiveDocument, shaderUnlit, new GLRenderer2D(), getActiveDocument()->getCamera());
 
 		m_ActiveDocument->getLayerHandler()->addLayer(layer);
 
@@ -42,17 +42,16 @@ namespace spright { namespace document {
 #endif
 		float pixelCount = 32.0f;
 		Dimensions documentDimensions(-pixelCount / 2.0f, pixelCount / 2.0f, -pixelCount / 2.0f, pixelCount / 2.0f);
-		Canvas *canvas = new Canvas(pixelCount * 2.0f, pixelCount * 2.0f);
 		Camera *camera = new Camera(m_Window->getWidth(), m_Window->getHeight(), documentDimensions, -1.0f, 1.0f);
-		Document *document = new Document(documentDimensions, camera, canvas);
+		Document *document = new Document(documentDimensions, camera);
 
-		TileLayer *tempLayer = new TileLayer("", DEFAULT_TEMP_LAYER_ID, shaderUnlit, new GLRenderer2D(), document->getCamera(), documentDimensions);
-		TileLayer *backgroundLayer = new TileLayer("", DEFAULT_BACKGROUND_LAYER_ID, shaderUnlit, new GLRenderer2D(), document->getCamera(), documentDimensions, 2.0f);
+		TileLayer *tempLayer = new TileLayer("", DEFAULT_TEMP_LAYER_ID, document, shaderUnlit, new GLRenderer2D(), document->getCamera());
+		TileLayer *backgroundLayer = new TileLayer("", DEFAULT_BACKGROUND_LAYER_ID, document, shaderUnlit, new GLRenderer2D(), document->getCamera(), 2.0f);
 
 		document->getLayerHandler()->addBeforeLayer(backgroundLayer);
 		document->getLayerHandler()->addAfterLayer(tempLayer);
 
-		spright::document::Checkerboard checkerboard;
+		Checkerboard checkerboard;
 
 		checkerboard.create(document);
 

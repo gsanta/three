@@ -6,7 +6,7 @@
 #include "input_handler.h"
 #include <functional>
 
-namespace engine { namespace system {
+namespace spright { namespace engine {
 	class InputHandler;
 
 	class Window {

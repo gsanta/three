@@ -4,13 +4,12 @@
 #include "../../../document/document.h"
 #include "../../../document/document_handler.h"
 
-namespace spright {
-	using namespace ::engine::graphics;
-	using namespace document;
+namespace spright { namespace editor {
+	using namespace ::spright::engine;
 
 	class TileLayerExport {
 	public:
 		nlohmann::json exportLayer(Document* document, std::string layerId);
 		TileLayer* importLayer(DocumentHandler* documentHandler, nlohmann::json json);
 	};
-}
+}}

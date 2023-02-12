@@ -2,7 +2,7 @@
 #include "../core/event/event_handler.h"
 #include "em_events.h"
 
-namespace spright {
+namespace spright { namespace editor {
 
 	class EmService {
 	private:
@@ -13,4 +13,4 @@ namespace spright {
 		EmService(EventHandler* eventHandler);
 		~EmService();
 	};
-}
+}}

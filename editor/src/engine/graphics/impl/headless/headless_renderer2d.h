@@ -8,13 +8,15 @@
 #include "../../renderable/renderable2d.h"
 
 namespace spright { namespace engine {
-	using namespace ::engine::graphics;
 
 	class HeadlessRenderer2D : public Renderer2D
 	{
+	private:
+		VertexData* m_Buffer;
 	public:
 		void begin() override;
 		void end() override;
 		void flush() override;
+		VertexData*& getBuffer() override;
 	};
 }}

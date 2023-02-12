@@ -4,8 +4,9 @@
 #include "../../engine/graphics/layer/layer.h"
 #include "../../engine/graphics/layer/tileLayer.h"
 
-namespace spright {
-	using namespace ::engine::graphics;
+
+namespace spright { namespace editor {
+	using namespace ::spright::engine;
 
 	class LayerHandler {
 	private:
@@ -37,4 +38,4 @@ namespace spright {
 		void setActiveLayer(std::string layerId);
 	};
 
-}
+}}

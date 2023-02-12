@@ -6,11 +6,11 @@
 #include <emscripten/val.h>
 #endif
 
-namespace spright {
+namespace spright { namespace editor {
 	class EmEvents : public EventListener {
 
 	public:
 		void dataChange() override;
 	};
-}
+}}
 

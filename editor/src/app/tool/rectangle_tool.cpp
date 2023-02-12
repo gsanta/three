@@ -1,6 +1,6 @@
 #include "rectangle_tool.h"
 
-namespace spright { namespace tool {
+namespace spright { namespace editor {
 
 	RectangleTool::RectangleTool(DocumentHandler* documentHandler, Services* services, EventHandler* eventHandler) : m_DocumentHandler(documentHandler), m_Services(services), m_EventHandler(eventHandler), Tool("rectangle") {
 

@@ -2,8 +2,7 @@
 #include "../renderer/vertex_data.h"
 
 namespace spright { namespace engine {
-	using namespace ::engine::graphics;
-
+	
 	class Mesh : public Renderable2D {
 	private:
 		int m_VertexCount;

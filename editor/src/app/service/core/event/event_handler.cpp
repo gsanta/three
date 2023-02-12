@@ -1,6 +1,6 @@
 #include "event_handler.h"
 
-namespace spright {
+namespace spright { namespace editor {
 	void EventHandler::emitDataChange()
 	{
 		for (EventListener* listener : m_Listeners) {
@@ -21,4 +21,4 @@ namespace spright {
 			m_Listeners.erase(it);
 		}
 	}
-}
+}}

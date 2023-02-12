@@ -12,7 +12,8 @@
 #include "../renderer/renderer2d.h"
 #include "../../../engine/graphics/shader/shader.h"
 #include "bounds.h"
-namespace engine { namespace graphics {
+namespace spright { namespace engine {
+
 	class Renderable2D {
 
 	protected:
@@ -22,16 +23,16 @@ namespace engine { namespace graphics {
 
 		int m_VertexCount;
 		unsigned int m_Color;
-		engine::graphics::Bounds* m_bounds;
+		Bounds* m_bounds;
 		std::vector<Vec2> m_UV;
 	public:
 		Renderable2D(unsigned int color);
 		virtual ~Renderable2D() {}
 
-		virtual void submit(engine::graphics::Renderer2D* renderer) const = 0;
+		virtual void submit(Renderer2D* renderer) const = 0;
 
 		inline void setColor(unsigned int color) { m_Color = color; }
-		inline void setColor(const engine:: maths::Vec4& color) {
+		inline void setColor(const Vec4& color) {
 			int r = (color.x * 255.0f);
 			int g = (color.y * 255.0f);
 			int b = (color.z * 255.0f);
@@ -40,7 +41,7 @@ namespace engine { namespace graphics {
 			m_Color = a << 24 | b << 16 | g << 8 | r;
 		}
 
-		inline const engine::graphics::Bounds* getBounds() const {
+		inline const Bounds* getBounds() const {
 			return m_bounds;
 		}
 

@@ -1,6 +1,6 @@
 #include "vertexArray.h"
 
-namespace engine { namespace graphics {
+namespace spright { namespace engine {
 	VertexArray::VertexArray()
 	{
 		glGenVertexArrays(1, &m_arrayID);

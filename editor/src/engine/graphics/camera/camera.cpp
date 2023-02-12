@@ -1,10 +1,10 @@
 #include "camera.h"
 
-namespace engine { namespace graphics {
+namespace spright { namespace engine {
 	
-	Camera::Camera(float windowWidth, float windowHeight, Dimensions canvasDimensions, float near, float far) : m_WindowWidth(windowWidth), m_WindowHeight(windowHeight), m_Near(near), m_Far(far)
+	Camera::Camera(float windowWidth, float windowHeight, Dimensions documentDimensions, float near, float far) : m_WindowWidth(windowWidth), m_WindowHeight(windowHeight), m_Near(near), m_Far(far)
 	{
-		m_CanvasDimensions = canvasDimensions;
+		m_DocumentDimensions = documentDimensions;
 		updateWindowSize(windowWidth, windowHeight);
 	}
 
@@ -110,14 +110,14 @@ namespace engine { namespace graphics {
 		float width;
 		float height;
 
-		if (m_CanvasDimensions.getWidth() / ratio > m_CanvasDimensions.getHeight())
+		if (m_DocumentDimensions.getWidth() / ratio > m_DocumentDimensions.getHeight())
 		{
-			width = m_CanvasDimensions.getWidth();
+			width = m_DocumentDimensions.getWidth();
 			height = width / ratio;
 		}
 		else
 		{
-			height = m_CanvasDimensions.getHeight();
+			height = m_DocumentDimensions.getHeight();
 			width = height * ratio; // docDimensions.getRatio();
 		}
 

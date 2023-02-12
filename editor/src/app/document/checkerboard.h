@@ -1,13 +1,13 @@
 #pragma once
 
-#include "document.h"
 #include "../../engine/graphics/renderable/rect2d.h"
+#include "./document.h"
 
-namespace spright { namespace document {
+namespace spright { namespace editor {
 
 	class Checkerboard {
 
 	public:
-		void create(spright::document::Document* document);
+		void create(Document* document);
 	};
 }}

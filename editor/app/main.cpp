@@ -5,7 +5,7 @@
 #include "../src/engine/system/window/window.h"
 #include "../src/maths/vec2.h"
 #include "../src/maths/mat4.h"
-#include "../src/engine/maths/mathFuncs.h"
+#include "../src/maths/mathFuncs.h"
 // #include "utils/timer.h"
 #include "../src/engine/system/utils/fileUtils.h"
 #include "../src/engine/graphics/shader/shader.h"
@@ -27,8 +27,8 @@
 #include "../src/app/editor_api.h"
 // #define SPARKY_EMSCRIPTEN 0
 
-using namespace ::engine::graphics;
-using namespace ::engine::system;
+using namespace ::spright::engine;
+using namespace ::spright::maths;
 
 Window *window = nullptr;
 spright::Editor *editor = nullptr;
@@ -200,7 +200,7 @@ int main()
 	spright::maths::Vec3 p2 = spright::maths::Vec3(1, 1, 0);
 	spright::maths::Vec3 p3 = spright::maths::Vec3(0, -1, 0);
 
-	spright::maths::Vec3 res = ::engine::maths::linePlaneIntersection(la, lb, p1, p2, p3);
+	spright::maths::Vec3 res = linePlaneIntersection(la, lb, p1, p2, p3);
 
 	editor = new spright::Editor();
 	window = editor->getWindow();

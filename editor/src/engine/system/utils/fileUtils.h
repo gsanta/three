@@ -3,7 +3,7 @@
 #include <string>
 #include <string.h>
 
-namespace engine { namespace system {
+namespace spright { namespace engine {
 	class FileUtils {
 	public:
 		static std::string read_file(const char* filePath) {

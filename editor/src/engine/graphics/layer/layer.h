@@ -5,59 +5,57 @@
 #include <algorithm>
 #include "../renderable/renderable2d.h"
 #include "../renderer/renderer2d.h"
-#include "../camera/camera.h";
+#include "../camera/camera.h"
 #include "dimensions.h"
+#include "../../layout/container.h"
 
-namespace engine
-{
-	namespace graphics
+namespace spright { namespace engine {
+
+	class Layer
 	{
-		class Layer
-		{
-		protected:
-			Renderer2D *m_Renderer;
-			std::vector <engine::graphics::Renderable2D*> m_Renderables;
-			Shader *m_Shader;
-			Camera* m_Camera;	
-			std::string m_Id;
-			std::string m_Name;
-			bool m_IsEnabled = true;
-			Dimensions m_CameraDim;
+	protected:
+		std::vector <Renderable2D*> m_Renderables;
+		Container* m_Container;
+		Renderer2D *m_Renderer;
+		Shader *m_Shader;
+		Camera* m_Camera;	
+		std::string m_Id;
+		std::string m_Name;
+		bool m_IsEnabled = true;
 
-		protected:
-			Layer(std::string name, std::string id, Renderer2D *renderer, Shader *shader, Camera* camera, Dimensions dimensions);
+	protected:
+		Layer(std::string name, std::string id, Container* container, Renderer2D *renderer, Shader *shader, Camera* camera);
 
-		public:
-			virtual ~Layer();
-			virtual void add(engine::graphics::Renderable2D *renderable);
-			virtual void render();
-			virtual void clear();
-			virtual void remove(engine::graphics::Renderable2D* renderable);
+	public:
+		virtual ~Layer();
+		virtual void add(Renderable2D *renderable);
+		virtual void render();
+		virtual void clear();
+		virtual void remove(Renderable2D* renderable);
 
-			nlohmann::json getLayerDescription();
+		nlohmann::json getLayerDescription();
 
-			virtual nlohmann::json getJson() = 0;
-			virtual void setJson(std::string json) = 0;
+		virtual nlohmann::json getJson() = 0;
+		virtual void setJson(std::string json) = 0;
 
-			inline void setEnabled(bool isEnabled) {
-				m_IsEnabled = isEnabled;
-			}
+		inline void setEnabled(bool isEnabled) {
+			m_IsEnabled = isEnabled;
+		}
 
-			inline bool isEnabled() {
-				return m_IsEnabled;
-			}
+		inline bool isEnabled() {
+			return m_IsEnabled;
+		}
 
-			inline std::string getId() {
-				return m_Id;
-			}
+		inline std::string getId() {
+			return m_Id;
+		}
 
-			inline Shader* getShader() {
-				return m_Shader;
-			}
+		inline Shader* getShader() {
+			return m_Shader;
+		}
 
-			inline std::vector<engine::graphics::Renderable2D*>& getRenderables() {
-				return m_Renderables;
-			}
-		};
-	}
-}
+		inline std::vector<Renderable2D*>& getRenderables() {
+			return m_Renderables;
+		}
+	};
+}}

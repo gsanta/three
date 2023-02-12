@@ -4,7 +4,7 @@
 #include <GL/glew.h>
 #include "buffer.h"
 
-namespace engine { namespace graphics {
+namespace spright { namespace engine {
 
 	class VertexArray {
 	private:

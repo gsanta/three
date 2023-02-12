@@ -3,7 +3,7 @@
 #include "../src/engine/graphics/renderable/rect2d.h"
 #include "../src/maths/vec2.h"
 
-using namespace engine::graphics;
+using namespace spright::engine;
 
 TEST_CASE("Rect2D contains", "[rect2d]")
 {

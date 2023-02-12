@@ -1,12 +1,12 @@
 #include "em_events.h"
 
-namespace spright
-{
+namespace spright { namespace editor{
 	void EmEvents::dataChange()
 	{
-#ifdef SPARKY_EMSCRIPTEN
-		emscripten::val CanvasEventHandler = emscripten::val::global("EditorEvents");
-		CanvasEventHandler.call<emscripten::val>("emitDataChange");
-#endif
+	#ifdef SPARKY_EMSCRIPTEN
+			emscripten::val CanvasEventHandler = emscripten::val::global("EditorEvents");
+			CanvasEventHandler.call<emscripten::val>("emitDataChange");
+	#endif
+		}
 	}
 }

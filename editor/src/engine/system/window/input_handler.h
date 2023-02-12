@@ -8,7 +8,7 @@
 
 using namespace std;
 
-namespace engine { namespace system {
+namespace spright { namespace engine {
 	using namespace spright::maths;
 
 	class Window;

@@ -4,9 +4,7 @@
 
 namespace spright { namespace engine {
 
-	using namespace ::engine::graphics;
-	using namespace ::engine::maths;
-	using namespace ::engine::system;
+	using namespace ::spright::maths;
 
 	class GLShader : public Shader {
 	public:

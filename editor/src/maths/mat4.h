@@ -1,9 +1,9 @@
 #pragma once
 
 #include <cstring>
-#include "../maths/vec3.h"
-#include "../maths/vec4.h"
-#include "../engine/maths/mathFuncs.h"
+#include "vec3.h"
+#include "vec4.h"
+#include "mathFuncs.h"
 
 namespace spright { namespace maths {
 

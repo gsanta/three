@@ -1,7 +1,5 @@
 #pragma once
 #include <vector>
-#include "document.h"
-#include "canvas.h"
 #include "checkerboard.h"
 #include "../../engine/graphics/layer/tileLayer.h"
 #include "../../engine/graphics/layer/dimensions.h"
@@ -11,12 +9,11 @@
 #include "../../engine/graphics/renderable/line_shape.h"
 #include "../../engine/graphics/renderable/rect2d.h"
 #include "../../engine/system/window/window.h"
+#include "./document.h"
 
-namespace spright { namespace document {
+namespace spright { namespace editor {
 	using namespace std;
-	using namespace ::engine::system;
 	using namespace ::spright::engine;
-	using namespace ::engine::graphics;
 
 	class DocumentHandler {
 	private:

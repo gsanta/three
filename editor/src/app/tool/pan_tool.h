@@ -5,10 +5,10 @@
 #include "../../engine/graphics/camera/ortho_projection_info.h"
 #include "pointer_info.h"
 
-namespace spright {
-	using namespace ::engine::graphics;
+namespace spright { namespace editor {
+	using namespace ::spright::engine;
 
-	class PanTool : public tool::Tool
+	class PanTool : public Tool
 	{
 	private:
 		Camera* m_Camera;
@@ -17,6 +17,6 @@ namespace spright {
 	public:
 		PanTool(Camera* camera);
 	private:
-		void pointerMove(tool::PointerInfo& pointerInfo) override;
+		void pointerMove(PointerInfo& pointerInfo) override;
 	};
-}
+}}

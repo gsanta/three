@@ -1,6 +1,6 @@
 #pragma once
 
-namespace engine { namespace graphics {
+namespace spright { namespace engine {
 
 	class BoundsInt {
 	public:
