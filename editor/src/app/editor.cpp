@@ -1,6 +1,6 @@
 #include "editor.h"
 
-namespace spright {
+namespace spright { namespace editor {
 	Editor::Editor()
 	{
 		m_Window = new GLWindow("Editor", 800, 800);
@@ -53,4 +53,4 @@ namespace spright {
 	JsonIO* Editor::getJsonIO() {
 		return m_JsonExport.get();
 	}
-}
+}}

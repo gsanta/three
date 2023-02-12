@@ -16,22 +16,19 @@
 #include "./service/io/image_export.h"
 #include "./service/io/json/json_io.h"
 
-namespace spright
-{
-
+namespace spright { namespace editor {
 	using namespace ::spright::engine;
-	using namespace ::spright::editor;
 
 	class Editor
 	{
 	private:
-		Window *m_Window;
+		Window* m_Window;
 		ToolHandler* m_toolHandler;
-		CanvasListenerHandler *m_CanvasListenerHandler;
-		DocumentHandler *m_DocumentHandler;
+		CanvasListenerHandler* m_CanvasListenerHandler;
+		DocumentHandler* m_DocumentHandler;
 		Rendering* m_Rendering;
 		EditorConfig editorConfig;
-		spright::Services *m_Services;
+		spright::Services* m_Services;
 		ImageExport* m_ImageExport;
 		std::unique_ptr<JsonIO> m_JsonExport;
 
@@ -39,7 +36,7 @@ namespace spright
 		Editor();
 		~Editor();
 
-		inline spright::Services *getServices()
+		inline spright::Services* getServices()
 		{
 			return m_Services;
 		}
@@ -54,26 +51,26 @@ namespace spright
 			m_Window->getInputHandler()->unRegisterListener(m_toolHandler);
 		}
 
-		inline Window *getWindow() const
+		inline Window* getWindow() const
 		{
 			return m_Window;
 		}
 
-		inline DocumentHandler *getDocumentHandler()
+		inline DocumentHandler* getDocumentHandler()
 		{
 			return m_DocumentHandler;
 		}
 
 		Rendering* getRendering();
 
-		inline CanvasListenerHandler *getCanvasListenerHandler()
+		inline CanvasListenerHandler* getCanvasListenerHandler()
 		{
 			return m_CanvasListenerHandler;
 		}
 
 		ImageExport* getImageExport();
-	
+
 		JsonIO* getJsonIO();
 	};
 
-}
+}}

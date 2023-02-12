@@ -9,7 +9,7 @@
 #include <emscripten/bind.h>
 
 
-using namespace spright;
+using namespace spright::editor;
 
 void setLayerIndex(std::string layerId, int newIndex);
 void removeLayer(std::string layerId);
