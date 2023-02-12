@@ -109,7 +109,7 @@ void setActiveLayer(std::string id)
 
 void setBrushSize(int size)
 {
-	spright::tool::BrushTool *brushTool = dynamic_cast<spright::tool::BrushTool *>(editor->getToolHandler()->getTool("brush"));
+	BrushTool *brushTool = dynamic_cast<BrushTool *>(editor->getToolHandler()->getTool("brush"));
 
 	brushTool->setSize(size);
 }
