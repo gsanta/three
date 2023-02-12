@@ -4,11 +4,10 @@
 #include "pointer_info.h"
 #include "tool.h"
 
-namespace spright {
-	using namespace tool;
-	using namespace spright::document;
-	using namespace ::engine::graphics;
-	using namespace ::engine::maths;
+namespace spright { namespace editor {
+	using namespace spright::editor;
+	using namespace ::spright::engine;
+	using namespace ::spright::maths;
 
 	class ColorPickerTool : public Tool {
 	private:
@@ -18,4 +17,4 @@ namespace spright {
 		ColorPickerTool(DocumentHandler* documentHandler, Services* services);
 		void pointerDown(PointerInfo& pointerInfo) override;
 	};
-}
+}}

@@ -7,10 +7,9 @@
 #include "tool.h"
 #include "../service/core/event/event_handler.h"
 
-namespace spright { namespace tool {
+namespace spright { namespace editor {
 	using namespace spright::maths;
-	using namespace ::engine::graphics;
-	using namespace document;
+	using namespace spright::engine;
 
 	class EraseTool : public Tool {
 	private:

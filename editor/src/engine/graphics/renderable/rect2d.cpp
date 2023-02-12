@@ -1,11 +1,10 @@
 #include "rect2d.h"
 
-namespace engine {
-	namespace graphics {
+namespace spright { namespace engine {
 		Rect2D::Rect2D(float x, float y, float width, float height, unsigned int  color)
-			: m_Position(Vec3(x, y, 0)), m_Size(Vec2(width, height)), engine::graphics::Renderable2D(color)
+			: m_Position(Vec3(x, y, 0)), m_Size(Vec2(width, height)), Renderable2D(color)
 		{
-			m_bounds = new engine::graphics::Bounds(x, y, width, height);
+			m_bounds = new Bounds(x, y, width, height);
 
 			m_VertexCount = 4;
 		}
@@ -67,8 +66,8 @@ namespace engine {
 		return json;
 	}
 
-	void Rect2D::submit(engine::graphics::Renderer2D* renderer) const {
-		engine::graphics::VertexData*& buffer = renderer->getBuffer();
+	void Rect2D::submit(Renderer2D* renderer) const {
+		VertexData*& buffer = renderer->getBuffer();
 		const Mat4* transformation = renderer->getTransformation();
 		buffer->vertex = *transformation * m_Position;
 		buffer->uv = m_UV[0];
@@ -103,5 +102,5 @@ namespace engine {
 		m_bounds->minY = m_Position.y - m_bounds->getHeight() / 2;
 		m_bounds->maxY = m_Position.y + m_bounds->getHeight() / 2;
 	}
-} }
+}}
 

@@ -1,6 +1,6 @@
 #include "json_io.h"
 
-namespace spright {
+namespace spright { namespace editor {
 
 	JsonIO::JsonIO() {
 		m_TileLayerExport = new TileLayerExport();
@@ -29,9 +29,9 @@ namespace spright {
 		documentHandler->createDocument();
 		for (int i = 0; i < layerCount; i++) {
 			nlohmann::json layer = json["layers"][i];
-		
+
 			TileLayer* tileLayer = m_TileLayerExport->importLayer(documentHandler, layer);
 			documentHandler->getActiveDocument()->getLayerHandler()->addLayer(tileLayer);
 		}
 	}
-}
+}}

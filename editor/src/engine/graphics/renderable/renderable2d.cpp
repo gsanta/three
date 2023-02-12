@@ -1,6 +1,6 @@
 #include "renderable2d.h"
 
-namespace engine { namespace graphics {
+namespace spright { namespace engine {
 
 	Renderable2D::Renderable2D(unsigned int color) : m_Color(color)
 	{

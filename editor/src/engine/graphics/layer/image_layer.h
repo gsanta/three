@@ -1,12 +1,13 @@
+#pragma once
 #include "layer.h"
+#include "../../layout/container.h"
 
 namespace spright { namespace engine {
-	using namespace ::engine::graphics;
 
 	class ImageLayer : public Layer {
 
 	public:
-		ImageLayer(std::string name, std::string id, Shader* shader, Renderer2D* renderer, Camera* camera, Dimensions dimensions);
+		ImageLayer(std::string name, std::string id, Container* container, Shader* shader, Renderer2D* renderer, Camera* camera);
 	};
 
 }}	

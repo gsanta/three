@@ -3,14 +3,13 @@
 #include "../../../maths/mat4.h"
 #include "../../../maths/vec2.h"
 #include "../../../maths/vec3.h"
-#include "../../maths/mathFuncs.h"
+#include "../../../maths/mathFuncs.h"
 #include "./ortho_projection_info.h";
 #include "../../system/window/window.h"
 #include "../layer/dimensions.h"
 
-namespace engine { namespace graphics {
+namespace spright { namespace engine {
 	using namespace ::spright::maths;
-	using namespace ::engine::system;
 
 	class Camera {
 	private:
@@ -27,7 +26,7 @@ namespace engine { namespace graphics {
 		float m_InitialWidth;
 		float m_WindowWidth;
 		float m_WindowHeight;
-		Dimensions m_CanvasDimensions;
+		Dimensions m_DocumentDimensions;
 	public:
 		Camera(float windowWidth, float windowHeight, Dimensions canvasDimensions, float near, float far);
 

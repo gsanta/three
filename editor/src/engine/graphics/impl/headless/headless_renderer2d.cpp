@@ -16,4 +16,8 @@ namespace spright { namespace engine {
 	{
 
 	}
+
+	VertexData*& HeadlessRenderer2D::getBuffer() {
+		return m_Buffer;
+	}
 }}

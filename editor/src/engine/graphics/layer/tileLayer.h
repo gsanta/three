@@ -3,7 +3,7 @@
 #include <string>
 #include "layer.h"
 #include "../renderable/rect2d.h"
-#include "../../maths/vec2_int.h"
+#include "../../../maths/vec2_int.h"
 #include "../../../maths/vec2.h"
 #include "../renderable/bounds.h"
 #include "../renderable/bounds_int.h"
@@ -11,8 +11,8 @@
 #include "../camera/camera.h"
 #include "dimensions.h"
 
-namespace engine { namespace graphics {
-	using namespace spright::maths;
+namespace spright { namespace engine {
+	using namespace ::spright::maths;
 
 	class TileLayer : public Layer
 	{
@@ -23,15 +23,15 @@ namespace engine { namespace graphics {
 		BoundsInt m_TileBounds;
 
 	public:
-		TileLayer(std::string name, std::string id, engine::graphics::Shader* shader, engine::graphics::Renderer2D* renderer, Camera* camera, Dimensions dimensions, float tileSize = 0.5f);
+		TileLayer(std::string name, std::string id, Container* container, Shader* shader, Renderer2D* renderer, Camera* camera, float tileSize = 0.5f);
 		virtual ~TileLayer();
 
 		// TODO: find a better name
 		Vec2 getBottomLeftPos(Vec2 pointer);
 		Vec2 getBottomLeftPos(int tileIndex);
 		Vec2 getCenterPos(int tileIndex);
-		maths::Vec2Int getTilePos(Vec2 pos);
-		maths::Vec2Int getTilePos(int tileIndex);
+		Vec2Int getTilePos(Vec2 pos);
+		Vec2Int getTilePos(int tileIndex);
 		unsigned int getColumn(int tileIndex);
 		unsigned int getRow(int tileIndex);
 

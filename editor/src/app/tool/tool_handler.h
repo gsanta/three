@@ -15,10 +15,10 @@
 #include "../editor_config.h"
 #include "../service/services.h"
 
-namespace spright { namespace tool {
+namespace spright { namespace editor {
 
 	using namespace std;
-	using namespace ::engine::system;
+	using namespace ::spright::engine;
 
 	class ToolHandler : public InputListener {
 	private:

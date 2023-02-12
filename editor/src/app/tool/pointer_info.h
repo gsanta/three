@@ -1,7 +1,7 @@
 #pragma once
 #include "../../maths/vec2.h"
 
-namespace spright { namespace tool {
+namespace spright { namespace editor {
 
 	struct PointerInfo {
 	public:

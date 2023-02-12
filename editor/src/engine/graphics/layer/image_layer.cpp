@@ -2,8 +2,8 @@
 
 namespace spright { namespace engine {
 
-	ImageLayer::ImageLayer(std::string name, std::string id, Shader* shader, Renderer2D* renderer, Camera* camera, Dimensions dimensions)
-		: Layer(name, id, renderer, shader, camera, dimensions) {
+	ImageLayer::ImageLayer(std::string name, std::string id, Container* container, Shader* shader, Renderer2D* renderer, Camera* camera)
+		: Layer(name, id, container, renderer, shader, camera) {
 
 
 

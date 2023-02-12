@@ -1,6 +1,6 @@
 #pragma once
 
-namespace engine { namespace system {
+namespace spright { namespace engine {
 
 	class InputListener {
 	public:

@@ -1,7 +1,7 @@
 #include "services.h"
 
 
-namespace spright {
+namespace spright { namespace editor {
 
 	Services::Services()
 	{
@@ -34,4 +34,4 @@ namespace spright {
 	{
 		m_EmService = emService;
 	}
-}
+}}

@@ -6,9 +6,8 @@
 #include "../../model/rectangle.h"
 
 namespace spright {
-	using namespace document;
-	using namespace ::engine::maths;
-	using namespace ::engine::graphics;
+	using namespace ::spright::engine;
+	using namespace ::spright::editor;
 
 	class SelectionBox {
 	private:

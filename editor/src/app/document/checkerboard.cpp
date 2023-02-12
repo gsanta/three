@@ -1,10 +1,10 @@
 
 #include "checkerboard.h"
 
-namespace spright { namespace document {
-	void document::Checkerboard::create(spright::document::Document* document)
+namespace spright { namespace editor {
+	void Checkerboard::create(Document* document)
 	{
-		engine::graphics::TileLayer* layer = document->getLayerHandler()->getTileLayer(spright::document::DEFAULT_BACKGROUND_LAYER_ID);
+		TileLayer* layer = document->getLayerHandler()->getTileLayer(DEFAULT_BACKGROUND_LAYER_ID);
 	
 		float left = document->dimensions.left;
 		float right = document->dimensions.right;
@@ -19,7 +19,7 @@ namespace spright { namespace document {
 			for (float j = bottom; j < top; j += tileSize) {
 				counter++;
 				int color = counter % 2 == 0 ? 0Xff787878 : 0XffE0E0E0;
-				layer->add(new engine::graphics::Rect2D(i, j, tileSize, tileSize, color));
+				layer->add(new Rect2D(i, j, tileSize, tileSize, color));
 			}
 
 			counter = 1;

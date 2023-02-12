@@ -19,23 +19,21 @@
 namespace spright
 {
 
-	using namespace tool;
-	using namespace document;
-	using namespace ::engine::system;
+	using namespace ::spright::engine;
+	using namespace ::spright::editor;
 
 	class Editor
 	{
 	private:
 		Window *m_Window;
 		ToolHandler* m_toolHandler;
-		core::CanvasListenerHandler *m_CanvasListenerHandler;
+		CanvasListenerHandler *m_CanvasListenerHandler;
 		DocumentHandler *m_DocumentHandler;
 		Rendering* m_Rendering;
 		EditorConfig editorConfig;
 		spright::Services *m_Services;
 		ImageExport* m_ImageExport;
 		std::unique_ptr<JsonIO> m_JsonExport;
-		std::unique_ptr<Canvas> m_Canvas;
 
 	public:
 		Editor();
@@ -68,7 +66,7 @@ namespace spright
 
 		Rendering* getRendering();
 
-		inline core::CanvasListenerHandler *getCanvasListenerHandler()
+		inline CanvasListenerHandler *getCanvasListenerHandler()
 		{
 			return m_CanvasListenerHandler;
 		}

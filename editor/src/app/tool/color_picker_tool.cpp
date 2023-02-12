@@ -1,8 +1,8 @@
 #include "color_picker_tool.h"
 
-namespace spright {
+namespace spright { namespace editor {
 
-	ColorPickerTool::ColorPickerTool(DocumentHandler* documentHandler, Services* services): m_DocumentHandler(documentHandler), m_Services(services), Tool("color_picker") {
+	ColorPickerTool::ColorPickerTool(DocumentHandler* documentHandler, Services* services) : m_DocumentHandler(documentHandler), m_Services(services), Tool("color_picker") {
 
 	}
 
@@ -18,4 +18,4 @@ namespace spright {
 			m_Services->getColorPalette()->color = renderable->getColor();
 		}
 	}
-}
+}}

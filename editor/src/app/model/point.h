@@ -1,11 +1,10 @@
 #pragma once
 
-namespace spright { namespace base {
+namespace spright { namespace editor {
 
 	class Point {
 	public:
 		float x;
 		float y;
 	};
-
 }}

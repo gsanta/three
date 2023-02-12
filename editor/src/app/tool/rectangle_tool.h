@@ -7,10 +7,9 @@
 #include "../../maths/vec3.h"
 #include "../service/services.h"
 
-namespace spright { namespace tool {
+namespace spright { namespace editor {
 
-	using namespace document;
-	using namespace ::engine::graphics;
+	using namespace ::spright::engine;
 
 	class RectangleTool : public Tool {
 	private:

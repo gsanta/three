@@ -7,7 +7,7 @@
 #include "../../input_handler.h"
 #include "../../window.h"
 
-namespace engine { namespace system {
+namespace spright { namespace engine {
 
 #define MAX_KEYS 1024
 #define MAX_BUTTONS 3

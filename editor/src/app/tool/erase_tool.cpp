@@ -1,6 +1,6 @@
 #include "erase_tool.h"
 
-namespace spright { namespace tool {
+namespace spright { namespace editor {
 
 	EraseTool::EraseTool(DocumentHandler* documentHandler, EventHandler* eventHandler) : m_DocumentHandler(documentHandler), m_EventHandler(eventHandler), Tool("erase")
 	{

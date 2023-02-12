@@ -1,6 +1,6 @@
 #include "group.h"
 
-namespace engine { namespace graphics {
+namespace spright { namespace engine {
 	Group::Group(const Mat4& transform) : m_TransformationMatrix(transform)
 	{
 	}
@@ -11,14 +11,14 @@ namespace engine { namespace graphics {
 		}
 	}
 
-	void Group::add(engine::graphics::Renderable2D* renderable) {
+	void Group::add(Renderable2D* renderable) {
 		m_Renderables.push_back(renderable);
 	}
 
 	void Group::submit(Renderer2D* renderer) const {
 
 		renderer->push(m_TransformationMatrix);
-		for (const engine::graphics::Renderable2D* renderable : m_Renderables) {
+		for (const Renderable2D* renderable : m_Renderables) {
 			renderable->submit(renderer);
 		}
 		renderer->pop();

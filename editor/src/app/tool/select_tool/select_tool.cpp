@@ -7,7 +7,7 @@ namespace spright {
 		m_SelectionBox = new SelectionBox(m_DocumentHandler);
 	}
 
-	void SelectTool::pointerDown(tool::PointerInfo& pointerInfo)
+	void SelectTool::pointerDown(PointerInfo& pointerInfo)
 	{
 		Document* document = this->m_DocumentHandler->getActiveDocument();
 		
@@ -18,7 +18,7 @@ namespace spright {
 		}
 	}
 
-	void SelectTool::pointerUp(tool::PointerInfo& pointerInfo)
+	void SelectTool::pointerUp(PointerInfo& pointerInfo)
 	{
 		if (Vec2::distance(pointerInfo.down, pointerInfo.curr) < m_NoMovementTolerance) {
 			makePointSelection(pointerInfo);
@@ -30,7 +30,7 @@ namespace spright {
 		m_IsMove = false;
 	}
 
-	void SelectTool::pointerMove(tool::PointerInfo& pointerInfo)
+	void SelectTool::pointerMove(PointerInfo& pointerInfo)
 	{
 		if (!pointerInfo.isLeftButtonDown()) {
 			return;
@@ -91,7 +91,7 @@ namespace spright {
 	//	}
 	//}
 
-	void SelectTool::makeSelection(tool::PointerInfo& pointerInfo) {
+	void SelectTool::makeSelection(PointerInfo& pointerInfo) {
 		m_Data.clear();
 		m_OrigPositions.clear();
 
@@ -122,7 +122,7 @@ namespace spright {
 		m_EventHandler->emitDataChange();
 	}
 
-	void SelectTool::moveSelection(tool::PointerInfo& pointerInfo) {
+	void SelectTool::moveSelection(PointerInfo& pointerInfo) {
 		Document* document = m_DocumentHandler->getActiveDocument();
 		TileLayer* tileLayer = dynamic_cast<TileLayer*>(document->getLayerHandler()->getActiveLayer());
 
@@ -147,7 +147,7 @@ namespace spright {
 		}
 	}
 
-	void SelectTool::makePointSelection(tool::PointerInfo& pointerInfo) {
+	void SelectTool::makePointSelection(PointerInfo& pointerInfo) {
 		TileLayer* tileLayer = dynamic_cast<TileLayer*>(m_DocumentHandler->getActiveDocument()->getLayerHandler()->getActiveLayer());
 		Camera* camera = m_DocumentHandler->getActiveDocument()->getCamera();
 		Vec2 model = camera->screenToModel(pointerInfo.curr);

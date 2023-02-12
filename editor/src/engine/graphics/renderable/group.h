@@ -2,17 +2,17 @@
 
 #include "renderable2d.h"
 
-namespace engine { namespace graphics  {
-	using namespace ::engine::maths;
+namespace spright { namespace engine {
+	using namespace ::spright::maths;
 
-	class Group : public engine::graphics::Renderable2D {
+	class Group : public Renderable2D {
 	private:
-		std::vector<engine::graphics::Renderable2D*> m_Renderables;
+		std::vector<Renderable2D*> m_Renderables;
 		Mat4 m_TransformationMatrix;
 	public:
 		Group(const Mat4& transform);
 		~Group();
-		void add(engine::graphics::Renderable2D* renderable);
+		void add(Renderable2D* renderable);
 		void submit(Renderer2D* renderer) const override;
 	};
 

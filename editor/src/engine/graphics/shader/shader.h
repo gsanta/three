@@ -8,7 +8,7 @@
 #include "../../../maths/vec3.h"
 #include "../../../maths/mat4.h"
 
-namespace engine { namespace graphics {
+namespace spright { namespace engine {
 	using namespace spright::maths;
 
 	class Shader {
@@ -19,7 +19,7 @@ namespace engine { namespace graphics {
 		virtual void setUniform1fv(const GLchar* name, float* value, int count) = 0;
 		virtual void setUniform2f(const GLchar* name, const Vec2& vector) = 0;
 		virtual void setUniform3f(const GLchar* name, const Vec3& vector) = 0;
-		virtual void setUniform4f(const GLchar* name, const engine::maths::Vec4& vector) = 0;
+		virtual void setUniform4f(const GLchar* name, const Vec4& vector) = 0;
 		virtual void setUniformMat4(const GLchar* name, const Mat4& matrix) = 0;
 
 		virtual void enable() const = 0;

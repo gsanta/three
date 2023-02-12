@@ -2,7 +2,7 @@
 
 #include "../../maths/vec2.h"
 
-namespace spright {
+namespace spright { namespace editor {
 
 	struct Rectangle {
 		maths::Vec2 bottomLeft;
@@ -16,4 +16,4 @@ namespace spright {
 		float height();
 	};
 
-}
+}}

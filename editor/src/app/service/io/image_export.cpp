@@ -1,6 +1,6 @@
 #include "image_export.h"
 
-namespace spright {
+namespace spright { namespace editor {
 	ImageExport::ImageExport(Window* window, Rendering* rendering) : m_Window(window), m_Rendering(rendering)
 	{
 	}
@@ -35,7 +35,7 @@ namespace spright {
 		int height = m_Window->getHeight();
 
 		ImageData* image = new ImageData(4 * width * height);
-		
+
 		GLubyte* data = new GLubyte[4 * width * height];
 		memset(data, 0, 4 * width * height);
 		glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -60,4 +60,4 @@ namespace spright {
 	size_t ImageExport::getImageSize() {
 		return m_Size;
 	}
-}
+}}

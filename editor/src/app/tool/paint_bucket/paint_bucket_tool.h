@@ -6,19 +6,19 @@
 #include "queue_linear_flood_fill.h"
 #include "../../service/services.h"
 
-namespace spright {
-    using namespace ::engine::graphics;
-    using namespace ::engine::maths;
+namespace spright { namespace editor {
+    using namespace ::spright::engine;
+    using namespace ::spright::maths;
 
-    class PaintBucketTool : public tool::Tool
+    class PaintBucketTool : public Tool
     {
     private:
-        document::DocumentHandler *m_DocumentHandler;
+        DocumentHandler* m_DocumentHandler;
         QueueLinearFloodFill m_FloodFill;
         Services* m_Services;
 
     public:
-        PaintBucketTool(document::DocumentHandler* m_DocumentHandler, Services* services);
-        void pointerUp(tool::PointerInfo &pointerInfo) override;
+        PaintBucketTool(DocumentHandler* m_DocumentHandler, Services* services);
+        void pointerUp(PointerInfo& pointerInfo) override;
     };
-}
+}}

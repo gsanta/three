@@ -1,7 +1,7 @@
 #include "input_handler.h"
 
 
-namespace engine { namespace system {
+namespace spright { namespace engine {
 	InputHandler::InputHandler(Window* window) : m_Window(window)
 	{
 		

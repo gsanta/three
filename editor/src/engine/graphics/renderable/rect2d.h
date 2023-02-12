@@ -7,8 +7,7 @@
 
 using namespace std::string_literals;
 
-namespace engine { namespace graphics {
-	using namespace engine::graphics;
+namespace spright { namespace engine {
 	using namespace spright::maths;
 
 	class Rect2D : public Renderable2D {

@@ -7,12 +7,12 @@
 #include "../../service/core/event/event_handler.h"
 #include "selection_box.h"
 
-namespace spright {
-	using namespace document;
-	using namespace ::engine::maths;
-	using namespace ::engine::graphics;
+namespace spright { namespace editor {
+	using namespace ::spright::maths;
+	using namespace ::spright::engine;
+	using namespace editor;
 
-	class SelectTool : public tool::Tool {
+	class SelectTool : public Tool {
 	private:
 		DocumentHandler* m_DocumentHandler;
 		EventHandler* m_EventHandler;
@@ -29,13 +29,13 @@ namespace spright {
 
 	public:
 		SelectTool(DocumentHandler* documentHandler, EventHandler* eventHandler);
-		void pointerDown(tool::PointerInfo& pointerInfo) override;
-		void pointerUp(tool::PointerInfo& pointerInfo) override;
-		void pointerMove(tool::PointerInfo& pointerInfo) override;
+		void pointerDown(PointerInfo& pointerInfo) override;
+		void pointerUp(PointerInfo& pointerInfo) override;
+		void pointerMove(PointerInfo& pointerInfo) override;
 	private:
 		//void updateSelectionBox(Vec2 bottomLeft, Vec2 topRight);
-		void makeSelection(tool::PointerInfo& pointerInfo);
-		void makePointSelection(tool::PointerInfo& pointerInfo);
-		void moveSelection(tool::PointerInfo& pointerInfo);
+		void makeSelection(PointerInfo& pointerInfo);
+		void makePointSelection(PointerInfo& pointerInfo);
+		void moveSelection(PointerInfo& pointerInfo);
 	};
-}
+}}

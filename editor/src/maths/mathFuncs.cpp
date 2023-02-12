@@ -1,6 +1,6 @@
 #include "mathFuncs.h"
 
- namespace engine { namespace maths {
+ namespace spright { namespace maths {
 
 	float toRadians(float degrees) {
 		return degrees * (M_PI / 180.0f);

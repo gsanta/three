@@ -8,7 +8,6 @@
 #include "../../renderable/renderable2d.h"
 
 namespace spright { namespace engine {
-	using namespace ::engine::graphics;
 
 #define RENDERER_MAX_SPRITES 60000
 #define RENDERER_VERTEX_SIZE sizeof(VertexData)
