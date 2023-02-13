@@ -15,6 +15,7 @@
 #include "./rendering.h"
 #include "./service/io/image_export.h"
 #include "./service/io/json/json_io.h"
+#include "document/document_store.h"
 
 namespace spright { namespace editor {
 	using namespace ::spright::engine;
@@ -26,8 +27,8 @@ namespace spright { namespace editor {
 		ToolHandler* m_toolHandler;
 		CanvasListenerHandler* m_CanvasListenerHandler;
 		DocumentHandler* m_DocumentHandler;
+		std::unique_ptr<DocumentStore> m_DocumentStore;
 		Rendering* m_Rendering;
-		EditorConfig editorConfig;
 		spright::Services* m_Services;
 		ImageExport* m_ImageExport;
 		std::unique_ptr<JsonIO> m_JsonExport;
@@ -60,6 +61,8 @@ namespace spright { namespace editor {
 		{
 			return m_DocumentHandler;
 		}
+
+		DocumentStore* getDocumentStore();
 
 		Rendering* getRendering();
 

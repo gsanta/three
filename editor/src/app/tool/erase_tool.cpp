@@ -2,9 +2,14 @@
 
 namespace spright { namespace editor {
 
-	EraseTool::EraseTool(DocumentHandler* documentHandler, EventHandler* eventHandler) : m_DocumentHandler(documentHandler), m_EventHandler(eventHandler), Tool("erase")
+	EraseTool::EraseTool(DocumentStore* documentStore) : m_DocumentStore(documentStore), Tool("erase")
 	{
 
+	}
+
+	void EraseTool::pointerDown(PointerInfo& pointerInfo)
+	{
+		erase(pointerInfo);
 	}
 
 	void EraseTool::pointerMove(PointerInfo& pointerInfo)
@@ -17,9 +22,9 @@ namespace spright { namespace editor {
 	}
 
 	void EraseTool::setEraserPosition(PointerInfo& pointerInfo) {
-		TileLayer* activeLayer = dynamic_cast<TileLayer*>(m_DocumentHandler->getActiveDocument()->getLayerHandler()->getActiveLayer());
+		TileLayer* activeLayer = dynamic_cast<TileLayer*>(m_DocumentStore->getActiveDocument()->getLayerHandler()->getActiveLayer());
 
-		float halfEraserSize = activeLayer->getTileSize() * static_cast<float>(m_EraserSize) / 2.0f;
+		float halfEraserSize = activeLayer->getTileSize() * static_cast<float>(m_Size) / 2.0f;
 
 		int tileIndex = activeLayer->getTileIndex(pointerInfo.curr);
 		Vec2 pos = activeLayer->getCenterPos(tileIndex);
@@ -31,17 +36,17 @@ namespace spright { namespace editor {
 	}
 
 	void EraseTool::erase(PointerInfo& pointerInfo) {
-		TileLayer* activeLayer = dynamic_cast<TileLayer*>(m_DocumentHandler->getActiveDocument()->getLayerHandler()->getActiveLayer());
+		TileLayer* activeLayer = dynamic_cast<TileLayer*>(m_DocumentStore->getActiveDocument()->getLayerHandler()->getActiveLayer());
 		int tileIndex = activeLayer->getTileIndex(pointerInfo.curr);
 
 		bool isEven = true;
 
-		if (m_EraserSize % 2 == 1) {
+		if (m_Size % 2 == 1) {
 			isEven = false;
 		}
 
-		int start = isEven ? -m_EraserSize / 2 : -(m_EraserSize - 1) / 2;
-		int end = isEven ? m_EraserSize / 2 : (m_EraserSize - 1) / 2 + 1;
+		int start = isEven ? -m_Size / 2 : -(m_Size - 1) / 2;
+		int end = isEven ? m_Size / 2 : (m_Size - 1) / 2 + 1;
 
 		int centerCol = activeLayer->getColumn(tileIndex);
 		int centerRow = activeLayer->getRow(tileIndex);
@@ -59,10 +64,10 @@ namespace spright { namespace editor {
 
 	void EraseTool::activate()
 	{
-		auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayerHandler()->getLayer(DEFAULT_TEMP_LAYER_ID);
-		TileLayer* activeLayer = dynamic_cast<TileLayer*>(m_DocumentHandler->getActiveDocument()->getLayerHandler()->getActiveLayer());
+		auto tempLayer = this->m_DocumentStore->getActiveDocument()->getLayerHandler()->getLayer(DEFAULT_TEMP_LAYER_ID);
+		TileLayer* activeLayer = dynamic_cast<TileLayer*>(m_DocumentStore->getActiveDocument()->getLayerHandler()->getActiveLayer());
 	
-		float eraserSize = activeLayer->getTileSize() * static_cast<float>(m_EraserSize);
+		float eraserSize = activeLayer->getTileSize() * static_cast<float>(m_Size);
 
 		unsigned int color = 0xff0099ff;
 
@@ -79,7 +84,22 @@ namespace spright { namespace editor {
 
 	void EraseTool::deactivate()
 	{
-		auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayerHandler()->getLayer(DEFAULT_TEMP_LAYER_ID);
+		auto tempLayer = this->m_DocumentStore->getActiveDocument()->getLayerHandler()->getLayer(DEFAULT_TEMP_LAYER_ID);
 		tempLayer->clear();
+	}
+	void EraseTool::setOptions(std::string json)
+	{
+		nlohmann::json parsedJson = nlohmann::json::parse(json);
+
+		m_Size = parsedJson["size"];
+	}
+
+	std::string EraseTool::getOptions()
+	{
+		nlohmann::json json;
+
+		json["size"] = m_Size;
+
+		return json.dump();
 	}
 }}

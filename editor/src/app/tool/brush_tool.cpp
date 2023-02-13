@@ -2,8 +2,8 @@
 
 namespace spright { namespace editor {
 
-	BrushTool::BrushTool(DocumentHandler *documentHandler, EditorConfig &editorConfig, Services* services, EventHandler* eventHandler)
-			: m_documentHandler(documentHandler), m_EditorConfig(editorConfig), m_Services(services), m_EventHandler(eventHandler), Tool("brush")
+	BrushTool::BrushTool(DocumentStore *documentStore, Services* services, EventHandler* eventHandler)
+			: m_documentStore(documentStore), m_Services(services), m_EventHandler(eventHandler), Tool("brush")
 	{
 	}
 
@@ -27,7 +27,7 @@ namespace spright { namespace editor {
 			return;
 		}
 
-		Camera* camera = m_documentHandler->getActiveDocument()->getCamera();
+		Camera* camera = m_documentStore->getActiveDocument()->getCamera();
 
 		Vec2 center2D = camera->getCenter2D();
 
@@ -41,7 +41,7 @@ namespace spright { namespace editor {
 
 		Vec3 intersection = linePlaneIntersection(la, lb, p1, p2, p3);
 
-		TileLayer* tileLayer = dynamic_cast<TileLayer*>(m_documentHandler->getActiveDocument()->getLayerHandler()->getActiveLayer());
+		TileLayer* tileLayer = dynamic_cast<TileLayer*>(m_documentStore->getActiveDocument()->getLayerHandler()->getActiveLayer());
 
 		Vec2 tilePos = tileLayer->getBottomLeftPos(Vec2(intersection.x, intersection.y));
 

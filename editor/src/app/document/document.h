@@ -28,8 +28,6 @@ namespace spright { namespace editor {
 		Document(Dimensions dimensions, Camera* camera);
 		~Document();
 
-		Dimensions dimensions;
-
 		LayerHandler* getLayerHandler();
 
 		inline Camera* getCamera() {

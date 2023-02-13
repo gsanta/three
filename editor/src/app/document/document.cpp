@@ -2,7 +2,7 @@
 
 namespace spright { namespace editor {
 
-	Document::Document(Dimensions dimensions, Camera* camera) : Container(dimensions), dimensions(dimensions), m_Camera(camera)
+	Document::Document(Dimensions dimensions, Camera* camera) : Container(dimensions), m_Camera(camera)
 	{
 		m_LayerHandler = std::make_unique<LayerHandler>();
 		//auto it = find_if(m_Layers.begin(), m_Layers.end(), [](Layer* layer) {

@@ -43,7 +43,7 @@ void setWindowSize(int width, int height)
 	if (window != nullptr)
 	{
 		window->setSize(width, height);
-		editor->getDocumentHandler()->getActiveDocument()->getCamera()->updateWindowSize(width, height);
+		editor->getDocumentStore()->getActiveDocument()->getCamera()->updateWindowSize(width, height);
 	}
 }
 
@@ -65,7 +65,7 @@ void removeActiveTool(std::string toolName)
 
 std::vector<std::string> getLayers()
 {
-	std::vector<Layer *> &layers = editor->getDocumentHandler()->getActiveDocument()->getLayerHandler()->getLayers();
+	std::vector<Layer *> &layers = editor->getDocumentStore()->getActiveDocument()->getLayerHandler()->getLayers();
 
 	std::vector<std::string> target;
 
@@ -79,12 +79,12 @@ std::vector<std::string> getLayers()
 
 void createLayer(std::string name, std::string id)
 {
-	editor->getDocumentHandler()->createUserLayer(name, id);
+	editor->getDocumentHandler()->createUserLayer(editor->getDocumentStore()->getActiveDocument(), name, id);
 }
 
 void enableLayer(std::string id)
 {
-	Layer *layer = editor->getDocumentHandler()->getActiveDocument()->getLayerHandler()->getLayer(id);
+	Layer *layer = editor->getDocumentStore()->getActiveDocument()->getLayerHandler()->getLayer(id);
 
 	if (layer != nullptr)
 	{
@@ -94,7 +94,7 @@ void enableLayer(std::string id)
 
 void disableLayer(std::string id)
 {
-	Layer *layer = editor->getDocumentHandler()->getActiveDocument()->getLayerHandler()->getLayer(id);
+	Layer *layer = editor->getDocumentStore()->getActiveDocument()->getLayerHandler()->getLayer(id);
 
 	if (layer != nullptr)
 	{
@@ -104,7 +104,7 @@ void disableLayer(std::string id)
 
 void setActiveLayer(std::string id)
 {
-	editor->getDocumentHandler()->getActiveDocument()->getLayerHandler()->setActiveLayer(id);
+	editor->getDocumentStore()->getActiveDocument()->getLayerHandler()->setActiveLayer(id);
 }
 
 void setBrushSize(int size)
@@ -116,7 +116,7 @@ void setBrushSize(int size)
 
 void exportImage()
 {
-	editor->getImageExport()->exportImage(editor->getDocumentHandler()->getActiveDocument());
+	editor->getImageExport()->exportImage(editor->getDocumentStore()->getActiveDocument());
 }
 
 int getImageData()
@@ -151,7 +151,7 @@ std::string getEngineData()
 {
 	if (editor != nullptr)
 	{
-		return editor->getDocumentHandler()->getActiveDocument()->getJson();
+		return editor->getDocumentStore()->getActiveDocument()->getJson();
 	}
 }
 
@@ -159,7 +159,7 @@ void setEngineData(std::string json)
 {
 	if (editor != nullptr)
 	{
-		editor->getDocumentHandler()->getActiveDocument()->getLayerHandler()->getActiveLayer()->setJson(json);
+		editor->getDocumentStore()->getActiveDocument()->getLayerHandler()->getActiveLayer()->setJson(json);
 	}
 }
 

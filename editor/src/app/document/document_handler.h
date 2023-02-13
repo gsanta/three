@@ -19,18 +19,10 @@ namespace spright { namespace editor {
 	private:
 		Window* m_Window;
 		vector<Document*> m_documents;
-		Document* m_ActiveDocument = nullptr;
 	public:
 		DocumentHandler(Window* window);
 		~DocumentHandler();
-		void createDocument();
-		void createUserLayer(std::string name, std::string id);
-		inline Document* getActiveDocument() const {
-			return m_ActiveDocument;
-		}
-
-		inline bool hasActiveDocument() const {
-			return m_ActiveDocument != nullptr;
-		}
+		Document* createDocument();
+		TileLayer* createUserLayer(Document* document, std::string name, std::string id);
 	};
 }}

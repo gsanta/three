@@ -6,10 +6,10 @@ namespace spright { namespace editor {
 	{
 		TileLayer* layer = document->getLayerHandler()->getTileLayer(DEFAULT_BACKGROUND_LAYER_ID);
 	
-		float left = document->dimensions.left;
-		float right = document->dimensions.right;
-		float bottom = document->dimensions.bottom;
-		float top = document->dimensions.top;
+		float left = document->getDimensions().left;
+		float right = document->getDimensions().right;
+		float bottom = document->getDimensions().bottom;
+		float top = document->getDimensions().top;
 
 		float tileSize = layer->getTileSize();
 

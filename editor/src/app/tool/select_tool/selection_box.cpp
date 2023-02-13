@@ -1,7 +1,7 @@
 #include "selection_box.h"
 
 namespace spright {
-	SelectionBox::SelectionBox(DocumentHandler* documentHandler) : m_DocumentHandler(documentHandler)
+	SelectionBox::SelectionBox(DocumentStore* documentStore) : m_DocumentStore(documentStore)
 	{
 	}
 
@@ -24,7 +24,7 @@ namespace spright {
 		Vec2 bottomLeft = m_Rect.bottomLeft;
 		Vec2 topRight = m_Rect.topRight;
 
-		Document* document = this->m_DocumentHandler->getActiveDocument();
+		Document* document = this->m_DocumentStore->getActiveDocument();
 		TileLayer* tempLayer = document->getLayerHandler()->getTileLayer(DEFAULT_TEMP_LAYER_ID);
 
 		float tileSize = tempLayer->getTileSize();
@@ -59,7 +59,7 @@ namespace spright {
 
 	void SelectionBox::move(Vec2 delta)
 	{
-		Document* document = this->m_DocumentHandler->getActiveDocument();
+		Document* document = this->m_DocumentStore->getActiveDocument();
 		TileLayer* tempLayer = document->getLayerHandler()->getTileLayer(DEFAULT_TEMP_LAYER_ID);
 
 		float tileSize = tempLayer->getTileSize();
@@ -104,8 +104,8 @@ namespace spright {
 
 	void SelectionBox::clearSprites()
 	{
-		Document* document = this->m_DocumentHandler->getActiveDocument();
-		auto tempLayer = this->m_DocumentHandler->getActiveDocument()->getLayerHandler()->getLayer(DEFAULT_TEMP_LAYER_ID);
+		Document* document = this->m_DocumentStore->getActiveDocument();
+		auto tempLayer = this->m_DocumentStore->getActiveDocument()->getLayerHandler()->getLayer(DEFAULT_TEMP_LAYER_ID);
 
 		tempLayer->clear();
 
