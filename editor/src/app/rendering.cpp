@@ -1,7 +1,7 @@
 #include "rendering.h"
 
 namespace spright {
-	Rendering::Rendering(Window* window, DocumentHandler* documentHandler) : m_Window(window), m_DocumentHandler(documentHandler)
+	Rendering::Rendering(Window* window, DocumentStore* documentStore) : m_Window(window), m_DocumentStore(documentStore)
 	{
 		m_ImageRenderTarget = new ImageRenderTarget(window);
 		m_DefaultRenderTarget = new DefaultRenderTarget();
@@ -17,8 +17,8 @@ namespace spright {
 	void Rendering::render()
 	{
 		m_Window->beforeRender();
-		if (m_DocumentHandler->hasActiveDocument()) {
-			m_DocumentHandler->getActiveDocument()->render();
+		if (m_DocumentStore->hasActiveDocument()) {
+			m_DocumentStore->getActiveDocument()->render();
 		}
 		m_Window->afterRender();
 	}

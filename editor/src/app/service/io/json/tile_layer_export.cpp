@@ -1,6 +1,9 @@
 #include "tile_layer_export.h"
 
 namespace spright { namespace editor {
+	TileLayerExport::TileLayerExport(DocumentStore* documentStore, DocumentHandler* documentHandler): m_DocumentStore(documentStore), m_DocumentHandler(documentHandler)
+	{
+	}
 
 	nlohmann::json TileLayerExport::exportLayer(Document* document, std::string layerId) {
 		TileLayer* layer = dynamic_cast<TileLayer*>(document->getLayerHandler()->getLayer(layerId));
@@ -24,11 +27,12 @@ namespace spright { namespace editor {
 	}
 
 
-	TileLayer* TileLayerExport::importLayer(DocumentHandler* documentHandler, nlohmann::json json) {
+	TileLayer* TileLayerExport::importLayer(nlohmann::json json) {
 		std::string string = json.dump();
-		documentHandler->createUserLayer(json["name"], json["id"]);
 
-		TileLayer* layer = dynamic_cast<TileLayer*>(documentHandler->getActiveDocument()->getLayerHandler()->getLayer(json["id"]));
+		Document* document = m_DocumentStore->getActiveDocument();
+
+		TileLayer* layer = m_DocumentHandler->createUserLayer(document, json["name"], json["id"]);
 
 		int tileCount = json["tiles"].size();
 

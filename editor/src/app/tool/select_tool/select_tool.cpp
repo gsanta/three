@@ -2,14 +2,14 @@
 
 namespace spright {
 
-	SelectTool::SelectTool(DocumentHandler* documentHandler, EventHandler* eventHandler) : m_DocumentHandler(documentHandler), m_EventHandler(eventHandler), Tool("select")
+	SelectTool::SelectTool(DocumentStore* documentStore, EventHandler* eventHandler) : m_DocumentStore(documentStore), m_EventHandler(eventHandler), Tool("select")
 	{
-		m_SelectionBox = new SelectionBox(m_DocumentHandler);
+		m_SelectionBox = new SelectionBox(m_DocumentStore);
 	}
 
 	void SelectTool::pointerDown(PointerInfo& pointerInfo)
 	{
-		Document* document = this->m_DocumentHandler->getActiveDocument();
+		Document* document = this->m_DocumentStore->getActiveDocument();
 		
 		m_IsMove = m_SelectionBox->isInsideSelection(pointerInfo.curr);
 
@@ -36,7 +36,7 @@ namespace spright {
 			return;
 		}
 
-		Document* document = this->m_DocumentHandler->getActiveDocument();
+		Document* document = this->m_DocumentStore->getActiveDocument();
 
 
 		if (m_IsMove) {
@@ -95,7 +95,7 @@ namespace spright {
 		m_Data.clear();
 		m_OrigPositions.clear();
 
-		Document* document = m_DocumentHandler->getActiveDocument();
+		Document* document = m_DocumentStore->getActiveDocument();
 
 		Vec2 down = pointerInfo.down;
 		Vec2 curr = pointerInfo.curr;
@@ -123,7 +123,7 @@ namespace spright {
 	}
 
 	void SelectTool::moveSelection(PointerInfo& pointerInfo) {
-		Document* document = m_DocumentHandler->getActiveDocument();
+		Document* document = m_DocumentStore->getActiveDocument();
 		TileLayer* tileLayer = dynamic_cast<TileLayer*>(document->getLayerHandler()->getActiveLayer());
 
 		Vec2 down = pointerInfo.down;
@@ -148,8 +148,8 @@ namespace spright {
 	}
 
 	void SelectTool::makePointSelection(PointerInfo& pointerInfo) {
-		TileLayer* tileLayer = dynamic_cast<TileLayer*>(m_DocumentHandler->getActiveDocument()->getLayerHandler()->getActiveLayer());
-		Camera* camera = m_DocumentHandler->getActiveDocument()->getCamera();
+		TileLayer* tileLayer = dynamic_cast<TileLayer*>(m_DocumentStore->getActiveDocument()->getLayerHandler()->getActiveLayer());
+		Camera* camera = m_DocumentStore->getActiveDocument()->getCamera();
 		Vec2 model = camera->screenToModel(pointerInfo.curr);
 
 		Vec2Int tilePos = tileLayer->getTilePos(model);

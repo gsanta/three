@@ -3,7 +3,7 @@
 #include <vector>
 #include "../../engine/graphics/renderable/rect2d.h"
 #include "../../engine/graphics/renderable/renderable2d.h"
-#include "../document/document_handler.h"
+#include "../document/document_store.h"
 #include "tool.h"
 #include "../service/core/event/event_handler.h"
 
@@ -13,8 +13,7 @@ namespace spright { namespace editor {
 
 	class EraseTool : public Tool {
 	private:
-		DocumentHandler* m_DocumentHandler;
-		EventHandler* m_EventHandler;
+		DocumentStore* m_DocumentStore;
 		vector<Rect2D*> m_SelectionSprites;
 
 		Rect2D* m_TopLine = nullptr;
@@ -22,7 +21,7 @@ namespace spright { namespace editor {
 		Rect2D* m_BottomLine = nullptr;
 		Rect2D* m_LeftLine = nullptr;
 
-		int m_EraserSize = 3;
+		int m_Size = 5;
 
 		float m_DashSize = 0.2f;
 		bool m_IsMoveSelection = false;
@@ -30,10 +29,13 @@ namespace spright { namespace editor {
 		float m_NoMovementTolerance = 0.1f;
 
 	public:
-		EraseTool(DocumentHandler* documentHandler, EventHandler* eventHandler);
+		EraseTool(DocumentStore* documentStore);
+		void pointerDown(PointerInfo& pointerInfo) override;
 		void pointerMove(PointerInfo& pointerInfo) override;
 		void activate() override;
 		void deactivate() override;
+		void setOptions(std::string json);
+		std::string getOptions();
 	private:
 		void setEraserPosition(PointerInfo& pointerInfo);
 		void erase(PointerInfo& pointerInfo);

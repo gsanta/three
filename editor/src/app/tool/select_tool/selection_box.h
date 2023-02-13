@@ -2,8 +2,8 @@
 
 #include <vector>
 #include "../../../engine/graphics/renderable/rect2d.h"
-#include "../../document/document_handler.h"
 #include "../../model/rectangle.h"
+#include "../../document/document_store.h"
 
 namespace spright {
 	using namespace ::spright::engine;
@@ -11,7 +11,7 @@ namespace spright {
 
 	class SelectionBox {
 	private:
-		DocumentHandler* m_DocumentHandler;
+		DocumentStore* m_DocumentStore;
 		vector<Rect2D*> m_SelectionSprites;
 
 		float m_DashSize = 0.2f;
@@ -22,7 +22,7 @@ namespace spright {
 
 		Rectangle m_Rect;
 	public:
-		SelectionBox(DocumentHandler* ocumentHandler);
+		SelectionBox(DocumentStore* documentStore);
 		~SelectionBox();
 		void start(Vec2 pos);
 		void update(Vec2 pos);

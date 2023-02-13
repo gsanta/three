@@ -14,24 +14,26 @@ namespace spright { namespace editor {
 		}
 	}
 
-	void DocumentHandler::createUserLayer(std::string name, std::string id)
+	TileLayer* DocumentHandler::createUserLayer(Document* document, std::string name, std::string id)
 	{
 #ifdef SPARKY_EMSCRIPTEN
 		Shader *shaderUnlit = new GLShader("resources/shaders/basic.es3.vert", "resources/shaders/basic_unlit.es3.frag");
 #else
 		Shader *shaderUnlit = new GLShader("shaders/basic.vert", "shaders/unlit.frag");
 #endif
-		TileLayer *layer = new TileLayer(name, id, m_ActiveDocument, shaderUnlit, new GLRenderer2D(), getActiveDocument()->getCamera());
+		TileLayer *layer = new TileLayer(name, id, document, shaderUnlit, new GLRenderer2D(), document->getCamera());
 
-		m_ActiveDocument->getLayerHandler()->addLayer(layer);
+		document->getLayerHandler()->addLayer(layer);
 
-		if (m_ActiveDocument->getLayerHandler()->getLayers().size() == 1)
+		if (document->getLayerHandler()->getLayers().size() == 1)
 		{
-			m_ActiveDocument->getLayerHandler()->setActiveLayer(layer->getId());
+			document->getLayerHandler()->setActiveLayer(layer->getId());
 		}
+
+		return layer;
 	}
 
-	void DocumentHandler::createDocument()
+	Document* DocumentHandler::createDocument()
 	{
 #ifdef SPARKY_EMSCRIPTEN
 		Shader *shader = new GLShader("resources/shaders/basic.es3.vert", "resources/shaders/basic.es3.frag");
@@ -56,6 +58,7 @@ namespace spright { namespace editor {
 		checkerboard.create(document);
 
 		m_documents.push_back(document);
-		m_ActiveDocument = document;
+
+		return document;
 	}
 }}

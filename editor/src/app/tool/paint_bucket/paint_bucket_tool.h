@@ -1,10 +1,10 @@
 #pragma once
 
 #include "../tool.h"
-#include "../../document/document_handler.h"
 #include "../../../engine/graphics/camera/camera.h"
 #include "queue_linear_flood_fill.h"
 #include "../../service/services.h"
+#include "../../document/document_store.h"
 
 namespace spright { namespace editor {
     using namespace ::spright::engine;
@@ -13,12 +13,12 @@ namespace spright { namespace editor {
     class PaintBucketTool : public Tool
     {
     private:
-        DocumentHandler* m_DocumentHandler;
+        DocumentStore* m_DocumentStore;
         QueueLinearFloodFill m_FloodFill;
         Services* m_Services;
 
     public:
-        PaintBucketTool(DocumentHandler* m_DocumentHandler, Services* services);
+        PaintBucketTool(DocumentStore* documentStore, Services* services);
         void pointerUp(PointerInfo& pointerInfo) override;
     };
 }}

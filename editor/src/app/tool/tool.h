@@ -16,6 +16,8 @@ namespace spright { namespace editor {
 		inline virtual void scroll(PointerInfo& pointerInfo) {}
 		inline virtual void activate() {}
 		inline virtual void deactivate() {}
+		inline virtual void setOptions(std::string json) {}
+		inline virtual std::string getOptions() { return "{}"; }
 	
 		inline string getName() const {
 			return this->name;

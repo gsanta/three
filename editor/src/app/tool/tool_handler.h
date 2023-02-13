@@ -27,13 +27,12 @@ namespace spright { namespace editor {
 		vector<Tool*>* m_ActiveTools;
 		Tool* m_SelectedTool = nullptr;
 		PointerInfo m_pointerInfo;
-		EditorConfig m_EditorConfig;
 		Services* m_Services;
-		DocumentHandler* m_DocumentHandler;
+		DocumentStore* m_DocumentStore;
 		Camera* m_Camera;
 	public:
 		ToolHandler();
-		ToolHandler(Window* window, DocumentHandler* documentHandler, EditorConfig& editorConfig, Services* services, Camera* camera);
+		ToolHandler(Window* window, DocumentStore* documentStore, Services* services, Camera* camera);
 		~ToolHandler();
 
 		ToolHandler& operator=(const ToolHandler& toolHandler);
