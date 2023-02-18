@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "layer.h"
+#include "group.h"
 #include "../renderable/rect2d.h"
 #include "../../../maths/vec2_int.h"
 #include "../../../maths/vec2.h"
@@ -15,12 +15,13 @@
 namespace spright { namespace engine {
 	using namespace ::spright::maths;
 
-	class TileLayer : public Layer
+	class TileLayer
 	{
 	private:
 		std::string m_Id;
 		std::string m_Name;
 		Container* m_Container;
+		unique_ptr<Group> m_Group;
 		float m_TileSize = 0.5f;
 		int m_IndexSize;
 		bool m_IsEnabled = true;
@@ -28,7 +29,7 @@ namespace spright { namespace engine {
 		BoundsInt m_TileBounds;
 
 	public:
-		TileLayer(std::string name, std::string id, Container* container, Shader* shader, Renderer2D* renderer, float tileSize = 0.5f);
+		TileLayer(std::string name, std::string id, Group* group, Container* container, float tileSize = 0.5f);
 		virtual ~TileLayer();
 
 		std::string getId();

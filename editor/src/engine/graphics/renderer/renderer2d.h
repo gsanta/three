@@ -1,9 +1,11 @@
 #pragma once
 
 #include <GL/glew.h>
+#include <memory>
 #include "../../../maths/mat4.h"
 #include <vector>
 #include "vertex_data.h"
+#include "../shader/shader.h"
 
 namespace spright { namespace engine {
 	using namespace spright::maths;
@@ -11,16 +13,15 @@ namespace spright { namespace engine {
 	class Renderable2D;
 
 	class Renderer2D {
+	private:
+		std::shared_ptr<Shader> m_Shader;
 	protected:
 		std::vector<Mat4> m_TransformationStack;
 		const Mat4* m_TransformationBack;
 
 		GLsizei m_IndexCount = 0;
 
-		Renderer2D() {
-			m_TransformationStack.push_back(Mat4::identity());
-			m_TransformationBack = &m_TransformationStack.back();
-		}
+		Renderer2D(std::shared_ptr<Shader> shader);
 	public:
 		void push(const Mat4& matrix, bool override = false);
 		void pop();
@@ -38,5 +39,7 @@ namespace spright { namespace engine {
 		virtual void begin() = 0;
 		virtual void end() = 0;
 		virtual VertexData*& getBuffer() = 0;
+
+		Shader* getShader();
 	};
 } }

@@ -2,6 +2,11 @@
 
 namespace spright { namespace engine {
 
+	Renderer2D::Renderer2D(std::shared_ptr<Shader> shader): m_Shader(shader) {
+		m_TransformationStack.push_back(Mat4::identity());
+		m_TransformationBack = &m_TransformationStack.back();
+	}
+
 	void Renderer2D::push(const Mat4& matrix, bool override) {
 		if (override) {
 			m_TransformationStack.push_back(matrix);
@@ -22,5 +27,9 @@ namespace spright { namespace engine {
 
 	const spright::maths::Mat4* Renderer2D::getTransformation() {
 		return m_TransformationBack;
+	}
+
+	Shader* Renderer2D::getShader() {
+		return m_Shader.get();
 	}
 }}

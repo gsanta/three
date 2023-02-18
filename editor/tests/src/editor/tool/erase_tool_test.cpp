@@ -19,7 +19,7 @@ TEST_CASE("EraseTool erase", "[erase-tool]") {
 		Camera* camera = new Camera(500, 500, Dimensions(-16, 16, -16, 16), 0, 1);
 		Document document(Dimensions(-16.0f, 16.0f, -16.0f, 16.0f), camera);
 
-		TileLayer layer("layer", "id", &document, new HeadlessShader(), new HeadlessRenderer2D(), camera);
+		TileLayer layer("layer", "id", new Group(new HeadlessRenderer2D()) , &document);
 		Brush brush;
 
 		brush.paint(&layer, Vec2Int(0, 0), 0xFFFFFFFF);

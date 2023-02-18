@@ -2,6 +2,11 @@
 
 namespace spright { namespace engine {
 
+	HeadlessRenderer2D::HeadlessRenderer2D(): Renderer2D(std::make_shared<HeadlessShader>()) {
+
+	}
+
+
 	void HeadlessRenderer2D::begin()
 	{
 

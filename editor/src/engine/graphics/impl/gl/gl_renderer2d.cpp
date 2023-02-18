@@ -3,7 +3,7 @@
 
 namespace spright { namespace engine {
 
-	GLRenderer2D::GLRenderer2D() {
+	GLRenderer2D::GLRenderer2D(std::shared_ptr<Shader> shader): Renderer2D(shader) {
 		init();
 	}
 
@@ -59,6 +59,7 @@ namespace spright { namespace engine {
 
 	void GLRenderer2D::begin()
 	{	
+		getShader()->enable();
 		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 
 //#ifdef SPARKY_EMSCRIPTEN
@@ -96,5 +97,6 @@ namespace spright { namespace engine {
 		glBindVertexArray(0);
 
 		m_IndexCount = 0;
+		getShader()->disable();
 	}
 } }

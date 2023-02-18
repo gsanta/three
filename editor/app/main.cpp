@@ -22,10 +22,9 @@
 
 #include <time.h>
 #include "../src/engine/graphics/layer/tileLayer.h"
-#include "../src/engine/graphics/renderable/group.h"
 #include "../src/app/editor.h"
 #include "../src/app/editor_api.h"
-#include "../src/app/tool/brush_tool.cpp"
+#include "../src/app/tool/brush_tool.h"
 // #define SPARKY_EMSCRIPTEN 0
 
 using namespace ::spright::engine;
@@ -67,11 +66,11 @@ void removeActiveTool(std::string toolName)
 
 std::vector<std::string> getLayers()
 {
-	std::vector<Layer *> &layers = editor->getDocumentStore()->getActiveDocument()->getLayerHandler()->getLayers();
+	std::vector<TileLayer*> &layers = editor->getDocumentStore()->getActiveDocument()->getLayerHandler()->getLayers();
 
 	std::vector<std::string> target;
 
-	for (Layer *layer : layers)
+	for (TileLayer *layer : layers)
 	{
 		target.push_back(layer->getLayerDescription().dump());
 	}
@@ -86,7 +85,7 @@ void createLayer(std::string name, std::string id)
 
 void enableLayer(std::string id)
 {
-	Layer *layer = editor->getDocumentStore()->getActiveDocument()->getLayerHandler()->getLayer(id);
+	TileLayer *layer = editor->getDocumentStore()->getActiveDocument()->getLayerHandler()->getLayer(id);
 
 	if (layer != nullptr)
 	{
@@ -96,7 +95,7 @@ void enableLayer(std::string id)
 
 void disableLayer(std::string id)
 {
-	Layer *layer = editor->getDocumentStore()->getActiveDocument()->getLayerHandler()->getLayer(id);
+	TileLayer *layer = editor->getDocumentStore()->getActiveDocument()->getLayerHandler()->getLayer(id);
 
 	if (layer != nullptr)
 	{

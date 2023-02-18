@@ -1,12 +1,11 @@
-#include "layer.h"
+#include "group.h"
 
 namespace spright { namespace engine {
 
-	Layer::Layer(Renderer2D* renderer, Shader* shader)
-		: m_Renderer(renderer), m_Shader(shader) {
+	Group::Group(Renderer2D* renderer) : m_Renderer(renderer) {
 	}
-	Layer::~Layer() {
-		delete m_Shader;
+
+	Group::~Group() {
 		delete m_Renderer;
 
 		for (int i = 0; i < m_Renderables.size(); i++) {
@@ -14,11 +13,11 @@ namespace spright { namespace engine {
 		}
 	}
 
-	void Layer::add(Renderable2D* renderable) {
+	void Group::add(Renderable2D* renderable) {
 		m_Renderables.push_back(renderable);
 	}
 
-	void Layer::remove(Renderable2D* renderable)
+	void Group::remove(Renderable2D* renderable)
 	{
 		auto it = std::find(m_Renderables.begin(), m_Renderables.end(), renderable);
 
@@ -28,16 +27,17 @@ namespace spright { namespace engine {
 		}
 	}
 
-	void Layer::clear() {
+	void Group::clear() {
 		m_Renderables.clear();
 	}
 
-	void Layer::render(Camera* camera) {
-		m_Shader->enable();
-
-		m_Shader->setUniformMat4("pr_matrix", camera->getProjectionMatrix());
+	void Group::render(Camera* camera) {
 
 		m_Renderer->begin();
+		
+		m_Renderer->getShader()->setUniformMat4("pr_matrix", camera->getProjectionMatrix());
+		
+		
 		m_Renderer->push(camera->getView());
 		for (const Renderable2D* renderable : m_Renderables) {
 			renderable->submit(m_Renderer);

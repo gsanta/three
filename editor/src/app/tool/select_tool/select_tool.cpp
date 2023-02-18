@@ -105,7 +105,7 @@ namespace spright {
 		float startY = down.y < curr.y ? down.y : curr.y;
 		float endY = down.y < curr.y ? curr.y : down.y;
 
-		Layer* layer = dynamic_cast<TileLayer*>(document->getLayerHandler()->getActiveLayer());
+		TileLayer* layer = document->getLayerHandler()->getActiveLayer();
 
 		auto it = layer->getRenderables().begin();
 		while (it != layer->getRenderables().end()) {

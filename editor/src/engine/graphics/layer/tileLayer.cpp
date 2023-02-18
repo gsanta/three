@@ -2,8 +2,8 @@
 
 namespace spright { namespace engine {
 
-	TileLayer::TileLayer(std::string name, std::string id, Container* container, Shader* shader, Renderer2D* renderer, float tileSize)
-		: Layer(renderer, shader), m_TileSize(tileSize), m_Name(name), m_Id(id), m_Container(container) {
+	TileLayer::TileLayer(std::string name, std::string id, Group* group, Container* container, float tileSize)
+		: m_Group(group), m_TileSize(tileSize), m_Name(name), m_Id(id), m_Container(container) {
 	
 		Dimensions dimensions = container->getDimensions();
 
@@ -36,7 +36,7 @@ namespace spright { namespace engine {
 
 	void TileLayer::add(Rect2D* rect)
 	{
-		Layer::add(rect);
+		m_Group->add(rect);
 
 		Vec2 pos = rect->getBounds()->getCenter();
 		Vec2Int tilePos = getTilePos(pos);
@@ -49,21 +49,21 @@ namespace spright { namespace engine {
 	}
 
 	void TileLayer::remove(Rect2D* rect) {
-		Layer::remove(rect);
+		m_Group->remove(rect);
 	}
 	
 	void TileLayer::clear() {
-		Layer::clear();
+		m_Group->clear();
 	}
 	
 	void TileLayer::render(Camera* camera) {
 		if (m_IsEnabled) {
-			Layer::render(camera);
+			m_Group->render(camera);
 		}
 	}
 
 	std::vector<Renderable2D*>& TileLayer::getRenderables() {
-		return Layer::getRenderables();
+		return m_Group->getRenderables();
 	}
 
 	Vec2 TileLayer::getBottomLeftPos(Vec2 pointer)
@@ -183,7 +183,7 @@ namespace spright { namespace engine {
 	{
 		nlohmann::json json;
 
-		for (Renderable2D* renderable : m_Renderables) {
+		for (Renderable2D* renderable : m_Group->getRenderables()) {
 			json["tiles"] += renderable->getJson();
 		}
 
