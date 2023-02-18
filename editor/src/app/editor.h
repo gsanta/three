@@ -5,6 +5,8 @@
 #include "tool/tool_handler.h"
 #include "tool/pan_tool.h"
 #include "tool/zoom_tool.h"
+#include "tool/erase_tool.h"
+#include "tool/helper/layer_provider_impl.h"
 #include "tool/select_tool/select_tool.h"
 #include "tool/paint_bucket/paint_bucket_tool.h"
 #include "tool/color_picker_tool.h"

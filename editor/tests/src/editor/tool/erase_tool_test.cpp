@@ -6,29 +6,23 @@
 #include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
 #include "../src/engine/system/window/impl/headless/headless_window.h"
 #include "../src/app/tool/brush_tool.h"
+#include "layer_provider_test_impl.h"
 
 using namespace ::spright::engine;
 using namespace ::spright::editor;
 
 TEST_CASE("EraseTool erase", "[erase-tool]") {
 	SECTION("can add a renderable to the layer") {
+		Container container(Dimensions(-16.0f, 16.0f, -16.0f, 16.0f));
 
-		HeadlessWindow window(500.0f, 500.0f);
-		DocumentHandler documentHandler(&window);
+		TileLayer layer("layer", "id", new Group(new HeadlessRenderer2D()), &container);
+		TileLayer tempLayer("layer", "id", new Group(new HeadlessRenderer2D()) , &container);
 
-		Camera* camera = new Camera(500, 500, Dimensions(-16, 16, -16, 16), 0, 1);
-		Document document(Dimensions(-16.0f, 16.0f, -16.0f, 16.0f), camera);
-
-		TileLayer layer("layer", "id", new Group(new HeadlessRenderer2D()) , &document);
 		Brush brush;
-
 		brush.paint(&layer, Vec2Int(0, 0), 0xFFFFFFFF);
 
 		Renderable2D* renderable = layer.getAtTileIndex(0);
 
-		EventHandler eventHandler;
-		DocumentStore documentStore;
-
-		EraseTool eraseTool(&documentStore);
+		EraseTool eraseTool(new LayerProviderTestImpl(layer, tempLayer));
 	}
 }
