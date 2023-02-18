@@ -2,7 +2,7 @@
 
 namespace spright { namespace editor {
 
-	EraseTool::EraseTool(DocumentStore* documentStore) : m_DocumentStore(documentStore), Tool("erase")
+	EraseTool::EraseTool(LayerProvider* layerProvider) : m_LayerProvider(layerProvider), Tool("erase")
 	{
 
 	}
@@ -22,12 +22,12 @@ namespace spright { namespace editor {
 	}
 
 	void EraseTool::setEraserPosition(PointerInfo& pointerInfo) {
-		TileLayer* activeLayer = dynamic_cast<TileLayer*>(m_DocumentStore->getActiveDocument()->getLayerHandler()->getActiveLayer());
+		TileLayer& activeLayer = m_LayerProvider->getActiveLayer();
 
-		float halfEraserSize = activeLayer->getTileSize() * static_cast<float>(m_Size) / 2.0f;
+		float halfEraserSize = activeLayer.getTileSize() * static_cast<float>(m_Size) / 2.0f;
 
-		int tileIndex = activeLayer->getTileIndex(pointerInfo.curr);
-		Vec2 pos = activeLayer->getCenterPos(tileIndex);
+		int tileIndex = activeLayer.getTileIndex(pointerInfo.curr);
+		Vec2 pos = activeLayer.getCenterPos(tileIndex);
 
 		m_TopLine->setCenterPosition(pos + Vec2(0, halfEraserSize));
 		m_RightLine->setCenterPosition(pos + Vec2(halfEraserSize, 0));
@@ -36,8 +36,8 @@ namespace spright { namespace editor {
 	}
 
 	void EraseTool::erase(PointerInfo& pointerInfo) {
-		TileLayer* activeLayer = dynamic_cast<TileLayer*>(m_DocumentStore->getActiveDocument()->getLayerHandler()->getActiveLayer());
-		int tileIndex = activeLayer->getTileIndex(pointerInfo.curr);
+		TileLayer& activeLayer = m_LayerProvider->getActiveLayer();
+		int tileIndex = activeLayer.getTileIndex(pointerInfo.curr);
 
 		bool isEven = true;
 
@@ -48,15 +48,15 @@ namespace spright { namespace editor {
 		int start = isEven ? -m_Size / 2 : -(m_Size - 1) / 2;
 		int end = isEven ? m_Size / 2 : (m_Size - 1) / 2 + 1;
 
-		int centerCol = activeLayer->getColumn(tileIndex);
-		int centerRow = activeLayer->getRow(tileIndex);
+		int centerCol = activeLayer.getColumn(tileIndex);
+		int centerRow = activeLayer.getRow(tileIndex);
 
 		for (int i = start; i < end; i++) {
 			for (int j = start; j < end; j++) {
-				int currentTileIndex = activeLayer->getTileIndex(centerCol + i, centerRow + j);
-				Rect2D* sprite = activeLayer->getAtTileIndex(currentTileIndex);
+				int currentTileIndex = activeLayer.getTileIndex(centerCol + i, centerRow + j);
+				Rect2D* sprite = activeLayer.getAtTileIndex(currentTileIndex);
 				if (sprite != nullptr) {
-					activeLayer->remove(sprite);
+					activeLayer.remove(sprite);
 				}
 			}
 		}
@@ -64,10 +64,10 @@ namespace spright { namespace editor {
 
 	void EraseTool::activate()
 	{
-		auto tempLayer = this->m_DocumentStore->getActiveDocument()->getLayerHandler()->getLayer(DEFAULT_TEMP_LAYER_ID);
-		TileLayer* activeLayer = dynamic_cast<TileLayer*>(m_DocumentStore->getActiveDocument()->getLayerHandler()->getActiveLayer());
+		TileLayer& tempLayer = m_LayerProvider->getTempLayer();
+		TileLayer& activeLayer = m_LayerProvider->getActiveLayer();
 	
-		float eraserSize = activeLayer->getTileSize() * static_cast<float>(m_Size);
+		float eraserSize = activeLayer.getTileSize() * static_cast<float>(m_Size);
 
 		unsigned int color = 0xff0099ff;
 
@@ -76,16 +76,16 @@ namespace spright { namespace editor {
 		m_BottomLine = new Rect2D(-eraserSize / 2.0f, -eraserSize / 2.0f, eraserSize, 0.1f, color);
 		m_LeftLine = new Rect2D(-eraserSize / 2.0f, -eraserSize / 2.0f, 0.1f, eraserSize, color);
 
-		tempLayer->add(m_TopLine);
-		tempLayer->add(m_RightLine);
-		tempLayer->add(m_BottomLine);
-		tempLayer->add(m_LeftLine);
+		tempLayer.add(m_TopLine);
+		tempLayer.add(m_RightLine);
+		tempLayer.add(m_BottomLine);
+		tempLayer.add(m_LeftLine);
 	}
 
 	void EraseTool::deactivate()
 	{
-		auto tempLayer = this->m_DocumentStore->getActiveDocument()->getLayerHandler()->getLayer(DEFAULT_TEMP_LAYER_ID);
-		tempLayer->clear();
+		TileLayer& tempLayer = m_LayerProvider->getTempLayer();
+		tempLayer.clear();
 	}
 	void EraseTool::setOptions(std::string json)
 	{

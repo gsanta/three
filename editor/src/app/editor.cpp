@@ -23,7 +23,7 @@ namespace spright { namespace editor {
 		m_toolHandler = new ToolHandler(m_Window, getDocumentStore(), m_Services, m_DocumentStore->getActiveDocument()->getCamera());
 		m_toolHandler->addTool(new BrushTool(getDocumentStore(), m_Services->getEventHandler()));
 		m_toolHandler->addTool(new RectangleTool(getDocumentStore(), m_Services, m_Services->getEventHandler()));
-		m_toolHandler->addTool(new EraseTool(getDocumentStore()));
+		m_toolHandler->addTool(new EraseTool(new LayerProviderImpl(getDocumentStore())));
 		m_toolHandler->addTool(new PanTool(getDocumentStore()->getActiveDocument()->getCamera()));
 		m_toolHandler->addTool(new ZoomTool(getDocumentStore()->getActiveDocument()->getCamera()));
 		m_toolHandler->addTool(new PaintBucketTool(getDocumentStore(), m_Services));

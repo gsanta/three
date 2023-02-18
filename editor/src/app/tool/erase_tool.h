@@ -1,11 +1,13 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 #include "../../engine/graphics/renderable/rect2d.h"
 #include "../../engine/graphics/renderable/renderable2d.h"
 #include "../document/document_store.h"
 #include "tool.h"
 #include "../service/core/event/event_handler.h"
+#include "helper/layer_provider.h"
 
 namespace spright { namespace editor {
 	using namespace spright::maths;
@@ -13,7 +15,7 @@ namespace spright { namespace editor {
 
 	class EraseTool : public Tool {
 	private:
-		DocumentStore* m_DocumentStore;
+		unique_ptr<LayerProvider> m_LayerProvider;
 		vector<Rect2D*> m_SelectionSprites;
 
 		Rect2D* m_TopLine = nullptr;
@@ -29,7 +31,7 @@ namespace spright { namespace editor {
 		float m_NoMovementTolerance = 0.1f;
 
 	public:
-		EraseTool(DocumentStore* documentStore);
+		EraseTool(LayerProvider* m_LayerProvider);
 		void pointerDown(PointerInfo& pointerInfo) override;
 		void pointerMove(PointerInfo& pointerInfo) override;
 		void activate() override;
