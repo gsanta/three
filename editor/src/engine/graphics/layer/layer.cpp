@@ -2,8 +2,8 @@
 
 namespace spright { namespace engine {
 
-	Layer::Layer(std::string name, std::string id, Container* container, Renderer2D* renderer, Shader* shader, Camera* camera)
-		: m_Name(name), m_Id(id), m_Container(container), m_Renderer(renderer), m_Shader(shader), m_Camera(camera) {
+	Layer::Layer(Renderer2D* renderer, Shader* shader)
+		: m_Renderer(renderer), m_Shader(shader) {
 	}
 	Layer::~Layer() {
 		delete m_Shader;
@@ -28,30 +28,17 @@ namespace spright { namespace engine {
 		}
 	}
 
-	nlohmann::json Layer::getLayerDescription() {
-		nlohmann::json json = {
-			{"id", m_Id},
-			{"name", m_Name},
-		};
-
-		return json;
-	}
-
 	void Layer::clear() {
 		m_Renderables.clear();
 	}
 
-	void Layer::render() {
-		if (!m_IsEnabled) {
-			return;
-		}
-
+	void Layer::render(Camera* camera) {
 		m_Shader->enable();
 
-		m_Shader->setUniformMat4("pr_matrix", m_Camera->getProjectionMatrix());
+		m_Shader->setUniformMat4("pr_matrix", camera->getProjectionMatrix());
 
 		m_Renderer->begin();
-		m_Renderer->push(m_Camera->getView());
+		m_Renderer->push(camera->getView());
 		for (const Renderable2D* renderable : m_Renderables) {
 			renderable->submit(m_Renderer);
 		}

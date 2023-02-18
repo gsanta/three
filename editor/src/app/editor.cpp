@@ -21,7 +21,7 @@ namespace spright { namespace editor {
 		m_JsonExport = std::make_unique<JsonIO>(getDocumentStore(), m_DocumentHandler);
 
 		m_toolHandler = new ToolHandler(m_Window, getDocumentStore(), m_Services, m_DocumentStore->getActiveDocument()->getCamera());
-		m_toolHandler->addTool(new BrushTool(getDocumentStore(), m_Services, m_Services->getEventHandler()));
+		m_toolHandler->addTool(new BrushTool(getDocumentStore(), m_Services->getEventHandler()));
 		m_toolHandler->addTool(new RectangleTool(getDocumentStore(), m_Services, m_Services->getEventHandler()));
 		m_toolHandler->addTool(new EraseTool(getDocumentStore()));
 		m_toolHandler->addTool(new PanTool(getDocumentStore()->getActiveDocument()->getCamera()));

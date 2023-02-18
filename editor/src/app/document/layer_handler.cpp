@@ -1,8 +1,8 @@
  #include "./layer_handler.h"
 
 namespace spright { namespace editor {
-	Layer* findLayer(std::string id, std::vector<Layer*>& layers) {
-		auto it = find_if(layers.begin(), layers.end(), [&id](Layer* layer) { return layer->getId() == id; });
+	TileLayer* findLayer(std::string id, std::vector<TileLayer*>& layers) {
+		auto it = find_if(layers.begin(), layers.end(), [&id](TileLayer* layer) { return layer->getId() == id; });
 
 		if (it != layers.end()) {
 			return *it;
@@ -11,9 +11,9 @@ namespace spright { namespace editor {
 		return nullptr;
 	}
 
-	Layer* LayerHandler::getLayer(std::string id)
+	TileLayer* LayerHandler::getLayer(std::string id)
 	{
-		Layer* layer = findLayer(id, m_Layers);
+		TileLayer* layer = findLayer(id, m_SortableLayers);
 
 		if (layer != nullptr) {
 			return layer;
@@ -33,28 +33,23 @@ namespace spright { namespace editor {
 	}
 
 	TileLayer* LayerHandler::getTileLayer(std::string id) {
-		Layer* layer = getLayer(id);
+		TileLayer* layer = getLayer(id);
 
-		if (m_TileLayers.find(layer) != m_TileLayers.end()) {
+		if (m_AllLayers.find(layer) != m_AllLayers.end()) {
 			return static_cast<TileLayer*>(layer);
 		}
 
 		return nullptr;
 	}
 
-	void LayerHandler::addLayer(Layer* layer)
-	{
-		m_Layers.push_back(layer);
-	}
-
 	void LayerHandler::addLayer(TileLayer* layer)
 	{
-		m_Layers.push_back(layer);
-		m_TileLayers.insert(layer);
+		m_SortableLayers.push_back(layer);
+		m_AllLayers.insert(layer);
 	}
 
-	std::vector<Layer*>& LayerHandler::getLayers() {
-		return m_Layers;
+	std::vector<TileLayer*>& LayerHandler::getLayers() {
+		return m_SortableLayers;
 	}
 
 	void LayerHandler::setLayerIndex(std::string layerId, int newIndex) {
@@ -64,28 +59,28 @@ namespace spright { namespace editor {
 			newIndex -= 1;
 		}
 
-		Layer* layer = getLayer(layerId);
+		TileLayer* layer = getLayer(layerId);
 
 		if (layer != nullptr) {
-			m_Layers.erase(m_Layers.begin() + oldIndex);
-			m_Layers.insert(m_Layers.begin() + newIndex, layer);
+			m_SortableLayers.erase(m_SortableLayers.begin() + oldIndex);
+			m_SortableLayers.insert(m_SortableLayers.begin() + newIndex, layer);
 		}
 	}
 
 	void LayerHandler::removeLayer(std::string layerId) {
 		int index = getLayerIndex(layerId);
-		Layer* layer = getLayer(layerId);
+		TileLayer* layer = getLayer(layerId);
 
 
 		if (index != -1) {
-			m_Layers.erase(m_Layers.begin() + index);
-			if (m_TileLayers.find(layer) != m_TileLayers.end()) {
-				m_TileLayers.erase(layer);
+			m_SortableLayers.erase(m_SortableLayers.begin() + index);
+			if (m_AllLayers.find(layer) != m_AllLayers.end()) {
+				m_AllLayers.erase(layer);
 			}
 		}
 
-		if (index != -1 && m_Layers.size() > 1) {
-			Layer* layer = getLayer(layerId);
+		if (index != -1 && m_SortableLayers.size() > 1) {
+			TileLayer* layer = getLayer(layerId);
 
 			bool shouldUpdateActiveLayer = false;
 
@@ -93,10 +88,10 @@ namespace spright { namespace editor {
 				shouldUpdateActiveLayer = true;
 			}
 
-			m_Layers.erase(m_Layers.begin() + index);
+			m_SortableLayers.erase(m_SortableLayers.begin() + index);
 
 			if (shouldUpdateActiveLayer) {
-				m_ActiveLayer = m_Layers[0];
+				m_ActiveLayer = m_SortableLayers[0];
 			}
 		}
 	}
@@ -104,42 +99,35 @@ namespace spright { namespace editor {
 	int LayerHandler::getLayerIndex(std::string layerId) {
 		int index = -1;
 
-		auto it = find_if(m_Layers.begin(), m_Layers.end(), [&](Layer* layer) { return layer->getId() == layerId; });
+		auto it = find_if(m_SortableLayers.begin(), m_SortableLayers.end(), [&](TileLayer* layer) { return layer->getId() == layerId; });
 
-		if (it != m_Layers.end()) {
-			return it - m_Layers.begin();
+		if (it != m_SortableLayers.end()) {
+			return it - m_SortableLayers.begin();
 		}
 
 		return -1;
 	}
 
-	void LayerHandler::addBeforeLayer(Layer* layer) {
-		m_BeforeLayers.push_back(layer);
-	}
-
 	void LayerHandler::addBeforeLayer(TileLayer* layer) {
-		addBeforeLayer((Layer*)layer);
-		m_TileLayers.insert(layer);
+		m_BeforeLayers.push_back(layer);
+		m_AllLayers.insert(layer);
 	}
 
-	std::vector<Layer*>& LayerHandler::getBeforeLayers() {
+	std::vector<TileLayer*>& LayerHandler::getBeforeLayers() {
 		return m_BeforeLayers;
 	}
 
-	void LayerHandler::addAfterLayer(Layer* layer) {
-		m_AfterLayers.push_back(layer);
-	}
 
 	void LayerHandler::addAfterLayer(TileLayer* layer) {
-		addAfterLayer((Layer*)layer);
-		m_TileLayers.insert(layer);
+		m_AfterLayers.push_back(layer);
+		m_AllLayers.insert(layer);
 	}
 
-	std::vector<Layer*>& LayerHandler::getAfterLayers() {
+	std::vector<TileLayer*>& LayerHandler::getAfterLayers() {
 		return m_AfterLayers;
 	}
 
-	Layer* LayerHandler::getActiveLayer() {
+	TileLayer* LayerHandler::getActiveLayer() {
 		if (m_ActiveLayer == nullptr) {
 			throw "No active layer for the current document";
 		}

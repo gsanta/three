@@ -4,8 +4,9 @@
 #include "../../engine/graphics/renderable/rect2d.h"
 #include "../../engine/graphics/renderable/renderable2d.h"
 #include "../editor_config.h"
-#include "../service/services.h"
 #include "../document/document_store.h"
+#include "../service/core/event/event_handler.h"
+#include "brush.h"
 
 namespace spright { namespace editor {
 	using namespace ::spright::engine;
@@ -15,20 +16,21 @@ namespace spright { namespace editor {
 	{
 	private:
 		DocumentStore *m_documentStore;
-		Services* m_Services;
 		EventHandler* m_EventHandler;
 		int m_Size = 1;
 		Rect2D *sprite;
+		unsigned int m_Color = 0x8f000000;
+		Brush brush;
 
 	public:
-		BrushTool(DocumentStore* documentStore, Services* services, EventHandler* eventHandler);
+		BrushTool(DocumentStore* documentStore, EventHandler* eventHandler);
 
 		void setSize(int size);
-
+		unsigned int getColor() const;
+		void setColor(unsigned int color);
 	private:
 		void pointerMove(PointerInfo& pointerInfo) override;
 		void pointerDown(PointerInfo &pointerInfo) override;
-		void setColor(TileLayer* tileLayer, Vec2Int tilePos);
-		void draw(PointerInfo& pointerInfo);
+		void paint(PointerInfo& pointerInfo);
 	};
 }}

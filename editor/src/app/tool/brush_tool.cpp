@@ -2,8 +2,8 @@
 
 namespace spright { namespace editor {
 
-	BrushTool::BrushTool(DocumentStore *documentStore, Services* services, EventHandler* eventHandler)
-			: m_documentStore(documentStore), m_Services(services), m_EventHandler(eventHandler), Tool("brush")
+	BrushTool::BrushTool(DocumentStore *documentStore, EventHandler* eventHandler)
+			: m_documentStore(documentStore), m_EventHandler(eventHandler), Tool("brush")
 	{
 	}
 
@@ -12,17 +12,25 @@ namespace spright { namespace editor {
 		m_Size = size;
 	}
 
+	unsigned int BrushTool::getColor() const {
+		return m_Color;
+	}
+
+	void BrushTool::setColor(unsigned int color) {
+		m_Color = color;
+	}
+
 	void BrushTool::pointerMove(PointerInfo &pointerInfo)
 	{
-		draw(pointerInfo);
+		paint(pointerInfo);
 	}
 
 	void BrushTool::pointerDown(PointerInfo& pointerInfo)
 	{
-		draw(pointerInfo);
+		paint(pointerInfo);
 	}
 
-	void BrushTool::draw(PointerInfo& pointerInfo) {
+	void BrushTool::paint(PointerInfo& pointerInfo) {
 		if (pointerInfo.isLeftButtonDown() == false) {
 			return;
 		}
@@ -49,27 +57,10 @@ namespace spright { namespace editor {
 			for (int j = 0; j < m_Size; j++) {
 				Vec2Int tilePos = tileLayer->getTilePos(pointerInfo.curr);
 
-				setColor(tileLayer, tilePos);
+				brush.paint(tileLayer, tilePos, m_Color);
 			}
 		}
 
 		m_EventHandler->emitDataChange();
-	}
-
-	void BrushTool::setColor(TileLayer* tileLayer, Vec2Int tilePos)
-	{
-		unsigned int color = m_Services->getColorPalette()->color;
-
-		int tileIndex = tileLayer->getTileIndex(tilePos.x, tilePos.y);
-		Renderable2D* renderable = tileLayer->getAtTileIndex(tileIndex);
-
-		if (renderable == nullptr) {
-			Vec2 worldPos = tileLayer->getBottomLeftPos(tileIndex);
-			Rect2D* sprite = new Rect2D(worldPos.x, worldPos.y, tileLayer->getTileSize(), tileLayer->getTileSize(), color);
-			tileLayer->add(sprite);
-		}
-		else {
-			renderable->setColor(color);
-		}
 	}
 }}

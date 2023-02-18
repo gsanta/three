@@ -10,31 +10,28 @@ namespace spright { namespace editor {
 
 	class LayerHandler {
 	private:
-		std::vector<Layer*> m_Layers;
-		std::vector<Layer*> m_BeforeLayers;
-		std::vector<Layer*> m_AfterLayers;
+		std::vector<TileLayer*> m_SortableLayers;
+		std::vector<TileLayer*> m_BeforeLayers;
+		std::vector<TileLayer*> m_AfterLayers;
 
-		std::set<Layer*> m_TileLayers;
+		std::set<TileLayer*> m_AllLayers;
 
-		Layer* m_ActiveLayer;
+		TileLayer* m_ActiveLayer;
 	public:
-		Layer* getLayer(std::string id);
+		TileLayer* getLayer(std::string id);
 		TileLayer* getTileLayer(std::string id);
 
-		void addLayer(Layer* layer);
 		void addLayer(TileLayer* tileLayer);
-		std::vector<Layer*>& getLayers();
-		void addBeforeLayer(Layer* layer);
+		std::vector<TileLayer*>& getLayers();
 		void addBeforeLayer(TileLayer* tileLayer);
-		std::vector<Layer*>& getBeforeLayers();
-		void addAfterLayer(Layer* layer);
+		std::vector<TileLayer*>& getBeforeLayers();
 		void addAfterLayer(TileLayer* tileLayer);
-		std::vector<Layer*>& getAfterLayers();
+		std::vector<TileLayer*>& getAfterLayers();
 
 		void setLayerIndex(std::string layerId, int newIndex);
 		int getLayerIndex(std::string layerId);
 		void removeLayer(std::string layerId);
-		Layer* getActiveLayer();
+		TileLayer* getActiveLayer();
 		void setActiveLayer(std::string layerId);
 	};
 

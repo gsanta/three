@@ -25,13 +25,15 @@
 #include "../src/engine/graphics/renderable/group.h"
 #include "../src/app/editor.h"
 #include "../src/app/editor_api.h"
+#include "../src/app/tool/brush_tool.cpp"
 // #define SPARKY_EMSCRIPTEN 0
 
 using namespace ::spright::engine;
 using namespace ::spright::maths;
+using namespace ::spright::editor;
 
 Window *window = nullptr;
-spright::Editor *editor = nullptr;
+Editor *editor = nullptr;
 
 #ifdef SPARKY_EMSCRIPTEN
 #include <emscripten/emscripten.h>
@@ -168,6 +170,8 @@ void setColor(unsigned int color)
 	if (editor != nullptr)
 	{
 		editor->getServices()->getColorPalette()->color = color;
+		BrushTool* brushTool = dynamic_cast<BrushTool*>(editor->getToolHandler()->getTool("brush"));
+		brushTool->setColor(color);
 	}
 }
 

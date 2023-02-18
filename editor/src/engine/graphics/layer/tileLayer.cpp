@@ -2,8 +2,8 @@
 
 namespace spright { namespace engine {
 
-	TileLayer::TileLayer(std::string name, std::string id, Container* container, Shader* shader, Renderer2D* renderer, Camera* camera, float tileSize)
-		: Layer(name, id, container, renderer, shader, camera), m_TileSize(tileSize) {
+	TileLayer::TileLayer(std::string name, std::string id, Container* container, Shader* shader, Renderer2D* renderer, float tileSize)
+		: Layer(renderer, shader), m_TileSize(tileSize), m_Name(name), m_Id(id), m_Container(container) {
 	
 		Dimensions dimensions = container->getDimensions();
 
@@ -20,6 +20,50 @@ namespace spright { namespace engine {
 
 	TileLayer::~TileLayer() {
 		delete[] m_TileIndexes;
+	}
+
+	std::string TileLayer::getId() {
+		return m_Id;
+	}
+
+	void TileLayer::setEnabled(bool isEnabled) {
+		m_IsEnabled = isEnabled;
+	}
+
+	bool TileLayer::isEnabled() {
+		return m_IsEnabled;
+	}
+
+	void TileLayer::add(Rect2D* rect)
+	{
+		Layer::add(rect);
+
+		Vec2 pos = rect->getBounds()->getCenter();
+		Vec2Int tilePos = getTilePos(pos);
+
+		int index = m_TileBounds.getWidth() * tilePos.y + tilePos.x;
+		if (m_IndexSize > index) {
+			m_TileIndexes[index] = rect;
+			rect->setTileIndex(index);
+		}
+	}
+
+	void TileLayer::remove(Rect2D* rect) {
+		Layer::remove(rect);
+	}
+	
+	void TileLayer::clear() {
+		Layer::clear();
+	}
+	
+	void TileLayer::render(Camera* camera) {
+		if (m_IsEnabled) {
+			Layer::render(camera);
+		}
+	}
+
+	std::vector<Renderable2D*>& TileLayer::getRenderables() {
+		return Layer::getRenderables();
 	}
 
 	Vec2 TileLayer::getBottomLeftPos(Vec2 pointer)
@@ -88,6 +132,53 @@ namespace spright { namespace engine {
 		return Vec2(worldX, worldY);
 	}
 
+	void TileLayer::updateTileIndex(int oldIndex, int newIndex) {
+		Rect2D* sprite = dynamic_cast<Rect2D*>(getAtTileIndex(oldIndex));
+		sprite->setTileIndex(newIndex);
+		m_TileIndexes[oldIndex] = nullptr;
+		m_TileIndexes[newIndex] = sprite;
+	}
+
+	int TileLayer::getTileIndex(int tileX, int tileY)
+	{
+		return m_TileBounds.getWidth() * tileY + tileX;
+	}
+
+	int TileLayer::getTileIndex(Vec2 worldPos)
+	{
+		Vec2Int tilePos = getTilePos(worldPos);
+
+		return getTileIndex(tilePos.x, tilePos.y);
+	}
+
+	const BoundsInt& TileLayer::getTileBounds() const
+	{
+		return m_TileBounds;
+	}
+
+	Rect2D* TileLayer::getAtTileIndex(int tilePos)
+	{
+		for (int i = 0; i < m_IndexSize; i++) {
+			if (m_TileIndexes[i] != nullptr) {
+				int a = 1;
+			}
+		}
+		return static_cast<Rect2D*>(m_TileIndexes[tilePos]);
+	}
+
+	int TileLayer::getIndexSize() const {
+		return m_IndexSize;
+	}
+
+	nlohmann::json TileLayer::getLayerDescription() {
+		nlohmann::json json = {
+			{"id", m_Id},
+			{"name", m_Name},
+		};
+
+		return json;
+	}
+
 	nlohmann::json TileLayer::getJson()
 	{
 		nlohmann::json json;
@@ -117,57 +208,4 @@ namespace spright { namespace engine {
 			add(sprite);
 		}
 	}
-
-	void TileLayer::add(Rect2D* sprite)
-	{
-		Layer::add(sprite);
-
-		Vec2 pos = sprite->getBounds()->getCenter();
-		Vec2Int tilePos = getTilePos(pos);
-
-		int index = m_TileBounds.getWidth() * tilePos.y + tilePos.x;
-		if (m_IndexSize > index) {
-			m_TileIndexes[index] = sprite;
-			sprite->setTileIndex(index);
-		}
-	}
-
-	void TileLayer::updateTileIndex(int oldIndex, int newIndex) {
-		Rect2D* sprite = dynamic_cast<Rect2D*>(getAtTileIndex(oldIndex));
-		sprite->setTileIndex(newIndex);
-		m_TileIndexes[oldIndex] = nullptr;
-		m_TileIndexes[newIndex] = sprite;
-	}
-
-	int TileLayer::getTileIndex(int tileX, int tileY)
-	{
-		return m_TileBounds.getWidth() * tileY + tileX;
-	}
-
-	int TileLayer::getTileIndex(Vec2 worldPos)
-	{
-		Vec2Int tilePos = getTilePos(worldPos);
-
-		return getTileIndex(tilePos.x, tilePos.y);
-	}
-
-	const BoundsInt& TileLayer::getTileBounds() const
-	{
-		return m_TileBounds;
-	}
-
-	Renderable2D* TileLayer::getAtTileIndex(int tilePos)
-	{
-		for (int i = 0; i < m_IndexSize; i++) {
-			if (m_TileIndexes[i] != nullptr) {
-				int a = 1;
-			}
-		}
-		return m_TileIndexes[tilePos];
-	}
-
-	int TileLayer::getIndexSize() const {
-		return m_IndexSize;
-	}
-
 }}

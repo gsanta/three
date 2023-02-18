@@ -54,7 +54,7 @@ namespace spright { namespace editor {
 		for (int i = start; i < end; i++) {
 			for (int j = start; j < end; j++) {
 				int currentTileIndex = activeLayer->getTileIndex(centerCol + i, centerRow + j);
-				Renderable2D* sprite = activeLayer->getAtTileIndex(currentTileIndex);
+				Rect2D* sprite = activeLayer->getAtTileIndex(currentTileIndex);
 				if (sprite != nullptr) {
 					activeLayer->remove(sprite);
 				}
