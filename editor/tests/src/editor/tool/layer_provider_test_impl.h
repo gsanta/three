@@ -1,5 +1,6 @@
 #pragma once
 #include "../src/app/tool/helper/layer_provider.h"
+#include "../src/engine/graphics/layer/tileLayer.h"
 
 namespace spright { namespace editor {
 

@@ -170,6 +170,11 @@ namespace spright { namespace engine {
 		return static_cast<Rect2D*>(m_TileIndexes[tilePos]);
 	}
 
+	Rect2D* TileLayer::getAtTilePos(int tileX, int tileY)
+	{
+		return getAtTileIndex(getTileIndex(tileX, tileY));
+	}
+
 	int TileLayer::getIndexSize() const {
 		return m_IndexSize;
 	}
