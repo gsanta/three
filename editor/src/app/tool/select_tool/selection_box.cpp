@@ -17,7 +17,7 @@ namespace spright {
 		m_Rect.topRight = pos;
 	}
 
-	void SelectionBox::update(Vec2 pos) {
+	void SelectionBox::setPosition(Vec2 pos) {
 
 		calcSelectionBounds(m_Start, pos);
 

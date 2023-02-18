@@ -51,7 +51,7 @@ namespace spright {
 			//float startY = down.y < curr.y ? down.y : curr.y;
 			//float endY = down.y < curr.y ? curr.y : down.y;
 
-			m_SelectionBox->update(pointerInfo.curr);
+			m_SelectionBox->setPosition(pointerInfo.curr);
 
 			//updateSelectionBox(Vec2(startX, startY), Vec2(endX, endY));
 		}

@@ -20,13 +20,13 @@ namespace spright { namespace editor {
 		vector<Rect2D*> m_SelectionSprites;
 
 		Eraser m_Eraser;
-
+		
 		Rect2D* m_TopLine = nullptr;
 		Rect2D* m_RightLine = nullptr;
 		Rect2D* m_BottomLine = nullptr;
 		Rect2D* m_LeftLine = nullptr;
 
-		int m_Size = 5;
+		int m_Size = 2;
 
 		float m_DashSize = 0.2f;
 		bool m_IsMoveSelection = false;

@@ -27,7 +27,12 @@ namespace spright { namespace editor {
 		float halfEraserSize = activeLayer.getTileSize() * static_cast<float>(m_Size) / 2.0f;
 
 		int tileIndex = activeLayer.getTileIndex(pointerInfo.curr);
+		float halfTileSize = activeLayer.getTileSize() / 2.0f;
 		Vec2 pos = activeLayer.getCenterPos(tileIndex);
+
+		if (m_Size % 2 == 0) {
+			pos += Vec2(-halfTileSize, -halfTileSize);
+		}
 
 		m_TopLine->setCenterPosition(pos + Vec2(0, halfEraserSize));
 		m_RightLine->setCenterPosition(pos + Vec2(halfEraserSize, 0));

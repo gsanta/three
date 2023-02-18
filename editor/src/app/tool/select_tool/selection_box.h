@@ -25,7 +25,7 @@ namespace spright {
 		SelectionBox(DocumentStore* documentStore);
 		~SelectionBox();
 		void start(Vec2 pos);
-		void update(Vec2 pos);
+		void setPosition(Vec2 pos);
 		void move(Vec2 delta);
 		void clear();
 		bool isInsideSelection(Vec2 point);
