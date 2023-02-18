@@ -10,18 +10,15 @@
 
 namespace spright { namespace engine {
 
-	class Layer
+	class Group
 	{
 	protected:
 		std::vector <Renderable2D*> m_Renderables;
 		Renderer2D *m_Renderer;
-		Shader *m_Shader;
-
-	protected:
-		Layer(Renderer2D *renderer, Shader *shader);
 
 	public:
-		virtual ~Layer();
+		Group(Renderer2D *renderer);
+		virtual ~Group();
 		virtual void add(Renderable2D *renderable);
 		virtual void render(Camera* camera);
 		virtual void clear();

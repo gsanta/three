@@ -1,6 +1,6 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_approx.hpp>
-#include "../src/engine/graphics/layer/layer.h"
+#include "../src/engine/graphics/layer/group.h"
 #include "../src/engine/graphics/layer/dimensions.h"
 #include "../src/engine/graphics/camera/camera.h"
 #include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
@@ -17,7 +17,7 @@ TEST_CASE("Layer add", "[layer]") {
 		Camera* camera = new Camera(800, 600, Dimensions(-16, 16, -16, 16), 0, 1);
 		Document* document = new Document(Dimensions(-16.0f, 16.0f, -16.0f, 16.0f), camera);
 
-		TileLayer layer("layer", "id", document, new HeadlessShader(), new HeadlessRenderer2D(), camera);
+		TileLayer layer("layer", "id", new Group(new HeadlessRenderer2D()), document);
 
 		REQUIRE(layer.getRenderables().size() == 0);
 
@@ -38,7 +38,7 @@ TEST_CASE("Layer getTilePos", "[layer]") {
 		Camera* camera = new Camera(800, 600, Dimensions(-16, 16, -16, 16), 0, 1);
 		Document* document = new Document(Dimensions(-16.0f, 16.0f, -16.0f, 16.0f), camera);
 
-		TileLayer layer("layer", "id", document, new HeadlessShader(), new HeadlessRenderer2D(), camera);
+		TileLayer layer("layer", "id", new Group(new HeadlessRenderer2D()), document);
 
 		float tileSize = layer.getTileSize();
 

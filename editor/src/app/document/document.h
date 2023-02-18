@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <algorithm>
-#include "../../engine/graphics/layer/layer.h"
+#include "../../engine/graphics/layer/group.h"
 #include "../../engine/graphics/layer/tileLayer.h"
 #include "../../engine/graphics/camera/camera.h"
 #include "../../engine/graphics/camera/ortho_projection_info.h"

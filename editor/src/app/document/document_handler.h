@@ -2,6 +2,7 @@
 #include <vector>
 #include "checkerboard.h"
 #include "../../engine/graphics/layer/tileLayer.h"
+#include "../../engine/graphics/layer/group.h"
 #include "../../engine/graphics/layer/dimensions.h"
 #include "../../engine/graphics/shader/shader.h"
 #include "../../engine/graphics/impl/gl/gl_shader.h"

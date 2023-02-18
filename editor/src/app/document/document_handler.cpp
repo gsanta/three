@@ -17,11 +17,11 @@ namespace spright { namespace editor {
 	TileLayer* DocumentHandler::createUserLayer(Document* document, std::string name, std::string id)
 	{
 #ifdef SPARKY_EMSCRIPTEN
-		Shader *shaderUnlit = new GLShader("resources/shaders/basic.es3.vert", "resources/shaders/basic_unlit.es3.frag");
+		shared_ptr<GLShader> shaderUnlit = make_shared<GLShader>("resources/shaders/basic.es3.vert", "resources/shaders/basic_unlit.es3.frag");
 #else
-		Shader *shaderUnlit = new GLShader("shaders/basic.vert", "shaders/unlit.frag");
+		shared_ptr<Shader> shaderUnlit = make_shared<GLShader>("shaders/basic.vert", "shaders/unlit.frag");
 #endif
-		TileLayer *layer = new TileLayer(name, id, document, shaderUnlit, new GLRenderer2D());
+		TileLayer *layer = new TileLayer(name, id, new Group(new GLRenderer2D(shaderUnlit)), document);
 
 		document->getLayerHandler()->addLayer(layer);
 
@@ -36,19 +36,17 @@ namespace spright { namespace editor {
 	Document* DocumentHandler::createDocument()
 	{
 #ifdef SPARKY_EMSCRIPTEN
-		Shader *shader = new GLShader("resources/shaders/basic.es3.vert", "resources/shaders/basic.es3.frag");
-		Shader *shaderUnlit = new GLShader("resources/shaders/basic.es3.vert", "resources/shaders/basic_unlit.es3.frag");
+		shared_ptr<GLShader> shaderUnlit = make_shared<GLShader>("resources/shaders/basic.es3.vert", "resources/shaders/basic_unlit.es3.frag");
 #else
-		Shader *shader = new GLShader("shaders/basic.vert", "shaders/basic.frag");
-		Shader *shaderUnlit = new GLShader("shaders/basic.vert", "shaders/unlit.frag");
+		shared_ptr<GLShader> shaderUnlit =  make_shared<GLShader>("shaders/basic.vert", "shaders/unlit.frag");
 #endif
 		float pixelCount = 32.0f;
 		Dimensions documentDimensions(-pixelCount / 2.0f, pixelCount / 2.0f, -pixelCount / 2.0f, pixelCount / 2.0f);
 		Camera *camera = new Camera(m_Window->getWidth(), m_Window->getHeight(), documentDimensions, -1.0f, 1.0f);
 		Document *document = new Document(documentDimensions, camera);
 
-		TileLayer *tempLayer = new TileLayer("", DEFAULT_TEMP_LAYER_ID, document, shaderUnlit, new GLRenderer2D());
-		TileLayer *backgroundLayer = new TileLayer("", DEFAULT_BACKGROUND_LAYER_ID, document, shaderUnlit, new GLRenderer2D(), 2.0f);
+		TileLayer *tempLayer = new TileLayer("", DEFAULT_TEMP_LAYER_ID, new Group(new GLRenderer2D(shaderUnlit)), document);
+		TileLayer *backgroundLayer = new TileLayer("", DEFAULT_BACKGROUND_LAYER_ID, new Group(new GLRenderer2D(shaderUnlit)), document, 2.0f);
 
 		document->getLayerHandler()->addBeforeLayer(backgroundLayer);
 		document->getLayerHandler()->addAfterLayer(tempLayer);

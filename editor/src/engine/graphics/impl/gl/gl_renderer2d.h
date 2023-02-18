@@ -1,11 +1,13 @@
 #pragma once
 
 #include <cstddef>
+#include <memory>
 #include "../../renderer/renderer2d.h"
 #include "../../renderer/vertex_data.h"
 #include "../../buffer/vertexArray.h"
 #include "../../buffer/indexBuffer.h"
 #include "../../renderable/renderable2d.h"
+#include "../../shader/shader.h"
 
 namespace spright { namespace engine {
 
@@ -33,7 +35,7 @@ namespace spright { namespace engine {
 		std::vector<GLuint> m_TextureSlots;
 
 	public:
-		GLRenderer2D();
+		GLRenderer2D(std::shared_ptr<Shader> shader);
 		~GLRenderer2D();
 		inline virtual VertexData *&getBuffer()
 		{

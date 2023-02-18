@@ -13,7 +13,7 @@ namespace spright { namespace editor {
 	}
 
 	Document::~Document() {
-		std::vector<Layer*>::iterator it;
+		std::vector<Group*>::iterator it;
 
 		delete m_Camera;
 		// TODO fix it
@@ -35,15 +35,15 @@ namespace spright { namespace editor {
 
 	void Document::render()
 	{
-		for (Layer* layer : getLayerHandler()->getBeforeLayers()) {
+		for (TileLayer* layer : getLayerHandler()->getBeforeLayers()) {
 			layer->render(m_Camera);
 		}
 
-		for (Layer* layer : getLayerHandler()->getLayers()) {
+		for (TileLayer* layer : getLayerHandler()->getLayers()) {
 			layer->render(m_Camera);
 		}
 
-		for (Layer* layer : getLayerHandler()->getAfterLayers()) {
+		for (TileLayer* layer : getLayerHandler()->getAfterLayers()) {
 			layer->render(m_Camera);
 		}
 	}
