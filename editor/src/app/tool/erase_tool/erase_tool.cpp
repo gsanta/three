@@ -37,29 +37,7 @@ namespace spright { namespace editor {
 
 	void EraseTool::erase(PointerInfo& pointerInfo) {
 		TileLayer& activeLayer = m_LayerProvider->getActiveLayer();
-		int tileIndex = activeLayer.getTileIndex(pointerInfo.curr);
-
-		bool isEven = true;
-
-		if (m_Size % 2 == 1) {
-			isEven = false;
-		}
-
-		int start = isEven ? -m_Size / 2 : -(m_Size - 1) / 2;
-		int end = isEven ? m_Size / 2 : (m_Size - 1) / 2 + 1;
-
-		int centerCol = activeLayer.getColumn(tileIndex);
-		int centerRow = activeLayer.getRow(tileIndex);
-
-		for (int i = start; i < end; i++) {
-			for (int j = start; j < end; j++) {
-				int currentTileIndex = activeLayer.getTileIndex(centerCol + i, centerRow + j);
-				Rect2D* sprite = activeLayer.getAtTileIndex(currentTileIndex);
-				if (sprite != nullptr) {
-					activeLayer.remove(sprite);
-				}
-			}
-		}
+		m_Eraser.erase(activeLayer, activeLayer.getTilePos(pointerInfo.curr), m_Size);
 	}
 
 	void EraseTool::activate()

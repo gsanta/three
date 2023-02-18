@@ -2,12 +2,13 @@
 
 #include <vector>
 #include <memory>
-#include "../../engine/graphics/renderable/rect2d.h"
-#include "../../engine/graphics/renderable/renderable2d.h"
-#include "../document/document_store.h"
-#include "tool.h"
-#include "../service/core/event/event_handler.h"
-#include "helper/layer_provider.h"
+#include "../../../engine/graphics/renderable/rect2d.h"
+#include "../../../engine/graphics/renderable/renderable2d.h"
+#include "../../document/document_store.h"
+#include "../tool.h"
+#include "../../service/core/event/event_handler.h"
+#include "../helper/layer_provider.h"
+#include "eraser.h"
 
 namespace spright { namespace editor {
 	using namespace spright::maths;
@@ -17,6 +18,8 @@ namespace spright { namespace editor {
 	private:
 		unique_ptr<LayerProvider> m_LayerProvider;
 		vector<Rect2D*> m_SelectionSprites;
+
+		Eraser m_Eraser;
 
 		Rect2D* m_TopLine = nullptr;
 		Rect2D* m_RightLine = nullptr;

@@ -49,9 +49,18 @@ namespace spright { namespace engine {
 	}
 
 	void TileLayer::remove(Rect2D* rect) {
+		Vec2 pos = rect->getBounds()->getCenter();
+		Vec2Int tilePos = getTilePos(pos);
+
+		int index = m_TileBounds.getWidth() * tilePos.y + tilePos.x;
+
+		m_TileIndexes[index] = nullptr;
+		rect->setTileIndex(-1);
+
 		m_Group->remove(rect);
 	}
 	
+	// TODO: fix clear to remove from m_TileIndexes
 	void TileLayer::clear() {
 		m_Group->clear();
 	}
@@ -158,11 +167,6 @@ namespace spright { namespace engine {
 
 	Rect2D* TileLayer::getAtTileIndex(int tilePos)
 	{
-		for (int i = 0; i < m_IndexSize; i++) {
-			if (m_TileIndexes[i] != nullptr) {
-				int a = 1;
-			}
-		}
 		return static_cast<Rect2D*>(m_TileIndexes[tilePos]);
 	}
 

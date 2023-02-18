@@ -1,12 +1,12 @@
 #include <catch2/catch_test_macros.hpp>
-#include "../src/app/tool/erase_tool.cpp"
+#include "../src/app/tool/erase_tool/erase_tool.cpp"
 #include "../src/app/document/document_handler.h"
 #include "../src/app/document/document_store.h"
 #include "../src/engine/graphics/impl/headless/headless_shader.h"
 #include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
 #include "../src/engine/system/window/impl/headless/headless_window.h"
 #include "../src/app/tool/brush_tool.h"
-#include "layer_provider_test_impl.h"
+#include "../layer_provider_test_impl.h"
 
 using namespace ::spright::engine;
 using namespace ::spright::editor;
