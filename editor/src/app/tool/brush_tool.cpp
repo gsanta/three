@@ -51,8 +51,6 @@ namespace spright { namespace editor {
 
 		TileLayer* tileLayer = dynamic_cast<TileLayer*>(m_documentStore->getActiveDocument()->getLayerHandler()->getActiveLayer());
 
-		Vec2 tilePos = tileLayer->getBottomLeftPos(Vec2(intersection.x, intersection.y));
-
 		for (int i = 0; i < m_Size; i++) {
 			for (int j = 0; j < m_Size; j++) {
 				Vec2Int tilePos = tileLayer->getTilePos(pointerInfo.curr);

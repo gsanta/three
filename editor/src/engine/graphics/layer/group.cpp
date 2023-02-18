@@ -28,6 +28,7 @@ namespace spright { namespace engine {
 	}
 
 	void Group::clear() {
+		// TODO: check if the renderables will be destroyed
 		m_Renderables.clear();
 	}
 
