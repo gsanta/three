@@ -36,15 +36,15 @@ namespace spright { namespace editor {
 	void Document::render()
 	{
 		for (Layer* layer : getLayerHandler()->getBeforeLayers()) {
-			layer->render();
+			layer->render(m_Camera);
 		}
 
 		for (Layer* layer : getLayerHandler()->getLayers()) {
-			layer->render();
+			layer->render(m_Camera);
 		}
 
 		for (Layer* layer : getLayerHandler()->getAfterLayers()) {
-			layer->render();
+			layer->render(m_Camera);
 		}
 	}
 }}
