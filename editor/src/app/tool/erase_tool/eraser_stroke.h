@@ -24,6 +24,6 @@ namespace spright { namespace editor {
 
 	private:
 		void init(float tileSize);
-		void setPosition(const TileLayer& eraseLayer, Vec2& pos);
+		void setPosition(const TileLayer& eraseLayer, const Vec2& pos);
 	};
 }}
