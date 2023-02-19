@@ -9,7 +9,7 @@ namespace spright { namespace editor {
 	{
 	}
 
-	void editor::EraserStroke::draw(const TileLayer& eraseLayer, Vec2& pos)
+	void editor::EraserStroke::draw(const TileLayer& eraseLayer, const Vec2& pos)
 	{
 		if (!m_DrawLayer) {
 			throw std::runtime_error("DrawLayer not set.");
