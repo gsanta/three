@@ -18,12 +18,12 @@ namespace spright { namespace editor {
 	public:
 		EraserStroke();
 		EraserStroke(TileLayer* drawLayer, int eraserSize);
-		void draw(const TileLayer& eraseLayer, Vec2& pos);
+		void draw(const TileLayer& eraseLayer, const Vec2& pos);
 		void clear();
 		float getStrokeWidth();
 
 	private:
 		void init(float tileSize);
-		void setPosition(const TileLayer& eraseLayer, const Vec2& pos);
+		void setPosition(const TileLayer& eraseLayer, Vec2& pos);
 	};
 }}
