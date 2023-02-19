@@ -10,7 +10,7 @@ TEST_CASE("Eraser erase", "[eraser]") {
 
 		Container container(Dimensions(-16.0f, 16.0f, -16.0f, 16.0f));
 
-		TileLayer layer("layer", "id", new Group(new HeadlessRenderer2D()), &container);
+		TileLayer layer("layer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), &container);
 
 		Brush brush;
 		brush.paint(&layer, Vec2Int(0, 0), 0xFFFFFFFF);
@@ -28,7 +28,7 @@ TEST_CASE("Eraser erase", "[eraser]") {
 
 		Container container(Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
 
-		TileLayer layer("layer", "id", new Group(new HeadlessRenderer2D()), &container);
+		TileLayer layer("layer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), &container);
 
 		Brush brush;
 		brush.paint(&layer, Vec2Int(1, 1), 0xFFFFFFFF);
@@ -54,7 +54,7 @@ TEST_CASE("Eraser erase", "[eraser]") {
 
 		Container container(Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
 
-		TileLayer layer("layer", "id", new Group(new HeadlessRenderer2D()), &container);
+		TileLayer layer("layer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), &container);
 
 		Brush brush;
 		brush.paint(&layer, Vec2Int(1, 1), 0xFFFFFFFF);

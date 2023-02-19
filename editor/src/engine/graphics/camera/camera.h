@@ -4,7 +4,7 @@
 #include "../../../maths/vec2.h"
 #include "../../../maths/vec3.h"
 #include "../../../maths/mathFuncs.h"
-#include "./ortho_projection_info.h";
+#include "./ortho_projection_info.h"
 #include "../../system/window/window.h"
 #include "../layer/dimensions.h"
 

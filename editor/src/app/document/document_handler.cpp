@@ -21,7 +21,7 @@ namespace spright { namespace editor {
 #else
 		shared_ptr<Shader> shaderUnlit = make_shared<GLShader>("shaders/basic.vert", "shaders/unlit.frag");
 #endif
-		TileLayer *layer = new TileLayer(name, id, new Group(new GLRenderer2D(shaderUnlit)), document);
+		TileLayer *layer = new TileLayer(name, id, new Group<Rect2D>(new GLRenderer2D(shaderUnlit)), document);
 
 		document->getLayerHandler()->addLayer(layer);
 
@@ -45,8 +45,8 @@ namespace spright { namespace editor {
 		Camera *camera = new Camera(m_Window->getWidth(), m_Window->getHeight(), documentDimensions, -1.0f, 1.0f);
 		Document *document = new Document(documentDimensions, camera);
 
-		TileLayer *tempLayer = new TileLayer("", DEFAULT_TEMP_LAYER_ID, new Group(new GLRenderer2D(shaderUnlit)), document);
-		TileLayer *backgroundLayer = new TileLayer("", DEFAULT_BACKGROUND_LAYER_ID, new Group(new GLRenderer2D(shaderUnlit)), document, 2.0f);
+		TileLayer *tempLayer = new TileLayer("", DEFAULT_TEMP_LAYER_ID, new Group<Rect2D>(new GLRenderer2D(shaderUnlit)), document);
+		TileLayer *backgroundLayer = new TileLayer("", DEFAULT_BACKGROUND_LAYER_ID, new Group<Rect2D>(new GLRenderer2D(shaderUnlit)), document, 2.0f);
 
 		document->getLayerHandler()->addBeforeLayer(backgroundLayer);
 		document->getLayerHandler()->addAfterLayer(tempLayer);

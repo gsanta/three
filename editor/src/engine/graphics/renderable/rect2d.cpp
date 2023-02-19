@@ -30,6 +30,10 @@ namespace spright { namespace engine {
 			this->m_Size = size;
 		}
 
+		Vec2 Rect2D::getSize() {
+			return m_Size;
+		}
+
 		void Rect2D::setPosition(Vec2 position)
 		{
 			this->m_Position = Vec3(position.x, position.y, m_Position.z);
@@ -38,6 +42,10 @@ namespace spright { namespace engine {
 
 		void Rect2D::setCenterPosition(Vec2 position) {
 			this->m_Position = Vec3(position.x - m_Size.x / 2.0f, position.y - m_Size.y / 2.0f, m_Position.z);
+		}
+
+		Vec2 Rect2D::getCenterPosition2d() const {
+			return Vec2(m_Position.x + m_Size.x / 2.0f, m_Position.y + m_Size.y / 2.0f);
 		}
 
 		bool Rect2D::contains(Vec2 point)

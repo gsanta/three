@@ -8,19 +8,22 @@ namespace spright { namespace editor {
 	class EraserStroke {
 	private:
 		TileLayer* m_DrawLayer = nullptr;
-		const int m_EraserSize;
+		int m_EraserSize;
+		float m_StrokeWidth = 0.1f;
 
 		Rect2D* m_TopLine = nullptr;
 		Rect2D* m_RightLine = nullptr;
 		Rect2D* m_BottomLine = nullptr;
 		Rect2D* m_LeftLine = nullptr;
 	public:
-		EraserStroke(TileLayer* drawLayer, const int eraserSize);
-		void draw(TileLayer* eraseLayer, Vec2& pos);
+		EraserStroke();
+		EraserStroke(TileLayer* drawLayer, int eraserSize);
+		void draw(const TileLayer& eraseLayer, Vec2& pos);
 		void clear();
+		float getStrokeWidth();
 
 	private:
 		void init(float tileSize);
-		void setPosition(TileLayer* eraseLayer, Vec2& pos);
+		void setPosition(const TileLayer& eraseLayer, Vec2& pos);
 	};
 }}

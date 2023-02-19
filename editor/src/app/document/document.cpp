@@ -13,7 +13,7 @@ namespace spright { namespace editor {
 	}
 
 	Document::~Document() {
-		std::vector<Group*>::iterator it;
+		std::vector<Group<Rect2D>*>::iterator it;
 
 		delete m_Camera;
 		// TODO fix it
