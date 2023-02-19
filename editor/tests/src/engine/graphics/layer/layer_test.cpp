@@ -17,7 +17,7 @@ TEST_CASE("Layer add", "[layer]") {
 		Camera* camera = new Camera(800, 600, Dimensions(-16, 16, -16, 16), 0, 1);
 		Document* document = new Document(Dimensions(-16.0f, 16.0f, -16.0f, 16.0f), camera);
 
-		TileLayer layer("layer", "id", new Group(new HeadlessRenderer2D()), document);
+		TileLayer layer("layer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), document);
 
 		REQUIRE(layer.getRenderables().size() == 0);
 
@@ -38,7 +38,7 @@ TEST_CASE("Layer getTilePos", "[layer]") {
 		Camera* camera = new Camera(800, 600, Dimensions(-16, 16, -16, 16), 0, 1);
 		Document* document = new Document(Dimensions(-16.0f, 16.0f, -16.0f, 16.0f), camera);
 
-		TileLayer layer("layer", "id", new Group(new HeadlessRenderer2D()), document);
+		TileLayer layer("layer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), document);
 
 		float tileSize = layer.getTileSize();
 

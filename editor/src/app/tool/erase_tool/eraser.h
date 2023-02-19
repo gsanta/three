@@ -8,6 +8,6 @@ namespace spright { namespace editor {
 
 	class Eraser {
 	public:
-		void erase(TileLayer& layer, Vec2Int& vec2, int eraserSize);
+		void erase(TileLayer& layer, const Vec2Int& vec2, int eraserSize);
 	};
 }}

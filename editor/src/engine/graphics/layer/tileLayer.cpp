@@ -2,7 +2,7 @@
 
 namespace spright { namespace engine {
 
-	TileLayer::TileLayer(std::string name, std::string id, Group* group, Container* container, float tileSize)
+	TileLayer::TileLayer(std::string name, std::string id, Group<Rect2D>* group, Container* container, float tileSize)
 		: m_Group(group), m_TileSize(tileSize), m_Name(name), m_Id(id), m_Container(container) {
 	
 		Dimensions dimensions = container->getDimensions();
@@ -71,11 +71,11 @@ namespace spright { namespace engine {
 		}
 	}
 
-	std::vector<Renderable2D*>& TileLayer::getRenderables() {
+	std::vector<Rect2D*>& TileLayer::getRenderables() {
 		return m_Group->getRenderables();
 	}
 
-	Vec2 TileLayer::getBottomLeftPos(Vec2 pointer)
+	Vec2 TileLayer::getBottomLeftPos(Vec2 pointer) const
 	{
 		Vec2Int tilePos = getTilePos(pointer);
 		float tileSize = m_TileSize;
@@ -87,7 +87,7 @@ namespace spright { namespace engine {
 		return Vec2(x, y);
 	}
 
-	Vec2 TileLayer::getBottomLeftPos(int tileIndex)
+	Vec2 TileLayer::getBottomLeftPos(int tileIndex) const
 	{
 		int y = tileIndex / m_TileBounds.getWidth();
 		int x = tileIndex % m_TileBounds.getWidth();
@@ -96,7 +96,7 @@ namespace spright { namespace engine {
 		return Vec2(x * m_TileSize + dimensions.left, y * m_TileSize + dimensions.bottom);
 	}
 
-	Vec2 TileLayer::getCenterPos(int tileIndex) {
+	Vec2 TileLayer::getCenterPos(int tileIndex) const {
 		Vec2 bottomLeftPos = getBottomLeftPos(tileIndex);
 		bottomLeftPos.x += m_TileSize / 2.0f;
 		bottomLeftPos.y += m_TileSize / 2.0f;
@@ -105,7 +105,7 @@ namespace spright { namespace engine {
 	}
 
 	// TODO: check if it works for both even and odd number of tiles
-	Vec2Int TileLayer::getTilePos(Vec2 pos) {
+	Vec2Int TileLayer::getTilePos(Vec2 pos) const {
 		Dimensions dimensions = m_Container->getDimensions();
 
 		Vec2 adjustedPos(pos.x - dimensions.left, pos.y - dimensions.bottom);
@@ -117,15 +117,15 @@ namespace spright { namespace engine {
 		return Vec2Int(tileX, tileY);
 	}
 
-	Vec2Int TileLayer::getTilePos(int tileIndex) {
+	Vec2Int TileLayer::getTilePos(int tileIndex) const {
 		return Vec2Int(getColumn(tileIndex), getRow(tileIndex));
 	}
 
-	unsigned int TileLayer::getColumn(int tileIndex) {
+	unsigned int TileLayer::getColumn(int tileIndex) const {
 		return tileIndex % m_TileBounds.getWidth();
 	}
 	
-	unsigned int TileLayer::getRow(int tileIndex) {
+	unsigned int TileLayer::getRow(int tileIndex) const {
 		return tileIndex / m_TileBounds.getWidth();
 	}
 
@@ -148,12 +148,12 @@ namespace spright { namespace engine {
 		m_TileIndexes[newIndex] = sprite;
 	}
 
-	int TileLayer::getTileIndex(int tileX, int tileY)
+	int TileLayer::getTileIndex(int tileX, int tileY) const
 	{
 		return m_TileBounds.getWidth() * tileY + tileX;
 	}
 
-	int TileLayer::getTileIndex(Vec2 worldPos)
+	int TileLayer::getTileIndex(Vec2 worldPos) const
 	{
 		Vec2Int tilePos = getTilePos(worldPos);
 

@@ -23,8 +23,10 @@ namespace spright { namespace engine {
 		int getTileIndex();
 		void setTileIndex(int tileIndex);
 		void setSize(Vec2 size);
+		Vec2 getSize();
 		void setPosition(Vec2 position);
 		void setCenterPosition(Vec2 position);
+		Vec2 getCenterPosition2d() const;
 		bool contains(Vec2 point);
 		void translate(Vec2 vec);
 		virtual nlohmann::json getJson();

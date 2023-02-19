@@ -1,7 +1,7 @@
 #include "eraser.h"
 
 namespace spright { namespace editor {
-	void editor::Eraser::erase(TileLayer& layer, Vec2Int& vec2, int eraserSize) {
+	void editor::Eraser::erase(TileLayer& layer, const Vec2Int& vec2, int eraserSize) {
 		int tileIndex = layer.getTileIndex(vec2.x, vec2.y);
 
 		bool isEven = true;
