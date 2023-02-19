@@ -12,6 +12,6 @@ namespace spright { namespace editor {
 	class Brush {
 
 	public:
-		void paint(TileLayer* tileLayer, Vec2Int& tilePos, unsigned int color);
+		void paint(TileLayer* tileLayer, const Vec2Int& tilePos, unsigned int color);
 	};
 }}
