@@ -15,7 +15,7 @@ namespace spright { namespace editor {
 		Window* m_Window;
 
 		unsigned char* m_Data;
-		size_t m_Size;
+		size_t m_EraserSize;
 
 	public:
 		ImageExport(Window* window, Rendering* rendering);

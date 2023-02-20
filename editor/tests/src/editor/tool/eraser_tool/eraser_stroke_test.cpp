@@ -2,7 +2,7 @@
 #include <catch2/catch_approx.hpp>
 #include <vector>
 #include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
-#include "../src/app/tool/erase_tool/eraser_stroke.h"
+#include "../src/app/tool/eraser_tool/eraser_stroke.h"
 #include "../src/maths/vec2.h"
 
 using namespace spright::editor;
@@ -10,12 +10,14 @@ using namespace spright::maths;
 
 TEST_CASE("EraserStroke draw", "[eraser-stroke]") {
 	SECTION("creates the rectangular stroke, eraser size is even, eraser position is at the origin") {
+		int eraserSize = 4;
+		float tileSize = 0.5f;
+
 		Container container(Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
 
 		TileLayer drawLayer("drawLayer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), &container);
-		TileLayer eraseLayer("eraseLayer", "id2", new Group<Rect2D>(new HeadlessRenderer2D()), &container);
+		TileLayer eraseLayer("eraseLayer", "id2", new Group<Rect2D>(new HeadlessRenderer2D()), &container, tileSize);
 
-		int eraserSize = 4;
 		EraserStroke eraserStroke(&drawLayer, eraserSize);
 
 		eraserStroke.draw(eraseLayer, Vec2(0, 0));
@@ -48,12 +50,14 @@ TEST_CASE("EraserStroke draw", "[eraser-stroke]") {
 	}
 
 	SECTION("creates the rectangular stroke, eraser size is odd, eraser position is at the origin") {
+		int eraserSize = 3;
+		float tileSize = 0.5f;
+
 		Container container(Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
 
 		TileLayer drawLayer("drawLayer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), &container);
-		TileLayer eraseLayer("eraseLayer", "id2", new Group<Rect2D>(new HeadlessRenderer2D()), &container);
+		TileLayer eraseLayer("eraseLayer", "id2", new Group<Rect2D>(new HeadlessRenderer2D()), &container, tileSize);
 
-		int eraserSize = 3;
 		EraserStroke eraserStroke(&drawLayer, eraserSize);
 
 		eraserStroke.draw(eraseLayer, Vec2(0, 0));
@@ -86,16 +90,18 @@ TEST_CASE("EraserStroke draw", "[eraser-stroke]") {
 	}
 
 	SECTION("creates the rectangular stroke when the eraser is not at the origin") {
+		int eraserSize = 4;
+		float tileSize = 0.5f;
+		float translateX = 2.0f;
+		float translateY = 3.0f;
+
 		Container container(Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
 
 		TileLayer drawLayer("drawLayer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), &container);
-		TileLayer eraseLayer("eraseLayer", "id2", new Group<Rect2D>(new HeadlessRenderer2D()), &container);
+		TileLayer eraseLayer("eraseLayer", "id2", new Group<Rect2D>(new HeadlessRenderer2D()), &container, tileSize);
 
-		int eraserSize = 4;
 		EraserStroke eraserStroke(&drawLayer, eraserSize);
 
-		float translateX = 2.0f;
-		float translateY = 3.0f;
 
 		eraserStroke.draw(eraseLayer, Vec2(translateX, translateY));
 

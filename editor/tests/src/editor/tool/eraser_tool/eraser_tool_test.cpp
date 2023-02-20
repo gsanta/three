@@ -1,0 +1,54 @@
+#include <catch2/catch_test_macros.hpp>
+#include "../src/app/tool/eraser_tool/eraser_tool.h"
+#include "../src/app/document/document_handler.h"
+#include "../src/app/document/document_store.h"
+#include "../src/engine/graphics/renderable/rect2d.h"
+#include "../src/engine/graphics/layer/group.h"
+#include "../src/engine/graphics/impl/headless/headless_shader.h"
+#include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
+#include "../src/engine/system/window/impl/headless/headless_window.h"
+#include "../src/app/tool/brush_tool.h"
+#include "../layer_provider_test_impl.h"
+
+using namespace ::spright::engine;
+using namespace ::spright::editor;
+
+TEST_CASE("EraseTool erase", "[erase-tool]") {
+	SECTION("can add a renderable to the layer") {
+		Container container(Dimensions(-3.0f, 3.0f, -3.0f, 3.0f));
+
+		TileLayer eraseLayer("layer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
+		TileLayer drawLayer("layer", "id", new Group<Rect2D>(new HeadlessRenderer2D()) , &container, 1.0f);
+
+
+		Brush brush;
+		brush.paint(&eraseLayer, Vec2Int(0, 0), 0xFFFFFFFF);
+		brush.paint(&eraseLayer, Vec2Int(1, 0), 0xFFFFFFFF);
+		brush.paint(&eraseLayer, Vec2Int(2, 0), 0xFFFFFFFF);
+		brush.paint(&eraseLayer, Vec2Int(0, 1), 0xFFFFFFFF);
+		brush.paint(&eraseLayer, Vec2Int(1, 1), 0xFFFFFFFF);
+		brush.paint(&eraseLayer, Vec2Int(2, 1), 0xFFFFFFFF);
+		brush.paint(&eraseLayer, Vec2Int(0, 2), 0xFFFFFFFF);
+		brush.paint(&eraseLayer, Vec2Int(1, 2), 0xFFFFFFFF);
+		brush.paint(&eraseLayer, Vec2Int(2, 2), 0xFFFFFFFF);
+
+		Renderable2D* renderable = eraseLayer.getAtTileIndex(0);
+
+		EraserTool eraseTool(new LayerProviderTestImpl(eraseLayer, drawLayer), 1);
+
+		PointerInfo pointerInfo;
+		pointerInfo.curr = eraseLayer.getWorldPos(Vec2Int(1, 1));
+
+		eraseTool.pointerDown(pointerInfo);
+
+		REQUIRE(eraseLayer.getAtTilePos(Vec2Int(0, 0)) != nullptr);
+		REQUIRE(eraseLayer.getAtTilePos(Vec2Int(1, 0)) != nullptr);
+		REQUIRE(eraseLayer.getAtTilePos(Vec2Int(2, 0)) != nullptr);
+		REQUIRE(eraseLayer.getAtTilePos(Vec2Int(0, 1)) != nullptr);
+		REQUIRE(eraseLayer.getAtTilePos(Vec2Int(1, 1)) == nullptr);
+		REQUIRE(eraseLayer.getAtTilePos(Vec2Int(2, 1)) != nullptr);
+		REQUIRE(eraseLayer.getAtTilePos(Vec2Int(0, 2)) != nullptr);
+		REQUIRE(eraseLayer.getAtTilePos(Vec2Int(1, 2)) != nullptr);
+		REQUIRE(eraseLayer.getAtTilePos(Vec2Int(2, 2)) != nullptr);
+	}
+}

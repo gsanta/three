@@ -13,7 +13,7 @@ namespace spright { namespace engine {
 	class Rect2D : public Renderable2D {
 	private:
 		Vec3 m_Position;
-		Vec2 m_Size;
+		Vec2 m_EraserSize;
 		int m_TileIndex = -1;
 	public:
 		Rect2D(float x, float y, float width, float height, unsigned int color);

@@ -9,7 +9,7 @@ namespace spright { namespace editor {
 
 	void BrushTool::setSize(int size)
 	{
-		m_Size = size;
+		m_EraserSize = size;
 	}
 
 	unsigned int BrushTool::getColor() const {
@@ -51,8 +51,8 @@ namespace spright { namespace editor {
 
 		TileLayer* tileLayer = dynamic_cast<TileLayer*>(m_documentStore->getActiveDocument()->getLayerHandler()->getActiveLayer());
 
-		for (int i = 0; i < m_Size; i++) {
-			for (int j = 0; j < m_Size; j++) {
+		for (int i = 0; i < m_EraserSize; i++) {
+			for (int j = 0; j < m_EraserSize; j++) {
 				Vec2Int tilePos = tileLayer->getTilePos(pointerInfo.curr);
 
 				brush.paint(tileLayer, tilePos, m_Color);

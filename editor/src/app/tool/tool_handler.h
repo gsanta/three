@@ -5,7 +5,7 @@
 #include "tool.h"
 #include "brush_tool.h"
 #include "rectangle_tool.h"
-#include "erase_tool/erase_tool.h"
+#include "eraser_tool/eraser_tool.h"
 #include "../service/services.h"
 #include "../../engine/system/window/window.h"
 #include "../../engine/system/window/input_listener.h"

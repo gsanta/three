@@ -46,7 +46,10 @@ namespace spright { namespace engine {
 		// TODO: find a better name
 		Vec2 getBottomLeftPos(Vec2 pointer) const;
 		Vec2 getBottomLeftPos(int tileIndex) const;
-		Vec2 getCenterPos(int tileIndex) const;
+		
+		Vec2 getWorldPos(int tileIndex) const;
+		Vec2 getWorldPos(const Vec2Int tilePos) const;
+
 		Vec2Int getTilePos(Vec2 pos) const;
 		Vec2Int getTilePos(int tileIndex) const;
 		unsigned int getColumn(int tileIndex) const;
@@ -55,8 +58,8 @@ namespace spright { namespace engine {
 		Vec2 getWorldPos(int x, int y);
 
 		void updateTileIndex(int oldIndex, int newIndex);
-		Rect2D* getAtTileIndex(int tileIndex);
-		Rect2D* getAtTilePos(int tileX, int tileY);
+		Rect2D* getAtTileIndex(int tileIndex) const;
+		Rect2D* getAtTilePos(const Vec2Int& tilePos) const;
 		int getTileIndex(int tileX, int tileY) const;
 		int getTileIndex(Vec2 worldPos) const;
 
