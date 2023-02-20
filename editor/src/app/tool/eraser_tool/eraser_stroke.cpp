@@ -53,13 +53,13 @@ namespace spright { namespace editor {
 		m_DrawLayer->add(m_LeftLine);
 	}
 
-	void EraserStroke::setPosition(const TileLayer& eraseLayer, Vec2& pos)
+	void EraserStroke::setPosition(const TileLayer& eraseLayer, const Vec2& pos)
 	{
 		float halfEraserSize = eraseLayer.getTileSize() * static_cast<float>(m_EraserSize) / 2.0f;
 
 		int tileIndex = eraseLayer.getTileIndex(pos);
 		float halfTileSize = eraseLayer.getTileSize() / 2.0f;
-		Vec2 tileCenterPos = eraseLayer.getCenterPos(tileIndex);
+		Vec2 tileCenterPos = eraseLayer.getWorldPos(tileIndex);
 
 		if (m_EraserSize % 2 == 0) {
 			tileCenterPos += Vec2(-halfTileSize, -halfTileSize);

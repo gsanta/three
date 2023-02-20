@@ -15,14 +15,14 @@ namespace spright { namespace editor {
 	using namespace spright::maths;
 	using namespace spright::engine;
 
-	class EraseTool : public Tool {
+	class EraserTool : public Tool {
 	private:
 		unique_ptr<LayerProvider> m_LayerProvider;
 
 		Eraser m_Eraser;
 		EraserStroke m_EraserStroke;
 
-		int m_Size = 3;
+		int m_EraserSize = 3;
 
 		float m_DashSize = 0.2f;
 		bool m_IsMoveSelection = false;
@@ -30,7 +30,7 @@ namespace spright { namespace editor {
 		float m_NoMovementTolerance = 0.1f;
 
 	public:
-		EraseTool(LayerProvider* m_LayerProvider);
+		EraserTool(LayerProvider* m_LayerProvider, int eraserSize);
 		void pointerDown(PointerInfo& pointerInfo) override;
 		void pointerMove(PointerInfo& pointerInfo) override;
 		void deactivate() override;

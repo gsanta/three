@@ -17,7 +17,7 @@ namespace spright { namespace editor {
 	private:
 		DocumentStore *m_documentStore;
 		EventHandler* m_EventHandler;
-		int m_Size = 1;
+		int m_EraserSize = 1;
 		Rect2D *sprite;
 		unsigned int m_Color = 0x8f000000;
 		Brush brush;

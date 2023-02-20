@@ -96,12 +96,16 @@ namespace spright { namespace engine {
 		return Vec2(x * m_TileSize + dimensions.left, y * m_TileSize + dimensions.bottom);
 	}
 
-	Vec2 TileLayer::getCenterPos(int tileIndex) const {
+	Vec2 TileLayer::getWorldPos(int tileIndex) const {
 		Vec2 bottomLeftPos = getBottomLeftPos(tileIndex);
 		bottomLeftPos.x += m_TileSize / 2.0f;
 		bottomLeftPos.y += m_TileSize / 2.0f;
 
 		return bottomLeftPos;
+	}
+
+	Vec2 TileLayer::getWorldPos(const Vec2Int tilePos) const {
+		return getWorldPos(getTileIndex(tilePos.x, tilePos.y));
 	}
 
 	// TODO: check if it works for both even and odd number of tiles
@@ -165,14 +169,14 @@ namespace spright { namespace engine {
 		return m_TileBounds;
 	}
 
-	Rect2D* TileLayer::getAtTileIndex(int tilePos)
+	Rect2D* TileLayer::getAtTileIndex(int tilePos) const
 	{
 		return static_cast<Rect2D*>(m_TileIndexes[tilePos]);
 	}
 
-	Rect2D* TileLayer::getAtTilePos(int tileX, int tileY)
+	Rect2D* TileLayer::getAtTilePos(const Vec2Int& tilePos) const
 	{
-		return getAtTileIndex(getTileIndex(tileX, tileY));
+		return getAtTileIndex(getTileIndex(tilePos.x, tilePos.y));
 	}
 
 	int TileLayer::getIndexSize() const {
