@@ -1,5 +1,6 @@
 #pragma once
 
+#include <nlohmann/json.hpp>
 #include "../core/event/event_listener.h"
 
 #ifdef SPARKY_EMSCRIPTEN
@@ -11,6 +12,7 @@ namespace spright { namespace editor {
 
 	public:
 		void dataChange() override;
+		void onChange(nlohmann::json data) override;
 	};
 }}
 

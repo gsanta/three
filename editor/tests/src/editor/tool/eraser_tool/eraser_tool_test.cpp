@@ -13,8 +13,8 @@
 using namespace ::spright::engine;
 using namespace ::spright::editor;
 
-TEST_CASE("EraseTool erase", "[erase-tool]") {
-	SECTION("can add a renderable to the layer") {
+TEST_CASE("EraseTool pointerDown", "[erase-tool]") {
+	SECTION("removes the tiles at the given pointer position") {
 		Container container(Dimensions(-3.0f, 3.0f, -3.0f, 3.0f));
 
 		TileLayer eraseLayer("layer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
@@ -32,7 +32,7 @@ TEST_CASE("EraseTool erase", "[erase-tool]") {
 		brush.paint(&eraseLayer, Vec2Int(1, 2), 0xFFFFFFFF);
 		brush.paint(&eraseLayer, Vec2Int(2, 2), 0xFFFFFFFF);
 
-		Renderable2D* renderable = eraseLayer.getAtTileIndex(0);
+		Rect2D* renderable = eraseLayer.getAtTileIndex(0);
 
 		EraserTool eraseTool(new LayerProviderTestImpl(eraseLayer, drawLayer), 1);
 

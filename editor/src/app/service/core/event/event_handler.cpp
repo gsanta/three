@@ -8,6 +8,13 @@ namespace spright { namespace editor {
 		}
 	}
 
+	void EventHandler::emitChange(nlohmann::json data)
+	{
+		for (EventListener* listener : m_Listeners) {
+			listener->onChange(data);
+		}
+	}
+
 	void EventHandler::addListener(EventListener* listener)
 	{
 		m_Listeners.push_back(listener);

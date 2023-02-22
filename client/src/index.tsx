@@ -2,6 +2,7 @@ import React from 'react';
 import { createRoot, Root } from 'react-dom/client';
 import { editor } from './services/editor/Editor';
 import EditorEvents from './services/editor/EditorEvents';
+import EditorListener from './services/editor/EditorListener';
 import WindowHandler from './services/editor/WindowHandler';
 import KeyboardHandler from './services/keyboard/KeyboardHandler';
 import ToolStore from './panels/toolbar/ToolStore';
@@ -13,6 +14,7 @@ import ModuleManager from './app/ModuleManager';
 
 // embinds uses this global state
 window.EditorEvents = new EditorEvents();
+window.EditorListener = new EditorListener();
 
 const app: App = {
   editorApi: editor,

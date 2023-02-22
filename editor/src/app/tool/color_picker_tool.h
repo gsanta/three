@@ -3,6 +3,7 @@
 #include "../document/document_store.h"
 #include "pointer_info.h"
 #include "tool.h"
+#include "helper/layer_provider.h"
 
 namespace spright { namespace editor {
 	using namespace ::spright::engine;
@@ -10,10 +11,16 @@ namespace spright { namespace editor {
 
 	class ColorPickerTool : public Tool {
 	private:
-		DocumentStore* m_DocumentStore;
-		Services* m_Services;
+		LayerProvider* m_LayerProvider;
+		EventHandler* m_EventHandler;
+		unsigned int m_PickedColor;
+
 	public:
-		ColorPickerTool(DocumentStore* documentStore, Services* services);
+		ColorPickerTool(LayerProvider* layerProvider, EventHandler* eventHandler);
 		void pointerDown(PointerInfo& pointerInfo) override;
+		unsigned int getPickedColor() const;
+
+	private:
+		void emitColorChange() const;
 	};
 }}
