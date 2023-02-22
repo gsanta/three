@@ -13,6 +13,10 @@ class EditorEvents {
     this.listeners.forEach((listener) => listener.onDataChange?.());
   }
 
+  emitChange(data: string) {
+    console.log(data);
+  }
+
   emitEditorInitialized() {
     this.listeners.forEach((listener) => listener.onEditorInitialized?.());
   }
