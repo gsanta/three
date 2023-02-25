@@ -2,7 +2,7 @@
 
 namespace spright { namespace editor {
 
-	ColorPickerTool::ColorPickerTool(LayerProvider* layerProvider, EventEmitter* eventHandler) : m_LayerProvider(layerProvider), m_EventEmitter(eventHandler), Tool("color_picker") {
+	ColorPickerTool::ColorPickerTool(LayerProvider* layerProvider, ToolHandler* toolHandler, EventEmitter* eventEmitter) : m_LayerProvider(layerProvider), m_ToolHandler(toolHandler), m_EventEmitter(eventEmitter), Tool("color_picker") {
 
 	}
 
@@ -18,6 +18,10 @@ namespace spright { namespace editor {
 
 			if (color != m_PickedColor) {
 				m_PickedColor = color;
+
+				for (Colorable* colorable : m_ToolHandler->getColorableTools()) {
+					colorable->setColor(m_PickedColor);
+				}
 				emitColorChange();
 			}
 		}
@@ -28,17 +32,19 @@ namespace spright { namespace editor {
 		return m_PickedColor;
 	}
 
+	std::string ColorPickerTool::getData() {
+		nlohmann::json json = {};
+
+		json["color"] = m_PickedColor;
+
+		return json.dump();
+	}
+
 	void ColorPickerTool::emitColorChange() const {
 		nlohmann::json json = {
 			{ "tool", getName() },
 		};
 
 		m_EventEmitter->emitChange("tool_data_changed", json);
-	}
-
-	std::string ColorPickerTool::getData() {
-		nlohmann::json json = { "color", m_PickedColor };
-
-		return json;
 	}
 }}

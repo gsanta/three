@@ -1,28 +1,12 @@
-export interface EditorEventListener<T = unknown> {
-  onDataChange?(): void;
+import EventEmitter from 'eventemitter3';
 
-  onChange?(eventType: string, data: T): void;
-
-  onEditorInitialized?(): void;
+export interface EditorEventListener {
+  listen(events: EditorEvents): void;
 }
 
-class EditorEvents {
-  private listeners: EditorEventListener[] = [];
-
-  emitChange(data: string) {
-    console.log(data);
-  }
-
-  emitEditorInitialized() {
-    this.listeners.forEach((listener) => listener.onEditorInitialized?.());
-  }
-
-  public addListener(listener: EditorEventListener): void {
-    this.listeners.push(listener);
-  }
-
-  public removeListener(listener: EditorEventListener) {
-    this.listeners = this.listeners.filter((currentListener) => currentListener != listener);
+class EditorEvents extends EventEmitter {
+  public dispatch<T>(type: string, data: string) {
+    this.emit(type, JSON.parse(data) as T);
   }
 }
 

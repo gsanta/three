@@ -4,18 +4,16 @@ import { createContext } from 'react';
 import ModuleManager from './ModuleManager';
 import KeyboardHandler from '@/services/keyboard/KeyboardHandler';
 import Editor from '@/services/editor/Editor';
-import WindowHandler from '@/services/editor/WindowHandler';
 import LayerHandler from '@/panels/layer/model/LayerHandler';
-import Settings from '@/services/settings/Settings';
+import EditorStore from '@/services/settings/EditorStore';
 
 export type App = {
   editorApi: Editor;
   toolStore: ToolStore;
-  editorStore: Settings;
+  editorStore: EditorStore;
   editorEvents: EditorEvents;
   moduleManager: ModuleManager;
   keyboardHandler: KeyboardHandler;
-  windowHandler: WindowHandler;
   layerHandler: LayerHandler;
 };
 

@@ -23,7 +23,7 @@ namespace spright { namespace editor {
 	class ToolHandler : public InputListener {
 	private:
 		Window* m_Window;
-		vector<Tool*> tools;
+		vector<Tool*> m_Tools;
 		vector<Tool*>* m_ActiveTools;
 		Tool* m_SelectedTool = nullptr;
 		PointerInfo m_pointerInfo;
@@ -47,6 +47,8 @@ namespace spright { namespace editor {
 		void addTool(Tool* tool);
 
 		Tool* getTool(string name) const;
+
+		vector<Colorable*> getColorableTools();
 
 		inline vector<Tool*>* getActiveTool() const {
 			return m_ActiveTools;

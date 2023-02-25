@@ -1,14 +1,11 @@
 import { App } from '../../../../app/App';
 import DependencyInjector from '../../../../app/DependencyInjector';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const useInitApp = (appContext: App, canvasNode?: HTMLCanvasElement) => {
   const [isModuleInitialized, setIsModuleInitialized] = useState(false);
 
-  useEffect(() => {
-    appContext.editorEvents.addListener(appContext.windowHandler);
-    appContext.editorEvents.addListener(new DependencyInjector(appContext));
-  }, [appContext, appContext.editorEvents, appContext.windowHandler]);
+  const dependencyInjector = useRef(new DependencyInjector(appContext));
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -16,7 +13,7 @@ const useInitApp = (appContext: App, canvasNode?: HTMLCanvasElement) => {
     if (window?.Module?.isRuntimeInitialized && !isModuleInitialized) {
       appContext.editorApi.canvasNode = canvasNode?.parentElement as HTMLDivElement;
       setIsModuleInitialized(true);
-      appContext.editorEvents.emitEditorInitialized();
+      dependencyInjector.current.init();
     }
   });
 

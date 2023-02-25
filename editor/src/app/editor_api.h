@@ -14,5 +14,6 @@ using namespace spright::editor;
 void setLayerIndex(std::string layerId, int newIndex);
 void removeLayer(std::string layerId);
 std::string exportDocument();
+std::string getToolData(std::string tool);
 
 #endif

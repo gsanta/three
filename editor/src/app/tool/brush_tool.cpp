@@ -12,14 +12,6 @@ namespace spright { namespace editor {
 		m_EraserSize = size;
 	}
 
-	unsigned int BrushTool::getColor() const {
-		return m_Color;
-	}
-
-	void BrushTool::setColor(unsigned int color) {
-		m_Color = color;
-	}
-
 	void BrushTool::pointerMove(PointerInfo &pointerInfo)
 	{
 		paint(pointerInfo);
@@ -55,7 +47,7 @@ namespace spright { namespace editor {
 			for (int j = 0; j < m_EraserSize; j++) {
 				Vec2Int tilePos = tileLayer->getTilePos(pointerInfo.curr);
 
-				brush.paint(tileLayer, tilePos, m_Color);
+				brush.paint(tileLayer, tilePos, getColor());
 			}
 		}
 	}

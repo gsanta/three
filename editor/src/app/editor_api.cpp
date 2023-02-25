@@ -20,11 +20,16 @@ void importDocument(std::string json) {
 	return editor->getJsonIO()->importDocument(json);
 }
 
+std::string getToolData(std::string tool) {
+	return editor->getToolHandler()->getTool(tool)->getData();
+}
+
 EMSCRIPTEN_BINDINGS(spright) {
 	emscripten::function("setLayerIndex", &setLayerIndex);
 	emscripten::function("removeLayer", &removeLayer);
 	emscripten::function("exportDocument", &exportDocument);
 	emscripten::function("importDocument", &importDocument);
+	emscripten::function("getToolData", &getToolData);
 }
 
 #endif
