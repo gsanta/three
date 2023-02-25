@@ -2,7 +2,7 @@
 
 namespace spright { namespace editor {
 
-	RectangleTool::RectangleTool(DocumentStore* documentStore, Services* services, EventHandler* eventHandler) : m_DocumentStore(documentStore), m_Services(services), m_EventHandler(eventHandler), Tool("rectangle") {
+	RectangleTool::RectangleTool(DocumentStore* documentStore, Services* services) : m_DocumentStore(documentStore), m_Services(services), Tool("rectangle") {
 
 	}
 
@@ -20,7 +20,6 @@ namespace spright { namespace editor {
 			this->m_Rect = new Rect2D(pointerInfo.curr.x, pointerInfo.curr.y - m_EraserSize, m_EraserSize, m_EraserSize, color);
 			this->m_DocumentStore->getActiveDocument()->getLayerHandler()->getActiveLayer()->add(m_Rect);
 		
-			m_EventHandler->emitDataChange();
 		}
 	}
 

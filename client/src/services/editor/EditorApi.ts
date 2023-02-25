@@ -1,3 +1,5 @@
+import ToolName from '@/panels/toolbar/model/ToolName';
+
 interface EditorApi {
   setWindowSize(width: number, height: number): void;
 
@@ -8,6 +10,8 @@ interface EditorApi {
 
   getEngineData(): void;
   setEngineData(data: string): void;
+
+  getToolData(toolName: ToolName): string;
 
   setColor(color: number): void;
 

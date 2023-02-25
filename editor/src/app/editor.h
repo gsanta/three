@@ -17,7 +17,9 @@
 #include "./rendering.h"
 #include "./service/io/image_export.h"
 #include "./service/io/json/json_io.h"
+#include "service/core/event/event_emitter.h"
 #include "document/document_store.h"
+#include "api/emscripten_event_emitter.h"
 
 namespace spright { namespace editor {
 	using namespace ::spright::engine;
@@ -34,6 +36,8 @@ namespace spright { namespace editor {
 		spright::Services* m_Services;
 		ImageExport* m_ImageExport;
 		std::unique_ptr<JsonIO> m_JsonExport;
+
+		std::unique_ptr<EventEmitter> m_EventEmitter;
 
 	public:
 		Editor();

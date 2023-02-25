@@ -11,6 +11,7 @@ import LayerHandler from './panels/layer/model/LayerHandler';
 import Settings from './services/settings/Settings';
 import App from './app/App';
 import ModuleManager from './app/ModuleManager';
+import ToolEventListener from './panels/toolbar/ToolEventListener';
 
 // embinds uses this global state
 window.EditorEvents = new EditorEvents();
@@ -26,6 +27,8 @@ const app: App = {
   windowHandler: new WindowHandler(),
   layerHandler: new LayerHandler(editor),
 };
+
+app.editorEvents.addListener(new ToolEventListener(app.toolStore, app.editorApi));
 
 let root: Root;
 

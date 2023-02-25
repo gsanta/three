@@ -3,7 +3,6 @@ import KeyCode from '../services/keyboard/KeyCode';
 import ExternalTool from '../panels/toolbar/model/ExternalTool';
 import ToolName from '../panels/toolbar/model/ToolName';
 import ToolSelectionEvent from '../panels/toolbar/model/ToolSelectionEvents';
-import PreviewModule from '@/panels/preview/PreviewModule';
 import { EditorEventListener } from '../services/editor/EditorEvents';
 
 class DependencyInjector implements EditorEventListener {
@@ -14,7 +13,7 @@ class DependencyInjector implements EditorEventListener {
   }
 
   onEditorInitialized() {
-    const { toolStore, editorApi, moduleManager, editorEvents, layerHandler, keyboardHandler } = this.app;
+    const { toolStore, editorApi, moduleManager, layerHandler, keyboardHandler } = this.app;
 
     toolStore.addTool(
       new ExternalTool(
@@ -31,8 +30,6 @@ class DependencyInjector implements EditorEventListener {
     toolStore.addTool(new ExternalTool(ToolName.PaintBucket, 'BiColorFill', editorApi));
     toolStore.addTool(new ExternalTool(ToolName.ColorPicker, 'BiHighlight', editorApi));
     toolStore.setSelectedTool(ToolName.Brush);
-
-    moduleManager.addModule(new PreviewModule(editorEvents, editorApi));
 
     moduleManager.start();
 

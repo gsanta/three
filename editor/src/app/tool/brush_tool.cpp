@@ -2,8 +2,8 @@
 
 namespace spright { namespace editor {
 
-	BrushTool::BrushTool(DocumentStore *documentStore, EventHandler* eventHandler)
-			: m_documentStore(documentStore), m_EventHandler(eventHandler), Tool("brush")
+	BrushTool::BrushTool(DocumentStore *documentStore)
+			: m_documentStore(documentStore), Tool("brush")
 	{
 	}
 
@@ -58,7 +58,5 @@ namespace spright { namespace editor {
 				brush.paint(tileLayer, tilePos, m_Color);
 			}
 		}
-
-		m_EventHandler->emitDataChange();
 	}
 }}

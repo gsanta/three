@@ -4,7 +4,6 @@
 #include "../../../engine/graphics/renderable/rect2d.h"
 #include "../../document/document_store.h"
 #include "../tool.h"
-#include "../../service/core/event/event_handler.h"
 #include "selection_box.h"
 
 namespace spright { namespace editor {
@@ -15,7 +14,6 @@ namespace spright { namespace editor {
 	class SelectTool : public Tool {
 	private:
 		DocumentStore* m_DocumentStore;
-		EventHandler* m_EventHandler;
 		SelectionBox* m_SelectionBox;
 
 		//vector<engine::graphics::Rect2D*> m_SelectionSprites;
@@ -28,7 +26,7 @@ namespace spright { namespace editor {
 		bool m_IsMove = false;
 
 	public:
-		SelectTool(DocumentStore* documentHandler, EventHandler* eventHandler);
+		SelectTool(DocumentStore* documentHandler);
 		void pointerDown(PointerInfo& pointerInfo) override;
 		void pointerUp(PointerInfo& pointerInfo) override;
 		void pointerMove(PointerInfo& pointerInfo) override;

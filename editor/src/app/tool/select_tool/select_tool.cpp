@@ -2,7 +2,7 @@
 
 namespace spright {
 
-	SelectTool::SelectTool(DocumentStore* documentStore, EventHandler* eventHandler) : m_DocumentStore(documentStore), m_EventHandler(eventHandler), Tool("select")
+	SelectTool::SelectTool(DocumentStore* documentStore) : m_DocumentStore(documentStore), Tool("select")
 	{
 		m_SelectionBox = new SelectionBox(m_DocumentStore);
 	}
@@ -118,8 +118,6 @@ namespace spright {
 			}
 			++it;
 		}
-
-		m_EventHandler->emitDataChange();
 	}
 
 	void SelectTool::moveSelection(PointerInfo& pointerInfo) {

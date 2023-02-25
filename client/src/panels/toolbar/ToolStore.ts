@@ -24,6 +24,10 @@ class ToolStore {
     this.tools.push(tool);
   }
 
+  getTool(name: ToolName) {
+    return this.tools.find((tool) => tool.name === name);
+  }
+
   setSelectedTool(toolName: ToolName) {
     const selectedTool = this.tools.find((tool) => tool.name === toolName);
     if (selectedTool) {

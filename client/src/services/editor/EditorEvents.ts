@@ -1,17 +1,13 @@
-import App from '../../app/App';
-
-export interface EditorEventListener {
+export interface EditorEventListener<T = unknown> {
   onDataChange?(): void;
+
+  onChange?(eventType: string, data: T): void;
 
   onEditorInitialized?(): void;
 }
 
 class EditorEvents {
   private listeners: EditorEventListener[] = [];
-
-  emitDataChange() {
-    this.listeners.forEach((listener) => listener.onDataChange?.());
-  }
 
   emitChange(data: string) {
     console.log(data);
