@@ -20,7 +20,12 @@ class ExternalTool implements Tool {
     this.toolSelectionEvent = toolSelectionEvent;
   }
 
-  public getShortCut() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setData(_data: unknown): void {
+    throw new Error('Method not implemented.');
+  }
+
+  getShortCut() {
     return this.toolSelectionEvent;
   }
 
@@ -30,6 +35,10 @@ class ExternalTool implements Tool {
 
   deActivate(): void {
     this.editorApi.removeActiveTool(this.name);
+  }
+
+  onChange(changes: Record<string, any>) {
+    console.log(changes);
   }
 }
 

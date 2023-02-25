@@ -6,7 +6,6 @@
 #include "../../../engine/graphics/renderable/renderable2d.h"
 #include "../../document/document_store.h"
 #include "../tool.h"
-#include "../../service/core/event/event_handler.h"
 #include "../helper/layer_provider.h"
 #include "eraser.h"
 #include "eraser_stroke.h"

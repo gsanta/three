@@ -6,15 +6,10 @@
 
 namespace spright { namespace editor {
 
-	class EventHandler {
+	class EventEmitter {
 	private:
 		std::vector<EventListener*> m_Listeners;
 	public:
-		void emitDataChange();
-
-		void emitChange(nlohmann::json data);
-
-		void addListener(EventListener* listener);
-		void removeListener(EventListener* listener);
+		virtual void emitChange(std::string eventType, nlohmann::json data) = 0;
 	};
 }}

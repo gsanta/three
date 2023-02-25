@@ -5,7 +5,6 @@
 #include "../../engine/graphics/renderable/renderable2d.h"
 #include "../editor_config.h"
 #include "../document/document_store.h"
-#include "../service/core/event/event_handler.h"
 #include "brush.h"
 
 namespace spright { namespace editor {
@@ -16,14 +15,13 @@ namespace spright { namespace editor {
 	{
 	private:
 		DocumentStore *m_documentStore;
-		EventHandler* m_EventHandler;
 		int m_EraserSize = 1;
 		Rect2D *sprite;
 		unsigned int m_Color = 0x8f000000;
 		Brush brush;
 
 	public:
-		BrushTool(DocumentStore* documentStore, EventHandler* eventHandler);
+		BrushTool(DocumentStore* documentStore);
 
 		void setSize(int size);
 		unsigned int getColor() const;
