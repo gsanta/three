@@ -1,7 +1,7 @@
 import { makeObservable, observable } from 'mobx';
 import NativeSettings from './NativeSettings';
 
-class Settings {
+class EditorStore {
   color = '#000000';
 
   private _settings: NativeSettings;
@@ -26,4 +26,4 @@ class Settings {
   }
 }
 
-export default Settings;
+export default EditorStore;

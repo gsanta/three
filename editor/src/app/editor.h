@@ -17,7 +17,7 @@
 #include "./rendering.h"
 #include "./service/io/image_export.h"
 #include "./service/io/json/json_io.h"
-#include "service/core/event/event_emitter.h"
+#include "event/event_emitter.h"
 #include "document/document_store.h"
 #include "api/emscripten_event_emitter.h"
 

@@ -2,7 +2,7 @@
 
 #include <nlohmann/json.hpp>
 #include <string>
-#include "../src/app/service/core/event/event_emitter.h"
+#include "../src/app/event/event_emitter.h"
 
 using namespace ::spright::editor;
 

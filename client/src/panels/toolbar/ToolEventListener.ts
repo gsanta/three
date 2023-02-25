@@ -1,9 +1,9 @@
 import EditorApi from '@/services/editor/EditorApi';
-import { EditorEventListener } from '@/services/editor/EditorEvents';
+import EditorEvents from '@/services/editor/EditorEvents';
 import ToolName from './model/ToolName';
 import ToolStore from './ToolStore';
 
-class ToolEventListener implements EditorEventListener<ToolName> {
+class ToolEventListener {
   private toolStore: ToolStore;
 
   private editorApi: EditorApi;
@@ -11,12 +11,19 @@ class ToolEventListener implements EditorEventListener<ToolName> {
   constructor(toolStore: ToolStore, editorApi: EditorApi) {
     this.toolStore = toolStore;
     this.editorApi = editorApi;
+
+    this.onToolDataChanged = this.onToolDataChanged.bind(this);
   }
 
-  onChange(_eventType: string, toolName: ToolName): void {
-    const data = this.editorApi.getToolData(toolName);
+  listens = ['on_tool_data_changed'];
 
-    this.toolStore.getTool(toolName)?.setData(JSON.parse(data));
+  onToolDataChanged({ tool }: { tool: ToolName }): void {
+    const data = this.editorApi.getToolData(tool);
+    this.toolStore.getTool(tool)?.setData(JSON.parse(data));
+  }
+
+  listen(editorEvents: EditorEvents) {
+    editorEvents.on('tool_data_changed', this.onToolDataChanged);
   }
 }
 

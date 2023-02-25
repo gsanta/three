@@ -1,6 +1,5 @@
 import Box from '@/ui/components/box/Box';
 import useAppContext from '@/ui/hooks/useAppContext';
-import useEditorInitialized from '@/ui/hooks/useEditorInitialized';
 import { useResizeObserver } from '@/ui/hooks/useResizeObserver';
 import { forwardRef } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -27,8 +26,6 @@ const Canvas = forwardRef((_props, ref) => {
       editorApi.setWindowSize(debouncedWidth, debouncedHeight);
     }
   }, [editorApi, debouncedWidth, debouncedHeight]);
-
-  useEditorInitialized(resize);
 
   useResizeObserver(canvasParentRef.current, resize);
 

@@ -16,8 +16,10 @@ TEST_CASE("ColorPickerTool pointerDown", "[color-picker-tool]") {
 
 		TestEventEmitter eventEmitter;
 
+		ToolHandler toolHandler;
+
 		// TODO: destroy layerprovider
-		ColorPickerTool colorPickerTool(new LayerProviderTestImpl(tileLayer, tempLayer), &eventEmitter);
+		ColorPickerTool colorPickerTool(new LayerProviderTestImpl(tileLayer, tempLayer), &toolHandler, &eventEmitter);
 
 		Brush brush;
 		brush.paint(&tileLayer, Vec2Int(0, 0), 0xFFFF0000);
@@ -43,9 +45,11 @@ TEST_CASE("ColorPickerTool pointerDown", "[color-picker-tool]") {
 
 		TestEventEmitter eventEmitter;
 
+		ToolHandler toolHandler;
+
 		LayerProviderTestImpl layerProvider(tileLayer, tempLayer);
 
-		ColorPickerTool colorPickerTool(&layerProvider, &eventEmitter);
+		ColorPickerTool colorPickerTool(&layerProvider, &toolHandler, &eventEmitter);
 
 		Brush brush;
 		brush.paint(&tileLayer, Vec2Int(0, 0), 0xFFFF0000);

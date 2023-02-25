@@ -20,7 +20,7 @@ namespace spright { namespace editor {
 	ToolHandler& ToolHandler::operator=(const ToolHandler& toolHandler)
 	{
 		m_Window = toolHandler.m_Window;
-		tools = toolHandler.tools;
+		m_Tools = toolHandler.m_Tools;
 		m_ActiveTools = toolHandler.m_ActiveTools;
 		m_SelectedTool = toolHandler.m_SelectedTool;
 		m_Services = toolHandler.m_Services;
@@ -133,14 +133,28 @@ namespace spright { namespace editor {
 
 	void ToolHandler::addTool(Tool* tool)
 	{
-		tools.push_back(tool);
+		m_Tools.push_back(tool);
 	}
 
 	Tool* ToolHandler::getTool(string name) const
 	{
-		auto it = find_if(this->tools.begin(), this->tools.end(), [&name](const Tool* tool) { return tool->getName() == name; });
+		auto it = find_if(this->m_Tools.begin(), this->m_Tools.end(), [&name](const Tool* tool) { return tool->getName() == name; });
 	
 		return *it;
+	}
+
+	vector<Colorable*> ToolHandler::getColorableTools()
+	{
+		vector<Colorable*> colorables;
+
+		for (Tool* tool : m_Tools) {
+			if (Colorable* colorable = dynamic_cast<Colorable*>(tool)) {
+				// old was safely casted to NewType
+				colorables.push_back(colorable);
+			}
+		}
+
+		return colorables;
 	}
 
 	Tool* ToolHandler::getSelectedTool()

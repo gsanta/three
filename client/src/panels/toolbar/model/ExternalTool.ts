@@ -4,7 +4,7 @@ import Tool from './Tool';
 import ToolName from './ToolName';
 import ToolSelectionEvent from './ToolSelectionEvents';
 
-class ExternalTool implements Tool {
+class ExternalTool<D = unknown> implements Tool {
   name: ToolName;
 
   iconName: IconName;
@@ -21,7 +21,7 @@ class ExternalTool implements Tool {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setData(_data: unknown): void {
+  setData(_data: D): void {
     throw new Error('Method not implemented.');
   }
 
