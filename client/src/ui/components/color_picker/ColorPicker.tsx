@@ -2,21 +2,26 @@ import { colorToHexString } from '@/panels/tool_options/colorUtils';
 import useAppContext from '@/ui/hooks/useAppContext';
 import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
-import { ChromePicker, RGBColor } from 'react-color';
+import { ChromePicker, ColorResult } from 'react-color';
 
 const ColorPicker = observer(() => {
   const { editorStore } = useAppContext();
 
-  const [color, setColor] = useState<RGBColor>({ r: 255, g: 255, b: 255, a: 1 });
+  const [tempColor, setTempColor] = useState<string | null>(editorStore.color);
 
-  const handleChangeComplete = () => {
-    editorStore.setColor(colorToHexString(color));
+  const handleChangeComplete = (newColor: ColorResult) => {
+    editorStore.setColor(colorToHexString(newColor.rgb));
+    setTempColor(null);
+  };
+
+  const handleChange = (newColor: ColorResult) => {
+    setTempColor(newColor.hex);
   };
 
   return (
     <ChromePicker
-      color={color}
-      onChange={(newColor) => setColor(newColor.rgb)}
+      color={tempColor || editorStore.color}
+      onChange={handleChange}
       onChangeComplete={handleChangeComplete}
     />
   );
