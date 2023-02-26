@@ -13,7 +13,7 @@ class DependencyInjector {
   }
 
   init() {
-    const { toolStore, editorApi, moduleManager, layerHandler, keyboardHandler } = this.app;
+    const { editorStore, toolStore, editorApi, moduleManager, layerHandler, keyboardHandler } = this.app;
 
     toolStore.addTool(
       new ExternalTool(
@@ -28,7 +28,7 @@ class DependencyInjector {
     toolStore.addTool(new ExternalTool(ToolName.Erase, 'BiEraser', editorApi));
     toolStore.addTool(new ExternalTool(ToolName.Pan, 'BiMove', editorApi));
     toolStore.addTool(new ExternalTool(ToolName.PaintBucket, 'BiColorFill', editorApi));
-    toolStore.addTool(new ColorPickerTool(ToolName.ColorPicker, 'BiHighlight', editorApi));
+    toolStore.addTool(new ColorPickerTool(ToolName.ColorPicker, 'BiHighlight', editorApi, editorStore));
     toolStore.setSelectedTool(ToolName.Brush);
 
     moduleManager.start();

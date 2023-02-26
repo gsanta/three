@@ -12,5 +12,5 @@ export function toRGBAColor(abgrColor: string): number {
   const b = abgrColor.substring(3, 5);
   const a = abgrColor.substring(1, 3);
 
-  return Number('0x' + r + b + g + a);
+  return Number('0x' + r + g + b + a);
 }

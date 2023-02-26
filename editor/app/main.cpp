@@ -168,7 +168,6 @@ void setColor(unsigned int color)
 {
 	if (editor != nullptr)
 	{
-		editor->getServices()->getColorPalette()->color = color;
 		BrushTool* brushTool = dynamic_cast<BrushTool*>(editor->getToolHandler()->getTool("brush"));
 		brushTool->setColor(color);
 	}
