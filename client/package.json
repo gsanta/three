@@ -38,6 +38,7 @@
     "axios": "^0.24.0",
     "classnames": "^2.3.1",
     "connect": "^3.7.0",
+    "eventemitter3": "^5.0.0",
     "framer-motion": "^6.3.3",
     "mobx": "^6.6.2",
     "mobx-react-lite": "^3.4.0",
