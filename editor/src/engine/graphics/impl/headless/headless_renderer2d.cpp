@@ -1,12 +1,6 @@
 #include "headless_renderer2d.h"
 
 namespace spright { namespace engine {
-
-	HeadlessRenderer2D::HeadlessRenderer2D(): Renderer2D(std::make_shared<HeadlessShader>()) {
-
-	}
-
-
 	void HeadlessRenderer2D::begin()
 	{
 
@@ -24,5 +18,10 @@ namespace spright { namespace engine {
 
 	VertexData*& HeadlessRenderer2D::getBuffer() {
 		return m_Buffer;
+	}
+
+	Shader& HeadlessRenderer2D::getShader()
+	{
+		return m_Shader;
 	}
 }}

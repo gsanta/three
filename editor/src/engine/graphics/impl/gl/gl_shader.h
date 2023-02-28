@@ -7,13 +7,18 @@ namespace spright { namespace engine {
 	using namespace ::spright::maths;
 
 	class GLShader : public Shader {
+	private:
+		std::size_t* m_Use;
 	public:
 		GLuint m_ShaderID;
 		const char* m_VertPath;
 		const char* m_FragPath;
 	public:
 		GLShader(const char* vertPath, const char* fragPath);
+		GLShader(const GLShader& shader);
 		~GLShader();
+
+		GLShader& operator=(const GLShader&);
 
 		void setUniform1f(const GLchar* name, float value);
 		void setUniform1i(const GLchar* name, int value);

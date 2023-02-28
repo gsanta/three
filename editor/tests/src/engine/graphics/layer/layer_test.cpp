@@ -6,18 +6,16 @@
 #include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
 #include "../src/engine/graphics/impl/headless/headless_shader.h"
 #include "../src/engine/graphics/layer/tileLayer.h"
-#include "../src/app/document/document.h"
+#include "../src/engine/layout/container.h"
 
 using namespace ::spright::engine;
-using namespace ::spright::editor;
 
 TEST_CASE("Layer add", "[layer]") {
 	SECTION("can add a renderable to the layer") {
 		
-		Camera* camera = new Camera(800, 600, Dimensions(-16, 16, -16, 16), 0, 1);
-		Document* document = new Document(Dimensions(-16.0f, 16.0f, -16.0f, 16.0f), camera);
+		Container* container = new Container(Dimensions(-16.0f, 16.0f, -16.0f, 16.0f));
 
-		TileLayer layer("layer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), document);
+		TileLayer layer("layer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), container);
 
 		REQUIRE(layer.getRenderables().size() == 0);
 
@@ -35,10 +33,9 @@ TEST_CASE("Layer add", "[layer]") {
 
 TEST_CASE("Layer getTilePos", "[layer]") {
 	SECTION("converts world coordinates to tile coordinates starting at the document bottom left position") {
-		Camera* camera = new Camera(800, 600, Dimensions(-16, 16, -16, 16), 0, 1);
-		Document* document = new Document(Dimensions(-16.0f, 16.0f, -16.0f, 16.0f), camera);
+		Container* container = new Container(Dimensions(-16.0f, 16.0f, -16.0f, 16.0f));
 
-		TileLayer layer("layer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), document);
+		TileLayer layer("layer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), container);
 
 		float tileSize = layer.getTileSize();
 

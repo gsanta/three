@@ -17,9 +17,9 @@ namespace spright { namespace editor {
 	TileLayer* DocumentHandler::createUserLayer(Document* document, std::string name, std::string id)
 	{
 #ifdef SPARKY_EMSCRIPTEN
-		shared_ptr<GLShader> shaderUnlit = make_shared<GLShader>("resources/shaders/basic.es3.vert", "resources/shaders/basic_unlit.es3.frag");
+		GLShader shaderUnlit("resources/shaders/basic.es3.vert", "resources/shaders/basic_unlit.es3.frag");
 #else
-		shared_ptr<Shader> shaderUnlit = make_shared<GLShader>("shaders/basic.vert", "shaders/unlit.frag");
+		GLShader shaderUnlit("shaders/basic.vert", "shaders/unlit.frag");
 #endif
 		TileLayer *layer = new TileLayer(name, id, new Group<Rect2D>(new GLRenderer2D(shaderUnlit)), document);
 
@@ -36,9 +36,9 @@ namespace spright { namespace editor {
 	Document* DocumentHandler::createDocument()
 	{
 #ifdef SPARKY_EMSCRIPTEN
-		shared_ptr<GLShader> shaderUnlit = make_shared<GLShader>("resources/shaders/basic.es3.vert", "resources/shaders/basic_unlit.es3.frag");
+		GLShader shaderUnlit("resources/shaders/basic.es3.vert", "resources/shaders/basic_unlit.es3.frag");
 #else
-		shared_ptr<GLShader> shaderUnlit =  make_shared<GLShader>("shaders/basic.vert", "shaders/unlit.frag");
+		GLShader shaderUnlit("shaders/basic.vert", "shaders/unlit.frag");
 #endif
 		float pixelCount = 32.0f;
 		Dimensions documentDimensions(-pixelCount / 2.0f, pixelCount / 2.0f, -pixelCount / 2.0f, pixelCount / 2.0f);

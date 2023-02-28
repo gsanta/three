@@ -70,7 +70,7 @@ namespace spright { namespace engine {
 
 		m_Renderer->begin();
 
-		m_Renderer->getShader()->setUniformMat4("pr_matrix", camera->getProjectionMatrix());
+		m_Renderer->getShader().setUniformMat4("pr_matrix", camera->getProjectionMatrix());
 
 
 		m_Renderer->push(camera->getView());

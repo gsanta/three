@@ -18,6 +18,12 @@ namespace spright { namespace engine {
 		m_TileIndexes = new Renderable2D*[m_IndexSize]();
 	}
 
+	//TileLayer::TileLayer(const TileLayer& tileLayer)
+	//	: m_Group(tileLayer.m_Group), m_TileSize(tileLayer.m_TileSize), m_Name(tileLayer.m_Name), m_Id(tileLayer.m_Id), m_Container(tileLayer.m_Container) {
+
+	//}
+
+
 	TileLayer::~TileLayer() {
 		delete[] m_TileIndexes;
 	}

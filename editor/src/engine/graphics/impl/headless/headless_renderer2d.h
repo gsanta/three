@@ -7,6 +7,7 @@
 #include "../../buffer/vertexArray.h"
 #include "../../buffer/indexBuffer.h"
 #include "../../renderable/renderable2d.h"
+#include "../../shader/shader.h"
 #include "headless_shader.h"
 
 namespace spright { namespace engine {
@@ -15,11 +16,12 @@ namespace spright { namespace engine {
 	{
 	private:
 		VertexData* m_Buffer;
+		HeadlessShader m_Shader;
 	public:
-		HeadlessRenderer2D();
 		void begin() override;
 		void end() override;
 		void flush() override;
 		VertexData*& getBuffer() override;
+		Shader& getShader() override;
 	};
 }}

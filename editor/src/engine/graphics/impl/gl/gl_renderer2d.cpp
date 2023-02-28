@@ -3,7 +3,9 @@
 
 namespace spright { namespace engine {
 
-	GLRenderer2D::GLRenderer2D(std::shared_ptr<Shader> shader): Renderer2D(shader) {
+	GLRenderer2D::GLRenderer2D(GLShader shader): m_Shader(shader) {
+		m_TransformationStack.push_back(Mat4::identity());
+		m_TransformationBack = &m_TransformationStack.back();
 		init();
 	}
 
@@ -59,7 +61,7 @@ namespace spright { namespace engine {
 
 	void GLRenderer2D::begin()
 	{	
-		getShader()->enable();
+		getShader().enable();
 		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 
 //#ifdef SPARKY_EMSCRIPTEN
@@ -97,6 +99,11 @@ namespace spright { namespace engine {
 		glBindVertexArray(0);
 
 		m_IndexCount = 0;
-		getShader()->disable();
+		getShader().disable();
+	}
+
+	Shader& GLRenderer2D::getShader()
+	{
+		return m_Shader;
 	}
 } }

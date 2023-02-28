@@ -13,15 +13,11 @@ namespace spright { namespace engine {
 	class Renderable2D;
 
 	class Renderer2D {
-	private:
-		std::shared_ptr<Shader> m_Shader;
 	protected:
 		std::vector<Mat4> m_TransformationStack;
 		const Mat4* m_TransformationBack;
 
 		GLsizei m_IndexCount = 0;
-
-		Renderer2D(std::shared_ptr<Shader> shader);
 	public:
 		void push(const Mat4& matrix, bool override = false);
 		void pop();
@@ -40,6 +36,6 @@ namespace spright { namespace engine {
 		virtual void end() = 0;
 		virtual VertexData*& getBuffer() = 0;
 
-		Shader* getShader();
+		virtual Shader& getShader() = 0;
 	};
 } }

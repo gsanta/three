@@ -3,13 +3,37 @@
 namespace spright { namespace engine {
 
 	GLShader::GLShader(const char* vertPath, const char* fragPath)
-		: m_VertPath(vertPath), m_FragPath(fragPath)
+		: m_VertPath(vertPath), m_FragPath(fragPath), m_Use(new std::size_t(1))
 	{
 		m_ShaderID = load();
 	}
 
+	GLShader::GLShader(const GLShader& shader): m_VertPath(shader.m_VertPath), m_FragPath(shader.m_FragPath), m_ShaderID(shader.m_ShaderID), m_Use(shader.m_Use)
+	{
+		++*m_Use;
+	}
+
 	GLShader::~GLShader() {
-		glDeleteProgram(m_ShaderID);
+		if (--*m_Use == 0) {
+			delete m_VertPath;
+			delete m_FragPath;
+			glDeleteProgram(m_ShaderID);
+		}
+	}
+
+	GLShader& GLShader::operator=(const GLShader& rhs)
+	{
+		++*rhs.m_Use;
+		if (--*m_Use == 0) {
+			delete m_VertPath;
+			delete m_FragPath;
+			glDeleteProgram(m_ShaderID);
+		}
+		m_VertPath = rhs.m_VertPath;
+		m_FragPath = rhs.m_FragPath;
+		m_Use = rhs.m_Use;
+
+		return *this;
 	}
 
 	void GLShader::setUniform1f(const GLchar* name, float value)
