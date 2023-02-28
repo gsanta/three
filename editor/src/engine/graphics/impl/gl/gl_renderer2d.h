@@ -8,6 +8,7 @@
 #include "../../buffer/indexBuffer.h"
 #include "../../renderable/renderable2d.h"
 #include "../../shader/shader.h"
+#include "gl_shader.h"
 
 namespace spright { namespace engine {
 
@@ -25,6 +26,8 @@ namespace spright { namespace engine {
 	class GLRenderer2D : public Renderer2D
 	{
 	private:
+		GLShader m_Shader;
+
 		GLuint m_VBO;
 		GLuint m_VAO;
 		IndexBuffer *m_IBO;
@@ -35,7 +38,7 @@ namespace spright { namespace engine {
 		std::vector<GLuint> m_TextureSlots;
 
 	public:
-		GLRenderer2D(std::shared_ptr<Shader> shader);
+		GLRenderer2D(GLShader shader);
 		~GLRenderer2D();
 		inline virtual VertexData *&getBuffer()
 		{
@@ -44,6 +47,8 @@ namespace spright { namespace engine {
 		void begin() override;
 		void end() override;
 		void flush() override;
+
+		Shader& getShader() override;
 
 	private:
 		void init();

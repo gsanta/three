@@ -30,6 +30,7 @@ namespace spright { namespace engine {
 
 	public:
 		TileLayer(std::string name, std::string id, Group<Rect2D>* group, Container* container, float tileSize = 0.5f);
+		//TileLayer(const TileLayer& tileLayer);
 		virtual ~TileLayer();
 
 		std::string getId();
