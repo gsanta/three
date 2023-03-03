@@ -15,7 +15,7 @@ TEST_CASE("Layer add", "[layer]") {
 		
 		Container* container = new Container(Dimensions(-16.0f, 16.0f, -16.0f, 16.0f));
 
-		TileLayer layer("layer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), container);
+		TileLayer layer("layer", "id", Group<Rect2D>(new HeadlessRenderer2D()), container);
 
 		REQUIRE(layer.getRenderables().size() == 0);
 
@@ -35,7 +35,7 @@ TEST_CASE("Layer getTilePos", "[layer]") {
 	SECTION("converts world coordinates to tile coordinates starting at the document bottom left position") {
 		Container* container = new Container(Dimensions(-16.0f, 16.0f, -16.0f, 16.0f));
 
-		TileLayer layer("layer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), container);
+		TileLayer layer("layer", "id", Group<Rect2D>(new HeadlessRenderer2D()), container);
 
 		float tileSize = layer.getTileSize();
 

@@ -2,15 +2,15 @@
 
 namespace spright { namespace editor {
 
-	EraserTool::EraserTool(LayerProvider* layerProvider, int eraserSize) : m_LayerProvider(layerProvider), m_EraserSize(eraserSize), Tool("erase")
+	EraserTool::EraserTool(LayerProvider* layerProvider, int eraserSize) : m_LayerProvider(layerProvider), m_Size(eraserSize), Tool("erase")
 	{
-		m_EraserStroke = EraserStroke(&layerProvider->getTempLayer(), m_EraserSize);
+		m_EraserStroke = EraserStroke(&layerProvider->getTempLayer(), m_Size);
 	}
 
 	void EraserTool::pointerDown(PointerInfo& pointerInfo)
 	{
 		TileLayer& activeLayer = m_LayerProvider->getActiveLayer();
-		m_Eraser.erase(activeLayer, activeLayer.getTilePos(pointerInfo.curr), m_EraserSize);
+		m_Eraser.erase(activeLayer, activeLayer.getTilePos(pointerInfo.curr), m_Size);
 	}
 
 	void EraserTool::pointerMove(PointerInfo& pointerInfo)
@@ -20,7 +20,7 @@ namespace spright { namespace editor {
 		m_EraserStroke.draw(activeLayer, pointerInfo.curr);
 
 		if (pointerInfo.isDown) {
-			m_Eraser.erase(activeLayer, activeLayer.getTilePos(pointerInfo.curr), m_EraserSize);
+			m_Eraser.erase(activeLayer, activeLayer.getTilePos(pointerInfo.curr), m_Size);
 		}
 	}
 
@@ -32,14 +32,14 @@ namespace spright { namespace editor {
 	{
 		nlohmann::json parsedJson = nlohmann::json::parse(json);
 
-		m_EraserSize = parsedJson["size"];
+		m_Size = parsedJson["size"];
 	}
 
 	std::string EraserTool::getOptions()
 	{
 		nlohmann::json json;
 
-		json["size"] = m_EraserSize;
+		json["size"] = m_Size;
 
 		return json.dump();
 	}

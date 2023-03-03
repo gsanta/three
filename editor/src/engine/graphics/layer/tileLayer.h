@@ -21,7 +21,7 @@ namespace spright { namespace engine {
 		std::string m_Id;
 		std::string m_Name;
 		Container* m_Container;
-		unique_ptr<Group<Rect2D>> m_Group;
+		Group<Rect2D> m_Group;
 		float m_TileSize = 0.5f;
 		int m_IndexSize;
 		bool m_IsEnabled = true;
@@ -29,8 +29,8 @@ namespace spright { namespace engine {
 		BoundsInt m_TileBounds;
 
 	public:
-		TileLayer(std::string name, std::string id, Group<Rect2D>* group, Container* container, float tileSize = 0.5f);
-		//TileLayer(const TileLayer& tileLayer);
+		TileLayer(std::string name, std::string id, Group<Rect2D> group, Container* container, float tileSize = 0.5f);
+		TileLayer(const TileLayer& tileLayer);
 		virtual ~TileLayer();
 
 		std::string getId();
@@ -74,5 +74,8 @@ namespace spright { namespace engine {
 		nlohmann::json getJson();
 		void setJson(std::string json);
 		nlohmann::json getLayerDescription();
+
+	private:
+		void init();
 	};
 }}

@@ -15,10 +15,17 @@ namespace spright { namespace engine {
 	class Renderer2D {
 	protected:
 		std::vector<Mat4> m_TransformationStack;
-		const Mat4* m_TransformationBack;
+		const Mat4* m_TransformationBack = nullptr;
 
 		GLsizei m_IndexCount = 0;
 	public:
+		Renderer2D();
+		Renderer2D(const Renderer2D&);
+		~Renderer2D();
+
+		virtual Renderer2D& operator=(Renderer2D&);
+		virtual Renderer2D* clone() const = 0;
+
 		void push(const Mat4& matrix, bool override = false);
 		void pop();
 		const spright::maths::Mat4* getTransformation();

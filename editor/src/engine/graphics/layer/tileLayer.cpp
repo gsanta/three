@@ -2,26 +2,17 @@
 
 namespace spright { namespace engine {
 
-	TileLayer::TileLayer(std::string name, std::string id, Group<Rect2D>* group, Container* container, float tileSize)
+	TileLayer::TileLayer(std::string name, std::string id, Group<Rect2D> group, Container* container, float tileSize)
 		: m_Group(group), m_TileSize(tileSize), m_Name(name), m_Id(id), m_Container(container) {
 	
-		Dimensions dimensions = container->getDimensions();
-
-		int width = (dimensions.right - dimensions.left) / m_TileSize;
-		int height = (dimensions.top - dimensions.bottom) / m_TileSize;
-		int left = (dimensions.left / m_TileSize) - 1;
-		int bottom = (dimensions.bottom / m_TileSize) - 1;
-
-		m_TileBounds = BoundsInt(left, left + width, bottom, bottom + height);
-
-		m_IndexSize = width * height;
-		m_TileIndexes = new Renderable2D*[m_IndexSize]();
+		init();
 	}
 
-	//TileLayer::TileLayer(const TileLayer& tileLayer)
-	//	: m_Group(tileLayer.m_Group), m_TileSize(tileLayer.m_TileSize), m_Name(tileLayer.m_Name), m_Id(tileLayer.m_Id), m_Container(tileLayer.m_Container) {
+	TileLayer::TileLayer(const TileLayer& tileLayer)
+		: m_Id(tileLayer.m_Id), m_Name(tileLayer.m_Name), m_Group(tileLayer.m_Group), m_Container(tileLayer.m_Container), m_TileSize(tileLayer.m_TileSize) {
 
-	//}
+		init();
+	}
 
 
 	TileLayer::~TileLayer() {
@@ -42,7 +33,7 @@ namespace spright { namespace engine {
 
 	void TileLayer::add(Rect2D* rect)
 	{
-		m_Group->add(rect);
+		m_Group.add(rect);
 
 		Vec2 pos = rect->getBounds()->getCenter();
 		Vec2Int tilePos = getTilePos(pos);
@@ -63,22 +54,22 @@ namespace spright { namespace engine {
 		m_TileIndexes[index] = nullptr;
 		rect->setTileIndex(-1);
 
-		m_Group->remove(rect);
+		m_Group.remove(rect);
 	}
 	
 	// TODO: fix clear to remove from m_TileIndexes
 	void TileLayer::clear() {
-		m_Group->clear();
+		m_Group.clear();
 	}
 	
 	void TileLayer::render(Camera* camera) {
 		if (m_IsEnabled) {
-			m_Group->render(camera);
+			m_Group.render(camera);
 		}
 	}
 
 	std::vector<Rect2D*>& TileLayer::getRenderables() {
-		return m_Group->getRenderables();
+		return m_Group.getRenderables();
 	}
 
 	Vec2 TileLayer::getBottomLeftPos(Vec2 pointer) const
@@ -202,7 +193,7 @@ namespace spright { namespace engine {
 	{
 		nlohmann::json json;
 
-		for (Renderable2D* renderable : m_Group->getRenderables()) {
+		for (Renderable2D* renderable : m_Group.getRenderables()) {
 			json["tiles"] += renderable->getJson();
 		}
 
@@ -226,5 +217,19 @@ namespace spright { namespace engine {
 			Rect2D* sprite = new Rect2D(posX, posY, sizeX, sizeY, 0xff0000ff);
 			add(sprite);
 		}
+	}
+
+	void TileLayer::init() {
+		Dimensions dimensions = m_Container->getDimensions();
+
+		int width = (dimensions.right - dimensions.left) / m_TileSize;
+		int height = (dimensions.top - dimensions.bottom) / m_TileSize;
+		int left = (dimensions.left / m_TileSize) - 1;
+		int bottom = (dimensions.bottom / m_TileSize) - 1;
+
+		m_TileBounds = BoundsInt(left, left + width, bottom, bottom + height);
+
+		m_IndexSize = width * height;
+		m_TileIndexes = new Renderable2D*[m_IndexSize]();
 	}
 }}

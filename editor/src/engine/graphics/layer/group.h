@@ -19,11 +19,14 @@ namespace spright { namespace engine {
 
 	public:
 		Group(Renderer2D *renderer);
-		virtual ~Group();
-		virtual void add(T *renderable);
-		virtual void render(Camera* camera);
-		virtual void clear();
-		virtual void remove(T* renderable);
+		Group(const Group&);
+		~Group();
+
+		Group& operator=(const Group&);
+		void add(T *renderable);
+		void render(Camera* camera);
+		void clear();
+		void remove(T* renderable);
 
 		inline std::vector<T*>& getRenderables() {
 			return m_Renderables;
@@ -35,6 +38,14 @@ namespace spright { namespace engine {
 	}
 
 	template <typename T>
+	Group<T>::Group(const Group& group) {
+		m_Renderer = group.m_Renderer->clone();
+		for (T* item : m_Renderables) {
+			m_Renderables.push_back(new T(*item));
+		}
+	}
+
+	template <typename T>
 	Group<T>::~Group() {
 		delete m_Renderer;
 
@@ -42,6 +53,21 @@ namespace spright { namespace engine {
 			delete m_Renderables[i];
 		}
 	}
+
+	template <typename T>
+	Group<T>& Group<T>::operator=(const Group<T>& rhs) {
+		if (this != &rhs) {
+			delete m_Renderer;
+			for (T* element : m_Renderables)
+			{
+				delete element;
+			}
+			m_Renderables.clear();
+		}
+
+		return *this;
+	}
+
 
 	template <typename T>
 	void Group<T>::add(T* renderable) {

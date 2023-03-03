@@ -15,8 +15,8 @@ TEST_CASE("EraserStroke draw", "[eraser-stroke]") {
 
 		Container container(Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
 
-		TileLayer drawLayer("drawLayer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), &container);
-		TileLayer eraseLayer("eraseLayer", "id2", new Group<Rect2D>(new HeadlessRenderer2D()), &container, tileSize);
+		TileLayer drawLayer("drawLayer", "id", Group<Rect2D>(new HeadlessRenderer2D()), &container);
+		TileLayer eraseLayer("eraseLayer", "id2", Group<Rect2D>(new HeadlessRenderer2D()), &container, tileSize);
 
 		EraserStroke eraserStroke(&drawLayer, eraserSize);
 
@@ -55,8 +55,8 @@ TEST_CASE("EraserStroke draw", "[eraser-stroke]") {
 
 		Container container(Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
 
-		TileLayer drawLayer("drawLayer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), &container);
-		TileLayer eraseLayer("eraseLayer", "id2", new Group<Rect2D>(new HeadlessRenderer2D()), &container, tileSize);
+		TileLayer drawLayer("drawLayer", "id", Group<Rect2D>(new HeadlessRenderer2D()), &container);
+		TileLayer eraseLayer("eraseLayer", "id2", Group<Rect2D>(new HeadlessRenderer2D()), &container, tileSize);
 
 		EraserStroke eraserStroke(&drawLayer, eraserSize);
 
@@ -97,8 +97,8 @@ TEST_CASE("EraserStroke draw", "[eraser-stroke]") {
 
 		Container container(Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
 
-		TileLayer drawLayer("drawLayer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), &container);
-		TileLayer eraseLayer("eraseLayer", "id2", new Group<Rect2D>(new HeadlessRenderer2D()), &container, tileSize);
+		TileLayer drawLayer("drawLayer", "id", Group<Rect2D>(new HeadlessRenderer2D()), &container);
+		TileLayer eraseLayer("eraseLayer", "id2", Group<Rect2D>(new HeadlessRenderer2D()), &container, tileSize);
 
 		EraserStroke eraserStroke(&drawLayer, eraserSize);
 

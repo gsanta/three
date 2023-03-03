@@ -2,9 +2,15 @@
 
 namespace spright { namespace engine {
 		Rect2D::Rect2D(float x, float y, float width, float height, unsigned int  color)
-			: m_Position(Vec3(x, y, 0)), m_EraserSize(Vec2(width, height)), Renderable2D(color)
+			: m_Position(Vec3(x, y, 0)), m_Size(Vec2(width, height)), Renderable2D(color)
 		{
 			m_bounds = new Bounds(x, y, width, height);
+
+			m_VertexCount = 4;
+		}
+
+		Rect2D::Rect2D(const Rect2D& rect2d): m_Position(rect2d.m_Position), m_Size(rect2d.m_Size), Renderable2D(rect2d.m_Color) {
+			m_bounds = new Bounds(m_Position.x, m_Position.y, m_Size.x, m_Size.y);
 
 			m_VertexCount = 4;
 		}
@@ -27,11 +33,11 @@ namespace spright { namespace engine {
 
 		void Rect2D::setSize(Vec2 size)
 		{
-			this->m_EraserSize = size;
+			this->m_Size = size;
 		}
 
 		Vec2 Rect2D::getSize() {
-			return m_EraserSize;
+			return m_Size;
 		}
 
 		void Rect2D::setPosition(Vec2 position)
@@ -41,11 +47,11 @@ namespace spright { namespace engine {
 		}
 
 		void Rect2D::setCenterPosition(Vec2 position) {
-			this->m_Position = Vec3(position.x - m_EraserSize.x / 2.0f, position.y - m_EraserSize.y / 2.0f, m_Position.z);
+			this->m_Position = Vec3(position.x - m_Size.x / 2.0f, position.y - m_Size.y / 2.0f, m_Position.z);
 		}
 
 		Vec2 Rect2D::getCenterPosition2d() const {
-			return Vec2(m_Position.x + m_EraserSize.x / 2.0f, m_Position.y + m_EraserSize.y / 2.0f);
+			return Vec2(m_Position.x + m_Size.x / 2.0f, m_Position.y + m_Size.y / 2.0f);
 		}
 
 		bool Rect2D::contains(Vec2 point)
@@ -67,8 +73,8 @@ namespace spright { namespace engine {
 			{"posX", m_Position.x},
 			{"posY", m_Position.y},
 			{"posZ", m_Position.z},
-			{"sizeX", m_EraserSize.x},
-			{"sizeY", m_EraserSize.y},
+			{"sizeX", m_Size.x},
+			{"sizeY", m_Size.y},
 		};
 
 		return json;
@@ -83,19 +89,19 @@ namespace spright { namespace engine {
 		buffer->color = m_Color;
 		buffer++;
 
-		buffer->vertex = *transformation * Vec3(m_Position.x, m_Position.y + m_EraserSize.y, m_Position.z);
+		buffer->vertex = *transformation * Vec3(m_Position.x, m_Position.y + m_Size.y, m_Position.z);
 		buffer->uv = m_UV[1];
 		buffer->tid = 0.0f;
 		buffer->color = m_Color;
 		buffer++;
 
-		buffer->vertex = *transformation * Vec3(m_Position.x + m_EraserSize.x, m_Position.y + m_EraserSize.y, m_Position.z);
+		buffer->vertex = *transformation * Vec3(m_Position.x + m_Size.x, m_Position.y + m_Size.y, m_Position.z);
 		buffer->uv = m_UV[2];
 		buffer->tid = 0.0f;
 		buffer->color = m_Color;
 		buffer++;
 
-		buffer->vertex = *transformation * Vec3(m_Position.x + m_EraserSize.x, m_Position.y, m_Position.z);
+		buffer->vertex = *transformation * Vec3(m_Position.x + m_Size.x, m_Position.y, m_Position.z);
 		buffer->uv = m_UV[3];
 		buffer->tid = 0.0f;
 		buffer->color = m_Color;

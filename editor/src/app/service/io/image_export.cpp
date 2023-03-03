@@ -49,7 +49,7 @@ namespace spright { namespace editor {
 			}
 		, image, width, height, 4, data, width * 4);
 
-		m_EraserSize = image->size;
+		m_Size = image->size;
 		m_Data = image->data;
 	}
 
@@ -58,6 +58,6 @@ namespace spright { namespace editor {
 	}
 
 	size_t ImageExport::getImageSize() {
-		return m_EraserSize;
+		return m_Size;
 	}
 }}

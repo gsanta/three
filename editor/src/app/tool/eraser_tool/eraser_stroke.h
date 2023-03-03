@@ -8,7 +8,7 @@ namespace spright { namespace editor {
 	class EraserStroke {
 	private:
 		TileLayer* m_DrawLayer = nullptr;
-		int m_EraserSize;
+		int m_Size;
 		float m_StrokeWidth = 0.1f;
 
 		Rect2D* m_TopLine = nullptr;

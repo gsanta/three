@@ -1,6 +1,28 @@
 #include "./renderer2d.h"
 
 namespace spright { namespace engine {
+	Renderer2D::Renderer2D() {}
+
+	Renderer2D::Renderer2D(const Renderer2D& that): m_TransformationStack(that.m_TransformationStack), m_IndexCount(that.m_IndexCount) {
+		if (m_TransformationStack.size() > 0) {
+			m_TransformationBack = &m_TransformationStack.back();
+		}
+	}
+
+	Renderer2D::~Renderer2D() {
+		m_TransformationBack = nullptr;
+	}
+
+	Renderer2D& Renderer2D::operator=(Renderer2D& that) {
+		m_IndexCount = that.m_IndexCount;
+		m_TransformationStack = that.m_TransformationStack;
+		if (m_TransformationStack.size() > 0) {
+			m_TransformationBack = &m_TransformationStack.back();
+		}
+
+		return *this;
+	}
+
 	void Renderer2D::push(const Mat4& matrix, bool override) {
 		if (override) {
 			m_TransformationStack.push_back(matrix);

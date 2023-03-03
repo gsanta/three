@@ -17,7 +17,7 @@ namespace spright { namespace editor {
 	{
 		if (!pointerInfo.isDown) {
 			int color = m_Services->getColorPalette()->color;
-			this->m_Rect = new Rect2D(pointerInfo.curr.x, pointerInfo.curr.y - m_EraserSize, m_EraserSize, m_EraserSize, color);
+			this->m_Rect = new Rect2D(pointerInfo.curr.x, pointerInfo.curr.y - m_Size, m_Size, m_Size, color);
 			this->m_DocumentStore->getActiveDocument()->getLayerHandler()->getActiveLayer()->add(m_Rect);
 		
 		}

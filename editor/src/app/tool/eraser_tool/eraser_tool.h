@@ -21,7 +21,7 @@ namespace spright { namespace editor {
 		Eraser m_Eraser;
 		EraserStroke m_EraserStroke;
 
-		int m_EraserSize = 3;
+		int m_Size = 3;
 
 		float m_DashSize = 0.2f;
 		bool m_IsMoveSelection = false;
