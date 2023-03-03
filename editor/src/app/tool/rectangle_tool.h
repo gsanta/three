@@ -15,7 +15,7 @@ namespace spright { namespace editor {
 	private:
 		DocumentStore* m_DocumentStore;
 		Services* m_Services;
-		float m_EraserSize = 10;
+		float m_Size = 10;
 		Rect2D* m_Rect = nullptr;
 
 	public:

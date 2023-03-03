@@ -2,36 +2,51 @@
 
 namespace spright { namespace engine {
 
-	GLShader::GLShader(const char* vertPath, const char* fragPath)
-		: m_VertPath(vertPath), m_FragPath(fragPath), m_Use(new std::size_t(1))
+	GLShader::GLShader(char* vertPath, char* fragPath)
+		//: m_VertPath(vertPath), m_FragPath(fragPath)
 	{
+		m_VertPath = new char[strlen(vertPath) + 1];
+		std::strcpy(m_VertPath, vertPath);
+
+		m_FragPath = new char[strlen(fragPath) + 1];
+		std::strcpy(m_FragPath, fragPath);
+
 		m_ShaderID = load();
 	}
 
-	GLShader::GLShader(const GLShader& shader): m_VertPath(shader.m_VertPath), m_FragPath(shader.m_FragPath), m_ShaderID(shader.m_ShaderID), m_Use(shader.m_Use)
+	GLShader::GLShader(const GLShader& shader)
 	{
-		++*m_Use;
+		m_VertPath = new char[strlen(shader.m_VertPath) + 1];
+		std::strcpy(m_VertPath, shader.m_VertPath);
+
+		m_FragPath = new char[strlen(shader.m_FragPath) + 1];
+		std::strcpy(m_FragPath, shader.m_FragPath);
+
+		m_ShaderID = load();
 	}
 
+
 	GLShader::~GLShader() {
-		if (--*m_Use == 0) {
-			delete m_VertPath;
-			delete m_FragPath;
-			glDeleteProgram(m_ShaderID);
-		}
+		delete m_VertPath;
+		delete m_FragPath;
+		glDeleteProgram(m_ShaderID);
 	}
 
 	GLShader& GLShader::operator=(const GLShader& rhs)
 	{
-		++*rhs.m_Use;
-		if (--*m_Use == 0) {
+		if (&rhs != this) {
 			delete m_VertPath;
 			delete m_FragPath;
 			glDeleteProgram(m_ShaderID);
+
+			m_VertPath = new char[strlen(rhs.m_VertPath) + 1];
+			std::strcpy(m_VertPath, rhs.m_VertPath);
+
+			m_FragPath = new char[strlen(rhs.m_FragPath) + 1];
+			std::strcpy(m_FragPath, rhs.m_FragPath);
+
+			m_ShaderID = load();
 		}
-		m_VertPath = rhs.m_VertPath;
-		m_FragPath = rhs.m_FragPath;
-		m_Use = rhs.m_Use;
 
 		return *this;
 	}

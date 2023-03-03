@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <memory>
+#include<algorithm> 
 #include "../../renderer/renderer2d.h"
 #include "../../renderer/vertex_data.h"
 #include "../../buffer/vertexArray.h"
@@ -31,16 +32,18 @@ namespace spright { namespace engine {
 		GLuint m_VBO;
 		GLuint m_VAO;
 		IndexBuffer *m_IBO;
-		//#ifdef SPARKY_EMSCRIPTEN
 		VertexData *m_BufferBase;
-		//#endif
 		VertexData *m_Buffer;
 		std::vector<GLuint> m_TextureSlots;
-
 	public:
 		GLRenderer2D(GLShader shader);
+		GLRenderer2D(const GLRenderer2D&);
 		~GLRenderer2D();
-		inline virtual VertexData *&getBuffer()
+
+		GLRenderer2D& operator=(Renderer2D&) override;
+		GLRenderer2D* clone() const override;
+
+		inline VertexData *&getBuffer()
 		{
 			return m_Buffer;
 		}

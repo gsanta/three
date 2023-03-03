@@ -6,6 +6,11 @@ namespace spright { namespace engine {
 
 	}
 
+	HeadlessRenderer2D* HeadlessRenderer2D::clone() const {
+		return new HeadlessRenderer2D();
+	}
+
+
 	void HeadlessRenderer2D::end()
 	{
 

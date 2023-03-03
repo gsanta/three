@@ -9,9 +9,44 @@ namespace spright { namespace engine {
 		init();
 	}
 
+	GLRenderer2D::GLRenderer2D(const GLRenderer2D& renderer)
+		: m_Shader(renderer.m_Shader), m_TextureSlots(renderer.m_TextureSlots)
+	{
+		m_TransformationStack = renderer.m_TransformationStack;
+		m_TransformationBack = &m_TransformationStack.back();
+
+		init();
+
+		std::copy(renderer.m_BufferBase, renderer.m_BufferBase + RENDERER_MAX_SPRITES * 4, m_BufferBase);
+		m_Buffer = m_BufferBase + (renderer.m_Buffer - renderer.m_BufferBase);
+	}
+
 	GLRenderer2D::~GLRenderer2D() {
 		delete m_IBO;
 		glDeleteBuffers(1, &m_VBO);
+	}
+
+	GLRenderer2D& GLRenderer2D::operator=(Renderer2D& rhs)
+	{
+		GLRenderer2D& that = dynamic_cast<GLRenderer2D&>(rhs);
+		if (&rhs != this) {
+			delete m_IBO;
+			glDeleteBuffers(1, &m_VBO);
+
+			m_Shader = that.m_Shader;
+			m_TextureSlots = that.m_TextureSlots;
+
+			init();
+
+			std::copy(that.m_BufferBase, that.m_BufferBase + RENDERER_MAX_SPRITES * 4, m_BufferBase);
+			m_Buffer = m_BufferBase + (that.m_Buffer - that.m_BufferBase);
+		}
+
+		return *this;
+	}
+
+	GLRenderer2D* GLRenderer2D::clone() const {
+		return new GLRenderer2D(*this);
 	}
 
 	void GLRenderer2D::init() {
@@ -54,9 +89,7 @@ namespace spright { namespace engine {
 		
 		glBindVertexArray(0);
 
-//#ifdef SPARKY_EMSCRIPTEN
 		m_BufferBase = new VertexData[RENDERER_MAX_SPRITES * 4];
-//#endif
 	}
 
 	void GLRenderer2D::begin()
@@ -64,32 +97,18 @@ namespace spright { namespace engine {
 		getShader().enable();
 		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 
-//#ifdef SPARKY_EMSCRIPTEN
 		m_Buffer = m_BufferBase;
-//#else
-//		m_Buffer = (VertexData*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-//#endif
 	}
 
 	void GLRenderer2D::end()
 	{
-//#ifdef SPARKY_EMSCRIPTEN
-		//glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, (m_Buffer - m_BufferBase) * RENDERER_VERTEX_SIZE, m_BufferBase);
 		m_Buffer = m_BufferBase;
-//#else
-//		glUnmapBuffer(GL_ARRAY_BUFFER);
-//#endif
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
 	void GLRenderer2D::flush()
 	{
-		//for (int i = 0; i < m_TextureSlots.size(); i++) {
-		//	glActiveTexture(GL_TEXTURE0 + i);
-		//	glBindTexture(GL_TEXTURE_2D, m_TextureSlots[i]);
-		//}
-
 		glBindVertexArray(m_VAO);
 		m_IBO->bind();
 

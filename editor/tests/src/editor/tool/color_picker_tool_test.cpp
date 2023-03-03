@@ -11,8 +11,8 @@ TEST_CASE("ColorPickerTool pointerDown", "[color-picker-tool]") {
 	SECTION("picks the color at the given pointer position") {
 		Container container(Dimensions(-3.0f, 3.0f, -3.0f, 3.0f));
 
-		TileLayer tileLayer("layer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
-		TileLayer tempLayer("layer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
+		TileLayer tileLayer("layer", "id", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
+		TileLayer tempLayer("layer", "id", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
 
 		TestEventEmitter eventEmitter;
 
@@ -40,8 +40,8 @@ TEST_CASE("ColorPickerTool pointerDown", "[color-picker-tool]") {
 	SECTION("emits event if picked color changes") {
 		Container container(Dimensions(-3.0f, 3.0f, -3.0f, 3.0f));
 
-		TileLayer tileLayer("layer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
-		TileLayer tempLayer("layer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
+		TileLayer tileLayer("layer", "id", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
+		TileLayer tempLayer("layer", "id", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
 
 		TestEventEmitter eventEmitter;
 

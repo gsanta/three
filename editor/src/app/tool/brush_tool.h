@@ -16,7 +16,7 @@ namespace spright { namespace editor {
 	{
 	private:
 		DocumentStore *m_documentStore;
-		int m_EraserSize = 1;
+		int m_Size = 1;
 		Rect2D *sprite;
 		Brush brush;
 

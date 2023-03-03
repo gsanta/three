@@ -15,9 +15,12 @@ namespace spright { namespace engine {
 	class HeadlessRenderer2D : public Renderer2D
 	{
 	private:
-		VertexData* m_Buffer;
+		VertexData* m_Buffer = nullptr;
 		HeadlessShader m_Shader;
 	public:
+
+		HeadlessRenderer2D* clone() const override;
+
 		void begin() override;
 		void end() override;
 		void flush() override;

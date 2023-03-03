@@ -17,8 +17,8 @@ TEST_CASE("EraseTool pointerDown", "[erase-tool]") {
 	SECTION("removes the tiles at the given pointer position") {
 		Container container(Dimensions(-3.0f, 3.0f, -3.0f, 3.0f));
 
-		TileLayer eraseLayer("layer", "id", new Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
-		TileLayer drawLayer("layer", "id", new Group<Rect2D>(new HeadlessRenderer2D()) , &container, 1.0f);
+		TileLayer eraseLayer("layer", "id", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
+		TileLayer drawLayer("layer", "id", Group<Rect2D>(new HeadlessRenderer2D()) , &container, 1.0f);
 
 
 		Brush brush;

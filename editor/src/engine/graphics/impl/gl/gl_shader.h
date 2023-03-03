@@ -7,14 +7,12 @@ namespace spright { namespace engine {
 	using namespace ::spright::maths;
 
 	class GLShader : public Shader {
-	private:
-		std::size_t* m_Use;
 	public:
 		GLuint m_ShaderID;
-		const char* m_VertPath;
-		const char* m_FragPath;
+		char* m_VertPath = nullptr;
+		char* m_FragPath = nullptr;
 	public:
-		GLShader(const char* vertPath, const char* fragPath);
+		GLShader(char* vertPath, char* fragPath);
 		GLShader(const GLShader& shader);
 		~GLShader();
 

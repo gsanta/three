@@ -5,7 +5,7 @@ namespace spright { namespace editor {
 	{
 	}
 
-	EraserStroke::EraserStroke(TileLayer* drawLayer, int eraserSize) : m_DrawLayer(drawLayer), m_EraserSize(eraserSize)
+	EraserStroke::EraserStroke(TileLayer* drawLayer, int eraserSize) : m_DrawLayer(drawLayer), m_Size(eraserSize)
 	{
 	}
 
@@ -38,7 +38,7 @@ namespace spright { namespace editor {
 
 	void EraserStroke::init(float tileSize)
 	{
-		float eraserArea = tileSize * static_cast<float>(m_EraserSize);
+		float eraserArea = tileSize * static_cast<float>(m_Size);
 
 		unsigned int color = 0xff0099ff;
 
@@ -55,13 +55,13 @@ namespace spright { namespace editor {
 
 	void EraserStroke::setPosition(const TileLayer& eraseLayer, const Vec2& pos)
 	{
-		float halfEraserSize = eraseLayer.getTileSize() * static_cast<float>(m_EraserSize) / 2.0f;
+		float halfEraserSize = eraseLayer.getTileSize() * static_cast<float>(m_Size) / 2.0f;
 
 		int tileIndex = eraseLayer.getTileIndex(pos);
 		float halfTileSize = eraseLayer.getTileSize() / 2.0f;
 		Vec2 tileCenterPos = eraseLayer.getWorldPos(tileIndex);
 
-		if (m_EraserSize % 2 == 0) {
+		if (m_Size % 2 == 0) {
 			tileCenterPos += Vec2(-halfTileSize, -halfTileSize);
 		}
 
