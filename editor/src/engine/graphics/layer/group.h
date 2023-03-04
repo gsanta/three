@@ -23,10 +23,10 @@ namespace spright { namespace engine {
 		~Group();
 
 		Group& operator=(const Group&);
-		void add(T *renderable);
+		T& add(const T& renderable);
 		void render(Camera* camera);
 		void clear();
-		void remove(T* renderable);
+		void remove(const T& renderable);
 
 		inline std::vector<T*>& getRenderables() {
 			return m_Renderables;
@@ -55,29 +55,31 @@ namespace spright { namespace engine {
 	}
 
 	template <typename T>
-	Group<T>& Group<T>::operator=(const Group<T>& rhs) {
-		if (this != &rhs) {
+	Group<T>& Group<T>::operator=(const Group<T>& that) {
+		if (this != &that) {
 			delete m_Renderer;
 			for (T* element : m_Renderables)
 			{
 				delete element;
 			}
 			m_Renderables.clear();
+
+			m_Renderer = that.m_Renderer->clone();
 		}
 
 		return *this;
 	}
 
-
 	template <typename T>
-	void Group<T>::add(T* renderable) {
-		m_Renderables.push_back(renderable);
+	T& Group<T>::add(const T& renderable) {
+		m_Renderables.push_back(new T(renderable));
+		return *m_Renderables.back();
 	}
 
 	template <typename T>
-	void Group<T>::remove(T* renderable)
+	void Group<T>::remove(const T& renderable)
 	{
-		auto it = std::find(m_Renderables.begin(), m_Renderables.end(), renderable);
+		auto it = std::find(m_Renderables.begin(), m_Renderables.end(), &renderable);
 
 		if (it != m_Renderables.end())
 		{

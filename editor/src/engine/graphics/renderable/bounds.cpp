@@ -9,6 +9,8 @@ namespace spright { namespace engine {
         maxY = minY + height;
     }
 
+    Bounds::Bounds() {}
+
     Vec2 Bounds::getCenter() const
     {
         return Vec2(minX + (maxX - minX) / 2.0, minY + (maxY - minY) / 2.0);

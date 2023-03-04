@@ -9,8 +9,7 @@ namespace spright { namespace editor {
 
 		if (renderable == nullptr) {
 			Vec2 worldPos = tileLayer->getBottomLeftPos(tileIndex);
-			Rect2D* sprite = new Rect2D(worldPos.x, worldPos.y, tileLayer->getTileSize(), tileLayer->getTileSize(), color);
-			tileLayer->add(sprite);
+			tileLayer->add(Rect2D(worldPos.x, worldPos.y, tileLayer->getTileSize(), tileLayer->getTileSize(), color));
 		}
 		else {
 			renderable->setColor(color);

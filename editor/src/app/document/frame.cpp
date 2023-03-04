@@ -45,14 +45,10 @@ namespace spright { namespace editor {
 
 	void Frame::removeLayer(std::string layerId) {
 		int index = getLayerIndex(layerId);
-		TileLayer& layer = getLayer(layerId);
-
 
 		if (index != -1) {
 			m_Layers.erase(m_Layers.begin() + index);
 		}
-
-		std::cout << "hello";
 	}
 
 	int Frame::getLayerIndex(std::string layerId) {

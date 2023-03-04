@@ -109,9 +109,9 @@ namespace spright {
 
 		auto it = layer->getRenderables().begin();
 		while (it != layer->getRenderables().end()) {
-			const Bounds* bounds = (*it)->getBounds();
+			const Bounds& bounds = (*it)->getBounds();
 
-			if (bounds->minX > startX && bounds->maxX < endX && bounds->minY > startY && bounds->maxY < endY) {
+			if (bounds.minX > startX && bounds.maxX < endX && bounds.minY > startY && bounds.maxY < endY) {
 				Rect2D* sprite = static_cast<Rect2D*>(*it);
 				m_Data.push_back(sprite);
 				m_OrigPositions.push_back(Vec2(sprite->getPosition().x, sprite->getPosition().y));

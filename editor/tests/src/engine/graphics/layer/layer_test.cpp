@@ -4,9 +4,9 @@
 #include "../src/engine/graphics/layer/dimensions.h"
 #include "../src/engine/graphics/camera/camera.h"
 #include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
-#include "../src/engine/graphics/impl/headless/headless_shader.h"
 #include "../src/engine/graphics/layer/tileLayer.h"
 #include "../src/engine/layout/container.h"
+#include "../src/engine/graphics/renderable/rect2d.h"
 
 using namespace ::spright::engine;
 
@@ -19,11 +19,11 @@ TEST_CASE("Layer add", "[layer]") {
 
 		REQUIRE(layer.getRenderables().size() == 0);
 
-		layer.add(new Rect2D(0, 0, 1, 1, 0x00000000));
+		layer.add(Rect2D(0, 0, 1, 1, 0x00000000));
 
 		REQUIRE(layer.getRenderables().size() == 1);
 		
-		layer.add(new Rect2D(2, 2, 1, 1, 0x00000000));
+		layer.add(Rect2D(2, 2, 1, 1, 0x00000000));
 
 		REQUIRE(layer.getRenderables().size() == 2);
 

@@ -31,15 +31,17 @@ namespace spright { namespace engine {
 	public:
 		TileLayer(std::string name, std::string id, Group<Rect2D> group, Container* container, float tileSize = 0.5f);
 		TileLayer(const TileLayer& tileLayer);
-		virtual ~TileLayer();
+		~TileLayer();
+
+		TileLayer& operator=(const TileLayer&);
 
 		std::string getId();
 
 		void setEnabled(bool isEnabled);
 		bool isEnabled();
 
-		void add(Rect2D* rect);
-		void remove(Rect2D* rect);
+		Rect2D& add(const Rect2D& rect);
+		void remove(const Rect2D& rect);
 		void clear();
 		void render(Camera* camera);
 		std::vector<Rect2D*>& getRenderables();

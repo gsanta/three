@@ -21,7 +21,6 @@ namespace spright { namespace engine {
 	public:
 		Renderer2D();
 		Renderer2D(const Renderer2D&);
-		~Renderer2D();
 
 		virtual Renderer2D& operator=(Renderer2D&);
 		virtual Renderer2D* clone() const = 0;

@@ -46,15 +46,15 @@ namespace spright {
 		Rect2D* left = new Rect2D(xStart, yStart, 0.1f, height, color);
 		Rect2D* right = new Rect2D(xEnd, yStart, 0.1f, height, color);
 
-		m_SelectionSprites.push_back(bottom);
-		m_SelectionSprites.push_back(top);
-		m_SelectionSprites.push_back(left);
-		m_SelectionSprites.push_back(right);
+		//m_SelectionSprites.push_back(bottom);
+		//m_SelectionSprites.push_back(top);
+		//m_SelectionSprites.push_back(left);
+		//m_SelectionSprites.push_back(right);
 
-		tempLayer->add(bottom);
-		tempLayer->add(top);
-		tempLayer->add(left);
-		tempLayer->add(right);
+		tempLayer->add(Rect2D(xStart, yStart, width, 0.1f, color));
+		tempLayer->add(Rect2D(xStart, yEnd, width, 0.1f, color));
+		tempLayer->add(Rect2D(xStart, yStart, 0.1f, height, color));
+		tempLayer->add(Rect2D(xEnd, yStart, 0.1f, height, color));
 	}
 
 	void SelectionBox::move(Vec2 delta)

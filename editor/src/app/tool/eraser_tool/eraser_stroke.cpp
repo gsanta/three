@@ -47,10 +47,10 @@ namespace spright { namespace editor {
 		m_BottomLine = new Rect2D(-eraserArea / 2.0f, -eraserArea / 2.0f, eraserArea, m_StrokeWidth, color);
 		m_LeftLine = new Rect2D(-eraserArea / 2.0f, -eraserArea / 2.0f, m_StrokeWidth, eraserArea, color);
 
-		m_DrawLayer->add(m_TopLine);
-		m_DrawLayer->add(m_RightLine);
-		m_DrawLayer->add(m_BottomLine);
-		m_DrawLayer->add(m_LeftLine);
+		m_TopLine = &m_DrawLayer->add(Rect2D(-eraserArea / 2.0f, eraserArea / 2.0f, eraserArea, m_StrokeWidth, color));
+		m_RightLine = &m_DrawLayer->add(Rect2D(eraserArea / 2.0f, -eraserArea / 2.0f, m_StrokeWidth, eraserArea, color));
+		m_BottomLine = &m_DrawLayer->add(Rect2D(-eraserArea / 2.0f, -eraserArea / 2.0f, eraserArea, m_StrokeWidth, color));
+		m_LeftLine = &m_DrawLayer->add(Rect2D(-eraserArea / 2.0f, -eraserArea / 2.0f, m_StrokeWidth, eraserArea, color));
 	}
 
 	void EraserStroke::setPosition(const TileLayer& eraseLayer, const Vec2& pos)

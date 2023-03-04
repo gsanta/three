@@ -9,16 +9,14 @@ namespace spright { namespace editor {
 	void RectangleTool::pointerDown(PointerInfo& pointerInfo)
 	{
 		int color = m_Services->getColorPalette()->color;
-		this->m_Rect = new Rect2D(pointerInfo.curr.x, pointerInfo.curr.y, 0.1f, 0.1f, color);
-		this->m_DocumentStore->getActiveDocument()->getLayerHandler()->getActiveLayer()->add(m_Rect);
+		m_Rect = &m_DocumentStore->getActiveDocument()->getLayerHandler()->getActiveLayer()->add(Rect2D(pointerInfo.curr.x, pointerInfo.curr.y, 0.1f, 0.1f, color));
 	}
 
 	void RectangleTool::pointerUp(PointerInfo& pointerInfo)
 	{
 		if (!pointerInfo.isDown) {
 			int color = m_Services->getColorPalette()->color;
-			this->m_Rect = new Rect2D(pointerInfo.curr.x, pointerInfo.curr.y - m_Size, m_Size, m_Size, color);
-			this->m_DocumentStore->getActiveDocument()->getLayerHandler()->getActiveLayer()->add(m_Rect);
+			m_Rect = &m_DocumentStore->getActiveDocument()->getLayerHandler()->getActiveLayer()->add(Rect2D(pointerInfo.curr.x, pointerInfo.curr.y - m_Size, m_Size, m_Size, color));
 		
 		}
 	}
