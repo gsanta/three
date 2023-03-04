@@ -7237,6 +7237,26 @@ function dbg(text) {
       return id;
     }
 
+  function _glDeleteBuffers(n, buffers) {
+      for (var i = 0; i < n; i++) {
+        var id = HEAP32[(((buffers)+(i*4))>>2)];
+        var buffer = GL.buffers[id];
+  
+        // From spec: "glDeleteBuffers silently ignores 0's and names that do not
+        // correspond to existing buffer objects."
+        if (!buffer) continue;
+  
+        GLctx.deleteBuffer(buffer);
+        buffer.name = 0;
+        GL.buffers[id] = null;
+  
+        if (id == GLctx.currentArrayBufferBinding) GLctx.currentArrayBufferBinding = 0;
+        if (id == GLctx.currentElementArrayBufferBinding) GLctx.currentElementArrayBufferBinding = 0;
+        if (id == GLctx.currentPixelPackBufferBinding) GLctx.currentPixelPackBufferBinding = 0;
+        if (id == GLctx.currentPixelUnpackBufferBinding) GLctx.currentPixelUnpackBufferBinding = 0;
+      }
+    }
+
   function _glDeleteProgram(id) {
       if (!id) return;
       var program = GL.programs[id];
@@ -9481,6 +9501,7 @@ var wasmImports = {
   "glCompileShader": _glCompileShader,
   "glCreateProgram": _glCreateProgram,
   "glCreateShader": _glCreateShader,
+  "glDeleteBuffers": _glDeleteBuffers,
   "glDeleteProgram": _glDeleteProgram,
   "glDeleteShader": _glDeleteShader,
   "glDrawElements": _glDrawElements,
@@ -9593,7 +9614,7 @@ var dynCall_iiiiij = Module["dynCall_iiiiij"] = createExportWrapper("dynCall_iii
 var dynCall_iiiiijj = Module["dynCall_iiiiijj"] = createExportWrapper("dynCall_iiiiijj");
 /** @type {function(...*):?} */
 var dynCall_iiiiiijj = Module["dynCall_iiiiiijj"] = createExportWrapper("dynCall_iiiiiijj");
-var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 83920;
+var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 83840;
 
 // include: postamble.js
 // === Auto-generated postamble setup entry stuff ===
