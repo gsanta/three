@@ -2,7 +2,7 @@
 
 namespace spright { namespace engine {
 
-	Renderable2D::Renderable2D(unsigned int color) : m_Color(color)
+	Renderable2D::Renderable2D(const Bounds& bounds, unsigned int color) : m_bounds(bounds), m_Color(color)
 	{
 		setUVDefaults();
 	}

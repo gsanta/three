@@ -13,6 +13,7 @@ namespace spright { namespace engine {
 		float maxY;
 
 		Bounds(float bottomLeftX, float bottomLeftY, float width, float height);
+		Bounds();
 
 		Vec2 getCenter() const;
 

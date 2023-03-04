@@ -23,11 +23,10 @@ namespace spright { namespace engine {
 
 		int m_VertexCount;
 		unsigned int m_Color;
-		Bounds* m_bounds;
+		Bounds m_bounds;
 		std::vector<Vec2> m_UV;
 	public:
-		Renderable2D(unsigned int color);
-		virtual ~Renderable2D() {}
+		Renderable2D(const Bounds& bounds, unsigned int color);
 
 		virtual void submit(Renderer2D* renderer) const = 0;
 
@@ -41,7 +40,7 @@ namespace spright { namespace engine {
 			m_Color = a << 24 | b << 16 | g << 8 | r;
 		}
 
-		inline const Bounds* getBounds() const {
+		inline const Bounds& getBounds() const {
 			return m_bounds;
 		}
 

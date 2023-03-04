@@ -19,6 +19,20 @@ namespace spright { namespace engine {
 		delete[] m_TileIndexes;
 	}
 
+	TileLayer& TileLayer::operator=(const TileLayer& that) {
+		if (this != &that) {
+			m_Id = that.m_Id;
+			m_Name = that.m_Name;
+			m_Group = that.m_Group;
+			m_Container = that.m_Container;
+			m_TileSize = that.m_TileSize;
+
+			init();
+		}
+
+		return *this;
+	}
+
 	std::string TileLayer::getId() {
 		return m_Id;
 	}
@@ -31,28 +45,29 @@ namespace spright { namespace engine {
 		return m_IsEnabled;
 	}
 
-	void TileLayer::add(Rect2D* rect)
+	Rect2D& TileLayer::add(const Rect2D& rect)
 	{
-		m_Group.add(rect);
+		Rect2D& newRect = m_Group.add(rect);
 
-		Vec2 pos = rect->getBounds()->getCenter();
+		Vec2 pos = newRect.getBounds().getCenter();
 		Vec2Int tilePos = getTilePos(pos);
 
 		int index = m_TileBounds.getWidth() * tilePos.y + tilePos.x;
 		if (m_IndexSize > index) {
-			m_TileIndexes[index] = rect;
-			rect->setTileIndex(index);
+			m_TileIndexes[index] = &newRect;
+			newRect.setTileIndex(index);
 		}
+
+		return newRect;
 	}
 
-	void TileLayer::remove(Rect2D* rect) {
-		Vec2 pos = rect->getBounds()->getCenter();
+	void TileLayer::remove(const Rect2D& rect) {
+		Vec2 pos = rect.getBounds().getCenter();
 		Vec2Int tilePos = getTilePos(pos);
 
 		int index = m_TileBounds.getWidth() * tilePos.y + tilePos.x;
 
 		m_TileIndexes[index] = nullptr;
-		rect->setTileIndex(-1);
 
 		m_Group.remove(rect);
 	}
@@ -214,8 +229,7 @@ namespace spright { namespace engine {
 			float sizeX = j["sizeX"];
 			float sizeY = j["sizeY"];
 
-			Rect2D* sprite = new Rect2D(posX, posY, sizeX, sizeY, 0xff0000ff);
-			add(sprite);
+			add(Rect2D(posX, posY, sizeX, sizeY, 0xff0000ff));
 		}
 	}
 

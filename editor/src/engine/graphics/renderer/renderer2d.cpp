@@ -9,10 +9,6 @@ namespace spright { namespace engine {
 		}
 	}
 
-	Renderer2D::~Renderer2D() {
-		m_TransformationBack = nullptr;
-	}
-
 	Renderer2D& Renderer2D::operator=(Renderer2D& that) {
 		m_IndexCount = that.m_IndexCount;
 		m_TransformationStack = that.m_TransformationStack;

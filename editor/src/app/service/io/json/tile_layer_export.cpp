@@ -41,7 +41,7 @@ namespace spright { namespace editor {
 
 			Vec2 bottomLeftPos = layer->getBottomLeftPos(tile["i"]);
 			float tileSize = layer->getTileSize();
-			layer->add(new Rect2D(bottomLeftPos.x, bottomLeftPos.y, tileSize, tileSize, tile["c"]));
+			layer->add(Rect2D(bottomLeftPos.x, bottomLeftPos.y, tileSize, tileSize, tile["c"]));
 		}
 
 		return layer;

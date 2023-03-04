@@ -21,7 +21,7 @@ namespace spright { namespace editor {
 				int currentTileIndex = layer.getTileIndex(centerCol + i, centerRow + j);
 				Rect2D* sprite = layer.getAtTileIndex(currentTileIndex);
 				if (sprite != nullptr) {
-					layer.remove(sprite);
+					layer.remove(*sprite);
 				}
 			}
 		}
