@@ -19,6 +19,8 @@ namespace spright { namespace engine {
 		return *this;
 	}
 
+	Renderer2D::~Renderer2D() {}
+
 	void Renderer2D::push(const Mat4& matrix, bool override) {
 		if (override) {
 			m_TransformationStack.push_back(matrix);

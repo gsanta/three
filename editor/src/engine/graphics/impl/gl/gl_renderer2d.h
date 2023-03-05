@@ -43,7 +43,7 @@ namespace spright { namespace engine {
 		GLRenderer2D& operator=(Renderer2D&) override;
 		GLRenderer2D* clone() const override;
 
-		inline VertexData *&getBuffer()
+		inline VertexData *&getBuffer() override
 		{
 			return m_Buffer;
 		}

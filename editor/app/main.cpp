@@ -154,6 +154,8 @@ std::string getEngineData()
 	{
 		return editor->getDocumentStore()->getActiveDocument()->getJson();
 	}
+
+	throw "Editor was null";
 }
 
 void setEngineData(std::string json)

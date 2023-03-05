@@ -6,6 +6,7 @@ namespace spright { namespace editor {
 
 	class LayerProvider {
 	public:
+		inline virtual ~LayerProvider() {}
 		virtual TileLayer& getActiveLayer() = 0;
 		virtual TileLayer& getTempLayer() = 0;
 	};
