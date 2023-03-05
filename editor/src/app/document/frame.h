@@ -11,11 +11,12 @@ namespace spright { namespace editor {
 	public:
 
 		void addLayer(const TileLayer& tileLayer);
-		TileLayer& getLayer(std::string id);
-		std::vector<TileLayer>& getLayers();
-
-		void setLayerIndex(std::string layerId, int newIndex);
-		int getLayerIndex(std::string layerId);
+		void insertLayer(const TileLayer& tileLayer, size_t index);
 		void removeLayer(std::string layerId);
+		virtual TileLayer& getLayer(std::string id);
+		std::vector<TileLayer>& getLayers();
+		int getLayerIndex(const TileLayer& tileLayer) const;
 	};
+
+	TileLayer& find_layer(std::string id, std::vector<TileLayer>& layers);
 }}

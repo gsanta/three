@@ -30,7 +30,7 @@ namespace spright { namespace engine {
 		Vec2 getCenterPosition2d() const;
 		bool contains(Vec2 point);
 		void translate(Vec2 vec);
-		virtual nlohmann::json getJson();
+		nlohmann::json getJson() override;
 
 		virtual void submit(Renderer2D* renderer) const override;
 	private:

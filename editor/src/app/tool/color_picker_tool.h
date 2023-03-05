@@ -26,7 +26,7 @@ namespace spright { namespace editor {
 		ColorPickerTool(LayerProvider* layerProvider, ToolHandler* toolHandler, EventEmitter* eventEmitter);
 		void pointerDown(PointerInfo& pointerInfo) override;
 		unsigned int getPickedColor() const;
-		std::string getData();
+		std::string getData() override;
 
 	private:
 		void emitColorChange() const;

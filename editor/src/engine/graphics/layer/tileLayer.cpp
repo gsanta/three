@@ -33,7 +33,7 @@ namespace spright { namespace engine {
 		return *this;
 	}
 
-	std::string TileLayer::getId() {
+	std::string TileLayer::getId() const {
 		return m_Id;
 	}
 

@@ -12,7 +12,7 @@ namespace spright { namespace engine {
 		char* m_VertPath = nullptr;
 		char* m_FragPath = nullptr;
 	public:
-		GLShader(char* vertPath, char* fragPath);
+		GLShader(const char* const vertPath, const char* const fragPath);
 		GLShader(const GLShader& shader);
 		~GLShader();
 

@@ -11,6 +11,7 @@ namespace spright { namespace engine {
 
 	class Window {
 	public:
+		inline virtual ~Window() {}
 		virtual void clear() const = 0;
 		virtual float beforeRender() = 0;
 		virtual void afterRender() = 0;

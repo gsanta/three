@@ -33,7 +33,7 @@ namespace spright { namespace editor {
 		void pointerDown(PointerInfo& pointerInfo) override;
 		void pointerMove(PointerInfo& pointerInfo) override;
 		void deactivate() override;
-		void setOptions(std::string json);
-		std::string getOptions();
+		void setOptions(std::string json) override;
+		std::string getOptions() override;
 	};
 }}

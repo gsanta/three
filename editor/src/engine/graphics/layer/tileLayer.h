@@ -35,7 +35,7 @@ namespace spright { namespace engine {
 
 		TileLayer& operator=(const TileLayer&);
 
-		std::string getId();
+		std::string getId() const;
 
 		void setEnabled(bool isEnabled);
 		bool isEnabled();
