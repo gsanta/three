@@ -1,9 +1,8 @@
 #include "active_frame.h"
 
 namespace spright { namespace editor {
-	ActiveFrame::ActiveFrame(Frame& frame, int activeLayerIndex) : m_Frame(frame), m_ActiveLayer(frame.getLayerAtIndex(0))
+	ActiveFrame::ActiveFrame(Frame& frame, int activeLayerIndex) : m_Frame(frame), m_ActiveLayer(frame.getLayerAtIndex(activeLayerIndex))
 	{
-		m_ActiveLayer = frame.getLayerAtIndex(activeLayerIndex);
 	}
 
 	void ActiveFrame::addBackgroundLayer(const TileLayer& tileLayer)
