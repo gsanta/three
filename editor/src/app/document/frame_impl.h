@@ -1,20 +1,20 @@
 #pragma once
+#include <vector>
 #include "./frame.h"
-#include "./frame_impl.h"
 #include "../../engine/graphics/layer/tileLayer.h"
 
 namespace spright { namespace editor {
+	using namespace engine;
 
-	class ActiveFrame : public Frame {
+	class FrameImpl : public Frame {
 	private:
-		std::vector<TileLayer> m_BackgroundLayers;
-		std::vector<TileLayer> m_ForegroundLayers;
-
-		Frame& m_Frame;
-		TileLayer& m_ActiveLayer;
+		size_t m_Index;
+	protected:
+		std::vector<TileLayer> m_Layers;
 	public:
-
-		ActiveFrame(Frame& frame, int activeLayerIndex = 0);
+		FrameImpl();
+		FrameImpl(size_t index);
+		FrameImpl(const Frame&);
 
 		void addLayer(const TileLayer& tileLayer) override;
 		void insertLayer(const TileLayer& tileLayer, size_t index) override;
@@ -26,12 +26,7 @@ namespace spright { namespace editor {
 		size_t getLayerIndex(const TileLayer& tileLayer) const override;
 		size_t getIndex() const override;
 		void setIndex(size_t index) override;
-
-		void addBackgroundLayer(const TileLayer& tileLayer);
-		std::vector<TileLayer>& getBackgroundLayers();
-		void addForegroundLayer(const TileLayer& tileLayer);
-		std::vector<TileLayer>& getForegroundLayers();
-		TileLayer& getActiveLayer();
-		void setActiveLayer(const TileLayer& tileLayer);
 	};
+
+	TileLayer& find_layer(std::string id, std::vector<TileLayer>& layers);
 }}

@@ -5,6 +5,7 @@
 #include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
 #include "../src/engine/layout/container.h"
 #include "../src/app/document/active_frame.h"
+#include "../src/app/document/frame_impl.h"
 
 using namespace ::spright::engine;
 using namespace ::spright::editor;
@@ -17,26 +18,52 @@ TEST_CASE("ActiveFrame", "[active_frame]") {
 		TileLayer layer2("layer2", "id2", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
 		TileLayer layer3("layer3", "id3", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
 
-		ActiveFrame frame;
-
-		frame.addBackgroundLayer(layer1);
-		frame.addForegroundLayer(layer2);
+		FrameImpl frame;
 		frame.addLayer(layer3);
+		ActiveFrame activeFrame(frame);
 
-		REQUIRE(frame.getLayer("id1").getId() == "id1");
-		REQUIRE(frame.getLayer("id2").getId() == "id2");
-		REQUIRE(frame.getLayer("id3").getId() == "id3");
+		activeFrame.addBackgroundLayer(layer1);
+		activeFrame.addForegroundLayer(layer2);
+
+		REQUIRE(activeFrame.getLayer("id1").getId() == "id1");
+		REQUIRE(activeFrame.getLayer("id2").getId() == "id2");
+		REQUIRE(activeFrame.getLayer("id3").getId() == "id3");
 	}
 
 	SECTION("throws if layer with id is not found") {
 		Container container(Dimensions(-3.0f, 3.0f, -3.0f, 3.0f));
 
 		TileLayer layer1("layer1", "id1", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
+		TileLayer layer2("layer2", "id2", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
 
-		ActiveFrame frame;
+		FrameImpl frame;
+		frame.addLayer(layer2);
+		ActiveFrame activeFrame(frame);
 
-		frame.addBackgroundLayer(layer1);
+		activeFrame.addBackgroundLayer(layer1);
 
-		REQUIRE_THROWS_WITH(frame.getLayer("id2"), "Layer with id id2 not found");
+		REQUIRE_THROWS_WITH(frame.getLayer("id3"), "Layer with id id3 not found");
+	}
+
+	SECTION("can set the active layer") {
+		Container container(Dimensions(-3.0f, 3.0f, -3.0f, 3.0f));
+
+		TileLayer layer1("layer1", "id1", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
+		TileLayer layer2("layer2", "id2", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
+		TileLayer layer3("layer3", "id3", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
+
+		FrameImpl frame;
+
+		frame.addLayer(layer1);
+		frame.addLayer(layer2);
+		frame.addLayer(layer3);
+
+		ActiveFrame activeFrame(frame);
+
+		REQUIRE(activeFrame.getActiveLayer().getId() == layer1.getId());
+
+		activeFrame.setActiveLayer(layer2);
+
+		REQUIRE(activeFrame.getActiveLayer().getId() == layer2.getId());
 	}
 }

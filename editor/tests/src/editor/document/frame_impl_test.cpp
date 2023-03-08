@@ -4,7 +4,7 @@
 #include "../src/engine/graphics/layer/tileLayer.h"
 #include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
 #include "../src/engine/layout/container.h"
-#include "../src/app/document/frame.h"
+#include "../src/app/document/frame_impl.h"
 
 using namespace ::spright::engine;
 using namespace ::spright::editor;
@@ -17,7 +17,7 @@ TEST_CASE("Frame", "[frame]") {
 		TileLayer layer2("layer2", "id2", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
 		TileLayer layer3("layer3", "id3", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
 	
-		Frame frame;
+		FrameImpl frame;
 
 		frame.addLayer(layer1);
 		frame.addLayer(layer2);
@@ -37,7 +37,7 @@ TEST_CASE("Frame", "[frame]") {
 		temp1 = layer1;
 		TileLayer temp2 = layer2;
 
-		Frame frame;
+		FrameImpl frame;
 
 		frame.addLayer(layer1);
 		frame.addLayer(layer2);
@@ -59,7 +59,7 @@ TEST_CASE("Frame", "[frame]") {
 		TileLayer layer2("layer2", "id2", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
 		TileLayer layer3("layer3", "id3", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
 
-		Frame frame;
+		FrameImpl frame;
 
 		frame.addLayer(layer1);
 		frame.addLayer(layer2);
@@ -77,7 +77,7 @@ TEST_CASE("Frame", "[frame]") {
 		TileLayer layer2("layer2", "id2", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
 		TileLayer layer3("layer3", "id3", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
 
-		Frame frame;
+		FrameImpl frame;
 
 		frame.addLayer(layer1);
 		frame.addLayer(layer2);
@@ -92,7 +92,7 @@ TEST_CASE("Frame", "[frame]") {
 		TileLayer layer1("layer1", "id1", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
 		TileLayer layer2("layer2", "id2", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
 
-		Frame frame;
+		FrameImpl frame;
 
 		frame.addLayer(layer1);
 		frame.addLayer(layer2);
@@ -107,7 +107,7 @@ TEST_CASE("Frame", "[frame]") {
 		TileLayer layer1("layer1", "id1", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
 		TileLayer layer2("layer2", "id2", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
 
-		Frame frame;
+		FrameImpl frame;
 
 		frame.addLayer(layer1);
 		frame.addLayer(layer2);
