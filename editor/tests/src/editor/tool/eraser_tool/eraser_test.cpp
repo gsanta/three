@@ -1,16 +1,13 @@
 #include <catch2/catch_test_macros.hpp>
 #include "../src/app/tool/eraser_tool/eraser.h"
-#include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
 #include "../src/app/tool/brush.h"
+#include "../../test_helpers/test_document_factory.h"
 
 using namespace ::spright::editor;
 
 TEST_CASE("Eraser erase", "[eraser]") {
 	SECTION("removes the tile at the given position") {
-
-		Container container(Dimensions(-16.0f, 16.0f, -16.0f, 16.0f));
-
-		TileLayer layer("layer", "id", Group<Rect2D>(new HeadlessRenderer2D()), &container);
+		TileLayer layer = TestDocumentFactory::createTileLayer(0, TileLayer::defaultTileSize, Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
 
 		Brush brush;
 		brush.paint(&layer, Vec2Int(0, 0), 0xFFFFFFFF);
@@ -25,10 +22,7 @@ TEST_CASE("Eraser erase", "[eraser]") {
 	}
 
 	SECTION("eraser is positioned one tile left and one tile up when eraser size is even") {
-
-		Container container(Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
-
-		TileLayer layer("layer", "id", Group<Rect2D>(new HeadlessRenderer2D()), &container);
+		TileLayer layer = TestDocumentFactory::createTileLayer(0, TileLayer::defaultTileSize, Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
 
 		Brush brush;
 		brush.paint(&layer, Vec2Int(1, 1), 0xFFFFFFFF);
@@ -51,10 +45,7 @@ TEST_CASE("Eraser erase", "[eraser]") {
 	}
 
 	SECTION("eraser is positioned at the center when the eraser size is odd") {
-
-		Container container(Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
-
-		TileLayer layer("layer", "id", Group<Rect2D>(new HeadlessRenderer2D()), &container);
+		TileLayer layer = TestDocumentFactory::createTileLayer(0, TileLayer::defaultTileSize, Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
 
 		Brush brush;
 		brush.paint(&layer, Vec2Int(1, 1), 0xFFFFFFFF);

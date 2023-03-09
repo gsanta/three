@@ -4,6 +4,7 @@
 #include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
 #include "../src/app/tool/eraser_tool/eraser_stroke.h"
 #include "../src/maths/vec2.h"
+#include "../../test_helpers/test_document_factory.h"
 
 using namespace spright::editor;
 using namespace spright::maths;
@@ -13,10 +14,8 @@ TEST_CASE("EraserStroke draw", "[eraser-stroke]") {
 		int eraserSize = 4;
 		float tileSize = 0.5f;
 
-		Container container(Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
-
-		TileLayer drawLayer("drawLayer", "id", Group<Rect2D>(new HeadlessRenderer2D()), &container);
-		TileLayer eraseLayer("eraseLayer", "id2", Group<Rect2D>(new HeadlessRenderer2D()), &container, tileSize);
+		TileLayer drawLayer = TestDocumentFactory::createTileLayer(0, tileSize, Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
+		TileLayer eraseLayer = TestDocumentFactory::createTileLayer(1, tileSize, Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
 
 		EraserStroke eraserStroke(&drawLayer, eraserSize);
 
@@ -53,10 +52,8 @@ TEST_CASE("EraserStroke draw", "[eraser-stroke]") {
 		int eraserSize = 3;
 		float tileSize = 0.5f;
 
-		Container container(Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
-
-		TileLayer drawLayer("drawLayer", "id", Group<Rect2D>(new HeadlessRenderer2D()), &container);
-		TileLayer eraseLayer("eraseLayer", "id2", Group<Rect2D>(new HeadlessRenderer2D()), &container, tileSize);
+		TileLayer drawLayer = TestDocumentFactory::createTileLayer(0, tileSize, Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
+		TileLayer eraseLayer = TestDocumentFactory::createTileLayer(1, tileSize, Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
 
 		EraserStroke eraserStroke(&drawLayer, eraserSize);
 
@@ -97,8 +94,8 @@ TEST_CASE("EraserStroke draw", "[eraser-stroke]") {
 
 		Container container(Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
 
-		TileLayer drawLayer("drawLayer", "id", Group<Rect2D>(new HeadlessRenderer2D()), &container);
-		TileLayer eraseLayer("eraseLayer", "id2", Group<Rect2D>(new HeadlessRenderer2D()), &container, tileSize);
+		TileLayer drawLayer = TestDocumentFactory::createTileLayer(0, tileSize, Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
+		TileLayer eraseLayer = TestDocumentFactory::createTileLayer(1, tileSize, Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
 
 		EraserStroke eraserStroke(&drawLayer, eraserSize);
 
