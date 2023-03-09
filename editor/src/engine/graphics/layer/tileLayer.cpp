@@ -2,14 +2,16 @@
 
 namespace spright { namespace engine {
 
-	TileLayer::TileLayer(std::string name, std::string id, Group<Rect2D> group, Container* container, float tileSize)
-		: m_Group(group), m_TileSize(tileSize), m_Name(name), m_Id(id), m_Container(container) {
+	const float TileLayer::defaultTileSize = 0.5f;
+
+	TileLayer::TileLayer(std::string name, std::string id, Group<Rect2D> group, Dimensions dimensions, float tileSize)
+		: m_Group(group), m_TileSize(tileSize), m_Name(name), m_Id(id), m_Dimensions(dimensions) {
 	
 		init();
 	}
 
 	TileLayer::TileLayer(const TileLayer& tileLayer)
-		: m_Id(tileLayer.m_Id), m_Name(tileLayer.m_Name), m_Group(tileLayer.m_Group), m_Container(tileLayer.m_Container), m_TileSize(tileLayer.m_TileSize) {
+		: m_Id(tileLayer.m_Id), m_Name(tileLayer.m_Name), m_Group(tileLayer.m_Group), m_Dimensions(tileLayer.m_Dimensions), m_TileSize(tileLayer.m_TileSize) {
 
 		init();
 	}
@@ -24,7 +26,7 @@ namespace spright { namespace engine {
 			m_Id = that.m_Id;
 			m_Name = that.m_Name;
 			m_Group = that.m_Group;
-			m_Container = that.m_Container;
+			m_Dimensions = that.m_Dimensions;
 			m_TileSize = that.m_TileSize;
 
 			init();
@@ -91,10 +93,9 @@ namespace spright { namespace engine {
 	{
 		Vec2Int tilePos = getTilePos(pointer);
 		float tileSize = m_TileSize;
-		Dimensions dimensions = m_Container->getDimensions();
 
-		float x = static_cast<float>(tilePos.x) * tileSize + dimensions.left;
-		float y = static_cast<float>(tilePos.y) * tileSize + dimensions.bottom;
+		float x = static_cast<float>(tilePos.x) * tileSize + m_Dimensions.left;
+		float y = static_cast<float>(tilePos.y) * tileSize + m_Dimensions.bottom;
 
 		return Vec2(x, y);
 	}
@@ -103,9 +104,7 @@ namespace spright { namespace engine {
 	{
 		int y = tileIndex / m_TileBounds.getWidth();
 		int x = tileIndex % m_TileBounds.getWidth();
-		Dimensions dimensions = m_Container->getDimensions();
-
-		return Vec2(x * m_TileSize + dimensions.left, y * m_TileSize + dimensions.bottom);
+		return Vec2(x * m_TileSize + m_Dimensions.left, y * m_TileSize + m_Dimensions.bottom);
 	}
 
 	Vec2 TileLayer::getWorldPos(int tileIndex) const {
@@ -122,9 +121,7 @@ namespace spright { namespace engine {
 
 	// TODO: check if it works for both even and odd number of tiles
 	Vec2Int TileLayer::getTilePos(Vec2 pos) const {
-		Dimensions dimensions = m_Container->getDimensions();
-
-		Vec2 adjustedPos(pos.x - dimensions.left, pos.y - dimensions.bottom);
+		Vec2 adjustedPos(pos.x - m_Dimensions.left, pos.y - m_Dimensions.bottom);
 		float tileSize = m_TileSize;
 		int tileX = (int)(adjustedPos.x / tileSize);
 
@@ -147,12 +144,10 @@ namespace spright { namespace engine {
 
 	Vec2 TileLayer::getWorldPos(int x, int y)
 	{
-		Dimensions dimensions = m_Container->getDimensions();
-
 		float tileSize = m_TileSize;
 
-		float worldX = x * tileSize + tileSize / 2 + dimensions.left;
-		float worldY = y * tileSize + tileSize / 2 + dimensions.bottom;
+		float worldX = x * tileSize + tileSize / 2 + m_Dimensions.left;
+		float worldY = y * tileSize + tileSize / 2 + m_Dimensions.bottom;
 
 		return Vec2(worldX, worldY);
 	}
@@ -234,12 +229,10 @@ namespace spright { namespace engine {
 	}
 
 	void TileLayer::init() {
-		Dimensions dimensions = m_Container->getDimensions();
-
-		int width = (dimensions.right - dimensions.left) / m_TileSize;
-		int height = (dimensions.top - dimensions.bottom) / m_TileSize;
-		int left = (dimensions.left / m_TileSize) - 1;
-		int bottom = (dimensions.bottom / m_TileSize) - 1;
+		int width = (m_Dimensions.right - m_Dimensions.left) / m_TileSize;
+		int height = (m_Dimensions.top - m_Dimensions.bottom) / m_TileSize;
+		int left = (m_Dimensions.left / m_TileSize) - 1;
+		int bottom = (m_Dimensions.bottom / m_TileSize) - 1;
 
 		m_TileBounds = BoundsInt(left, left + width, bottom, bottom + height);
 
