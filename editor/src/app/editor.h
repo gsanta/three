@@ -20,6 +20,8 @@
 #include "event/event_emitter.h"
 #include "document/document_store.h"
 #include "api/emscripten_event_emitter.h"
+#include "document/active_frame.h"
+#include "document/frame_store.h"
 
 namespace spright { namespace editor {
 	using namespace ::spright::engine;
@@ -36,49 +38,22 @@ namespace spright { namespace editor {
 		spright::Services* m_Services;
 		ImageExport* m_ImageExport;
 		std::unique_ptr<JsonIO> m_JsonExport;
-
 		std::unique_ptr<EventEmitter> m_EventEmitter;
+		FrameStore m_FrameStore;
 
 	public:
 		Editor();
 		~Editor();
 
-		inline spright::Services* getServices()
-		{
-			return m_Services;
-		}
-
-		inline ToolHandler* getToolHandler()
-		{
-			return m_toolHandler;
-		}
-
-		inline void cleanup()
-		{
-			m_Window->getInputHandler()->unRegisterListener(m_toolHandler);
-		}
-
-		inline Window* getWindow() const
-		{
-			return m_Window;
-		}
-
-		inline DocumentHandler* getDocumentHandler()
-		{
-			return m_DocumentHandler;
-		}
-
+		Window* getWindow() const;
 		DocumentStore* getDocumentStore();
-
+		DocumentHandler* getDocumentHandler();
+		Document* getActiveDocument();
+		ActiveFrame& getActiveFrame();
+		TileLayer& getActiveLayer();
+		ToolHandler* getToolHandler();
 		Rendering* getRendering();
-
-		inline CanvasListenerHandler* getCanvasListenerHandler()
-		{
-			return m_CanvasListenerHandler;
-		}
-
 		ImageExport* getImageExport();
-
 		JsonIO* getJsonIO();
 	};
 

@@ -1,18 +1,18 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers.hpp>
 #include "../src/app/document/frame_impl.h"
-#include "../src/app/document/frame_handler.h"
+#include "../src/app/document/frame_store.h"
 #include "../test_helpers/test_document_factory.h"
 
 using namespace ::spright::editor;
 
-TEST_CASE("FrameHandler", "[frame_handler]") {
+TEST_CASE("FrameStore", "[frame_handler]") {
 	SECTION("can return frame by index") {
 
 		FrameImpl frame1(0);
 		FrameImpl frame2(0);
 
-		FrameHandler frameHandler;
+		FrameStore frameHandler;
 
 		frameHandler.addFrame(frame1);
 		frameHandler.addFrame(frame2);
@@ -32,7 +32,7 @@ TEST_CASE("FrameHandler", "[frame_handler]") {
 		FrameImpl frame2(1);
 		frame2.addLayer(layers[1]);
 
-		FrameHandler frameHandler;
+		FrameStore frameHandler;
 
 		frameHandler.addFrame(frame1);
 		frameHandler.addFrame(frame2);
