@@ -7,7 +7,7 @@
 using namespace ::spright::editor;
 
 TEST_CASE("FrameHandler", "[frame_handler]") {
-	SECTION("can return Frame by index") {
+	SECTION("can return frame by index") {
 
 		FrameImpl frame1(0);
 		FrameImpl frame2(0);
@@ -22,7 +22,7 @@ TEST_CASE("FrameHandler", "[frame_handler]") {
 		REQUIRE_THROWS_WITH(frameHandler.getFrame(2), "Frame with index 2 not found");
 	}
 
-	SECTION("can set the active index") {
+	SECTION("can get/set the active frame") {
 		Container container(Dimensions(-3.0f, 3.0f, -3.0f, 3.0f));
 
 		std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(2);
@@ -37,10 +37,11 @@ TEST_CASE("FrameHandler", "[frame_handler]") {
 		frameHandler.addFrame(frame1);
 		frameHandler.addFrame(frame2);
 
-		REQUIRE(frameHandler.getActiveFrame() == nullptr);
+		REQUIRE(frameHandler.hasActiveFrame() == false);
+		REQUIRE_THROWS_WITH(frameHandler.getActiveFrame(), "No active frame set.");
 
 		frameHandler.setActiveFrame(1);
 
-		REQUIRE(frameHandler.getActiveFrame().get()->getIndex() == frame2.getIndex());
+		REQUIRE(frameHandler.getActiveFrame().getIndex() == frame2.getIndex());
 	}
 }

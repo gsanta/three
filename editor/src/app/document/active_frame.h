@@ -10,11 +10,15 @@ namespace spright { namespace editor {
 		std::vector<TileLayer> m_BackgroundLayers;
 		std::vector<TileLayer> m_ForegroundLayers;
 
-		Frame& m_Frame;
-		TileLayer& m_ActiveLayer;
+		Frame* m_Frame = nullptr;
+		TileLayer* m_ActiveLayer = nullptr;
 	public:
-
 		ActiveFrame(Frame& frame, int activeLayerIndex = 0);
+		ActiveFrame();
+
+		ActiveFrame& operator=(const ActiveFrame& rhs);
+
+		bool isValid() const;
 
 		void addLayer(const TileLayer& tileLayer) override;
 		void insertLayer(const TileLayer& tileLayer, size_t index) override;

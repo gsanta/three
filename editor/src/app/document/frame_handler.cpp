@@ -13,7 +13,8 @@ namespace spright { namespace editor {
 		if (index >= m_Frames.size()) {
 			throw std::invalid_argument("No frame at index " + std::to_string(index));
 		}
-		m_ActiveFrame = std::make_shared<ActiveFrame>(m_Frames[index]);
+
+		m_ActiveFrame = ActiveFrame(m_Frames[index], 0);
 	}
 
 	Frame& FrameHandler::getFrame(size_t index)
@@ -27,8 +28,15 @@ namespace spright { namespace editor {
 		throw std::invalid_argument("Frame with index " + std::to_string(index) + " not found");
 	}
 
-	std::shared_ptr<ActiveFrame> FrameHandler::getActiveFrame() {
+	ActiveFrame& FrameHandler::getActiveFrame() {
+		if (!m_ActiveFrame.isValid()) {
+			throw std::runtime_error("No active frame set.");
+		}
+		
 		return m_ActiveFrame;
 	}
 
+	bool FrameHandler::hasActiveFrame() const {
+		return m_ActiveFrame.isValid();
+	}
 }}

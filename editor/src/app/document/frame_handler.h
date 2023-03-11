@@ -13,11 +13,12 @@ namespace spright { namespace editor {
 	private:
 		std::vector<FrameImpl> m_Frames;
 
-		std::shared_ptr<ActiveFrame> m_ActiveFrame = nullptr;
+		ActiveFrame m_ActiveFrame;
 	public:
 		void addFrame(const Frame& frame);
 		void setActiveFrame(size_t index);
-		std::shared_ptr<ActiveFrame> getActiveFrame();
+		ActiveFrame& getActiveFrame();
+		bool hasActiveFrame() const;
 		Frame& getFrame(size_t index);
 	};
 }}
