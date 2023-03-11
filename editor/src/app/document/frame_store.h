@@ -9,7 +9,7 @@
 namespace spright { namespace editor {
 	using namespace engine;
 
-	class FrameHandler {
+	class FrameStore {
 	private:
 		std::vector<FrameImpl> m_Frames;
 

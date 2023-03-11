@@ -255,7 +255,6 @@ int main()
 #endif
 
 	// delete texture;
-	editor->cleanup();
 	delete editor;
 	return 0;
 }

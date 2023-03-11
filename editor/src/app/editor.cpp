@@ -37,15 +37,44 @@ namespace spright { namespace editor {
 
 	Editor::~Editor()
 	{
+		m_Window->getInputHandler()->unRegisterListener(m_toolHandler);
+
 		delete m_Rendering;
 		delete m_Window;
 		delete m_DocumentHandler;
 		delete m_Services;
 	}
 
+	Document* Editor::getActiveDocument() {
+		return m_DocumentStore->getActiveDocument();
+	}
+
+	ActiveFrame& Editor::getActiveFrame() {
+		return m_FrameStore.getActiveFrame();
+	}
+
+	TileLayer& Editor::getActiveLayer() {
+		return getActiveFrame().getActiveLayer();
+	}
+
+	Window* Editor::getWindow() const
+	{
+		return m_Window;
+	}
+
+	DocumentHandler* Editor::getDocumentHandler()
+	{
+		return m_DocumentHandler;
+	}
+
 	DocumentStore* Editor::getDocumentStore()
 	{
 		return m_DocumentStore.get();
+	}
+
+	ToolHandler* Editor::getToolHandler()
+	{
+		return m_toolHandler;
 	}
 
 	Rendering* Editor::getRendering()
