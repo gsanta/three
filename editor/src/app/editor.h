@@ -39,7 +39,6 @@ namespace spright { namespace editor {
 		ImageExport* m_ImageExport;
 		std::unique_ptr<JsonIO> m_JsonExport;
 		std::unique_ptr<EventEmitter> m_EventEmitter;
-		FrameStore m_FrameStore;
 
 	public:
 		Editor();

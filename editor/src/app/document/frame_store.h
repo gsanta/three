@@ -12,9 +12,11 @@ namespace spright { namespace editor {
 	class FrameStore {
 	private:
 		std::vector<FrameImpl> m_Frames;
-
 		ActiveFrame m_ActiveFrame;
+
 	public:
+		FrameStore();
+
 		void addFrame(const Frame& frame);
 		void setActiveFrame(size_t index);
 		ActiveFrame& getActiveFrame();

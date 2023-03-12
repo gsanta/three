@@ -22,9 +22,10 @@ namespace spright { namespace editor {
 
 	}
 
-	void FrameImpl::addLayer(const TileLayer& layer)
+	TileLayer& FrameImpl::addLayer(const TileLayer& layer)
 	{
 		m_Layers.push_back(layer);
+		return m_Layers.back();
 	}
 
 	void FrameImpl::insertLayer(const TileLayer& layer, size_t index) {

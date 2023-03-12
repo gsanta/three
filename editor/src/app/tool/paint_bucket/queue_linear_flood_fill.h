@@ -45,12 +45,12 @@ namespace spright {
 		bool m_IsEmptyTile;
 		int m_SourceColor;
 	public:
-		void floodFill(TileLayer* layer, int x, int y, int color);
+		void floodFill(TileLayer& layer, int x, int y, int color);
 	private:
-		void linearFill(TileLayer* layer, int x, int y, int color);
-		bool checkPoint(TileLayer* layer, int x, int y, int color);
-		bool isPixelWithinColorTolerance(TileLayer* layer, int tileIndex);
-		void setColor(TileLayer* layer, int x, int y, int color);
+		void linearFill(TileLayer& layer, int x, int y, int color);
+		bool checkPoint(TileLayer& layer, int x, int y, int color);
+		bool isPixelWithinColorTolerance(TileLayer& layer, int tileIndex);
+		void setColor(TileLayer& layer, int x, int y, int color);
 	};
 
 }

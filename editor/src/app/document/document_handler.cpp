@@ -14,20 +14,20 @@ namespace spright { namespace editor {
 		}
 	}
 
-	TileLayer* DocumentHandler::createUserLayer(Document* document, std::string name, std::string id)
+	TileLayer& DocumentHandler::createUserLayer(Document* document, std::string name, std::string id)
 	{
 #ifdef SPARKY_EMSCRIPTEN
 		GLShader shaderUnlit("resources/shaders/basic.es3.vert", "resources/shaders/basic_unlit.es3.frag");
 #else
 		GLShader shaderUnlit("shaders/basic.vert", "shaders/unlit.frag");
 #endif
-		TileLayer *layer = new TileLayer(name, id, Group<Rect2D>(new GLRenderer2D(shaderUnlit)), document->getDimensions());
+		TileLayer layer(name, id, Group<Rect2D>(new GLRenderer2D(shaderUnlit)), document->getDimensions());
 
-		document->getLayerHandler()->addLayer(layer);
+		document->getActiveFrame().addLayer(std::move(layer));
 
-		if (document->getLayerHandler()->getLayers().size() == 1)
+		if (document->getActiveFrame().getLayers().size() == 1)
 		{
-			document->getLayerHandler()->setActiveLayer(layer->getId());
+			document->getActiveFrame().setActiveLayer(document->getActiveFrame().getLayer(id));
 		}
 
 		return layer;
@@ -45,11 +45,18 @@ namespace spright { namespace editor {
 		Camera *camera = new Camera(m_Window->getWidth(), m_Window->getHeight(), documentDimensions, -1.0f, 1.0f);
 		Document *document = new Document(documentDimensions, camera);
 
-		TileLayer *tempLayer = new TileLayer("", DEFAULT_TEMP_LAYER_ID, Group<Rect2D>(new GLRenderer2D(shaderUnlit)), document->getDimensions());
-		TileLayer *backgroundLayer = new TileLayer("", DEFAULT_BACKGROUND_LAYER_ID, Group<Rect2D>(new GLRenderer2D(shaderUnlit)), document->getDimensions(), 2.0f);
+		TileLayer layer("layer1", USER_LAYER_ID_PREFIX + "1", Group<Rect2D>(new GLRenderer2D(shaderUnlit)), document->getDimensions());
+		TileLayer layer2("layer2", USER_LAYER_ID_PREFIX + "2", Group<Rect2D>(new GLRenderer2D(shaderUnlit)), document->getDimensions());
+		TileLayer tempLayer("", DEFAULT_TEMP_LAYER_ID, Group<Rect2D>(new GLRenderer2D(shaderUnlit)), document->getDimensions());
+		TileLayer backgroundLayer("", DEFAULT_BACKGROUND_LAYER_ID, Group<Rect2D>(new GLRenderer2D(shaderUnlit)), document->getDimensions(), 2.0f);
 
-		document->getLayerHandler()->addBeforeLayer(backgroundLayer);
-		document->getLayerHandler()->addAfterLayer(tempLayer);
+		FrameImpl frame(0);
+		frame.addLayer(layer);
+		frame.addLayer(layer2);
+
+		document->getFrameStore().addFrame(std::move(frame));
+		document->getActiveFrame().addBackgroundLayer(std::move(backgroundLayer));
+		document->getActiveFrame().addForegroundLayer(std::move(tempLayer));
 
 		Checkerboard checkerboard;
 

@@ -16,7 +16,7 @@ namespace spright { namespace editor {
 		FrameImpl(size_t index);
 		FrameImpl(const Frame&);
 
-		void addLayer(const TileLayer& tileLayer) override;
+		TileLayer& addLayer(const TileLayer& tileLayer) override;
 		void insertLayer(const TileLayer& tileLayer, size_t index) override;
 		void removeLayer(std::string layerId) override;
 		TileLayer& getLayer(std::string id) override;

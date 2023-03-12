@@ -126,7 +126,8 @@ namespace spright { namespace editor {
 			//m_JsonExport->importDocument("{ \"a\": 2 }");
 		}
 		else if (key == GLFW_KEY_L) {
-			m_DocumentStore->getActiveDocument()->getLayerHandler()->setActiveLayer(USER_LAYER_ID_PREFIX + "2");
+			ActiveFrame& frame = m_DocumentStore->getActiveDocument()->getActiveFrame();
+			frame.setActiveLayer(frame.getLayer(USER_LAYER_ID_PREFIX + "2"));
 		}
 
 	}

@@ -27,18 +27,18 @@ TEST_CASE("FrameStore", "[frame_handler]") {
 
 		std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(2);
 
-		FrameImpl frame1(1);
-		frame1.addLayer(layers[0]);
+		FrameImpl* frame1 = new FrameImpl(0);
+		frame1->addLayer(layers[0]);
 		FrameImpl frame2(1);
 		frame2.addLayer(layers[1]);
 
 		FrameStore frameHandler;
 
-		frameHandler.addFrame(frame1);
+		frameHandler.addFrame(*frame1);
 		frameHandler.addFrame(frame2);
 
-		REQUIRE(frameHandler.hasActiveFrame() == false);
-		REQUIRE_THROWS_WITH(frameHandler.getActiveFrame(), "No active frame set.");
+
+		REQUIRE(frameHandler.getActiveFrame().getIndex() == frame1->getIndex());
 
 		frameHandler.setActiveFrame(1);
 

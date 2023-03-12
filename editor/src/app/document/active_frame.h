@@ -10,17 +10,18 @@ namespace spright { namespace editor {
 		std::vector<TileLayer> m_BackgroundLayers;
 		std::vector<TileLayer> m_ForegroundLayers;
 
-		Frame* m_Frame = nullptr;
-		TileLayer* m_ActiveLayer = nullptr;
+		std::vector<FrameImpl>& m_Frames;
+		size_t m_ActiveFrameIndex;
+		size_t m_ActiveLayerIndex;
 	public:
-		ActiveFrame(Frame& frame, int activeLayerIndex = 0);
-		ActiveFrame();
+		ActiveFrame(std::vector<FrameImpl>& frames, size_t activeFrameIndex = -1);
+		~ActiveFrame();
 
 		ActiveFrame& operator=(const ActiveFrame& rhs);
 
 		bool isValid() const;
 
-		void addLayer(const TileLayer& tileLayer) override;
+		TileLayer& addLayer(const TileLayer& tileLayer) override;
 		void insertLayer(const TileLayer& tileLayer, size_t index) override;
 		void removeLayer(std::string layerId) override;
 		TileLayer& getLayer(std::string id) override;
@@ -37,5 +38,8 @@ namespace spright { namespace editor {
 		std::vector<TileLayer>& getForegroundLayers();
 		TileLayer& getActiveLayer();
 		void setActiveLayer(const TileLayer& tileLayer);
+
+	private:
+		FrameImpl& getActiveFrame() const;
 	};
 }}

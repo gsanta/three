@@ -9,9 +9,10 @@ namespace spright { namespace editor {
 		m_EventEmitter = std::make_unique<EmscriptenEventEmitter>();
 
 		m_DocumentStore = std::make_unique<DocumentStore>();
+		
 		m_DocumentStore->setActiveDocument(m_DocumentHandler->createDocument());
-		m_DocumentHandler->createUserLayer(m_DocumentStore->getActiveDocument(), "layer1", USER_LAYER_ID_PREFIX + "1");
-		m_DocumentHandler->createUserLayer(m_DocumentStore->getActiveDocument(), "layer2", USER_LAYER_ID_PREFIX + "2");
+		//m_DocumentHandler->createUserLayer(m_DocumentStore->getActiveDocument(), "layer1", USER_LAYER_ID_PREFIX + "1");
+		//m_DocumentHandler->createUserLayer(m_DocumentStore->getActiveDocument(), "layer2", USER_LAYER_ID_PREFIX + "2");
 
 		m_Rendering = new Rendering(m_Window, getDocumentStore());
 
@@ -50,7 +51,7 @@ namespace spright { namespace editor {
 	}
 
 	ActiveFrame& Editor::getActiveFrame() {
-		return m_FrameStore.getActiveFrame();
+		return m_DocumentStore->getActiveDocument()->getActiveFrame();
 	}
 
 	TileLayer& Editor::getActiveLayer() {
