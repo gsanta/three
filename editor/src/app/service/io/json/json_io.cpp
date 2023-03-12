@@ -12,8 +12,8 @@ namespace spright { namespace editor {
 			{"layers", {}}
 		};
 
-		for (TileLayer* layer : document->getLayerHandler()->getLayers()) {
-			nlohmann::json jsonLayer = m_TileLayerExport->exportLayer(document, layer->getId());
+		for (TileLayer& layer : document->getActiveFrame().getLayers()) {
+			nlohmann::json jsonLayer = m_TileLayerExport->exportLayer(document, layer.getId());
 			json["layers"] += jsonLayer;
 		}
 
@@ -31,7 +31,7 @@ namespace spright { namespace editor {
 		for (int i = 0; i < layerCount; i++) {
 			nlohmann::json layer = json["layers"][i];
 
-			TileLayer* tileLayer = m_TileLayerExport->importLayer(layer);
+			m_TileLayerExport->importLayer(layer);
 		}
 	}
 }}

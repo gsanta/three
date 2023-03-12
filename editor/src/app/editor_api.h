@@ -2,6 +2,7 @@
 
 #include <string>
 #include "editor.h"
+#include "../engine/graphics/layer/tileLayer.h"
 
 #ifdef SPARKY_EMSCRIPTEN
 #include <emscripten/emscripten.h>

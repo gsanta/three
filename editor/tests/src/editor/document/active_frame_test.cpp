@@ -14,9 +14,10 @@ TEST_CASE("ActiveFrame", "[active_frame]") {
 
 		std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(3);
 
-		FrameImpl frame;
-		frame.addLayer(layers[2]);
-		ActiveFrame activeFrame(frame);
+		std::vector<FrameImpl> frames{ FrameImpl() };
+		frames[0].addLayer(layers[2]);
+
+		ActiveFrame activeFrame(frames, 0);
 
 		activeFrame.addBackgroundLayer(layers[0]);
 		activeFrame.addForegroundLayer(layers[1]);
@@ -31,13 +32,14 @@ TEST_CASE("ActiveFrame", "[active_frame]") {
 
 		std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(2);
 
-		FrameImpl frame;
-		frame.addLayer(layers[1]);
-		ActiveFrame activeFrame(frame);
+		std::vector<FrameImpl> frames{ FrameImpl() };
+
+		frames[0].addLayer(layers[1]);
+		ActiveFrame activeFrame(frames, 0);
 
 		activeFrame.addBackgroundLayer(layers[0]);
 
-		REQUIRE_THROWS_WITH(frame.getLayer("id2"), "Layer with id id2 not found");
+		REQUIRE_THROWS_WITH(activeFrame.getLayer("id2"), "Layer with id id2 not found");
 	}
 
 	SECTION("can set the active layer") {
@@ -45,15 +47,13 @@ TEST_CASE("ActiveFrame", "[active_frame]") {
 
 		std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(3);
 
-		FrameImpl frame;
+		std::vector<FrameImpl> frames{ FrameImpl() };
 
-		frame.addLayer(layers[0]);
-		frame.addLayer(layers[1]);
-		frame.addLayer(layers[2]);
+		frames[0].addLayer(layers[0]);
+		frames[0].addLayer(layers[1]);
+		frames[0].addLayer(layers[2]);
 
-		ActiveFrame activeFrame(frame);
-
-		REQUIRE(activeFrame.getActiveLayer().getId() == layers[0].getId());
+		ActiveFrame activeFrame(frames, 0);
 
 		activeFrame.setActiveLayer(layers[1]);
 

@@ -10,8 +10,8 @@ TEST_CASE("Eraser erase", "[eraser]") {
 		TileLayer layer = TestDocumentFactory::createTileLayer(0, TileLayer::defaultTileSize, Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
 
 		Brush brush;
-		brush.paint(&layer, Vec2Int(0, 0), 0xFFFFFFFF);
-		brush.paint(&layer, Vec2Int(1, 0), 0xFFFFFFFF);
+		brush.paint(layer, Vec2Int(0, 0), 0xFFFFFFFF);
+		brush.paint(layer, Vec2Int(1, 0), 0xFFFFFFFF);
 
 		Eraser eraser;
 
@@ -25,12 +25,12 @@ TEST_CASE("Eraser erase", "[eraser]") {
 		TileLayer layer = TestDocumentFactory::createTileLayer(0, TileLayer::defaultTileSize, Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
 
 		Brush brush;
-		brush.paint(&layer, Vec2Int(1, 1), 0xFFFFFFFF);
-		brush.paint(&layer, Vec2Int(2, 1), 0xFFFFFFFF);
-		brush.paint(&layer, Vec2Int(1, 2), 0xFFFFFFFF);
-		brush.paint(&layer, Vec2Int(2, 2), 0xFFFFFFFF);
-		brush.paint(&layer, Vec2Int(3, 2), 0xFFFFFFFF);
-		brush.paint(&layer, Vec2Int(2, 3), 0xFFFFFFFF);
+		brush.paint(layer, Vec2Int(1, 1), 0xFFFFFFFF);
+		brush.paint(layer, Vec2Int(2, 1), 0xFFFFFFFF);
+		brush.paint(layer, Vec2Int(1, 2), 0xFFFFFFFF);
+		brush.paint(layer, Vec2Int(2, 2), 0xFFFFFFFF);
+		brush.paint(layer, Vec2Int(3, 2), 0xFFFFFFFF);
+		brush.paint(layer, Vec2Int(2, 3), 0xFFFFFFFF);
 
 		Eraser eraser;
 
@@ -48,17 +48,17 @@ TEST_CASE("Eraser erase", "[eraser]") {
 		TileLayer layer = TestDocumentFactory::createTileLayer(0, TileLayer::defaultTileSize, Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
 
 		Brush brush;
-		brush.paint(&layer, Vec2Int(1, 1), 0xFFFFFFFF);
-		brush.paint(&layer, Vec2Int(2, 1), 0xFFFFFFFF);
-		brush.paint(&layer, Vec2Int(3, 1), 0xFFFFFFFF);
-		brush.paint(&layer, Vec2Int(1, 2), 0xFFFFFFFF);
-		brush.paint(&layer, Vec2Int(2, 2), 0xFFFFFFFF);
-		brush.paint(&layer, Vec2Int(3, 2), 0xFFFFFFFF);
-		brush.paint(&layer, Vec2Int(1, 3), 0xFFFFFFFF);
-		brush.paint(&layer, Vec2Int(2, 3), 0xFFFFFFFF);
-		brush.paint(&layer, Vec2Int(3, 3), 0xFFFFFFFF);
-		brush.paint(&layer, Vec2Int(4, 3), 0xFFFFFFFF);
-		brush.paint(&layer, Vec2Int(3, 4), 0xFFFFFFFF);
+		brush.paint(layer, Vec2Int(1, 1), 0xFFFFFFFF);
+		brush.paint(layer, Vec2Int(2, 1), 0xFFFFFFFF);
+		brush.paint(layer, Vec2Int(3, 1), 0xFFFFFFFF);
+		brush.paint(layer, Vec2Int(1, 2), 0xFFFFFFFF);
+		brush.paint(layer, Vec2Int(2, 2), 0xFFFFFFFF);
+		brush.paint(layer, Vec2Int(3, 2), 0xFFFFFFFF);
+		brush.paint(layer, Vec2Int(1, 3), 0xFFFFFFFF);
+		brush.paint(layer, Vec2Int(2, 3), 0xFFFFFFFF);
+		brush.paint(layer, Vec2Int(3, 3), 0xFFFFFFFF);
+		brush.paint(layer, Vec2Int(4, 3), 0xFFFFFFFF);
+		brush.paint(layer, Vec2Int(3, 4), 0xFFFFFFFF);
 
 		Eraser eraser;
 

@@ -21,8 +21,8 @@ TEST_CASE("ColorPickerTool pointerDown", "[color-picker-tool]") {
 		ColorPickerTool colorPickerTool(new LayerProviderTestImpl(tileLayer, tempLayer), &toolHandler, &eventEmitter);
 
 		Brush brush;
-		brush.paint(&tileLayer, Vec2Int(0, 0), 0xFFFF0000);
-		brush.paint(&tileLayer, Vec2Int(1, 1), 0xFF00FF00);
+		brush.paint(tileLayer, Vec2Int(0, 0), 0xFFFF0000);
+		brush.paint(tileLayer, Vec2Int(1, 1), 0xFF00FF00);
 
 		PointerInfo pointerInfo;
 		pointerInfo.curr = tileLayer.getWorldPos(Vec2Int(0, 0));
@@ -49,7 +49,7 @@ TEST_CASE("ColorPickerTool pointerDown", "[color-picker-tool]") {
 		ColorPickerTool colorPickerTool(&layerProvider, &toolHandler, &eventEmitter);
 
 		Brush brush;
-		brush.paint(&tileLayer, Vec2Int(0, 0), 0xFFFF0000);
+		brush.paint(tileLayer, Vec2Int(0, 0), 0xFFFF0000);
 
 		PointerInfo pointerInfo;
 

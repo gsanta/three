@@ -11,6 +11,8 @@
 #include "../../engine/graphics/renderable/rect2d.h"
 #include "../../engine/system/window/window.h"
 #include "./document.h"
+#include "./frame.h"
+#include "./frame_impl.h"
 
 namespace spright { namespace editor {
 	using namespace std;
@@ -24,6 +26,6 @@ namespace spright { namespace editor {
 		DocumentHandler(Window* window);
 		~DocumentHandler();
 		Document* createDocument();
-		TileLayer* createUserLayer(Document* document, std::string name, std::string id);
+		TileLayer& createUserLayer(Document* document, std::string name, std::string id);
 	};
 }}

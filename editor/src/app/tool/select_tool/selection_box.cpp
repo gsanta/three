@@ -25,11 +25,11 @@ namespace spright {
 		Vec2 topRight = m_Rect.topRight;
 
 		Document* document = this->m_DocumentStore->getActiveDocument();
-		TileLayer* tempLayer = document->getLayerHandler()->getTileLayer(DEFAULT_TEMP_LAYER_ID);
+		TileLayer& tempLayer = document->getActiveFrame().getLayer(DEFAULT_TEMP_LAYER_ID);
 
-		float tileSize = tempLayer->getTileSize();
+		float tileSize = tempLayer.getTileSize();
 
-		tempLayer->clear();
+		tempLayer.clear();
 		clearSprites();
 
 		unsigned int color = 0xff0099ff;
@@ -51,18 +51,18 @@ namespace spright {
 		//m_SelectionSprites.push_back(left);
 		//m_SelectionSprites.push_back(right);
 
-		tempLayer->add(Rect2D(xStart, yStart, width, 0.1f, color));
-		tempLayer->add(Rect2D(xStart, yEnd, width, 0.1f, color));
-		tempLayer->add(Rect2D(xStart, yStart, 0.1f, height, color));
-		tempLayer->add(Rect2D(xEnd, yStart, 0.1f, height, color));
+		tempLayer.add(Rect2D(xStart, yStart, width, 0.1f, color));
+		tempLayer.add(Rect2D(xStart, yEnd, width, 0.1f, color));
+		tempLayer.add(Rect2D(xStart, yStart, 0.1f, height, color));
+		tempLayer.add(Rect2D(xEnd, yStart, 0.1f, height, color));
 	}
 
 	void SelectionBox::move(Vec2 delta)
 	{
 		Document* document = this->m_DocumentStore->getActiveDocument();
-		TileLayer* tempLayer = document->getLayerHandler()->getTileLayer(DEFAULT_TEMP_LAYER_ID);
+		TileLayer& tempLayer = document->getActiveFrame().getLayer(DEFAULT_TEMP_LAYER_ID);
 
-		float tileSize = tempLayer->getTileSize();
+		float tileSize = tempLayer.getTileSize();
 
 		m_AbsoluteDelta += delta;
 
@@ -104,10 +104,10 @@ namespace spright {
 
 	void SelectionBox::clearSprites()
 	{
-		Document* document = this->m_DocumentStore->getActiveDocument();
-		auto tempLayer = this->m_DocumentStore->getActiveDocument()->getLayerHandler()->getLayer(DEFAULT_TEMP_LAYER_ID);
+		Document* document = m_DocumentStore->getActiveDocument();
+		auto tempLayer = m_DocumentStore->getActiveDocument()->getActiveFrame().getLayer(DEFAULT_TEMP_LAYER_ID);
 
-		tempLayer->clear();
+		tempLayer.clear();
 
 		m_SelectionSprites.clear();
 	}
