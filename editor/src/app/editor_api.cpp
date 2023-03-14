@@ -5,11 +5,12 @@ extern class Editor* editor;
 #ifdef SPARKY_EMSCRIPTEN
 
 void setLayerIndex(std::string layerId, int newIndex) {
-	editor->getDocumentStore()->getActiveDocument()->getLayerHandler()->setLayerIndex(layerId, newIndex);
+	TileLayer& tileLayer = editor->getActiveFrame().getLayer(layerId);
+	editor->getActiveFrame().insertLayer(std::move(tileLayer), newIndex);
 }
 
 void removeLayer(std::string layerId) {
-	editor->getDocumentStore()->getActiveDocument()->getLayerHandler()->removeLayer(layerId);
+	editor->getActiveFrame().removeLayer(layerId);
 }
 
 std::string exportDocument() {

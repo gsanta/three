@@ -10,6 +10,7 @@
 #include "../../engine/graphics/layer/dimensions.h"
 #include "../../engine/layout/container.h"
 #include "layer_handler.h"
+#include "frame_store.h"
 
 namespace spright { namespace editor {
 
@@ -23,13 +24,16 @@ namespace spright { namespace editor {
 	{
 	private:
 		std::unique_ptr<LayerHandler> m_LayerHandler;
+		FrameStore m_FrameStore;
 		Camera* m_Camera;
 
 	public:
 		Document(Dimensions dimensions, Camera* camera);
 		~Document();
 
-		LayerHandler* getLayerHandler();
+		FrameStore& getFrameStore();
+		ActiveFrame& getActiveFrame();
+		TileLayer& getActiveLayer();
 
 		inline Camera* getCamera() {
 			return m_Camera;

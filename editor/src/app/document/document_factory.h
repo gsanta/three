@@ -11,19 +11,21 @@
 #include "../../engine/graphics/renderable/rect2d.h"
 #include "../../engine/system/window/window.h"
 #include "./document.h"
+#include "./frame.h"
+#include "./frame_impl.h"
 
 namespace spright { namespace editor {
 	using namespace std;
 	using namespace ::spright::engine;
 
-	class DocumentHandler {
+	class DocumentFactory {
 	private:
 		Window* m_Window;
 		vector<Document*> m_documents;
 	public:
-		DocumentHandler(Window* window);
-		~DocumentHandler();
+		DocumentFactory(Window* window);
+		~DocumentFactory();
 		Document* createDocument();
-		TileLayer* createUserLayer(Document* document, std::string name, std::string id);
+		TileLayer& createUserLayer(Document* document, std::string name, std::string id);
 	};
 }}

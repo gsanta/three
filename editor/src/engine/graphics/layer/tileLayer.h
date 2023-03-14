@@ -20,7 +20,7 @@ namespace spright { namespace engine {
 	private:
 		std::string m_Id;
 		std::string m_Name;
-		Container* m_Container;
+		Dimensions m_Dimensions;
 		Group<Rect2D> m_Group;
 		float m_TileSize = 0.5f;
 		int m_IndexSize;
@@ -29,7 +29,9 @@ namespace spright { namespace engine {
 		BoundsInt m_TileBounds;
 
 	public:
-		TileLayer(std::string name, std::string id, Group<Rect2D> group, Container* container, float tileSize = 0.5f);
+		const static float defaultTileSize;
+	public:
+		TileLayer(std::string name, std::string id, Group<Rect2D> group, Dimensions dimensions, float tileSize = TileLayer::defaultTileSize);
 		TileLayer(const TileLayer& tileLayer);
 		~TileLayer();
 
@@ -73,9 +75,9 @@ namespace spright { namespace engine {
 			return m_TileSize;
 		}
 
-		nlohmann::json getJson();
+		nlohmann::json getJson() const;
 		void setJson(std::string json);
-		nlohmann::json getLayerDescription();
+		nlohmann::json getLayerDescription() const;
 
 	private:
 		void init();

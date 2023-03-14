@@ -105,10 +105,10 @@ namespace spright {
 		float startY = down.y < curr.y ? down.y : curr.y;
 		float endY = down.y < curr.y ? curr.y : down.y;
 
-		TileLayer* layer = document->getLayerHandler()->getActiveLayer();
+		TileLayer& layer = document->getActiveFrame().getActiveLayer();
 
-		auto it = layer->getRenderables().begin();
-		while (it != layer->getRenderables().end()) {
+		auto it = layer.getRenderables().begin();
+		while (it != layer.getRenderables().end()) {
 			const Bounds& bounds = (*it)->getBounds();
 
 			if (bounds.minX > startX && bounds.maxX < endX && bounds.minY > startY && bounds.maxY < endY) {
@@ -122,14 +122,14 @@ namespace spright {
 
 	void SelectTool::moveSelection(PointerInfo& pointerInfo) {
 		Document* document = m_DocumentStore->getActiveDocument();
-		TileLayer* tileLayer = dynamic_cast<TileLayer*>(document->getLayerHandler()->getActiveLayer());
+		TileLayer& tileLayer = document->getActiveLayer();
 
 		Vec2 down = pointerInfo.down;
 		Vec2 curr = pointerInfo.curr;
 
 		Vec2 move(curr - down);
-		Vec2Int moveTile(move.x / tileLayer->getTileSize(), move.y / tileLayer->getTileSize());
-		Vec2 finalMove(moveTile.x * tileLayer->getTileSize(), moveTile.y * tileLayer->getTileSize());
+		Vec2Int moveTile(move.x / tileLayer.getTileSize(), move.y / tileLayer.getTileSize());
+		Vec2 finalMove(moveTile.x * tileLayer.getTileSize(), moveTile.y * tileLayer.getTileSize());
 
 		for (int i = 0; i < m_Data.size(); i++) {
 			Rect2D* sprite = m_Data[i];
@@ -139,20 +139,20 @@ namespace spright {
 
 			sprite->setPosition(Vec2(position.x, position.y) + finalMove);
 
-			Vec2Int tilePos = tileLayer->getTilePos(Vec2(position.x, position.y));
-			int newTileIndex = tileLayer->getTileIndex(tilePos.x, tilePos.y);
-			tileLayer->updateTileIndex(sprite->getTileIndex(), newTileIndex);
+			Vec2Int tilePos = tileLayer.getTilePos(Vec2(position.x, position.y));
+			int newTileIndex = tileLayer.getTileIndex(tilePos.x, tilePos.y);
+			tileLayer.updateTileIndex(sprite->getTileIndex(), newTileIndex);
 		}
 	}
 
 	void SelectTool::makePointSelection(PointerInfo& pointerInfo) {
-		TileLayer* tileLayer = dynamic_cast<TileLayer*>(m_DocumentStore->getActiveDocument()->getLayerHandler()->getActiveLayer());
+		TileLayer& tileLayer = m_DocumentStore->getActiveDocument()->getActiveLayer();
 		Camera* camera = m_DocumentStore->getActiveDocument()->getCamera();
 		Vec2 model = camera->screenToModel(pointerInfo.curr);
 
-		Vec2Int tilePos = tileLayer->getTilePos(model);
-		int tileIndex = tileLayer->getTileIndex(tilePos.x, tilePos.y);
-		Renderable2D* renderable = tileLayer->getAtTileIndex(tileIndex);
+		Vec2Int tilePos = tileLayer.getTilePos(model);
+		int tileIndex = tileLayer.getTileIndex(tilePos.x, tilePos.y);
+		Renderable2D* renderable = tileLayer.getAtTileIndex(tileIndex);
 
 		if (renderable != nullptr) {
 			Rect2D* sprite = static_cast<Rect2D*>(renderable);
@@ -160,7 +160,7 @@ namespace spright {
 			m_OrigPositions.push_back(Vec2(sprite->getPosition().x, sprite->getPosition().y));
 			
 			Vec2 spritePos = sprite->getPosition2d();
-			float tileSize = tileLayer->getTileSize();
+			float tileSize = tileLayer.getTileSize();
 			//updateSelectionBox(Vec2(spritePos.x, spritePos.y), Vec2(spritePos.x + tileSize, spritePos.y + tileSize));
 		}
 	}

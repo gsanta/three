@@ -10,8 +10,8 @@ namespace spright { namespace editor {
 	void PaintBucketTool::pointerUp(PointerInfo& pointerInfo)
 	{
 		Camera* camera = m_DocumentStore->getActiveDocument()->getCamera();
-		TileLayer* tileLayer = dynamic_cast<TileLayer*>(m_DocumentStore->getActiveDocument()->getLayerHandler()->getActiveLayer());
-		Vec2Int tilePos = tileLayer->getTilePos(pointerInfo.curr);
+		TileLayer& tileLayer = m_DocumentStore->getActiveDocument()->getActiveLayer();
+		Vec2Int tilePos = tileLayer.getTilePos(pointerInfo.curr);
 
 		m_FloodFill.floodFill(tileLayer, tilePos.x, tilePos.y, m_Services->getColorPalette()->color);
 	}

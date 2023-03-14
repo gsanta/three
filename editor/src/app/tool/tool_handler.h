@@ -14,6 +14,7 @@
 #include "../../engine/graphics/camera/ortho_projection_info.h"
 #include "../editor_config.h"
 #include "../service/services.h"
+#include "../service/io/image_export.h"
 
 namespace spright { namespace editor {
 
@@ -30,9 +31,10 @@ namespace spright { namespace editor {
 		Services* m_Services;
 		DocumentStore* m_DocumentStore;
 		Camera* m_Camera;
+		ImageExport* m_ImageExport;
 	public:
 		ToolHandler();
-		ToolHandler(Window* window, DocumentStore* documentStore, Services* services, Camera* camera);
+		ToolHandler(Window* window, DocumentStore* documentStore, Services* services, Camera* camera, ImageExport* imageExport);
 		~ToolHandler();
 
 		ToolHandler& operator=(const ToolHandler& toolHandler);

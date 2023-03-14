@@ -41,11 +41,11 @@ namespace spright { namespace editor {
 
 		Vec3 intersection = linePlaneIntersection(la, lb, p1, p2, p3);
 
-		TileLayer* tileLayer = dynamic_cast<TileLayer*>(m_documentStore->getActiveDocument()->getLayerHandler()->getActiveLayer());
+		TileLayer& tileLayer = m_documentStore->getActiveDocument()->getActiveLayer();
 
 		for (int i = 0; i < m_Size; i++) {
 			for (int j = 0; j < m_Size; j++) {
-				Vec2Int tilePos = tileLayer->getTilePos(pointerInfo.curr);
+				Vec2Int tilePos = tileLayer.getTilePos(pointerInfo.curr);
 
 				brush.paint(tileLayer, tilePos, getColor());
 			}

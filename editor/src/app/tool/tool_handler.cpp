@@ -8,8 +8,8 @@ namespace spright { namespace editor {
 	{
 	}
 
-	ToolHandler::ToolHandler(Window* window, DocumentStore* documentStore, Services* services, Camera* camera) 
-		: m_Window(window), m_DocumentStore(documentStore), m_Services(services), m_Camera(camera)
+	ToolHandler::ToolHandler(Window* window, DocumentStore* documentStore, Services* services, Camera* camera, ImageExport* imageExport)
+		: m_Window(window), m_DocumentStore(documentStore), m_Services(services), m_Camera(camera), m_ImageExport(imageExport)
 	{
 		window->getInputHandler()->registerListener(this);
 		m_ActiveTools = new vector<Tool*>();
@@ -126,7 +126,11 @@ namespace spright { namespace editor {
 			//m_JsonExport->importDocument("{ \"a\": 2 }");
 		}
 		else if (key == GLFW_KEY_L) {
-			m_DocumentStore->getActiveDocument()->getLayerHandler()->setActiveLayer(USER_LAYER_ID_PREFIX + "2");
+			ActiveFrame& frame = m_DocumentStore->getActiveDocument()->getActiveFrame();
+			frame.setActiveLayer(frame.getLayer(USER_LAYER_ID_PREFIX + "2"));
+		}
+		else if (key == GLFW_KEY_X) {
+			m_ImageExport->exportImage(m_DocumentStore->getActiveDocument());
 		}
 
 	}

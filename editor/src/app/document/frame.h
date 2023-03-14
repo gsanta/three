@@ -7,7 +7,7 @@ namespace spright { namespace editor {
 
 	class Frame {
 	public:
-		virtual void addLayer(const TileLayer& tileLayer) = 0;
+		virtual TileLayer& addLayer(const TileLayer& tileLayer) = 0;
 		virtual void insertLayer(const TileLayer& tileLayer, size_t index) = 0;
 		virtual void removeLayer(std::string layerId) = 0;
 		virtual TileLayer& getLayer(std::string id) = 0;

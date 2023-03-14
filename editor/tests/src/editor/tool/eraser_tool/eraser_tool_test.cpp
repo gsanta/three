@@ -9,28 +9,26 @@
 #include "../src/engine/system/window/impl/headless/headless_window.h"
 #include "../src/app/tool/brush_tool.h"
 #include "../layer_provider_test_impl.h"
+#include "../../test_helpers/test_document_factory.h"
 
 using namespace ::spright::engine;
 using namespace ::spright::editor;
 
 TEST_CASE("EraseTool pointerDown", "[erase-tool]") {
 	SECTION("removes the tiles at the given pointer position") {
-		Container container(Dimensions(-3.0f, 3.0f, -3.0f, 3.0f));
-
-		TileLayer eraseLayer("layer", "id", Group<Rect2D>(new HeadlessRenderer2D()), &container, 1.0f);
-		TileLayer drawLayer("layer", "id", Group<Rect2D>(new HeadlessRenderer2D()) , &container, 1.0f);
-
+		TileLayer eraseLayer = TestDocumentFactory::createTileLayer(0);
+		TileLayer drawLayer = TestDocumentFactory::createTileLayer(0);
 
 		Brush brush;
-		brush.paint(&eraseLayer, Vec2Int(0, 0), 0xFFFFFFFF);
-		brush.paint(&eraseLayer, Vec2Int(1, 0), 0xFFFFFFFF);
-		brush.paint(&eraseLayer, Vec2Int(2, 0), 0xFFFFFFFF);
-		brush.paint(&eraseLayer, Vec2Int(0, 1), 0xFFFFFFFF);
-		brush.paint(&eraseLayer, Vec2Int(1, 1), 0xFFFFFFFF);
-		brush.paint(&eraseLayer, Vec2Int(2, 1), 0xFFFFFFFF);
-		brush.paint(&eraseLayer, Vec2Int(0, 2), 0xFFFFFFFF);
-		brush.paint(&eraseLayer, Vec2Int(1, 2), 0xFFFFFFFF);
-		brush.paint(&eraseLayer, Vec2Int(2, 2), 0xFFFFFFFF);
+		brush.paint(eraseLayer, Vec2Int(0, 0), 0xFFFFFFFF);
+		brush.paint(eraseLayer, Vec2Int(1, 0), 0xFFFFFFFF);
+		brush.paint(eraseLayer, Vec2Int(2, 0), 0xFFFFFFFF);
+		brush.paint(eraseLayer, Vec2Int(0, 1), 0xFFFFFFFF);
+		brush.paint(eraseLayer, Vec2Int(1, 1), 0xFFFFFFFF);
+		brush.paint(eraseLayer, Vec2Int(2, 1), 0xFFFFFFFF);
+		brush.paint(eraseLayer, Vec2Int(0, 2), 0xFFFFFFFF);
+		brush.paint(eraseLayer, Vec2Int(1, 2), 0xFFFFFFFF);
+		brush.paint(eraseLayer, Vec2Int(2, 2), 0xFFFFFFFF);
 
 		Rect2D* renderable = eraseLayer.getAtTileIndex(0);
 

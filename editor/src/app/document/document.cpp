@@ -22,29 +22,39 @@ namespace spright { namespace editor {
 		//}
 	}
 
+	FrameStore& Document::getFrameStore() {
+		return m_FrameStore;
+	}
+
+	ActiveFrame& Document::getActiveFrame() {
+		return m_FrameStore.getActiveFrame();
+	}
+
+
+	TileLayer& Document::getActiveLayer() {
+		return getFrameStore().getActiveFrame().getActiveLayer();
+	}
+
+
 	std::string Document::getJson()
 	{
-		nlohmann::json json = getLayerHandler()->getActiveLayer()->getJson();
+		nlohmann::json json = m_FrameStore.getActiveFrame().getActiveLayer().getJson();
 
 		return json.dump();
 	}
 
-	LayerHandler* Document::getLayerHandler() {
-		return m_LayerHandler.get();
-	}
-
 	void Document::render()
 	{
-		for (TileLayer* layer : getLayerHandler()->getBeforeLayers()) {
-			layer->render(m_Camera);
+		for (TileLayer& layer : getActiveFrame().getBackgroundLayers()) {
+			layer.render(m_Camera);
 		}
 
-		for (TileLayer* layer : getLayerHandler()->getLayers()) {
-			layer->render(m_Camera);
+		for (TileLayer& layer : getActiveFrame().getLayers()) {
+			layer.render(m_Camera);
 		}
 
-		for (TileLayer* layer : getLayerHandler()->getAfterLayers()) {
-			layer->render(m_Camera);
+		for (TileLayer& layer : getActiveFrame().getForegroundLayers()) {
+			layer.render(m_Camera);
 		}
 	}
 }}

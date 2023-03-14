@@ -12,10 +12,7 @@ using namespace ::spright::engine;
 
 TEST_CASE("Layer add", "[layer]") {
 	SECTION("can add a renderable to the layer") {
-		
-		Container* container = new Container(Dimensions(-16.0f, 16.0f, -16.0f, 16.0f));
-
-		TileLayer layer("layer", "id", Group<Rect2D>(new HeadlessRenderer2D()), container);
+		TileLayer layer("layer", "id", Group<Rect2D>(new HeadlessRenderer2D()), Dimensions(-16.0f, 16.0f, -16.0f, 16.0f));
 
 		REQUIRE(layer.getRenderables().size() == 0);
 
@@ -33,9 +30,7 @@ TEST_CASE("Layer add", "[layer]") {
 
 TEST_CASE("Layer getTilePos", "[layer]") {
 	SECTION("converts world coordinates to tile coordinates starting at the document bottom left position") {
-		Container* container = new Container(Dimensions(-16.0f, 16.0f, -16.0f, 16.0f));
-
-		TileLayer layer("layer", "id", Group<Rect2D>(new HeadlessRenderer2D()), container);
+		TileLayer layer("layer", "id", Group<Rect2D>(new HeadlessRenderer2D()), Dimensions(-16.0f, 16.0f, -16.0f, 16.0f));
 
 		float tileSize = layer.getTileSize();
 
