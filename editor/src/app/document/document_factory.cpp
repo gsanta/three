@@ -1,20 +1,20 @@
-#include "document_handler.h"
+#include "document_factory.h"
 
 namespace spright { namespace editor {
 
-	DocumentHandler::DocumentHandler(Window *window) : m_Window(window)
+	DocumentFactory::DocumentFactory(Window* window) : m_Window(window)
 	{
 	}
 
-	DocumentHandler::~DocumentHandler()
+	DocumentFactory::~DocumentFactory()
 	{
-		for (Document *document : m_documents)
+		for (Document* document : m_documents)
 		{
 			delete document;
 		}
 	}
 
-	TileLayer& DocumentHandler::createUserLayer(Document* document, std::string name, std::string id)
+	TileLayer& DocumentFactory::createUserLayer(Document* document, std::string name, std::string id)
 	{
 #ifdef SPARKY_EMSCRIPTEN
 		GLShader shaderUnlit("resources/shaders/basic.es3.vert", "resources/shaders/basic_unlit.es3.frag");
@@ -33,7 +33,7 @@ namespace spright { namespace editor {
 		return layer;
 	}
 
-	Document* DocumentHandler::createDocument()
+	Document* DocumentFactory::createDocument()
 	{
 #ifdef SPARKY_EMSCRIPTEN
 		GLShader shaderUnlit("resources/shaders/basic.es3.vert", "resources/shaders/basic_unlit.es3.frag");
@@ -45,18 +45,14 @@ namespace spright { namespace editor {
 		Camera *camera = new Camera(m_Window->getWidth(), m_Window->getHeight(), documentDimensions, -1.0f, 1.0f);
 		Document *document = new Document(documentDimensions, camera);
 
-		TileLayer layer("layer1", USER_LAYER_ID_PREFIX + "1", Group<Rect2D>(new GLRenderer2D(shaderUnlit)), document->getDimensions());
-		TileLayer layer2("layer2", USER_LAYER_ID_PREFIX + "2", Group<Rect2D>(new GLRenderer2D(shaderUnlit)), document->getDimensions());
 		TileLayer tempLayer("", DEFAULT_TEMP_LAYER_ID, Group<Rect2D>(new GLRenderer2D(shaderUnlit)), document->getDimensions());
 		TileLayer backgroundLayer("", DEFAULT_BACKGROUND_LAYER_ID, Group<Rect2D>(new GLRenderer2D(shaderUnlit)), document->getDimensions(), 2.0f);
 
 		FrameImpl frame(0);
-		frame.addLayer(layer);
-		frame.addLayer(layer2);
 
-		document->getFrameStore().addFrame(std::move(frame));
-		document->getActiveFrame().addBackgroundLayer(std::move(backgroundLayer));
-		document->getActiveFrame().addForegroundLayer(std::move(tempLayer));
+		document->getFrameStore().addFrame(frame);
+		document->getActiveFrame().addBackgroundLayer(backgroundLayer);
+		document->getActiveFrame().addForegroundLayer(tempLayer);
 
 		Checkerboard checkerboard;
 

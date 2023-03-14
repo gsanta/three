@@ -10,7 +10,7 @@
 #include "tool/select_tool/select_tool.h"
 #include "tool/paint_bucket/paint_bucket_tool.h"
 #include "tool/color_picker_tool.h"
-#include "document/document_handler.h"
+#include "document/document_factory.h"
 #include "editor_config.h"
 #include "core/canvas/canvas_listener_handler.h"
 #include "./service/services.h"
@@ -32,7 +32,7 @@ namespace spright { namespace editor {
 		Window* m_Window;
 		ToolHandler* m_toolHandler;
 		CanvasListenerHandler* m_CanvasListenerHandler;
-		DocumentHandler* m_DocumentHandler;
+		DocumentFactory* m_DocumentFactory;
 		std::unique_ptr<DocumentStore> m_DocumentStore;
 		Rendering* m_Rendering;
 		spright::Services* m_Services;
@@ -46,7 +46,7 @@ namespace spright { namespace editor {
 
 		Window* getWindow() const;
 		DocumentStore* getDocumentStore();
-		DocumentHandler* getDocumentHandler();
+		DocumentFactory* getDocumentFactory();
 		Document* getActiveDocument();
 		ActiveFrame& getActiveFrame();
 		TileLayer& getActiveLayer();

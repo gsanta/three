@@ -2,7 +2,7 @@
 #include <nlohmann/json.hpp>
 #include "../../../../engine/graphics/layer/tileLayer.h"
 #include "../../../document/document.h"
-#include "../../../document/document_handler.h"
+#include "../../../document/document_factory.h"
 #include "../../../document/document_store.h"
 
 namespace spright { namespace editor {
@@ -10,9 +10,9 @@ namespace spright { namespace editor {
 
 	class TileLayerExport {
 		DocumentStore* m_DocumentStore;
-		DocumentHandler* m_DocumentHandler;
+		DocumentFactory* m_DocumentFactory;
 	public:
-		TileLayerExport(DocumentStore* documentStore, DocumentHandler* documentHandler);
+		TileLayerExport(DocumentStore* documentStore, DocumentFactory* documentHandler);
 		nlohmann::json exportLayer(Document* document, std::string layerId);
 		void importLayer(nlohmann::json json);
 	};

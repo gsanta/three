@@ -3,11 +3,9 @@
 namespace spright { namespace editor {
 
 	DocumentStore::DocumentStore() {
-		std::cout << "Constructor\n";
 	}
 
 	DocumentStore::~DocumentStore() {
-		std::cout << "Destructor\n";
 	}
 
 	Document* DocumentStore::getActiveDocument() const {

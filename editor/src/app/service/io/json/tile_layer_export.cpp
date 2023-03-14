@@ -1,7 +1,7 @@
 #include "tile_layer_export.h"
 
 namespace spright { namespace editor {
-	TileLayerExport::TileLayerExport(DocumentStore* documentStore, DocumentHandler* documentHandler): m_DocumentStore(documentStore), m_DocumentHandler(documentHandler)
+	TileLayerExport::TileLayerExport(DocumentStore* documentStore, DocumentFactory* documentFactory): m_DocumentStore(documentStore), m_DocumentFactory(documentFactory)
 	{
 	}
 
@@ -32,7 +32,7 @@ namespace spright { namespace editor {
 
 		Document* document = m_DocumentStore->getActiveDocument();
 
-		TileLayer& layer = m_DocumentHandler->createUserLayer(document, json["name"], json["id"]);
+		TileLayer& layer = m_DocumentFactory->createUserLayer(document, json["name"], json["id"]);
 
 		int tileCount = json["tiles"].size();
 

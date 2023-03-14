@@ -34,6 +34,8 @@ using namespace ::spright::editor;
 Window *window = nullptr;
 Editor *editor = nullptr;
 
+//#define SPARKY_EMSCRIPTEN
+
 #ifdef SPARKY_EMSCRIPTEN
 #include <emscripten/emscripten.h>
 #include <emscripten/val.h>
@@ -66,13 +68,13 @@ void removeActiveTool(std::string toolName)
 
 std::vector<std::string> getLayers()
 {
-	std::vector<TileLayer*> &layers = editor->getActiveFrame().getLayers();
+	const std::vector<TileLayer> &layers = editor->getActiveFrame().getLayers();
 
 	std::vector<std::string> target;
 
-	for (TileLayer *layer : layers)
+	for (const TileLayer& layer : layers)
 	{
-		target.push_back(layer->getLayerDescription().dump());
+		target.push_back(layer.getLayerDescription().dump());
 	}
 
 	return target;
@@ -80,32 +82,24 @@ std::vector<std::string> getLayers()
 
 void createLayer(std::string name, std::string id)
 {
-	editor->getDocumentHandler()->createUserLayer(editor->getDocumentStore()->getActiveDocument(), name, id);
+	editor->getDocumentFactory()->createUserLayer(editor->getDocumentStore()->getActiveDocument(), name, id);
 }
 
 void enableLayer(std::string id)
 {
-	TileLayer *layer = editor->getActiveFrame().getLayer(id);
-
-	if (layer != nullptr)
-	{
-		layer->setEnabled(true);
-	}
+	TileLayer& layer = editor->getActiveFrame().getLayer(id);
+	layer.setEnabled(true);
 }
 
 void disableLayer(std::string id)
 {
-	TileLayer *layer = editor->getActiveFrame().getLayer(id);
-
-	if (layer != nullptr)
-	{
-		layer->setEnabled(false);
-	}
+	TileLayer& layer = editor->getActiveFrame().getLayer(id);
+	layer.setEnabled(false);
 }
 
 void setActiveLayer(std::string id)
 {
-	editor->getActiveFrame().setActiveLayer(id);
+	editor->getActiveFrame().setActiveLayer(editor->getActiveFrame().getLayer(id));
 }
 
 void setBrushSize(int size)
@@ -148,16 +142,6 @@ EMSCRIPTEN_BINDINGS(engine2)
 	emscripten::function("getImageSize", &getImageSize);
 }
 
-std::string getEngineData()
-{
-	if (editor != nullptr)
-	{
-		return editor->getDocumentStore()->getActiveDocument()->getJson();
-	}
-
-	throw "Editor was null";
-}
-
 void setEngineData(std::string json)
 {
 	if (editor != nullptr)
@@ -177,7 +161,6 @@ void setColor(unsigned int color)
 
 EMSCRIPTEN_BINDINGS(editor)
 {
-	emscripten::function("getEngineData", &getEngineData);
 	emscripten::function("setEngineData", &setEngineData);
 	emscripten::function("setColor", &setColor);
 }
@@ -239,7 +222,6 @@ int main()
 		// shader->setUniform2f("light_pos", Vec2((float)(x * 32.0f / editor.getWindow()->getWidth() - 16.0f), (float)(9.0f - y * 18.0f / editor.getWindow()->getHeight())));
 		// shader->disable();
 		// layer.render();
-
 		editor->getRendering()->render();
 		frames++;
 		// if (time.elapsed() - timer > 1.0f) {

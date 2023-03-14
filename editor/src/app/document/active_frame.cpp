@@ -62,6 +62,7 @@ namespace spright { namespace editor {
 		}
 		catch (const std::exception&) {}
 
+
 		try {
 			return find_layer(id, m_BackgroundLayers);
 		}
