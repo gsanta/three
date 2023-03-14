@@ -75,9 +75,9 @@ namespace spright { namespace engine {
 			return m_TileSize;
 		}
 
-		nlohmann::json getJson();
+		nlohmann::json getJson() const;
 		void setJson(std::string json);
-		nlohmann::json getLayerDescription();
+		nlohmann::json getLayerDescription() const;
 
 	private:
 		void init();

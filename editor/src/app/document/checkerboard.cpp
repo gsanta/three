@@ -5,7 +5,7 @@ namespace spright { namespace editor {
 	void Checkerboard::create(Document* document)
 	{
 		TileLayer& layer = document->getActiveFrame().getLayer(DEFAULT_BACKGROUND_LAYER_ID);
-	
+
 		float left = document->getDimensions().left;
 		float right = document->getDimensions().right;
 		float bottom = document->getDimensions().bottom;
@@ -15,6 +15,7 @@ namespace spright { namespace editor {
 
 		int counter = 1;
 		bool even = false;
+
 		for (float i = left; i < right; i += tileSize) {
 			for (float j = bottom; j < top; j += tileSize) {
 				counter++;

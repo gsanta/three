@@ -8,7 +8,6 @@ interface EditorApi {
   addActiveTool(name: string): void;
   removeActiveTool(name: string): void;
 
-  getEngineData(): void;
   setEngineData(data: string): void;
 
   getToolData(toolName: ToolName): string;

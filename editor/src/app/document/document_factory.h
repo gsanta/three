@@ -18,13 +18,13 @@ namespace spright { namespace editor {
 	using namespace std;
 	using namespace ::spright::engine;
 
-	class DocumentHandler {
+	class DocumentFactory {
 	private:
 		Window* m_Window;
 		vector<Document*> m_documents;
 	public:
-		DocumentHandler(Window* window);
-		~DocumentHandler();
+		DocumentFactory(Window* window);
+		~DocumentFactory();
 		Document* createDocument();
 		TileLayer& createUserLayer(Document* document, std::string name, std::string id);
 	};

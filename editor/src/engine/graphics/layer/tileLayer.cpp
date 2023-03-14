@@ -190,7 +190,7 @@ namespace spright { namespace engine {
 		return m_IndexSize;
 	}
 
-	nlohmann::json TileLayer::getLayerDescription() {
+	nlohmann::json TileLayer::getLayerDescription() const {
 		nlohmann::json json = {
 			{"id", m_Id},
 			{"name", m_Name},
@@ -199,7 +199,7 @@ namespace spright { namespace engine {
 		return json;
 	}
 
-	nlohmann::json TileLayer::getJson()
+	nlohmann::json TileLayer::getJson() const
 	{
 		nlohmann::json json;
 

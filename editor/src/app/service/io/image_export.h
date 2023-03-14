@@ -14,7 +14,7 @@ namespace spright { namespace editor {
 		Rendering* m_Rendering;
 		Window* m_Window;
 
-		unsigned char* m_Data;
+		unsigned char* m_Data = nullptr;
 		size_t m_Size;
 
 	public:

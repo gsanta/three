@@ -31,6 +31,10 @@ namespace spright { namespace engine {
 		inline std::vector<T*>& getRenderables() {
 			return m_Renderables;
 		}
+
+		inline const std::vector<T*>& getRenderables() const {
+			return m_Renderables;
+		}
 	};
 
 	template <typename T>
