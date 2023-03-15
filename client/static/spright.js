@@ -61,24 +61,17 @@ var read_,
     readBinary,
     setWindowTitle;
 
-// Normally we don't log exceptions but instead let them bubble out the top
-// level where the embedding environment (e.g. the browser) can handle
-// them.
-// However under v8 and node we sometimes exit the process direcly in which case
-// its up to use us to log the exception before exiting.
-// If we fix https://github.com/emscripten-core/emscripten/issues/15080
-// this may no longer be needed under node.
-function logExceptionOnExit(e) {
-  if (e instanceof ExitStatus) return;
-  let toLog = e;
-  if (e && typeof e == 'object' && e.stack) {
-    toLog = [e, e.stack];
-  }
-  err('exiting due to exception: ' + toLog);
-}
-
 if (ENVIRONMENT_IS_NODE) {
   if (typeof process == 'undefined' || !process.release || process.release.name !== 'node') throw new Error('not compiled for this environment (did you build to HTML and try to run it not on the web, or set ENVIRONMENT to something - like node - and run it someplace else - like on the web?)');
+
+  var nodeVersion = process.versions.node;
+  var numericVersion = nodeVersion.split('.').slice(0, 3);
+  numericVersion = (numericVersion[0] * 10000) + (numericVersion[1] * 100) + numericVersion[2] * 1;
+  var minVersion = 101900;
+  if (numericVersion < 101900) {
+    throw new Error('This emscripten-generated code requires node v10.19.19.0 (detected v' + nodeVersion + ')');
+  }
+
   // `require()` is no-op in an ESM module, use `createRequire()` to construct
   // the require()` function.  This is only necessary for multi-environment
   // builds, `-sENVIRONMENT=node` emits a static import declaration instead.
@@ -133,7 +126,7 @@ readAsync = (filename, onload, onerror) => {
 
   process.on('uncaughtException', function(ex) {
     // suppress ExitStatus exceptions from showing an error
-    if (!(ex instanceof ExitStatus)) {
+    if (ex !== 'unwind' && !(ex instanceof ExitStatus) && !(ex.context instanceof ExitStatus)) {
       throw ex;
     }
   });
@@ -149,12 +142,8 @@ readAsync = (filename, onload, onerror) => {
   }
 
   quit_ = (status, toThrow) => {
-    if (keepRuntimeAlive()) {
-      process.exitCode = status;
-      throw toThrow;
-    }
-    logExceptionOnExit(toThrow);
-    process.exit(status);
+    process.exitCode = status;
+    throw toThrow;
   };
 
   Module['inspect'] = function () { return '[Emscripten Module object]'; };
@@ -196,8 +185,26 @@ if (ENVIRONMENT_IS_SHELL) {
 
   if (typeof quit == 'function') {
     quit_ = (status, toThrow) => {
-      logExceptionOnExit(toThrow);
-      quit(status);
+      // Unlike node which has process.exitCode, d8 has no such mechanism. So we
+      // have no way to set the exit code and then let the program exit with
+      // that code when it naturally stops running (say, when all setTimeouts
+      // have completed). For that reason, we must call `quit` - the only way to
+      // set the exit code - but quit also halts immediately.  To increase
+      // consistency with node (and the web) we schedule the actual quit call
+      // using a setTimeout to give the current stack and any exception handlers
+      // a chance to run.  This enables features such as addOnPostRun (which
+      // expected to be able to run code after main returns).
+      setTimeout(() => {
+        if (!(toThrow instanceof ExitStatus)) {
+          let toLog = toThrow;
+          if (toThrow && typeof toThrow == 'object' && toThrow.stack) {
+            toLog = [toThrow, toThrow.stack];
+          }
+          err('exiting due to exception: ' + toLog);
+        }
+        quit(status);
+      });
+      throw toThrow;
     };
   }
 
@@ -664,8 +671,10 @@ var __ATPOSTRUN__ = []; // functions called after the main() is called
 
 var runtimeInitialized = false;
 
+var runtimeKeepaliveCounter = 0;
+
 function keepRuntimeAlive() {
-  return noExitRuntime;
+  return noExitRuntime || runtimeKeepaliveCounter > 0;
 }
 
 function preRun() {
@@ -855,6 +864,19 @@ function abort(what) {
   // defintion for WebAssembly.RuntimeError claims it takes no arguments even
   // though it can.
   // TODO(https://github.com/google/closure-compiler/pull/3913): Remove if/when upstream closure gets fixed.
+  // See above, in the meantime, we resort to wasm code for trapping.
+  //
+  // In case abort() is called before the module is initialized, Module['asm']
+  // and its exported '__trap' function is not available, in which case we throw
+  // a RuntimeError.
+  //
+  // We trap instead of throwing RuntimeError to prevent infinite-looping in
+  // Wasm EH code (because RuntimeError is considered as a foreign exception and
+  // caught by 'catch_all'), but in case throwing RuntimeError is fine because
+  // the module has not even been instantiated, even less running.
+  if (runtimeInitialized) {
+    ___trap();
+  }
   /** @suppress {checkTypes} */
   var e = new WebAssembly.RuntimeError(what);
 
@@ -1055,7 +1077,7 @@ function createWasm() {
     assert(Module === trueModule, 'the Module object should not be replaced during async compilation - perhaps the order of HTML elements is wrong?');
     trueModule = null;
     // TODO: Due to Closure regression https://github.com/google/closure-compiler/issues/3193, the above line no longer optimizes out down to the following line.
-    // When the regression is fixed, can restore the above USE_PTHREADS-enabled path.
+    // When the regression is fixed, can restore the above PTHREADS-enabled path.
     receiveInstance(result['instance']);
   }
 
@@ -1197,6 +1219,57 @@ function dbg(text) {
     }
 
   
+  function getCppExceptionTag() {
+      // In static linking, tags are defined within the wasm module and are
+      // exported, whereas in dynamic linking, tags are defined in library.js in
+      // JS code and wasm modules import them.
+      return Module['asm']['__cpp_exception'];
+    }
+  
+  function getCppExceptionThrownObjectFromWebAssemblyException(ex) {
+      // In Wasm EH, the value extracted from WebAssembly.Exception is a pointer
+      // to the unwind header. Convert it to the actual thrown value.
+      var unwind_header = ex.getArg(getCppExceptionTag(), 0);
+      return ___thrown_object_from_unwind_exception(unwind_header);
+    }
+  function decrementExceptionRefcount(ex) {
+      var ptr = getCppExceptionThrownObjectFromWebAssemblyException(ex);
+      ___cxa_decrement_exception_refcount(ptr);
+    }
+
+  
+  
+  
+  function withStackSave(f) {
+      var stack = stackSave();
+      var ret = f();
+      stackRestore(stack);
+      return ret;
+    }
+  function getExceptionMessageCommon(ptr) {
+      return withStackSave(function() {
+        var type_addr_addr = stackAlloc(4);
+        var message_addr_addr = stackAlloc(4);
+        ___get_exception_message(ptr, type_addr_addr, message_addr_addr);
+        var type_addr = HEAPU32[((type_addr_addr)>>2)];
+        var message_addr = HEAPU32[((message_addr_addr)>>2)];
+        var type = UTF8ToString(type_addr);
+        _free(type_addr);
+        var message;
+        if (message_addr) {
+          message = UTF8ToString(message_addr);
+          _free(message_addr);
+        }
+        return [type, message];
+      });
+    }
+  function getExceptionMessage(ex) {
+      var ptr = getCppExceptionThrownObjectFromWebAssemblyException(ex);
+      return getExceptionMessageCommon(ptr);
+    }
+  Module["getExceptionMessage"] = getExceptionMessage;
+
+  
     /**
      * @param {number} ptr
      * @param {string} type
@@ -1215,6 +1288,12 @@ function dbg(text) {
       default: abort('invalid type for getValue: ' + type);
     }
   }
+
+  
+  function incrementExceptionRefcount(ex) {
+      var ptr = getCppExceptionThrownObjectFromWebAssemblyException(ex);
+      ___cxa_increment_exception_refcount(ptr);
+    }
 
   function ptrToString(ptr) {
       assert(typeof ptr === 'number');
@@ -1253,109 +1332,6 @@ function dbg(text) {
 
   function ___assert_fail(condition, filename, line, func) {
       abort('Assertion failed: ' + UTF8ToString(condition) + ', at: ' + [filename ? UTF8ToString(filename) : 'unknown filename', line, func ? UTF8ToString(func) : 'unknown function']);
-    }
-
-  /** @constructor */
-  function ExceptionInfo(excPtr) {
-      this.excPtr = excPtr;
-      this.ptr = excPtr - 24;
-  
-      this.set_type = function(type) {
-        HEAPU32[(((this.ptr)+(4))>>2)] = type;
-      };
-  
-      this.get_type = function() {
-        return HEAPU32[(((this.ptr)+(4))>>2)];
-      };
-  
-      this.set_destructor = function(destructor) {
-        HEAPU32[(((this.ptr)+(8))>>2)] = destructor;
-      };
-  
-      this.get_destructor = function() {
-        return HEAPU32[(((this.ptr)+(8))>>2)];
-      };
-  
-      this.set_refcount = function(refcount) {
-        HEAP32[((this.ptr)>>2)] = refcount;
-      };
-  
-      this.set_caught = function (caught) {
-        caught = caught ? 1 : 0;
-        HEAP8[(((this.ptr)+(12))>>0)] = caught;
-      };
-  
-      this.get_caught = function () {
-        return HEAP8[(((this.ptr)+(12))>>0)] != 0;
-      };
-  
-      this.set_rethrown = function (rethrown) {
-        rethrown = rethrown ? 1 : 0;
-        HEAP8[(((this.ptr)+(13))>>0)] = rethrown;
-      };
-  
-      this.get_rethrown = function () {
-        return HEAP8[(((this.ptr)+(13))>>0)] != 0;
-      };
-  
-      // Initialize native structure fields. Should be called once after allocated.
-      this.init = function(type, destructor) {
-        this.set_adjusted_ptr(0);
-        this.set_type(type);
-        this.set_destructor(destructor);
-        this.set_refcount(0);
-        this.set_caught(false);
-        this.set_rethrown(false);
-      }
-  
-      this.add_ref = function() {
-        var value = HEAP32[((this.ptr)>>2)];
-        HEAP32[((this.ptr)>>2)] = value + 1;
-      };
-  
-      // Returns true if last reference released.
-      this.release_ref = function() {
-        var prev = HEAP32[((this.ptr)>>2)];
-        HEAP32[((this.ptr)>>2)] = prev - 1;
-        assert(prev > 0);
-        return prev === 1;
-      };
-  
-      this.set_adjusted_ptr = function(adjustedPtr) {
-        HEAPU32[(((this.ptr)+(16))>>2)] = adjustedPtr;
-      };
-  
-      this.get_adjusted_ptr = function() {
-        return HEAPU32[(((this.ptr)+(16))>>2)];
-      };
-  
-      // Get pointer which is expected to be received by catch clause in C++ code. It may be adjusted
-      // when the pointer is casted to some of the exception object base classes (e.g. when virtual
-      // inheritance is used). When a pointer is thrown this method should return the thrown pointer
-      // itself.
-      this.get_exception_ptr = function() {
-        // Work around a fastcomp bug, this code is still included for some reason in a build without
-        // exceptions support.
-        var isPointer = ___cxa_is_pointer_type(this.get_type());
-        if (isPointer) {
-          return HEAPU32[((this.excPtr)>>2)];
-        }
-        var adjusted = this.get_adjusted_ptr();
-        if (adjusted !== 0) return adjusted;
-        return this.excPtr;
-      };
-    }
-  
-  var exceptionLast = 0;
-  
-  var uncaughtExceptionCount = 0;
-  function ___cxa_throw(ptr, type, destructor) {
-      var info = new ExceptionInfo(ptr);
-      // Initialize ExceptionInfo content after it was allocated in __cxa_allocate_exception.
-      info.init(type, destructor);
-      exceptionLast = ptr;
-      uncaughtExceptionCount++;
-      throw ptr + " - Exception catching is disabled, this exception cannot be caught. Compile with -sNO_DISABLE_EXCEPTION_CATCHING or -sEXCEPTION_CATCHING_ALLOWED=[..] to catch.";
     }
 
   function setErrNo(value) {
@@ -3776,6 +3752,27 @@ function dbg(text) {
   }
   }
 
+  
+  function ___throw_exception_with_stack_trace(ex) {
+      var e = new WebAssembly.Exception(getCppExceptionTag(), [ex], {traceStack: true});
+      e.message = getExceptionMessage(e);
+      // The generated stack trace will be in the form of:
+      //
+      // Error
+      //     at ___throw_exception_with_stack_trace(test.js:1139:13)
+      //     at __cxa_throw (wasm://wasm/009a7c9a:wasm-function[1551]:0x24367)
+      //     ...
+      //
+      // Remove this JS function name, which is in the second line, from the stack
+      // trace. Note that .stack does not yet exist in all browsers (see #18828).
+      if (e.stack) {
+        var arr = e.stack.split('\n');
+        arr.splice(1,1);
+        e.stack = arr.join('\n');
+      }
+      throw e;
+    }
+
   function __embind_register_bigint(primitiveType, name, size, minRange, maxRange) {}
 
   function getShiftFromSize(size) {
@@ -4853,7 +4850,7 @@ function dbg(text) {
     }
   
   
-  function craftInvokerFunction(humanName, argTypes, classType, cppInvokerFunc, cppTargetFunc) {
+  function craftInvokerFunction(humanName, argTypes, classType, cppInvokerFunc, cppTargetFunc, isAsync) {
       // humanName: a human-readable string name for the function to be generated.
       // argTypes: An array that contains the embind type objects for all types in the function signature.
       //    argTypes[0] is the type object for the function return value.
@@ -4867,6 +4864,8 @@ function dbg(text) {
       if (argCount < 2) {
         throwBindingError("argTypes array size mismatch! Must at least get return value and 'this' types!");
       }
+  
+      assert(!isAsync, 'Async bindings are only supported with JSPI.');
   
       var isClassMethodFunc = (argTypes[1] !== null && classType !== null);
   
@@ -4925,7 +4924,7 @@ function dbg(text) {
       }
   
       invokerFnBody +=
-          (returns?"var rv = ":"") + "invoker(fn"+(argsListWired.length>0?", ":"")+argsListWired+");\n";
+          (returns || isAsync ? "var rv = ":"") + "invoker(fn"+(argsListWired.length>0?", ":"")+argsListWired+");\n";
   
       if (needsDestructorStack) {
         invokerFnBody += "runDestructors(destructors);\n";
@@ -5003,7 +5002,8 @@ function dbg(text) {
                                               invokerSignature,
                                               rawInvoker,
                                               context,
-                                              isPureVirtual) {
+                                              isPureVirtual,
+                                              isAsync) {
       var rawArgTypes = heap32VectorToArray(argCount, rawArgTypesAddr);
       methodName = readLatin1String(methodName);
       rawInvoker = embind__requireFunction(invokerSignature, rawInvoker);
@@ -5040,7 +5040,7 @@ function dbg(text) {
         }
   
         whenDependentTypesAreResolved([], rawArgTypes, function(argTypes) {
-          var memberFunction = craftInvokerFunction(humanName, argTypes, classType, rawInvoker, context);
+          var memberFunction = craftInvokerFunction(humanName, argTypes, classType, rawInvoker, context, isAsync);
   
           // Replace the initial unbound-handler-stub function with the appropriate member function, now that all types
           // are resolved. If multiple overloads are registered for this function, the function goes into an overload table.
@@ -5194,7 +5194,7 @@ function dbg(text) {
   
   
   
-  function __embind_register_function(name, argCount, rawArgTypesAddr, signature, rawInvoker, fn) {
+  function __embind_register_function(name, argCount, rawArgTypesAddr, signature, rawInvoker, fn, isAsync) {
       var argTypes = heap32VectorToArray(argCount, rawArgTypesAddr);
       name = readLatin1String(name);
   
@@ -5206,7 +5206,7 @@ function dbg(text) {
   
       whenDependentTypesAreResolved([], argTypes, function(argTypes) {
         var invokerArgsArray = [argTypes[0] /* return value */, null /* no class 'this'*/].concat(argTypes.slice(1) /* actual params */);
-        replacePublicSymbol(name, craftInvokerFunction(name, invokerArgsArray, null /* no class 'this'*/, rawInvoker, fn), argCount - 1);
+        replacePublicSymbol(name, craftInvokerFunction(name, invokerArgsArray, null /* no class 'this'*/, rawInvoker, fn, isAsync), argCount - 1);
         return [];
       });
     }
@@ -5883,6 +5883,41 @@ function dbg(text) {
       }
       quit_(1, e);
     }
+  
+  
+  function _proc_exit(code) {
+      EXITSTATUS = code;
+      if (!keepRuntimeAlive()) {
+        if (Module['onExit']) Module['onExit'](code);
+        ABORT = true;
+      }
+      quit_(code, new ExitStatus(code));
+    }
+  /** @param {boolean|number=} implicit */
+  function exitJS(status, implicit) {
+      EXITSTATUS = status;
+  
+      checkUnflushedContent();
+  
+      // if exit() was called explicitly, warn the user if the runtime isn't actually being shut down
+      if (keepRuntimeAlive() && !implicit) {
+        var msg = 'program exited (with status: ' + status + '), but keepRuntimeAlive() is set (counter=' + runtimeKeepaliveCounter + ') due to an async operation, so halting execution but not exiting the runtime or preventing further async execution (you can use emscripten_force_exit, if you want to force a true shutdown)';
+        err(msg);
+      }
+  
+      _proc_exit(status);
+    }
+  var _exit = exitJS;
+  
+  function maybeExit() {
+      if (!keepRuntimeAlive()) {
+        try {
+          _exit(EXITSTATUS);
+        } catch (e) {
+          handleException(e);
+        }
+      }
+    }
   function callUserCallback(func) {
       if (ABORT) {
         err('user callback triggered after runtime exited or application aborted.  Ignoring.');
@@ -5890,6 +5925,7 @@ function dbg(text) {
       }
       try {
         func();
+        maybeExit();
       } catch (e) {
         handleException(e);
       }
@@ -7936,7 +7972,9 @@ function dbg(text) {
         this.windowRefreshFunc = null; // GLFWwindowrefreshfun
         this.windowFocusFunc = null; // GLFWwindowfocusfun
         this.windowIconifyFunc = null; // GLFWwindowiconifyfun
+        this.windowMaximizeFunc = null; // GLFWwindowmaximizefun
         this.framebufferSizeFunc = null; // GLFWframebuffersizefun
+        this.windowContentScaleFunc = null; // GLFWwindowcontentscalefun
         this.mouseButtonFunc = null; // GLFWmousebuttonfun
         this.cursorPosFunc = null; // GLFWcursorposfun
         this.cursorEnterFunc = null; // GLFWcursorenterfun
@@ -7953,7 +7991,7 @@ function dbg(text) {
   var GLFW = {WindowFromId:function(id) {
         if (id <= 0 || !GLFW.windows) return null;
         return GLFW.windows[id - 1];
-      },joystickFunc:null,errorFunc:null,monitorFunc:null,active:null,windows:null,monitors:null,monitorString:null,versionString:null,initialTime:null,extensions:null,hints:null,defaultHints:{131073:0,131074:0,131075:1,131076:1,131077:1,135169:8,135170:8,135171:8,135172:8,135173:24,135174:8,135175:0,135176:0,135177:0,135178:0,135179:0,135180:0,135181:0,135182:0,135183:0,139265:196609,139266:1,139267:0,139268:0,139269:0,139270:0,139271:0,139272:0},DOMToGLFWKeyCode:function(keycode) {
+      },joystickFunc:null,errorFunc:null,monitorFunc:null,active:null,scale:null,windows:null,monitors:null,monitorString:null,versionString:null,initialTime:null,extensions:null,hints:null,defaultHints:{131073:0,131074:0,131075:1,131076:1,131077:1,131082:0,135169:8,135170:8,135171:8,135172:8,135173:24,135174:8,135175:0,135176:0,135177:0,135178:0,135179:0,135180:0,135181:0,135182:0,135183:0,139265:196609,139266:1,139267:0,139268:0,139269:0,139270:0,139271:0,139272:0,139276:0},DOMToGLFWKeyCode:function(keycode) {
         switch (keycode) {
           // these keycodes are only defined for GLFW3, assume they are the same for GLFW2
           case 0x20:return 32; // DOM_VK_SPACE -> GLFW_KEY_SPACE
@@ -8086,6 +8124,7 @@ function dbg(text) {
         if (win.keys[341]) mod |= 0x0002; // GLFW_MOD_CONTROL
         if (win.keys[342]) mod |= 0x0004; // GLFW_MOD_ALT
         if (win.keys[343]) mod |= 0x0008; // GLFW_MOD_SUPER
+        // add caps and num lock keys? only if lock_key_mod is set
         return mod;
       },onKeyPress:function(event) {
         if (!GLFW.active || !GLFW.active.charFunc) return;
@@ -8263,6 +8302,11 @@ function dbg(text) {
         if (!GLFW.active.framebufferSizeFunc) return;
   
         getWasmTableEntry(GLFW.active.framebufferSizeFunc)(GLFW.active.id, GLFW.active.width, GLFW.active.height);
+      },onWindowContentScaleChanged:function(scale) {
+        GLFW.scale = scale;
+        if (!GLFW.active) return;
+  
+        getWasmTableEntry(GLFW.active.windowContentScaleFunc)(GLFW.active.id, GLFW.scale, GLFW.scale);
       },getTime:function() {
         return _emscripten_get_now() / 1000;
       },setWindowTitle:function(winid, title) {
@@ -8476,6 +8520,14 @@ function dbg(text) {
           }
           case 0x00033003: { // GLFW_STICKY_MOUSE_BUTTONS
             out("glfwSetInputMode called with GLFW_STICKY_MOUSE_BUTTONS mode not implemented.");
+            break;
+          }
+          case 0x00033004: { // GLFW_LOCK_KEY_MODS
+            out("glfwSetInputMode called with GLFW_LOCK_KEY_MODS mode not implemented.");
+            break;
+          }
+          case 0x000330005: { // GLFW_RAW_MOUSE_MOTION
+            out("glfwSetInputMode called with GLFW_RAW_MOUSE_MOTION mode not implemented.");
             break;
           }
           default: {
@@ -8693,6 +8745,10 @@ function dbg(text) {
       return win.userptr;
     }
 
+  function _emscripten_get_device_pixel_ratio() {
+      return (typeof devicePixelRatio == 'number' && devicePixelRatio) || 1.0;
+    }
+  
   function _glfwInit() {
       if (GLFW.windows) return 1; // GL_TRUE
   
@@ -8700,6 +8756,7 @@ function dbg(text) {
       GLFW.hints = GLFW.defaultHints;
       GLFW.windows = new Array()
       GLFW.active = null;
+      GLFW.scale  = _emscripten_get_device_pixel_ratio();
   
       window.addEventListener("gamepadconnected", GLFW.onGamepadConnected, true);
       window.addEventListener("gamepaddisconnected", GLFW.onGamepadDisconnected, true);
@@ -8707,6 +8764,13 @@ function dbg(text) {
       window.addEventListener("keypress", GLFW.onKeyPress, true);
       window.addEventListener("keyup", GLFW.onKeyup, true);
       window.addEventListener("blur", GLFW.onBlur, true);
+      // from https://stackoverflow.com/a/70514686/7484780 . maybe add this to browser.js?
+      // no idea how to remove this listener.
+      (function updatePixelRatio(){
+        window.matchMedia("(resolution: " + window.devicePixelRatio + "dppx)")
+        .addEventListener('change', updatePixelRatio, {once: true});
+        GLFW.onWindowContentScaleChanged(_emscripten_get_device_pixel_ratio());
+        })();
       Module["canvas"].addEventListener("touchmove", GLFW.onMousemove, true);
       Module["canvas"].addEventListener("touchstart", GLFW.onMouseButtonDown, true);
       Module["canvas"].addEventListener("touchcancel", GLFW.onMouseButtonUp, true);
@@ -9147,29 +9211,6 @@ function dbg(text) {
       return _strftime(s, maxsize, format, tm); // no locale support yet
     }
 
-  
-  function _proc_exit(code) {
-      EXITSTATUS = code;
-      if (!keepRuntimeAlive()) {
-        if (Module['onExit']) Module['onExit'](code);
-        ABORT = true;
-      }
-      quit_(code, new ExitStatus(code));
-    }
-  /** @param {boolean|number=} implicit */
-  function exitJS(status, implicit) {
-      EXITSTATUS = status;
-  
-      checkUnflushedContent();
-  
-      // if exit() was called explicitly, warn the user if the runtime isn't actually being shut down
-      if (keepRuntimeAlive() && !implicit) {
-        var msg = 'program exited (with status: ' + status + '), but EXIT_RUNTIME is not set, so halting execution but not exiting the runtime or preventing further async execution (build with EXIT_RUNTIME=1, if you want a true shutdown)';
-        err(msg);
-      }
-  
-      _proc_exit(status);
-    }
 
 
 
@@ -9452,10 +9493,10 @@ function checkIncomingModuleAPI() {
 }
 var wasmImports = {
   "__assert_fail": ___assert_fail,
-  "__cxa_throw": ___cxa_throw,
   "__syscall_fcntl64": ___syscall_fcntl64,
   "__syscall_ioctl": ___syscall_ioctl,
   "__syscall_openat": ___syscall_openat,
+  "__throw_exception_with_stack_trace": ___throw_exception_with_stack_trace,
   "_embind_register_bigint": __embind_register_bigint,
   "_embind_register_bool": __embind_register_bool,
   "_embind_register_class": __embind_register_class,
@@ -9562,7 +9603,7 @@ var _malloc = createExportWrapper("malloc");
 /** @type {function(...*):?} */
 var ___errno_location = createExportWrapper("__errno_location");
 /** @type {function(...*):?} */
-var _free = createExportWrapper("free");
+var _free = Module["_free"] = createExportWrapper("free");
 /** @type {function(...*):?} */
 var _main = Module["_main"] = createExportWrapper("main");
 /** @type {function(...*):?} */
@@ -9571,6 +9612,11 @@ var ___getTypeName = Module["___getTypeName"] = createExportWrapper("__getTypeNa
 var __embind_initialize_bindings = Module["__embind_initialize_bindings"] = createExportWrapper("_embind_initialize_bindings");
 /** @type {function(...*):?} */
 var _fflush = Module["_fflush"] = createExportWrapper("fflush");
+/** @type {function(...*):?} */
+var ___trap = function() {
+  return (___trap = Module["asm"]["__trap"]).apply(null, arguments);
+};
+
 /** @type {function(...*):?} */
 var _emscripten_stack_init = function() {
   return (_emscripten_stack_init = Module["asm"]["emscripten_stack_init"]).apply(null, arguments);
@@ -9603,7 +9649,13 @@ var _emscripten_stack_get_current = function() {
 };
 
 /** @type {function(...*):?} */
-var ___cxa_is_pointer_type = createExportWrapper("__cxa_is_pointer_type");
+var ___cxa_decrement_exception_refcount = Module["___cxa_decrement_exception_refcount"] = createExportWrapper("__cxa_decrement_exception_refcount");
+/** @type {function(...*):?} */
+var ___cxa_increment_exception_refcount = Module["___cxa_increment_exception_refcount"] = createExportWrapper("__cxa_increment_exception_refcount");
+/** @type {function(...*):?} */
+var ___thrown_object_from_unwind_exception = Module["___thrown_object_from_unwind_exception"] = createExportWrapper("__thrown_object_from_unwind_exception");
+/** @type {function(...*):?} */
+var ___get_exception_message = Module["___get_exception_message"] = createExportWrapper("__get_exception_message");
 /** @type {function(...*):?} */
 var dynCall_jiji = Module["dynCall_jiji"] = createExportWrapper("dynCall_jiji");
 /** @type {function(...*):?} */
@@ -9614,7 +9666,7 @@ var dynCall_iiiiij = Module["dynCall_iiiiij"] = createExportWrapper("dynCall_iii
 var dynCall_iiiiijj = Module["dynCall_iiiiijj"] = createExportWrapper("dynCall_iiiiijj");
 /** @type {function(...*):?} */
 var dynCall_iiiiiijj = Module["dynCall_iiiiiijj"] = createExportWrapper("dynCall_iiiiiijj");
-var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 83936;
+var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 87536;
 
 // include: postamble.js
 // === Auto-generated postamble setup entry stuff ===
@@ -9643,7 +9695,6 @@ var missingLibrarySymbols = [
   'autoResumeAudioContext',
   'runtimeKeepalivePush',
   'runtimeKeepalivePop',
-  'maybeExit',
   'asmjsMangle',
   'HandleAllocator',
   'getNativeTypeSize',
@@ -9736,8 +9787,6 @@ var missingLibrarySymbols = [
   'getPromise',
   'makePromise',
   'makePromiseCallback',
-  'exception_addRef',
-  'exception_decRef',
   '_setNetworkCallback',
   'emscriptenWebGLGet',
   'emscriptenWebGLGetUniform',
@@ -9813,6 +9862,7 @@ var unexportedSymbols = [
   'dynCall',
   'handleException',
   'callUserCallback',
+  'maybeExit',
   'safeSetTimeout',
   'asyncLoad',
   'alignMemory',
@@ -9848,10 +9898,12 @@ var unexportedSymbols = [
   'doWritev',
   'dlopenMissingError',
   'promiseMap',
-  'uncaughtExceptionCount',
-  'exceptionLast',
-  'exceptionCaught',
-  'ExceptionInfo',
+  'getExceptionMessageCommon',
+  'getCppExceptionTag',
+  'getCppExceptionThrownObjectFromWebAssemblyException',
+  'incrementExceptionRefcount',
+  'decrementExceptionRefcount',
+  'getExceptionMessage',
   'Browser',
   'setMainLoop',
   'wget',
