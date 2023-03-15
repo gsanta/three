@@ -1,6 +1,6 @@
 #include <catch2/catch_test_macros.hpp>
 #include "../src/app/tool/eraser_tool/eraser_tool.h"
-#include "../src/app/document/document_handler.h"
+#include "../src/app/document/document_factory.h"
 #include "../src/app/document/document_store.h"
 #include "../src/engine/graphics/renderable/rect2d.h"
 #include "../src/engine/graphics/layer/group.h"
