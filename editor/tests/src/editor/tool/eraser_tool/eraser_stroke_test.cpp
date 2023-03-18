@@ -14,8 +14,8 @@ TEST_CASE("EraserStroke draw", "[eraser-stroke]") {
 		int eraserSize = 4;
 		float tileSize = 0.5f;
 
-		TileLayer drawLayer = TestDocumentFactory::createTileLayer(0, tileSize, Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
-		TileLayer eraseLayer = TestDocumentFactory::createTileLayer(1, tileSize, Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
+		TileLayer drawLayer = TestDocumentFactory::createTileLayer(0, tileSize, Bounds::createWithPositions(-5.0f, 5.0f, -5.0f, 5.0f));
+		TileLayer eraseLayer = TestDocumentFactory::createTileLayer(1, tileSize, Bounds::createWithPositions(-5.0f, 5.0f, -5.0f, 5.0f));
 
 		EraserStroke eraserStroke(&drawLayer, eraserSize);
 
@@ -52,8 +52,8 @@ TEST_CASE("EraserStroke draw", "[eraser-stroke]") {
 		int eraserSize = 3;
 		float tileSize = 0.5f;
 
-		TileLayer drawLayer = TestDocumentFactory::createTileLayer(0, tileSize, Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
-		TileLayer eraseLayer = TestDocumentFactory::createTileLayer(1, tileSize, Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
+		TileLayer drawLayer = TestDocumentFactory::createTileLayer(0, tileSize, Bounds::createWithPositions(-5.0f, 5.0f, -5.0f, 5.0f));
+		TileLayer eraseLayer = TestDocumentFactory::createTileLayer(1, tileSize, Bounds::createWithPositions(-5.0f, 5.0f, -5.0f, 5.0f));
 
 		EraserStroke eraserStroke(&drawLayer, eraserSize);
 
@@ -92,10 +92,10 @@ TEST_CASE("EraserStroke draw", "[eraser-stroke]") {
 		float translateX = 2.0f;
 		float translateY = 3.0f;
 
-		Container container(Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
+		Container container(Bounds::createWithPositions(-5.0f, 5.0f, -5.0f, 5.0f));
 
-		TileLayer drawLayer = TestDocumentFactory::createTileLayer(0, tileSize, Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
-		TileLayer eraseLayer = TestDocumentFactory::createTileLayer(1, tileSize, Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
+		TileLayer drawLayer = TestDocumentFactory::createTileLayer(0, tileSize, Bounds::createWithPositions(-5.0f, 5.0f, -5.0f, 5.0f));
+		TileLayer eraseLayer = TestDocumentFactory::createTileLayer(1, tileSize, Bounds::createWithPositions(-5.0f, 5.0f, -5.0f, 5.0f));
 
 		EraserStroke eraserStroke(&drawLayer, eraserSize);
 

@@ -3,6 +3,7 @@
 #include <string.h>
 #include "renderable2d.h"
 #include "../renderer/vertex_data.h"
+#include "../../../maths/vec2.h"
 #include <nlohmann/json.hpp>
 
 using namespace std::string_literals;
@@ -18,6 +19,8 @@ namespace spright { namespace engine {
 	public:
 		Rect2D(float x, float y, float width, float height, unsigned int color);
 		Rect2D(const Rect2D&);
+
+		bool isEqual(const Renderable2D& obj) const override;
 
 		Vec3 getPosition();
 		Vec2 getPosition2d();

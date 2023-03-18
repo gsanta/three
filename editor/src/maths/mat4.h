@@ -39,6 +39,8 @@ namespace spright { namespace maths {
 		friend Mat4 operator*(Mat4 left, const Mat4& right);
 		friend Vec3 operator*(const Mat4 left, const Vec3& right);
 		friend Vec4 operator*(const Mat4 left, const Vec4& right);
+		friend bool operator==(const Mat4&, const Mat4&);
+		friend bool operator!=(const Mat4&, const Mat4&);
 		Mat4& operator*=(const Mat4& other);
 	};
 } }

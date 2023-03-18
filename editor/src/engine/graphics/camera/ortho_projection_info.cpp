@@ -1,7 +1,7 @@
 #include "ortho_projection_info.h"
 
 namespace spright { namespace engine {
-	OrthoProjectionInfo::OrthoProjectionInfo(Dimensions dimensions, float near, float far): left(dimensions.left), right(dimensions.right), bottom(dimensions.bottom), top(dimensions.top), near(near), far(far)
+	OrthoProjectionInfo::OrthoProjectionInfo(Bounds bounds, float near, float far): left(bounds.minX), right(bounds.maxX), bottom(bounds.minY), top(bounds.maxY), near(near), far(far)
 	{
 
 	}

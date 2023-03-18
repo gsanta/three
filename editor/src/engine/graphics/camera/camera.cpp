@@ -2,7 +2,7 @@
 
 namespace spright { namespace engine {
 	
-	Camera::Camera(float windowWidth, float windowHeight, Dimensions documentDimensions, float near, float far) : m_WindowWidth(windowWidth), m_WindowHeight(windowHeight), m_Near(near), m_Far(far)
+	Camera::Camera(float windowWidth, float windowHeight, Bounds documentDimensions, float near, float far) : m_WindowWidth(windowWidth), m_WindowHeight(windowHeight), m_Near(near), m_Far(far)
 	{
 		m_DocumentDimensions = documentDimensions;
 		updateWindowSize(windowWidth, windowHeight);
@@ -40,7 +40,7 @@ namespace spright { namespace engine {
 		return m_Zoom;
 	}
 
-	const Dimensions& Camera::getDimensions() const
+	const Bounds& Camera::getDimensions() const
 	{
 		return m_CameraDim;
 	}
@@ -67,7 +67,7 @@ namespace spright { namespace engine {
 		m_WindowHeight = windowHeight;
 		m_CameraDim = getCameraDimensions();
 
-		m_InitialWidth = m_CameraDim.right - m_CameraDim.left;
+		m_InitialWidth = m_CameraDim.maxX - m_CameraDim.minX;
 		m_View = Mat4::lookAt(Vec3(0, 0, z), Vec3(0, 0, 0), Vec3(0, 1, 0));
 		m_Zoom = 1.0f;
 		m_Translate.x = 0;
@@ -78,8 +78,8 @@ namespace spright { namespace engine {
 
 	void Camera::updateAspectRatio()
 	{
-		m_AspectRatio = (m_CameraDim.right - m_CameraDim.left) / (m_CameraDim.top - m_CameraDim.bottom);
-		m_ProjectionMatrix = Mat4::otrthographic(m_CameraDim.left, m_CameraDim.right, m_CameraDim.bottom, m_CameraDim.top, m_Near, m_Far);
+		m_AspectRatio = (m_CameraDim.maxX - m_CameraDim.minX) / (m_CameraDim.maxY - m_CameraDim.minY);
+		m_ProjectionMatrix = Mat4::otrthographic(m_CameraDim.minX, m_CameraDim.maxX, m_CameraDim.minY, m_CameraDim.maxY, m_Near, m_Far);
 	}
 
 	Vec2 Camera::screenToModel(Vec2 screen) {
@@ -103,7 +103,7 @@ namespace spright { namespace engine {
 		return Vec2(result.x, result.y);
 	}
 
-	Dimensions Camera::getCameraDimensions()
+	Bounds Camera::getCameraDimensions()
 	{
 		float ratio = m_WindowWidth / m_WindowHeight;
 
@@ -121,6 +121,6 @@ namespace spright { namespace engine {
 			width = height * ratio; // docDimensions.getRatio();
 		}
 
-		return Dimensions(-width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f);
+		return Bounds::createWithPositions(-width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f);
 	}
 }}

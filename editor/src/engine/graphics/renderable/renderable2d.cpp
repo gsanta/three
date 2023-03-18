@@ -14,4 +14,15 @@ namespace spright { namespace engine {
 		m_UV.push_back(Vec2(1, 0));
 	}
 
+	bool Renderable2D::isEqual(const Renderable2D& rhs) const {
+		return m_VertexCount == rhs.m_VertexCount && m_Color == rhs.m_Color && m_bounds == rhs.m_bounds;
+	}
+
+	bool operator==(const Renderable2D& lhs, const Renderable2D& rhs) {
+		return typeid(lhs) == typeid(rhs) && lhs.isEqual(rhs); 
+	}
+	
+	bool operator!=(const Renderable2D& lhs, const Renderable2D& rhs) {
+		return !(lhs == rhs); 
+	}
 }}

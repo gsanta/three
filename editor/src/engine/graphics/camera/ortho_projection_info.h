@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../layer/dimensions.h"
+#include "../renderable/bounds.h"
 
 namespace spright { namespace engine {
 
@@ -13,7 +13,7 @@ namespace spright { namespace engine {
 		float near;
 		float far;
 	public:
-		OrthoProjectionInfo(Dimensions dimensions, float near, float far);
+		OrthoProjectionInfo(Bounds bounds, float near, float far);
 		OrthoProjectionInfo();
 
 		float getWidth() const;

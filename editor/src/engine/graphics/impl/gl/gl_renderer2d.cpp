@@ -45,6 +45,10 @@ namespace spright { namespace engine {
 		return *this;
 	}
 
+	bool GLRenderer2D::isEqual(const Renderer2D& rhs) const {
+		throw "isEqual not implemented in GlRenderer2D";
+	}
+
 	GLRenderer2D* GLRenderer2D::clone() const {
 		return new GLRenderer2D(*this);
 	}

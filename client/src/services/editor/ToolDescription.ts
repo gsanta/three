@@ -1,5 +1,5 @@
 type ToolDescription = {
-  id: string;
+  index: number;
   name: string;
 };
 

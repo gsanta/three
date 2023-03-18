@@ -24,6 +24,10 @@ namespace spright { namespace engine {
 		virtual ~Renderer2D();
 
 		virtual Renderer2D& operator=(Renderer2D&);
+		friend bool operator==(const Renderer2D&, const Renderer2D&);
+		friend bool operator!=(const Renderer2D&, const Renderer2D&);
+
+		virtual bool isEqual(const Renderer2D& rhs) const;
 		virtual Renderer2D* clone() const = 0;
 
 		void push(const Mat4& matrix, bool override = false);

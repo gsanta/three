@@ -2,11 +2,11 @@
 
 namespace spright { namespace engine {
 
-	Container::Container(Dimensions dimensions): m_Dimensions(dimensions) {
+	Container::Container(Bounds bounds): m_Bounds(bounds) {
 
 	}
 
-	Dimensions& Container::getDimensions() {
-		return m_Dimensions;
+	Bounds& Container::getDimensions() {
+		return m_Bounds;
 	}
 }}

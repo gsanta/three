@@ -27,6 +27,11 @@ namespace spright { namespace editor {
 		return *this;
 	}
 
+	bool ActiveFrame::isEqual(const Frame& rhs) const {
+		throw "isEqual not implemented in ActiveFrame";
+	}
+
+
 	bool ActiveFrame::isValid() const {
 		return m_ActiveFrameIndex != -1;
 	}
@@ -47,43 +52,36 @@ namespace spright { namespace editor {
 
 	TileLayer& ActiveFrame::getActiveLayer()
 	{
-		return getActiveFrame().getLayerAtIndex(m_ActiveLayerIndex);
+		return getActiveFrame().getLayer(m_ActiveLayerIndex);
 	}
 
-	void ActiveFrame::setActiveLayer(const TileLayer& tileLayer)
+	void ActiveFrame::setActiveLayer(size_t layerIndex)
 	{
-		m_ActiveLayerIndex = getLayerIndex(tileLayer);
-	}
-
-	TileLayer& ActiveFrame::getLayer(std::string id)
-	{
-		try {
-			return getActiveFrame().getLayer(id);
+		if (layerIndex >= getActiveFrame().getLayers().size()) {
+			throw std::invalid_argument("No frame at index " + layerIndex);
 		}
-		catch (const std::exception&) {}
 
-
-		try {
-			return find_layer(id, m_BackgroundLayers);
-		}
-		catch (const std::exception&) {}
-
-		return find_layer(id, m_ForegroundLayers);
+		m_ActiveLayerIndex = layerIndex;
 	}
 
 	TileLayer& ActiveFrame::addLayer(const TileLayer& layer)
 	{
-		getActiveFrame().getLayers().push_back(layer);
-		return getActiveFrame().getLayers().back();
+		TileLayer& newLayer = getActiveFrame().addLayer(layer);
+
+		if (getActiveFrame().getLayers().size() == 1) {
+			setActiveLayer(0);
+		}
+
+		return newLayer;
 	}
 
 	void ActiveFrame::insertLayer(const TileLayer& layer, size_t index) {
-		getActiveFrame().getLayers().insert(getActiveFrame().getLayers().begin() + index, layer);
+		getActiveFrame().insertLayer(layer, index);
 	}
 
-	TileLayer& ActiveFrame::getLayerAtIndex(size_t index)
+	TileLayer& ActiveFrame::getLayer(size_t index)
 	{
-		return *(getActiveFrame().getLayers().begin() + index);
+		return getActiveFrame().getLayer(index);
 	}
 
 	std::vector<TileLayer>& ActiveFrame::getLayers() {
@@ -95,24 +93,8 @@ namespace spright { namespace editor {
 		return getActiveFrame().getLayers();
 	}
 
-	void ActiveFrame::removeLayer(std::string layerId) {
-		int index = getLayerIndex(getLayer(layerId));
-
-		if (index != -1) {
-			getActiveFrame().getLayers().erase(getActiveFrame().getLayers().begin() + index);
-		}
-	}
-
-	size_t ActiveFrame::getLayerIndex(const TileLayer& tileLayer) const {
-		int index = -1;
-
-		auto it = find_if(getActiveFrame().getLayers().begin(), getActiveFrame().getLayers().end(), [&](const TileLayer& layer) { return layer.getId() == tileLayer.getId(); });
-
-		if (it != getActiveFrame().getLayers().end()) {
-			return it - getActiveFrame().getLayers().begin();
-		}
-
-		return -1;
+	void ActiveFrame::removeLayer(size_t layerIndex) {
+		getActiveFrame().removeLayer(layerIndex);
 	}
 
 	size_t ActiveFrame::getIndex() const
@@ -131,5 +113,9 @@ namespace spright { namespace editor {
 		}
 
 		return m_Frames[m_ActiveFrameIndex];
+	}
+
+	nlohmann::json ActiveFrame::getLayerDescription() const {
+		return getActiveFrame().getLayerDescription();
 	}
 }}

@@ -25,7 +25,7 @@ namespace spright {
 		Vec2 topRight = m_Rect.topRight;
 
 		Document* document = this->m_DocumentStore->getActiveDocument();
-		TileLayer& tempLayer = document->getActiveFrame().getLayer(DEFAULT_TEMP_LAYER_ID);
+		TileLayer& tempLayer = document->getActiveFrame().getForegroundLayers()[0];
 
 		float tileSize = tempLayer.getTileSize();
 
@@ -60,7 +60,7 @@ namespace spright {
 	void SelectionBox::move(Vec2 delta)
 	{
 		Document* document = this->m_DocumentStore->getActiveDocument();
-		TileLayer& tempLayer = document->getActiveFrame().getLayer(DEFAULT_TEMP_LAYER_ID);
+		TileLayer& tempLayer = document->getActiveFrame().getForegroundLayers()[0];
 
 		float tileSize = tempLayer.getTileSize();
 
@@ -105,7 +105,7 @@ namespace spright {
 	void SelectionBox::clearSprites()
 	{
 		Document* document = m_DocumentStore->getActiveDocument();
-		auto tempLayer = m_DocumentStore->getActiveDocument()->getActiveFrame().getLayer(DEFAULT_TEMP_LAYER_ID);
+		auto tempLayer = m_DocumentStore->getActiveDocument()->getActiveFrame().getForegroundLayers()[0];
 
 		tempLayer.clear();
 

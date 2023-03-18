@@ -1,15 +1,14 @@
 #pragma once
-
-#include "../graphics/layer/dimensions.h"
+#include "../graphics/renderable/bounds.h"
 
 namespace spright { namespace engine {
 
 	class Container {
 	private:
-		Dimensions m_Dimensions;
+		Bounds m_Bounds;
 
 	public:
-		Container(Dimensions dimensions);
-		Dimensions& getDimensions();
+		Container(Bounds bounds);
+		Bounds& getDimensions();
 	};
 }}

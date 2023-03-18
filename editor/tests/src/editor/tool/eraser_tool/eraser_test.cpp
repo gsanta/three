@@ -7,7 +7,7 @@ using namespace ::spright::editor;
 
 TEST_CASE("Eraser erase", "[eraser]") {
 	SECTION("removes the tile at the given position") {
-		TileLayer layer = TestDocumentFactory::createTileLayer(0, TileLayer::defaultTileSize, Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
+		TileLayer layer = TestDocumentFactory::createTileLayer(0, TileLayer::defaultTileSize, Bounds::createWithPositions(-5.0f, 5.0f, -5.0f, 5.0f));
 
 		Brush brush;
 		brush.paint(layer, Vec2Int(0, 0), 0xFFFFFFFF);
@@ -22,7 +22,7 @@ TEST_CASE("Eraser erase", "[eraser]") {
 	}
 
 	SECTION("eraser is positioned one tile left and one tile up when eraser size is even") {
-		TileLayer layer = TestDocumentFactory::createTileLayer(0, TileLayer::defaultTileSize, Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
+		TileLayer layer = TestDocumentFactory::createTileLayer(0, TileLayer::defaultTileSize, Bounds::createWithPositions(-5.0f, 5.0f, -5.0f, 5.0f));
 
 		Brush brush;
 		brush.paint(layer, Vec2Int(1, 1), 0xFFFFFFFF);
@@ -45,7 +45,7 @@ TEST_CASE("Eraser erase", "[eraser]") {
 	}
 
 	SECTION("eraser is positioned at the center when the eraser size is odd") {
-		TileLayer layer = TestDocumentFactory::createTileLayer(0, TileLayer::defaultTileSize, Dimensions(-5.0f, 5.0f, -5.0f, 5.0f));
+		TileLayer layer = TestDocumentFactory::createTileLayer(0, TileLayer::defaultTileSize, Bounds::createWithPositions(-5.0f, 5.0f, -5.0f, 5.0f));
 
 		Brush brush;
 		brush.paint(layer, Vec2Int(1, 1), 0xFFFFFFFF);

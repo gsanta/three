@@ -6,7 +6,6 @@
 #include "../renderable/renderable2d.h"
 #include "../renderer/renderer2d.h"
 #include "../camera/camera.h"
-#include "dimensions.h"
 
 namespace spright { namespace engine {
 
@@ -22,6 +21,8 @@ namespace spright { namespace engine {
 		Group(const Group&);
 		~Group();
 
+		bool operator==(const Group<T>&) const;
+		//friend bool operator!=(const Group<T>&, const Group<T>&);
 		Group& operator=(const Group&);
 		T& add(const T& renderable);
 		void render(Camera* camera);
@@ -36,6 +37,28 @@ namespace spright { namespace engine {
 			return m_Renderables;
 		}
 	};
+
+	template <typename T>
+	bool Group<T>::operator==(const Group<T>& rhs) const {
+		const Group<T>& lhs = *this;
+
+		if (lhs.m_Renderables.size() != rhs.m_Renderables.size()) {
+			return false;
+		}
+		
+		for (int i = 0; i < lhs.m_Renderables.size(); i++) {
+			if (*lhs.m_Renderables[i] != *rhs.m_Renderables[i]) {
+				return false;
+			}
+		}
+
+		return *lhs.m_Renderer == *rhs.m_Renderer;
+	}
+
+	template <typename T>
+	bool operator!=(const Group<T>& lhs, const Group<T>& rhs) {
+		return !(lhs == rhs);
+	}
 
 	template <typename T>
 	Group<T>::Group(Renderer2D* renderer) : m_Renderer(renderer) {

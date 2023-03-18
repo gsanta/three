@@ -11,8 +11,8 @@ namespace spright { namespace editor {
 		m_DocumentStore = std::make_unique<DocumentStore>();
 		
 		m_DocumentStore->setActiveDocument(m_DocumentFactory->createDocument());
-		m_DocumentFactory->createUserLayer(m_DocumentStore->getActiveDocument(), "layer1", USER_LAYER_ID_PREFIX + "1");
-		m_DocumentFactory->createUserLayer(m_DocumentStore->getActiveDocument(), "layer2", USER_LAYER_ID_PREFIX + "2");
+		m_DocumentFactory->createUserLayer(m_DocumentStore->getActiveDocument(), "layer1");
+		m_DocumentFactory->createUserLayer(m_DocumentStore->getActiveDocument(), "layer2");
 
 
 		m_Rendering = new Rendering(m_Window, getDocumentStore());

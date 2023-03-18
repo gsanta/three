@@ -111,11 +111,11 @@ namespace spright { namespace maths {
 		return subtract(other);
 	}
 
-	bool Vec3::operator==(const Vec3& other) {
+	bool Vec3::operator==(const Vec3& other) const {
 		return x == other.x && y == other.y && z == other.z;
 	}
 
-	bool Vec3::operator!=(const Vec3& other) {
+	bool Vec3::operator!=(const Vec3& other) const {
 		return !(*this == other);
 	}
 

@@ -4,14 +4,14 @@ namespace spright { namespace engine {
 
 	const float TileLayer::defaultTileSize = 0.5f;
 
-	TileLayer::TileLayer(std::string name, std::string id, Group<Rect2D> group, Dimensions dimensions, float tileSize)
-		: m_Group(group), m_TileSize(tileSize), m_Name(name), m_Id(id), m_Dimensions(dimensions) {
+	TileLayer::TileLayer(std::string name, Group<Rect2D> group, Bounds bounds, float tileSize)
+		: m_Group(group), m_TileSize(tileSize), m_Name(name), m_Bounds(bounds) {
 	
 		init();
 	}
 
 	TileLayer::TileLayer(const TileLayer& tileLayer)
-		: m_Id(tileLayer.m_Id), m_Name(tileLayer.m_Name), m_Group(tileLayer.m_Group), m_Dimensions(tileLayer.m_Dimensions), m_TileSize(tileLayer.m_TileSize) {
+		: m_Index(tileLayer.m_Index), m_Name(tileLayer.m_Name), m_Group(tileLayer.m_Group), m_Bounds(tileLayer.m_Bounds), m_TileSize(tileLayer.m_TileSize) {
 
 		init();
 	}
@@ -23,10 +23,10 @@ namespace spright { namespace engine {
 
 	TileLayer& TileLayer::operator=(const TileLayer& that) {
 		if (this != &that) {
-			m_Id = that.m_Id;
+			m_Index = that.m_Index;
 			m_Name = that.m_Name;
 			m_Group = that.m_Group;
-			m_Dimensions = that.m_Dimensions;
+			m_Bounds = that.m_Bounds;
 			m_TileSize = that.m_TileSize;
 
 			init();
@@ -35,8 +35,25 @@ namespace spright { namespace engine {
 		return *this;
 	}
 
-	std::string TileLayer::getId() const {
-		return m_Id;
+	bool operator==(const TileLayer& lhs, const TileLayer& rhs) {
+		return lhs.m_Name == rhs.m_Name && lhs.m_Bounds == rhs.m_Bounds && lhs.m_Group == rhs.m_Group
+			&& lhs.m_TileSize == rhs.m_TileSize && lhs.m_IndexSize == rhs.m_IndexSize;
+	}
+
+	bool operator!=(const TileLayer& lhs, const TileLayer& rhs) {
+		return !(lhs == rhs);
+	}
+
+	void TileLayer::setIndex(size_t index) {
+		m_Index = index;
+	}
+
+	size_t TileLayer::getIndex() const {
+		return m_Index;
+	}
+
+	std::string TileLayer::getName() const {
+		return m_Name;
 	}
 
 	void TileLayer::setEnabled(bool isEnabled) {
@@ -94,8 +111,8 @@ namespace spright { namespace engine {
 		Vec2Int tilePos = getTilePos(pointer);
 		float tileSize = m_TileSize;
 
-		float x = static_cast<float>(tilePos.x) * tileSize + m_Dimensions.left;
-		float y = static_cast<float>(tilePos.y) * tileSize + m_Dimensions.bottom;
+		float x = static_cast<float>(tilePos.x) * tileSize + m_Bounds.minX;
+		float y = static_cast<float>(tilePos.y) * tileSize + m_Bounds.minY;
 
 		return Vec2(x, y);
 	}
@@ -104,7 +121,7 @@ namespace spright { namespace engine {
 	{
 		int y = tileIndex / m_TileBounds.getWidth();
 		int x = tileIndex % m_TileBounds.getWidth();
-		return Vec2(x * m_TileSize + m_Dimensions.left, y * m_TileSize + m_Dimensions.bottom);
+		return Vec2(x * m_TileSize + m_Bounds.minX, y * m_TileSize + m_Bounds.minY);
 	}
 
 	Vec2 TileLayer::getWorldPos(int tileIndex) const {
@@ -121,7 +138,7 @@ namespace spright { namespace engine {
 
 	// TODO: check if it works for both even and odd number of tiles
 	Vec2Int TileLayer::getTilePos(Vec2 pos) const {
-		Vec2 adjustedPos(pos.x - m_Dimensions.left, pos.y - m_Dimensions.bottom);
+		Vec2 adjustedPos(pos.x - m_Bounds.minX, pos.y - m_Bounds.minY);
 		float tileSize = m_TileSize;
 		int tileX = (int)(adjustedPos.x / tileSize);
 
@@ -146,8 +163,8 @@ namespace spright { namespace engine {
 	{
 		float tileSize = m_TileSize;
 
-		float worldX = x * tileSize + tileSize / 2 + m_Dimensions.left;
-		float worldY = y * tileSize + tileSize / 2 + m_Dimensions.bottom;
+		float worldX = x * tileSize + tileSize / 2 + m_Bounds.minX;
+		float worldY = y * tileSize + tileSize / 2 + m_Bounds.minY;
 
 		return Vec2(worldX, worldY);
 	}
@@ -192,7 +209,7 @@ namespace spright { namespace engine {
 
 	nlohmann::json TileLayer::getLayerDescription() const {
 		nlohmann::json json = {
-			{"id", m_Id},
+			{"index", m_Index},
 			{"name", m_Name},
 		};
 
@@ -229,10 +246,10 @@ namespace spright { namespace engine {
 	}
 
 	void TileLayer::init() {
-		int width = (m_Dimensions.right - m_Dimensions.left) / m_TileSize;
-		int height = (m_Dimensions.top - m_Dimensions.bottom) / m_TileSize;
-		int left = (m_Dimensions.left / m_TileSize) - 1;
-		int bottom = (m_Dimensions.bottom / m_TileSize) - 1;
+		int width = (m_Bounds.maxX - m_Bounds.minX) / m_TileSize;
+		int height = (m_Bounds.maxY - m_Bounds.minY) / m_TileSize;
+		int left = (m_Bounds.minX / m_TileSize) - 1;
+		int bottom = (m_Bounds.minY / m_TileSize) - 1;
 
 		m_TileBounds = BoundsInt(left, left + width, bottom, bottom + height);
 

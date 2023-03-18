@@ -9,27 +9,22 @@ using namespace ::spright::engine;
 using namespace ::spright::editor;
 
 TEST_CASE("ActiveFrame", "[active_frame]") {
-	SECTION("can get a layer by it's id") {
-		Container container(Dimensions(-3.0f, 3.0f, -3.0f, 3.0f));
-
+	SECTION("can get a layer by it's index") {
 		std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(3);
 
 		std::vector<FrameImpl> frames{ FrameImpl() };
+		frames[0].addLayer(layers[0]);
+		frames[0].addLayer(layers[1]);
 		frames[0].addLayer(layers[2]);
 
 		ActiveFrame activeFrame(frames, 0);
 
-		activeFrame.addBackgroundLayer(layers[0]);
-		activeFrame.addForegroundLayer(layers[1]);
-
-		REQUIRE(activeFrame.getLayer("id0").getId() == "id0");
-		REQUIRE(activeFrame.getLayer("id1").getId() == "id1");
-		REQUIRE(activeFrame.getLayer("id2").getId() == "id2");
+		REQUIRE(activeFrame.getLayer(0).getName() == "layer_0");
+		REQUIRE(activeFrame.getLayer(1).getName() == "layer_1");
+		REQUIRE(activeFrame.getLayer(2).getName() == "layer_2");
 	}
 
 	SECTION("throws if layer with id is not found") {
-		Container container(Dimensions(-3.0f, 3.0f, -3.0f, 3.0f));
-
 		std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(2);
 
 		std::vector<FrameImpl> frames{ FrameImpl() };
@@ -39,12 +34,10 @@ TEST_CASE("ActiveFrame", "[active_frame]") {
 
 		activeFrame.addBackgroundLayer(layers[0]);
 
-		REQUIRE_THROWS_WITH(activeFrame.getLayer("id2"), "Layer with id id2 not found");
+		REQUIRE_THROWS_WITH(activeFrame.getLayer(2), "No layer at index 2");
 	}
 
 	SECTION("can set the active layer") {
-		Container container(Dimensions(-3.0f, 3.0f, -3.0f, 3.0f));
-
 		std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(3);
 
 		std::vector<FrameImpl> frames{ FrameImpl() };
@@ -55,8 +48,8 @@ TEST_CASE("ActiveFrame", "[active_frame]") {
 
 		ActiveFrame activeFrame(frames, 0);
 
-		activeFrame.setActiveLayer(layers[1]);
+		activeFrame.setActiveLayer(1);
 
-		REQUIRE(activeFrame.getActiveLayer().getId() == layers[1].getId());
+		REQUIRE(activeFrame.getActiveLayer().getName() == layers[1].getName());
 	}
 }

@@ -28,6 +28,10 @@ namespace spright { namespace engine {
 	public:
 		Renderable2D(const Bounds& bounds, unsigned int color);
 
+		friend bool operator==(const Renderable2D&, const Renderable2D&);
+		friend bool operator!=(const Renderable2D&, const Renderable2D&);
+		virtual bool isEqual(const Renderable2D& obj) const;
+
 		virtual void submit(Renderer2D* renderer) const = 0;
 
 		inline void setColor(unsigned int color) { m_Color = color; }
