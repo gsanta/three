@@ -109,6 +109,20 @@ namespace spright { namespace maths {
 		return left.multiply(right);
 	}
 
+	bool operator==(const Mat4& lhs, const Mat4& rhs) {
+		for (int i = 0; i < 16; i++) {
+			if (lhs.elements[i] != rhs.elements[i]) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+	
+	bool operator!=(const Mat4& lhs, const Mat4& rhs) {
+		return !(lhs == rhs);
+	}
+
 	Mat4& Mat4::operator*=(const Mat4& other) {
 		return multiply(other);
 	}

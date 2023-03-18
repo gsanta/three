@@ -4,13 +4,13 @@ extern class Editor* editor;
 
 #ifdef SPARKY_EMSCRIPTEN
 
-void setLayerIndex(std::string layerId, int newIndex) {
-	TileLayer& tileLayer = editor->getActiveFrame().getLayer(layerId);
+void setLayerIndex(size_t oldIndex, size_t newIndex) {
+	TileLayer& tileLayer = editor->getActiveFrame().getLayer(oldIndex);
 	editor->getActiveFrame().insertLayer(std::move(tileLayer), newIndex);
 }
 
-void removeLayer(std::string layerId) {
-	editor->getActiveFrame().removeLayer(layerId);
+void removeLayer(size_t layerIndex) {
+	editor->getActiveFrame().removeLayer(layerIndex);
 }
 
 std::string exportDocument() {
@@ -25,7 +25,22 @@ std::string getToolData(std::string tool) {
 	return editor->getToolHandler()->getTool(tool)->getData();
 }
 
+std::vector<std::string> getFrames()
+{
+	const std::vector<FrameImpl>& frames = editor->getActiveDocument()->getFrameStore().getFrames();
+
+	std::vector<std::string> target;
+
+	for (const Frame& frame : frames)
+	{
+		target.push_back(frame.getLayerDescription().dump());
+	}
+
+	return target;
+}
+
 EMSCRIPTEN_BINDINGS(spright) {
+	emscripten::function("getFrames", &getFrames);
 	emscripten::function("setLayerIndex", &setLayerIndex);
 	emscripten::function("removeLayer", &removeLayer);
 	emscripten::function("exportDocument", &exportDocument);

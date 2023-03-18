@@ -29,13 +29,13 @@ class LayerHandler {
     const layersList = this.editorApi.getLayers();
     const layersString = new Array<string>(layersList.size()).fill('').map((_, id) => layersList.get(id));
     const layers = layersString.map<ToolDescription>((layerString) => JSON.parse(layerString));
-    layers.forEach((layer) => this.addLayer(new LayerAdapter(layer.name, layer.id, this.editorApi)));
+    layers.forEach((layer) => this.addLayer(new LayerAdapter(layer.name, layer.index, this.editorApi)));
 
     this.setActiveLayer(this.layers[0]);
   }
 
   setActiveLayer(layer: LayerAdapter) {
-    this.editorApi.setActiveLayer(layer.getId());
+    this.editorApi.setActiveLayer(layer.getIndex());
     this.activeLayer = layer;
   }
 
@@ -44,8 +44,9 @@ class LayerHandler {
   }
 
   createLayer(layerName: string) {
-    const layer = new LayerAdapter(layerName, uuidv4(), this.editorApi);
-    this.editorApi.createLayer(layer.getName(), layer.getId());
+    const layer = new LayerAdapter(layerName, 0, this.editorApi);
+    const index = this.editorApi.createLayer(layer.getName());
+    layer.setIndex(index);
     this.addLayer(layer);
   }
 
@@ -65,7 +66,7 @@ class LayerHandler {
     this.layers.splice(this.layers.indexOf(layer), 1);
     this.layers.splice(finalLayerIndex, 0, layer);
 
-    this.editorApi.setLayerIndex(layer.getId(), newLayerIndex);
+    this.editorApi.setLayerIndex(layer.getIndex(), newLayerIndex);
   }
 
   getLayerIndex(layer: LayerAdapter) {
@@ -81,7 +82,7 @@ class LayerHandler {
     if (this.activeLayer === layer) {
       this.activeLayer = this.layers[0];
     }
-    this.editorApi.removeLayer(layer.getId());
+    this.editorApi.removeLayer(layer.getIndex());
   }
 
   getLayers() {

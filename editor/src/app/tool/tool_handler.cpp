@@ -127,7 +127,7 @@ namespace spright { namespace editor {
 		}
 		else if (key == GLFW_KEY_L) {
 			ActiveFrame& frame = m_DocumentStore->getActiveDocument()->getActiveFrame();
-			frame.setActiveLayer(frame.getLayer(USER_LAYER_ID_PREFIX + "2"));
+			frame.setActiveLayer(1);
 		}
 		else if (key == GLFW_KEY_X) {
 			m_ImageExport->exportImage(m_DocumentStore->getActiveDocument());

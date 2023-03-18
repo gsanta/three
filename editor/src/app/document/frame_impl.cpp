@@ -1,17 +1,6 @@
 #include "frame_impl.h"
 
 namespace spright { namespace editor {
-
-	TileLayer& find_layer(std::string id, std::vector<TileLayer>& layers) {
-		auto it = find_if(layers.begin(), layers.end(), [&id](TileLayer& layer) { return layer.getId() == id; });
-
-		if (it != layers.end()) {
-			return *it;
-		}
-
-		throw std::invalid_argument("Layer with id " + id + " not found");
-	}
-
 	FrameImpl::FrameImpl() : m_Index(0) {}
 
 	FrameImpl::FrameImpl(size_t index) : m_Index(index)
@@ -22,24 +11,38 @@ namespace spright { namespace editor {
 
 	}
 
+	bool FrameImpl::isEqual(const Frame& rhs) const {
+		const FrameImpl& frame = dynamic_cast<const FrameImpl&>(rhs);
+
+		if (m_Layers.size() != frame.m_Layers.size()) {
+			return false;
+		}
+
+		for (int i = 0; i < m_Layers.size(); i++) {
+			if (frame.m_Layers[i] != m_Layers[i]) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 	TileLayer& FrameImpl::addLayer(const TileLayer& layer)
 	{
+		size_t index = m_Layers.size();
 		m_Layers.push_back(layer);
+		TileLayer& newLayer = m_Layers.back();
+		newLayer.setIndex(index);
+
 		return m_Layers.back();
 	}
 
 	void FrameImpl::insertLayer(const TileLayer& layer, size_t index) {
 		m_Layers.insert(m_Layers.begin() + index, layer);
+		resetLayerIndexes();
 	}
 
-	TileLayer& FrameImpl::getLayer(std::string id)
-	{
-		TileLayer& layer = find_layer(id, m_Layers);
-
-		return layer;
-	}
-
-	TileLayer& FrameImpl::getLayerAtIndex(size_t index)
+	TileLayer& FrameImpl::getLayer(size_t index)
 	{
 		if (index >= m_Layers.size()) {
 			throw std::invalid_argument("No layer at index " + std::to_string(index));
@@ -56,24 +59,12 @@ namespace spright { namespace editor {
 		return m_Layers;
 	}
 
-	void FrameImpl::removeLayer(std::string layerId) {
-		int index = getLayerIndex(getLayer(layerId));
-
-		if (index != -1) {
-			m_Layers.erase(m_Layers.begin() + index);
+	void FrameImpl::removeLayer(size_t layerIndex) {
+		if (layerIndex > m_Layers.size()) {
+			throw std::invalid_argument("No layer at index " + layerIndex);
 		}
-	}
-
-	size_t FrameImpl::getLayerIndex(const TileLayer& tileLayer) const {
-		int index = -1;
-
-		auto it = find_if(m_Layers.begin(), m_Layers.end(), [&](const TileLayer& layer) { return layer.getId() == tileLayer.getId(); });
-
-		if (it != m_Layers.end()) {
-			return it - m_Layers.begin();
-		}
-
-		return -1;
+		m_Layers.erase(m_Layers.begin() + layerIndex);
+		resetLayerIndexes();
 	}
 
 	size_t FrameImpl::getIndex() const
@@ -84,5 +75,19 @@ namespace spright { namespace editor {
 	void FrameImpl::setIndex(size_t index)
 	{
 		m_Index = index;
+	}
+
+	void FrameImpl::resetLayerIndexes() {
+		for (int i = 0; i < m_Layers.size(); i++) {
+			m_Layers[i].setIndex(i);
+		}
+	}
+
+	nlohmann::json FrameImpl::getLayerDescription() const {
+		nlohmann::json json = {
+			{"index", m_Index},
+		};
+
+		return json;
 	}
 }}

@@ -10,7 +10,7 @@
 #include "../../../maths/mat4.h"
 #include "../camera/camera.h"
 #include "../../layout/container.h"
-#include "dimensions.h"
+#include "../renderable/bounds.h"
 
 namespace spright { namespace engine {
 	using namespace ::spright::maths;
@@ -18,9 +18,9 @@ namespace spright { namespace engine {
 	class TileLayer
 	{
 	private:
-		std::string m_Id;
+		size_t m_Index = 0;
 		std::string m_Name;
-		Dimensions m_Dimensions;
+		Bounds m_Bounds;
 		Group<Rect2D> m_Group;
 		float m_TileSize = 0.5f;
 		int m_IndexSize;
@@ -31,14 +31,17 @@ namespace spright { namespace engine {
 	public:
 		const static float defaultTileSize;
 	public:
-		TileLayer(std::string name, std::string id, Group<Rect2D> group, Dimensions dimensions, float tileSize = TileLayer::defaultTileSize);
+		TileLayer(std::string name, Group<Rect2D> group, Bounds bounds, float tileSize = TileLayer::defaultTileSize);
 		TileLayer(const TileLayer& tileLayer);
 		~TileLayer();
 
 		TileLayer& operator=(const TileLayer&);
+		friend bool operator==(const TileLayer&, const TileLayer&);
+		friend bool operator!=(const TileLayer&, const TileLayer&);
 
-		std::string getId() const;
-
+		void setIndex(size_t index);
+		size_t getIndex() const;
+		std::string getName() const;
 		void setEnabled(bool isEnabled);
 		bool isEnabled();
 

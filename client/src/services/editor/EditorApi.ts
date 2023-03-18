@@ -15,12 +15,12 @@ interface EditorApi {
   setColor(color: number): void;
 
   getLayers(): any;
-  createLayer(name: string, id: string): void;
-  enableLayer(id: string): void;
-  setLayerIndex(id: string, index: number): void;
-  removeLayer(id: string): void;
-  disableLayer(id: string): void;
-  setActiveLayer(id: string): void;
+  createLayer(name: string): number;
+  enableLayer(index: number): void;
+  setLayerIndex(oldIndex: number, newIndex: number): void;
+  removeLayer(index: number): void;
+  disableLayer(index: number): void;
+  setActiveLayer(index: number): void;
 
   setBrushSize(size: number): void;
 

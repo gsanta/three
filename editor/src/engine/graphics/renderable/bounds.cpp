@@ -9,7 +9,11 @@ namespace spright { namespace engine {
         maxY = minY + height;
     }
 
-    Bounds::Bounds() {}
+    Bounds::Bounds() : Bounds(0, 0, 0, 0) {}
+
+    Bounds Bounds::createWithPositions(float minX, float maxX, float minY, float maxY) {
+        return Bounds(minX, minY, maxX - minX, maxY - minY);
+    }
 
     Vec2 Bounds::getCenter() const
     {
@@ -22,6 +26,29 @@ namespace spright { namespace engine {
 
     float Bounds::getHeight() const {
         return maxY - minY;
+    }
+
+    void Bounds::setSize(float newWidth, float newHeight)
+    {
+        float deltaWidth = (newWidth - getWidth()) / 2.0f;
+
+        minX -= deltaWidth;
+        maxX += deltaWidth;
+
+
+        float deltaHeight = (newHeight - getHeight()) / 2.0f;
+
+        maxY += deltaHeight;
+        minY -= deltaHeight;
+    }
+
+
+    bool operator==(const Bounds& lhs, const Bounds& rhs) {
+        return lhs.minX == rhs.minX && lhs.maxX == rhs.maxX && lhs.minY == rhs.minY && lhs.maxY == rhs.maxY;
+    }
+
+    bool operator!=(const Bounds& lhs, const Bounds& rhs) {
+        return !(lhs == rhs);
     }
 }}
 

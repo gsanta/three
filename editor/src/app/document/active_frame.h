@@ -1,4 +1,5 @@
 #pragma once
+#include <nlohmann/json.hpp>
 #include "./frame.h"
 #include "./frame_impl.h"
 #include "../../engine/graphics/layer/tileLayer.h"
@@ -19,16 +20,16 @@ namespace spright { namespace editor {
 
 		ActiveFrame& operator=(const ActiveFrame& rhs);
 
+		bool isEqual(const Frame& rhs) const override;
+
 		bool isValid() const;
 
 		TileLayer& addLayer(const TileLayer& tileLayer) override;
 		void insertLayer(const TileLayer& tileLayer, size_t index) override;
-		void removeLayer(std::string layerId) override;
-		TileLayer& getLayer(std::string id) override;
-		TileLayer& getLayerAtIndex(size_t index) override;
+		void removeLayer(size_t layerIndex) override;
+		TileLayer& getLayer(size_t index) override;
 		std::vector<TileLayer>& getLayers() override;
 		const std::vector<TileLayer>& getLayers() const override;
-		size_t getLayerIndex(const TileLayer& tileLayer) const override;
 		size_t getIndex() const override;
 		void setIndex(size_t index) override;
 
@@ -37,8 +38,8 @@ namespace spright { namespace editor {
 		void addForegroundLayer(const TileLayer& tileLayer);
 		std::vector<TileLayer>& getForegroundLayers();
 		TileLayer& getActiveLayer();
-		void setActiveLayer(const TileLayer& tileLayer);
-
+		void setActiveLayer(size_t layerIndex);
+		nlohmann::json getLayerDescription() const override;
 	private:
 		FrameImpl& getActiveFrame() const;
 	};

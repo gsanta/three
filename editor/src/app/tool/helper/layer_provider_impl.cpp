@@ -10,7 +10,7 @@ namespace spright { namespace editor {
 
 	TileLayer& LayerProviderImpl::getTempLayer()
 	{
-		return m_DocumentStore->getActiveDocument()->getActiveFrame().getLayer(DEFAULT_TEMP_LAYER_ID);
+		return m_DocumentStore->getActiveDocument()->getActiveFrame().getForegroundLayers()[0 ];
 	}
 
 }}

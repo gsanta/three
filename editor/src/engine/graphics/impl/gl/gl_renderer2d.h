@@ -41,6 +41,7 @@ namespace spright { namespace engine {
 		~GLRenderer2D();
 
 		GLRenderer2D& operator=(Renderer2D&) override;
+		bool isEqual(const Renderer2D& rhs) const override;
 		GLRenderer2D* clone() const override;
 
 		inline VertexData *&getBuffer() override

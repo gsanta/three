@@ -5,6 +5,31 @@
 
 using namespace spright::engine;
 
+TEST_CASE("Rect2D", "[rect2d]")
+{
+	SECTION("equals with an other Rect2D with the same data") {
+		Rect2D rect1(-2.0f, -3.0f, 3.0f, 5.0f, 0xFF0000FF);
+		Rect2D rect2(-2.0f, -3.0f, 3.0f, 5.0f, 0xFF0000FF);
+
+		REQUIRE(rect1 == rect2);
+	}
+
+	SECTION("does not equals with an other Rect2D with different data") {
+		Rect2D rect1(-2.0f, -3.0f, 3.0f, 5.0f, 0xFF0000FF);
+		Rect2D rect2(2.0f, -3.0f, 3.0f, 5.0f, 0xFF0000FF);
+		Rect2D rect3(-2.0f, 3.0f, 3.0f, 5.0f, 0xFF0000FF);
+		Rect2D rect4(-2.0f, -3.0f, -3.0f, 5.0f, 0xFF0000FF);
+		Rect2D rect5(-2.0f, -3.0f, 3.0f, -5.0f, 0xFF0000FF);
+		Rect2D rect6(-2.0f, -3.0f, 3.0f, 5.0f, 0xFF00FF00);
+
+		REQUIRE(rect1 != rect2);
+		REQUIRE(rect1 != rect3);
+		REQUIRE(rect1 != rect4);
+		REQUIRE(rect1 != rect5);
+		REQUIRE(rect1 != rect6);
+	}
+}
+
 TEST_CASE("Rect2D contains", "[rect2d]")
 {
 	SECTION("check a point with positive coordinates inside of the rect") {

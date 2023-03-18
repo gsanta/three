@@ -13,7 +13,7 @@ namespace spright { namespace editor {
 		};
 
 		for (TileLayer& layer : document->getActiveFrame().getLayers()) {
-			nlohmann::json jsonLayer = m_TileLayerExport->exportLayer(document, layer.getId());
+			nlohmann::json jsonLayer = m_TileLayerExport->exportLayer(document, layer.getIndex());
 			json["layers"] += jsonLayer;
 		}
 

@@ -32,8 +32,8 @@ namespace spright { namespace maths {
 		friend Vec3 operator/(Vec3 left, const Vec3& right);
 		friend std::ostream& operator<<(std::ostream& stream, const Vec3 vec);
 
-		bool operator==(const Vec3& other);
-		bool operator!=(const Vec3& other);
+		bool operator==(const Vec3& other) const;
+		bool operator!=(const Vec3& other) const;
 		Vec3& operator+=(const Vec3& other);
 		Vec3& operator-=(const Vec3& other);
 		Vec3& operator*=(const Vec3& other);

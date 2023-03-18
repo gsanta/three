@@ -6,7 +6,7 @@
 #include "../../../maths/mathFuncs.h"
 #include "./ortho_projection_info.h"
 #include "../../system/window/window.h"
-#include "../layer/dimensions.h"
+#include "../renderable/bounds.h"
 
 namespace spright { namespace engine {
 	using namespace ::spright::maths;
@@ -16,7 +16,7 @@ namespace spright { namespace engine {
 		Mat4 m_ProjectionMatrix;
 		Mat4 m_View;
 		Vec2 m_Translate;
-		Dimensions m_CameraDim;
+		Bounds m_CameraDim;
 		float m_Near;
 		float m_Far;
 		float z = 0.5f;
@@ -26,15 +26,15 @@ namespace spright { namespace engine {
 		float m_InitialWidth;
 		float m_WindowWidth;
 		float m_WindowHeight;
-		Dimensions m_DocumentDimensions;
+		Bounds m_DocumentDimensions;
 	public:
-		Camera(float windowWidth, float windowHeight, Dimensions canvasDimensions, float near, float far);
+		Camera(float windowWidth, float windowHeight, Bounds canvasDimensions, float near, float far);
 
 		void translate2D(Vec2 pos);
 		void translateZ(float val);
 		void zoom(float newWidth);
 		float getZoom();
-		const Dimensions& getDimensions() const;
+		const Bounds& getDimensions() const;
 
 		Mat4 getProjectionMatrix();
 		Mat4& getView();
@@ -50,7 +50,7 @@ namespace spright { namespace engine {
 	private:
 		void updateAspectRatio();
 		float getAspectRatio() const;
-		Dimensions getCameraDimensions();
+		Bounds getCameraDimensions();
 	};
 }}
 

@@ -9,7 +9,6 @@
 #include "../service/services.h"
 #include "../../engine/system/window/window.h"
 #include "../../engine/system/window/input_listener.h"
-#include "../../engine/graphics/layer/dimensions.h"
 #include "../../engine/graphics/camera/camera.h"
 #include "../../engine/graphics/camera/ortho_projection_info.h"
 #include "../editor_config.h"

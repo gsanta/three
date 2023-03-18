@@ -13,6 +13,12 @@ namespace spright { namespace engine {
 			m_bounds = Bounds(m_Position.x, m_Position.y, m_Size.x, m_Size.y);
 		}
 
+		bool Rect2D::isEqual(const Renderable2D& rhs) const {
+			Rect2D rect2d = dynamic_cast<const Rect2D&>(rhs);
+
+			return Renderable2D::isEqual(rect2d) && m_Size == rect2d.m_Size && m_Position == rect2d.m_Position;
+		}
+
 
 		int Rect2D::getTileIndex() {
 			return m_TileIndex;
