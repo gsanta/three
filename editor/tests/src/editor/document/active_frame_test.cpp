@@ -52,4 +52,18 @@ TEST_CASE("ActiveFrame", "[active_frame]") {
 
 		REQUIRE(activeFrame.getActiveLayer().getName() == layers[1].getName());
 	}
+
+	SECTION("can get the json representation of the active layer") {
+		std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(3);
+
+		std::vector<FrameImpl> frames{ FrameImpl() };
+
+		frames[0].addLayer(layers[0]);
+		frames[0].addLayer(layers[1]);
+		frames[0].addLayer(layers[2]);
+
+		ActiveFrame activeFrame(frames, 0);
+
+		REQUIRE(activeFrame.getJson().dump() == "{\"index\":0}");
+	}
 }

@@ -1,9 +1,12 @@
-import LayerHandler from '@/panels/layer/model/LayerHandler';
-import layerDragType from '@/panels/layer/model/layerDragType';
+import { useAppDispatch } from '@/hooks';
+import layerDragType from '@/panels/layer/ui/layerDragType';
 import { useDrop } from 'react-dnd';
-import LayerItemDragType from '../../model/LayerItemDragType';
+import LayerItemDragType from '../LayerItemDragType';
+import { setLayerIndex } from '../../state/layerSlice';
 
-const useDropLayer = (layerIndex: number, layerHandler: LayerHandler) => {
+const useDropLayer = (layerIndex: number) => {
+  const dispatch = useAppDispatch();
+
   const [{ isOver }, ref] = useDrop(() => ({
     accept: layerDragType,
 
@@ -12,7 +15,7 @@ const useDropLayer = (layerIndex: number, layerHandler: LayerHandler) => {
     },
 
     drop: (item: LayerItemDragType) => {
-      layerHandler.setLayerIndex(item.layerAdapter, layerIndex);
+      dispatch(setLayerIndex({ layer: item.layer, newLayerIndex: layerIndex }));
     },
 
     collect: (monitor) => ({

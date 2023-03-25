@@ -14,7 +14,7 @@ namespace spright { namespace editor {
 		}
 	}
 
-	TileLayer& DocumentFactory::createUserLayer(Document* document, std::string name)
+	void DocumentFactory::createUserLayer(Document* document, std::string name)
 	{
 #ifdef SPARKY_EMSCRIPTEN
 		GLShader shaderUnlit("resources/shaders/basic.es3.vert", "resources/shaders/basic_unlit.es3.frag");
@@ -23,7 +23,21 @@ namespace spright { namespace editor {
 #endif
 		TileLayer layer(name, Group<Rect2D>(new GLRenderer2D(shaderUnlit)), document->getDimensions());
 
-		return document->getActiveFrame().addLayer(std::move(layer));
+		for (Frame& frame : document->getFrameStore().getFrames()) {
+			frame.addLayer(std::move(layer));
+		}
+	}
+
+	void DocumentFactory::createFrame(Document* document) {
+		FrameImpl frame(0);
+
+		Frame& activeFrame = document->getFrameStore().getActiveFrame();
+
+		for (TileLayer& layer : activeFrame.getLayers()) {
+			frame.addLayer(layer);
+		}
+
+		document->getFrameStore().addFrame(std::move(frame));
 	}
 
 	Document* DocumentFactory::createDocument()

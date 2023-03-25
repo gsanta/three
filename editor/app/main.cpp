@@ -81,7 +81,8 @@ std::vector<std::string> getLayers()
 
 size_t createLayer(std::string name)
 {
-	return editor->getDocumentFactory()->createUserLayer(editor->getDocumentStore()->getActiveDocument(), name).getIndex();
+	editor->getDocumentFactory()->createUserLayer(editor->getDocumentStore()->getActiveDocument(), name);
+	return editor->getActiveFrame().getLayers().back().getIndex();
 }
 
 void enableLayer(size_t index)

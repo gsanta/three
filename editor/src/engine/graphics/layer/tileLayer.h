@@ -84,5 +84,6 @@ namespace spright { namespace engine {
 
 	private:
 		void init();
+		void copyGroup(const Group<Rect2D>& group);
 	};
 }}

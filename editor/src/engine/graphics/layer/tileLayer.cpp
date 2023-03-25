@@ -11,9 +11,10 @@ namespace spright { namespace engine {
 	}
 
 	TileLayer::TileLayer(const TileLayer& tileLayer)
-		: m_Index(tileLayer.m_Index), m_Name(tileLayer.m_Name), m_Group(tileLayer.m_Group), m_Bounds(tileLayer.m_Bounds), m_TileSize(tileLayer.m_TileSize) {
+		: m_Index(tileLayer.m_Index), m_Name(tileLayer.m_Name), m_Group(Group<Rect2D>(tileLayer.m_Group.getRenderer()->clone())), m_Bounds(tileLayer.m_Bounds), m_TileSize(tileLayer.m_TileSize) {
 
 		init();
+		copyGroup(tileLayer.m_Group);
 	}
 
 
@@ -25,11 +26,11 @@ namespace spright { namespace engine {
 		if (this != &that) {
 			m_Index = that.m_Index;
 			m_Name = that.m_Name;
-			m_Group = that.m_Group;
 			m_Bounds = that.m_Bounds;
 			m_TileSize = that.m_TileSize;
-
+			
 			init();
+			copyGroup(that.m_Group);
 		}
 
 		return *this;
@@ -255,5 +256,11 @@ namespace spright { namespace engine {
 
 		m_IndexSize = width * height;
 		m_TileIndexes = new Renderable2D*[m_IndexSize]();
+	}
+
+	void TileLayer::copyGroup(const Group<Rect2D>& group) {
+		for (const Rect2D* rect : group.getRenderables()) {
+			add(*rect);
+		}
 	}
 }}

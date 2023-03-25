@@ -5,7 +5,6 @@ namespace spright { namespace editor {
 
 	}
 
-
 	void FrameStore::addFrame(const Frame& frame)
 	{
 		int index = m_Frames.size();
@@ -28,7 +27,12 @@ namespace spright { namespace editor {
 			m_Frames[i].setIndex(i);
 		}
 
-		setActiveFrame(m_Frames.size() < index ? index - 1 : index);
+		size_t newActiveIndex = index;
+		if (newActiveIndex >= m_Frames.size()) {
+			newActiveIndex = 0;
+		}
+
+		setActiveFrame(newActiveIndex);
 	}
 	
 	void FrameStore::setActiveFrame(size_t index)
@@ -36,8 +40,18 @@ namespace spright { namespace editor {
 		if (index >= m_Frames.size()) {
 			throw std::invalid_argument("No frame at index " + std::to_string(index));
 		}
-
+		vector<TileLayer> backgroundLayers = m_ActiveFrame.getBackgroundLayers();
+		vector<TileLayer> forgroundLayers = m_ActiveFrame.getForegroundLayers();
 		m_ActiveFrame = ActiveFrame(m_Frames, index);
+
+		for (TileLayer& layer : backgroundLayers) {
+			m_ActiveFrame.addBackgroundLayer(std::move(layer));
+		}
+
+		for (TileLayer& layer : forgroundLayers) {
+			layer.clear();
+			m_ActiveFrame.addForegroundLayer(std::move(layer));
+		}
 	}
 
 	Frame& FrameStore::getFrame(size_t index)
@@ -52,10 +66,10 @@ namespace spright { namespace editor {
 	}
 
 	ActiveFrame& FrameStore::getActiveFrame() {
-		if (!m_ActiveFrame.isValid()) {
+		//if (!m_ActiveFrame.isValid()) {
 
-			throw std::runtime_error("No active frame set.");
-		}
+		//	throw std::runtime_error("No active frame set.");
+		//}
 
 		return m_ActiveFrame;
 	}

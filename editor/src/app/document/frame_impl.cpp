@@ -83,7 +83,7 @@ namespace spright { namespace editor {
 		}
 	}
 
-	nlohmann::json FrameImpl::getLayerDescription() const {
+	nlohmann::json FrameImpl::getJson() const {
 		nlohmann::json json = {
 			{"index", m_Index},
 		};

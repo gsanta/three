@@ -39,7 +39,7 @@ namespace spright { namespace editor {
 		std::vector<TileLayer>& getForegroundLayers();
 		TileLayer& getActiveLayer();
 		void setActiveLayer(size_t layerIndex);
-		nlohmann::json getLayerDescription() const override;
+		nlohmann::json getJson() const override;
 	private:
 		FrameImpl& getActiveFrame() const;
 	};

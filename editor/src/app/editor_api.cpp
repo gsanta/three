@@ -33,14 +33,34 @@ std::vector<std::string> getFrames()
 
 	for (const Frame& frame : frames)
 	{
-		target.push_back(frame.getLayerDescription().dump());
+		target.push_back(frame.getJson().dump());
 	}
 
 	return target;
 }
 
+void addFrame() {
+	editor->getDocumentFactory()->createFrame(editor->getDocumentStore()->getActiveDocument());
+}
+
+void removeFrame(size_t index) {
+	editor->getActiveDocument()->getFrameStore().removeFrame(index);
+}
+
+void setActiveFrame(size_t index) {
+	editor->getActiveDocument()->getFrameStore().setActiveFrame(index);
+}
+
+std::string getActiveFrame() {
+	return editor->getActiveFrame().getJson().dump();
+}
+
 EMSCRIPTEN_BINDINGS(spright) {
 	emscripten::function("getFrames", &getFrames);
+	emscripten::function("addFrame", &addFrame);
+	emscripten::function("removeFrame", &removeFrame);
+	emscripten::function("setActiveFrame", &setActiveFrame);
+	emscripten::function("getActiveFrame", &getActiveFrame);
 	emscripten::function("setLayerIndex", &setLayerIndex);
 	emscripten::function("removeLayer", &removeLayer);
 	emscripten::function("exportDocument", &exportDocument);

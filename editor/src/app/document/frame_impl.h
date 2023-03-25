@@ -26,7 +26,7 @@ namespace spright { namespace editor {
 		const std::vector<TileLayer>& getLayers() const override;
 		size_t getIndex() const override;
 		void setIndex(size_t index) override;
-		nlohmann::json getLayerDescription() const override;
+		nlohmann::json getJson() const override;
 	private:
 		void resetLayerIndexes();
 	};

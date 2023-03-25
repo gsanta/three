@@ -20,7 +20,7 @@ namespace spright { namespace editor {
 		virtual const std::vector<TileLayer>& getLayers() const = 0;
 		virtual size_t getIndex() const = 0;
 		virtual void setIndex(size_t index) = 0;
-		virtual nlohmann::json getLayerDescription() const = 0;
+		virtual nlohmann::json getJson() const = 0;
 	};
 
 	inline bool operator==(const Frame& lhs, const Frame& rhs) {

@@ -14,10 +14,10 @@ namespace spright { namespace engine {
 	{
 	protected:
 		std::vector <T*> m_Renderables;
-		Renderer2D* m_Renderer;
+		Renderer2D* m_Renderer = nullptr;
 
 	public:
-		Group(Renderer2D *renderer);
+		Group(Renderer2D* renderer);
 		Group(const Group&);
 		~Group();
 
@@ -28,6 +28,7 @@ namespace spright { namespace engine {
 		void render(Camera* camera);
 		void clear();
 		void remove(const T& renderable);
+		const Renderer2D* getRenderer() const;
 
 		inline std::vector<T*>& getRenderables() {
 			return m_Renderables;
@@ -65,9 +66,14 @@ namespace spright { namespace engine {
 	}
 
 	template <typename T>
+	const Renderer2D* Group<T>::getRenderer() const {
+		return m_Renderer;
+	}
+
+	template <typename T>
 	Group<T>::Group(const Group& group) {
 		m_Renderer = group.m_Renderer->clone();
-		for (T* item : m_Renderables) {
+		for (T* item : group.m_Renderables) {
 			m_Renderables.push_back(new T(*item));
 		}
 	}

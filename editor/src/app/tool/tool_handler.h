@@ -14,6 +14,7 @@
 #include "../editor_config.h"
 #include "../service/services.h"
 #include "../service/io/image_export.h"
+#include "../document/document_factory.h"
 
 namespace spright { namespace editor {
 
@@ -31,9 +32,10 @@ namespace spright { namespace editor {
 		DocumentStore* m_DocumentStore;
 		Camera* m_Camera;
 		ImageExport* m_ImageExport;
+		DocumentFactory* m_DocumentFactory;
 	public:
 		ToolHandler();
-		ToolHandler(Window* window, DocumentStore* documentStore, Services* services, Camera* camera, ImageExport* imageExport);
+		ToolHandler(Window* window, DocumentStore* documentStore, Services* services, Camera* camera, ImageExport* imageExport, DocumentFactory* documentFractory);
 		~ToolHandler();
 
 		ToolHandler& operator=(const ToolHandler& toolHandler);
