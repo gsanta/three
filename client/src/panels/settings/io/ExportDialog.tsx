@@ -4,26 +4,32 @@ import DialogBody from '@/ui/components/dialog/DialogBody';
 import DialogFooter from '@/ui/components/dialog/DialogFooter';
 import { Button, FormControl, FormLabel, Select } from '@chakra-ui/react';
 import { downloadBlob, downloadString } from '../utils/fileUtils';
-import useAppContext from '@/ui/hooks/useAppContext';
 import FileType, { getFileTypes } from './FileType';
-import { observer } from 'mobx-react-lite';
+import { useAppSelector } from '@/hooks';
 
-const ExportDialog = observer(({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children'>) => {
-  const { editorApi } = useAppContext();
+const ExportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children'>) => {
+  const editor = useAppSelector((state) => state.tool.editor);
+
   const [selectedFileType, setSelectedFileType] = useState<FileType>(FileType.json);
 
   const exportImage = () => {
-    editorApi.exportImage();
-    const data = editorApi.getImageData();
-    const size = editorApi.getImageSize();
-    const buffer = new Uint8Array(Module.HEAPU8.buffer, data, size);
-    downloadBlob(buffer);
+    if (editor) {
+      // TODO: create action instead of direct call
+      editor.exportImage();
+      const data = editor.getImageData();
+      const size = editor.getImageSize();
+      const buffer = new Uint8Array(Module.HEAPU8.buffer, data, size);
+      downloadBlob(buffer);
+    }
     onClose();
   };
 
   const exportDocument = () => {
-    const doc = editorApi.exportDocument();
-    downloadString(doc, 'spright.json');
+    if (editor) {
+      // TODO: create action instead of direct call
+      const doc = editor.exportDocument();
+      downloadString(doc, 'spright.json');
+    }
     onClose();
   };
 
@@ -67,6 +73,6 @@ const ExportDialog = observer(({ isOpen, onClose }: Omit<DialogProps, 'title' | 
       </DialogFooter>
     </Dialog>
   );
-});
+};
 
 export default ExportDialog;

@@ -1,16 +1,15 @@
-import ToolName from '@/panels/toolbar/model/ToolName';
+import ToolName from '@/features/tool/state/ToolName';
 import BrushToolOptions from './BrushToolOptions';
 import Panel from '@/ui/components/panel/Panel';
-import useAppContext from '@/ui/hooks/useAppContext';
-import { observer } from 'mobx-react-lite';
 import React from 'react';
 import ColorPicker from '@/ui/components/color_picker/ColorPicker';
+import { useAppSelector } from '@/hooks';
 
-const ToolOptionsPanel = observer(() => {
-  const { toolStore } = useAppContext();
+const ToolOptionsPanel = () => {
+  const selectedTool = useAppSelector((state) => state.tool.selectedTool);
 
   const getOptions = () => {
-    switch (toolStore.getSelectedTool()?.name) {
+    switch (selectedTool) {
       case ToolName.Brush:
         return <BrushToolOptions />;
       default:
@@ -24,6 +23,6 @@ const ToolOptionsPanel = observer(() => {
       <ColorPicker />
     </Panel>
   );
-});
+};
 
 export default ToolOptionsPanel;

@@ -4,11 +4,11 @@ import DialogBody from '@/ui/components/dialog/DialogBody';
 import DialogFooter from '@/ui/components/dialog/DialogFooter';
 import { Button } from '@chakra-ui/react';
 import DropZone from './DropZone';
-import { observer } from 'mobx-react-lite';
-import useAppContext from '@/ui/hooks/useAppContext';
+import { useAppSelector } from '@/hooks';
 
-const ImportDialog = observer(({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children'>) => {
-  const { editorApi } = useAppContext();
+const ImportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children'>) => {
+  const editor = useAppSelector((state) => state.tool.editor);
+
   const [fileName, setFileName] = useState<string>();
   const [fileContent, setFileContent] = useState<string>();
 
@@ -18,10 +18,10 @@ const ImportDialog = observer(({ isOpen, onClose }: Omit<DialogProps, 'title' | 
   };
 
   const handleImport = () => {
-    if (fileContent) {
-      editorApi.importDocument(fileContent);
-      onClose();
+    if (fileContent && editor) {
+      editor.importDocument(fileContent);
     }
+    onClose();
   };
 
   return (
@@ -39,6 +39,6 @@ const ImportDialog = observer(({ isOpen, onClose }: Omit<DialogProps, 'title' | 
       </DialogFooter>
     </Dialog>
   );
-});
+};
 
 export default ImportDialog;

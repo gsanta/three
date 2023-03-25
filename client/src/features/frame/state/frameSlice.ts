@@ -26,12 +26,6 @@ export const frameSlice = createSlice({
     initFrames: (state, action: PayloadAction<Editor>) => {
       state.editor = action.payload;
 
-      try {
-        console.log(state.editor?.getActiveFrame());
-      } catch (e) {
-        console.log(e);
-      }
-
       const framesList = state.editor?.getFrames();
       const framesJson = new Array<string>(framesList.size()).fill('').map((_, index) => framesList.get(index));
       const frames = framesJson.map<Frame>((frameJson) => JSON.parse(frameJson));
