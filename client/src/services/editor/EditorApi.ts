@@ -1,4 +1,4 @@
-import ToolName from '@/panels/toolbar/model/ToolName';
+import ToolName from '@/features/tool/state/ToolName';
 import { EmsVector } from '@/types/EmscriptenTypes';
 
 interface EditorApi {

@@ -1,12 +1,9 @@
 import { App } from './App';
-import KeyCode from '../services/keyboard/KeyCode';
-import ExternalTool from '../panels/toolbar/model/ExternalTool';
-import ToolName from '../panels/toolbar/model/ToolName';
-import ToolSelectionEvent from '../panels/toolbar/model/ToolSelectionEvents';
-import ColorPickerTool from '@/panels/toolbar/model/ColorPickerTool';
 import { store } from '@/store';
 import { initFrames } from '@/features/frame/state/frameSlice';
 import { initLayers } from '@/panels/layer/state/layerSlice';
+import { initTools } from '@/features/tool/state/toolSlice';
+import { initSettings } from '@/features/settings/state/settingsSlice';
 
 class DependencyInjector {
   private app: App;
@@ -16,35 +13,12 @@ class DependencyInjector {
   }
 
   init() {
-    const { editorStore, toolStore, editorApi, moduleManager, keyboardHandler } = this.app;
-
-    toolStore.addTool(
-      new ExternalTool(
-        ToolName.Brush,
-        'BiPencil',
-        editorApi,
-        new ToolSelectionEvent(toolStore, ToolName.Brush, KeyCode.b),
-      ),
-    );
-    toolStore.addTool(new ExternalTool(ToolName.Rectangle, 'BiRectangle', editorApi));
-    toolStore.addTool(new ExternalTool(ToolName.SelectionRectangle, 'BiBorderRadius', editorApi));
-    toolStore.addTool(new ExternalTool(ToolName.Erase, 'BiEraser', editorApi));
-    toolStore.addTool(new ExternalTool(ToolName.Pan, 'BiMove', editorApi));
-    toolStore.addTool(new ExternalTool(ToolName.PaintBucket, 'BiColorFill', editorApi));
-    toolStore.addTool(new ColorPickerTool(ToolName.ColorPicker, 'BiHighlight', editorApi, editorStore));
-    toolStore.setSelectedTool(ToolName.Brush);
+    const { editorApi } = this.app;
 
     store.dispatch(initFrames(editorApi));
     store.dispatch(initLayers(editorApi));
-
-    moduleManager.start();
-
-    toolStore.tools.forEach((tool) => {
-      const shortCut = tool.getShortCut();
-      if (shortCut) {
-        keyboardHandler.addKeyEvent(shortCut);
-      }
-    });
+    store.dispatch(initTools(editorApi));
+    store.dispatch(initSettings(editorApi));
   }
 }
 

@@ -3,11 +3,8 @@ import { createRoot, Root } from 'react-dom/client';
 import { editor } from './services/editor/Editor';
 import EditorEvents from './services/editor/EditorEvents';
 import KeyboardHandler from './services/keyboard/KeyboardHandler';
-import ToolStore from './panels/toolbar/ToolStore';
 import AppContainer from './ui/components/AppContainer';
-import EditorStore from './services/settings/EditorStore';
 import App from './app/App';
-import ModuleManager from './app/ModuleManager';
 import ToolEventListener from './panels/toolbar/ToolEventListener';
 
 // embinds uses this global state
@@ -15,14 +12,11 @@ window.EditorEvents = new EditorEvents();
 
 const app: App = {
   editorApi: editor,
-  toolStore: new ToolStore(),
-  editorStore: new EditorStore(editor),
   editorEvents: window.EditorEvents,
-  moduleManager: new ModuleManager(),
   keyboardHandler: new KeyboardHandler(),
 };
 
-const toolEventListener = new ToolEventListener(app.toolStore, app.editorApi);
+const toolEventListener = new ToolEventListener(app.editorApi);
 toolEventListener.listen(app.editorEvents);
 
 let root: Root;

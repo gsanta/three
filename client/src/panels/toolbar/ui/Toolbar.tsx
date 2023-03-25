@@ -1,17 +1,19 @@
-import ToolName from '@/panels/toolbar/model/ToolName';
-import { observer } from 'mobx-react-lite';
+import ToolName from '@/features/tool/state/ToolName';
 import React from 'react';
-import useAppContext from '@/ui/hooks/useAppContext';
 import { Tooltip } from '@chakra-ui/react';
 import Box from '@/ui/components/box/Box';
 import ToggleButton from '@/ui/components/button/ToggleButton';
 import Icon from '@/ui/components/icon/Icon';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { setSelectedTool } from '@/features/tool/state/toolSlice';
 
-const Toolbar = observer(() => {
-  const { toolStore } = useAppContext();
+const Toolbar = () => {
+  const tools = useAppSelector((state) => state.tool.tools);
+  const selectedTool = useAppSelector((state) => state.tool.selectedTool);
+  const dispatch = useAppDispatch();
 
   const handleSelectTool = (name: string) => {
-    toolStore.setSelectedTool(name as ToolName);
+    dispatch(setSelectedTool(name as ToolName));
   };
 
   return (
@@ -24,8 +26,8 @@ const Toolbar = observer(() => {
       gap="1"
       alignItems="center"
     >
-      {toolStore?.tools.map(({ iconName, name }) => {
-        const toggle = name === toolStore.getSelectedTool()?.name;
+      {tools.map(({ iconName, name }) => {
+        const toggle = name === selectedTool;
         return (
           <Tooltip key={name} label={name} placement="right">
             <ToggleButton
@@ -41,6 +43,6 @@ const Toolbar = observer(() => {
       })}
     </Box>
   );
-});
+};
 
 export default Toolbar;

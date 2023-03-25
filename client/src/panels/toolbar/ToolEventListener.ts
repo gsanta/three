@@ -1,15 +1,13 @@
+import { receiveColor } from '@/features/settings/state/settingsSlice';
 import EditorApi from '@/services/editor/EditorApi';
 import EditorEvents from '@/services/editor/EditorEvents';
-import ToolName from './model/ToolName';
-import ToolStore from './ToolStore';
+import { store } from '@/store';
+import ToolName from '../../features/tool/state/ToolName';
 
 class ToolEventListener {
-  private toolStore: ToolStore;
-
   private editorApi: EditorApi;
 
-  constructor(toolStore: ToolStore, editorApi: EditorApi) {
-    this.toolStore = toolStore;
+  constructor(editorApi: EditorApi) {
     this.editorApi = editorApi;
 
     this.onToolDataChanged = this.onToolDataChanged.bind(this);
@@ -19,7 +17,8 @@ class ToolEventListener {
 
   onToolDataChanged({ tool }: { tool: ToolName }): void {
     const data = this.editorApi.getToolData(tool);
-    this.toolStore.getTool(tool)?.setData(JSON.parse(data));
+
+    store.dispatch(receiveColor(JSON.parse(data)));
   }
 
   listen(editorEvents: EditorEvents) {

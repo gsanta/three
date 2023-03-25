@@ -1,12 +1,12 @@
+import { useAppSelector } from '@/hooks';
 import Box from '@/ui/components/box/Box';
-import useAppContext from '@/ui/hooks/useAppContext';
 import { useResizeObserver } from '@/ui/hooks/useResizeObserver';
 import { forwardRef } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDebounce } from 'usehooks-ts';
 
 const Canvas = forwardRef((_props, ref) => {
-  const { editorApi } = useAppContext();
+  const editor = useAppSelector((state) => state.tool.editor);
   const [width, setWidth] = useState(100);
   const [height, setHeight] = useState(100);
   const debouncedWidth = useDebounce(width, 200);
@@ -22,10 +22,11 @@ const Canvas = forwardRef((_props, ref) => {
   }, []);
 
   useEffect(() => {
-    if (editorApi.isRuntimeInitialized) {
-      editorApi.setWindowSize(debouncedWidth, debouncedHeight);
+    if (editor?.isRuntimeInitialized) {
+      // TODO: create action instead of direct call
+      editor.setWindowSize(debouncedWidth, debouncedHeight);
     }
-  }, [editorApi, debouncedWidth, debouncedHeight]);
+  }, [editor, debouncedWidth, debouncedHeight]);
 
   useResizeObserver(canvasParentRef.current, resize);
 
