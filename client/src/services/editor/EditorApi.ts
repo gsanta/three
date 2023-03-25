@@ -1,4 +1,5 @@
 import ToolName from '@/panels/toolbar/model/ToolName';
+import { EmsVector } from '@/types/EmscriptenTypes';
 
 interface EditorApi {
   setWindowSize(width: number, height: number): void;
@@ -14,13 +15,20 @@ interface EditorApi {
 
   setColor(color: number): void;
 
-  getLayers(): any;
+  getLayers(): EmsVector<string>;
   createLayer(name: string): number;
   enableLayer(index: number): void;
   setLayerIndex(oldIndex: number, newIndex: number): void;
   removeLayer(index: number): void;
   disableLayer(index: number): void;
   setActiveLayer(index: number): void;
+
+  //frame
+  getFrames(): EmsVector<string>;
+  addFrame(): void;
+  removeFrame(index: number): void;
+  setActiveFrame(index: number): void;
+  getActiveFrame(): string;
 
   setBrushSize(size: number): void;
 

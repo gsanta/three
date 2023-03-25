@@ -1,19 +1,9 @@
 class EditorRuntime {
   isRuntimeInitialized = false;
 
-  private _canvasNode: HTMLElement | undefined;
-
   onRuntimeInitialized() {
     this.isRuntimeInitialized = true;
     renderApp();
-  }
-
-  set canvasNode(canvas: HTMLElement | undefined) {
-    this._canvasNode = canvas;
-  }
-
-  get canvasNode(): HTMLElement | undefined {
-    return this._canvasNode;
   }
 
   setStatus() {}

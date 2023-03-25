@@ -8,10 +8,12 @@ type PanelProps = {
 };
 
 const Panel = ({ children, header }: PanelProps) => (
-  <section>
+  <Box as="section" display="flex" flexDir="column" height="100%">
     {header}
-    <Box paddingInline="2">{children}</Box>
-  </section>
+    <Box display="flex" flex="1" flexDir="column" paddingInline="2">
+      {children}
+    </Box>
+  </Box>
 );
 
 type PanelHeaderProps = {
@@ -25,7 +27,7 @@ Panel.Header = ({ children, title }: PanelHeaderProps) => (
       <Text color="gray.300" fontWeight="bold" paddingInlineStart="2" textTransform="uppercase">
         {title}
       </Text>
-      {children && children}
+      {children}
     </Box>
     <Divider marginBlockStart="2" />
   </Box>

@@ -8,8 +8,8 @@ namespace spright { namespace editor {
 	{
 	}
 
-	ToolHandler::ToolHandler(Window* window, DocumentStore* documentStore, Services* services, Camera* camera, ImageExport* imageExport)
-		: m_Window(window), m_DocumentStore(documentStore), m_Services(services), m_Camera(camera), m_ImageExport(imageExport)
+	ToolHandler::ToolHandler(Window* window, DocumentStore* documentStore, Services* services, Camera* camera, ImageExport* imageExport, DocumentFactory* documentFactory)
+		: m_Window(window), m_DocumentStore(documentStore), m_Services(services), m_Camera(camera), m_ImageExport(imageExport), m_DocumentFactory(documentFactory)
 	{
 		window->getInputHandler()->registerListener(this);
 		m_ActiveTools = new vector<Tool*>();
@@ -101,7 +101,9 @@ namespace spright { namespace editor {
 			setSelectedTool("select");
 		}
 		else if (key == GLFW_KEY_C) {
-			setSelectedTool("color_picker");
+			m_DocumentFactory->createFrame(m_DocumentStore->getActiveDocument());
+			m_DocumentStore->getActiveDocument()->getFrameStore().setActiveFrame(m_DocumentStore->getActiveDocument()->getFrameStore().getFrames().size() - 1);
+			//setSelectedTool("color_picker");
 		}
 		else if (key == GLFW_KEY_1) {
 			m_Services->getColorPalette()->color = COLOR_RED;
@@ -132,7 +134,21 @@ namespace spright { namespace editor {
 		else if (key == GLFW_KEY_X) {
 			m_ImageExport->exportImage(m_DocumentStore->getActiveDocument());
 		}
+		else if (key == GLFW_KEY_F) {
+			size_t activeIndex = m_DocumentStore->getActiveDocument()->getActiveFrame().getIndex();
+			size_t maxIndex = m_DocumentStore->getActiveDocument()->getFrameStore().getFrames().size();
 
+			if (activeIndex == maxIndex - 1) {
+				activeIndex = 0;
+			}
+			else {
+				activeIndex = activeIndex + 1;
+			}
+			m_DocumentStore->getActiveDocument()->getFrameStore().setActiveFrame(activeIndex);
+		}
+		else if (key == GLFW_KEY_R) {
+			m_DocumentStore->getActiveDocument()->getFrameStore().removeFrame(1);
+		}
 	}
 
 	void ToolHandler::addTool(Tool* tool)

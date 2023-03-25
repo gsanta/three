@@ -12,6 +12,8 @@ import LayerPanel from '../../panels/layer/ui/components/LayerPanel';
 import Toolbar from '@/panels/toolbar/ui/Toolbar';
 import SettingsPanel from '@/panels/settings/SettingsPanel';
 import ToolOptionsPanel from '@/panels/tool_options/ui/ToolOptionsPanel';
+import { Provider } from 'react-redux';
+import { store } from '@/store';
 
 type AppContainerProps = {
   app: App;
@@ -47,37 +49,39 @@ const AppContainer = ({ app }: AppContainerProps) => {
 
   return (
     <ChakraProvider theme={theme} cssVarsRoot="body">
-      <AppContext.Provider value={app}>
-        <Layout
-          header={
-            <Box
-              borderBottom="1px solid"
-              borderColor="gray.600"
-              display="flex"
-              justifyContent="space-between"
-              height="40px"
-              paddingInline="1"
-              paddingBlock="1"
-            >
-              <SettingsPanel />
-            </Box>
-          }
-          footer={<Box bgColor="orange.400" height="40px"></Box>}
-        >
-          <Box width="50px">
-            <Toolbar />
-          </Box>
-          <Split className="split" direction="horizontal" sizes={[75, 25]}>
-            <Canvas ref={canvasRef} />
-            <Split className="split-vertical" direction="vertical" sizes={[50, 50]}>
-              <Box overflowY="auto">
-                <LayerPanel />
+      <Provider store={store}>
+        <AppContext.Provider value={app}>
+          <Layout
+            header={
+              <Box
+                borderBottom="1px solid"
+                borderColor="gray.600"
+                display="flex"
+                justifyContent="space-between"
+                height="40px"
+                paddingInline="1"
+                paddingBlock="1"
+              >
+                <SettingsPanel />
               </Box>
-              <ToolOptionsPanel />
+            }
+            footer={<Box bgColor="orange.400" height="40px"></Box>}
+          >
+            <Box width="50px">
+              <Toolbar />
+            </Box>
+            <Split className="split" direction="horizontal" sizes={[75, 25]}>
+              <Canvas ref={canvasRef} />
+              <Split className="split-vertical" direction="vertical" sizes={[50, 50]}>
+                <Box overflowY="auto">
+                  <LayerPanel />
+                </Box>
+                <ToolOptionsPanel />
+              </Split>
             </Split>
-          </Split>
-        </Layout>
-      </AppContext.Provider>
+          </Layout>
+        </AppContext.Provider>
+      </Provider>
     </ChakraProvider>
   );
 };

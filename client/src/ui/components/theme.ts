@@ -6,9 +6,7 @@ import Tooltip from './tooltip/Tooltip.theme';
 import Dialog from './dialog/Dialog.theme';
 import IconButton from './themes/IconButton.theme';
 import MenuTheme from './themes/Menu.theme';
-import FormControl from './themes/FormControl.theme';
-import { inputTheme } from './themes/Input.theme';
-import { formLabelTheme } from './themes/FormLabel.theme';
+import FrameButtonTheme from './button/FrameButton.theme';
 
 const theme = extendTheme({
   config: {
@@ -47,6 +45,7 @@ const theme = extendTheme({
     Tooltip,
     Menu: MenuTheme,
     Modal: Dialog,
+    FrameButton: FrameButtonTheme,
     // Input: inputTheme,
     // Form: FormControl,
     // FormLabel: formLabelTheme,

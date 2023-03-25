@@ -4,7 +4,6 @@ import { createContext } from 'react';
 import ModuleManager from './ModuleManager';
 import KeyboardHandler from '@/services/keyboard/KeyboardHandler';
 import Editor from '@/services/editor/Editor';
-import LayerHandler from '@/panels/layer/model/LayerHandler';
 import EditorStore from '@/services/settings/EditorStore';
 
 export type App = {
@@ -14,7 +13,6 @@ export type App = {
   editorEvents: EditorEvents;
   moduleManager: ModuleManager;
   keyboardHandler: KeyboardHandler;
-  layerHandler: LayerHandler;
 };
 
 export const AppContext = createContext<App | undefined>(undefined);

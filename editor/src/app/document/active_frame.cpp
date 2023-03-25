@@ -115,7 +115,7 @@ namespace spright { namespace editor {
 		return m_Frames[m_ActiveFrameIndex];
 	}
 
-	nlohmann::json ActiveFrame::getLayerDescription() const {
-		return getActiveFrame().getLayerDescription();
+	nlohmann::json ActiveFrame::getJson() const {
+		return getActiveFrame().getJson();
 	}
 }}

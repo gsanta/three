@@ -1,12 +1,12 @@
-import LayerAdapter from '@/panels/layer/model/LayerAdapter';
 import { useDrag } from 'react-dnd';
-import layerDragType from '../../model/layerDragType';
+import layerDragType from '../layerDragType';
+import Layer from '../../state/Layer';
 
-const useDragLayer = (layerAdapter: LayerAdapter) => {
+const useDragLayer = (layer: Layer) => {
   const [{ opacity }, ref] = useDrag(
     () => ({
       type: layerDragType,
-      item: { layerAdapter },
+      item: { layer },
       collect: (monitor) => ({
         opacity: monitor.isDragging() ? 0.5 : 1,
       }),

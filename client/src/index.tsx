@@ -5,7 +5,6 @@ import EditorEvents from './services/editor/EditorEvents';
 import KeyboardHandler from './services/keyboard/KeyboardHandler';
 import ToolStore from './panels/toolbar/ToolStore';
 import AppContainer from './ui/components/AppContainer';
-import LayerHandler from './panels/layer/model/LayerHandler';
 import EditorStore from './services/settings/EditorStore';
 import App from './app/App';
 import ModuleManager from './app/ModuleManager';
@@ -21,7 +20,6 @@ const app: App = {
   editorEvents: window.EditorEvents,
   moduleManager: new ModuleManager(),
   keyboardHandler: new KeyboardHandler(),
-  layerHandler: new LayerHandler(editor),
 };
 
 const toolEventListener = new ToolEventListener(app.toolStore, app.editorApi);

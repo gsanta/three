@@ -3,20 +3,20 @@ import DialogFooter from '@/ui/components/dialog/DialogFooter';
 import DialogBody from '@/ui/components/dialog/DialogBody';
 import React, { useState } from 'react';
 import { Button, Input } from '@chakra-ui/react';
-import { observer } from 'mobx-react-lite';
-import useAppContext from '@/ui/hooks/useAppContext';
+import { useAppDispatch } from '@/hooks';
+import { createLayer } from '../../state/layerSlice';
 
 type LayerDialogProps = {
   isOpen: boolean;
   onClose(): void;
 };
 
-const AddLayerDialog = observer(({ isOpen, onClose }: LayerDialogProps) => {
+const AddLayerDialog = ({ isOpen, onClose }: LayerDialogProps) => {
   const [layerName, setLayerName] = useState('');
-  const { layerHandler } = useAppContext();
+  const dispatch = useAppDispatch();
 
   const handleAddLayer = () => {
-    layerHandler.createLayer(layerName);
+    dispatch(createLayer(layerName));
     setLayerName('');
     onClose();
   };
@@ -42,6 +42,6 @@ const AddLayerDialog = observer(({ isOpen, onClose }: LayerDialogProps) => {
       </DialogFooter>
     </Dialog>
   );
-});
+};
 
 export default AddLayerDialog;

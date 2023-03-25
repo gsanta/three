@@ -18,5 +18,9 @@ void removeLayer(size_t layerIndex);
 std::string exportDocument();
 std::string getToolData(std::string tool);
 std::vector<std::string> getFrames();
+void addFrame();
+void removeFrame(size_t index);
+void setActiveFrame(size_t index);
+std::string getActiveFrame();
 
 #endif

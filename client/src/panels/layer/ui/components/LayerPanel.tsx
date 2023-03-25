@@ -1,8 +1,6 @@
 import Panel from '@/ui/components/panel/Panel';
-import useAppContext from '@/ui/hooks/useAppContext';
 import { List, Tooltip, Button } from '@chakra-ui/react';
 import { useBoolean } from 'usehooks-ts';
-import { observer } from 'mobx-react-lite';
 import React from 'react';
 import LayerItem from './LayerItem';
 import AddLayerDialog from './AddLayerDialog';
@@ -10,15 +8,21 @@ import LayerDropTarget from './LayerDropTarget';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import Icon from '@/ui/components/icon/Icon';
+import Frames from '../../../../features/frame/components/Frames';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { setActiveLayer } from '../../state/layerSlice';
 
-const LayerPanel = observer(() => {
+const LayerPanel = () => {
   const { value: isAddPanelOpen, setTrue: setOpenAddPanel, setFalse: setCloseAddPanel } = useBoolean(false);
-  const { layerHandler } = useAppContext();
+  const dispatch = useAppDispatch();
+
+  const layers = useAppSelector((state) => state.layer.layers);
+  const activeLayer = useAppSelector((state) => state.layer.activeLayer);
 
   return (
     <Panel
       header={
-        <Panel.Header title="layers">
+        <Panel.Header title="layers & frames">
           <Tooltip label="new layer">
             <Button className="iconOnly" onClick={setOpenAddPanel} size="sm">
               <Icon name="BiPlus" />
@@ -28,23 +32,24 @@ const LayerPanel = observer(() => {
       }
     >
       <DndProvider backend={HTML5Backend}>
-        <List display="flex" flexDir="column" justifyContent="space-between">
+        <List flex="1">
           <LayerDropTarget layerIndex={0} />
-          {layerHandler.getLayers().map((layerAdapter, index) => (
-            <React.Fragment key={layerAdapter.getName()}>
+          {layers.map((layer, index) => (
+            <React.Fragment key={layer.name}>
               <LayerItem
-                isActive={layerAdapter === layerHandler.getActiveLayer()}
-                layerAdapter={layerAdapter}
-                setActiveLayer={() => layerHandler.setActiveLayer(layerAdapter)}
+                isActive={layer === activeLayer}
+                layer={layer}
+                setActiveLayer={() => dispatch(setActiveLayer(layer))}
               />
               <LayerDropTarget key={index + 1} layerIndex={index + 1} />
             </React.Fragment>
           ))}
         </List>
       </DndProvider>
+      <Frames />
       <AddLayerDialog isOpen={isAddPanelOpen} onClose={setCloseAddPanel} />
     </Panel>
   );
-});
+};
 
 export default LayerPanel;

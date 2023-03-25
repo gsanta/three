@@ -11,7 +11,6 @@ const useInitApp = (appContext: App, canvasNode?: HTMLCanvasElement) => {
   useEffect(() => {
     appContext.editorApi.canvas = canvasNode;
     if (window?.Module?.isRuntimeInitialized && !isModuleInitialized) {
-      appContext.editorApi.canvasNode = canvasNode?.parentElement as HTMLDivElement;
       setIsModuleInitialized(true);
       dependencyInjector.current.init();
     }

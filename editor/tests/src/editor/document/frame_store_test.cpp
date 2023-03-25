@@ -74,7 +74,11 @@ TEST_CASE("FrameStore", "[frame_handler]") {
 		frameStore.removeFrame(1);
 
 		REQUIRE(frameStore.getFrame(1) == frame3);
+
 		// no better way to check that the active frame is frame3
 		REQUIRE(frameStore.getActiveFrame().getLayer(0).getName() == frame3.getLayer(0).getName());
+
+		frameStore.removeFrame(1);
+		REQUIRE(frameStore.getActiveFrame().getLayer(0).getName() == frame.getLayer(0).getName());
 	}
 }
