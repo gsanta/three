@@ -2,7 +2,7 @@
 
 namespace spright { namespace editor {
 
-	DocumentFactory::DocumentFactory(Window* window) : m_Window(window)
+	DocumentFactory::DocumentFactory(Window* window, EventEmitter* eventEmitter) : m_Window(window), m_EventEmitter(eventEmitter)
 	{
 	}
 
@@ -50,7 +50,7 @@ namespace spright { namespace editor {
 		float pixelCount = 32.0f;
 		Bounds documentBounds = Bounds::createWithPositions(-pixelCount / 2.0f, pixelCount / 2.0f, -pixelCount / 2.0f, pixelCount / 2.0f);
 		Camera *camera = new Camera(m_Window->getWidth(), m_Window->getHeight(), documentBounds, -1.0f, 1.0f);
-		Document *document = new Document(documentBounds, camera);
+		Document *document = new Document(documentBounds, camera, m_EventEmitter);
 
 		TileLayer tempLayer("", Group<Rect2D>(new GLRenderer2D(shaderUnlit)), document->getDimensions());
 		TileLayer backgroundLayer("", Group<Rect2D>(new GLRenderer2D(shaderUnlit)), document->getDimensions(), 2.0f);

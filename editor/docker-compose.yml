@@ -9,7 +9,7 @@ services:
       - .:/src
     working_dir: /src
     command: >
-        bash -c "cmake . && cmake --build . && cd tests && ./unit_tests --reporter JUnit::out=unit_test_result.xml"
+        bash -c "cmake . -DCOMPILE_APP=OFF && cmake --build . && cd tests && ./unit_tests --reporter JUnit::out=unit_test_result.xml"
   compile-emscripten:
     build:
       context: .

@@ -1,12 +1,12 @@
 #include "editor.h"
 
 namespace spright { namespace editor {
-	Editor::Editor()
+	Editor::Editor(RunLoop runLoop): m_RunLoop(runLoop)
 	{
-		m_Window = new GLWindow("Editor", 800, 800);
-		m_DocumentFactory = new DocumentFactory(m_Window);
-
 		m_EventEmitter = std::make_unique<EmscriptenEventEmitter>();
+
+		m_Window = new GLWindow("Editor", 800, 800);
+		m_DocumentFactory = new DocumentFactory(m_Window, m_EventEmitter.get());
 
 		m_DocumentStore = std::make_unique<DocumentStore>();
 		
@@ -35,6 +35,8 @@ namespace spright { namespace editor {
 		m_toolHandler->addActiveTool("zoom");
 		m_toolHandler->addActiveTool("pan");
 		m_toolHandler->setSelectedTool("brush");
+
+		m_RunLoop.add(getActiveDocument()->getFramePlayer());
 	}
 
 	Editor::~Editor()
@@ -90,5 +92,9 @@ namespace spright { namespace editor {
 
 	JsonIO* Editor::getJsonIO() {
 		return m_JsonExport.get();
+	}
+
+	RunLoop& Editor::getRunLoop() {
+		return m_RunLoop;
 	}
 }}

@@ -24,6 +24,15 @@
 #include "../src/app/editor.h"
 #include "../src/app/editor_api.h"
 #include "../src/app/tool/brush_tool.h"
+#include "../src/app/core/run_loop/run_loop.h"
+#include "../src/app/core/run_loop/timer.h"
+#ifdef SPARKY_EMSCRIPTEN
+#include "../src/app/core/run_loop/ems_timer.h"
+#else
+#include "../src/app/core/run_loop/win_timer.h"
+#endif
+#include "../src/app/feature/frame/frame_player.h"
+
 // #define SPARKY_EMSCRIPTEN 0
 
 using namespace ::spright::engine;
@@ -189,7 +198,15 @@ int main()
 
 	spright::maths::Vec3 res = linePlaneIntersection(la, lb, p1, p2, p3);
 
-	editor = new spright::Editor();
+	Timer* timer = nullptr;
+
+#ifdef SPARKY_EMSCRIPTEN
+	timer = new EmsTimer();
+#else
+	timer = new WinTimer();
+#endif
+
+	editor = new spright::Editor(RunLoop(timer));
 	window = editor->getWindow();
 
 	// Group* group = new Group(Mat4::translation(maths::Vec3(-5.0f, 5.0f, 0.0f)));
@@ -204,9 +221,7 @@ int main()
 	// shader->setUniform1iv("textures", textIDs, 10);
 	// shader->setUniform1i("tex", 0);
 
-	// Timer time;
-	float timer = 0;
-	unsigned int frames = 0;
+	editor->getRunLoop().start();
 
 #ifdef SPARKY_EMSCRIPTEN
 	std::function<void()> mainLoop = [&]()
@@ -223,7 +238,8 @@ int main()
 		// shader->disable();
 		// layer.render();
 		editor->getRendering()->render();
-		frames++;
+
+		editor->getRunLoop().update();
 		// if (time.elapsed() - timer > 1.0f) {
 		//	timer += 1.0f;
 		//	printf("%d fps\n", frames);

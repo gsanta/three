@@ -32,6 +32,8 @@ jobs:
             set -x
             cd editor
             docker-compose run --rm unit-test; echo $?
+          environment: 
+            UNIT_TEST: 'true'
       - store_test_results:
           path: editor/tests/unit_test_result.xml
   build_client:

@@ -22,6 +22,8 @@
 #include "api/emscripten_event_emitter.h"
 #include "document/active_frame.h"
 #include "document/frame_store.h"
+#include "core/run_loop/run_loop.h"
+#include "feature/frame/frame_player.h"
 
 namespace spright { namespace editor {
 	using namespace ::spright::engine;
@@ -39,9 +41,10 @@ namespace spright { namespace editor {
 		ImageExport* m_ImageExport;
 		std::unique_ptr<JsonIO> m_JsonExport;
 		std::unique_ptr<EventEmitter> m_EventEmitter;
-
+		RunLoop m_RunLoop;
+		
 	public:
-		Editor();
+		Editor(RunLoop runLoop);
 		~Editor();
 
 		Window* getWindow() const;
@@ -54,6 +57,7 @@ namespace spright { namespace editor {
 		Rendering* getRendering();
 		ImageExport* getImageExport();
 		JsonIO* getJsonIO();
+		RunLoop& getRunLoop();
 	};
 
 }}

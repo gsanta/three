@@ -5,6 +5,15 @@ namespace spright { namespace editor {
 
 	}
 
+	void FrameStore::activateNextFrame() {
+		if (m_ActiveFrame.getIndex() == m_Frames.size() - 1) {
+			setActiveFrame(0);
+		}
+		else {
+			setActiveFrame(m_ActiveFrame.getIndex() + 1);
+		}
+	}
+
 	void FrameStore::addFrame(const Frame& frame)
 	{
 		int index = m_Frames.size();

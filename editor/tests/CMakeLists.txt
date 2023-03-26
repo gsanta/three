@@ -1,5 +1,6 @@
 set(TEST_MAIN "unit_tests")
 file(GLOB_RECURSE SOURCES "*.cpp")
+list(FILTER SOURCES EXCLUDE REGEX ".*win_timer\\.cpp$")
 set(TEST_SOURCES ${SOURCES})
 set(TEST_INCLUDES "./")
 

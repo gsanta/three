@@ -29,6 +29,8 @@ interface EditorApi {
   removeFrame(index: number): void;
   setActiveFrame(index: number): void;
   getActiveFrame(): string;
+  activateFramePlayer(): void;
+  deActivateFramePlayer(): void;
 
   setBrushSize(size: number): void;
 

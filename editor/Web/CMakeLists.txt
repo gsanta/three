@@ -20,6 +20,7 @@ endif()
 
 file(GLOB_RECURSE SOURCES "../src/*.cpp")
 file(GLOB_RECURSE APP_SOURCES "../app/*.cpp")
+list(FILTER SOURCES EXCLUDE REGEX ".*win_timer\\.cpp$")
 
 add_executable(spright ${SOURCES} ${APP_SOURCES})
 

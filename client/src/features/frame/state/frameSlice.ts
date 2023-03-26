@@ -4,23 +4,40 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import Frame from './Frame';
 
 interface FrameState {
-  frames: Frame[];
   activeIndex: number;
   editor?: EditorApi;
+  frames: Frame[];
+  isPlaying: boolean;
 }
 
 const initialState: FrameState = {
   frames: [],
   activeIndex: 0,
+  isPlaying: false,
 };
 
 export const frameSlice = createSlice({
   name: 'frame',
   initialState,
   reducers: {
+    activeFrameChanged: (state) => {
+      const activeFrameJson = state.editor?.getActiveFrame() || '';
+      state.activeIndex = JSON.parse(activeFrameJson).index;
+    },
+
+    activateFramePlayer: (state) => {
+      state.editor?.activateFramePlayer();
+      state.isPlaying = true;
+    },
+
     addFrame: (state) => {
       state.editor?.addFrame();
       state.frames.push({ index: state.frames.length });
+    },
+
+    deActivateFramePlayer: (state) => {
+      state.editor?.deActivateFramePlayer();
+      state.isPlaying = false;
     },
 
     initFrames: (state, action: PayloadAction<Editor>) => {
@@ -48,6 +65,14 @@ export const frameSlice = createSlice({
   },
 });
 
-export const { addFrame, initFrames, removeFrame, setActiveFrame } = frameSlice.actions;
+export const {
+  activeFrameChanged,
+  activateFramePlayer,
+  addFrame,
+  deActivateFramePlayer,
+  initFrames,
+  removeFrame,
+  setActiveFrame,
+} = frameSlice.actions;
 
 export default frameSlice.reducer;

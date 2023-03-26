@@ -18,6 +18,11 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(Catch2)
 
+OPTION(COMPILE_APP "Whether to compile the editor" ON)
+
 add_subdirectory(src)
+if (COMPILE_APP)
 add_subdirectory(app)
+endif()
+
 add_subdirectory(tests)

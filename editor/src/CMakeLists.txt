@@ -41,6 +41,10 @@ endif()
 
 file(GLOB_RECURSE SOURCES "*.cpp" "*.h")
 
+if (NOT WIN32)
+list(FILTER SOURCES EXCLUDE REGEX ".*win_timer\\.cpp$")
+ENDIF()
+
 add_library(editor STATIC ${SOURCES})
 
 target_link_libraries(editor glfw libglew_static nlohmann_json::nlohmann_json)
