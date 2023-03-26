@@ -55,6 +55,14 @@ std::string getActiveFrame() {
 	return editor->getActiveFrame().getJson().dump();
 }
 
+void activateFramePlayer() {
+	editor->getActiveDocument()->getFramePlayer().setIsActive(true);
+}
+
+void deActivateFramePlayer() {
+	editor->getActiveDocument()->getFramePlayer().setIsActive(false);
+}
+
 EMSCRIPTEN_BINDINGS(spright) {
 	emscripten::function("getFrames", &getFrames);
 	emscripten::function("addFrame", &addFrame);
@@ -66,6 +74,8 @@ EMSCRIPTEN_BINDINGS(spright) {
 	emscripten::function("exportDocument", &exportDocument);
 	emscripten::function("importDocument", &importDocument);
 	emscripten::function("getToolData", &getToolData);
+	emscripten::function("activateFramePlayer", &activateFramePlayer);
+	emscripten::function("deActivateFramePlayer", &deActivateFramePlayer);
 }
 
 #endif

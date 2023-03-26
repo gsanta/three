@@ -13,6 +13,7 @@
 #include "./document.h"
 #include "./frame.h"
 #include "./frame_impl.h"
+#include "../event/event_emitter.h"
 
 namespace spright { namespace editor {
 	using namespace std;
@@ -22,8 +23,9 @@ namespace spright { namespace editor {
 	private:
 		Window* m_Window;
 		vector<Document*> m_documents;
+		EventEmitter* m_EventEmitter;
 	public:
-		DocumentFactory(Window* window);
+		DocumentFactory(Window* window, EventEmitter* eventEmitter);
 		~DocumentFactory();
 		Document* createDocument();
 		void createFrame(Document* document);

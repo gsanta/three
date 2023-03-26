@@ -17,6 +17,7 @@ namespace spright { namespace editor {
 	public:
 		FrameStore();
 
+		void activateNextFrame();
 		void addFrame(const Frame& frame);
 		void removeFrame(size_t index);
 		void setActiveFrame(size_t index);

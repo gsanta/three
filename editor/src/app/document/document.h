@@ -10,6 +10,8 @@
 #include "../../engine/graphics/renderable/bounds.h"
 #include "../../engine/layout/container.h"
 #include "frame_store.h"
+#include "../event/event_emitter.h"
+#include "../feature/frame/frame_player.h"
 
 namespace spright { namespace editor {
 
@@ -20,9 +22,11 @@ namespace spright { namespace editor {
 	private:
 		FrameStore m_FrameStore;
 		Camera* m_Camera;
+		std::unique_ptr<FramePlayer> m_FramePlayer;
+		EventEmitter* m_EventEmitter;
 
 	public:
-		Document(Bounds bounds, Camera* camera);
+		Document(Bounds bounds, Camera* camera, EventEmitter* eventEmitter);
 		~Document();
 
 		FrameStore& getFrameStore();
@@ -36,6 +40,7 @@ namespace spright { namespace editor {
 		std::string getJson();
 
 		void render();
+		FramePlayer& getFramePlayer();
 	};
 }}
 

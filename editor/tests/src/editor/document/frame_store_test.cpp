@@ -43,6 +43,30 @@ TEST_CASE("FrameStore", "[frame_handler]") {
 		REQUIRE(frameStore.getActiveFrame().getIndex() == frame2.getIndex());
 	}
 
+	SECTION("can activate the next frame") {
+		std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(2);
+
+		FrameImpl frame1(0);
+		frame1.addLayer(layers[0]);
+		FrameImpl frame2(1);
+		frame2.addLayer(layers[1]);
+
+		FrameStore frameStore;
+
+		frameStore.addFrame(frame1);
+		frameStore.addFrame(frame2);
+
+		REQUIRE(frameStore.getActiveFrame().getIndex() == frame1.getIndex());
+
+		frameStore.activateNextFrame();
+
+		REQUIRE(frameStore.getActiveFrame().getIndex() == frame2.getIndex());
+
+		frameStore.activateNextFrame();
+
+		REQUIRE(frameStore.getActiveFrame().getIndex() == frame1.getIndex());
+	}
+
 	SECTION("throws when trying to remove the last frame") {
 		std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(1);
 

@@ -4,11 +4,12 @@ import Icon from '@/ui/components/icon/Icon';
 import React from 'react';
 import { Tooltip, Button } from '@chakra-ui/react';
 import { useAppSelector, useAppDispatch } from '@/hooks';
-import { addFrame, removeFrame, setActiveFrame } from '../state/frameSlice';
+import { activateFramePlayer, addFrame, deActivateFramePlayer, removeFrame, setActiveFrame } from '../state/frameSlice';
 
 const Frames = () => {
   const frames = useAppSelector((state) => state.frame.frames);
   const activeIndex = useAppSelector((state) => state.frame.activeIndex);
+  const isPlaying = useAppSelector((state) => state.frame.isPlaying);
   const dispatch = useAppDispatch();
 
   const handleFrameSelect = (index: number) => {
@@ -18,6 +19,16 @@ const Frames = () => {
   return (
     <Box>
       <Box display="flex" gap="2" justifyContent="end">
+        {isPlaying ? (
+          <Button className="iconOnly" onClick={() => dispatch(deActivateFramePlayer())} size="sm">
+            <Icon name="BiStop" />
+          </Button>
+        ) : (
+          <Button className="iconOnly" onClick={() => dispatch(activateFramePlayer())} size="sm">
+            <Icon name="BiPlay" />
+          </Button>
+        )}
+
         <Tooltip label="delete frame">
           <Button
             className="iconOnly"
