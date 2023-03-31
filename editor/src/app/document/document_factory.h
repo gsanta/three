@@ -11,6 +11,7 @@
 #include "../../engine/graphics/renderable/bounds.h"
 #include "../../engine/system/window/window.h"
 #include "./document.h"
+#include "./drawing.h"
 #include "./frame.h"
 #include "./frame_impl.h"
 #include "../event/event_emitter.h"
@@ -29,6 +30,6 @@ namespace spright { namespace editor {
 		~DocumentFactory();
 		Document* createDocument();
 		void createFrame(Document* document);
-		void createUserLayer(Document* document, std::string name);
+		void createUserLayer(Drawing* drawing, std::string name);
 	};
 }}

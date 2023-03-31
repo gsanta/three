@@ -33,21 +33,19 @@ namespace spright { namespace editor {
 
 		float zoom = camera->getZoom();
 
-		Vec3 la = Vec3(center2D.x * zoom + pointerInfo.curr.x, center2D.y * zoom + pointerInfo.curr.y, 0.5f);
-		Vec3 lb = Vec3(center2D.x * zoom + pointerInfo.curr.x, center2D.y * zoom + pointerInfo.curr.y, 0);
-		Vec3 p1 = Vec3(-1, 1, 0);
-		Vec3 p2 = Vec3(1, 1, 0);
-		Vec3 p3 = Vec3(0, -1, 0);
+		std::vector<Drawing*>& drawings = m_documentStore->getActiveDocument()->getDrawings();
 
-		Vec3 intersection = linePlaneIntersection(la, lb, p1, p2, p3);
+		for (Drawing* drawing : drawings) {
+			if (drawing->getBounds().contains(pointerInfo.curr.x, pointerInfo.curr.y)) {
+				TileLayer& tileLayer = drawing->getActiveLayer();
 
-		TileLayer& tileLayer = m_documentStore->getActiveDocument()->getActiveLayer();
+				for (int i = 0; i < m_Size; i++) {
+					for (int j = 0; j < m_Size; j++) {
+						Vec2Int tilePos = tileLayer.getTilePos(pointerInfo.curr);
 
-		for (int i = 0; i < m_Size; i++) {
-			for (int j = 0; j < m_Size; j++) {
-				Vec2Int tilePos = tileLayer.getTilePos(pointerInfo.curr);
-
-				brush.paint(tileLayer, tilePos, getColor());
+						brush.paint(tileLayer, tilePos, getColor());
+					}
+				}
 			}
 		}
 	}

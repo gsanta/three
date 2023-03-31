@@ -10,7 +10,7 @@ namespace spright { namespace engine {
 		float minY;
 		float maxY;
 
-		Bounds(float bottomLeftX, float bottomLeftY, float width, float height);
+		Bounds(float minX, float minY, float width, float height);
 		Bounds();
 
 		static Bounds createWithPositions(float minX, float maxX, float minY, float maxY);
@@ -23,5 +23,6 @@ namespace spright { namespace engine {
 		float getWidth() const;
 		float getHeight() const;
 		void setSize(float newWidth, float newHeight);
+		bool contains(float x, float y);
 	};
 }}

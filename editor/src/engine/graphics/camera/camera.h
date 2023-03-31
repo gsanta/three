@@ -26,7 +26,7 @@ namespace spright { namespace engine {
 		float m_InitialWidth;
 		float m_WindowWidth;
 		float m_WindowHeight;
-		Bounds m_DocumentDimensions;
+		Bounds m_DocumentBounds;
 	public:
 		Camera(float windowWidth, float windowHeight, Bounds canvasDimensions, float near, float far);
 
@@ -34,10 +34,10 @@ namespace spright { namespace engine {
 		void translateZ(float val);
 		void zoom(float newWidth);
 		float getZoom();
-		const Bounds& getDimensions() const;
+		const Bounds& getBounds() const;
 
 		Mat4 getProjectionMatrix();
-		Mat4& getView();
+		Mat4& getViewMatrix();
 		Vec2 getCenter2D();
 
 		Vec2 screenToModel(Vec2 screen);

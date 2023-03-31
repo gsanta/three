@@ -32,7 +32,7 @@ namespace spright { namespace editor {
 
 		Document* document = m_DocumentStore->getActiveDocument();
 
-		m_DocumentFactory->createUserLayer(document, json["name"]);
+		m_DocumentFactory->createUserLayer(document->getActiveDrawing(), json["name"]);
 		TileLayer& layer = m_DocumentStore->getActiveDocument()->getActiveFrame().getLayers().back();
 
 		int tileCount = json["tiles"].size();

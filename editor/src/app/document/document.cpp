@@ -2,23 +2,24 @@
 
 namespace spright { namespace editor {
 
-	Document::Document(Bounds bounds, Camera* camera, EventEmitter* eventEmitter) : Container(bounds), m_Camera(camera), m_EventEmitter(eventEmitter)
+	Document::Document(Bounds bounds) : Container(bounds), m_ActiveDrawing(0)
 	{
-		m_FramePlayer = std::make_unique<FramePlayer>(m_FrameStore, eventEmitter);
 	}
 
 	Document::~Document() {
 		std::vector<Group<Rect2D>*>::iterator it;
 
-		delete m_Camera;
+		for (Drawing* drawing : m_Drawings) {
+			delete drawing;
+		}
 	}
 
 	FrameStore& Document::getFrameStore() {
-		return m_FrameStore;
+		return m_Drawings[m_ActiveDrawing]->getFrameStore();
 	}
 
 	ActiveFrame& Document::getActiveFrame() {
-		return m_FrameStore.getActiveFrame();
+		return getFrameStore().getActiveFrame();
 	}
 
 
@@ -26,30 +27,33 @@ namespace spright { namespace editor {
 		return getFrameStore().getActiveFrame().getActiveLayer();
 	}
 
+	Drawing* Document::getActiveDrawing() {
+		return m_Drawings[m_ActiveDrawing];
+	}
+
+	void Document::addDrawing(Drawing* drawing) {
+		m_Drawings.push_back(drawing);
+	}
+
+	std::vector<Drawing*>& Document::getDrawings() {
+		return m_Drawings;
+	}
 
 	std::string Document::getJson()
 	{
-		nlohmann::json json = m_FrameStore.getActiveFrame().getActiveLayer().getJson();
+		nlohmann::json json = getActiveLayer().getJson();
 
 		return json.dump();
 	}
 
 	void Document::render()
 	{
-		for (TileLayer& layer : getActiveFrame().getBackgroundLayers()) {
-			layer.render(m_Camera);
-		}
-
-		for (TileLayer& layer : getActiveFrame().getLayers()) {
-			layer.render(m_Camera);
-		}
-
-		for (TileLayer& layer : getActiveFrame().getForegroundLayers()) {
-			layer.render(m_Camera);
+		for (Drawing* drawing : m_Drawings) {
+			drawing->render();
 		}
 	}
 
 	FramePlayer& Document::getFramePlayer() {
-		return *m_FramePlayer;
+		return m_Drawings[m_ActiveDrawing]->getFramePlayer();
 	}
 }}

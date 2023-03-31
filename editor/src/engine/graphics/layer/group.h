@@ -134,7 +134,7 @@ namespace spright { namespace engine {
 		m_Renderer->getShader().setUniformMat4("pr_matrix", camera->getProjectionMatrix());
 
 
-		m_Renderer->push(camera->getView());
+		m_Renderer->push(camera->getViewMatrix());
 		for (const Renderable2D* renderable : m_Renderables) {
 			renderable->submit(m_Renderer);
 		}

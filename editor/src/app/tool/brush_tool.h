@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include "tool.h"
 #include "colorable.h"
 #include "pointer_info.h"
@@ -6,6 +7,7 @@
 #include "../../engine/graphics/renderable/renderable2d.h"
 #include "../editor_config.h"
 #include "../document/document_store.h"
+#include "../document/drawing.h"
 #include "brush.h"
 
 namespace spright { namespace editor {
