@@ -75,10 +75,10 @@ namespace spright { namespace editor {
 	}
 
 	ActiveFrame& FrameStore::getActiveFrame() {
-		//if (!m_ActiveFrame.isValid()) {
+		if (!m_ActiveFrame.isValid()) {
 
-		//	throw std::runtime_error("No active frame set.");
-		//}
+			throw std::runtime_error("No active frame set.");
+		}
 
 		return m_ActiveFrame;
 	}

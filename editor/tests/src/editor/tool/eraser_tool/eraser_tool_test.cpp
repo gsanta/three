@@ -39,14 +39,14 @@ TEST_CASE("EraseTool pointerDown", "[erase-tool]") {
 
 		eraseTool.pointerDown(pointerInfo);
 
-		REQUIRE(eraseLayer.getAtTilePos(Vec2Int(0, 0)) != nullptr);
-		REQUIRE(eraseLayer.getAtTilePos(Vec2Int(1, 0)) != nullptr);
-		REQUIRE(eraseLayer.getAtTilePos(Vec2Int(2, 0)) != nullptr);
-		REQUIRE(eraseLayer.getAtTilePos(Vec2Int(0, 1)) != nullptr);
-		REQUIRE(eraseLayer.getAtTilePos(Vec2Int(1, 1)) == nullptr);
-		REQUIRE(eraseLayer.getAtTilePos(Vec2Int(2, 1)) != nullptr);
-		REQUIRE(eraseLayer.getAtTilePos(Vec2Int(0, 2)) != nullptr);
-		REQUIRE(eraseLayer.getAtTilePos(Vec2Int(1, 2)) != nullptr);
-		REQUIRE(eraseLayer.getAtTilePos(Vec2Int(2, 2)) != nullptr);
+		REQUIRE(eraseLayer.getAtTilePos(0, 0) != nullptr);
+		REQUIRE(eraseLayer.getAtTilePos(1, 0) != nullptr);
+		REQUIRE(eraseLayer.getAtTilePos(2, 0) != nullptr);
+		REQUIRE(eraseLayer.getAtTilePos(0, 1) != nullptr);
+		REQUIRE(eraseLayer.getAtTilePos(1, 1) == nullptr);
+		REQUIRE(eraseLayer.getAtTilePos(2, 1) != nullptr);
+		REQUIRE(eraseLayer.getAtTilePos(0, 2) != nullptr);
+		REQUIRE(eraseLayer.getAtTilePos(1, 2) != nullptr);
+		REQUIRE(eraseLayer.getAtTilePos(2, 2) != nullptr);
 	}
 }

@@ -1,12 +1,8 @@
 #include "bounds.h"
 
 namespace spright { namespace engine {
-    Bounds::Bounds(float bottomLeftX, float bottomLeftY, float width, float height)
+    Bounds::Bounds(float minX, float minY, float width, float height): minX(minX), minY(minY), maxX(minX + width), maxY(minY + height)
     {
-        minX = bottomLeftX;
-        minY = bottomLeftY;
-        maxX = minX + width;
-        maxY = minY + height;
     }
 
     Bounds::Bounds() : Bounds(0, 0, 0, 0) {}
@@ -42,6 +38,9 @@ namespace spright { namespace engine {
         minY -= deltaHeight;
     }
 
+    bool Bounds::contains(float x, float y) {
+        return minX <= x && maxX >= x && minY <= y && maxY >= y;
+    }
 
     bool operator==(const Bounds& lhs, const Bounds& rhs) {
         return lhs.minX == rhs.minX && lhs.maxX == rhs.maxX && lhs.minY == rhs.minY && lhs.maxY == rhs.maxY;

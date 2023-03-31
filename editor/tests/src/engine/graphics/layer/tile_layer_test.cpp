@@ -1,5 +1,4 @@
 #include <catch2/catch_test_macros.hpp>
-#include <catch2/catch_approx.hpp>
 #include "../src/engine/graphics/layer/group.h"
 #include "../src/engine/graphics/renderable/bounds.h"
 #include "../src/engine/graphics/camera/camera.h"

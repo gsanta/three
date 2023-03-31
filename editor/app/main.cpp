@@ -90,7 +90,7 @@ std::vector<std::string> getLayers()
 
 size_t createLayer(std::string name)
 {
-	editor->getDocumentFactory()->createUserLayer(editor->getDocumentStore()->getActiveDocument(), name);
+	editor->getDocumentFactory()->createUserLayer(editor->getDocumentStore()->getActiveDocument()->getActiveDrawing(), name);
 	return editor->getActiveFrame().getLayers().back().getIndex();
 }
 

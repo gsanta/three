@@ -9,6 +9,6 @@ namespace spright { namespace engine {
 
 	public:
 		Container(Bounds bounds);
-		Bounds& getDimensions();
+		Bounds& getBounds();
 	};
 }}

@@ -10,7 +10,6 @@ namespace spright { namespace engine {
 		return new HeadlessRenderer2D();
 	}
 
-
 	void HeadlessRenderer2D::end()
 	{
 

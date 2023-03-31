@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <math.h>
 #include "group.h"
 #include "../renderable/rect2d.h"
 #include "../../../maths/vec2_int.h"
@@ -67,7 +68,7 @@ namespace spright { namespace engine {
 
 		void updateTileIndex(int oldIndex, int newIndex);
 		Rect2D* getAtTileIndex(int tileIndex) const;
-		Rect2D* getAtTilePos(const Vec2Int& tilePos) const;
+		Rect2D* getAtTilePos(int x, int y) const;
 		int getTileIndex(int tileX, int tileY) const;
 		int getTileIndex(Vec2 worldPos) const;
 
@@ -77,6 +78,8 @@ namespace spright { namespace engine {
 		{
 			return m_TileSize;
 		}
+
+		const Bounds& getBounds() const;
 
 		nlohmann::json getJson() const;
 		void setJson(std::string json);

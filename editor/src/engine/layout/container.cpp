@@ -6,7 +6,7 @@ namespace spright { namespace engine {
 
 	}
 
-	Bounds& Container::getDimensions() {
+	Bounds& Container::getBounds() {
 		return m_Bounds;
 	}
 }}

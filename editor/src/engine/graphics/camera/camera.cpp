@@ -2,9 +2,9 @@
 
 namespace spright { namespace engine {
 	
-	Camera::Camera(float windowWidth, float windowHeight, Bounds documentDimensions, float near, float far) : m_WindowWidth(windowWidth), m_WindowHeight(windowHeight), m_Near(near), m_Far(far)
+	Camera::Camera(float windowWidth, float windowHeight, Bounds documentBounds, float near, float far) : m_WindowWidth(windowWidth), m_WindowHeight(windowHeight), m_Near(near), m_Far(far)
 	{
-		m_DocumentDimensions = documentDimensions;
+		m_DocumentBounds = documentBounds;
 		updateWindowSize(windowWidth, windowHeight);
 	}
 
@@ -40,7 +40,7 @@ namespace spright { namespace engine {
 		return m_Zoom;
 	}
 
-	const Bounds& Camera::getDimensions() const
+	const Bounds& Camera::getBounds() const
 	{
 		return m_CameraDim;
 	}
@@ -53,7 +53,7 @@ namespace spright { namespace engine {
 		return m_AspectRatio;
 	}
 
-	Mat4& Camera::getView() {
+	Mat4& Camera::getViewMatrix() {
 		return m_View;
 	}
 
@@ -110,14 +110,14 @@ namespace spright { namespace engine {
 		float width;
 		float height;
 
-		if (m_DocumentDimensions.getWidth() / ratio > m_DocumentDimensions.getHeight())
+		if (m_DocumentBounds.getWidth() / ratio > m_DocumentBounds.getHeight())
 		{
-			width = m_DocumentDimensions.getWidth();
+			width = m_DocumentBounds.getWidth();
 			height = width / ratio;
 		}
 		else
 		{
-			height = m_DocumentDimensions.getHeight();
+			height = m_DocumentBounds.getHeight();
 			width = height * ratio; // docDimensions.getRatio();
 		}
 
