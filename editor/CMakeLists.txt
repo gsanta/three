@@ -8,6 +8,10 @@ set(CMAKE_CXX_EXTENSIONS Off)
 
 set(CMAKE_VERBOSE_MAKEFILE on)
 
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(MACOSX TRUE)
+endif()
+
 include(FetchContent)
 
 FetchContent_Declare(

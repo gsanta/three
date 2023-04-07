@@ -41,8 +41,12 @@ endif()
 
 file(GLOB_RECURSE SOURCES "*.cpp" "*.h")
 
-if (NOT WIN32)
+IF (NOT WIN32)
 list(FILTER SOURCES EXCLUDE REGEX ".*win_timer\\.cpp$")
+ENDIF()
+
+IF (WIN32)
+list(FILTER SOURCES EXCLUDE REGEX ".*unix_timer\\.cpp$")
 ENDIF()
 
 add_library(editor STATIC ${SOURCES})
