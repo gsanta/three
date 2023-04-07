@@ -29,17 +29,26 @@ namespace spright { namespace engine {
 	}
 
 	bool GLWindow::init() {
-
 		if (!glfwInit()) {
 			std::cout << "Failed to initialize GLFW!" << std::endl;
 			return false;
 		}
+		// mac needs these hints
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		m_Window = glfwCreateWindow(m_Width, m_Height, m_Title, NULL, NULL);
 		if (!m_Window) {
 			glfwTerminate();
 			std::cout << "Failed to create GLWF window!" << std::endl;
 			return false;
 		}
+		// glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		// glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		// glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+		// glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 		glfwMakeContextCurrent(m_Window);
 		glfwSetWindowUserPointer(m_Window, this);
 		glfwSetFramebufferSizeCallback(m_Window, window_resize);
@@ -48,6 +57,7 @@ namespace spright { namespace engine {
 		glfwSetCursorPosCallback(m_Window, cursor_position_callback);
 		glfwSetScrollCallback(m_Window, scroll_callback);
 		glfwSwapInterval(0);
+		glewExperimental = GL_TRUE;
 
 		if (glewInit() != GLEW_OK) {
 			std::cout << "Could not initialize GLEW!" << std::endl;

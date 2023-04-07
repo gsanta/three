@@ -13,7 +13,7 @@ out DATA {
 	vec4 pos;
 	vec2 uv;
 	float tid;
-	vec4 color; 
+	vec4 color;
 } vs_out;
 
 void main() {
