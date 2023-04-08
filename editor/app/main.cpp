@@ -56,7 +56,7 @@ void setWindowSize(int width, int height)
 	if (window != nullptr)
 	{
 		window->setSize(width, height);
-		editor->getDocumentStore()->getActiveDocument()->getCamera()->updateWindowSize(width, height);
+		editor->getDocumentStore()->getActiveDocument().getCamera().updateWindowSize(width, height);
 	}
 }
 
@@ -92,7 +92,7 @@ std::vector<std::string> getLayers()
 
 size_t createLayer(std::string name)
 {
-	editor->getDocumentFactory()->createUserLayer(editor->getDocumentStore()->getActiveDocument()->getActiveDrawing(), name);
+	editor->getDocumentFactory()->createUserLayer(editor->getDocumentStore()->getActiveDocument().getActiveDrawing(), name);
 	return editor->getActiveFrame().getLayers().back().getIndex();
 }
 

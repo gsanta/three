@@ -7,7 +7,6 @@ namespace spright { namespace editor {
 
 	class EraserStroke {
 	private:
-		TileLayer* m_DrawLayer = nullptr;
 		int m_Size;
 		float m_StrokeWidth = 0.1f;
 
@@ -17,13 +16,13 @@ namespace spright { namespace editor {
 		Rect2D* m_LeftLine = nullptr;
 	public:
 		EraserStroke();
-		EraserStroke(TileLayer* drawLayer, int eraserSize);
-		void draw(const TileLayer& eraseLayer, const Vec2& pos);
+		EraserStroke(int eraserSize);
+		void draw(const TileLayer& eraseLayer, TileLayer& drawLayer, const Vec2& pos);
 		void clear();
 		float getStrokeWidth();
 
 	private:
-		void init(float tileSize);
+		void init(TileLayer& drawLayer, float tileSize);
 		void setPosition(const TileLayer& eraseLayer, const Vec2& pos);
 	};
 }}

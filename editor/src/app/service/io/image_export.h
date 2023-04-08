@@ -20,7 +20,7 @@ namespace spright { namespace editor {
 	public:
 		ImageExport(Window* window, Rendering* rendering);
 		~ImageExport();
-		void exportImage(Document* document);
+		void exportImage(Document& document);
 		unsigned char* getImageData();
 		size_t getImageSize();
 	private:

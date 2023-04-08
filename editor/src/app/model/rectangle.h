@@ -11,6 +11,8 @@ namespace spright { namespace editor {
 		Rectangle(maths::Vec2 bottomLeft, maths::Vec2 topRight);
 		Rectangle();
 
+		Rectangle& operator=(const Rectangle&);
+
 		bool contains(maths::Vec2 point);
 		float width();
 		float height();

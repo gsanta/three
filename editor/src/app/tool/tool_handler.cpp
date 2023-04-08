@@ -8,8 +8,8 @@ namespace spright { namespace editor {
 	{
 	}
 
-	ToolHandler::ToolHandler(Window* window, DocumentStore* documentStore, Services* services, Camera* camera, ImageExport* imageExport, DocumentFactory* documentFactory)
-		: m_Window(window), m_DocumentStore(documentStore), m_Services(services), m_Camera(camera), m_ImageExport(imageExport), m_DocumentFactory(documentFactory)
+	ToolHandler::ToolHandler(Window* window, DocumentStore* documentStore, Services* services, ImageExport* imageExport, DocumentFactory* documentFactory)
+		: m_Window(window), m_DocumentStore(documentStore), m_Services(services), m_ImageExport(imageExport), m_DocumentFactory(documentFactory)
 	{
 		window->getInputHandler()->registerListener(this);
 		m_ActiveTools = new vector<Tool*>();
@@ -43,7 +43,7 @@ namespace spright { namespace editor {
 
 	void ToolHandler::onMouseDown(bool buttons[3])
 	{
-		Vec2 pos = m_DocumentStore->getActiveDocument()->getCamera()->screenToCameraPos(x_tmp, y_tmp);
+		Vec2 pos = m_DocumentStore->getActiveDocument().getCamera().screenToCameraPos(x_tmp, y_tmp);
 
 		this->m_pointerInfo.isDown = true;
 		this->m_pointerInfo.down.x = this->m_pointerInfo.curr.x;
@@ -61,7 +61,7 @@ namespace spright { namespace editor {
 	void ToolHandler::onMouseMove(double x, double y)
 	{
 		x_tmp = x; y_tmp = y;
-		Vec2 pos = m_DocumentStore->getActiveDocument()->getCamera()->screenToCameraPos(x, y);
+		Vec2 pos = m_DocumentStore->getActiveDocument().getCamera().screenToCameraPos(x, y);
 		this->m_pointerInfo.prev.x = m_pointerInfo.curr.x;
 		this->m_pointerInfo.prev.y = m_pointerInfo.curr.y;
 		this->m_pointerInfo.curr.x = pos.x;
@@ -102,7 +102,7 @@ namespace spright { namespace editor {
 		}
 		else if (key == GLFW_KEY_C) {
 			m_DocumentFactory->createFrame(m_DocumentStore->getActiveDocument());
-			m_DocumentStore->getActiveDocument()->getFrameStore().setActiveFrame(m_DocumentStore->getActiveDocument()->getFrameStore().getFrames().size() - 1);
+			m_DocumentStore->getActiveDocument().getFrameStore().setActiveFrame(m_DocumentStore->getActiveDocument().getFrameStore().getFrames().size() - 1);
 			//setSelectedTool("color_picker");
 		}
 		else if (key == GLFW_KEY_1) {
@@ -121,22 +121,25 @@ namespace spright { namespace editor {
 			else {
 				m_Window->setSize(800, 1100);
 			}
-			m_Camera->updateWindowSize(m_Window->getWidth(), m_Window->getHeight());
+			m_DocumentStore->getActiveDocument().getCamera().updateWindowSize(m_Window->getWidth(), m_Window->getHeight());
 			//std::string str = m_JsonExport->exportDocument(m_DocumentHandler->getActiveDocument());
 			//m_JsonExport->importDocument(m_DocumentHandler, str);
 			//m_JsonExport->importDocument("{ \"tiles\": [ {\"i\": 1, \"c\": \"black\"} ] }");
 			//m_JsonExport->importDocument("{ \"a\": 2 }");
 		}
 		else if (key == GLFW_KEY_L) {
-			ActiveFrame& frame = m_DocumentStore->getActiveDocument()->getActiveFrame();
+			ActiveFrame& frame = m_DocumentStore->getActiveDocument().getActiveFrame();
 			frame.setActiveLayer(1);
+		}
+		else if (key == GLFW_KEY_N) {
+			setSelectedTool("new_drawing");
 		}
 		else if (key == GLFW_KEY_X) {
 			m_ImageExport->exportImage(m_DocumentStore->getActiveDocument());
 		}
 		else if (key == GLFW_KEY_F) {
-			size_t activeIndex = m_DocumentStore->getActiveDocument()->getActiveFrame().getIndex();
-			size_t maxIndex = m_DocumentStore->getActiveDocument()->getFrameStore().getFrames().size();
+			size_t activeIndex = m_DocumentStore->getActiveDocument().getActiveFrame().getIndex();
+			size_t maxIndex = m_DocumentStore->getActiveDocument().getFrameStore().getFrames().size();
 
 			if (activeIndex == maxIndex - 1) {
 				activeIndex = 0;
@@ -144,10 +147,10 @@ namespace spright { namespace editor {
 			else {
 				activeIndex = activeIndex + 1;
 			}
-			m_DocumentStore->getActiveDocument()->getFrameStore().setActiveFrame(activeIndex);
+			m_DocumentStore->getActiveDocument().getFrameStore().setActiveFrame(activeIndex);
 		}
 		else if (key == GLFW_KEY_R) {
-			m_DocumentStore->getActiveDocument()->getFrameStore().removeFrame(1);
+			m_DocumentStore->getActiveDocument().getFrameStore().removeFrame(1);
 		}
 	}
 

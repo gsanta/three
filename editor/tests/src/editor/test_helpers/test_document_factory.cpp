@@ -1,5 +1,6 @@
 #include "test_document_factory.h"
-#include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
+
+TestEventEmitter TestDocumentFactory::eventEmitter;
 
 std::vector<TileLayer> TestDocumentFactory::createTileLayers(size_t num) {
 	std::vector<TileLayer> layers;
@@ -18,3 +19,8 @@ TileLayer TestDocumentFactory::createTileLayer(size_t index, float tileSize, Bou
 
 	return layer;
 }
+
+DocumentFactory TestDocumentFactory::createDocumentFactory(Container& windowContainer) {
+	return DocumentFactory(&windowContainer, new HeadlessRendererProvider(), & eventEmitter);
+}
+

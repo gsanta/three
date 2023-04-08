@@ -10,6 +10,13 @@ namespace spright { namespace editor {
 	{
 	}
 
+	Rectangle& Rectangle::operator=(const Rectangle& rhs) {
+		bottomLeft = rhs.bottomLeft;
+		topRight = rhs.topRight;
+
+		return *this;
+	}
+
 	bool Rectangle::contains(maths::Vec2 point)
 	{
 		bool ret = point.x > bottomLeft.x && point.x < topRight.x&& point.y > bottomLeft.y && point.y < topRight.y;

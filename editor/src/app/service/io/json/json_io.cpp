@@ -6,13 +6,13 @@ namespace spright { namespace editor {
 		m_TileLayerExport = new TileLayerExport(documentStore, documentFactory);
 	}
 
-	std::string JsonIO::exportDocument(Document* document) {
+	std::string JsonIO::exportDocument(Document& document) {
 
 		nlohmann::json json = {
 			{"layers", {}}
 		};
 
-		for (TileLayer& layer : document->getActiveFrame().getLayers()) {
+		for (TileLayer& layer : document.getActiveFrame().getLayers()) {
 			nlohmann::json jsonLayer = m_TileLayerExport->exportLayer(document, layer.getIndex());
 			json["layers"] += jsonLayer;
 		}
@@ -26,8 +26,8 @@ namespace spright { namespace editor {
 		nlohmann::json json = nlohmann::json::parse(string);
 		int layerCount = json["layers"].size();
 
-		Document* document = m_DocumentFactory->createDocument();
-		m_DocumentStore->setActiveDocument(document);
+		Document document = m_DocumentFactory->createDocument();
+		m_DocumentStore->addDocument(document);
 		for (int i = 0; i < layerCount; i++) {
 			nlohmann::json layer = json["layers"][i];
 

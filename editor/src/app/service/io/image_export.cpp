@@ -11,10 +11,10 @@ namespace spright { namespace editor {
 		}
 	}
 
-	void ImageExport::exportImage(Document* document)
+	void ImageExport::exportImage(Document& document)
 	{
 		m_Rendering->enableImageTarget();
-		document->render();
+		document.render();
 		m_Rendering->getImageTarget();
 
 		int width = m_Window->getWidth();

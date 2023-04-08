@@ -5,18 +5,14 @@ namespace spright { namespace editor {
 	{
 	}
 
-	EraserStroke::EraserStroke(TileLayer* drawLayer, int eraserSize) : m_DrawLayer(drawLayer), m_Size(eraserSize)
+	EraserStroke::EraserStroke(int eraserSize) : m_Size(eraserSize)
 	{
 	}
 
-	void editor::EraserStroke::draw(const TileLayer& eraseLayer, const Vec2& pos)
+	void editor::EraserStroke::draw(const TileLayer& eraseLayer, TileLayer& drawLayer, const Vec2& pos)
 	{
-		if (!m_DrawLayer) {
-			throw std::runtime_error("DrawLayer not set.");
-		}
-
 		if (!m_TopLine) {
-			init(eraseLayer.getTileSize());
+			init(drawLayer, eraseLayer.getTileSize());
 		}
 
 		setPosition(eraseLayer, pos);
@@ -24,7 +20,6 @@ namespace spright { namespace editor {
 
 	void EraserStroke::clear()
 	{
-		m_DrawLayer->clear();
 		m_TopLine = nullptr;
 		m_RightLine = nullptr;
 		m_BottomLine = nullptr;
@@ -36,7 +31,7 @@ namespace spright { namespace editor {
 		return m_StrokeWidth;
 	}
 
-	void EraserStroke::init(float tileSize)
+	void EraserStroke::init(TileLayer& drawLayer, float tileSize)
 	{
 		float eraserArea = tileSize * static_cast<float>(m_Size);
 
@@ -47,10 +42,10 @@ namespace spright { namespace editor {
 		m_BottomLine = new Rect2D(-eraserArea / 2.0f, -eraserArea / 2.0f, eraserArea, m_StrokeWidth, color);
 		m_LeftLine = new Rect2D(-eraserArea / 2.0f, -eraserArea / 2.0f, m_StrokeWidth, eraserArea, color);
 
-		m_TopLine = &m_DrawLayer->add(Rect2D(-eraserArea / 2.0f, eraserArea / 2.0f, eraserArea, m_StrokeWidth, color));
-		m_RightLine = &m_DrawLayer->add(Rect2D(eraserArea / 2.0f, -eraserArea / 2.0f, m_StrokeWidth, eraserArea, color));
-		m_BottomLine = &m_DrawLayer->add(Rect2D(-eraserArea / 2.0f, -eraserArea / 2.0f, eraserArea, m_StrokeWidth, color));
-		m_LeftLine = &m_DrawLayer->add(Rect2D(-eraserArea / 2.0f, -eraserArea / 2.0f, m_StrokeWidth, eraserArea, color));
+		m_TopLine = &drawLayer.add(Rect2D(-eraserArea / 2.0f, eraserArea / 2.0f, eraserArea, m_StrokeWidth, color));
+		m_RightLine = &drawLayer.add(Rect2D(eraserArea / 2.0f, -eraserArea / 2.0f, m_StrokeWidth, eraserArea, color));
+		m_BottomLine = &drawLayer.add(Rect2D(-eraserArea / 2.0f, -eraserArea / 2.0f, eraserArea, m_StrokeWidth, color));
+		m_LeftLine = &drawLayer.add(Rect2D(-eraserArea / 2.0f, -eraserArea / 2.0f, m_StrokeWidth, eraserArea, color));
 	}
 
 	void EraserStroke::setPosition(const TileLayer& eraseLayer, const Vec2& pos)

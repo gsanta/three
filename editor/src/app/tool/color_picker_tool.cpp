@@ -2,13 +2,13 @@
 
 namespace spright { namespace editor {
 
-	ColorPickerTool::ColorPickerTool(LayerProvider* layerProvider, ToolHandler* toolHandler, EventEmitter* eventEmitter) : m_LayerProvider(layerProvider), m_ToolHandler(toolHandler), m_EventEmitter(eventEmitter), Tool("color_picker") {
+	ColorPickerTool::ColorPickerTool(DocumentStore* documentStore, ToolHandler* toolHandler, EventEmitter* eventEmitter) : m_DocumentStore(documentStore), m_ToolHandler(toolHandler), m_EventEmitter(eventEmitter), Tool("color_picker") {
 
 	}
 
 	void ColorPickerTool::pointerDown(PointerInfo& pointerInfo) {
 
-		TileLayer& tileLayer = m_LayerProvider->getActiveLayer();
+		TileLayer& tileLayer = m_DocumentStore->getActiveDocument().getActiveDrawing().getActiveLayer();
 		Vec2Int tilePos = tileLayer.getTilePos(pointerInfo.curr);
 		int tileIndex = tileLayer.getTileIndex(tilePos.x, tilePos.y);
 		Rect2D* tile = tileLayer.getAtTileIndex(tileIndex);

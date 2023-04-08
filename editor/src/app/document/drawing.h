@@ -13,21 +13,17 @@ namespace spright { namespace editor {
 	{
 	private:
 		FrameStore m_FrameStore;
-		Camera* m_Camera;
-		std::unique_ptr<FramePlayer> m_FramePlayer;
+		FramePlayer* m_FramePlayer;
 		EventEmitter* m_EventEmitter;
 
 	public:
-		Drawing(Bounds bounds, Camera* camera, EventEmitter* eventEmitter);
+		Drawing(Bounds bounds, EventEmitter* eventEmitter);
+		Drawing(const Drawing&);
 		~Drawing();
 
 		FrameStore& getFrameStore();
 		ActiveFrame& getActiveFrame();
 		TileLayer& getActiveLayer();
-
-		inline Camera* getCamera() {
-			return m_Camera;
-		}
 
 		TileLayer& addLayer(const TileLayer& tileLayer);
 
@@ -36,7 +32,7 @@ namespace spright { namespace editor {
 
 		std::string getJson();
 
-		void render();
+		void render(const Camera& camera);
 		FramePlayer& getFramePlayer();
 	};
 }}
