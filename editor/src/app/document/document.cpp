@@ -2,20 +2,12 @@
 
 namespace spright { namespace editor {
 
-	Document::Document(Bounds bounds) : Container(bounds), m_ActiveDrawing(0)
+	Document::Document(Bounds bounds, Camera camera, Drawing canvas) : Container(bounds), m_Camera(camera), m_Canvas(canvas), m_ActiveDrawing(0)
 	{
 	}
 
-	Document::~Document() {
-		std::vector<Group<Rect2D>*>::iterator it;
-
-		for (Drawing* drawing : m_Drawings) {
-			delete drawing;
-		}
-	}
-
 	FrameStore& Document::getFrameStore() {
-		return m_Drawings[m_ActiveDrawing]->getFrameStore();
+		return m_Drawings[m_ActiveDrawing].getFrameStore();
 	}
 
 	ActiveFrame& Document::getActiveFrame() {
@@ -27,16 +19,38 @@ namespace spright { namespace editor {
 		return getFrameStore().getActiveFrame().getActiveLayer();
 	}
 
-	Drawing* Document::getActiveDrawing() {
+	Drawing& Document::getActiveDrawing() {
 		return m_Drawings[m_ActiveDrawing];
 	}
 
-	void Document::addDrawing(Drawing* drawing) {
+	Drawing& Document::getDrawing(size_t index) {
+		return m_Drawings[index];
+	}
+
+	Drawing* Document::getDrawingAt(const Vec2& pos) {
+		for (Drawing& drawing : m_Drawings) {
+			if (drawing.getBounds().contains(pos.x, pos.y)) {
+				return &drawing;
+			}
+		}
+
+		return nullptr;
+	}
+
+	void Document::addDrawing(const Drawing& drawing) {
 		m_Drawings.push_back(drawing);
 	}
 
-	std::vector<Drawing*>& Document::getDrawings() {
+	std::vector<Drawing>& Document::getDrawings() {
 		return m_Drawings;
+	}
+
+	Drawing& Document::getCanvas() {
+		return m_Canvas;
+	}
+
+	Camera& Document::getCamera() {
+		return m_Camera;
 	}
 
 	std::string Document::getJson()
@@ -48,12 +62,14 @@ namespace spright { namespace editor {
 
 	void Document::render()
 	{
-		for (Drawing* drawing : m_Drawings) {
-			drawing->render();
+		for (Drawing& drawing : m_Drawings) {
+			drawing.render(m_Camera);
 		}
+
+		m_Canvas.render(m_Camera);
 	}
 
 	FramePlayer& Document::getFramePlayer() {
-		return m_Drawings[m_ActiveDrawing]->getFramePlayer();
+		return m_Drawings[m_ActiveDrawing].getFramePlayer();
 	}
 }}

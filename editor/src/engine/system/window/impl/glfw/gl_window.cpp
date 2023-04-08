@@ -4,7 +4,7 @@ namespace spright { namespace engine {
 
 	void window_resize(GLFWwindow* window, int width, int height);
 
-	GLWindow::GLWindow(const char* title, int width, int height) {
+	GLWindow::GLWindow(const char* title, int width, int height) : Window(width, height) {
 		m_Title = title;
 		m_Width = width;
 		m_Height = height;

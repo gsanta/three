@@ -1,7 +1,7 @@
 #include "pan_tool.h"
 
 namespace spright { namespace editor {
-	PanTool::PanTool(Camera* camera) : m_Camera(camera), Tool("pan")
+	PanTool::PanTool(DocumentStore* documentStore) : m_DocumentStore(documentStore), Tool("pan")
 	{
 	}
 
@@ -12,7 +12,7 @@ namespace spright { namespace editor {
 		}
 
 		if (pointerInfo.isDown) {
-			m_Camera->translate2D(pointerInfo.prev - pointerInfo.curr);
+			m_DocumentStore->getActiveDocument().getCamera().translate2D(pointerInfo.prev - pointerInfo.curr);
 		}
 	}
 }}

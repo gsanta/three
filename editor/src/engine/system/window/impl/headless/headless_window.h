@@ -14,7 +14,7 @@ namespace spright { namespace engine {
 	private:
 		int m_Width, m_Height;
 	public:
-		HeadlessWindow(int width, int height) : m_Width(width), m_Height(height) {}
+		inline HeadlessWindow(int width, int height) : m_Width(width), m_Height(height), Window(width, height) {}
 		inline void clear() const {}
 		inline float beforeRender() { return 0; }
 		inline void afterRender() {}

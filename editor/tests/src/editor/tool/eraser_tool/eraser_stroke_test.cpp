@@ -17,9 +17,9 @@ TEST_CASE("EraserStroke draw", "[eraser-stroke]") {
 		TileLayer drawLayer = TestDocumentFactory::createTileLayer(0, tileSize, Bounds::createWithPositions(-5.0f, 5.0f, -5.0f, 5.0f));
 		TileLayer eraseLayer = TestDocumentFactory::createTileLayer(1, tileSize, Bounds::createWithPositions(-5.0f, 5.0f, -5.0f, 5.0f));
 
-		EraserStroke eraserStroke(&drawLayer, eraserSize);
+		EraserStroke eraserStroke(eraserSize);
 
-		eraserStroke.draw(eraseLayer, Vec2(0, 0));
+		eraserStroke.draw(eraseLayer, drawLayer, Vec2(0, 0));
 
 		std::vector<Rect2D*>& rects = drawLayer.getRenderables();
 
@@ -55,9 +55,9 @@ TEST_CASE("EraserStroke draw", "[eraser-stroke]") {
 		TileLayer drawLayer = TestDocumentFactory::createTileLayer(0, tileSize, Bounds::createWithPositions(-5.0f, 5.0f, -5.0f, 5.0f));
 		TileLayer eraseLayer = TestDocumentFactory::createTileLayer(1, tileSize, Bounds::createWithPositions(-5.0f, 5.0f, -5.0f, 5.0f));
 
-		EraserStroke eraserStroke(&drawLayer, eraserSize);
+		EraserStroke eraserStroke(eraserSize);
 
-		eraserStroke.draw(eraseLayer, Vec2(0, 0));
+		eraserStroke.draw(eraseLayer, drawLayer, Vec2(0, 0));
 
 		std::vector<Rect2D*>& rects = drawLayer.getRenderables();
 
@@ -97,10 +97,10 @@ TEST_CASE("EraserStroke draw", "[eraser-stroke]") {
 		TileLayer drawLayer = TestDocumentFactory::createTileLayer(0, tileSize, Bounds::createWithPositions(-5.0f, 5.0f, -5.0f, 5.0f));
 		TileLayer eraseLayer = TestDocumentFactory::createTileLayer(1, tileSize, Bounds::createWithPositions(-5.0f, 5.0f, -5.0f, 5.0f));
 
-		EraserStroke eraserStroke(&drawLayer, eraserSize);
+		EraserStroke eraserStroke(eraserSize);
 
 
-		eraserStroke.draw(eraseLayer, Vec2(translateX, translateY));
+		eraserStroke.draw(eraseLayer, drawLayer, Vec2(translateX, translateY));
 
 		std::vector<Rect2D*>& rects = drawLayer.getRenderables();
 

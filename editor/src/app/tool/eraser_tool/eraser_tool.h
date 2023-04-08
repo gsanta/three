@@ -16,7 +16,7 @@ namespace spright { namespace editor {
 
 	class EraserTool : public Tool {
 	private:
-		unique_ptr<LayerProvider> m_LayerProvider;
+		DocumentStore* m_documentStore;
 
 		Eraser m_Eraser;
 		EraserStroke m_EraserStroke;
@@ -29,7 +29,7 @@ namespace spright { namespace editor {
 		float m_NoMovementTolerance = 0.1f;
 
 	public:
-		EraserTool(LayerProvider* m_LayerProvider, int eraserSize);
+		EraserTool(DocumentStore* documentStore, int eraserSize);
 		void pointerDown(PointerInfo& pointerInfo) override;
 		void pointerMove(PointerInfo& pointerInfo) override;
 		void deactivate() override;

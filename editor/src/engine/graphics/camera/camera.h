@@ -36,8 +36,8 @@ namespace spright { namespace engine {
 		float getZoom();
 		const Bounds& getBounds() const;
 
-		Mat4 getProjectionMatrix();
-		Mat4& getViewMatrix();
+		const Mat4 getProjectionMatrix() const;
+		const Mat4& getViewMatrix() const;
 		Vec2 getCenter2D();
 
 		Vec2 screenToModel(Vec2 screen);

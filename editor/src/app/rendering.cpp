@@ -18,7 +18,7 @@ namespace spright {
 	{
 		m_Window->beforeRender();
 		if (m_DocumentStore->hasActiveDocument()) {
-			m_DocumentStore->getActiveDocument()->render();
+			m_DocumentStore->getActiveDocument().render();
 		}
 		m_Window->afterRender();
 	}

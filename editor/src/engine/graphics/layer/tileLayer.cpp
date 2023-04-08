@@ -4,14 +4,15 @@ namespace spright { namespace engine {
 
 	const float TileLayer::defaultTileSize = 0.5f;
 
-	TileLayer::TileLayer(std::string name, Group<Rect2D> group, Bounds bounds, float tileSize)
-		: m_Group(group), m_TileSize(tileSize), m_Name(name), m_Bounds(bounds) {
-	
+	TileLayer::TileLayer(std::string name, Group<Rect2D> group, Bounds bounds, float tileSize, float zPos)
+		: m_Group(group), m_TileSize(tileSize), m_Name(name), m_Bounds(bounds), m_ZPos(zPos) {
+
 		init();
 	}
 
 	TileLayer::TileLayer(const TileLayer& tileLayer)
-		: m_Index(tileLayer.m_Index), m_Name(tileLayer.m_Name), m_Group(Group<Rect2D>(tileLayer.m_Group.getRenderer()->clone())), m_Bounds(tileLayer.m_Bounds), m_TileSize(tileLayer.m_TileSize) {
+		: m_Index(tileLayer.m_Index), m_Name(tileLayer.m_Name), m_Group(Group<Rect2D>(tileLayer.m_Group.getRenderer()->clone())),
+		m_Bounds(tileLayer.m_Bounds), m_TileSize(tileLayer.m_TileSize), m_ZPos(tileLayer.m_ZPos) {
 
 		init();
 		copyGroup(tileLayer.m_Group);
@@ -28,7 +29,8 @@ namespace spright { namespace engine {
 			m_Name = that.m_Name;
 			m_Bounds = that.m_Bounds;
 			m_TileSize = that.m_TileSize;
-			
+			m_ZPos = that.m_ZPos;
+
 			init();
 			copyGroup(that.m_Group);
 		}
@@ -73,7 +75,7 @@ namespace spright { namespace engine {
 		Vec2Int tilePos = getTilePos(pos);
 
 		int index = m_TileBounds.getWidth() * tilePos.y + tilePos.x;
-		if (m_IndexSize > index) {
+;		if (m_IndexSize > index) {
 			m_TileIndexes[index] = &newRect;
 			newRect.setTileIndex(index);
 		}
@@ -91,13 +93,13 @@ namespace spright { namespace engine {
 
 		m_Group.remove(rect);
 	}
-	
+
 	// TODO: fix clear to remove from m_TileIndexes
 	void TileLayer::clear() {
 		m_Group.clear();
 	}
-	
-	void TileLayer::render(Camera* camera) {
+
+	void TileLayer::render(const Camera& camera) {
 		if (m_IsEnabled) {
 			m_Group.render(camera);
 		}
@@ -155,7 +157,7 @@ namespace spright { namespace engine {
 	unsigned int TileLayer::getColumn(int tileIndex) const {
 		return tileIndex % m_TileBounds.getWidth();
 	}
-	
+
 	unsigned int TileLayer::getRow(int tileIndex) const {
 		return tileIndex / m_TileBounds.getWidth();
 	}
@@ -260,6 +262,8 @@ namespace spright { namespace engine {
 
 		m_IndexSize = width * height;
 		m_TileIndexes = new Renderable2D*[m_IndexSize]();
+		Mat4 transformation = Mat4::translation(Vec3(0, 0, m_ZPos));
+		m_Group.getRenderer()->push(transformation);
 	}
 
 	void TileLayer::copyGroup(const Group<Rect2D>& group) {

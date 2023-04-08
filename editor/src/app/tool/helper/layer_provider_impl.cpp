@@ -5,12 +5,12 @@ namespace spright { namespace editor {
 	
 	TileLayer& LayerProviderImpl::getActiveLayer()
 	{
-		return m_DocumentStore->getActiveDocument()->getActiveLayer();
+		return m_DocumentStore->getActiveDocument().getActiveLayer();
 	}
 
 	TileLayer& LayerProviderImpl::getTempLayer()
 	{
-		return m_DocumentStore->getActiveDocument()->getActiveFrame().getForegroundLayers()[0 ];
+		return m_DocumentStore->getActiveDocument().getActiveFrame().getForegroundLayers()[0 ];
 	}
 
 }}

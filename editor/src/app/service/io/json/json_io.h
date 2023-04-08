@@ -3,7 +3,7 @@
 #include "../../../document/document.h"
 #include "../../../../engine/graphics/layer/tileLayer.h"
 #include "tile_layer_export.h"
-#include "../../../document/document_factory.h"
+#include "../../../document/factory/document_factory.h"
 #include "../../../document/document_store.h"
 
 namespace spright { namespace editor {
@@ -17,7 +17,7 @@ namespace spright { namespace editor {
 
 	public:
 		JsonIO(DocumentStore* documentStore, DocumentFactory* documentHandler);
-		std::string exportDocument(Document* document);
+		std::string exportDocument(Document& document);
 		void importDocument(std::string string);
 	};
 }}

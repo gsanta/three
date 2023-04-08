@@ -10,8 +10,10 @@
 #include "tool/helper/layer_provider_impl.h"
 #include "tool/select_tool/select_tool.h"
 #include "tool/paint_bucket/paint_bucket_tool.h"
+#include "tool/new_drawing_tool/new_drawing_tool.h"
 #include "tool/color_picker_tool.h"
-#include "document/document_factory.h"
+#include "document/factory/document_factory.h"
+#include "document/factory/gl_renderer_provider.h"
 #include "editor_config.h"
 #include "core/canvas/canvas_listener_handler.h"
 #include "./service/services.h"
@@ -25,6 +27,7 @@
 #include "document/frame_store.h"
 #include "core/run_loop/run_loop.h"
 #include "feature/frame/frame_player.h"
+#include "feature/frame/frame_player_handler.h"
 
 namespace spright { namespace editor {
 	using namespace ::spright::engine;
@@ -42,6 +45,7 @@ namespace spright { namespace editor {
 		ImageExport* m_ImageExport;
 		std::unique_ptr<JsonIO> m_JsonExport;
 		std::unique_ptr<EventEmitter> m_EventEmitter;
+		FramePlayerHandler m_FramePlayerHandler;
 		RunLoop m_RunLoop;
 		
 	public:
@@ -51,7 +55,7 @@ namespace spright { namespace editor {
 		Window* getWindow() const;
 		DocumentStore* getDocumentStore();
 		DocumentFactory* getDocumentFactory();
-		Document* getActiveDocument();
+		Document& getActiveDocument();
 		ActiveFrame& getActiveFrame();
 		TileLayer& getActiveLayer();
 		ToolHandler* getToolHandler();

@@ -27,7 +27,7 @@ std::string getToolData(std::string tool) {
 
 std::vector<std::string> getFrames()
 {
-	const std::vector<FrameImpl>& frames = editor->getActiveDocument()->getFrameStore().getFrames();
+	const std::vector<FrameImpl>& frames = editor->getActiveDocument().getFrameStore().getFrames();
 
 	std::vector<std::string> target;
 
@@ -44,11 +44,11 @@ void addFrame() {
 }
 
 void removeFrame(size_t index) {
-	editor->getActiveDocument()->getFrameStore().removeFrame(index);
+	editor->getActiveDocument().getFrameStore().removeFrame(index);
 }
 
 void setActiveFrame(size_t index) {
-	editor->getActiveDocument()->getFrameStore().setActiveFrame(index);
+	editor->getActiveDocument().getFrameStore().setActiveFrame(index);
 }
 
 std::string getActiveFrame() {
@@ -56,11 +56,11 @@ std::string getActiveFrame() {
 }
 
 void activateFramePlayer() {
-	editor->getActiveDocument()->getFramePlayer().setIsActive(true);
+	editor->getActiveDocument().getFramePlayer().setIsActive(true);
 }
 
 void deActivateFramePlayer() {
-	editor->getActiveDocument()->getFramePlayer().setIsActive(false);
+	editor->getActiveDocument().getFramePlayer().setIsActive(false);
 }
 
 EMSCRIPTEN_BINDINGS(spright) {

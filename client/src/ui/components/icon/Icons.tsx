@@ -12,3 +12,4 @@ export { BiHighlight } from 'react-icons/bi';
 export { CiSettings } from 'react-icons/ci';
 export { BiPlay } from 'react-icons/bi';
 export { BiStop } from 'react-icons/bi';
+export { BiImageAlt } from 'react-icons/bi';

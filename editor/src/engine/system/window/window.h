@@ -5,12 +5,14 @@
 #include <GLFW/glfw3.h>
 #include "input_handler.h"
 #include <functional>
+#include "../../layout/container.h"
 
 namespace spright { namespace engine {
 	class InputHandler;
 
-	class Window {
+	class Window : public Container {
 	public:
+		inline Window(int width, int height): Container(Bounds(0, 0, width, height)) {}
 		inline virtual ~Window() {}
 		virtual void clear() const = 0;
 		virtual float beforeRender() = 0;

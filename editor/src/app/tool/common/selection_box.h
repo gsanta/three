@@ -2,17 +2,15 @@
 
 #include <vector>
 #include "../../../engine/graphics/renderable/rect2d.h"
-#include "../../model/rectangle.h"
-#include "../../document/document_store.h"
+#include "../../../engine/graphics/layer/tileLayer.h"
+#include "../../../engine/graphics/renderable/bounds.h"
 
-namespace spright {
+namespace spright { namespace editor {
 	using namespace ::spright::engine;
-	using namespace ::spright::editor;
-
+	
 	class SelectionBox {
 	private:
-		DocumentStore* m_DocumentStore;
-		vector<Rect2D*> m_SelectionSprites;
+		TileLayer* m_Layer;
 
 		float m_DashSize = 0.2f;
 		Vec2 m_AbsoluteDelta;
@@ -20,17 +18,20 @@ namespace spright {
 
 		Vec2 m_Start;
 
-		Rectangle m_Rect;
+		Bounds m_Bounds;
 	public:
-		SelectionBox(DocumentStore* documentStore);
+		SelectionBox();
 		~SelectionBox();
+
+		void setTileLayer(TileLayer& tileLayer);
 		void start(Vec2 pos);
 		void setPosition(Vec2 pos);
 		void move(Vec2 delta);
 		void clear();
 		bool isInsideSelection(Vec2 point);
+		Bounds getBounds();
 	private:
 		void calcSelectionBounds(Vec2 vec1, Vec2 vec2);
 		void clearSprites();
 	};
-}
+}}

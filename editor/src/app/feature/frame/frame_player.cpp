@@ -13,9 +13,7 @@ namespace spright { namespace editor {
 
 			if (m_IsActive) {
 				m_FrameStore.activateNextFrame();
-				m_EventEmitter->emitChange("active_frame_changed", {});
 			}
-			std::cout << "1 sec" << std::endl;
 			m_Elapsed = 0;
 		}
 	}

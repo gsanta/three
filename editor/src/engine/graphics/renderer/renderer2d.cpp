@@ -4,6 +4,7 @@ namespace spright { namespace engine {
 	Renderer2D::Renderer2D() {}
 
 	Renderer2D::Renderer2D(const Renderer2D& that): m_TransformationStack(that.m_TransformationStack), m_IndexCount(that.m_IndexCount) {
+		m_TransformationBack = nullptr;
 		if (m_TransformationStack.size() > 0) {
 			m_TransformationBack = &m_TransformationStack.back();
 		}
@@ -13,6 +14,7 @@ namespace spright { namespace engine {
 
 	Renderer2D& Renderer2D::operator=(Renderer2D& that) {
 		m_IndexCount = that.m_IndexCount;
+		m_TransformationBack = nullptr;
 		m_TransformationStack = that.m_TransformationStack;
 		if (m_TransformationStack.size() > 0) {
 			m_TransformationBack = &m_TransformationStack.back();
@@ -46,7 +48,11 @@ namespace spright { namespace engine {
 			m_TransformationStack.push_back(matrix);
 		}
 		else {
-			m_TransformationStack.push_back(m_TransformationStack.back() * matrix);
+			Mat4 m = matrix;
+			if (m_TransformationStack.size() > 0) {
+				m = m_TransformationStack.back() * m;
+			}
+			m_TransformationStack.push_back(m);
 		}
 		m_TransformationBack = &m_TransformationStack.back();
 	}

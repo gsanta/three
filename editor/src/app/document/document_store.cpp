@@ -2,22 +2,23 @@
 
 namespace spright { namespace editor {
 
-	DocumentStore::DocumentStore() {
+	DocumentStore::DocumentStore() : m_ActiveDocument(0) {
 	}
 
-	DocumentStore::~DocumentStore() {
+	Document& DocumentStore::getActiveDocument() {
+		return m_Documents[m_ActiveDocument];
 	}
 
-	Document* DocumentStore::getActiveDocument() const {
-		return m_ActiveDocument;
+	void DocumentStore::addDocument(Document document) {
+		m_Documents.push_back(document);
 	}
 
-	void DocumentStore::setActiveDocument(Document* document)
+	void DocumentStore::setActiveDocument(size_t index)
 	{
-		m_ActiveDocument = document;
+		m_ActiveDocument = index;
 	}
 
 	bool DocumentStore::hasActiveDocument() const {
-		return m_ActiveDocument != nullptr;
+		return m_Documents.size() > m_ActiveDocument;
 	}
 }}

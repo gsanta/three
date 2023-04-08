@@ -1,35 +1,37 @@
 #include "selection_box.h"
 
-namespace spright {
-	SelectionBox::SelectionBox(DocumentStore* documentStore) : m_DocumentStore(documentStore)
-	{
-	}
+namespace spright { namespace editor {
+	SelectionBox::SelectionBox() {}
 
 	SelectionBox::~SelectionBox()
 	{
 	}
 
+	void SelectionBox::setTileLayer(TileLayer& tileLayer) {
+		m_Layer = &tileLayer;
+	}
+
+
 	void SelectionBox::start(Vec2 pos)
 	{
 		clear();
 		m_Start = pos;
-		m_Rect.bottomLeft = pos;
-		m_Rect.topRight = pos;
+		m_Bounds.minX = pos.x;
+		m_Bounds.maxX = pos.x;
+		m_Bounds.minY = pos.y;
+		m_Bounds.maxY = pos.y;
 	}
 
 	void SelectionBox::setPosition(Vec2 pos) {
 
 		calcSelectionBounds(m_Start, pos);
 
-		Vec2 bottomLeft = m_Rect.bottomLeft;
-		Vec2 topRight = m_Rect.topRight;
+		Vec2 bottomLeft = m_Bounds.getBottomLeft();
+		Vec2 topRight = m_Bounds.getTopRight();
 
-		Document* document = this->m_DocumentStore->getActiveDocument();
-		TileLayer& tempLayer = document->getActiveFrame().getForegroundLayers()[0];
+		float tileSize = m_Layer->getTileSize();
 
-		float tileSize = tempLayer.getTileSize();
-
-		tempLayer.clear();
+		m_Layer->clear();
 		clearSprites();
 
 		unsigned int color = 0xff0099ff;
@@ -46,30 +48,22 @@ namespace spright {
 		Rect2D* left = new Rect2D(xStart, yStart, 0.1f, height, color);
 		Rect2D* right = new Rect2D(xEnd, yStart, 0.1f, height, color);
 
-		//m_SelectionSprites.push_back(bottom);
-		//m_SelectionSprites.push_back(top);
-		//m_SelectionSprites.push_back(left);
-		//m_SelectionSprites.push_back(right);
-
-		tempLayer.add(Rect2D(xStart, yStart, width, 0.1f, color));
-		tempLayer.add(Rect2D(xStart, yEnd, width, 0.1f, color));
-		tempLayer.add(Rect2D(xStart, yStart, 0.1f, height, color));
-		tempLayer.add(Rect2D(xEnd, yStart, 0.1f, height, color));
+		m_Layer->add(Rect2D(xStart, yStart, width, 0.1f, color));
+		m_Layer->add(Rect2D(xStart, yEnd, width, 0.1f, color));
+		m_Layer->add(Rect2D(xStart, yStart, 0.1f, height, color));
+		m_Layer->add(Rect2D(xEnd, yStart, 0.1f, height, color));
 	}
 
 	void SelectionBox::move(Vec2 delta)
 	{
-		Document* document = this->m_DocumentStore->getActiveDocument();
-		TileLayer& tempLayer = document->getActiveFrame().getForegroundLayers()[0];
-
-		float tileSize = tempLayer.getTileSize();
+		float tileSize = m_Layer->getTileSize();
 
 		m_AbsoluteDelta += delta;
 
 		float xDelta = static_cast<int>(m_AbsoluteDelta.x / tileSize) * tileSize;
 		float yDelta = static_cast<int>(m_AbsoluteDelta.y / tileSize) * tileSize;
 
-		for (Rect2D* sprite : m_SelectionSprites) {
+		for (Rect2D* sprite : m_Layer->getRenderables()) {
 			sprite->translate(Vec2(-m_PrevTranslate.x, -m_PrevTranslate.y));
 			sprite->translate(Vec2(xDelta, yDelta));
 		}
@@ -82,13 +76,17 @@ namespace spright {
 	{
 		clearSprites();
 		m_Start = Vec2();
-		m_Rect.topRight = Vec2();
-		m_Rect.bottomLeft = Vec2();
+		
+		m_Bounds = Bounds(0, 0, 0, 0);
 	}
 
 	bool SelectionBox::isInsideSelection(Vec2 point)
 	{
-		return m_Rect.contains(point);
+		return m_Bounds.contains(point.x, point.y);
+	}
+
+	Bounds SelectionBox::getBounds() {
+		return m_Bounds;
 	}
 
 	void SelectionBox::calcSelectionBounds(Vec2 vec1, Vec2 vec2)
@@ -98,17 +96,14 @@ namespace spright {
 		float startY = vec1.y < vec2.y ? vec1.y : vec2.y;
 		float endY = vec1.y < vec2.y ? vec2.y : vec1.y;
 
-		m_Rect.bottomLeft = Vec2(startX, startY);
-		m_Rect.topRight = Vec2(endX, endY);
+		m_Bounds.minX = startX;
+		m_Bounds.maxX = endX;
+		m_Bounds.minY = startY;
+		m_Bounds.maxY = endY;
 	}
 
 	void SelectionBox::clearSprites()
 	{
-		Document* document = m_DocumentStore->getActiveDocument();
-		auto tempLayer = m_DocumentStore->getActiveDocument()->getActiveFrame().getForegroundLayers()[0];
-
-		tempLayer.clear();
-
-		m_SelectionSprites.clear();
+		m_Layer->clear();
 	}
-}
+}}

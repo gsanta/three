@@ -19,6 +19,7 @@ const initialState: ToolState = {
     { name: ToolName.Pan, iconName: 'BiMove' },
     { name: ToolName.PaintBucket, iconName: 'BiColorFill' },
     { name: ToolName.ColorPicker, iconName: 'BiHighlight' },
+    { name: ToolName.NewDrawing, iconName: 'BiImageAlt' },
   ],
   selectedTool: ToolName.Brush,
 };

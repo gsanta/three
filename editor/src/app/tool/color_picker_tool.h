@@ -16,14 +16,14 @@ namespace spright { namespace editor {
 
 	class ColorPickerTool : public Tool {
 	private:
-		LayerProvider* m_LayerProvider;
+		DocumentStore* m_DocumentStore;
 		ToolHandler* m_ToolHandler;
 		EventEmitter* m_EventEmitter;
 
 		unsigned int m_PickedColor;
 
 	public:
-		ColorPickerTool(LayerProvider* layerProvider, ToolHandler* toolHandler, EventEmitter* eventEmitter);
+		ColorPickerTool(DocumentStore* documentStore, ToolHandler* toolHandler, EventEmitter* eventEmitter);
 		void pointerDown(PointerInfo& pointerInfo) override;
 		unsigned int getPickedColor() const;
 		std::string getData() override;

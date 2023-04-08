@@ -45,7 +45,7 @@ namespace spright { namespace engine {
 		return m_CameraDim;
 	}
 
-	Mat4 Camera::getProjectionMatrix() {
+	const Mat4 Camera::getProjectionMatrix() const {
 		return m_ProjectionMatrix;
 	}
 
@@ -53,7 +53,7 @@ namespace spright { namespace engine {
 		return m_AspectRatio;
 	}
 
-	Mat4& Camera::getViewMatrix() {
+	const Mat4& Camera::getViewMatrix() const {
 		return m_View;
 	}
 
