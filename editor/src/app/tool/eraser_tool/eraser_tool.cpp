@@ -1,51 +1,57 @@
 #include "eraser_tool.h"
 
-namespace spright { namespace editor {
+namespace spright
+{
+namespace editor
+{
 
-	EraserTool::EraserTool(DocumentStore* documentStore, int eraserSize) : m_documentStore(documentStore), m_Size(eraserSize), Tool("erase")
-	{
-		m_EraserStroke = EraserStroke(m_Size);
-	}
+    EraserTool::EraserTool(DocumentStore *documentStore, int eraserSize)
+        : m_documentStore(documentStore), m_Size(eraserSize), Tool("erase")
+    {
+        m_EraserStroke = EraserStroke(m_Size);
+    }
 
-	void EraserTool::pointerDown(PointerInfo& pointerInfo)
-	{
-		Drawing& drawing = m_documentStore->getActiveDocument().getActiveDrawing();
+    void EraserTool::pointerDown(PointerInfo &pointerInfo)
+    {
+        Drawing &drawing = m_documentStore->getActiveDocument().getActiveDrawing();
 
-		TileLayer& activeLayer = drawing.getActiveLayer();
-		m_Eraser.erase(activeLayer, activeLayer.getTilePos(pointerInfo.curr), m_Size);
-	}
+        TileLayer &activeLayer = drawing.getActiveLayer();
+        m_Eraser.erase(activeLayer, activeLayer.getTilePos(pointerInfo.curr), m_Size);
+    }
 
-	void EraserTool::pointerMove(PointerInfo& pointerInfo)
-	{
-		Drawing& drawing = m_documentStore->getActiveDocument().getActiveDrawing();
+    void EraserTool::pointerMove(PointerInfo &pointerInfo)
+    {
+        Drawing &drawing = m_documentStore->getActiveDocument().getActiveDrawing();
 
-		TileLayer& activeLayer = drawing.getActiveLayer();
-		TileLayer& drawLayer = drawing.getForegroundLayer();
+        TileLayer &activeLayer = drawing.getActiveLayer();
+        TileLayer &drawLayer = drawing.getForegroundLayer();
 
-		m_EraserStroke.draw(activeLayer, drawLayer, pointerInfo.curr);
+        m_EraserStroke.draw(activeLayer, drawLayer, pointerInfo.curr);
 
-		if (pointerInfo.isDown) {
-			m_Eraser.erase(activeLayer, activeLayer.getTilePos(pointerInfo.curr), m_Size);
-		}
-	}
+        if (pointerInfo.isDown)
+        {
+            m_Eraser.erase(activeLayer, activeLayer.getTilePos(pointerInfo.curr), m_Size);
+        }
+    }
 
-	void EraserTool::deactivate()
-	{
-		m_EraserStroke.clear();
-	}
-	void EraserTool::setOptions(std::string json)
-	{
-		nlohmann::json parsedJson = nlohmann::json::parse(json);
+    void EraserTool::deactivate()
+    {
+        m_EraserStroke.clear();
+    }
+    void EraserTool::setOptions(std::string json)
+    {
+        nlohmann::json parsedJson = nlohmann::json::parse(json);
 
-		m_Size = parsedJson["size"];
-	}
+        m_Size = parsedJson["size"];
+    }
 
-	std::string EraserTool::getOptions()
-	{
-		nlohmann::json json;
+    std::string EraserTool::getOptions()
+    {
+        nlohmann::json json;
 
-		json["size"] = m_Size;
+        json["size"] = m_Size;
 
-		return json.dump();
-	}
-}}
+        return json.dump();
+    }
+} // namespace editor
+} // namespace spright
