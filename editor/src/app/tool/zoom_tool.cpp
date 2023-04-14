@@ -1,12 +1,17 @@
 #include "zoom_tool.h"
 
-namespace spright { namespace editor {
-	ZoomTool::ZoomTool(DocumentStore* documentStore) : m_DocumentStore(documentStore), Tool("zoom")
-	{
-	}
+namespace spright
+{
+namespace editor
+{
+    ZoomTool::ZoomTool(DocumentStore *documentStore) : m_DocumentStore(documentStore), Tool("zoom")
+    {
+    }
 
-	void ZoomTool::scroll(PointerInfo& pointerInfo)
-	{
-		m_DocumentStore->getActiveDocument().getCamera().zoom(pointerInfo.scroll.y > 0 ? -m_ZoomFactor : m_ZoomFactor);
-	}
-}}
+    void ZoomTool::scroll(ToolContext &context)
+    {
+        m_DocumentStore->getActiveDocument().getCamera().zoom(context.pointer.scroll.y > 0 ? -m_ZoomFactor
+                                                                                           : m_ZoomFactor);
+    }
+} // namespace editor
+} // namespace spright

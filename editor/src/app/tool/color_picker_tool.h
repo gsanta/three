@@ -1,34 +1,41 @@
 #pragma once
-#include <iostream>
-#include <sstream>
-#include "../service/services.h"
 #include "../document/document_store.h"
-#include "pointer_info.h"
-#include "tool.h"
-#include "helper/layer_provider.h"
+#include "../document/drawing.h"
 #include "../event/event_emitter.h"
+#include "../service/services.h"
 #include "brush_tool.h"
+#include "helper/layer_provider.h"
+#include "tool/tool.h"
+#include "tool/tool_context.h"
 #include "tool_handler.h"
 
-namespace spright { namespace editor {
-	using namespace ::spright::engine;
-	using namespace ::spright::maths;
+#include <iostream>
+#include <sstream>
 
-	class ColorPickerTool : public Tool {
-	private:
-		DocumentStore* m_DocumentStore;
-		ToolHandler* m_ToolHandler;
-		EventEmitter* m_EventEmitter;
+namespace spright
+{
+namespace editor
+{
+    using namespace ::spright::engine;
+    using namespace ::spright::maths;
 
-		unsigned int m_PickedColor;
+    class ColorPickerTool : public Tool
+    {
+    private:
+        DocumentStore *m_DocumentStore;
+        ToolHandler *m_ToolHandler;
+        EventEmitter *m_EventEmitter;
 
-	public:
-		ColorPickerTool(DocumentStore* documentStore, ToolHandler* toolHandler, EventEmitter* eventEmitter);
-		void pointerDown(PointerInfo& pointerInfo) override;
-		unsigned int getPickedColor() const;
-		std::string getData() override;
+        unsigned int m_PickedColor;
 
-	private:
-		void emitColorChange() const;
-	};
-}}
+    public:
+        ColorPickerTool(ToolHandler *toolHandler, EventEmitter *eventEmitter);
+        void pointerDown(ToolContext &) override;
+        unsigned int getPickedColor() const;
+        std::string getData() override;
+
+    private:
+        void emitColorChange() const;
+    };
+} // namespace editor
+} // namespace spright

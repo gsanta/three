@@ -1,27 +1,33 @@
 #pragma once
 
-#include <vector>
-#include <algorithm>
-#include "canvas_listener.h"
-#include "../../tool/pointer_info.h"
 #include "../../../engine/system/window/input_listener.h"
-#include "../../tool/pointer_info.h"
+#include "../../tool/tool/pointer_info.h"
+#include "canvas_listener.h"
 
-namespace spright { namespace editor {
-	using namespace ::spright::engine;
+#include <algorithm>
+#include <vector>
 
-	class CanvasListenerHandler : public InputListener {
-	private:
-		std::vector<CanvasListener*> m_Listeners;
-		PointerInfo m_PointerInfo;
-	public:
-		virtual void onMouseUp(bool buttons[3]) override;
-		virtual void onMouseDown(bool buttons[3]) override;
-		virtual void onMouseMove(double x, double y) override;
+namespace spright
+{
+namespace editor
+{
+    using namespace ::spright::engine;
+
+    class CanvasListenerHandler : public InputListener
+    {
+    private:
+        std::vector<CanvasListener *> m_Listeners;
+        PointerInfo m_PointerInfo;
+
+    public:
+        virtual void onMouseUp(bool buttons[3]) override;
+        virtual void onMouseDown(bool buttons[3]) override;
+        virtual void onMouseMove(double x, double y) override;
 
 
-		void addListener(CanvasListener* listener);
-		void removeListener(CanvasListener* listener);
-	};
+        void addListener(CanvasListener *listener);
+        void removeListener(CanvasListener *listener);
+    };
 
-}}
+} // namespace editor
+} // namespace spright

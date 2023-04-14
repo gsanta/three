@@ -1,30 +1,30 @@
 #include "tile_layer_builder.h"
 
 
-TileLayerBuilder& TileLayerBuilder::withBounds(Bounds bounds) {
-	m_Bounds = bounds;
+TileLayerBuilder &TileLayerBuilder::withBounds(Bounds bounds)
+{
+    m_Bounds = bounds;
 
-	return *this;
+    return *this;
 }
 
-TileLayerBuilder& TileLayerBuilder::withIndex(size_t index) {
-	m_Index = index;
+TileLayerBuilder &TileLayerBuilder::withIndex(size_t index)
+{
+    m_Index = index;
 
-	return *this;
+    return *this;
 }
 
-TileLayerBuilder& TileLayerBuilder::withTileSize(float tileSize) {
-	m_TileSize = tileSize;
+TileLayerBuilder &TileLayerBuilder::withTileSize(float tileSize)
+{
+    m_TileSize = tileSize;
 
-	return *this;
+    return *this;
 }
 
-TileLayer TileLayerBuilder::build() {
-	TileLayer layer("layer_" + std::to_string(m_Index), Group<Rect2D>(new HeadlessRenderer2D()), m_Bounds, m_TileSize);
+TileLayer TileLayerBuilder::build()
+{
+    TileLayer layer("layer_" + std::to_string(m_Index), Group<Rect2D>(new HeadlessRenderer2D()), m_Bounds, m_TileSize);
 
-	return layer;
-}
-
-TileLayerBuilder TileLayerBuilder::TileLayerBuilder::create() {
-	return TileLayerBuilder();
+    return layer;
 }
