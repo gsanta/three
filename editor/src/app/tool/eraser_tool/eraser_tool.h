@@ -1,39 +1,50 @@
 #pragma once
 
-#include <vector>
-#include <memory>
 #include "../../../engine/graphics/renderable/rect2d.h"
 #include "../../../engine/graphics/renderable/renderable2d.h"
 #include "../../document/document_store.h"
-#include "../tool.h"
+#include "../../document/drawing.h"
 #include "../helper/layer_provider.h"
+#include "../tool/tool.h"
+#include "../tool/tool_context.h"
 #include "eraser.h"
 #include "eraser_stroke.h"
 
-namespace spright { namespace editor {
-	using namespace spright::maths;
-	using namespace spright::engine;
+#include <memory>
+#include <vector>
 
-	class EraserTool : public Tool {
-	private:
-		DocumentStore* m_documentStore;
+namespace spright
+{
+namespace editor
+{
+    using namespace spright::maths;
+    using namespace spright::engine;
 
-		Eraser m_Eraser;
-		EraserStroke m_EraserStroke;
+    class EraserTool : public Tool
+    {
+    private:
+        DocumentStore *m_documentStore;
 
-		int m_Size = 3;
+        Eraser m_Eraser;
+        EraserStroke m_EraserStroke;
 
-		float m_DashSize = 0.2f;
-		bool m_IsMoveSelection = false;
+        int m_Size = 3;
+        float m_DashSize = 0.2f;
+        bool m_IsMoveSelection = false;
+        float m_NoMovementTolerance = 0.1f;
 
-		float m_NoMovementTolerance = 0.1f;
+    public:
+        EraserTool(int eraserSize);
 
-	public:
-		EraserTool(DocumentStore* documentStore, int eraserSize);
-		void pointerDown(PointerInfo& pointerInfo) override;
-		void pointerMove(PointerInfo& pointerInfo) override;
-		void deactivate() override;
-		void setOptions(std::string json) override;
-		std::string getOptions() override;
-	};
-}}
+        void pointerDown(ToolContext &) override;
+
+        void pointerMove(ToolContext &) override;
+
+        void deactivate(ToolContext &) override;
+
+        void setOptions(std::string json) override;
+
+        std::string getOptions() override;
+    };
+} // namespace editor
+} // namespace spright

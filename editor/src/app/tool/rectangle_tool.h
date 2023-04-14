@@ -1,27 +1,31 @@
 #pragma once
 
 #include "../../engine/graphics/renderable/rect2d.h"
-#include "tool.h"
 #include "../../maths/vec2.h"
 #include "../../maths/vec3.h"
 #include "../service/services.h"
-#include "../document/document_store.h"
+#include "tool/tool.h"
+#include "tool/tool_context.h"
 
-namespace spright { namespace editor {
+namespace spright
+{
+namespace editor
+{
 
-	using namespace ::spright::engine;
+    using namespace ::spright::engine;
 
-	class RectangleTool : public Tool {
-	private:
-		DocumentStore* m_DocumentStore;
-		Services* m_Services;
-		float m_Size = 10;
-		Rect2D* m_Rect = nullptr;
+    class RectangleTool : public Tool
+    {
+    private:
+        Services *m_Services;
+        float m_Size = 10;
+        Rect2D *m_Rect = nullptr;
 
-	public:
-		RectangleTool(DocumentStore* documentStore, Services* services);
-		void pointerDown(PointerInfo& pointerInfo) override;
-		void pointerUp(PointerInfo& pointerInfo) override;
-		void pointerMove(PointerInfo& pointerInfo) override;
-	};
-}}
+    public:
+        RectangleTool(Services *services);
+        void pointerDown(ToolContext &) override;
+        void pointerUp(ToolContext &) override;
+        void pointerMove(ToolContext &) override;
+    };
+} // namespace editor
+} // namespace spright

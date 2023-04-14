@@ -1,102 +1,112 @@
 #include "editor.h"
 
-namespace spright { namespace editor {
-	Editor::Editor(RunLoop runLoop): m_RunLoop(runLoop)
-	{
-		m_EventEmitter = std::make_unique<EmscriptenEventEmitter>();
+namespace spright
+{
+namespace editor
+{
+    Editor::Editor(RunLoop runLoop) : m_RunLoop(runLoop)
+    {
+        m_EventEmitter = std::make_unique<EmscriptenEventEmitter>();
 
-		m_Window = new GLWindow("Editor", 800, 800);
-		m_DocumentFactory = new DocumentFactory(m_Window, new GLRendererProvider(),  m_EventEmitter.get());
+        m_Window = new GLWindow("Editor", 800, 800);
+        m_DocumentFactory = new DocumentFactory(m_Window, new GLRendererProvider(), m_EventEmitter.get());
 
-		m_DocumentStore = std::make_unique<DocumentStore>();
-		
-		m_DocumentStore->addDocument(m_DocumentFactory->createDocument());
+        m_DocumentStore = std::make_unique<DocumentStore>();
 
-		std::vector<Drawing>& drawings = m_DocumentStore->getActiveDocument().getDrawings();
+        m_DocumentStore->addDocument(m_DocumentFactory->createDocument());
 
-		m_Rendering = new Rendering(m_Window, getDocumentStore());
+        std::vector<Drawing> &drawings = m_DocumentStore->getActiveDocument().getDrawings();
 
-		m_Services = new spright::Services();
+        m_Rendering = new Rendering(m_Window, getDocumentStore());
 
-		m_ImageExport = new ImageExport(m_Window, m_Rendering);
+        m_Services = new spright::Services();
 
-		m_JsonExport = std::make_unique<JsonIO>(getDocumentStore(), m_DocumentFactory);
+        m_ImageExport = new ImageExport(m_Window, m_Rendering);
 
-		m_FramePlayerHandler.setDocumentStore(getDocumentStore());
+        m_JsonExport = std::make_unique<JsonIO>(getDocumentStore(), m_DocumentFactory);
 
-		m_toolHandler = new ToolHandler(m_Window, getDocumentStore(), m_Services, m_ImageExport, m_DocumentFactory);
-		m_toolHandler->addTool(new BrushTool(getDocumentStore()));
-		m_toolHandler->addTool(new RectangleTool(getDocumentStore(), m_Services));
-		m_toolHandler->addTool(new EraserTool(getDocumentStore(), 3));
-		m_toolHandler->addTool(new PanTool(getDocumentStore()));
-		m_toolHandler->addTool(new ZoomTool(getDocumentStore()));
-		m_toolHandler->addTool(new PaintBucketTool(getDocumentStore(), m_Services));
-		m_toolHandler->addTool(new SelectTool(getDocumentStore()));
-		m_toolHandler->addTool(new ColorPickerTool(getDocumentStore(), m_toolHandler, m_EventEmitter.get()));
-		m_toolHandler->addTool(new NewDrawingTool(getDocumentStore(), m_DocumentFactory));
-		m_toolHandler->addActiveTool("zoom");
-		m_toolHandler->addActiveTool("pan");
-		m_toolHandler->setSelectedTool("brush");
+        m_FramePlayerHandler.setDocumentStore(getDocumentStore());
 
-		m_RunLoop.add(m_FramePlayerHandler);
-	}
+        m_toolHandler = new ToolHandler(m_Window, getDocumentStore(), m_Services, m_ImageExport, m_DocumentFactory);
+        m_toolHandler->addTool(new BrushTool(getDocumentStore()));
+        m_toolHandler->addTool(new RectangleTool(m_Services));
+        m_toolHandler->addTool(new EraserTool(3));
+        m_toolHandler->addTool(new PanTool(getDocumentStore()));
+        m_toolHandler->addTool(new ZoomTool(getDocumentStore()));
+        m_toolHandler->addTool(new PaintBucketTool(m_Services));
+        m_toolHandler->addTool(new SelectTool(getDocumentStore()));
+        m_toolHandler->addTool(new ColorPickerTool(m_toolHandler, m_EventEmitter.get()));
+        m_toolHandler->addTool(new NewDrawingTool(getDocumentStore(), m_DocumentFactory));
+        m_toolHandler->addActiveTool("zoom");
+        m_toolHandler->addActiveTool("pan");
+        m_toolHandler->setSelectedTool("brush");
 
-	Editor::~Editor()
-	{
-		m_Window->getInputHandler()->unRegisterListener(m_toolHandler);
+        m_RunLoop.add(m_FramePlayerHandler);
+    }
 
-		delete m_Rendering;
-		delete m_Window;
-		delete m_DocumentFactory;
-		delete m_Services;
-	}
+    Editor::~Editor()
+    {
+        m_Window->getInputHandler()->unRegisterListener(m_toolHandler);
 
-	Document& Editor::getActiveDocument() {
-		return m_DocumentStore->getActiveDocument();
-	}
+        delete m_Rendering;
+        delete m_Window;
+        delete m_DocumentFactory;
+        delete m_Services;
+    }
 
-	ActiveFrame& Editor::getActiveFrame() {
-		return m_DocumentStore->getActiveDocument().getActiveFrame();
-	}
+    Document &Editor::getActiveDocument()
+    {
+        return m_DocumentStore->getActiveDocument();
+    }
 
-	TileLayer& Editor::getActiveLayer() {
-		return getActiveFrame().getActiveLayer();
-	}
+    ActiveFrame &Editor::getActiveFrame()
+    {
+        return m_DocumentStore->getActiveDocument().getActiveFrame();
+    }
 
-	Window* Editor::getWindow() const
-	{
-		return m_Window;
-	}
+    TileLayer &Editor::getActiveLayer()
+    {
+        return getActiveFrame().getActiveLayer();
+    }
 
-	DocumentFactory* Editor::getDocumentFactory()
-	{
-		return m_DocumentFactory;
-	}
+    Window *Editor::getWindow() const
+    {
+        return m_Window;
+    }
 
-	DocumentStore* Editor::getDocumentStore()
-	{
-		return m_DocumentStore.get();
-	}
+    DocumentFactory *Editor::getDocumentFactory()
+    {
+        return m_DocumentFactory;
+    }
 
-	ToolHandler* Editor::getToolHandler()
-	{
-		return m_toolHandler;
-	}
+    DocumentStore *Editor::getDocumentStore()
+    {
+        return m_DocumentStore.get();
+    }
 
-	Rendering* Editor::getRendering()
-	{
-		return m_Rendering;
-	}
+    ToolHandler *Editor::getToolHandler()
+    {
+        return m_toolHandler;
+    }
 
-	ImageExport* Editor::getImageExport() {
-		return m_ImageExport;
-	}
+    Rendering *Editor::getRendering()
+    {
+        return m_Rendering;
+    }
 
-	JsonIO* Editor::getJsonIO() {
-		return m_JsonExport.get();
-	}
+    ImageExport *Editor::getImageExport()
+    {
+        return m_ImageExport;
+    }
 
-	RunLoop& Editor::getRunLoop() {
-		return m_RunLoop;
-	}
-}}
+    JsonIO *Editor::getJsonIO()
+    {
+        return m_JsonExport.get();
+    }
+
+    RunLoop &Editor::getRunLoop()
+    {
+        return m_RunLoop;
+    }
+} // namespace editor
+} // namespace spright

@@ -1,38 +1,44 @@
 #pragma once
 
-#include <vector>
 #include "../../../engine/graphics/renderable/rect2d.h"
 #include "../../document/document_store.h"
-#include "../tool.h"
+#include "../../document/drawing.h"
 #include "../common/selection_box.h"
+#include "../tool/tool.h"
+#include "../tool/tool_context.h"
 
-namespace spright { namespace editor {
-	using namespace ::spright::maths;
-	using namespace ::spright::engine;
-	using namespace editor;
+#include <vector>
 
-	class SelectTool : public Tool {
-	private:
-		DocumentStore* m_DocumentStore;
-		SelectionBox m_SelectionBox;
+namespace spright
+{
+namespace editor
+{
+    using namespace ::spright::maths;
+    using namespace ::spright::engine;
+    using namespace editor;
 
-		vector<Rect2D*> m_Data;
-		vector<Vec2> m_OrigPositions;
+    class SelectTool : public Tool
+    {
+    private:
+        DocumentStore *m_DocumentStore;
+        SelectionBox m_SelectionBox;
 
-		float m_NoMovementTolerance = 0.1f;
-		bool m_IsMove = false;
+        vector<Rect2D *> m_Data;
+        vector<Vec2> m_OrigPositions;
 
-		Drawing* m_ActiveDrawing = nullptr;
+        float m_NoMovementTolerance = 0.1f;
+        bool m_IsMove = false;
 
-	public:
-		SelectTool(DocumentStore* documentHandler);
-		void pointerDown(PointerInfo& pointerInfo) override;
-		void pointerUp(PointerInfo& pointerInfo) override;
-		void pointerMove(PointerInfo& pointerInfo) override;
-	private:
-		//void updateSelectionBox(Vec2 bottomLeft, Vec2 topRight);
-		void makeSelection(PointerInfo& pointerInfo);
-		void makePointSelection(PointerInfo& pointerInfo);
-		void moveSelection(PointerInfo& pointerInfo);
-	};
-}}
+    public:
+        SelectTool(DocumentStore *documentHandler);
+        void pointerDown(ToolContext &) override;
+        void pointerUp(ToolContext &) override;
+        void pointerMove(ToolContext &) override;
+
+    private:
+        void makeSelection(ToolContext &);
+        void makePointSelection(ToolContext &);
+        void moveSelection(Vec2 tileDelta, Drawing *activeDrawing);
+    };
+} // namespace editor
+} // namespace spright

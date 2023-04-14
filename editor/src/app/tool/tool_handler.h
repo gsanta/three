@@ -1,76 +1,94 @@
 #pragma once
-#include <vector>
-#include <iostream>
-#include <algorithm>
-#include "tool.h"
-#include "brush_tool.h"
-#include "rectangle_tool.h"
-#include "eraser_tool/eraser_tool.h"
-#include "../service/services.h"
-#include "../../engine/system/window/window.h"
-#include "../../engine/system/window/input_listener.h"
 #include "../../engine/graphics/camera/camera.h"
 #include "../../engine/graphics/camera/ortho_projection_info.h"
-#include "../editor_config.h"
-#include "../service/services.h"
-#include "../service/io/image_export.h"
+#include "../../engine/system/window/input_listener.h"
+#include "../../engine/system/window/window.h"
 #include "../document/factory/document_factory.h"
+#include "../editor_config.h"
+#include "../service/io/image_export.h"
+#include "../service/services.h"
+#include "brush_tool.h"
+#include "eraser_tool/eraser_tool.h"
+#include "rectangle_tool.h"
+#include "tool/document_info.h"
+#include "tool/pointer_info.h"
+#include "tool/tool.h"
+#include "tool/tool_context.h"
 
-namespace spright { namespace editor {
+#include <algorithm>
+#include <iostream>
+#include <vector>
 
-	using namespace std;
-	using namespace ::spright::engine;
+namespace spright
+{
+namespace editor
+{
 
-	class ToolHandler : public InputListener {
-	private:
-		Window* m_Window;
-		vector<Tool*> m_Tools;
-		vector<Tool*>* m_ActiveTools;
-		Tool* m_SelectedTool = nullptr;
-		PointerInfo m_pointerInfo;
-		Services* m_Services;
-		DocumentStore* m_DocumentStore;
-		ImageExport* m_ImageExport;
-		DocumentFactory* m_DocumentFactory;
-	public:
-		ToolHandler();
-		ToolHandler(Window* window, DocumentStore* documentStore, Services* services, ImageExport* imageExport, DocumentFactory* documentFractory);
-		~ToolHandler();
+    using namespace std;
+    using namespace ::spright::engine;
 
-		ToolHandler& operator=(const ToolHandler& toolHandler);
+    class ToolHandler : public InputListener
+    {
+    private:
+        Window *m_Window;
+        vector<Tool *> m_Tools;
+        vector<Tool *> *m_ActiveTools;
+        Tool *m_SelectedTool = nullptr;
+        Services *m_Services;
+        DocumentStore *m_DocumentStore;
+        ImageExport *m_ImageExport;
+        DocumentFactory *m_DocumentFactory;
 
-		// TODO: destructor
-		virtual void onMouseUp(bool buttons[3]) override;
-		virtual void onMouseDown(bool buttons[3]) override;
-		virtual void onMouseMove(double x, double y) override;
-		virtual void onScroll(double x, double y) override;
-		virtual void onKeyChange(int key, bool isPressed) override;
+        ToolContext m_ToolContext;
 
-		void addTool(Tool* tool);
+    public:
+        ToolHandler();
+        ToolHandler(Window *window,
+                    DocumentStore *documentStore,
+                    Services *services,
+                    ImageExport *imageExport,
+                    DocumentFactory *documentFractory);
+        ~ToolHandler();
 
-		Tool* getTool(string name) const;
+        ToolHandler &operator=(const ToolHandler &toolHandler);
 
-		vector<Colorable*> getColorableTools();
+        // TODO: destructor
+        virtual void onMouseUp(bool buttons[3]) override;
+        virtual void onMouseDown(bool buttons[3]) override;
+        virtual void onMouseMove(double x, double y) override;
+        virtual void onScroll(double x, double y) override;
+        virtual void onKeyChange(int key, bool isPressed) override;
 
-		inline vector<Tool*>* getActiveTool() const {
-			return m_ActiveTools;
-		}
+        void addTool(Tool *tool);
 
-		Tool* getSelectedTool();
-		void setSelectedTool(string name);
+        Tool *getTool(string name) const;
 
-		inline void addActiveTool(string name) {
-			m_ActiveTools->push_back(getTool(name));
-		}
+        vector<Colorable *> getColorableTools();
 
-		inline void removeActiveTool(string name) {
-			auto it = find(m_ActiveTools->begin(), m_ActiveTools->end(), getTool(name));
+        inline vector<Tool *> *getActiveTool() const
+        {
+            return m_ActiveTools;
+        }
 
-			if (it != m_ActiveTools->end()) {
-				m_ActiveTools->erase(it);
-			}
-		}
+        Tool *getSelectedTool();
+        void setSelectedTool(string name);
 
-		bool isActiveTool(string name);
-	};
-} }
+        inline void addActiveTool(string name)
+        {
+            m_ActiveTools->push_back(getTool(name));
+        }
+
+        inline void removeActiveTool(string name)
+        {
+            auto it = find(m_ActiveTools->begin(), m_ActiveTools->end(), getTool(name));
+
+            if (it != m_ActiveTools->end())
+            {
+                m_ActiveTools->erase(it);
+            }
+        }
+
+        bool isActiveTool(string name);
+    };
+} // namespace editor
+} // namespace spright

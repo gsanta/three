@@ -1,130 +1,148 @@
 #include "select_tool.h"
 
-namespace spright { namespace editor {
+namespace spright
+{
+namespace editor
+{
 
-	SelectTool::SelectTool(DocumentStore* documentStore) : m_DocumentStore(documentStore), Tool("select")
-	{
-	}
+    SelectTool::SelectTool(DocumentStore *documentStore) : m_DocumentStore(documentStore), Tool("select")
+    {
+    }
 
-	void SelectTool::pointerDown(PointerInfo& pointerInfo)
-	{
-		m_ActiveDrawing = m_DocumentStore->getActiveDocument().getDrawingAt(pointerInfo.curr);
+    void SelectTool::pointerDown(ToolContext &context)
+    {
+        if (context.doc.hasActiveDrawing())
+        {
+            m_SelectionBox.setTileLayer(context.doc.activeDrawing->getForegroundLayer());
+            m_IsMove = m_SelectionBox.isInsideSelection(context.pointer.curr);
 
-		if (m_ActiveDrawing != nullptr) {
-			m_SelectionBox.setTileLayer(m_ActiveDrawing->getForegroundLayer());
-			m_IsMove = m_SelectionBox.isInsideSelection(pointerInfo.curr);
+            if (!m_IsMove)
+            {
+                m_SelectionBox.start(context.pointer.curr);
+            }
+        }
+    }
 
-			if (!m_IsMove) {
-				m_SelectionBox.start(pointerInfo.curr);
-			}
-		}
-	}
+    void SelectTool::pointerUp(ToolContext &context)
+    {
+        if (!context.doc.hasActiveDrawing())
+        {
+            return;
+        }
 
-	void SelectTool::pointerUp(PointerInfo& pointerInfo)
-	{
-		if (Vec2::distance(pointerInfo.down, pointerInfo.curr) < m_NoMovementTolerance) {
-			makePointSelection(pointerInfo);
-		}
-		else {
-			makeSelection(pointerInfo);
-		}
+        if (Vec2::distance(context.pointer.down, context.pointer.curr) < m_NoMovementTolerance)
+        {
+            makePointSelection(context);
+        }
+        else
+        {
+            makeSelection(context);
+        }
 
-		m_IsMove = false;
-	}
+        m_IsMove = false;
+    }
 
-	void SelectTool::pointerMove(PointerInfo& pointerInfo)
-	{
-		if (!pointerInfo.isLeftButtonDown()) {
-			return;
-		}
+    void SelectTool::pointerMove(ToolContext &context)
+    {
+        if (!context.pointer.isLeftButtonDown())
+        {
+            return;
+        }
 
-		if (m_IsMove) {
-			moveSelection(pointerInfo);
-			m_SelectionBox.move(pointerInfo.curr - pointerInfo.prev);
-		}
-		else {
-			m_SelectionBox.setPosition(pointerInfo.curr);
-		}
-	}
+        if (m_IsMove)
+        {
+            Vec2 delta = m_SelectionBox.move(context.pointer.curr - context.pointer.prev);
+            moveSelection(delta, context.doc.activeDrawing);
+        }
+        else
+        {
+            m_SelectionBox.setPosition(context.pointer.curr);
+        }
+    }
 
-	void SelectTool::makeSelection(PointerInfo& pointerInfo) {
-		m_Data.clear();
-		m_OrigPositions.clear();
+    void SelectTool::makeSelection(ToolContext &context)
+    {
+        m_Data.clear();
+        m_OrigPositions.clear();
 
-		if (m_ActiveDrawing == nullptr) {
-			return;
-		}
+        if (!context.doc.activeDrawing)
+        {
+            return;
+        }
 
-		Vec2 down = pointerInfo.down;
-		Vec2 curr = pointerInfo.curr;
+        Vec2 down = context.pointer.down;
+        Vec2 curr = context.pointer.curr;
 
-		float startX = down.x < curr.x ? down.x : curr.x;
-		float endX = down.x < curr.x ? curr.x : down.x;
-		float startY = down.y < curr.y ? down.y : curr.y;
-		float endY = down.y < curr.y ? curr.y : down.y;
+        float startX = down.x < curr.x ? down.x : curr.x;
+        float endX = down.x < curr.x ? curr.x : down.x;
+        float startY = down.y < curr.y ? down.y : curr.y;
+        float endY = down.y < curr.y ? curr.y : down.y;
+        Bounds selectionBounds = Bounds::createWithPositions(startX, endX, startY, endY);
 
-		TileLayer& layer = m_ActiveDrawing->getActiveLayer();
+        TileLayer &layer = context.doc.activeDrawing->getActiveLayer();
 
-		auto it = layer.getRenderables().begin();
-		while (it != layer.getRenderables().end()) {
-			const Bounds& bounds = (*it)->getBounds();
+        auto it = layer.getRenderables().begin();
+        while (it != layer.getRenderables().end())
+        {
+            Vec2 pos = (*it)->getCenterPosition2d();
 
-			if (bounds.minX > startX && bounds.maxX < endX && bounds.minY > startY && bounds.maxY < endY) {
-				Rect2D* sprite = static_cast<Rect2D*>(*it);
-				m_Data.push_back(sprite);
-				m_OrigPositions.push_back(Vec2(sprite->getPosition().x, sprite->getPosition().y));
-			}
-			++it;
-		}
-	}
+            if (selectionBounds.contains(pos.x, pos.y))
+            {
+                Rect2D *sprite = static_cast<Rect2D *>(*it);
+                m_Data.push_back(sprite);
+                m_OrigPositions.push_back(Vec2(sprite->getPosition().x, sprite->getPosition().y));
+            }
+            ++it;
+        }
+    }
 
-	void SelectTool::moveSelection(PointerInfo& pointerInfo) {
-		if (m_ActiveDrawing == nullptr) {
-			return;
-		}
+    void SelectTool::moveSelection(Vec2 tileDelta, Drawing *activeDrawing)
+    {
+        if (activeDrawing == nullptr)
+        {
+            return;
+        }
 
-		TileLayer& tileLayer = m_ActiveDrawing->getActiveLayer();
+        TileLayer &tileLayer = activeDrawing->getActiveLayer();
 
-		Vec2 down = pointerInfo.down;
-		Vec2 curr = pointerInfo.curr;
+        for (int i = 0; i < m_Data.size(); i++)
+        {
+            Rect2D *sprite = m_Data[i];
 
-		Vec2 move(curr - down);
-		Vec2Int moveTile(move.x / tileLayer.getTileSize(), move.y / tileLayer.getTileSize());
-		Vec2 finalMove(moveTile.x * tileLayer.getTileSize(), moveTile.y * tileLayer.getTileSize());
+            sprite->translate(tileDelta);
+        }
 
-		for (int i = 0; i < m_Data.size(); i++) {
-			Rect2D* sprite = m_Data[i];
+        for (Rect2D *sprite : m_Data)
+        {
+            Vec2Int tilePos = tileLayer.getTilePos(sprite->getPosition2d());
+            int newTileIndex = tileLayer.getTileIndex(tilePos.x, tilePos.y);
+            tileLayer.updateTileIndex(sprite, newTileIndex);
+        }
+    }
 
-			sprite->setPosition(m_OrigPositions[i]);
-			Vec3 position = sprite->getPosition();
+    void SelectTool::makePointSelection(ToolContext &context)
+    {
+        if (!context.doc.activeDrawing)
+        {
+            return;
+        }
+        TileLayer &tileLayer = context.doc.activeDrawing->getActiveLayer();
+        Camera &camera = m_DocumentStore->getActiveDocument().getCamera();
+        Vec2 model = camera.screenToModel(context.pointer.curr);
 
-			sprite->setPosition(Vec2(position.x, position.y) + finalMove);
+        Vec2Int tilePos = tileLayer.getTilePos(model);
+        int tileIndex = tileLayer.getTileIndex(tilePos.x, tilePos.y);
+        Renderable2D *renderable = tileLayer.getAtTileIndex(tileIndex);
 
-			Vec2Int tilePos = tileLayer.getTilePos(Vec2(position.x, position.y));
-			int newTileIndex = tileLayer.getTileIndex(tilePos.x, tilePos.y);
-			tileLayer.updateTileIndex(sprite->getTileIndex(), newTileIndex);
-		}
-	}
+        if (renderable != nullptr)
+        {
+            Rect2D *sprite = static_cast<Rect2D *>(renderable);
+            m_Data.push_back(sprite);
+            m_OrigPositions.push_back(Vec2(sprite->getPosition().x, sprite->getPosition().y));
 
-	void SelectTool::makePointSelection(PointerInfo& pointerInfo) {
-				if (m_ActiveDrawing == nullptr) {
-			return;
-		}
-		TileLayer& tileLayer = m_ActiveDrawing->getActiveLayer();
-		Camera& camera = m_DocumentStore->getActiveDocument().getCamera();
-		Vec2 model = camera.screenToModel(pointerInfo.curr);
-
-		Vec2Int tilePos = tileLayer.getTilePos(model);
-		int tileIndex = tileLayer.getTileIndex(tilePos.x, tilePos.y);
-		Renderable2D* renderable = tileLayer.getAtTileIndex(tileIndex);
-
-		if (renderable != nullptr) {
-			Rect2D* sprite = static_cast<Rect2D*>(renderable);
-			m_Data.push_back(sprite);
-			m_OrigPositions.push_back(Vec2(sprite->getPosition().x, sprite->getPosition().y));
-
-			Vec2 spritePos = sprite->getPosition2d();
-			float tileSize = tileLayer.getTileSize();
-		}
-	}
-}}
+            Vec2 spritePos = sprite->getPosition2d();
+            float tileSize = tileLayer.getTileSize();
+        }
+    }
+} // namespace editor
+} // namespace spright

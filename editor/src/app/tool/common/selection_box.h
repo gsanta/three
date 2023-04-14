@@ -1,37 +1,45 @@
 #pragma once
 
-#include <vector>
-#include "../../../engine/graphics/renderable/rect2d.h"
 #include "../../../engine/graphics/layer/tileLayer.h"
 #include "../../../engine/graphics/renderable/bounds.h"
+#include "../../../engine/graphics/renderable/rect2d.h"
 
-namespace spright { namespace editor {
-	using namespace ::spright::engine;
-	
-	class SelectionBox {
-	private:
-		TileLayer* m_Layer;
+#include <vector>
 
-		float m_DashSize = 0.2f;
-		Vec2 m_AbsoluteDelta;
-		Vec2 m_PrevTranslate;
+namespace spright
+{
+namespace editor
+{
+    using namespace ::spright::engine;
 
-		Vec2 m_Start;
+    class SelectionBox
+    {
+    private:
+        TileLayer *m_Layer;
 
-		Bounds m_Bounds;
-	public:
-		SelectionBox();
-		~SelectionBox();
+        float m_DashSize = 0.2f;
+        Vec2 m_AbsoluteDelta;
+        Vec2 m_PrevTranslate;
 
-		void setTileLayer(TileLayer& tileLayer);
-		void start(Vec2 pos);
-		void setPosition(Vec2 pos);
-		void move(Vec2 delta);
-		void clear();
-		bool isInsideSelection(Vec2 point);
-		Bounds getBounds();
-	private:
-		void calcSelectionBounds(Vec2 vec1, Vec2 vec2);
-		void clearSprites();
-	};
-}}
+        Vec2 m_Start;
+
+        Bounds m_Bounds;
+
+    public:
+        SelectionBox();
+        ~SelectionBox();
+
+        void setTileLayer(TileLayer &tileLayer);
+        void start(Vec2 pos);
+        void setPosition(Vec2 pos);
+        Vec2 move(Vec2 delta);
+        void clear();
+        bool isInsideSelection(Vec2 point);
+        Bounds getBounds();
+
+    private:
+        void calcSelectionBounds(Vec2 vec1, Vec2 vec2);
+        void clearSprites();
+    };
+} // namespace editor
+} // namespace spright
