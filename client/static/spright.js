@@ -1008,7 +1008,7 @@ function unexportedRuntimeSymbol(sym) {
 function dbg(text) {
   // TODO(sbc): Make this configurable somehow.  Its not always convenient for
   // logging to show up as errors.
-  console.error(text);
+  console.error.apply(console, arguments);
 }
 
 // end include: runtime_debug.js
@@ -1401,6 +1401,7 @@ function dbg(text) {
     }
   
   function stringToUTF8Array(str, heap, outIdx, maxBytesToWrite) {
+      assert(typeof str === 'string');
       // Parameter maxBytesToWrite is not optional. Negative values, 0, null,
       // undefined and false each don't write out any bytes.
       if (!(maxBytesToWrite > 0))
@@ -4760,7 +4761,7 @@ function dbg(text) {
       var r = constructor.apply(obj, argumentList);
       return (r instanceof Object) ? r : obj;
     }
-  function craftInvokerFunction(humanName, argTypes, classType, cppInvokerFunc, cppTargetFunc, isAsync) {
+  function craftInvokerFunction(humanName, argTypes, classType, cppInvokerFunc, cppTargetFunc, /** boolean= */ isAsync) {
       // humanName: a human-readable string name for the function to be generated.
       // argTypes: An array that contains the embind type objects for all types in the function signature.
       //    argTypes[0] is the type object for the function return value.
@@ -4769,6 +4770,7 @@ function dbg(text) {
       // classType: The embind type object for the class to be bound, or null if this is not a method of a class.
       // cppInvokerFunc: JS Function object to the C++-side function that interops into C++ code.
       // cppTargetFunc: Function pointer (an integer to FUNCTION_TABLE) to the target C++ function the cppInvokerFunc will end up calling.
+      // isAsync: Optional. If true, returns an async function. Async bindings are only supported with JSPI.
       var argCount = argTypes.length;
   
       if (argCount < 2) {
@@ -7750,6 +7752,7 @@ function dbg(text) {
   function _glViewport(x0, x1, x2, x3) { GLctx['viewport'](x0, x1, x2, x3) }
 
   
+  
   function stringToNewUTF8(str) {
       var size = lengthBytesUTF8(str) + 1;
       var ret = _malloc(size);
@@ -8075,10 +8078,11 @@ function dbg(text) {
         var repeat = status && GLFW.active.keys[key];
         GLFW.active.keys[key] = status;
         GLFW.active.domKeys[keyCode] = status;
-        if (!GLFW.active.keyFunc) return;
   
-        if (repeat) status = 2; // GLFW_REPEAT
-        getWasmTableEntry(GLFW.active.keyFunc)(GLFW.active.id, key, keyCode, status, GLFW.getModBits(GLFW.active));
+        if (GLFW.active.keyFunc) {
+          if (repeat) status = 2; // GLFW_REPEAT
+          getWasmTableEntry(GLFW.active.keyFunc)(GLFW.active.id, key, keyCode, status, GLFW.getModBits(GLFW.active));
+        }
       },onGamepadConnected:function(event) {
         GLFW.refreshJoysticks();
       },onGamepadDisconnected:function(event) {
@@ -8109,7 +8113,9 @@ function dbg(text) {
   
         if (event.target != Module["canvas"] || !GLFW.active.cursorPosFunc) return;
   
-        getWasmTableEntry(GLFW.active.cursorPosFunc)(GLFW.active.id, Browser.mouseX, Browser.mouseY);
+        if (GLFW.active.cursorPosFunc) {
+          getWasmTableEntry(GLFW.active.cursorPosFunc)(GLFW.active.id, Browser.mouseX, Browser.mouseY);
+        }
       },DOMToGLFWMouseButton:function(event) {
         // DOM and glfw have different button codes.
         // See http://www.w3schools.com/jsref/event_button.asp.
@@ -8125,15 +8131,19 @@ function dbg(text) {
       },onMouseenter:function(event) {
         if (!GLFW.active) return;
   
-        if (event.target != Module["canvas"] || !GLFW.active.cursorEnterFunc) return;
+        if (event.target != Module["canvas"]) return;
   
-        getWasmTableEntry(GLFW.active.cursorEnterFunc)(GLFW.active.id, 1);
+        if (GLFW.active.cursorEnterFunc) {
+          getWasmTableEntry(GLFW.active.cursorEnterFunc)(GLFW.active.id, 1);
+        }
       },onMouseleave:function(event) {
         if (!GLFW.active) return;
   
-        if (event.target != Module["canvas"] || !GLFW.active.cursorEnterFunc) return;
+        if (event.target != Module["canvas"]) return;
   
-        getWasmTableEntry(GLFW.active.cursorEnterFunc)(GLFW.active.id, 0);
+        if (GLFW.active.cursorEnterFunc) {
+          getWasmTableEntry(GLFW.active.cursorEnterFunc)(GLFW.active.id, 0);
+        }
       },onMouseButtonChanged:function(event, status) {
         if (!GLFW.active) return;
   
@@ -8152,9 +8162,9 @@ function dbg(text) {
           GLFW.active.buttons &= ~(1 << eventButton);
         }
   
-        if (!GLFW.active.mouseButtonFunc) return;
-  
-        getWasmTableEntry(GLFW.active.mouseButtonFunc)(GLFW.active.id, eventButton, status, GLFW.getModBits(GLFW.active));
+        if (GLFW.active.mouseButtonFunc) {
+          getWasmTableEntry(GLFW.active.mouseButtonFunc)(GLFW.active.id, eventButton, status, GLFW.getModBits(GLFW.active));
+        }
       },onMouseButtonDown:function(event) {
         if (!GLFW.active) return;
         GLFW.onMouseButtonChanged(event, 1); // GLFW_PRESS
@@ -8168,7 +8178,6 @@ function dbg(text) {
         GLFW.wheelPos += delta;
   
         if (!GLFW.active || !GLFW.active.scrollFunc || event.target != Module['canvas']) return;
-  
         var sx = 0;
         var sy = delta;
         if (event.type == 'mousewheel') {
@@ -8224,20 +8233,22 @@ function dbg(text) {
       },onWindowSizeChanged:function() {
         if (!GLFW.active) return;
   
-        if (!GLFW.active.windowSizeFunc) return;
-  
-        getWasmTableEntry(GLFW.active.windowSizeFunc)(GLFW.active.id, GLFW.active.width, GLFW.active.height);
+        if (GLFW.active.windowSizeFunc) {
+          getWasmTableEntry(GLFW.active.windowSizeFunc)(GLFW.active.id, GLFW.active.width, GLFW.active.height);
+        }
       },onFramebufferSizeChanged:function() {
         if (!GLFW.active) return;
   
-        if (!GLFW.active.framebufferSizeFunc) return;
-  
-        getWasmTableEntry(GLFW.active.framebufferSizeFunc)(GLFW.active.id, GLFW.active.width, GLFW.active.height);
+        if (GLFW.active.framebufferSizeFunc) {
+          getWasmTableEntry(GLFW.active.framebufferSizeFunc)(GLFW.active.id, GLFW.active.width, GLFW.active.height);
+        }
       },onWindowContentScaleChanged:function(scale) {
         GLFW.scale = scale;
         if (!GLFW.active) return;
   
-        getWasmTableEntry(GLFW.active.windowContentScaleFunc)(GLFW.active.id, GLFW.scale, GLFW.scale);
+        if (GLFW.active.windowContentScaleFunc) {
+          getWasmTableEntry(GLFW.active.windowContentScaleFunc)(GLFW.active.id, GLFW.scale, GLFW.scale);
+        }
       },getTime:function() {
         return _emscripten_get_now() / 1000;
       },setWindowTitle:function(winid, title) {
@@ -8535,9 +8546,9 @@ function dbg(text) {
           }
         }
   
-        if (!win.windowSizeFunc) return;
-  
-        getWasmTableEntry(win.windowSizeFunc)(win.id, width, height);
+        if (win.windowSizeFunc) {
+          getWasmTableEntry(win.windowSizeFunc)(win.id, width, height);
+        }
       },createWindow:function(width, height, title, monitor, share) {
         var i, id;
         for (i = 0; i < GLFW.windows.length && GLFW.windows[i] !== null; i++) {
@@ -8595,8 +8606,9 @@ function dbg(text) {
         var win = GLFW.WindowFromId(winid);
         if (!win) return;
   
-        if (win.windowCloseFunc)
+        if (win.windowCloseFunc) {
           getWasmTableEntry(win.windowCloseFunc)(win.id);
+        }
   
         GLFW.windows[win.id - 1] = null;
         if (GLFW.active.id == win.id)
@@ -9604,7 +9616,7 @@ var dynCall_iiiiij = Module["dynCall_iiiiij"] = createExportWrapper("dynCall_iii
 var dynCall_iiiiijj = Module["dynCall_iiiiijj"] = createExportWrapper("dynCall_iiiiijj");
 /** @type {function(...*):?} */
 var dynCall_iiiiiijj = Module["dynCall_iiiiiijj"] = createExportWrapper("dynCall_iiiiiijj");
-var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 87780;
+var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 87828;
 
 // include: postamble.js
 // === Auto-generated postamble setup entry stuff ===
@@ -9726,6 +9738,7 @@ var missingLibrarySymbols = [
   'polyfillSetImmediate',
   'getPromise',
   'makePromise',
+  'idsToPromises',
   'makePromiseCallback',
   '_setNetworkCallback',
   'emscriptenWebGLGet',
