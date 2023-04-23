@@ -22,19 +22,24 @@ namespace editor
     {
     private:
         DocumentStore *m_documentStore;
+
         int m_Size = 1;
+
         Rect2D *sprite;
+
         Brush brush;
 
     public:
         BrushTool(DocumentStore *documentStore);
 
         void setSize(int size);
-        void pointerMove(ToolContext &) override;
-        void pointerDown(ToolContext &) override;
+
+        void pointerMove(const ToolContext &) override;
+
+        void pointerDown(const ToolContext &) override;
 
     private:
-        void paint(PointerInfo &pointerInfo);
+        void paint(const PointerInfo &pointerInfo);
     };
 } // namespace editor
 } // namespace spright

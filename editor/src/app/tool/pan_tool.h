@@ -20,7 +20,7 @@ namespace editor
         PanTool(DocumentStore *documentStore);
 
     private:
-        void pointerMove(ToolContext &) override;
+        void pointerMove(const ToolContext &) override;
     };
 } // namespace editor
 } // namespace spright

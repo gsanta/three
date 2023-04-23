@@ -14,17 +14,17 @@ namespace editor
         m_Size = size;
     }
 
-    void BrushTool::pointerMove(ToolContext &context)
+    void BrushTool::pointerMove(const ToolContext &context)
     {
         paint(context.pointer);
     }
 
-    void BrushTool::pointerDown(ToolContext &context)
+    void BrushTool::pointerDown(const ToolContext &context)
     {
         paint(context.pointer);
     }
 
-    void BrushTool::paint(PointerInfo &pointerInfo)
+    void BrushTool::paint(const PointerInfo &pointerInfo)
     {
         if (pointerInfo.isLeftButtonDown() == false)
         {

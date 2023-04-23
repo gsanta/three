@@ -1,13 +1,20 @@
 #include "bounds.h"
 
-namespace spright { namespace engine {
-    Bounds::Bounds(float minX, float minY, float width, float height): minX(minX), minY(minY), maxX(minX + width), maxY(minY + height)
+namespace spright
+{
+namespace engine
+{
+    Bounds::Bounds(float minX, float minY, float width, float height)
+        : minX(minX), minY(minY), maxX(minX + width), maxY(minY + height)
     {
     }
 
-    Bounds::Bounds() : Bounds(0, 0, 0, 0) {}
+    Bounds::Bounds() : Bounds(0, 0, 0, 0)
+    {
+    }
 
-    Bounds Bounds::createWithPositions(float minX, float maxX, float minY, float maxY) {
+    Bounds Bounds::createWithPositions(float minX, float maxX, float minY, float maxY)
+    {
         return Bounds(minX, minY, maxX - minX, maxY - minY);
     }
 
@@ -16,11 +23,13 @@ namespace spright { namespace engine {
         return Vec2(minX + (maxX - minX) / 2.0, minY + (maxY - minY) / 2.0);
     }
 
-    float Bounds::getWidth() const {
+    float Bounds::getWidth() const
+    {
         return maxX - minX;
     }
 
-    float Bounds::getHeight() const {
+    float Bounds::getHeight() const
+    {
         return maxY - minY;
     }
 
@@ -38,24 +47,44 @@ namespace spright { namespace engine {
         minY -= deltaHeight;
     }
 
-    bool Bounds::contains(float x, float y) const {
+    bool Bounds::contains(float x, float y) const
+    {
         return minX <= x && maxX >= x && minY <= y && maxY >= y;
     }
 
-    bool operator==(const Bounds& lhs, const Bounds& rhs) {
+    void Bounds::translate(float x, float y)
+    {
+        minX += x;
+        maxX += x;
+        minY += y;
+        maxY += y;
+    }
+
+    bool operator==(const Bounds &lhs, const Bounds &rhs)
+    {
         return lhs.minX == rhs.minX && lhs.maxX == rhs.maxX && lhs.minY == rhs.minY && lhs.maxY == rhs.maxY;
     }
 
-    bool operator!=(const Bounds& lhs, const Bounds& rhs) {
+    bool operator!=(const Bounds &lhs, const Bounds &rhs)
+    {
         return !(lhs == rhs);
     }
 
-    Vec2 Bounds::getBottomLeft() {
+    Vec2 Bounds::getBottomLeft() const
+    {
         return Vec2(minX, minY);
     }
 
-    Vec2 Bounds::getTopRight() {
+    Vec2 Bounds::getTopRight() const
+    {
         return Vec2(maxX, maxY);
     }
-}}
 
+    std::string Bounds::toString() const
+    {
+        std::ostringstream ss;
+        ss << "(" << minX << "," << minY << "),(" << maxX << "," << maxY << ")";
+        return ss.str();
+    }
+} // namespace engine
+} // namespace spright

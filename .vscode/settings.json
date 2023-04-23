@@ -103,7 +103,12 @@
         "valarray": "cpp",
         "variant": "cpp",
         "vector": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "filesystem": "cpp",
+        "iterator": "cpp",
+        "memory_resource": "cpp",
+        "thread": "cpp",
+        "utility": "cpp"
     },
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,

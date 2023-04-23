@@ -22,7 +22,7 @@ namespace editor
 
     public:
         PaintBucketTool(Services *services);
-        void pointerUp(ToolContext &) override;
+        void pointerUp(const ToolContext &) override;
     };
 } // namespace editor
 } // namespace spright

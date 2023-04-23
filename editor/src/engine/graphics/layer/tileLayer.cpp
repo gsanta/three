@@ -200,14 +200,13 @@ namespace engine
         return Vec2(worldX, worldY);
     }
 
-    void TileLayer::updateTileIndex(Rect2D *rect, int newIndex)
+    void TileLayer::translateTile(Rect2D *tile, const Vec2 &delta)
     {
-        if (m_TileIndexes[rect->getTileIndex()] == rect)
-        {
-            m_TileIndexes[rect->getTileIndex()] = nullptr;
-        }
-        rect->setTileIndex(newIndex);
-        m_TileIndexes[newIndex] = rect;
+        tile->translate(delta);
+
+        Vec2Int tilePos = getTilePos(tile->getPosition2d());
+        int newTileIndex = getTileIndex(tilePos.x, tilePos.y);
+        updateTileIndex(tile, newTileIndex);
     }
 
     int TileLayer::getTileIndex(int tileX, int tileY) const
@@ -309,5 +308,16 @@ namespace engine
             add(*rect);
         }
     }
+
+    void TileLayer::updateTileIndex(Rect2D *rect, int newIndex)
+    {
+        if (m_TileIndexes[rect->getTileIndex()] == rect)
+        {
+            m_TileIndexes[rect->getTileIndex()] = nullptr;
+        }
+        rect->setTileIndex(newIndex);
+        m_TileIndexes[newIndex] = rect;
+    }
+
 } // namespace engine
 } // namespace spright

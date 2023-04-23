@@ -4,7 +4,7 @@ namespace spright
 {
 namespace editor
 {
-    SelectionBox::SelectionBox()
+    SelectionBox::SelectionBox(TileLayer *tileLayer) : m_Layer(tileLayer)
     {
     }
 
@@ -12,26 +12,19 @@ namespace editor
     {
     }
 
-    void SelectionBox::setTileLayer(TileLayer &tileLayer)
-    {
-        m_Layer = &tileLayer;
-    }
-
-
-    void SelectionBox::start(Vec2 pos)
+    void SelectionBox::setSelectionStart(Vec2 pos)
     {
         clear();
-        m_Start = pos;
+        m_SelectioinStart = pos;
         m_Bounds.minX = pos.x;
         m_Bounds.maxX = pos.x;
         m_Bounds.minY = pos.y;
         m_Bounds.maxY = pos.y;
     }
 
-    void SelectionBox::setPosition(Vec2 pos)
+    void SelectionBox::setSelectionEnd(Vec2 pos)
     {
-
-        calcSelectionBounds(m_Start, pos);
+        calcSelectionBounds(m_SelectioinStart, pos);
 
         Vec2 bottomLeft = m_Bounds.getBottomLeft();
         Vec2 topRight = m_Bounds.getTopRight();
@@ -59,36 +52,67 @@ namespace editor
         m_Layer->add(Rect2D(xStart, yEnd, width, 0.1f, color));
         m_Layer->add(Rect2D(xStart, yStart, 0.1f, height, color));
         m_Layer->add(Rect2D(xEnd, yStart, 0.1f, height, color));
+
+        calcSelectionBounds(Vec2(xStart, yStart), Vec2(xEnd, yEnd));
     }
 
-    Vec2 SelectionBox::move(Vec2 delta)
+    void SelectionBox::setMoveStart(Vec2 pos)
     {
+        m_IsMoveStarted = true;
+        m_MoveStart = pos;
+        m_MovePrev = pos;
+    }
+
+    Vec2 SelectionBox::setMoveEnd(Vec2 pos)
+    {
+        if (!m_IsMoveStarted)
+        {
+            throw "Call setMoveStart before calling setMoveEnd";
+        }
+
+        Vec2 delta = pos - m_MoveStart;
+        Vec2 deltaPrev = m_MovePrev - m_MoveStart;
+
         float tileSize = m_Layer->getTileSize();
 
-        m_AbsoluteDelta += delta;
+        float tiledDeltaPrevX = static_cast<int>(deltaPrev.x / tileSize) * tileSize;
+        float tiledDeltaPrevY = static_cast<int>(deltaPrev.y / tileSize) * tileSize;
+        Vec2 tileDeltaPrev = Vec2(tiledDeltaPrevX, tiledDeltaPrevY);
 
-        float xDelta = static_cast<int>(m_AbsoluteDelta.x / tileSize) * tileSize;
-        float yDelta = static_cast<int>(m_AbsoluteDelta.y / tileSize) * tileSize;
-
-        Vec2 tileDelta(xDelta - m_PrevTranslate.x, yDelta - m_PrevTranslate.y);
+        float tiledDeltaX = static_cast<int>(delta.x / tileSize) * tileSize;
+        float tiledDeltaY = static_cast<int>(delta.y / tileSize) * tileSize;
+        Vec2 tileDelta = Vec2(tiledDeltaX, tiledDeltaY);
 
         for (Rect2D *sprite : m_Layer->getRenderables())
         {
+            sprite->translate(-tileDeltaPrev);
             sprite->translate(tileDelta);
         }
 
-        m_PrevTranslate.x = xDelta;
-        m_PrevTranslate.y = yDelta;
+        m_MovePrev = pos;
 
-        return tileDelta;
+        Vec2 diff = tileDelta - tileDeltaPrev;
+
+        m_Bounds.translate(diff.x, diff.y);
+
+        return diff;
     }
 
     void SelectionBox::clear()
     {
-        clearSprites();
-        m_Start = Vec2();
-
+        if (m_Layer != nullptr)
+        {
+            clearSprites();
+        }
+        m_SelectioinStart = Vec2();
         m_Bounds = Bounds(0, 0, 0, 0);
+        m_IsMoveStarted = false;
+    }
+
+    void SelectionBox::reset(TileLayer *layer)
+    {
+        clear();
+        m_Layer = layer;
     }
 
     bool SelectionBox::isInsideSelection(Vec2 point)
@@ -118,5 +142,11 @@ namespace editor
     {
         m_Layer->clear();
     }
+
+    TileLayer *SelectionBox::getTileLayer()
+    {
+        return m_Layer;
+    }
+
 } // namespace editor
 } // namespace spright

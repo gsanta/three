@@ -30,7 +30,7 @@ namespace editor
 
     public:
         ColorPickerTool(ToolHandler *toolHandler, EventEmitter *eventEmitter);
-        void pointerDown(ToolContext &) override;
+        void pointerDown(const ToolContext &) override;
         unsigned int getPickedColor() const;
         std::string getData() override;
 

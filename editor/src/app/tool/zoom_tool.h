@@ -22,7 +22,7 @@ namespace editor
         ZoomTool(DocumentStore *documentStore);
 
     private:
-        void scroll(ToolContext &toolContext) override;
+        void scroll(const ToolContext &toolContext) override;
     };
 } // namespace editor
 } // namespace spright

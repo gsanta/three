@@ -8,7 +8,7 @@ namespace editor
     {
     }
 
-    void ZoomTool::scroll(ToolContext &context)
+    void ZoomTool::scroll(const ToolContext &context)
     {
         m_DocumentStore->getActiveDocument().getCamera().zoom(context.pointer.scroll.y > 0 ? -m_ZoomFactor
                                                                                            : m_ZoomFactor);

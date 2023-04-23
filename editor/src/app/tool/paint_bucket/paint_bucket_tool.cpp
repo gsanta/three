@@ -9,7 +9,7 @@ namespace editor
     {
     }
 
-    void PaintBucketTool::pointerUp(ToolContext &context)
+    void PaintBucketTool::pointerUp(const ToolContext &context)
     {
         if (!context.doc.hasActiveDrawing())
         {
