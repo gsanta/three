@@ -23,9 +23,9 @@ namespace editor
 
     public:
         RectangleTool(Services *services);
-        void pointerDown(ToolContext &) override;
-        void pointerUp(ToolContext &) override;
-        void pointerMove(ToolContext &) override;
+        void pointerDown(const ToolContext &) override;
+        void pointerUp(const ToolContext &) override;
+        void pointerMove(const ToolContext &) override;
     };
 } // namespace editor
 } // namespace spright

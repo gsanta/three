@@ -1,30 +1,51 @@
 #pragma once
 #include "../../../maths/vec2.h"
 
-namespace spright { namespace engine {
-	using namespace spright::maths;
+#include <sstream>
 
-	struct Bounds {
-		float minX;
-		float maxX;
-		float minY;
-		float maxY;
+namespace spright
+{
+namespace engine
+{
+    using namespace spright::maths;
 
-		Bounds(float minX, float minY, float width, float height);
-		Bounds();
+    struct Bounds
+    {
+        float minX;
 
-		static Bounds createWithPositions(float minX, float maxX, float minY, float maxY);
+        float maxX;
 
-		friend bool operator==(const Bounds&, const Bounds&);
-		friend bool operator!=(const Bounds&, const Bounds&);
+        float minY;
 
-		Vec2 getCenter() const;
+        float maxY;
 
-		float getWidth() const;
-		float getHeight() const;
-		void setSize(float newWidth, float newHeight);
-		bool contains(float x, float y) const;
-		Vec2 getBottomLeft();
-		Vec2 getTopRight();
-	};
-}}
+        Bounds(float minX, float minY, float width, float height);
+
+        Bounds();
+
+        static Bounds createWithPositions(float minX, float maxX, float minY, float maxY);
+
+        friend bool operator==(const Bounds &, const Bounds &);
+
+        friend bool operator!=(const Bounds &, const Bounds &);
+
+        Vec2 getCenter() const;
+
+        float getWidth() const;
+
+        float getHeight() const;
+
+        void setSize(float newWidth, float newHeight);
+
+        bool contains(float x, float y) const;
+
+        void translate(float x, float y);
+
+        Vec2 getBottomLeft() const;
+
+        Vec2 getTopRight() const;
+
+        std::string toString() const;
+    };
+} // namespace engine
+} // namespace spright

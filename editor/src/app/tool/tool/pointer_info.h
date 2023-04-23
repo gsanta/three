@@ -5,34 +5,30 @@ namespace spright
 {
 namespace editor
 {
+    using namespace maths;
 
     struct PointerInfo
     {
-    public:
-        bool isDown = false;
-        maths::Vec2 prev;
-        maths::Vec2 curr;
-        maths::Vec2 down;
-        maths::Vec2 scroll;
         bool buttons[3];
+
+        bool isDown = false;
+
+        Vec2 prev;
+
+        Vec2 curr;
+
+        Vec2 down;
+
+        Vec2 scroll;
 
     public:
         PointerInfo();
 
-        inline bool isLeftButtonDown()
-        {
-            return buttons[0];
-        }
+        bool isLeftButtonDown() const;
 
-        inline bool isRightButtonDown()
-        {
-            return buttons[1];
-        }
+        bool isRightButtonDown() const;
 
-        inline bool isMiddleButtonDown()
-        {
-            return buttons[2];
-        }
+        bool isMiddleButtonDown() const;
     };
 } // namespace editor
 } // namespace spright

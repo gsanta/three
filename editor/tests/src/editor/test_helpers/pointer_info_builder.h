@@ -9,8 +9,10 @@ class PointerInfoBuilder
 {
 private:
     Vec2 m_Curr;
+    PointerInfo m_Pointer;
 
 public:
-    PointerInfoBuilder &withCurr(Vec2 curr);
+    PointerInfoBuilder &withPoinerInfo(const PointerInfo &);
+    PointerInfoBuilder &withCurr(Vec2);
     PointerInfo build();
 };

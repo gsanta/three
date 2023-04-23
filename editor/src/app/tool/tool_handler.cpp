@@ -60,8 +60,7 @@ namespace editor
         Vec2 pos = m_DocumentStore->getActiveDocument().getCamera().screenToCameraPos(x_tmp, y_tmp);
 
         m_ToolContext.pointer.isDown = true;
-        m_ToolContext.pointer.down.x = m_ToolContext.pointer.curr.x;
-        m_ToolContext.pointer.down.y = m_ToolContext.pointer.curr.y;
+        m_ToolContext.pointer.down = m_ToolContext.pointer.curr;
         m_ToolContext.pointer.buttons[0] = buttons[0];
         m_ToolContext.pointer.buttons[1] = buttons[1];
         m_ToolContext.pointer.buttons[2] = buttons[2];
@@ -82,20 +81,18 @@ namespace editor
         {
             m_ToolContext.doc.prevDrawing = m_ToolContext.doc.activeDrawing;
             m_ToolContext.doc.activeDrawing = activeDrawing;
-            m_ToolContext.doc.isLeavingDrawing = true;
+            m_ToolContext.doc.setActiveDocumentChanging(true);
         }
         else
         {
-            m_ToolContext.doc.isLeavingDrawing = false;
+            m_ToolContext.doc.setActiveDocumentChanging(false);
         }
 
         x_tmp = x;
         y_tmp = y;
         Vec2 pos = m_DocumentStore->getActiveDocument().getCamera().screenToCameraPos(x, y);
-        this->m_ToolContext.pointer.prev.x = m_ToolContext.pointer.curr.x;
-        this->m_ToolContext.pointer.prev.y = m_ToolContext.pointer.curr.y;
-        this->m_ToolContext.pointer.curr.x = pos.x;
-        this->m_ToolContext.pointer.curr.y = pos.y;
+        m_ToolContext.pointer.prev = m_ToolContext.pointer.curr;
+        m_ToolContext.pointer.curr = pos;
 
         for (Tool *tool : *m_ActiveTools)
         {
@@ -105,8 +102,7 @@ namespace editor
 
     void ToolHandler::onScroll(double x, double y)
     {
-        m_ToolContext.pointer.scroll.x = x;
-        m_ToolContext.pointer.scroll.y = y;
+        m_ToolContext.pointer.scroll = Vec2(x, y);
 
         for (Tool *tool : *m_ActiveTools)
         {

@@ -18,22 +18,22 @@ namespace editor
 
     public:
         Tool(string name);
-        inline virtual void pointerDown(ToolContext &toolContext)
+        inline virtual void pointerDown(const ToolContext &toolContext)
         {
         }
-        inline virtual void pointerUp(ToolContext &toolContext)
+        inline virtual void pointerUp(const ToolContext &toolContext)
         {
         }
-        inline virtual void pointerMove(ToolContext &toolContext)
+        inline virtual void pointerMove(const ToolContext &toolContext)
         {
         }
-        inline virtual void scroll(ToolContext &toolContext)
+        inline virtual void scroll(const ToolContext &toolContext)
         {
         }
         inline virtual void activate()
         {
         }
-        inline virtual void deactivate(ToolContext &toolContext)
+        inline virtual void deactivate(const ToolContext &toolContext)
         {
         }
         inline virtual void setOptions(std::string json)

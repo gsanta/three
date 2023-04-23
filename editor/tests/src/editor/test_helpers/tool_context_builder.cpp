@@ -1,5 +1,11 @@
 #include "tool_context_builder.h"
 
+ToolContextBuilder &ToolContextBuilder::withToolContext(ToolContext context)
+{
+    m_ToolContext = context;
+}
+
+
 ToolContextBuilder &ToolContextBuilder::withDocumentInfo(DocumentInfoBuilder builder)
 {
     m_DocInfo = builder;
@@ -14,8 +20,11 @@ ToolContextBuilder &ToolContextBuilder::withPointerInfo(PointerInfoBuilder build
 
 ToolContext ToolContextBuilder::build()
 {
-    ToolContext context;
-    context.pointer = m_PointerInfo.build();
-    context.doc = m_DocInfo.build();
-    return context;
+    PointerInfo pointer = m_PointerInfo.build();
+    DocumentInfo doc = m_DocInfo.build();
+
+    m_ToolContext.pointer = pointer;
+    m_ToolContext.doc = doc;
+
+    return m_ToolContext;
 }

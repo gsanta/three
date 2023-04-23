@@ -9,7 +9,7 @@ namespace editor
     {
     }
 
-    void RectangleTool::pointerDown(ToolContext &context)
+    void RectangleTool::pointerDown(const ToolContext &context)
     {
         if (!context.doc.hasActiveDrawing())
         {
@@ -21,7 +21,7 @@ namespace editor
             Rect2D(context.pointer.curr.x, context.pointer.curr.y, 0.1f, 0.1f, color));
     }
 
-    void RectangleTool::pointerUp(ToolContext &context)
+    void RectangleTool::pointerUp(const ToolContext &context)
     {
         if (!context.pointer.isDown || !context.doc.hasActiveDrawing())
         {
@@ -32,7 +32,7 @@ namespace editor
             Rect2D(context.pointer.curr.x, context.pointer.curr.y - m_Size, m_Size, m_Size, color));
     }
 
-    void RectangleTool::pointerMove(ToolContext &context)
+    void RectangleTool::pointerMove(const ToolContext &context)
     {
         if (!context.pointer.isDown || !context.doc.hasActiveDrawing())
         {

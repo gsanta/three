@@ -10,7 +10,7 @@ namespace editor
         m_EraserStroke = EraserStroke(m_Size);
     }
 
-    void EraserTool::pointerDown(ToolContext &context)
+    void EraserTool::pointerDown(const ToolContext &context)
     {
         if (!context.doc.hasActiveDrawing())
         {
@@ -21,9 +21,9 @@ namespace editor
         m_Eraser.erase(activeLayer, activeLayer.getTilePos(context.pointer.curr), m_Size);
     }
 
-    void EraserTool::pointerMove(ToolContext &context)
+    void EraserTool::pointerMove(const ToolContext &context)
     {
-        if (context.doc.isLeavingDrawing && context.doc.hasPrevDrawing())
+        if (context.doc.isLeavingDrawing())
         {
             m_EraserStroke.clear(context.doc.prevDrawing->getForegroundLayer());
         }
@@ -44,7 +44,7 @@ namespace editor
         }
     }
 
-    void EraserTool::deactivate(ToolContext &context)
+    void EraserTool::deactivate(const ToolContext &context)
     {
         if (context.doc.hasActiveDrawing())
         {

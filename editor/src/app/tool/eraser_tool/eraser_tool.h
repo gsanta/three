@@ -36,11 +36,11 @@ namespace editor
     public:
         EraserTool(int eraserSize);
 
-        void pointerDown(ToolContext &) override;
+        void pointerDown(const ToolContext &) override;
 
-        void pointerMove(ToolContext &) override;
+        void pointerMove(const ToolContext &) override;
 
-        void deactivate(ToolContext &) override;
+        void deactivate(const ToolContext &) override;
 
         void setOptions(std::string json) override;
 

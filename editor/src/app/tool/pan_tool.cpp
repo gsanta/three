@@ -8,7 +8,7 @@ namespace editor
     {
     }
 
-    void PanTool::pointerMove(ToolContext &context)
+    void PanTool::pointerMove(const ToolContext &context)
     {
         if (context.pointer.isMiddleButtonDown() == false)
         {

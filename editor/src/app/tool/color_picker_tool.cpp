@@ -10,7 +10,7 @@ namespace editor
     {
     }
 
-    void ColorPickerTool::pointerDown(ToolContext &context)
+    void ColorPickerTool::pointerDown(const ToolContext &context)
     {
 
         if (!context.doc.hasActiveDrawing())
