@@ -184,18 +184,27 @@ namespace editor
         }
         else if (key == GLFW_KEY_F)
         {
-            size_t activeIndex = m_DocumentStore->getActiveDocument().getActiveFrame().getIndex();
-            size_t maxIndex = m_DocumentStore->getActiveDocument().getFrameStore().getFrames().size();
-
-            if (activeIndex == maxIndex - 1)
+            Drawing &drawing = m_DocumentStore->getActiveDocument().getActiveDrawing();
+            if (drawing.getState().getBounds().isNull())
             {
-                activeIndex = 0;
+                flip_horizontal(drawing.getActiveFrame().getLayers());
             }
             else
             {
-                activeIndex = activeIndex + 1;
+                flip_horizontal(drawing.getActiveFrame().getLayers(), drawing.getState().getBounds());
             }
-            m_DocumentStore->getActiveDocument().getFrameStore().setActiveFrame(activeIndex);
+            // size_t activeIndex = m_DocumentStore->getActiveDocument().getActiveFrame().getIndex();
+            // size_t maxIndex = m_DocumentStore->getActiveDocument().getFrameStore().getFrames().size();
+
+            // if (activeIndex == maxIndex - 1)
+            // {
+            //     activeIndex = 0;
+            // }
+            // else
+            // {
+            //     activeIndex = activeIndex + 1;
+            // }
+            // m_DocumentStore->getActiveDocument().getFrameStore().setActiveFrame(activeIndex);
         }
         else if (key == GLFW_KEY_R)
         {

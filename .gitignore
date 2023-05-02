@@ -152,3 +152,6 @@ node_modules
 _deps
 CMakeFiles
 cmake_install.cmake
+
+#clion
+cmake-build-debug

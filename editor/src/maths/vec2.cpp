@@ -49,6 +49,12 @@ namespace maths
         return *this;
     }
 
+    float Vec2::length() const
+    {
+        return std::sqrt(x * x + y * y);
+    }
+
+
     Vec2 &Vec2::operator+=(const Vec2 &other)
     {
         return add(other);

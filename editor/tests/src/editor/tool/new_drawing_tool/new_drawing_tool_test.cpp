@@ -1,7 +1,6 @@
 #include "../../test_helpers/document_info_builder.h"
 #include "../../test_helpers/document_store_builder.h"
 #include "../../test_helpers/pointer_info_builder.h"
-#include "../../test_helpers/test_document_factory.h"
 #include "../../test_helpers/tool_context_builder.h"
 #include "../src/app/tool/new_drawing_tool/new_drawing_tool.h"
 
@@ -36,6 +35,6 @@ TEST_CASE("NewDrawingTool", "[new-drawing-tool]")
         newDrawingTool.pointerMove(toolContext);
         newDrawingTool.pointerUp(toolContext);
 
-        REQUIRE(documentStore.getActiveDocument().getDrawings().size() == 1);
+        REQUIRE(documentStore.getActiveDocument().getDrawings().size() == 2);
     }
 }

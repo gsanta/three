@@ -14,6 +14,14 @@ DrawingBuilder &DrawingBuilder::withTileLayer(TileLayerBuilder props)
     return *this;
 }
 
+DrawingBuilder &DrawingBuilder::withTileSize(float tileSize)
+{
+
+    m_TileSize = tileSize;
+
+    return *this;
+}
+
 DrawingBuilder &DrawingBuilder::withTileLayer()
 {
     TileLayerBuilder builder;
@@ -26,10 +34,10 @@ Drawing DrawingBuilder::build()
 {
     Drawing drawing(m_Bounds, &TestDocumentFactory::eventEmitter);
 
-    FrameImpl frame(0);
+    const FrameImpl frame(0);
 
-    TileLayer foregroundLayer("", Group<Rect2D>(new HeadlessRenderer2D()), m_Bounds);
-    TileLayer backgroundLayer("", Group<Rect2D>(new HeadlessRenderer2D()), m_Bounds, 2.0f);
+    const TileLayer foregroundLayer("", Group<Rect2D>(new HeadlessRenderer2D()), m_Bounds, m_TileSize);
+    const TileLayer backgroundLayer("", Group<Rect2D>(new HeadlessRenderer2D()), m_Bounds, 2.0f);
 
     drawing.getFrameStore().addFrame(frame);
     drawing.getActiveFrame().addBackgroundLayer(backgroundLayer);
@@ -37,13 +45,13 @@ Drawing DrawingBuilder::build()
 
     for (TileLayerBuilder &builder : m_TileLayers)
     {
-        TileLayer layer = builder.build();
+        const TileLayer layer = builder.withBounds(m_Bounds).withTileSize(m_TileSize).build();
         drawing.addLayer(layer);
     }
 
-    if (m_TileLayers.size() == 0)
+    if (m_TileLayers.empty())
     {
-        drawing.addLayer(TileLayerBuilder().withBounds(m_Bounds).build());
+        drawing.addLayer(TileLayerBuilder().withTileSize(m_TileSize).withBounds(m_Bounds).build());
     }
 
     return drawing;

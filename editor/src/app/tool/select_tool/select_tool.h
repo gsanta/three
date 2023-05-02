@@ -22,7 +22,7 @@ namespace editor
     class SelectTool : public Tool
     {
     public:
-        SelectTool(DocumentStore *documentHandler);
+        SelectTool();
 
         void pointerDown(const ToolContext &) override;
 

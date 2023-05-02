@@ -24,5 +24,10 @@ namespace editor
         return buttons[2];
     }
 
+    Vec2 PointerInfo::downDelta() const
+    {
+        return curr - down;
+    }
+
 } // namespace editor
 } // namespace spright

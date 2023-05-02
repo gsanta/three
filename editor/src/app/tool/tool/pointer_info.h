@@ -29,6 +29,8 @@ namespace editor
         bool isRightButtonDown() const;
 
         bool isMiddleButtonDown() const;
+
+        Vec2 downDelta() const;
     };
 } // namespace editor
 } // namespace spright

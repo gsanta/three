@@ -1,14 +1,17 @@
 #pragma once
 
-#include <string>
-#include "editor.h"
-#include "document/frame_impl.h"
 #include "../engine/graphics/layer/tileLayer.h"
+#include "algorithm/flip_horizontal.h"
+#include "document/drawing.h"
+#include "document/frame_impl.h"
+#include "editor.h"
+
+#include <string>
 
 #ifdef SPARKY_EMSCRIPTEN
+#include <emscripten/bind.h>
 #include <emscripten/emscripten.h>
 #include <emscripten/val.h>
-#include <emscripten/bind.h>
 
 
 using namespace spright::editor;
@@ -24,5 +27,7 @@ void setActiveFrame(size_t index);
 std::string getActiveFrame();
 void activateFramePlayer();
 void deActivateFramePlayer();
+
+void api_flip_horizontal();
 
 #endif
