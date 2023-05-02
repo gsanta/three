@@ -80,7 +80,9 @@ namespace engine
 
         Vec2 getWorldPos(int x, int y);
 
-        void translateTile(Rect2D *rect, const Vec2 &delta);
+        void translateTile(Rect2D *tile, const Vec2 &delta);
+
+        void setTilePos(Rect2D *tile, const Vec2Int &newPos);
 
         Rect2D *getAtTileIndex(int tileIndex) const;
 

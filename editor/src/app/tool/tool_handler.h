@@ -3,6 +3,7 @@
 #include "../../engine/graphics/camera/ortho_projection_info.h"
 #include "../../engine/system/window/input_listener.h"
 #include "../../engine/system/window/window.h"
+#include "../algorithm/flip_horizontal.h"
 #include "../document/factory/document_factory.h"
 #include "../editor_config.h"
 #include "../service/io/image_export.h"

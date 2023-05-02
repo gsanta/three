@@ -39,9 +39,13 @@ export const settingsSlice = createSlice({
       const hexColor = Number('0x' + a + b + g + r);
       state.editor?.setColor(hexColor);
     },
+
+    flipHorizontal: (state) => {
+      state.editor?.flipHorizontal();
+    },
   },
 });
 
-export const { initSettings, receiveColor, setColor } = settingsSlice.actions;
+export const { flipHorizontal, initSettings, receiveColor, setColor } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

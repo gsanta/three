@@ -1,41 +1,14 @@
+#include "../../test_helpers/matchers/equals_bounds_matcher.h"
 #include "../../test_helpers/test_document_factory.h"
 #include "../src/app/tool/color_picker_tool.h"
 #include "../src/app/tool/common/selection_box.h"
 #include "../src/engine/graphics/layer/tileLayer.h"
 #include "../src/maths/vec2.h"
 
-#include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
-#include <catch2/matchers/catch_matchers_templated.hpp>
 
 using namespace ::spright::editor;
 using namespace ::spright::engine;
-
-struct EqualsBoundsMatcher : Catch::Matchers::MatcherGenericBase
-{
-    EqualsBoundsMatcher(const Bounds &bounds) : bounds{bounds}
-    {
-    }
-
-    bool match(const Bounds &other) const
-    {
-        return bounds.minX == Catch::Approx(other.minX) && bounds.maxX == Catch::Approx(other.maxX) &&
-               bounds.minY == Catch::Approx(other.minY) && bounds.maxY == Catch::Approx(other.maxY);
-    }
-
-    std::string describe() const override
-    {
-        return "Equal Bounds";
-    }
-
-private:
-    const Bounds &bounds;
-};
-
-auto EqualsBounds(const Bounds &bounds) -> EqualsBoundsMatcher
-{
-    return EqualsBoundsMatcher{bounds};
-}
 
 TEST_CASE("SelectionBox", "[selection-box]")
 {

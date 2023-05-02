@@ -9,6 +9,11 @@ namespace engine
     {
     }
 
+    Bounds::Bounds(Vec2 bottomLeft, Vec2 topRight)
+        : Bounds(bottomLeft.x, bottomLeft.y, topRight.x - bottomLeft.x, topRight.y - bottomLeft.y)
+    {
+    }
+
     Bounds::Bounds() : Bounds(0, 0, 0, 0)
     {
     }
@@ -59,6 +64,12 @@ namespace engine
         minY += y;
         maxY += y;
     }
+
+    bool Bounds::isNull() const
+    {
+        return minX == 0 && maxX == 0 && minY == 0 && maxY == 0;
+    }
+
 
     bool operator==(const Bounds &lhs, const Bounds &rhs)
     {

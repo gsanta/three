@@ -21,6 +21,8 @@ namespace engine
 
         Bounds(float minX, float minY, float width, float height);
 
+        Bounds(Vec2 bottomLeft, Vec2 topRight);
+
         Bounds();
 
         static Bounds createWithPositions(float minX, float maxX, float minY, float maxY);
@@ -40,6 +42,8 @@ namespace engine
         bool contains(float x, float y) const;
 
         void translate(float x, float y);
+
+        bool isNull() const;
 
         Vec2 getBottomLeft() const;
 

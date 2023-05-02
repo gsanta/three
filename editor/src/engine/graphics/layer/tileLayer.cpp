@@ -151,11 +151,7 @@ namespace engine
 
     Vec2 TileLayer::getWorldPos(int tileIndex) const
     {
-        Vec2 bottomLeftPos = getBottomLeftPos(tileIndex);
-        bottomLeftPos.x += m_TileSize / 2.0f;
-        bottomLeftPos.y += m_TileSize / 2.0f;
-
-        return bottomLeftPos;
+        return getBottomLeftPos(tileIndex);
     }
 
     Vec2 TileLayer::getWorldPos(const Vec2Int tilePos) const
@@ -192,12 +188,7 @@ namespace engine
 
     Vec2 TileLayer::getWorldPos(int x, int y)
     {
-        float tileSize = m_TileSize;
-
-        float worldX = x * tileSize + tileSize / 2 + m_Bounds.minX;
-        float worldY = y * tileSize + tileSize / 2 + m_Bounds.minY;
-
-        return Vec2(worldX, worldY);
+        return getWorldPos(Vec2Int(x, y));
     }
 
     void TileLayer::translateTile(Rect2D *tile, const Vec2 &delta)
@@ -206,6 +197,14 @@ namespace engine
 
         Vec2Int tilePos = getTilePos(tile->getPosition2d());
         int newTileIndex = getTileIndex(tilePos.x, tilePos.y);
+        updateTileIndex(tile, newTileIndex);
+    }
+
+    void TileLayer::setTilePos(Rect2D *tile, const Vec2Int &newPos)
+    {
+        tile->setPosition(getWorldPos(newPos));
+
+        int newTileIndex = getTileIndex(newPos.x, newPos.y);
         updateTileIndex(tile, newTileIndex);
     }
 

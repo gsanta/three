@@ -1,41 +1,52 @@
 #include "document_store_builder.h"
 
-DocumentStoreBuilder& DocumentStoreBuilder::withWindowSize(int windowSize) {
-	m_WindowSize = windowSize;
+DocumentStoreBuilder &DocumentStoreBuilder::withWindowSize(int windowSize)
+{
+    m_WindowSize = windowSize;
 
-	return *this;
+    return *this;
 }
 
-DocumentStoreBuilder& DocumentStoreBuilder::withDocumentBounds(Bounds bounds) {
-	m_DocumentBounds = bounds;
+DocumentStoreBuilder &DocumentStoreBuilder::withDocumentBounds(Bounds bounds)
+{
+    m_DocumentBounds = bounds;
 
-	return *this;
+    return *this;
 }
 
-DocumentStoreBuilder& DocumentStoreBuilder::withDrawing(DrawingBuilder builder) {
-	m_Drawings.push_back(builder);
+DocumentStoreBuilder &DocumentStoreBuilder::withDrawing(DrawingBuilder builder)
+{
+    m_Drawings.push_back(builder);
 
-	return *this;
+    return *this;
 }
 
-DocumentStoreBuilder& DocumentStoreBuilder::withDrawing() {
-	DrawingBuilder builder;
-	m_Drawings.push_back(builder.withTileLayer());
+DocumentStoreBuilder &DocumentStoreBuilder::withDrawing()
+{
+    DrawingBuilder builder;
+    m_Drawings.push_back(builder.withTileLayer());
 
-	return *this;
+    return *this;
 }
 
-DocumentStore DocumentStoreBuilder::build() {
-	Camera camera(m_WindowSize, m_WindowSize, m_DocumentBounds, -1.0f, 1.0f);
+DocumentStore DocumentStoreBuilder::build()
+{
+    Camera camera(m_WindowSize, m_WindowSize, m_DocumentBounds, -1.0f, 1.0f);
 
-	Document document(m_DocumentBounds, camera, DrawingBuilder().withBounds(m_DocumentBounds).build());
+    Document document(m_DocumentBounds, camera, DrawingBuilder().withBounds(m_DocumentBounds).build());
 
-	for (DrawingBuilder builder : m_Drawings) {
-		document.addDrawing(builder.build());
-	}
+    if (m_Drawings.size() == 0)
+    {
+        m_Drawings.push_back(DrawingBuilder().withBounds(m_DocumentBounds));
+    }
 
-	DocumentStore documentStore;
-	documentStore.addDocument(document);
+    for (DrawingBuilder builder : m_Drawings)
+    {
+        document.addDrawing(builder.build());
+    }
 
-	return documentStore;
+    DocumentStore documentStore;
+    documentStore.addDocument(document);
+
+    return documentStore;
 }
