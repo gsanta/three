@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import '../../app.scss';
 import Layout from './layout/Layout';
 import Box from './box/Box';
@@ -14,6 +14,7 @@ import SettingsPanel from '@/panels/settings/SettingsPanel';
 import ToolOptionsPanel from '@/panels/tool_options/ui/ToolOptionsPanel';
 import { Provider } from 'react-redux';
 import { store } from '@/store';
+import SceneViewer from '@/panels/scene_viewer/SceneViewer';
 
 type AppContainerProps = {
   app: App;
@@ -76,7 +77,20 @@ const AppContainer = ({ app }: AppContainerProps) => {
                 <Box overflowY="auto">
                   <LayerPanel />
                 </Box>
-                <ToolOptionsPanel />
+                <Tabs display="flex" flexDir="column" isLazy>
+                  <TabList>
+                    <Tab>Options</Tab>
+                    <Tab>3D Viewer</Tab>
+                  </TabList>
+                  <TabPanels alignItems="stretch" display="flex" flex="1">
+                    <TabPanel flex="1">
+                      <ToolOptionsPanel />
+                    </TabPanel>
+                    <TabPanel display="flex" flex="1">
+                      <SceneViewer />
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
               </Split>
             </Split>
           </Layout>

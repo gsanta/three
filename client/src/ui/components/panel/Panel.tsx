@@ -1,20 +1,23 @@
-import { Box, Divider, Text } from '@chakra-ui/react';
+import { Box, BoxProps, Divider, Text } from '@chakra-ui/react';
 import React from 'react';
 import { ReactNode } from 'react';
 
 type PanelProps = {
   children: ReactNode;
-  header: ReactNode;
-};
+  header?: ReactNode;
+} & BoxProps;
 
-const Panel = ({ children, header }: PanelProps) => (
-  <Box as="section" display="flex" flexDir="column" height="100%">
-    {header}
-    <Box display="flex" flex="1" flexDir="column" paddingInline="2">
-      {children}
+const Panel = (props: PanelProps) => {
+  const { children, header, ...rest } = props;
+  return (
+    <Box as="section" display="flex" flexDir="column" {...rest}>
+      {header}
+      <Box display="flex" flex="1" flexDir="column" paddingInline="2">
+        {children}
+      </Box>
     </Box>
-  </Box>
-);
+  );
+};
 
 type PanelHeaderProps = {
   children?: ReactNode;
