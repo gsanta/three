@@ -18,7 +18,7 @@ const ToolOptionsPanel = () => {
   };
 
   return (
-    <Panel header={<Panel.Header title="tool options"></Panel.Header>}>
+    <Panel>
       {getOptions()}
       <ColorPicker />
     </Panel>

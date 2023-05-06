@@ -30,6 +30,7 @@ const LayerPanel = () => {
           </Tooltip>
         </Panel.Header>
       }
+      height="100%"
     >
       <DndProvider backend={HTML5Backend}>
         <List flex="1">
