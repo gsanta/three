@@ -1,22 +1,33 @@
 #pragma once
+#include "../../system/window/window.h"
+#include "render_target.h"
+
 #include <GL/glew.h>
 #include <iostream>
-#include "render_target.h"
-#include "../../system/window/window.h"
 
-namespace spright { namespace engine {
+namespace spright
+{
+namespace engine
+{
 
-	class ImageRenderTarget : public RenderTarget {
-	private:
-		unsigned int m_FrameBuffer;
-		unsigned int m_Texture;
-		Window* m_Window;
+    class ImageRenderTarget : public RenderTarget
+    {
+    public:
+        ImageRenderTarget(Window *window);
 
-	public:
-		ImageRenderTarget(Window* window);
-		void enable();
-		void disable();
-	private:
-		void init();
-	};
-}}
+        void enable();
+
+        void disable();
+
+    private:
+        void init();
+
+    private:
+        unsigned int m_FrameBuffer;
+
+        unsigned int m_Texture;
+
+        Window *m_Window;
+    };
+} // namespace engine
+} // namespace spright

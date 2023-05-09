@@ -36,10 +36,6 @@ module.exports = (env) => {
           use: [MiniCssExtractPlugin.loader, 'css-loader'],
         },
         {
-          test: /\.gwm$/,
-          use: 'raw-loader',
-        },
-        {
           test: /\.(png|jpg|gif|svg)$/,
           use: [
             {
@@ -61,7 +57,6 @@ module.exports = (env) => {
       }),
       new webpack.DefinePlugin({
         DEBUG: env === 'debug' ? true : false,
-        BACKEND_TYPE: JSON.stringify(process.env.BACKEND_TYPE),
       }),
       // new BundleAnalyzerPlugin({
       //     analyzerPort: 8887
@@ -84,9 +79,6 @@ module.exports = (env) => {
     output: {
       filename: '[name].js',
     },
-    externals: {
-      babylonjs: 'BABYLON',
-    },
     devtool: 'eval-source-map',
     mode: 'development',
     optimization: {
@@ -96,10 +88,6 @@ module.exports = (env) => {
     devServer: {
       static: ['../editor/Web'],
       port: 3012,
-      proxy: {
-        '/users': 'http://localhost:3000',
-        '/editor': 'http://localhost:3000',
-      },
     },
   };
 };

@@ -1,63 +1,77 @@
 #include "image_export.h"
 
-namespace spright { namespace editor {
-	ImageExport::ImageExport(Window* window, Rendering* rendering) : m_Window(window), m_Rendering(rendering)
-	{
-	}
+namespace spright
+{
+namespace editor
+{
+    ImageExport::ImageExport(Window *window, Rendering *rendering) : m_Window(window), m_Rendering(rendering)
+    {
+    }
 
-	ImageExport::~ImageExport() {
-		if (m_Data != nullptr) {
-			delete[] m_Data;
-		}
-	}
+    ImageExport::~ImageExport()
+    {
+        if (m_Data != nullptr)
+        {
+            delete[] m_Data;
+        }
+    }
 
-	void ImageExport::exportImage(Document& document)
-	{
-		m_Rendering->enableImageTarget();
-		document.render();
-		m_Rendering->getImageTarget();
+    void ImageExport::exportImage(Document &document)
+    {
+        const Bounds bounds = document.getActiveDrawing().getBounds();
+        const Camera camera = document.getCamera();
+        Vec2Int bottomLeft = camera.worldToScreenPos(bounds.minX, bounds.minY);
+        Vec2Int topRight = camera.worldToScreenPos(bounds.maxX, bounds.maxY);
 
-		int width = m_Window->getWidth();
-		int height = m_Window->getHeight();
+        const BoundsInt intBounds(bottomLeft.x, topRight.x, bottomLeft.y, topRight.y);
 
-		writeImageData();
+        m_Rendering->enableImageTarget();
 
-		m_Rendering->disableImageTarget();
-	}
+        document.render();
+        writeImageData(intBounds);
 
-	void ImageExport::writeImageData()
-	{
-		if (m_Data != nullptr) {
-			delete[] m_Data;
-		}
+        m_Rendering->disableImageTarget();
+    }
 
-		int width = m_Window->getWidth();
-		int height = m_Window->getHeight();
+    void ImageExport::writeImageData(BoundsInt bounds)
+    {
+        delete[] m_Data;
 
-		ImageData* image = new ImageData(4 * width * height);
+        int width = bounds.getWidth();
+        int height = bounds.getHeight();
+        int bytes = 4 * width * height;
 
-		GLubyte* data = new GLubyte[4 * width * height];
-		memset(data, 0, 4 * width * height);
-		glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        ImageData *image = new ImageData(bytes);
+        GLubyte *data = new GLubyte[bytes];
+        memset(data, 0, bytes);
 
-		stbi_flip_vertically_on_write(1);
-		stbi_write_png_to_func(
-			[](void* context, void* data, int size)
-			{
-				memcpy(((ImageData*)context)->data, data, size);
-				((ImageData*)context)->size = size;
-			}
-		, image, width, height, 4, data, width * 4);
+        glReadPixels(bounds.minX, bounds.minY, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
-		m_Size = image->size;
-		m_Data = image->data;
-	}
+        stbi_flip_vertically_on_write(1);
+        stbi_write_png_to_func(
+            [](void *context, void *data, int size) {
+                memcpy(static_cast<ImageData *>(context)->data, data, size);
+                static_cast<ImageData *>(context)->size = size;
+            },
+            image,
+            width,
+            height,
+            4,
+            data,
+            width * 4);
 
-	unsigned char* ImageExport::getImageData() {
-		return m_Data;
-	}
+        m_Size = image->size;
+        m_Data = image->data;
+    }
 
-	size_t ImageExport::getImageSize() {
-		return m_Size;
-	}
-}}
+    unsigned char *ImageExport::getImageData()
+    {
+        return m_Data;
+    }
+
+    size_t ImageExport::getImageSize()
+    {
+        return m_Size;
+    }
+} // namespace editor
+} // namespace spright

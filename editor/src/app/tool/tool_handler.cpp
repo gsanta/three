@@ -57,7 +57,7 @@ namespace editor
 
     void ToolHandler::onMouseDown(bool buttons[3])
     {
-        Vec2 pos = m_DocumentStore->getActiveDocument().getCamera().screenToCameraPos(x_tmp, y_tmp);
+        Vec2 pos = m_DocumentStore->getActiveDocument().getCamera().screenToWorldPos(x_tmp, y_tmp);
 
         m_ToolContext.pointer.isDown = true;
         m_ToolContext.pointer.down = m_ToolContext.pointer.curr;
@@ -90,7 +90,7 @@ namespace editor
 
         x_tmp = x;
         y_tmp = y;
-        Vec2 pos = m_DocumentStore->getActiveDocument().getCamera().screenToCameraPos(x, y);
+        Vec2 pos = m_DocumentStore->getActiveDocument().getCamera().screenToWorldPos(x, y);
         m_ToolContext.pointer.prev = m_ToolContext.pointer.curr;
         m_ToolContext.pointer.curr = pos;
 

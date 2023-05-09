@@ -19,7 +19,7 @@ namespace editor
         RectSelector rectSelector(&layer);
         rectSelector.setSelection(bounds.getBottomLeft(), bounds.getTopRight());
 
-        const vector<Rect2D *> tiles = rectSelector.getSelection();
+        const std::vector<Rect2D *> tiles = rectSelector.getSelection();
 
         int boundsTileX = std::round(layer.getTilePos(bounds.getBottomLeft()).x);
         int boundsTileWidth = std::round(bounds.getWidth() / layer.getTileSize());

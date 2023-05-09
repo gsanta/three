@@ -1,9 +1,12 @@
 #include "image_data.h"
 
-namespace spright { namespace editor {
+namespace spright
+{
+namespace editor
+{
 
-	ImageData::ImageData(size_t size) {
-		data = new unsigned char[size];
-		this->size = size;
-	}
-}}
+    ImageData::ImageData(size_t size) : data(new unsigned char[size]), size(size)
+    {
+    }
+} // namespace editor
+} // namespace spright
