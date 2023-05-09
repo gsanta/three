@@ -70,6 +70,11 @@ namespace maths
         return multiply(other);
     }
 
+    Vec2 &Vec2::operator*=(float val)
+    {
+        return multiply(Vec2(val, val));
+    }
+
     Vec2 &Vec2::operator/=(const Vec2 &other)
     {
         return divide(other);

@@ -35,6 +35,7 @@ namespace maths
         Vec2 &operator+=(const Vec2 &other);
         Vec2 &operator-=(const Vec2 &other);
         Vec2 &operator*=(const Vec2 &other);
+        Vec2 &operator*=(float val);
         Vec2 &operator/=(const Vec2 &other);
         Vec2 operator-();
 
