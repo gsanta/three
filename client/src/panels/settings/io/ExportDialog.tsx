@@ -56,7 +56,7 @@ const ExportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children
           <FormLabel>Type</FormLabel>
           <Select onChange={handleFileTypeChange}>
             {getFileTypes().map((fileType) => (
-              <option value={fileType} selected={fileType === selectedFileType}>
+              <option key={fileType} value={fileType} selected={fileType === selectedFileType}>
                 {fileType}
               </option>
             ))}

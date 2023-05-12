@@ -10,11 +10,6 @@ namespace editor
 
     void PanTool::pointerMove(const ToolContext &context)
     {
-        if (context.pointer.isMiddleButtonDown() == false)
-        {
-            return;
-        }
-
         if (context.pointer.isDown)
         {
             m_DocumentStore->getActiveDocument().getCamera().translate2D(context.pointer.prev - context.pointer.curr);
