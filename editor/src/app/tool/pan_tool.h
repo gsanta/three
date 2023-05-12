@@ -12,15 +12,16 @@ namespace editor
 
     class PanTool : public Tool
     {
-    private:
-        DocumentStore *m_DocumentStore;
-        float m_ZoomFactor = 1.0f;
-
     public:
         PanTool(DocumentStore *documentStore);
 
     private:
         void pointerMove(const ToolContext &) override;
+
+    private:
+        DocumentStore *m_DocumentStore;
+
+        float m_ZoomFactor = 1.0f;
     };
 } // namespace editor
 } // namespace spright
