@@ -4,7 +4,6 @@
 #include "../event/event_emitter.h"
 #include "../service/services.h"
 #include "brush_tool.h"
-#include "helper/layer_provider.h"
 #include "tool/tool.h"
 #include "tool/tool_context.h"
 #include "tool_handler.h"

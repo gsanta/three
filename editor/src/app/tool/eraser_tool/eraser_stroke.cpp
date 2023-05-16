@@ -12,23 +12,23 @@ namespace editor
     {
     }
 
-    void editor::EraserStroke::draw(const TileLayer &eraseLayer, TileLayer &drawLayer, const Vec2 &pos)
+    void editor::EraserStroke::draw(TileLayer &drawLayer, const Vec2 &pos)
     {
         if (!m_TopLine)
         {
-            init(drawLayer, eraseLayer.getTileSize());
+            init(drawLayer, drawLayer.getTileSize());
         }
 
-        setPosition(eraseLayer, pos);
+        setPosition(drawLayer, pos);
     }
 
-    void EraserStroke::clear(TileLayer &eraseLayer)
+    void EraserStroke::clear(TileLayer &drawLayer)
     {
         m_TopLine = nullptr;
         m_RightLine = nullptr;
         m_BottomLine = nullptr;
         m_LeftLine = nullptr;
-        eraseLayer.clear();
+        drawLayer.clear();
     }
 
     float EraserStroke::getStrokeWidth()
@@ -48,14 +48,14 @@ namespace editor
         m_LeftLine = &drawLayer.add(Rect2D(-eraserArea / 2.0f, -eraserArea / 2.0f, m_StrokeWidth, eraserArea, color));
     }
 
-    void EraserStroke::setPosition(const TileLayer &eraseLayer, const Vec2 &pos)
+    void EraserStroke::setPosition(const TileLayer &drawLayer, const Vec2 &pos)
     {
-        float halfEraserSize = eraseLayer.getTileSize() * static_cast<float>(m_Size) / 2.0f;
+        float halfEraserSize = drawLayer.getTileSize() * static_cast<float>(m_Size) / 2.0f;
 
-        int tileIndex = eraseLayer.getTileIndex(pos);
-        float halfTileSize = eraseLayer.getTileSize() / 2.0f;
+        int tileIndex = drawLayer.getTileIndex(pos);
+        float halfTileSize = drawLayer.getTileSize() / 2.0f;
         Vec2 tileCenterPos =
-            eraseLayer.getWorldPos(tileIndex) + Vec2(eraseLayer.getTileSize() / 2.0f, eraseLayer.getTileSize() / 2.0f);
+            drawLayer.getWorldPos(tileIndex) + Vec2(drawLayer.getTileSize() / 2.0f, drawLayer.getTileSize() / 2.0f);
 
         if (m_Size % 2 == 0)
         {

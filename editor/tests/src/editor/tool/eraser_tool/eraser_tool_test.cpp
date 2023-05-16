@@ -5,7 +5,6 @@
 #include "../../test_helpers/test_document_factory.h"
 #include "../../test_helpers/tile_layer_builder.h"
 #include "../../test_helpers/tool_context_builder.h"
-#include "../layer_provider_test_impl.h"
 #include "../src/app/document/document_store.h"
 #include "../src/app/document/factory/document_factory.h"
 #include "../src/app/tool/brush.h"
@@ -51,7 +50,7 @@ TEST_CASE("EraseTool pointerDown", "[erase-tool]")
 
         EraserTool eraseTool(1);
 
-        eraseTool.pointerDown(toolContext);
+        eraseTool.execPointerDown(toolContext);
 
         REQUIRE(activeLayer.getAtTilePos(0, 0) != nullptr);
         REQUIRE(activeLayer.getAtTilePos(1, 0) != nullptr);
@@ -82,14 +81,14 @@ TEST_CASE("EraseTool pointerDown", "[erase-tool]")
 
         EraserTool eraseTool(1);
 
-        eraseTool.pointerMove(toolContext);
+        eraseTool.execPointerMove(toolContext);
 
         REQUIRE(foregroundLayer1.getRenderables().size() > 0);
 
         toolContext.doc.setActiveDrawing(&documentStore.getActiveDocument().getDrawings()[1]);
         toolContext.pointer.curr = Vec2(4.0f, 4.0f);
 
-        eraseTool.pointerMove(toolContext);
+        eraseTool.execPointerMove(toolContext);
 
         REQUIRE(foregroundLayer1.getRenderables().size() == 0);
     }
