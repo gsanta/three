@@ -7,17 +7,14 @@ namespace spright
 {
 namespace editor
 {
-    ToolHandler::ToolHandler()
-    {
-    }
-
-    ToolHandler::ToolHandler(Window *window,
+    ToolHandler::ToolHandler(std::shared_ptr<EditorState> editorState,
+                             Window *window,
                              DocumentStore *documentStore,
                              Services *services,
                              ImageExport *imageExport,
                              DocumentFactory *documentFactory)
-        : m_Window(window), m_DocumentStore(documentStore), m_Services(services), m_ImageExport(imageExport),
-          m_DocumentFactory(documentFactory)
+        : m_ToolContext(editorState), m_Window(window), m_DocumentStore(documentStore), m_Services(services),
+          m_ImageExport(imageExport), m_DocumentFactory(documentFactory)
     {
         window->getInputHandler()->registerListener(this);
         m_ActiveTools = new vector<Tool *>();

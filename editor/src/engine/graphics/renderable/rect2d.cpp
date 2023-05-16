@@ -51,6 +51,7 @@ namespace engine
     void Rect2D::setSize(Vec2 size)
     {
         this->m_Size = size;
+        updateBounds();
     }
 
     Vec2 Rect2D::getSize()
@@ -133,8 +134,8 @@ namespace engine
 
     void Rect2D::updateBounds()
     {
-        float width = m_bounds.getWidth();
-        float height = m_bounds.getHeight();
+        float width = m_Size.x;
+        float height = m_Size.y;
         m_bounds.minX = m_Position.x;
         m_bounds.maxX = m_Position.x + width;
         m_bounds.minY = m_Position.y;
