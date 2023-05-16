@@ -21,7 +21,6 @@
 #include "feature/frame/frame_player_handler.h"
 #include "tool/color_picker_tool.h"
 #include "tool/eraser_tool/eraser_tool.h"
-#include "tool/helper/layer_provider_impl.h"
 #include "tool/new_drawing_tool/new_drawing_tool.h"
 #include "tool/paint_bucket/paint_bucket_tool.h"
 #include "tool/pan_tool.h"

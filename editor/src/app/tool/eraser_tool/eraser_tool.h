@@ -4,10 +4,10 @@
 #include "../../../engine/graphics/renderable/renderable2d.h"
 #include "../../document/document_store.h"
 #include "../../document/drawing.h"
-#include "../helper/layer_provider.h"
 #include "../tool/tool.h"
 #include "../tool/tool_context.h"
 #include "eraser.h"
+#include "eraser_cursor.h"
 #include "eraser_stroke.h"
 
 #include <memory>
@@ -22,17 +22,6 @@ namespace editor
 
     class EraserTool : public Tool
     {
-    private:
-        DocumentStore *m_documentStore;
-
-        Eraser m_Eraser;
-        EraserStroke m_EraserStroke;
-
-        int m_Size = 3;
-        float m_DashSize = 0.2f;
-        bool m_IsMoveSelection = false;
-        float m_NoMovementTolerance = 0.1f;
-
     public:
         EraserTool(int eraserSize);
 
@@ -40,11 +29,22 @@ namespace editor
 
         void pointerMove(const ToolContext &) override;
 
-        void deactivate(const ToolContext &) override;
-
         void setOptions(std::string json) override;
 
         std::string getOptions() override;
+
+    private:
+        DocumentStore *m_documentStore;
+
+        Eraser m_Eraser;
+
+        int m_Size = 3;
+
+        float m_DashSize = 0.2f;
+
+        bool m_IsMoveSelection = false;
+
+        float m_NoMovementTolerance = 0.1f;
     };
 } // namespace editor
 } // namespace spright

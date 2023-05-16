@@ -47,7 +47,7 @@ namespace editor
             m_ToolContext.pointer.buttons[1] = buttons[1];
             m_ToolContext.pointer.buttons[2] = buttons[2];
 
-            tool->pointerUp(m_ToolContext);
+            tool->execPointerUp(m_ToolContext);
             m_ToolContext.pointer.isDown = false;
         }
     }
@@ -66,7 +66,7 @@ namespace editor
 
         for (Tool *tool : *m_ActiveTools)
         {
-            tool->pointerDown(m_ToolContext);
+            tool->execPointerDown(m_ToolContext);
         }
     }
 
@@ -93,7 +93,7 @@ namespace editor
 
         for (Tool *tool : *m_ActiveTools)
         {
-            tool->pointerMove(m_ToolContext);
+            tool->execPointerMove(m_ToolContext);
         }
     }
 
@@ -251,7 +251,7 @@ namespace editor
             removeActiveTool(m_SelectedTool->getName());
 
             Drawing *activeDrawing = m_DocumentStore->getActiveDocument().getDrawingAt(m_ToolContext.pointer.curr);
-            m_SelectedTool->deactivate(m_ToolContext);
+            m_SelectedTool->execDeactivate(m_ToolContext);
         }
 
         if (!isActiveTool(name))

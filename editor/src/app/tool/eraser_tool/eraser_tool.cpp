@@ -4,10 +4,9 @@ namespace spright
 {
 namespace editor
 {
-
-    EraserTool::EraserTool(int eraserSize) : m_Size(eraserSize), Tool("erase")
+    EraserTool::EraserTool(int eraserSize)
+        : m_Size(eraserSize), Tool("erase", std::make_shared<EraserCursor>(eraserSize))
     {
-        m_EraserStroke = EraserStroke(m_Size);
     }
 
     void EraserTool::pointerDown(const ToolContext &context)
@@ -23,11 +22,6 @@ namespace editor
 
     void EraserTool::pointerMove(const ToolContext &context)
     {
-        if (context.doc.isLeavingDrawing())
-        {
-            m_EraserStroke.clear(context.doc.prevDrawing->getForegroundLayer());
-        }
-
         if (!context.doc.hasActiveDrawing())
         {
             return;
@@ -36,21 +30,12 @@ namespace editor
         TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
         TileLayer &drawLayer = context.doc.activeDrawing->getForegroundLayer();
 
-        m_EraserStroke.draw(activeLayer, drawLayer, context.pointer.curr);
-
         if (context.pointer.isDown)
         {
             m_Eraser.erase(activeLayer, activeLayer.getTilePos(context.pointer.curr), m_Size);
         }
     }
 
-    void EraserTool::deactivate(const ToolContext &context)
-    {
-        if (context.doc.hasActiveDrawing())
-        {
-            m_EraserStroke.clear(context.doc.activeDrawing->getForegroundLayer());
-        }
-    }
     void EraserTool::setOptions(std::string json)
     {
         nlohmann::json parsedJson = nlohmann::json::parse(json);
