@@ -5,6 +5,7 @@
 #include "../../engine/system/window/window.h"
 #include "../algorithm/flip_horizontal.h"
 #include "../document/factory/document_factory.h"
+#include "../editor/editor_state.h"
 #include "../editor_config.h"
 #include "../service/io/image_export.h"
 #include "../service/services.h"
@@ -32,23 +33,30 @@ namespace editor
     {
     private:
         Window *m_Window;
+
         vector<Tool *> m_Tools;
+
         vector<Tool *> *m_ActiveTools;
+
         Tool *m_SelectedTool = nullptr;
+
         Services *m_Services;
+
         DocumentStore *m_DocumentStore;
+
         ImageExport *m_ImageExport;
+
         DocumentFactory *m_DocumentFactory;
 
         ToolContext m_ToolContext;
 
     public:
-        ToolHandler();
-        ToolHandler(Window *window,
+        ToolHandler(shared_ptr<EditorState> editorState,
+                    Window *window,
                     DocumentStore *documentStore,
                     Services *services,
                     ImageExport *imageExport,
-                    DocumentFactory *documentFractory);
+                    DocumentFactory *documentFactory);
         ~ToolHandler();
 
         ToolHandler &operator=(const ToolHandler &toolHandler);

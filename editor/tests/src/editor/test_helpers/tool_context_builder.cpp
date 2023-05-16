@@ -1,10 +1,5 @@
 #include "tool_context_builder.h"
 
-ToolContextBuilder &ToolContextBuilder::withToolContext(ToolContext context)
-{
-    m_ToolContext = context;
-}
-
 
 ToolContextBuilder &ToolContextBuilder::withDocumentInfo(DocumentInfoBuilder builder)
 {
@@ -18,13 +13,23 @@ ToolContextBuilder &ToolContextBuilder::withPointerInfo(PointerInfoBuilder build
     return *this;
 }
 
+ToolContextBuilder &ToolContextBuilder::withActiveDrawing(DocumentStore &documentStore)
+{
+    Drawing &activeDrawing = documentStore.getActiveDocument().getDrawings()[0];
+
+    return withDocumentInfo(DocumentInfoBuilder().withActiveDrawing(&activeDrawing));
+}
+
+
 ToolContext ToolContextBuilder::build()
 {
+    ToolContext toolContext(std::make_shared<EditorState>());
+
     PointerInfo pointer = m_PointerInfo.build();
     DocumentInfo doc = m_DocInfo.build();
 
-    m_ToolContext.pointer = pointer;
-    m_ToolContext.doc = doc;
+    toolContext.pointer = pointer;
+    toolContext.doc = doc;
 
-    return m_ToolContext;
+    return toolContext;
 }

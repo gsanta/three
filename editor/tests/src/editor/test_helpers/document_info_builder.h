@@ -12,5 +12,6 @@ private:
 
 public:
     DocumentInfoBuilder &withActiveDrawing(Drawing *);
+
     DocumentInfo build();
 };

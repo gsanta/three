@@ -235,6 +235,11 @@ namespace engine
         return getAtTileIndex(getTileIndex(x, y));
     }
 
+    Rect2D *TileLayer::getAtWorldPos(Vec2 pos) const
+    {
+        return getAtTileIndex(getTileIndex(pos));
+    }
+
     int TileLayer::getIndexSize() const
     {
         return m_IndexSize;

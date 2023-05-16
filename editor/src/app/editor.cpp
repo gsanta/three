@@ -8,6 +8,8 @@ namespace editor
     {
         m_EventEmitter = std::make_unique<EmscriptenEventEmitter>();
 
+        m_EditorState = std::make_shared<EditorState>();
+
         m_Window = new GLWindow("Editor", 1200, 800);
         m_DocumentFactory = new DocumentFactory(m_Window, new GLRendererProvider(), m_EventEmitter.get());
 
@@ -27,9 +29,10 @@ namespace editor
 
         m_FramePlayerHandler.setDocumentStore(getDocumentStore());
 
-        m_toolHandler = new ToolHandler(m_Window, getDocumentStore(), m_Services, m_ImageExport, m_DocumentFactory);
+        m_toolHandler =
+            new ToolHandler(m_EditorState, m_Window, getDocumentStore(), m_Services, m_ImageExport, m_DocumentFactory);
         m_toolHandler->addTool(new BrushTool(getDocumentStore()));
-        m_toolHandler->addTool(new RectangleTool(m_Services));
+        m_toolHandler->addTool(new RectangleTool());
         m_toolHandler->addTool(new EraserTool(3));
         m_toolHandler->addTool(new PanTool(getDocumentStore()));
         m_toolHandler->addTool(new ZoomTool(getDocumentStore()));

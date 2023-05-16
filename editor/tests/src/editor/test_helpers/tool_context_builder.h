@@ -5,14 +5,17 @@
 
 class ToolContextBuilder
 {
-private:
-    ToolContext m_ToolContext;
-    DocumentInfoBuilder m_DocInfo;
-    PointerInfoBuilder m_PointerInfo;
-
 public:
-    ToolContextBuilder &withToolContext(ToolContext toolContext);
     ToolContextBuilder &withDocumentInfo(DocumentInfoBuilder builder);
+
     ToolContextBuilder &withPointerInfo(PointerInfoBuilder builder);
+
+    ToolContextBuilder &withActiveDrawing(DocumentStore &documentStore);
+
     ToolContext build();
+
+private:
+    DocumentInfoBuilder m_DocInfo;
+
+    PointerInfoBuilder m_PointerInfo;
 };
