@@ -200,7 +200,7 @@ if (ENVIRONMENT_IS_SHELL) {
           if (toThrow && typeof toThrow == 'object' && toThrow.stack) {
             toLog = [toThrow, toThrow.stack];
           }
-          err('exiting due to exception: ' + toLog);
+          err(`exiting due to exception: ${toLog}`);
         }
         quit(status);
       });
@@ -286,7 +286,7 @@ read_ = (url) => {
 }
 
 var out = Module['print'] || console.log.bind(console);
-var err = Module['printErr'] || console.warn.bind(console);
+var err = Module['printErr'] || console.error.bind(console);
 
 // Merge back in the overrides
 Object.assign(Module, moduleOverrides);
@@ -1005,8 +1005,8 @@ function unexportedRuntimeSymbol(sym) {
 // Used by XXXXX_DEBUG settings to output debug messages.
 function dbg(text) {
   // TODO(sbc): Make this configurable somehow.  Its not always convenient for
-  // logging to show up as errors.
-  console.error.apply(console, arguments);
+  // logging to show up as warnings.
+  console.warn.apply(console, arguments);
 }
 
 // end include: runtime_debug.js
@@ -1171,7 +1171,7 @@ function dbg(text) {
       case 'float': return HEAPF32[((ptr)>>2)];
       case 'double': return HEAPF64[((ptr)>>3)];
       case '*': return HEAPU32[((ptr)>>2)];
-      default: abort('invalid type for getValue: ' + type);
+      default: abort(`invalid type for getValue: ${type}`);
     }
   }
 
@@ -1203,7 +1203,7 @@ function dbg(text) {
       case 'float': HEAPF32[((ptr)>>2)] = value; break;
       case 'double': HEAPF64[((ptr)>>3)] = value; break;
       case '*': HEAPU32[((ptr)>>2)] = value; break;
-      default: abort('invalid type for setValue: ' + type);
+      default: abort(`invalid type for setValue: ${type}`);
     }
   }
 
@@ -1919,7 +1919,7 @@ function dbg(text) {
   
   /** @param {boolean=} noRunDep */
   function asyncLoad(url, onload, onerror, noRunDep) {
-      var dep = !noRunDep ? getUniqueRunDependency('al ' + url) : '';
+      var dep = !noRunDep ? getUniqueRunDependency(`al ${url}`) : '';
       readAsync(url, (arrayBuffer) => {
         assert(arrayBuffer, `Loading data file "${url}" failed (no arrayBuffer).`);
         onload(new Uint8Array(arrayBuffer));
@@ -1953,7 +1953,7 @@ function dbg(text) {
       // TODO we should allow people to just pass in a complete filename instead
       // of parent and name being that we just join them anyways
       var fullname = name ? PATH_FS.resolve(PATH.join2(parent, name)) : parent;
-      var dep = getUniqueRunDependency('cp ' + fullname); // might have several active requests for the same fullname
+      var dep = getUniqueRunDependency(`cp ${fullname}`); // might have several active requests for the same fullname
       function processData(byteArray) {
         function finish(byteArray) {
           if (preFinish) preFinish();
@@ -1990,7 +1990,7 @@ function dbg(text) {
       };
       var flags = flagModes[str];
       if (typeof flags == 'undefined') {
-        throw new Error('Unknown file open mode: ' + str);
+        throw new Error(`Unknown file open mode: ${str}`);
       }
       return flags;
     }
@@ -2086,9 +2086,9 @@ function dbg(text) {
           if (FS.isRoot(node)) {
             var mount = node.mount.mountpoint;
             if (!path) return mount;
-            return mount[mount.length-1] !== '/' ? mount + '/' + path : mount + path;
+            return mount[mount.length-1] !== '/' ? `${mount}/${path}` : mount + path;
           }
-          path = path ? node.name + '/' + path : node.name;
+          path = path ? `${node.name}/${path}` : node.name;
           node = node.parent;
         }
       },hashName:(parentid, name) => {
@@ -2313,7 +2313,7 @@ function dbg(text) {
         FS.syncFSRequests++;
   
         if (FS.syncFSRequests > 1) {
-          err('warning: ' + FS.syncFSRequests + ' FS.syncfs operations in flight at once, probably just doing extra work');
+          err(`warning: ${FS.syncFSRequests} FS.syncfs operations in flight at once, probably just doing extra work`);
         }
   
         var mounts = FS.getMounts(FS.root.mount);
@@ -2956,7 +2956,7 @@ function dbg(text) {
         opts.flags = opts.flags || 0;
         opts.encoding = opts.encoding || 'binary';
         if (opts.encoding !== 'utf8' && opts.encoding !== 'binary') {
-          throw new Error('Invalid encoding type "' + opts.encoding + '"');
+          throw new Error(`Invalid encoding type "${opts.encoding}"`);
         }
         var ret;
         var stream = FS.open(path, opts.flags);
@@ -3087,9 +3087,9 @@ function dbg(text) {
         var stdin = FS.open('/dev/stdin', 0);
         var stdout = FS.open('/dev/stdout', 1);
         var stderr = FS.open('/dev/stderr', 1);
-        assert(stdin.fd === 0, 'invalid handle for stdin (' + stdin.fd + ')');
-        assert(stdout.fd === 1, 'invalid handle for stdout (' + stdout.fd + ')');
-        assert(stderr.fd === 2, 'invalid handle for stderr (' + stderr.fd + ')');
+        assert(stdin.fd === 0, `invalid handle for stdin (${stdin.fd})`);
+        assert(stdout.fd === 1, `invalid handle for stdout (${stdout.fd})`);
+        assert(stderr.fd === 2, `invalid handle for stderr (${stderr.fd})`);
       },ensureErrnoError:() => {
         if (FS.ErrnoError) return;
         FS.ErrnoError = /** @this{Object} */ function ErrnoError(errno, node) {
@@ -3721,7 +3721,7 @@ function dbg(text) {
           case 4: return 2;
           case 8: return 3;
           default:
-              throw new TypeError('Unknown type size: ' + size);
+              throw new TypeError(`Unknown type size: ${size}`);
       }
     }
   
@@ -3758,7 +3758,7 @@ function dbg(text) {
       name = name.replace(/[^a-zA-Z0-9_]/g, '$');
       var f = name.charCodeAt(0);
       if (f >= char_0 && f <= char_9) {
-        return '_' + name;
+        return `_${name}`;
       }
       return name;
     }
@@ -3789,7 +3789,7 @@ function dbg(text) {
         if (this.message === undefined) {
           return this.name;
         } else {
-          return this.name + ': ' + this.message;
+          return `${this.name}: ${this.message}`;
         }
       };
   
@@ -4324,7 +4324,7 @@ function dbg(text) {
   function constNoSmartPtrRawPointerToWireType(destructors, handle) {
       if (handle === null) {
         if (this.isReference) {
-          throwBindingError('null is not a valid ' + this.name);
+          throwBindingError(`null is not a valid ${this.name}`);
         }
         return 0;
       }
@@ -4333,7 +4333,7 @@ function dbg(text) {
         throwBindingError(`Cannot pass "${embindRepr(handle)}" as a ${this.name}`);
       }
       if (!handle.$$.ptr) {
-        throwBindingError('Cannot pass deleted object as a pointer of type ' + this.name);
+        throwBindingError(`Cannot pass deleted object as a pointer of type ${this.name}`);
       }
       var handleClass = handle.$$.ptrType.registeredClass;
       var ptr = upcastPointer(handle.$$.ptr, handleClass, this.registeredClass);
@@ -4345,7 +4345,7 @@ function dbg(text) {
       var ptr;
       if (handle === null) {
         if (this.isReference) {
-          throwBindingError('null is not a valid ' + this.name);
+          throwBindingError(`null is not a valid ${this.name}`);
         }
   
         if (this.isSmartPointer) {
@@ -4421,7 +4421,7 @@ function dbg(text) {
   function nonConstNoSmartPtrRawPointerToWireType(destructors, handle) {
       if (handle === null) {
         if (this.isReference) {
-          throwBindingError('null is not a valid ' + this.name);
+          throwBindingError(`null is not a valid ${this.name}`);
         }
         return 0;
       }
@@ -4574,7 +4574,7 @@ function dbg(text) {
       if (sig.includes('j')) {
         return dynCallLegacy(sig, ptr, args);
       }
-      assert(getWasmTableEntry(ptr), 'missing table entry in dynCall: ' + ptr);
+      assert(getWasmTableEntry(ptr), `missing table entry in dynCall: ${ptr}`);
       var rtn = getWasmTableEntry(ptr).apply(null, args);
       return rtn;
   
@@ -4639,7 +4639,7 @@ function dbg(text) {
       }
       types.forEach(visit);
   
-      throw new UnboundTypeError(message + ': ' + unboundTypes.map(getTypeName).join([', ']));
+      throw new UnboundTypeError(`${message}: ` + unboundTypes.map(getTypeName).join([', ']));
     }
   
   function __embind_register_class(rawType,
@@ -4846,11 +4846,11 @@ function dbg(text) {
         argsListWired += (i!==0?", ":"")+"arg"+i+"Wired";
       }
   
-      var invokerFnBody =
-          "return function "+makeLegalFunctionName(humanName)+"("+argsList+") {\n" +
-          "if (arguments.length !== "+(argCount - 2)+") {\n" +
-              "throwBindingError('function "+humanName+" called with ' + arguments.length + ' arguments, expected "+(argCount - 2)+" args!');\n" +
-          "}\n";
+      var invokerFnBody = `
+        return function ${makeLegalFunctionName(humanName)}(${argsList}) {
+        if (arguments.length !== ${argCount - 2}) {
+          throwBindingError('function ${humanName} called with ${arguments.length} arguments, expected ${argCount - 2} args!');
+        }`;
   
       if (needsDestructorStack) {
         invokerFnBody += "var destructors = [];\n";
@@ -4918,7 +4918,7 @@ function dbg(text) {
   
       whenDependentTypesAreResolved([], [rawClassType], function(classType) {
         classType = classType[0];
-        var humanName = 'constructor ' + classType.name;
+        var humanName = `constructor ${classType.name}`;
   
         if (undefined === classType.registeredClass.constructor_body) {
           classType.registeredClass.constructor_body = [];
@@ -4960,7 +4960,7 @@ function dbg(text) {
   
       whenDependentTypesAreResolved([], [rawClassType], function(classType) {
         classType = classType[0];
-        var humanName = classType.name + '.' + methodName;
+        var humanName = `${classType.name}.${methodName}`;
   
         if (methodName.startsWith("@@")) {
           methodName = Symbol[methodName.substring(2)];
@@ -5014,8 +5014,11 @@ function dbg(text) {
       this.allocated = [undefined];
       this.freelist = [];
       this.get = function(id) {
-        assert(this.allocated[id] !== undefined, 'invalid handle: ' + id);
+        assert(this.allocated[id] !== undefined, `invalid handle: ${id}`);
         return this.allocated[id];
+      };
+      this.has = function(id) {
+        return this.allocated[id] !== undefined;
       };
       this.allocate = function(handle) {
         var id = this.freelist.pop() || this.allocated.length;
@@ -5556,7 +5559,7 @@ function dbg(text) {
         },
         'toWireType': function(destructors, value) {
           if (!(typeof value == 'string')) {
-            throwBindingError('Cannot pass non-string to C++ string type ' + name);
+            throwBindingError(`Cannot pass non-string to C++ string type ${name}`);
           }
   
           // assumes 4-byte alignment
@@ -5859,7 +5862,7 @@ function dbg(text) {
       checkStackCookie();
       if (e instanceof WebAssembly.RuntimeError) {
         if (_emscripten_stack_get_current() <= 0) {
-          err('Stack overflow detected.  You can try increasing -sSTACK_SIZE (currently set to ' + 65536 + ')');
+          err('Stack overflow detected.  You can try increasing -sSTACK_SIZE (currently set to 65536)');
         }
       }
       quit_(1, e);
@@ -6479,18 +6482,18 @@ function dbg(text) {
         
         Browser.mainLoop.running = true;
       }
-      if (mode == 0 /*EM_TIMING_SETTIMEOUT*/) {
+      if (mode == 0) {
         Browser.mainLoop.scheduler = function Browser_mainLoop_scheduler_setTimeout() {
           var timeUntilNextTick = Math.max(0, Browser.mainLoop.tickStartTime + value - _emscripten_get_now())|0;
           setTimeout(Browser.mainLoop.runner, timeUntilNextTick); // doing this each time means that on exception, we stop
         };
         Browser.mainLoop.method = 'timeout';
-      } else if (mode == 1 /*EM_TIMING_RAF*/) {
+      } else if (mode == 1) {
         Browser.mainLoop.scheduler = function Browser_mainLoop_scheduler_rAF() {
           Browser.requestAnimationFrame(Browser.mainLoop.runner);
         };
         Browser.mainLoop.method = 'rAF';
-      } else if (mode == 2 /*EM_TIMING_SETIMMEDIATE*/) {
+      } else if (mode == 2) {
         if (typeof setImmediate == 'undefined') {
           // Emulate setImmediate. (note: not a complete polyfill, we don't emulate clearImmediate() to keep code size to minimum, since not needed)
           var setImmediates = [];
@@ -6581,11 +6584,11 @@ function dbg(text) {
   
         // Implement very basic swap interval control
         Browser.mainLoop.currentFrameNumber = Browser.mainLoop.currentFrameNumber + 1 | 0;
-        if (Browser.mainLoop.timingMode == 1/*EM_TIMING_RAF*/ && Browser.mainLoop.timingValue > 1 && Browser.mainLoop.currentFrameNumber % Browser.mainLoop.timingValue != 0) {
+        if (Browser.mainLoop.timingMode == 1 && Browser.mainLoop.timingValue > 1 && Browser.mainLoop.currentFrameNumber % Browser.mainLoop.timingValue != 0) {
           // Not the scheduled time to render this frame - skip.
           Browser.mainLoop.scheduler();
           return;
-        } else if (Browser.mainLoop.timingMode == 0/*EM_TIMING_SETTIMEOUT*/) {
+        } else if (Browser.mainLoop.timingMode == 0) {
           Browser.mainLoop.tickStartTime = _emscripten_get_now();
         }
   
@@ -6615,8 +6618,12 @@ function dbg(text) {
       }
   
       if (!noSetTiming) {
-        if (fps && fps > 0) _emscripten_set_main_loop_timing(0/*EM_TIMING_SETTIMEOUT*/, 1000.0 / fps);
-        else _emscripten_set_main_loop_timing(1/*EM_TIMING_RAF*/, 1); // Do rAF by rendering each frame (no decimating)
+        if (fps && fps > 0) {
+          _emscripten_set_main_loop_timing(0, 1000.0 / fps);
+        } else {
+          // Do rAF by rendering each frame (no decimating)
+          _emscripten_set_main_loop_timing(1, 1);
+        }
   
         Browser.mainLoop.scheduler();
       }
