@@ -16,13 +16,13 @@ namespace editor
 
     class PaintBucketTool : public Tool
     {
+    public:
+        PaintBucketTool();
+
+        void pointerUp(const ToolContext &) override;
+
     private:
         QueueLinearFloodFill m_FloodFill;
-        Services *m_Services;
-
-    public:
-        PaintBucketTool(Services *services);
-        void pointerUp(const ToolContext &) override;
     };
 } // namespace editor
 } // namespace spright
