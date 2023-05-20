@@ -36,7 +36,7 @@ namespace editor
         m_toolHandler->addTool(new EraserTool(3));
         m_toolHandler->addTool(new PanTool(getDocumentStore()));
         m_toolHandler->addTool(new ZoomTool(getDocumentStore()));
-        m_toolHandler->addTool(new PaintBucketTool(m_Services));
+        m_toolHandler->addTool(new PaintBucketTool());
         m_toolHandler->addTool(new SelectTool());
         m_toolHandler->addTool(new ColorPickerTool(m_toolHandler, m_EventEmitter.get()));
         m_toolHandler->addTool(new NewDrawingTool(getDocumentStore(), m_DocumentFactory));
