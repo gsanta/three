@@ -1,30 +1,37 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const webpack = require('webpack');
+const glob = require('glob');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const WebpackAssetsManifest = require('webpack-assets-manifest');
+
 const path = require('path');
-const fs = require('fs');
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-// TODO: no better solution?
-const srcPath = (subdir) => path.join(__dirname, 'src', subdir);
-const getFilesAndDirectories = (source) => fs.readdirSync(source, { withFileTypes: true }).map((dirent) => dirent.name);
-let absoluteImports = {};
-getFilesAndDirectories('src').forEach((fileName) => {
-  const fileNameWithoutExtension = path.parse(fileName).name;
-  absoluteImports[`@/${fileNameWithoutExtension}`] = srcPath(fileName);
-});
+const pagesPath = path.resolve(__dirname, 'src/pages');
+
+const entryPoints = glob.sync(path.join(pagesPath, '*.ts')).reduce((entries, file) => {
+  const { name, dir } = path.parse(file);
+  const entry = path.join(path.relative(pagesPath, dir), name);
+  entries[entry] = file;
+  console.log(entry);
+  return entries;
+}, {});
+
+console.log(entryPoints);
 
 module.exports = (env) => {
   return {
-    entry: {
-      app: './src/index.tsx',
-    },
+    // entry: {
+    //   app: './src/index.tsx',
+    // },
+    entry: entryPoints,
     module: {
       rules: [
         {
           test: /\.tsx?$/,
-          use: 'ts-loader',
+          use: ['ts-loader'],
           exclude: [/node_modules/, /src\/server/],
         },
         {
@@ -67,17 +74,30 @@ module.exports = (env) => {
       new HtmlWebpackPlugin({
         template: 'index.html',
         filename: 'index.html',
-        inject: false,
+        inject: 'body',
+        hash: 'contenthash',
+        scriptLoading: 'blocking',
+      }),
+      new WebpackAssetsManifest({
+        entrypoints: true,
+        writeToDisk: false,
+        output: 'manifest.json',
+        entrypointsUseAssets: true,
       }),
     ],
     resolve: {
       extensions: ['.tsx', '.ts', '.js', 'scss', '.css'],
-      alias: {
-        ...absoluteImports,
-      },
+      // alias: getResolvedAbsolutePaths(),
+      plugins: [new TsconfigPathsPlugin({ configFile: './tsconfig.json' })],
     },
+    // output: {
+    //   filename: '[name].js',
+    // },
     output: {
-      filename: '[name].js',
+      filename: 'js/[name]-[contenthash].js',
+      // chunkFilename: 'js/[name]-[contenthash].chunk.js',
+      path: path.resolve(__dirname, 'public/js'),
+      // publicPath: 'auto',
     },
     devtool: 'eval-source-map',
     mode: 'development',
@@ -88,6 +108,11 @@ module.exports = (env) => {
     devServer: {
       static: ['../editor/Web'],
       port: 3012,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+        'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+      },
     },
   };
 };

@@ -57,7 +57,7 @@ jobs:
           command: cd client && npm i
       - run:
           name: Lint
-          command: ./client/node_modules/.bin/eslint $(git diff --name-only origin/master...HEAD | grep -E '\.(ts|tsx)$' | xargs)
+          command: ./client/node_modules/.bin/eslint $(git diff --diff-filter=ACMR --name-only origin/master...HEAD | grep -E '\.(ts|tsx)$' | xargs)
   client_build:
     working_directory: ~/client
     docker:

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ChakraProvider, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import '../../app.scss';
 import Layout from './layout/Layout';
@@ -10,24 +10,36 @@ import App, { AppContext } from '../../app/App';
 import useInitApp from '../panels/canvas/hooks/useInitApp';
 import LayerPanel from '../../panels/layer/ui/components/LayerPanel';
 import Toolbar from '@/panels/toolbar/ui/Toolbar';
-import SettingsPanel from '@/panels/settings/SettingsPanel';
 import ToolOptionsPanel from '@/panels/tool_options/ui/ToolOptionsPanel';
-import { Provider } from 'react-redux';
-import { store } from '@/store';
 import SceneViewer from '@/panels/scene_viewer/SceneViewer';
+import KeyboardHandler from '@/services/keyboard/KeyboardHandler';
+import { editor } from '@/services/editor/Editor';
+import ToolEventListener from '@/panels/toolbar/ToolEventListener';
+import Header from '../panels/header/Header';
+import ProtectedPage from './layout/ProtectedPage';
 
-type AppContainerProps = {
-  app: App;
-};
-
-const AppContainer = ({ app }: AppContainerProps) => {
+const AppContainer = () => {
   const [canvasContainer, setCanvasContainer] = useState<HTMLCanvasElement | undefined>();
 
+  console.log('app container runs');
+
   const canvasRef = useCallback((node: HTMLCanvasElement) => node && setCanvasContainer(node), []);
+
+  const app: App = useMemo(
+    () => ({
+      editorApi: editor,
+      editorEvents: window.EditorEvents,
+      keyboardHandler: new KeyboardHandler(),
+    }),
+    [],
+  );
 
   useInitApp(app, canvasContainer);
 
   useEffect(() => {
+    const toolEventListener = new ToolEventListener(app.editorApi);
+    toolEventListener.listen(window.EditorEvents);
+
     /* code to prevent emscripten compiled code from eating key input */
     window.addEventListener(
       'keydown',
@@ -49,25 +61,10 @@ const AppContainer = ({ app }: AppContainerProps) => {
   }, []);
 
   return (
-    <ChakraProvider theme={theme} cssVarsRoot="body">
-      <Provider store={store}>
+    <ProtectedPage>
+      <ChakraProvider theme={theme} cssVarsRoot="body">
         <AppContext.Provider value={app}>
-          <Layout
-            header={
-              <Box
-                borderBottom="1px solid"
-                borderColor="gray.600"
-                display="flex"
-                justifyContent="space-between"
-                height="40px"
-                paddingInline="1"
-                paddingBlock="1"
-              >
-                <SettingsPanel />
-              </Box>
-            }
-            footer={<Box bgColor="orange.400" height="40px"></Box>}
-          >
+          <Layout header={<Header />} footer={<Box bgColor="orange.400" height="40px"></Box>}>
             <Box width="50px">
               <Toolbar />
             </Box>
@@ -95,8 +92,8 @@ const AppContainer = ({ app }: AppContainerProps) => {
             </Split>
           </Layout>
         </AppContext.Provider>
-      </Provider>
-    </ChakraProvider>
+      </ChakraProvider>
+    </ProtectedPage>
   );
 };
 
