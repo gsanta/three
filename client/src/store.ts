@@ -3,6 +3,7 @@ import frameSlice from './features/frame/state/frameSlice';
 import settingsSlice from './features/settings/state/settingsSlice';
 import toolSlice from './features/tool/state/toolSlice';
 import layerSlice from './panels/layer/state/layerSlice';
+import userSlice from './features/user/userSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     layer: layerSlice,
     settings: settingsSlice,
     tool: toolSlice,
+    user: userSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

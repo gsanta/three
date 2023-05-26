@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <title>Spright</title>
+    <%= csrf_meta_tags %>
+    <%= css_asset_tag(react.pack_name) %>
+    <script type="text/javascript">
+        window.pageProps = <%=raw json_escape(react.props) %>;
+        window.globalProps = <%=raw json_escape(react.globalProps) %>;
+    </script>
+  </head>
+  <body>
+        <div id="react-mount" style="height: 100vh"/>
+        <%= javascript_asset_tag(react.pack_name) %>
+        <script type='text/javascript'>
+          window.onerror = function (event) {
+              // TODO: do not warn on ok events like simulating an infinite loop or exitStatus
+              Module.setStatus('Exception thrown, see JavaScript console');
+              Module.setStatus = function (text) {
+                  if (text) console.error('[post-exception status] ' + text);
+              };
+          };
+
+      </script>
+      <script async type="text/javascript" src="http://localhost:3012/spright.js"></script>
+  </body>
+</html>
