@@ -1,6 +1,6 @@
 import ToolName from '@/features/tool/state/ToolName';
-import Editor from '@/services/editor/Editor';
-import EditorApi from '@/services/editor/EditorApi';
+import Editor from '@/features/editor/Editor';
+import EditorApi from '@/features/editor/EditorApi';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import Tool from './Tool';
 

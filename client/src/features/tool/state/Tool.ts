@@ -1,5 +1,5 @@
 import ToolName from '@/features/tool/state/ToolName';
-import { IconName } from '@/ui/components/icon/Icon';
+import { IconName } from '@/components/icon/Icon';
 
 type Tool = {
   name: ToolName;

@@ -1,6 +1,6 @@
-import FrameButton from '@/ui/components/button/FrameButton';
+import FrameButton from '@/components/button/FrameButton';
 import { Box, Divider } from '@chakra-ui/react';
-import Icon from '@/ui/components/icon/Icon';
+import Icon from '@/components/icon/Icon';
 import React from 'react';
 import { Tooltip, Button } from '@chakra-ui/react';
 import { useAppSelector, useAppDispatch } from '@/hooks';

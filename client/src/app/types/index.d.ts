@@ -1,6 +1,6 @@
 /* eslint-disable no-var */
 
-import EditorEvents from '@/services/editor/EditorEvents';
+import EditorEvents from '@/features/editor/EditorEvents';
 import EditorListener from '@/services/editor/EditorListener';
 
 declare global {
