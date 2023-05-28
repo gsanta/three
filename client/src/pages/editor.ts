@@ -1,6 +1,6 @@
-import { renderPageComponent } from '@/utils/ReactPage';
-import AppContainer from '@/ui/components/AppContainer';
-import EditorEvents from '@/services/editor/EditorEvents';
+import { renderPageComponent } from '@/components/ReactPage';
+import AppContainer from '@/components/AppContainer';
+import EditorEvents from '@/features/editor/EditorEvents';
 
 window.EditorEvents = new EditorEvents();
 

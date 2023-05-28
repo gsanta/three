@@ -1,7 +1,7 @@
-import EditorEvents from '@/services/editor/EditorEvents';
+import EditorEvents from '@/features/editor/EditorEvents';
 import { createContext } from 'react';
-import KeyboardHandler from '@/services/keyboard/KeyboardHandler';
-import Editor from '@/services/editor/Editor';
+import KeyboardHandler from '@/features/keyboard/KeyboardHandler';
+import Editor from '@/features/editor/Editor';
 
 export type App = {
   editorApi: Editor;

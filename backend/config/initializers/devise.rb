@@ -305,7 +305,8 @@ Devise.setup do |config|
   config.responder.error_status = :unprocessable_entity
   config.responder.redirect_status = :see_other
 
-  config.navigational_formats = ['*/*', :html, :turbo_stream]
+  config.http_authenticatable_on_xhr = false
+  config.navigational_formats = [:"*/*", "*/*", :html, :js, :turbo_stream]
 
   # ==> Configuration for :registerable
 
