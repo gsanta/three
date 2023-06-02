@@ -117,8 +117,9 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
         Drawing &drawing = documentStore.getActiveDocument().getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
 
-        const Vec2 bottomLeft = activeLayer.getWorldPos(1, 0);
-        const Vec2 topRight = activeLayer.getWorldPos(5, 2);
+        float tileSize = activeLayer.getTileSize();
+        const Vec2 bottomLeft = activeLayer.getWorldPos(1, 0) - Vec2(tileSize / 2.0f, tileSize / 2.0f);
+        const Vec2 topRight = bottomLeft + Vec2(4, 2);
         const Bounds bounds(bottomLeft, topRight);
 
         drawing.getState().setBounds(bounds);
