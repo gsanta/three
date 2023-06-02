@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   unit-test:
@@ -9,8 +9,8 @@ services:
       - .:/src
     working_dir: /src
     command: >
-        sh -c "cd editor
-              cmake . -DCOMPILE_APP=OFF && cmake --build . && cd tests && ./unit_tests --reporter JUnit::out=unit_test_result.xml"
+      sh -c "cd editor
+            cmake . -DCOMPILE_APP=OFF && cmake --build . && cd tests && ./unit_tests --reporter JUnit::out=unit_test_result.xml"
   compile-emscripten:
     build:
       context: .
@@ -21,7 +21,7 @@ services:
       sh -c   "cd editor/Web &&
               emcmake cmake . &&
               cmake --build ."
-  clang-tidy:
+  clang-format:
     build:
       context: .
       dockerfile: ./docker/desktop.Dockerfile
@@ -30,6 +30,6 @@ services:
     working_dir: /src
     command: >
       sh -c   "git config --global --add safe.directory /src &&
-              ./run-clang-format.py editor/app/main.cpp $(git diff --diff-filter=ACMR --name-only origin/master | grep -E '\.(h|cpp)$' | xargs)"
+              ./run-clang-format.py editor/app/main.cpp $(git diff --diff-filter=ACMR --name-only origin/master | grep -E '\\.(h|cpp)$' | xargs)"
 volumes:
   myapp:

@@ -3,18 +3,23 @@
 <head>
   <meta charset="utf-8">
   <title>Spright</title>
-  <style>
-
-  </style>
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-  <!-- <link rel="stylesheet" type="text/css" href="./app.css"> -->
+  <link rel="stylesheet" type="text/css" href="./editor.css">
 </head>
 
 <body>
-  <div id="react-mount">
-
-  </div>
+  <div id="react-mount" style="height: 100vh"></div>
   <!-- <script src="./app.js"></script> -->
+  <script type="text/javascript">
+    window.pageProps = {
+
+    }
+    window.globalProps = {
+      user: {
+        isLoggedIn: false,
+      }
+    }
+  </script>
   <script type='text/javascript'>
     window.onerror = function (event) {
       // TODO: do not warn on ok events like simulating an infinite loop or exitStatus
@@ -23,7 +28,6 @@
         if (text) console.error('[post-exception status] ' + text);
       };
     };
-
   </script>
   <script async type="text/javascript" src="spright.js"></script>
 </body>
