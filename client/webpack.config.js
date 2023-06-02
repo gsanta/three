@@ -96,7 +96,7 @@ module.exports = (env) => {
     output: {
       filename: 'js/[name]-[contenthash].js',
       // chunkFilename: 'js/[name]-[contenthash].chunk.js',
-      path: path.resolve(__dirname, 'public/js'),
+      path: path.resolve(__dirname, 'public'),
       // publicPath: 'auto',
     },
     devtool: 'eval-source-map',

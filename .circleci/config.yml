@@ -46,7 +46,7 @@ jobs:
           name: Cpp code format check
           command: |
             set -x
-            docker-compose run --rm clang-tidy; echo $?
+            docker-compose run --rm clang-format; echo $?
   client_lint:
     docker:
       - image: cimg/node:16.15.0
