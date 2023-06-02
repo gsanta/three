@@ -40,8 +40,9 @@ namespace editor
         m_toolHandler->addTool(new SelectTool());
         m_toolHandler->addTool(new ColorPickerTool(m_toolHandler, m_EventEmitter.get()));
         m_toolHandler->addTool(new NewDrawingTool(getDocumentStore(), m_DocumentFactory));
+        m_toolHandler->addTool(new CircleTool());
         m_toolHandler->addActiveTool("zoom");
-        m_toolHandler->setSelectedTool("brush");
+        m_toolHandler->setSelectedTool("circle");
 
         m_RunLoop.add(m_FramePlayerHandler);
     }

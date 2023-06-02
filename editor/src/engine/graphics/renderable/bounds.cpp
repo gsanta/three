@@ -18,8 +18,13 @@ namespace engine
     {
     }
 
-    Bounds Bounds::createWithPositions(float minX, float maxX, float minY, float maxY)
+    Bounds Bounds::createWithPositions(float x1, float x2, float y1, float y2)
     {
+        float minX = x1 < x2 ? x1 : x2;
+        float maxX = x1 < x2 ? x2 : x1;
+        float minY = y1 < y2 ? y1 : y2;
+        float maxY = y1 < y2 ? y2 : y1;
+
         return Bounds(minX, minY, maxX - minX, maxY - minY);
     }
 

@@ -19,6 +19,7 @@
 #include "event/event_emitter.h"
 #include "feature/frame/frame_player.h"
 #include "feature/frame/frame_player_handler.h"
+#include "tool/circle_tool/circle_tool.h"
 #include "tool/color_picker_tool.h"
 #include "tool/eraser_tool/eraser_tool.h"
 #include "tool/new_drawing_tool/new_drawing_tool.h"
