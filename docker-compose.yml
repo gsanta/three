@@ -18,8 +18,10 @@ services:
     volumes:
       - .:/src
     command: >
-      sh -c   "cd editor/Web &&
-              emcmake cmake . &&
+      sh -c   "cd editor/emscripten &&
+              mkdir build &&
+              cd build &&
+              emcmake cmake .. &&
               cmake --build ."
   clang-format:
     build:
