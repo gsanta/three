@@ -15,7 +15,7 @@ jobs:
             cd editor
             docker-compose run --rm compile-emscripten; echo $?
       - persist_to_workspace:
-          root: editor/Web
+          root: editor/emscripten/build
           paths:
             - spright.js
             - spright.wasm
@@ -79,13 +79,13 @@ jobs:
           fingerprints:
             - "dc:92:64:8c:74:1a:84:49:fd:90:ba:7c:5a:0a:50:ec"
       - attach_workspace:
-          at: /tmp/editor/Web
+          at: /tmp/editor/emscripten
       - run:
           name: Copy files
           command: |
             mkdir -p client/static
-            cp /tmp/editor/Web/spright.js client/static
-            cp /tmp/editor/Web/spright.wasm client/static
+            cp /tmp/editor/emscripten/spright.js client/static
+            cp /tmp/editor/emscripten/spright.wasm client/static
             git config user.email "santagergely90@gmail.com"
             git config user.name "CircleCI Job"
             git add -A

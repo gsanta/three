@@ -106,7 +106,7 @@ module.exports = (env) => {
     },
     context: __dirname,
     devServer: {
-      static: ['../editor/Web'],
+      static: ['../editor/emscripten/build'],
       port: 3012,
       headers: {
         'Access-Control-Allow-Origin': '*',
