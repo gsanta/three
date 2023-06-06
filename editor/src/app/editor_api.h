@@ -5,6 +5,7 @@
 #include "document/drawing.h"
 #include "document/frame_impl.h"
 #include "editor.h"
+#include "tool/circle_tool/circle_tool.h"
 
 #include <string>
 

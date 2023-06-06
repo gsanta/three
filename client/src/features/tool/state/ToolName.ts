@@ -7,6 +7,7 @@ enum ToolName {
   PaintBucket = 'paint_bucket',
   ColorPicker = 'color_picker',
   NewDrawing = 'new_drawing',
+  Circle = 'circle',
 }
 
 export default ToolName;

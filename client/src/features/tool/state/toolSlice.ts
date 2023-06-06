@@ -8,20 +8,24 @@ interface ToolState {
   tools: Tool[];
   selectedTool: ToolName;
   editor?: EditorApi;
+
+  isCircleFilled: boolean;
 }
 
 const initialState: ToolState = {
   tools: [
     { name: ToolName.Brush, iconName: 'BiPencil' },
-    { name: ToolName.Rectangle, iconName: 'BiRectangle' },
     { name: ToolName.SelectionRectangle, iconName: 'BiBorderRadius' },
     { name: ToolName.Erase, iconName: 'BiEraser' },
-    { name: ToolName.Pan, iconName: 'BiMove' },
+    { name: ToolName.Rectangle, iconName: 'BiRectangle' },
+    { name: ToolName.Circle, iconName: 'BiCircle' },
     { name: ToolName.PaintBucket, iconName: 'BiColorFill' },
     { name: ToolName.ColorPicker, iconName: 'BiHighlight' },
+    { name: ToolName.Pan, iconName: 'BiMove' },
     { name: ToolName.NewDrawing, iconName: 'BiImageAlt' },
   ],
   selectedTool: ToolName.Brush,
+  isCircleFilled: false,
 };
 
 export const toolSlice = createSlice({
@@ -42,6 +46,7 @@ export const toolSlice = createSlice({
 
     initTools: (state, action: PayloadAction<Editor>) => {
       state.editor = action.payload;
+      state.isCircleFilled = state.editor.isCircleToolFilled();
     },
 
     setSelectedTool: (state, action: PayloadAction<ToolName>) => {
@@ -65,9 +70,14 @@ export const toolSlice = createSlice({
         state.editor?.addActiveTool(action.payload);
       }
     },
+
+    setCircleFilled: (state, action: PayloadAction<boolean>) => {
+      state.editor?.setCircleToolFilled(action.payload);
+      state.isCircleFilled = action.payload;
+    },
   },
 });
 
-export const { activateTool, addTool, deActivateTool, initTools, setSelectedTool } = toolSlice.actions;
+export const { activateTool, addTool, deActivateTool, initTools, setCircleFilled, setSelectedTool } = toolSlice.actions;
 
 export default toolSlice.reducer;

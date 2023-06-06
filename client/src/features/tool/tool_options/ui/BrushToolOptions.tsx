@@ -11,7 +11,7 @@ const BrushToolOptions = () => {
   };
 
   return (
-    <FormControl display="flex" flexDirection="row">
+    <FormControl display="flex" flexDirection="row" marginTop="4">
       <FormLabel size="xs">Size:</FormLabel>
       <Input size="xs" width="12" onChange={handleSizeChange} />
     </FormControl>

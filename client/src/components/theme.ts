@@ -7,6 +7,7 @@ import Dialog from './dialog/Dialog.theme';
 import IconButton from './themes/IconButton.theme';
 import MenuTheme from './themes/Menu.theme';
 import FrameButtonTheme from './button/FrameButton.theme';
+import { formLabelTheme } from './themes/FormLabel.theme';
 
 const theme = extendTheme({
   config: {
@@ -46,6 +47,7 @@ const theme = extendTheme({
     Menu: MenuTheme,
     Modal: Dialog,
     FrameButton: FrameButtonTheme,
+    FormLabel: formLabelTheme,
     // Input: inputTheme,
     // Form: FormControl,
     // FormLabel: formLabelTheme,

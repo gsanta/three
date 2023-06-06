@@ -64,6 +64,11 @@ interface EditorApi {
 
   //edit
   flipHorizontal(): void;
+
+  //tool
+  setCircleToolFilled(isFilled: boolean): void;
+
+  isCircleToolFilled(): boolean;
 }
 
 export default EditorApi;

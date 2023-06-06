@@ -18,6 +18,8 @@ namespace editor
 
         void setFilled(bool isFilled);
 
+        bool isFilled();
+
     private:
         void drawCircle(BoundsInt &bounds, int color, TileLayer &layer);
 
