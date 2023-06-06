@@ -51,6 +51,11 @@ namespace editor
         m_IsFilled = isFilled;
     }
 
+    bool CircleTool::isFilled()
+    {
+        return m_IsFilled;
+    }
+
     void CircleTool::drawCircle(BoundsInt &bounds, int color, TileLayer &tileLayer)
     {
         std::vector<Rect2D> tiles;

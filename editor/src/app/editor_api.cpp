@@ -88,6 +88,18 @@ void api_flip_horizontal()
     }
 }
 
+void set_circle_tool_filled(bool isFilled)
+{
+    CircleTool *circleTool = static_cast<CircleTool *>(editor->getToolHandler()->getTool("circle"));
+    circleTool->setFilled(isFilled);
+}
+
+bool is_circle_tool_filled()
+{
+    CircleTool *circleTool = static_cast<CircleTool *>(editor->getToolHandler()->getTool("circle"));
+    return circleTool->isFilled();
+}
+
 EMSCRIPTEN_BINDINGS(spright)
 {
     emscripten::function("getFrames", &getFrames);
@@ -103,6 +115,8 @@ EMSCRIPTEN_BINDINGS(spright)
     emscripten::function("activateFramePlayer", &activateFramePlayer);
     emscripten::function("deActivateFramePlayer", &deActivateFramePlayer);
     emscripten::function("flipHorizontal", &api_flip_horizontal);
+    emscripten::function("setCircleToolFilled", &set_circle_tool_filled);
+    emscripten::function("isCircleToolFilled", &is_circle_tool_filled);
 }
 
 #endif
