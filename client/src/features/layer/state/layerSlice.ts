@@ -59,20 +59,22 @@ export const layerSlice = createSlice({
       state.editor?.setActiveLayer(action.payload.index);
     },
 
-    setLayerIndex: (state, action: PayloadAction<{ layer: Layer; newLayerIndex: number }>) => {
-      const { layer, newLayerIndex } = action.payload;
-      const currentLayerIndex = state.layers.indexOf(layer);
+    setLayerIndex: (state, action: PayloadAction<{ oldLayerIndex: number; newLayerIndex: number }>) => {
+      const { oldLayerIndex, newLayerIndex } = action.payload;
 
-      if (currentLayerIndex == -1 || currentLayerIndex == newLayerIndex) {
+      const layer = state.layers[oldLayerIndex];
+
+      if (layer.index == -1 || layer.index == newLayerIndex) {
         return;
       }
 
-      const finalLayerIndex = currentLayerIndex < newLayerIndex ? newLayerIndex - 1 : newLayerIndex;
+      const finalLayerIndex = layer.index < newLayerIndex ? newLayerIndex - 1 : newLayerIndex;
 
-      state.layers.splice(state.layers.indexOf(layer), 1);
+      state.editor?.setLayerIndex(layer.index, finalLayerIndex);
+
+      state.layers.splice(layer.index, 1);
       state.layers.splice(finalLayerIndex, 0, layer);
-
-      state.editor?.setLayerIndex(layer.index, newLayerIndex);
+      state.layers = state.layers.map((l, index) => ({ ...l, index }));
     },
 
     setLayerVisible: (state, action: PayloadAction<{ index: number; visible: boolean }>) => {

@@ -42,7 +42,7 @@ namespace editor
         m_toolHandler->addTool(new NewDrawingTool(getDocumentStore(), m_DocumentFactory));
         m_toolHandler->addTool(new CircleTool());
         m_toolHandler->addActiveTool("zoom");
-        m_toolHandler->setSelectedTool("circle");
+        m_toolHandler->setSelectedTool("brush");
 
         m_RunLoop.add(m_FramePlayerHandler);
     }

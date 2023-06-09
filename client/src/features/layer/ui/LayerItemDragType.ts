@@ -1,7 +1,5 @@
-import Layer from '../state/Layer';
-
 type LayerItemDragType = {
-  layer: Layer;
+  index: number;
 };
 
 export default LayerItemDragType;

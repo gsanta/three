@@ -6,12 +6,12 @@ const useDragLayer = (layer: Layer) => {
   const [{ opacity }, ref] = useDrag(
     () => ({
       type: layerDragType,
-      item: { layer },
+      item: { index: layer.index },
       collect: (monitor) => ({
         opacity: monitor.isDragging() ? 0.5 : 1,
       }),
     }),
-    [],
+    [layer],
   );
 
   return {

@@ -11,7 +11,7 @@ const LayerDropTarget = ({ layerIndex }: LayerDropTargetProps) => {
 
   return (
     <Box as="li" ref={ref}>
-      <Divider borderBottomWidth="2" borderColor={isOver ? 'orange.500' : 'transparent'} marginBlock="1" />
+      <Divider borderBottomWidth="5" borderColor={isOver ? 'orange.500' : 'transparent'} marginBlock="1" />
     </Box>
   );
 };

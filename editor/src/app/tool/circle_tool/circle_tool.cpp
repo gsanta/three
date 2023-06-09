@@ -44,6 +44,9 @@ namespace editor
                                   bounds.getCenter().y,
                                   context.editorState->color);
         }
+
+        TileLayer &foregroundLayer = context.doc.activeDrawing->getForegroundLayer();
+        foregroundLayer.clear();
     }
 
     void CircleTool::setFilled(bool isFilled)

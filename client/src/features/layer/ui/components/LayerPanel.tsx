@@ -38,7 +38,8 @@ const LayerPanel = () => {
           {layers.map((layer, index) => (
             <React.Fragment key={layer.name}>
               <LayerItem
-                isActive={layer === activeLayer}
+                isActive={layer.index === activeLayer?.index}
+                key={layer.name}
                 layer={layer}
                 setActiveLayer={() => dispatch(setActiveLayer(layer))}
               />
