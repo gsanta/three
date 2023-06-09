@@ -15,7 +15,7 @@ const useDropLayer = (layerIndex: number) => {
     },
 
     drop: (item: LayerItemDragType) => {
-      dispatch(setLayerIndex({ layer: item.layer, newLayerIndex: layerIndex }));
+      dispatch(setLayerIndex({ oldLayerIndex: item.index, newLayerIndex: layerIndex }));
     },
 
     collect: (monitor) => ({

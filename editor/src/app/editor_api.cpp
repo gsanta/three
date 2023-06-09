@@ -6,8 +6,7 @@ extern class Editor *editor;
 
 void setLayerIndex(size_t oldIndex, size_t newIndex)
 {
-    TileLayer &tileLayer = editor->getActiveFrame().getLayer(oldIndex);
-    editor->getActiveFrame().insertLayer(std::move(tileLayer), newIndex);
+    editor->getActiveFrame().changeLayerOrder(oldIndex, newIndex);
 }
 
 void removeLayer(size_t layerIndex)

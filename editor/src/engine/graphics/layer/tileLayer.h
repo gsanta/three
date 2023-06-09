@@ -61,6 +61,8 @@ namespace engine
 
         std::vector<Rect2D *> &getRenderables();
 
+        const std::vector<Rect2D *> &getRenderables() const;
+
         // TODO: find a better name
         Vec2 getBottomLeftPos(Vec2 pointer) const;
 

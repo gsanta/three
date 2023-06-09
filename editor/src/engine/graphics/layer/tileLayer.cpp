@@ -40,6 +40,9 @@ namespace engine
             m_TileSize = that.m_TileSize;
             m_ZPos = that.m_ZPos;
 
+            m_Group.clear();
+            delete[] m_TileIndexes;
+
             init();
             copyGroup(that.m_Group);
         }
@@ -128,6 +131,11 @@ namespace engine
     }
 
     std::vector<Rect2D *> &TileLayer::getRenderables()
+    {
+        return m_Group.getRenderables();
+    }
+
+    const std::vector<Rect2D *> &TileLayer::getRenderables() const
     {
         return m_Group.getRenderables();
     }
