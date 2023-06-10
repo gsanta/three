@@ -2,6 +2,7 @@
 
 #include "../brush.h"
 #include "../tool/tool.h"
+#include "../tool/tool_context.h"
 
 namespace spright
 {

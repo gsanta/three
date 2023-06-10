@@ -19,6 +19,7 @@ const initialState: ToolState = {
     { name: ToolName.Erase, iconName: 'BiEraser' },
     { name: ToolName.Rectangle, iconName: 'BiRectangle' },
     { name: ToolName.Circle, iconName: 'BiCircle' },
+    { name: ToolName.Line, iconName: 'BsSlashLg' },
     { name: ToolName.PaintBucket, iconName: 'BiColorFill' },
     { name: ToolName.ColorPicker, iconName: 'BiHighlight' },
     { name: ToolName.Pan, iconName: 'BiMove' },

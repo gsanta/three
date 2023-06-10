@@ -112,5 +112,10 @@ namespace editor
     {
         return m_RunLoop;
     }
+
+    std::shared_ptr<EditorState> Editor::getState()
+    {
+        return m_EditorState;
+    }
 } // namespace editor
 } // namespace spright

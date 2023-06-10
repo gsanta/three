@@ -8,6 +8,7 @@ enum ToolName {
   ColorPicker = 'color_picker',
   NewDrawing = 'new_drawing',
   Circle = 'circle',
+  Line = 'line',
 }
 
 export default ToolName;
