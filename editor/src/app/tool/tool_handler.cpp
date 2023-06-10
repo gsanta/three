@@ -168,8 +168,7 @@ namespace editor
         }
         else if (key == GLFW_KEY_L)
         {
-            ActiveFrame &frame = m_DocumentStore->getActiveDocument().getActiveFrame();
-            frame.setActiveLayer(1);
+            setSelectedTool("line");
         }
         else if (key == GLFW_KEY_N)
         {

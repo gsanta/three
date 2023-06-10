@@ -67,6 +67,8 @@ namespace editor
 
         RunLoop &getRunLoop();
 
+        std::shared_ptr<EditorState> getState();
+
     private:
         Window *m_Window;
 
