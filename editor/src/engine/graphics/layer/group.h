@@ -1,152 +1,182 @@
 #pragma once
 
-#include <string>
-#include <nlohmann/json.hpp>
-#include <algorithm>
+#include "../camera/camera.h"
 #include "../renderable/renderable2d.h"
 #include "../renderer/renderer2d.h"
-#include "../camera/camera.h"
 
-namespace spright { namespace engine {
+#include <algorithm>
+#include <nlohmann/json.hpp>
+#include <string>
 
-	template <typename T>
-	class Group
-	{
-	protected:
-		std::vector <T*> m_Renderables;
-		Renderer2D* m_Renderer = nullptr;
+namespace spright
+{
+namespace engine
+{
 
-	public:
-		Group(Renderer2D* renderer);
-		Group(const Group&);
-		~Group();
+    template <typename T>
+    class Group
+    {
+    protected:
+        std::vector<T *> m_Renderables;
+        Renderer2D *m_Renderer = nullptr;
 
-		bool operator==(const Group<T>&) const;
-		//friend bool operator!=(const Group<T>&, const Group<T>&);
-		Group& operator=(const Group&);
-		T& add(const T& renderable);
-		void render(const Camera& camera);
-		void clear();
-		void remove(const T& renderable);
-		const Renderer2D* getRenderer() const;
-		Renderer2D* getRenderer();
+    public:
+        Group(Renderer2D *renderer);
+        Group(const Group &);
+        ~Group();
 
-		inline std::vector<T*>& getRenderables() {
-			return m_Renderables;
-		}
+        bool operator==(const Group<T> &) const;
+        //friend bool operator!=(const Group<T>&, const Group<T>&);
+        Group &operator=(const Group &);
+        T &add(const T &renderable);
+        void render(const Camera &camera);
+        void clear();
+        void remove(const T &renderable);
+        const Renderer2D *getRenderer() const;
+        Renderer2D *getRenderer();
 
-		inline const std::vector<T*>& getRenderables() const {
-			return m_Renderables;
-		}
-	};
+        inline std::vector<T *> &getRenderables()
+        {
+            return m_Renderables;
+        }
 
-	template <typename T>
-	bool Group<T>::operator==(const Group<T>& rhs) const {
-		const Group<T>& lhs = *this;
+        inline const std::vector<T *> &getRenderables() const
+        {
+            return m_Renderables;
+        }
+    };
 
-		if (lhs.m_Renderables.size() != rhs.m_Renderables.size()) {
-			return false;
-		}
+    template <typename T>
+    bool Group<T>::operator==(const Group<T> &rhs) const
+    {
+        const Group<T> &lhs = *this;
 
-		for (int i = 0; i < lhs.m_Renderables.size(); i++) {
-			if (*lhs.m_Renderables[i] != *rhs.m_Renderables[i]) {
-				return false;
-			}
-		}
+        if (lhs.m_Renderables.size() != rhs.m_Renderables.size())
+        {
+            return false;
+        }
 
-		return *lhs.m_Renderer == *rhs.m_Renderer;
-	}
+        for (int i = 0; i < lhs.m_Renderables.size(); i++)
+        {
+            if (*lhs.m_Renderables[i] != *rhs.m_Renderables[i])
+            {
+                return false;
+            }
+        }
 
-	template <typename T>
-	bool operator!=(const Group<T>& lhs, const Group<T>& rhs) {
-		return !(lhs == rhs);
-	}
+        return *lhs.m_Renderer == *rhs.m_Renderer;
+    }
 
-	template <typename T>
-	Group<T>::Group(Renderer2D* renderer) : m_Renderer(renderer) {
-	}
+    template <typename T>
+    bool operator!=(const Group<T> &lhs, const Group<T> &rhs)
+    {
+        return !(lhs == rhs);
+    }
 
-	template <typename T>
-	const Renderer2D* Group<T>::getRenderer() const {
-		return m_Renderer;
-	}
+    template <typename T>
+    Group<T>::Group(Renderer2D *renderer) : m_Renderer(renderer)
+    {
+    }
 
-	template <typename T>
-	Renderer2D* Group<T>::getRenderer() {
-		return m_Renderer;
-	}
+    template <typename T>
+    const Renderer2D *Group<T>::getRenderer() const
+    {
+        return m_Renderer;
+    }
 
-	template <typename T>
-	Group<T>::Group(const Group& group) {
-		m_Renderer = group.m_Renderer->clone();
-		for (T* item : group.m_Renderables) {
-			m_Renderables.push_back(new T(*item));
-		}
-	}
+    template <typename T>
+    Renderer2D *Group<T>::getRenderer()
+    {
+        return m_Renderer;
+    }
 
-	template <typename T>
-	Group<T>::~Group() {
-		delete m_Renderer;
+    template <typename T>
+    Group<T>::Group(const Group &group)
+    {
+        m_Renderer = group.m_Renderer->clone();
+        for (T *item : group.m_Renderables)
+        {
+            m_Renderables.push_back(new T(*item));
+        }
+    }
 
-		for (int i = 0; i < m_Renderables.size(); i++) {
-			delete m_Renderables[i];
-		}
-	}
+    template <typename T>
+    Group<T>::~Group()
+    {
+        delete m_Renderer;
 
-	template <typename T>
-	Group<T>& Group<T>::operator=(const Group<T>& that) {
-		if (this != &that) {
-			delete m_Renderer;
-			for (T* element : m_Renderables)
-			{
-				delete element;
-			}
-			m_Renderables.clear();
+        for (int i = 0; i < m_Renderables.size(); i++)
+        {
+            delete m_Renderables[i];
+        }
+    }
 
-			m_Renderer = that.m_Renderer->clone();
-		}
+    template <typename T>
+    Group<T> &Group<T>::operator=(const Group<T> &that)
+    {
+        if (this != &that)
+        {
+            delete m_Renderer;
+            for (T *element : m_Renderables)
+            {
+                delete element;
+            }
+            m_Renderables.clear();
 
-		return *this;
-	}
+            m_Renderer = that.m_Renderer->clone();
+        }
 
-	template <typename T>
-	T& Group<T>::add(const T& renderable) {
-		m_Renderables.push_back(new T(renderable));
-		return *m_Renderables.back();
-	}
+        return *this;
+    }
 
-	template <typename T>
-	void Group<T>::remove(const T& renderable)
-	{
-		auto it = std::find(m_Renderables.begin(), m_Renderables.end(), &renderable);
+    template <typename T>
+    T &Group<T>::add(const T &renderable)
+    {
+        m_Renderables.push_back(new T(renderable));
+        return *m_Renderables.back();
+    }
 
-		if (it != m_Renderables.end())
-		{
-			m_Renderables.erase(it);
-		}
-	}
+    template <typename T>
+    void Group<T>::remove(const T &renderable)
+    {
+        auto it = std::find(m_Renderables.begin(), m_Renderables.end(), &renderable);
 
-	template <typename T>
-	void Group<T>::clear() {
-		// TODO: check if the renderables will be destroyed
-		m_Renderables.clear();
-	}
+        if (it != m_Renderables.end())
+        {
+            m_Renderables.erase(it);
+        }
+    }
 
-	template <typename T>
-	void Group<T>::render(const Camera& camera) {
-		m_Renderer->begin();
+    template <typename T>
+    void Group<T>::clear()
+    {
+        // TODO: check if the renderables will be destroyed
+        for (T *element : m_Renderables)
+        {
+            delete element;
+        }
 
-		m_Renderer->getShader().setUniformMat4("pr_matrix", camera.getProjectionMatrix());
+        m_Renderables.clear();
+    }
+
+    template <typename T>
+    void Group<T>::render(const Camera &camera)
+    {
+        m_Renderer->begin();
+
+        m_Renderer->getShader().setUniformMat4("pr_matrix", camera.getProjectionMatrix());
 
 
-		m_Renderer->push(camera.getViewMatrix());
-		for (const Renderable2D* renderable : m_Renderables) {
-			renderable->submit(m_Renderer);
-		}
-		m_Renderer->end();
-		m_Renderer->pop();
+        m_Renderer->push(camera.getViewMatrix());
+        for (const Renderable2D *renderable : m_Renderables)
+        {
+            renderable->submit(m_Renderer);
+        }
+        m_Renderer->end();
+        m_Renderer->pop();
 
-		m_Renderer->flush();
-	}
+        m_Renderer->flush();
+    }
 
-}}
+} // namespace engine
+} // namespace spright

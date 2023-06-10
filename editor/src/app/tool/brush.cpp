@@ -9,7 +9,6 @@ namespace editor
     {
         int tileIndex = tileLayer.getTileIndex(tilePos.x, tilePos.y);
         Renderable2D *renderable = tileLayer.getAtTileIndex(tileIndex);
-
         if (renderable == nullptr)
         {
             float halfTileSize = tileLayer.getTileSize() / 2.0f;
