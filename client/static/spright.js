@@ -67,9 +67,9 @@ if (ENVIRONMENT_IS_NODE) {
   var nodeVersion = process.versions.node;
   var numericVersion = nodeVersion.split('.').slice(0, 3);
   numericVersion = (numericVersion[0] * 10000) + (numericVersion[1] * 100) + (numericVersion[2].split('-')[0] * 1);
-  var minVersion = 101900;
-  if (numericVersion < 101900) {
-    throw new Error('This emscripten-generated code requires node v10.19.19.0 (detected v' + nodeVersion + ')');
+  var minVersion = 160000;
+  if (numericVersion < 160000) {
+    throw new Error('This emscripten-generated code requires node v16.0.0 (detected v' + nodeVersion + ')');
   }
 
   // `require()` is no-op in an ESM module, use `createRequire()` to construct
@@ -112,7 +112,6 @@ readAsync = (filename, onload, onerror, binary = true) => {
     else onload(binary ? data.buffer : data);
   });
 };
-
 // end include: node_shell_read.js
   if (!Module['thisProgram'] && process.argv.length > 1) {
     thisProgram = process.argv[1].replace(/\\/g, '/');
@@ -130,16 +129,6 @@ readAsync = (filename, onload, onerror, binary = true) => {
       throw ex;
     }
   });
-
-  // Without this older versions of node (< v15) will log unhandled rejections
-  // but return 0, which is not normally the desired behaviour.  This is
-  // not be needed with node v15 and about because it is now the default
-  // behaviour:
-  // See https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode
-  var nodeMajor = process.versions.node.split(".")[0];
-  if (nodeMajor < 15) {
-    process.on('unhandledRejection', (reason) => { throw reason; });
-  }
 
   quit_ = (status, toThrow) => {
     process.exitCode = status;
@@ -170,11 +159,16 @@ if (ENVIRONMENT_IS_SHELL) {
   };
 
   readAsync = (f, onload, onerror) => {
-    setTimeout(() => onload(readBinary(f)), 0);
+    setTimeout(() => onload(readBinary(f)));
   };
 
   if (typeof clearTimeout == 'undefined') {
     globalThis.clearTimeout = (id) => {};
+  }
+
+  if (typeof setTimeout == 'undefined') {
+    // spidermonkey lacks setTimeout but we use it above in readAsync.
+    globalThis.setTimeout = (f) => (typeof f == 'function') ? f() : abort();
   }
 
   if (typeof scriptArgs != 'undefined') {
@@ -422,7 +416,6 @@ assert(!Module['INITIAL_MEMORY'], 'Detected runtime INITIAL_MEMORY setting.  Use
 // from the wasm module and this will be assigned once
 // the exports are available.
 var wasmTable;
-
 // end include: runtime_init_table.js
 // include: runtime_stack_check.js
 // Initializes the stack cookie. Called at the startup of main and at the startup of each thread in pthreads mode.
@@ -461,7 +454,6 @@ function checkStackCookie() {
     abort('Runtime error: The application has corrupted its heap memory area (address zero)!');
   }
 }
-
 // end include: runtime_stack_check.js
 // include: runtime_assertions.js
 // Endianness check
@@ -563,7 +555,6 @@ assert(Math.imul, 'This browser does not support Math.imul(), build with LEGACY_
 assert(Math.fround, 'This browser does not support Math.fround(), build with LEGACY_VM_SUPPORT or POLYFILL_OLD_MATH_FUNCTIONS to add in a polyfill');
 assert(Math.clz32, 'This browser does not support Math.clz32(), build with LEGACY_VM_SUPPORT or POLYFILL_OLD_MATH_FUNCTIONS to add in a polyfill');
 assert(Math.trunc, 'This browser does not support Math.trunc(), build with LEGACY_VM_SUPPORT or POLYFILL_OLD_MATH_FUNCTIONS to add in a polyfill');
-
 // end include: runtime_math.js
 // A counter of dependencies for calling run(). If we need to
 // do asynchronous work before running, increment this and
@@ -712,7 +703,6 @@ function isDataURI(filename) {
 function isFileURI(filename) {
   return filename.startsWith('file://');
 }
-
 // end include: URIUtils.js
 /** @param {boolean=} fixedasm */
 function createExportWrapper(name, fixedasm) {
@@ -972,7 +962,7 @@ function missingLibrarySymbol(sym) {
         if (!librarySymbol.startsWith('_')) {
           librarySymbol = '$' + sym;
         }
-        msg += " (e.g. -sDEFAULT_LIBRARY_FUNCS_TO_INCLUDE=" + librarySymbol + ")";
+        msg += " (e.g. -sDEFAULT_LIBRARY_FUNCS_TO_INCLUDE='" + librarySymbol + "')";
         if (isExportedByForceFilesystem(sym)) {
           msg += '. Alternatively, forcing filesystem support (-sFORCE_FILESYSTEM) can export this for you';
         }
@@ -1007,10 +997,8 @@ function dbg(text) {
   // logging to show up as warnings.
   console.warn.apply(console, arguments);
 }
-
 // end include: runtime_debug.js
 // === Body ===
-
 
 // end include: preamble.js
 
@@ -1021,12 +1009,12 @@ function dbg(text) {
       this.status = status;
     }
 
-  function callRuntimeCallbacks(callbacks) {
+  var callRuntimeCallbacks = (callbacks) => {
       while (callbacks.length > 0) {
         // Pass the module as the first argument.
         callbacks.shift()(Module);
       }
-    }
+    };
 
   
   function getCppExceptionTag() {
@@ -1050,12 +1038,12 @@ function dbg(text) {
   
   
   
-  function withStackSave(f) {
+  var withStackSave = (f) => {
       var stack = stackSave();
       var ret = f();
       stackRestore(stack);
       return ret;
-    }
+    };
   
   var UTF8Decoder = typeof TextDecoder != 'undefined' ? new TextDecoder('utf8') : undefined;
   
@@ -1068,7 +1056,7 @@ function dbg(text) {
      * @param {number=} maxBytesToRead
      * @return {string}
      */
-  function UTF8ArrayToString(heapOrArray, idx, maxBytesToRead) {
+  var UTF8ArrayToString = (heapOrArray, idx, maxBytesToRead) => {
       var endIdx = idx + maxBytesToRead;
       var endPtr = idx;
       // TextDecoder needs to know the byte length in advance, it doesn't stop on
@@ -1109,8 +1097,7 @@ function dbg(text) {
         }
       }
       return str;
-    }
-  
+    };
   
     /**
      * Given a pointer 'ptr' to a null-terminated UTF8-encoded string in the
@@ -1127,27 +1114,25 @@ function dbg(text) {
      *   JS JIT optimizations off, so it is worth to consider consistently using one
      * @return {string}
      */
-  function UTF8ToString(ptr, maxBytesToRead) {
+  var UTF8ToString = (ptr, maxBytesToRead) => {
       assert(typeof ptr == 'number');
       return ptr ? UTF8ArrayToString(HEAPU8, ptr, maxBytesToRead) : '';
-    }
-  function getExceptionMessageCommon(ptr) {
-      return withStackSave(function() {
-        var type_addr_addr = stackAlloc(4);
-        var message_addr_addr = stackAlloc(4);
-        ___get_exception_message(ptr, type_addr_addr, message_addr_addr);
-        var type_addr = HEAPU32[((type_addr_addr)>>2)];
-        var message_addr = HEAPU32[((message_addr_addr)>>2)];
-        var type = UTF8ToString(type_addr);
-        _free(type_addr);
-        var message;
-        if (message_addr) {
-          message = UTF8ToString(message_addr);
-          _free(message_addr);
-        }
-        return [type, message];
-      });
-    }
+    };
+  var getExceptionMessageCommon = (ptr) => withStackSave(() => {
+      var type_addr_addr = stackAlloc(4);
+      var message_addr_addr = stackAlloc(4);
+      ___get_exception_message(ptr, type_addr_addr, message_addr_addr);
+      var type_addr = HEAPU32[((type_addr_addr)>>2)];
+      var message_addr = HEAPU32[((message_addr_addr)>>2)];
+      var type = UTF8ToString(type_addr);
+      _free(type_addr);
+      var message;
+      if (message_addr) {
+        message = UTF8ToString(message_addr);
+        _free(message_addr);
+      }
+      return [type, message];
+    });
   function getExceptionMessage(ex) {
       var ptr = getCppExceptionThrownObjectFromWebAssemblyException(ex);
       return getExceptionMessageCommon(ptr);
@@ -1180,10 +1165,10 @@ function dbg(text) {
       ___cxa_increment_exception_refcount(ptr);
     }
 
-  function ptrToString(ptr) {
+  var ptrToString = (ptr) => {
       assert(typeof ptr === 'number');
       return '0x' + ptr.toString(16).padStart(8, '0');
-    }
+    };
 
   
     /**
@@ -1206,23 +1191,23 @@ function dbg(text) {
     }
   }
 
-  function warnOnce(text) {
+  var warnOnce = (text) => {
       if (!warnOnce.shown) warnOnce.shown = {};
       if (!warnOnce.shown[text]) {
         warnOnce.shown[text] = 1;
         if (ENVIRONMENT_IS_NODE) text = 'warning: ' + text;
         err(text);
       }
-    }
+    };
 
-  function ___assert_fail(condition, filename, line, func) {
+  var ___assert_fail = (condition, filename, line, func) => {
       abort(`Assertion failed: ${UTF8ToString(condition)}, at: ` + [filename ? UTF8ToString(filename) : 'unknown filename', line, func ? UTF8ToString(func) : 'unknown function']);
-    }
+    };
 
-  function setErrNo(value) {
+  var setErrNo = (value) => {
       HEAP32[((___errno_location())>>2)] = value;
       return value;
-    }
+    };
   
   var PATH = {isAbs:(path) => path.charAt(0) === '/',splitPath:(filename) => {
         var splitPathRe = /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
@@ -1289,7 +1274,7 @@ function dbg(text) {
         return PATH.normalize(l + '/' + r);
       }};
   
-  function initRandomFill() {
+  var initRandomFill = () => {
       if (typeof crypto == 'object' && typeof crypto['getRandomValues'] == 'function') {
         // for modern web browsers
         return (view) => crypto.getRandomValues(view);
@@ -1315,12 +1300,12 @@ function dbg(text) {
         }
       }
       // we couldn't find a proper implementation, as Math.random() is not suitable for /dev/random, see emscripten-core/emscripten/pull/7096
-      abort("no cryptographic support found for randomDevice. consider polyfilling it if you want to use something insecure like Math.random(), e.g. put this in a --pre-js: var crypto = { getRandomValues: function(array) { for (var i = 0; i < array.length; i++) array[i] = (Math.random()*256)|0 } };");
-    }
-  function randomFill(view) {
+      abort("no cryptographic support found for randomDevice. consider polyfilling it if you want to use something insecure like Math.random(), e.g. put this in a --pre-js: var crypto = { getRandomValues: (array) => { for (var i = 0; i < array.length; i++) array[i] = (Math.random()*256)|0 } };");
+    };
+  var randomFill = (view) => {
       // Lazily init on the first invocation.
       return (randomFill = initRandomFill())(view);
-    }
+    };
   
   
   
@@ -1376,7 +1361,7 @@ function dbg(text) {
       }};
   
   
-  function lengthBytesUTF8(str) {
+  var lengthBytesUTF8 = (str) => {
       var len = 0;
       for (var i = 0; i < str.length; ++i) {
         // Gotcha: charCodeAt returns a 16-bit word that is a UTF-16 encoded code
@@ -1395,9 +1380,9 @@ function dbg(text) {
         }
       }
       return len;
-    }
+    };
   
-  function stringToUTF8Array(str, heap, outIdx, maxBytesToWrite) {
+  var stringToUTF8Array = (str, heap, outIdx, maxBytesToWrite) => {
       assert(typeof str === 'string');
       // Parameter maxBytesToWrite is not optional. Negative values, 0, null,
       // undefined and false each don't write out any bytes.
@@ -1443,7 +1428,7 @@ function dbg(text) {
       // Null-terminate the pointer to the buffer.
       heap[outIdx] = 0;
       return outIdx - startIdx;
-    }
+    };
   /** @type {function(string, boolean=, number=)} */
   function intArrayFromString(stringy, dontAddNull, length) {
     var len = length > 0 ? length : lengthBytesUTF8(stringy)+1;
@@ -1581,6 +1566,24 @@ function dbg(text) {
             out(UTF8ArrayToString(tty.output, 0));
             tty.output = [];
           }
+        },ioctl_tcgets:function(tty) {
+          // typical setting
+          return {
+            c_iflag: 25856,
+            c_oflag: 5,
+            c_cflag: 191,
+            c_lflag: 35387,
+            c_cc: [
+              0x03, 0x1c, 0x7f, 0x15, 0x04, 0x00, 0x01, 0x00, 0x11, 0x13, 0x1a, 0x00,
+              0x12, 0x0f, 0x17, 0x16, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+              0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            ]
+          };
+        },ioctl_tcsets:function(tty, optional_actions, data) {
+          // currently just ignore
+          return 0;
+        },ioctl_tiocgwinsz:function(tty) {
+          return [24, 80];
         }},default_tty1_ops:{put_char:function(tty, val) {
           if (val === null || val === 10) {
             err(UTF8ArrayToString(tty.output, 0));
@@ -1596,18 +1599,18 @@ function dbg(text) {
         }}};
   
   
-  function zeroMemory(address, size) {
+  var zeroMemory = (address, size) => {
       HEAPU8.fill(0, address, address + size);
       return address;
-    }
+    };
   
-  function alignMemory(size, alignment) {
+  var alignMemory = (size, alignment) => {
       assert(alignment, "alignment argument is required");
       return Math.ceil(size / alignment) * alignment;
-    }
-  function mmapAlloc(size) {
+    };
+  var mmapAlloc = (size) => {
       abort('internal error: mmapAlloc called but `emscripten_builtin_memalign` native symbol not exported');
-    }
+    };
   var MEMFS = {ops_table:null,mount:function(mount) {
         return MEMFS.createNode(null, '/', 16384 | 511 /* 0777 */, 0);
       },createNode:function(parent, name, mode, dev) {
@@ -1909,7 +1912,7 @@ function dbg(text) {
             }
             HEAP8.set(contents, ptr);
           }
-          return { ptr: ptr, allocated: allocated };
+          return { ptr, allocated };
         },msync:function(stream, buffer, offset, length, mmapFlags) {
           MEMFS.stream_ops.write(stream, buffer, 0, length, offset, false);
           // should we check if bytesWritten and length are the same?
@@ -1917,7 +1920,7 @@ function dbg(text) {
         }}};
   
   /** @param {boolean=} noRunDep */
-  function asyncLoad(url, onload, onerror, noRunDep) {
+  var asyncLoad = (url, onload, onerror, noRunDep) => {
       var dep = !noRunDep ? getUniqueRunDependency(`al ${url}`) : '';
       readAsync(url, (arrayBuffer) => {
         assert(arrayBuffer, `Loading data file "${url}" failed (no arrayBuffer).`);
@@ -1931,7 +1934,8 @@ function dbg(text) {
         }
       });
       if (dep) addRunDependency(dep);
-    }
+    };
+  
   
   var preloadPlugins = Module['preloadPlugins'] || [];
   function FS_handledByPreloadPlugin(byteArray, fullname, finish, onerror) {
@@ -2231,6 +2235,12 @@ function dbg(text) {
           }
         }
         throw new FS.ErrnoError(33);
+      },getStreamChecked:(fd) => {
+        var stream = FS.getStream(fd);
+        if (!stream) {
+          throw new FS.ErrnoError(8);
+        }
+        return stream;
       },getStream:(fd) => FS.streams[fd],createStream:(stream, fd = -1) => {
         if (!FS.FSStream) {
           FS.FSStream = /** @constructor */ function() {
@@ -2374,9 +2384,9 @@ function dbg(text) {
         }
   
         var mount = {
-          type: type,
-          opts: opts,
-          mountpoint: mountpoint,
+          type,
+          opts,
+          mountpoint,
           mounts: []
         };
   
@@ -2663,10 +2673,7 @@ function dbg(text) {
       },lchmod:(path, mode) => {
         FS.chmod(path, mode, true);
       },fchmod:(fd, mode) => {
-        var stream = FS.getStream(fd);
-        if (!stream) {
-          throw new FS.ErrnoError(8);
-        }
+        var stream = FS.getStreamChecked(fd);
         FS.chmod(stream.node, mode);
       },chown:(path, uid, gid, dontFollow) => {
         var node;
@@ -2686,10 +2693,7 @@ function dbg(text) {
       },lchown:(path, uid, gid) => {
         FS.chown(path, uid, gid, true);
       },fchown:(fd, uid, gid) => {
-        var stream = FS.getStream(fd);
-        if (!stream) {
-          throw new FS.ErrnoError(8);
-        }
+        var stream = FS.getStreamChecked(fd);
         FS.chown(stream.node, uid, gid);
       },truncate:(path, len) => {
         if (len < 0) {
@@ -2720,10 +2724,7 @@ function dbg(text) {
           timestamp: Date.now()
         });
       },ftruncate:(fd, len) => {
-        var stream = FS.getStream(fd);
-        if (!stream) {
-          throw new FS.ErrnoError(8);
-        }
+        var stream = FS.getStreamChecked(fd);
         if ((stream.flags & 2097155) === 0) {
           throw new FS.ErrnoError(28);
         }
@@ -2802,9 +2803,9 @@ function dbg(text) {
   
         // register the stream with the filesystem
         var stream = FS.createStream({
-          node: node,
+          node,
           path: FS.getPath(node),  // we want the absolute path to the node
-          flags: flags,
+          flags,
           seekable: true,
           position: 0,
           stream_ops: node.stream_ops,
@@ -3045,8 +3046,7 @@ function dbg(text) {
             node.node_ops = {
               lookup: (parent, name) => {
                 var fd = +name;
-                var stream = FS.getStream(fd);
-                if (!stream) throw new FS.ErrnoError(8);
+                var stream = FS.getStreamChecked(fd);
                 var ret = {
                   parent: null,
                   mount: { mountpoint: 'fake' },
@@ -3474,7 +3474,7 @@ function dbg(text) {
             throw new FS.ErrnoError(48);
           }
           writeChunks(stream, HEAP8, ptr, length, position);
-          return { ptr: ptr, allocated: true };
+          return { ptr, allocated: true };
         };
         node.stream_ops = stream_ops;
         return node;
@@ -3522,25 +3522,24 @@ function dbg(text) {
           throw e;
         }
         HEAP32[((buf)>>2)] = stat.dev;
-        HEAP32[(((buf)+(8))>>2)] = stat.ino;
-        HEAP32[(((buf)+(12))>>2)] = stat.mode;
-        HEAPU32[(((buf)+(16))>>2)] = stat.nlink;
-        HEAP32[(((buf)+(20))>>2)] = stat.uid;
-        HEAP32[(((buf)+(24))>>2)] = stat.gid;
-        HEAP32[(((buf)+(28))>>2)] = stat.rdev;
-        (tempI64 = [stat.size>>>0,(tempDouble=stat.size,(+(Math.abs(tempDouble))) >= 1.0 ? (tempDouble > 0.0 ? (+(Math.floor((tempDouble)/4294967296.0)))>>>0 : (~~((+(Math.ceil((tempDouble - +(((~~(tempDouble)))>>>0))/4294967296.0)))))>>>0) : 0)], HEAP32[(((buf)+(40))>>2)] = tempI64[0],HEAP32[(((buf)+(44))>>2)] = tempI64[1]);
-        HEAP32[(((buf)+(48))>>2)] = 4096;
-        HEAP32[(((buf)+(52))>>2)] = stat.blocks;
+        HEAP32[(((buf)+(4))>>2)] = stat.mode;
+        HEAPU32[(((buf)+(8))>>2)] = stat.nlink;
+        HEAP32[(((buf)+(12))>>2)] = stat.uid;
+        HEAP32[(((buf)+(16))>>2)] = stat.gid;
+        HEAP32[(((buf)+(20))>>2)] = stat.rdev;
+        (tempI64 = [stat.size>>>0,(tempDouble=stat.size,(+(Math.abs(tempDouble))) >= 1.0 ? (tempDouble > 0.0 ? (+(Math.floor((tempDouble)/4294967296.0)))>>>0 : (~~((+(Math.ceil((tempDouble - +(((~~(tempDouble)))>>>0))/4294967296.0)))))>>>0) : 0)], HEAP32[(((buf)+(24))>>2)] = tempI64[0],HEAP32[(((buf)+(28))>>2)] = tempI64[1]);
+        HEAP32[(((buf)+(32))>>2)] = 4096;
+        HEAP32[(((buf)+(36))>>2)] = stat.blocks;
         var atime = stat.atime.getTime();
         var mtime = stat.mtime.getTime();
         var ctime = stat.ctime.getTime();
-        (tempI64 = [Math.floor(atime / 1000)>>>0,(tempDouble=Math.floor(atime / 1000),(+(Math.abs(tempDouble))) >= 1.0 ? (tempDouble > 0.0 ? (+(Math.floor((tempDouble)/4294967296.0)))>>>0 : (~~((+(Math.ceil((tempDouble - +(((~~(tempDouble)))>>>0))/4294967296.0)))))>>>0) : 0)], HEAP32[(((buf)+(56))>>2)] = tempI64[0],HEAP32[(((buf)+(60))>>2)] = tempI64[1]);
-        HEAPU32[(((buf)+(64))>>2)] = (atime % 1000) * 1000;
-        (tempI64 = [Math.floor(mtime / 1000)>>>0,(tempDouble=Math.floor(mtime / 1000),(+(Math.abs(tempDouble))) >= 1.0 ? (tempDouble > 0.0 ? (+(Math.floor((tempDouble)/4294967296.0)))>>>0 : (~~((+(Math.ceil((tempDouble - +(((~~(tempDouble)))>>>0))/4294967296.0)))))>>>0) : 0)], HEAP32[(((buf)+(72))>>2)] = tempI64[0],HEAP32[(((buf)+(76))>>2)] = tempI64[1]);
-        HEAPU32[(((buf)+(80))>>2)] = (mtime % 1000) * 1000;
-        (tempI64 = [Math.floor(ctime / 1000)>>>0,(tempDouble=Math.floor(ctime / 1000),(+(Math.abs(tempDouble))) >= 1.0 ? (tempDouble > 0.0 ? (+(Math.floor((tempDouble)/4294967296.0)))>>>0 : (~~((+(Math.ceil((tempDouble - +(((~~(tempDouble)))>>>0))/4294967296.0)))))>>>0) : 0)], HEAP32[(((buf)+(88))>>2)] = tempI64[0],HEAP32[(((buf)+(92))>>2)] = tempI64[1]);
-        HEAPU32[(((buf)+(96))>>2)] = (ctime % 1000) * 1000;
-        (tempI64 = [stat.ino>>>0,(tempDouble=stat.ino,(+(Math.abs(tempDouble))) >= 1.0 ? (tempDouble > 0.0 ? (+(Math.floor((tempDouble)/4294967296.0)))>>>0 : (~~((+(Math.ceil((tempDouble - +(((~~(tempDouble)))>>>0))/4294967296.0)))))>>>0) : 0)], HEAP32[(((buf)+(104))>>2)] = tempI64[0],HEAP32[(((buf)+(108))>>2)] = tempI64[1]);
+        (tempI64 = [Math.floor(atime / 1000)>>>0,(tempDouble=Math.floor(atime / 1000),(+(Math.abs(tempDouble))) >= 1.0 ? (tempDouble > 0.0 ? (+(Math.floor((tempDouble)/4294967296.0)))>>>0 : (~~((+(Math.ceil((tempDouble - +(((~~(tempDouble)))>>>0))/4294967296.0)))))>>>0) : 0)], HEAP32[(((buf)+(40))>>2)] = tempI64[0],HEAP32[(((buf)+(44))>>2)] = tempI64[1]);
+        HEAPU32[(((buf)+(48))>>2)] = (atime % 1000) * 1000;
+        (tempI64 = [Math.floor(mtime / 1000)>>>0,(tempDouble=Math.floor(mtime / 1000),(+(Math.abs(tempDouble))) >= 1.0 ? (tempDouble > 0.0 ? (+(Math.floor((tempDouble)/4294967296.0)))>>>0 : (~~((+(Math.ceil((tempDouble - +(((~~(tempDouble)))>>>0))/4294967296.0)))))>>>0) : 0)], HEAP32[(((buf)+(56))>>2)] = tempI64[0],HEAP32[(((buf)+(60))>>2)] = tempI64[1]);
+        HEAPU32[(((buf)+(64))>>2)] = (mtime % 1000) * 1000;
+        (tempI64 = [Math.floor(ctime / 1000)>>>0,(tempDouble=Math.floor(ctime / 1000),(+(Math.abs(tempDouble))) >= 1.0 ? (tempDouble > 0.0 ? (+(Math.floor((tempDouble)/4294967296.0)))>>>0 : (~~((+(Math.ceil((tempDouble - +(((~~(tempDouble)))>>>0))/4294967296.0)))))>>>0) : 0)], HEAP32[(((buf)+(72))>>2)] = tempI64[0],HEAP32[(((buf)+(76))>>2)] = tempI64[1]);
+        HEAPU32[(((buf)+(80))>>2)] = (ctime % 1000) * 1000;
+        (tempI64 = [stat.ino>>>0,(tempDouble=stat.ino,(+(Math.abs(tempDouble))) >= 1.0 ? (tempDouble > 0.0 ? (+(Math.floor((tempDouble)/4294967296.0)))>>>0 : (~~((+(Math.ceil((tempDouble - +(((~~(tempDouble)))>>>0))/4294967296.0)))))>>>0) : 0)], HEAP32[(((buf)+(88))>>2)] = tempI64[0],HEAP32[(((buf)+(92))>>2)] = tempI64[1]);
         return 0;
       },doMsync:function(addr, stream, len, flags, offset) {
         if (!FS.isFile(stream.node.mode)) {
@@ -3561,8 +3560,7 @@ function dbg(text) {
         var ret = UTF8ToString(ptr);
         return ret;
       },getStreamFromFD:function(fd) {
-        var stream = FS.getStream(fd);
-        if (!stream) throw new FS.ErrnoError(8);
+        var stream = FS.getStreamChecked(fd);
         return stream;
       }};
   function ___syscall_fcntl64(fd, cmd, varargs) {
@@ -3629,18 +3627,48 @@ function dbg(text) {
   
       var stream = SYSCALLS.getStreamFromFD(fd);
       switch (op) {
-        case 21509:
+        case 21509: {
+          if (!stream.tty) return -59;
+          return 0;
+        }
         case 21505: {
           if (!stream.tty) return -59;
+          if (stream.tty.ops.ioctl_tcgets) {
+            var termios = stream.tty.ops.ioctl_tcgets(stream);
+            var argp = SYSCALLS.get();
+            HEAP32[((argp)>>2)] = termios.c_iflag || 0;
+            HEAP32[(((argp)+(4))>>2)] = termios.c_oflag || 0;
+            HEAP32[(((argp)+(8))>>2)] = termios.c_cflag || 0;
+            HEAP32[(((argp)+(12))>>2)] = termios.c_lflag || 0;
+            for (var i = 0; i < 32; i++) {
+              HEAP8[(((argp + i)+(17))>>0)] = termios.c_cc[i] || 0;
+            }
+            return 0;
+          }
           return 0;
         }
         case 21510:
         case 21511:
-        case 21512:
+        case 21512: {
+          if (!stream.tty) return -59;
+          return 0; // no-op, not actually adjusting terminal settings
+        }
         case 21506:
         case 21507:
         case 21508: {
           if (!stream.tty) return -59;
+          if (stream.tty.ops.ioctl_tcsets) {
+            var argp = SYSCALLS.get();
+            var c_iflag = HEAP32[((argp)>>2)];
+            var c_oflag = HEAP32[(((argp)+(4))>>2)];
+            var c_cflag = HEAP32[(((argp)+(8))>>2)];
+            var c_lflag = HEAP32[(((argp)+(12))>>2)];
+            var c_cc = []
+            for (var i = 0; i < 32; i++) {
+              c_cc.push(HEAP8[(((argp + i)+(17))>>0)]);
+            }
+            return stream.tty.ops.ioctl_tcsets(stream.tty, op, { c_iflag, c_oflag, c_cflag, c_lflag, c_cc });
+          }
           return 0; // no-op, not actually adjusting terminal settings
         }
         case 21519: {
@@ -3661,12 +3689,22 @@ function dbg(text) {
           // TODO: in theory we should write to the winsize struct that gets
           // passed in, but for now musl doesn't read anything on it
           if (!stream.tty) return -59;
+          if (stream.tty.ops.ioctl_tiocgwinsz) {
+            var winsize = stream.tty.ops.ioctl_tiocgwinsz(stream.tty);
+            var argp = SYSCALLS.get();
+            HEAP16[((argp)>>1)] = winsize[0];
+            HEAP16[(((argp)+(2))>>1)] = winsize[1];
+          }
           return 0;
         }
         case 21524: {
           // TODO: technically, this ioctl call should change the window size.
           // but, since emscripten doesn't have any concept of a terminal window
           // yet, we'll just silently throw it away as we do TIOCGWINSZ
+          if (!stream.tty) return -59;
+          return 0;
+        }
+        case 21515: {
           if (!stream.tty) return -59;
           return 0;
         }
@@ -3879,7 +3917,7 @@ function dbg(text) {
   
       name = readLatin1String(name);
       registerType(rawType, {
-          name: name,
+          name,
           'fromWireType': function(wt) {
               // ambiguous emscripten ABI: sometimes return values are
               // true or false, and sometimes integers (0 or 1)
@@ -4098,7 +4136,7 @@ function dbg(text) {
         } else {
           return makeClassHandle(this.registeredClass.instancePrototype, {
             ptrType: this,
-            ptr: ptr,
+            ptr,
           });
         }
       }
@@ -4136,7 +4174,7 @@ function dbg(text) {
         });
       }
     }
-  function attachFinalizer(handle) {
+  var attachFinalizer = function(handle) {
       if ('undefined' === typeof FinalizationRegistry) {
         attachFinalizer = (handle) => handle;
         return handle;
@@ -4173,7 +4211,7 @@ function dbg(text) {
       };
       detachFinalizer = (handle) => finalizationRegistry.unregister(handle);
       return attachFinalizer(handle);
-    }
+    };
   function ClassHandle_clone() {
       if (!this.$$.ptr) {
         throwInstanceAlreadyDeleted(this);
@@ -4543,7 +4581,7 @@ function dbg(text) {
   
   
   
-  function dynCallLegacy(sig, ptr, args) {
+  var dynCallLegacy = (sig, ptr, args) => {
       assert(('dynCall_' + sig) in Module, `bad function pointer type - dynCall function not found for sig '${sig}'`);
       if (args && args.length) {
         // j (64-bit integer) must be passed in as two numbers [low 32, high 32].
@@ -4553,11 +4591,10 @@ function dbg(text) {
       }
       var f = Module['dynCall_' + sig];
       return args && args.length ? f.apply(null, [ptr].concat(args)) : f.call(null, ptr);
-    }
+    };
   
   var wasmTableMirror = [];
-  
-  function getWasmTableEntry(funcPtr) {
+  var getWasmTableEntry = (funcPtr) => {
       var func = wasmTableMirror[funcPtr];
       if (!func) {
         if (funcPtr >= wasmTableMirror.length) wasmTableMirror.length = funcPtr + 1;
@@ -4565,10 +4602,10 @@ function dbg(text) {
       }
       assert(wasmTable.get(funcPtr) == func, "JavaScript-side Wasm function table mirror is out of date!");
       return func;
-    }
+    };
   
   /** @param {Object=} args */
-  function dynCall(sig, ptr, args) {
+  var dynCall = (sig, ptr, args) => {
       // Without WASM_BIGINT support we cannot directly call function with i64 as
       // part of thier signature, so we rely the dynCall functions generated by
       // wasm-emscripten-finalize
@@ -4579,9 +4616,8 @@ function dbg(text) {
       var rtn = getWasmTableEntry(ptr).apply(null, args);
       return rtn;
   
-    }
-  
-  function getDynCaller(sig, ptr) {
+    };
+  var getDynCaller = (sig, ptr) => {
       assert(sig.includes('j') || sig.includes('p'), 'getDynCaller should only be called with i64 sigs')
       var argCache = [];
       return function() {
@@ -4589,7 +4625,7 @@ function dbg(text) {
         Object.assign(argCache, arguments);
         return dynCall(sig, ptr, argCache);
       };
-    }
+    };
   
   
   function embind__requireFunction(signature, rawFunction) {
@@ -5087,7 +5123,7 @@ function dbg(text) {
   function __embind_register_emval(rawType, name) {
       name = readLatin1String(name);
       registerType(rawType, {
-        name: name,
+        name,
         'fromWireType': function(handle) {
           var rv = Emval.toValue(handle);
           __emval_decref(handle);
@@ -5136,7 +5172,7 @@ function dbg(text) {
       var shift = getShiftFromSize(size);
       name = readLatin1String(name);
       registerType(rawType, {
-        name: name,
+        name,
         'fromWireType': function(value) {
            return value;
         },
@@ -5239,7 +5275,7 @@ function dbg(text) {
         }
       }
       registerType(primitiveType, {
-        name: name,
+        name,
         'fromWireType': fromWireType,
         'toWireType': toWireType,
         'argPackAdvance': 8,
@@ -5273,7 +5309,7 @@ function dbg(text) {
   
       name = readLatin1String(name);
       registerType(rawType, {
-        name: name,
+        name,
         'fromWireType': decodeMemoryView,
         'argPackAdvance': 8,
         'readValueFromPointer': decodeMemoryView,
@@ -5286,10 +5322,10 @@ function dbg(text) {
   
   
   
-  function stringToUTF8(str, outPtr, maxBytesToWrite) {
+  var stringToUTF8 = (str, outPtr, maxBytesToWrite) => {
       assert(typeof maxBytesToWrite == 'number', 'stringToUTF8(str, outPtr, maxBytesToWrite) is missing the third parameter that specifies the length of the output buffer!');
       return stringToUTF8Array(str, HEAPU8,outPtr, maxBytesToWrite);
-    }
+    };
   
   
   
@@ -5301,7 +5337,7 @@ function dbg(text) {
       = (name === "std::string");
   
       registerType(rawType, {
-        name: name,
+        name,
         'fromWireType': function(value) {
           var length = HEAPU32[((value)>>2)];
           var payload = value + 4;
@@ -5391,7 +5427,7 @@ function dbg(text) {
   
   
   var UTF16Decoder = typeof TextDecoder != 'undefined' ? new TextDecoder('utf-16le') : undefined;;
-  function UTF16ToString(ptr, maxBytesToRead) {
+  var UTF16ToString = (ptr, maxBytesToRead) => {
       assert(ptr % 2 == 0, 'Pointer passed to UTF16ToString must be aligned to two bytes!');
       var endPtr = ptr;
       // TextDecoder needs to know the byte length in advance, it doesn't stop on
@@ -5423,9 +5459,9 @@ function dbg(text) {
       }
   
       return str;
-    }
+    };
   
-  function stringToUTF16(str, outPtr, maxBytesToWrite) {
+  var stringToUTF16 = (str, outPtr, maxBytesToWrite) => {
       assert(outPtr % 2 == 0, 'Pointer passed to stringToUTF16 must be aligned to two bytes!');
       assert(typeof maxBytesToWrite == 'number', 'stringToUTF16(str, outPtr, maxBytesToWrite) is missing the third parameter that specifies the length of the output buffer!');
       // Backwards compatibility: if max bytes is not specified, assume unsafe unbounded write is allowed.
@@ -5445,13 +5481,13 @@ function dbg(text) {
       // Null-terminate the pointer to the HEAP.
       HEAP16[((outPtr)>>1)] = 0;
       return outPtr - startPtr;
-    }
+    };
   
-  function lengthBytesUTF16(str) {
+  var lengthBytesUTF16 = (str) => {
       return str.length*2;
-    }
+    };
   
-  function UTF32ToString(ptr, maxBytesToRead) {
+  var UTF32ToString = (ptr, maxBytesToRead) => {
       assert(ptr % 4 == 0, 'Pointer passed to UTF32ToString must be aligned to four bytes!');
       var i = 0;
   
@@ -5472,9 +5508,9 @@ function dbg(text) {
         }
       }
       return str;
-    }
+    };
   
-  function stringToUTF32(str, outPtr, maxBytesToWrite) {
+  var stringToUTF32 = (str, outPtr, maxBytesToWrite) => {
       assert(outPtr % 4 == 0, 'Pointer passed to stringToUTF32 must be aligned to four bytes!');
       assert(typeof maxBytesToWrite == 'number', 'stringToUTF32(str, outPtr, maxBytesToWrite) is missing the third parameter that specifies the length of the output buffer!');
       // Backwards compatibility: if max bytes is not specified, assume unsafe unbounded write is allowed.
@@ -5499,9 +5535,9 @@ function dbg(text) {
       // Null-terminate the pointer to the HEAP.
       HEAP32[((outPtr)>>2)] = 0;
       return outPtr - startPtr;
-    }
+    };
   
-  function lengthBytesUTF32(str) {
+  var lengthBytesUTF32 = (str) => {
       var len = 0;
       for (var i = 0; i < str.length; ++i) {
         // Gotcha: charCodeAt returns a 16-bit word that is a UTF-16 encoded code unit, not a Unicode code point of the character! We must decode the string to UTF-32 to the heap.
@@ -5512,8 +5548,8 @@ function dbg(text) {
       }
   
       return len;
-    }
-  function __embind_register_std_wstring(rawType, charSize, name) {
+    };
+  var __embind_register_std_wstring = function(rawType, charSize, name) {
       name = readLatin1String(name);
       var decodeString, encodeString, getHeap, lengthBytesUTF, shift;
       if (charSize === 2) {
@@ -5530,7 +5566,7 @@ function dbg(text) {
         shift = 2;
       }
       registerType(rawType, {
-        name: name,
+        name,
         'fromWireType': function(value) {
           // Code mostly taken from _embind_register_std_string fromWireType
           var length = HEAPU32[value >> 2];
@@ -5579,14 +5615,14 @@ function dbg(text) {
         'readValueFromPointer': simpleReadValueFromPointer,
         destructorFunction: function(ptr) { _free(ptr); },
       });
-    }
+    };
 
   
   function __embind_register_void(rawType, name) {
       name = readLatin1String(name);
       registerType(rawType, {
           isVoid: true, // void return values can be optimized out sometimes
-          name: name,
+          name,
           'argPackAdvance': 0,
           'fromWireType': function() {
               return undefined;
@@ -5600,7 +5636,7 @@ function dbg(text) {
 
   
   
-  function __emscripten_fs_load_embedded_files(ptr) {
+  var __emscripten_fs_load_embedded_files = (ptr) => {
       do {
         var name_addr = HEAPU32[((ptr)>>2)];
         ptr += 4;
@@ -5613,7 +5649,7 @@ function dbg(text) {
         // canOwn this data in the filesystem, it is a slice of wasm memory that will never change
         FS.createDataFile(name, null, HEAP8.subarray(content, content + len), true, true, true);
       } while (HEAPU32[((ptr)>>2)]);
-    }
+    };
 
   function emval_allocateDestructors(destructorsRef) {
       var destructors = [];
@@ -5759,35 +5795,27 @@ function dbg(text) {
       return Emval.toHandle(v);
     }
 
-  function _abort() {
+  var _abort = () => {
       abort('native code called abort()');
-    }
+    };
 
   var _emscripten_get_now;
-      // The performance global was added to node in v16.0.0:
-      // https://nodejs.org/api/globals.html#performance
-      if (ENVIRONMENT_IS_NODE) {
-        global.performance = require('perf_hooks').performance;
-      }
       // Modern environment where performance.now() is supported:
       // N.B. a shorter form "_emscripten_get_now = performance.now;" is
       // unfortunately not allowed even in current browsers (e.g. FF Nightly 75).
       _emscripten_get_now = () => performance.now();
   ;
 
-  function _emscripten_memcpy_big(dest, src, num) {
-      HEAPU8.copyWithin(dest, src, src + num);
-    }
+  var _emscripten_memcpy_big = (dest, src, num) => HEAPU8.copyWithin(dest, src, src + num);
 
-  function getHeapMax() {
+  var getHeapMax = () =>
       // Stay one Wasm page short of 4GB: while e.g. Chrome is able to allocate
       // full 4GB Wasm memories, the size will wrap back to 0 bytes in Wasm side
       // for any code that deals with heap sizes, which would require special
       // casing all heap size related code to treat 0 specially.
-      return 2147483648;
-    }
+      2147483648;
   
-  function emscripten_realloc_buffer(size) {
+  var growMemory = (size) => {
       var b = wasmMemory.buffer;
       var pages = (size - b.byteLength + 65535) >>> 16;
       try {
@@ -5796,12 +5824,12 @@ function dbg(text) {
         updateMemoryViews();
         return 1 /*success*/;
       } catch(e) {
-        err(`emscripten_realloc_buffer: Attempted to grow heap from ${b.byteLength} bytes to ${size} bytes, but got error: ${e}`);
+        err(`growMemory: Attempted to grow heap from ${b.byteLength} bytes to ${size} bytes, but got error: ${e}`);
       }
       // implicit 0 return to save code size (caller will cast "undefined" into 0
       // anyhow)
-    }
-  function _emscripten_resize_heap(requestedSize) {
+    };
+  var _emscripten_resize_heap = (requestedSize) => {
       var oldSize = HEAPU8.length;
       requestedSize = requestedSize >>> 0;
       // With multithreaded builds, races can happen (another thread might increase the size
@@ -5845,7 +5873,7 @@ function dbg(text) {
   
         var newSize = Math.min(maxHeapSize, alignUp(Math.max(requestedSize, overGrownHeapSize), 65536));
   
-        var replacement = emscripten_realloc_buffer(newSize);
+        var replacement = growMemory(newSize);
         if (replacement) {
   
           return true;
@@ -5853,10 +5881,10 @@ function dbg(text) {
       }
       err(`Failed to grow the heap from ${oldSize} bytes to ${newSize} bytes, not enough memory!`);
       return false;
-    }
+    };
 
   
-  function handleException(e) {
+  var handleException = (e) => {
       // Certain exception types we do not treat as errors since they are used for
       // internal control flow.
       // 1. ExitStatus, which is thrown by exit()
@@ -5872,20 +5900,20 @@ function dbg(text) {
         }
       }
       quit_(1, e);
-    }
+    };
   
   
-  function _proc_exit(code) {
+  var _proc_exit = (code) => {
       EXITSTATUS = code;
       if (!keepRuntimeAlive()) {
         if (Module['onExit']) Module['onExit'](code);
         ABORT = true;
       }
       quit_(code, new ExitStatus(code));
-    }
+    };
   /** @suppress {duplicate } */
   /** @param {boolean|number=} implicit */
-  function exitJS(status, implicit) {
+  var exitJS = (status, implicit) => {
       EXITSTATUS = status;
   
       checkUnflushedContent();
@@ -5897,10 +5925,10 @@ function dbg(text) {
       }
   
       _proc_exit(status);
-    }
+    };
   var _exit = exitJS;
   
-  function maybeExit() {
+  var maybeExit = () => {
       if (!keepRuntimeAlive()) {
         try {
           _exit(EXITSTATUS);
@@ -5908,8 +5936,8 @@ function dbg(text) {
           handleException(e);
         }
       }
-    }
-  function callUserCallback(func) {
+    };
+  var callUserCallback = (func) => {
       if (ABORT) {
         err('user callback triggered after runtime exited or application aborted.  Ignoring.');
         return;
@@ -5920,16 +5948,16 @@ function dbg(text) {
       } catch (e) {
         handleException(e);
       }
-    }
+    };
   
   /** @param {number=} timeout */
-  function safeSetTimeout(func, timeout) {
+  var safeSetTimeout = (func, timeout) => {
       
       return setTimeout(() => {
         
         callUserCallback(func);
       }, timeout);
-    }
+    };
   
   
   
@@ -6640,17 +6668,17 @@ function dbg(text) {
     }
   
   
-  function _emscripten_set_main_loop_arg(func, arg, fps, simulateInfiniteLoop) {
+  var _emscripten_set_main_loop_arg = function(func, arg, fps, simulateInfiniteLoop) {
       var browserIterationFunc = () => getWasmTableEntry(func)(arg);
       setMainLoop(browserIterationFunc, fps, simulateInfiniteLoop, arg);
-    }
+    };
 
   var ENV = {};
   
-  function getExecutableName() {
+  var getExecutableName = () => {
       return thisProgram || './this.program';
-    }
-  function getEnvStrings() {
+    };
+  var getEnvStrings = () => {
       if (!getEnvStrings.strings) {
         // Default values.
         // Browser language detection #8751
@@ -6679,18 +6707,18 @@ function dbg(text) {
         getEnvStrings.strings = strings;
       }
       return getEnvStrings.strings;
-    }
+    };
   
-  function stringToAscii(str, buffer) {
+  var stringToAscii = (str, buffer) => {
       for (var i = 0; i < str.length; ++i) {
         assert(str.charCodeAt(i) === (str.charCodeAt(i) & 0xff));
         HEAP8[((buffer++)>>0)] = str.charCodeAt(i);
       }
       // Null-terminate the string
       HEAP8[((buffer)>>0)] = 0;
-    }
+    };
   
-  function _environ_get(__environ, environ_buf) {
+  var _environ_get = (__environ, environ_buf) => {
       var bufSize = 0;
       getEnvStrings().forEach(function(string, i) {
         var ptr = environ_buf + bufSize;
@@ -6699,10 +6727,10 @@ function dbg(text) {
         bufSize += string.length + 1;
       });
       return 0;
-    }
+    };
 
   
-  function _environ_sizes_get(penviron_count, penviron_buf_size) {
+  var _environ_sizes_get = (penviron_count, penviron_buf_size) => {
       var strings = getEnvStrings();
       HEAPU32[((penviron_count)>>2)] = strings.length;
       var bufSize = 0;
@@ -6711,7 +6739,7 @@ function dbg(text) {
       });
       HEAPU32[((penviron_buf_size)>>2)] = bufSize;
       return 0;
-    }
+    };
 
   function _fd_close(fd) {
   try {
@@ -6726,7 +6754,7 @@ function dbg(text) {
   }
 
   /** @param {number=} offset */
-  function doReadv(stream, iov, iovcnt, offset) {
+  var doReadv = (stream, iov, iovcnt, offset) => {
       var ret = 0;
       for (var i = 0; i < iovcnt; i++) {
         var ptr = HEAPU32[((iov)>>2)];
@@ -6741,7 +6769,7 @@ function dbg(text) {
         }
       }
       return ret;
-    }
+    };
   
   function _fd_read(fd, iov, iovcnt, pnum) {
   try {
@@ -6765,6 +6793,7 @@ function dbg(text) {
   
   
   
+  
   function _fd_seek(fd, offset_low, offset_high, whence, newOffset) {
   try {
   
@@ -6781,7 +6810,7 @@ function dbg(text) {
   }
 
   /** @param {number=} offset */
-  function doWritev(stream, iov, iovcnt, offset) {
+  var doWritev = (stream, iov, iovcnt, offset) => {
       var ret = 0;
       for (var i = 0; i < iovcnt; i++) {
         var ptr = HEAPU32[((iov)>>2)];
@@ -6795,7 +6824,7 @@ function dbg(text) {
         }
       }
       return ret;
-    }
+    };
   
   function _fd_write(fd, iov, iovcnt, pnum) {
   try {
@@ -7031,7 +7060,7 @@ function dbg(text) {
         var handle = GL.getNewId(GL.contexts);
   
         var context = {
-          handle: handle,
+          handle,
           attributes: webGLContextAttributes,
           version: webGLContextAttributes.majorVersion,
           GLctx: ctx
@@ -7394,9 +7423,7 @@ function dbg(text) {
     }
 
   /** @suppress {checkTypes} */
-  function jstoi_q(str) {
-      return parseInt(str);
-    }
+  var jstoi_q = (str) => parseInt(str);
   
   /** @noinline */
   function webglGetLeftBracePos(name) {
@@ -7779,12 +7806,12 @@ function dbg(text) {
 
   
   
-  function stringToNewUTF8(str) {
+  var stringToNewUTF8 = (str) => {
       var size = lengthBytesUTF8(str) + 1;
       var ret = _malloc(size);
       if (ret) stringToUTF8(str, ret, size);
       return ret;
-    }
+    };
   
   function _glGetString(name_) {
       var ret = GL.stringCache[name_];
@@ -8848,23 +8875,23 @@ function dbg(text) {
       return win.shouldClose;
     }
 
-  function isLeapYear(year) {
+  var isLeapYear = (year) => {
         return year%4 === 0 && (year%100 !== 0 || year%400 === 0);
-    }
+    };
   
-  function arraySum(array, index) {
+  var arraySum = (array, index) => {
       var sum = 0;
       for (var i = 0; i <= index; sum += array[i++]) {
         // no-op
       }
       return sum;
-    }
+    };
   
   
   var MONTH_DAYS_LEAP = [31,29,31,30,31,30,31,31,30,31,30,31];
   
   var MONTH_DAYS_REGULAR = [31,28,31,30,31,30,31,31,30,31,30,31];
-  function addDays(date, days) {
+  var addDays = (date, days) => {
       var newDate = new Date(date.getTime());
       while (days > 0) {
         var leap = isLeapYear(newDate.getFullYear());
@@ -8889,17 +8916,17 @@ function dbg(text) {
       }
   
       return newDate;
-    }
+    };
   
   
   
   
-  function writeArrayToMemory(array, buffer) {
+  var writeArrayToMemory = (array, buffer) => {
       assert(array.length >= 0, 'writeArrayToMemory array must have a length (should be an array or typed array)')
       HEAP8.set(array, buffer);
-    }
+    };
   
-  function _strftime(s, maxsize, format, tm) {
+  var _strftime = (s, maxsize, format, tm) => {
       // size_t strftime(char *restrict s, size_t maxsize, const char *restrict format, const struct tm *restrict timeptr);
       // http://pubs.opengroup.org/onlinepubs/009695399/functions/strftime.html
   
@@ -9025,29 +9052,17 @@ function dbg(text) {
       }
   
       var EXPANSION_RULES_2 = {
-        '%a': function(date) {
-          return WEEKDAYS[date.tm_wday].substring(0,3);
-        },
-        '%A': function(date) {
-          return WEEKDAYS[date.tm_wday];
-        },
-        '%b': function(date) {
-          return MONTHS[date.tm_mon].substring(0,3);
-        },
-        '%B': function(date) {
-          return MONTHS[date.tm_mon];
-        },
-        '%C': function(date) {
+        '%a': (date) => WEEKDAYS[date.tm_wday].substring(0,3) ,
+        '%A': (date) => WEEKDAYS[date.tm_wday],
+        '%b': (date) => MONTHS[date.tm_mon].substring(0,3),
+        '%B': (date) => MONTHS[date.tm_mon],
+        '%C': (date) => {
           var year = date.tm_year+1900;
           return leadingNulls((year/100)|0,2);
         },
-        '%d': function(date) {
-          return leadingNulls(date.tm_mday, 2);
-        },
-        '%e': function(date) {
-          return leadingSomething(date.tm_mday, 2, ' ');
-        },
-        '%g': function(date) {
+        '%d': (date) => leadingNulls(date.tm_mday, 2),
+        '%e': (date) => leadingSomething(date.tm_mday, 2, ' '),
+        '%g': (date) => {
           // %g, %G, and %V give values according to the ISO 8601:2000 standard week-based year.
           // In this system, weeks begin on a Monday and week 1 of the year is the week that includes
           // January 4th, which is also the week that includes the first Thursday of the year, and
@@ -9060,51 +9075,35 @@ function dbg(text) {
   
           return getWeekBasedYear(date).toString().substring(2);
         },
-        '%G': function(date) {
-          return getWeekBasedYear(date);
-        },
-        '%H': function(date) {
-          return leadingNulls(date.tm_hour, 2);
-        },
-        '%I': function(date) {
+        '%G': (date) => getWeekBasedYear(date),
+        '%H': (date) => leadingNulls(date.tm_hour, 2),
+        '%I': (date) => {
           var twelveHour = date.tm_hour;
           if (twelveHour == 0) twelveHour = 12;
           else if (twelveHour > 12) twelveHour -= 12;
           return leadingNulls(twelveHour, 2);
         },
-        '%j': function(date) {
+        '%j': (date) => {
           // Day of the year (001-366)
           return leadingNulls(date.tm_mday + arraySum(isLeapYear(date.tm_year+1900) ? MONTH_DAYS_LEAP : MONTH_DAYS_REGULAR, date.tm_mon-1), 3);
         },
-        '%m': function(date) {
-          return leadingNulls(date.tm_mon+1, 2);
-        },
-        '%M': function(date) {
-          return leadingNulls(date.tm_min, 2);
-        },
-        '%n': function() {
-          return '\n';
-        },
-        '%p': function(date) {
+        '%m': (date) => leadingNulls(date.tm_mon+1, 2),
+        '%M': (date) => leadingNulls(date.tm_min, 2),
+        '%n': () => '\n',
+        '%p': (date) => {
           if (date.tm_hour >= 0 && date.tm_hour < 12) {
             return 'AM';
           }
           return 'PM';
         },
-        '%S': function(date) {
-          return leadingNulls(date.tm_sec, 2);
-        },
-        '%t': function() {
-          return '\t';
-        },
-        '%u': function(date) {
-          return date.tm_wday || 7;
-        },
-        '%U': function(date) {
+        '%S': (date) => leadingNulls(date.tm_sec, 2),
+        '%t': () => '\t',
+        '%u': (date) => date.tm_wday || 7,
+        '%U': (date) => {
           var days = date.tm_yday + 7 - date.tm_wday;
           return leadingNulls(Math.floor(days / 7), 2);
         },
-        '%V': function(date) {
+        '%V': (date) => {
           // Replaced by the week number of the year (Monday as the first day of the week)
           // as a decimal number [01,53]. If the week containing 1 January has four
           // or more days in the new year, then it is considered week 1.
@@ -9133,22 +9132,18 @@ function dbg(text) {
           }
           return leadingNulls(val, 2);
         },
-        '%w': function(date) {
-          return date.tm_wday;
-        },
-        '%W': function(date) {
+        '%w': (date) => date.tm_wday,
+        '%W': (date) => {
           var days = date.tm_yday + 7 - ((date.tm_wday + 6) % 7);
           return leadingNulls(Math.floor(days / 7), 2);
         },
-        '%y': function(date) {
+        '%y': (date) => {
           // Replaced by the last two digits of the year as a decimal number [00,99]. [ tm_year]
           return (date.tm_year+1900).toString().substring(2);
         },
-        '%Y': function(date) {
-          // Replaced by the year as a decimal number (for example, 1997). [ tm_year]
-          return date.tm_year+1900;
-        },
-        '%z': function(date) {
+        // Replaced by the year as a decimal number (for example, 1997). [ tm_year]
+        '%Y': (date) => date.tm_year+1900,
+        '%z': (date) => {
           // Replaced by the offset from UTC in the ISO 8601:2000 standard format ( +hhmm or -hhmm ).
           // For example, "-0430" means 4 hours 30 minutes behind UTC (west of Greenwich).
           var off = date.tm_gmtoff;
@@ -9158,12 +9153,8 @@ function dbg(text) {
           off = (off / 60)*100 + (off % 60);
           return (ahead ? '+' : '-') + String("0000" + off).slice(-4);
         },
-        '%Z': function(date) {
-          return date.tm_zone;
-        },
-        '%%': function() {
-          return '%';
-        }
+        '%Z': (date) => date.tm_zone,
+        '%%': () => '%'
       };
   
       // Replace %% with a pair of NULLs (which cannot occur in a C string), then
@@ -9183,10 +9174,10 @@ function dbg(text) {
   
       writeArrayToMemory(bytes, s);
       return bytes.length-1;
-    }
-  function _strftime_l(s, maxsize, format, tm, loc) {
+    };
+  var _strftime_l = (s, maxsize, format, tm, loc) => {
       return _strftime(s, maxsize, format, tm); // no locale support yet
-    }
+    };
 
 
 
@@ -9393,80 +9384,6 @@ var miniTempWebGLIntBuffersStorage = new Int32Array(288);
   miniTempWebGLIntBuffers[i] = miniTempWebGLIntBuffersStorage.subarray(0, i+1);
   }
   ;
-// include: base64Utils.js
-// Copied from https://github.com/strophe/strophejs/blob/e06d027/src/polyfills.js#L149
-
-// This code was written by Tyler Akins and has been placed in the
-// public domain.  It would be nice if you left this header intact.
-// Base64 code from Tyler Akins -- http://rumkin.com
-
-/**
- * Decodes a base64 string.
- * @param {string} input The string to decode.
- */
-var decodeBase64 = typeof atob == 'function' ? atob : function (input) {
-  var keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-
-  var output = '';
-  var chr1, chr2, chr3;
-  var enc1, enc2, enc3, enc4;
-  var i = 0;
-  // remove all characters that are not A-Z, a-z, 0-9, +, /, or =
-  input = input.replace(/[^A-Za-z0-9\+\/\=]/g, '');
-  do {
-    enc1 = keyStr.indexOf(input.charAt(i++));
-    enc2 = keyStr.indexOf(input.charAt(i++));
-    enc3 = keyStr.indexOf(input.charAt(i++));
-    enc4 = keyStr.indexOf(input.charAt(i++));
-
-    chr1 = (enc1 << 2) | (enc2 >> 4);
-    chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
-    chr3 = ((enc3 & 3) << 6) | enc4;
-
-    output = output + String.fromCharCode(chr1);
-
-    if (enc3 !== 64) {
-      output = output + String.fromCharCode(chr2);
-    }
-    if (enc4 !== 64) {
-      output = output + String.fromCharCode(chr3);
-    }
-  } while (i < input.length);
-  return output;
-};
-
-// Converts a string of base64 into a byte array.
-// Throws error on invalid input.
-function intArrayFromBase64(s) {
-  if (typeof ENVIRONMENT_IS_NODE == 'boolean' && ENVIRONMENT_IS_NODE) {
-    var buf = Buffer.from(s, 'base64');
-    return new Uint8Array(buf['buffer'], buf['byteOffset'], buf['byteLength']);
-  }
-
-  try {
-    var decoded = decodeBase64(s);
-    var bytes = new Uint8Array(decoded.length);
-    for (var i = 0 ; i < decoded.length ; ++i) {
-      bytes[i] = decoded.charCodeAt(i);
-    }
-    return bytes;
-  } catch (_) {
-    throw new Error('Converting base64 string to bytes failed.');
-  }
-}
-
-// If filename is a base64 data URI, parses and returns data (Buffer on node,
-// Uint8Array otherwise). If filename is not a base64 data URI, returns undefined.
-function tryParseAsDataURI(filename) {
-  if (!isDataURI(filename)) {
-    return;
-  }
-
-  return intArrayFromBase64(filename.slice(dataURIPrefix.length));
-}
-
-
-// end include: base64Utils.js
 function checkIncomingModuleAPI() {
   ignoredModuleProp('fetchSettings');
 }
@@ -9649,11 +9566,42 @@ var dynCall_iiiiij = Module["dynCall_iiiiij"] = createExportWrapper("dynCall_iii
 var dynCall_iiiiijj = Module["dynCall_iiiiijj"] = createExportWrapper("dynCall_iiiiijj");
 /** @type {function(...*):?} */
 var dynCall_iiiiiijj = Module["dynCall_iiiiiijj"] = createExportWrapper("dynCall_iiiiiijj");
-var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 88788;
+var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 88836;
 
 // include: postamble.js
 // === Auto-generated postamble setup entry stuff ===
 
+// include: base64Utils.js
+// Converts a string of base64 into a byte array.
+// Throws error on invalid input.
+function intArrayFromBase64(s) {
+  if (typeof ENVIRONMENT_IS_NODE != 'undefined' && ENVIRONMENT_IS_NODE) {
+    var buf = Buffer.from(s, 'base64');
+    return new Uint8Array(buf['buffer'], buf['byteOffset'], buf['byteLength']);
+  }
+
+  try {
+    var decoded = atob(s);
+    var bytes = new Uint8Array(decoded.length);
+    for (var i = 0 ; i < decoded.length ; ++i) {
+      bytes[i] = decoded.charCodeAt(i);
+    }
+    return bytes;
+  } catch (_) {
+    throw new Error('Converting base64 string to bytes failed.');
+  }
+}
+
+// If filename is a base64 data URI, parses and returns data (Buffer on node,
+// Uint8Array otherwise). If filename is not a base64 data URI, returns undefined.
+function tryParseAsDataURI(filename) {
+  if (!isDataURI(filename)) {
+    return;
+  }
+
+  return intArrayFromBase64(filename.slice(dataURIPrefix.length));
+}
+// end include: base64Utils.js
 Module["addRunDependency"] = addRunDependency;
 Module["removeRunDependency"] = removeRunDependency;
 Module["FS_createPath"] = FS.createPath;
@@ -9826,7 +9774,7 @@ var unexportedSymbols = [
   'zeroMemory',
   'exitJS',
   'getHeapMax',
-  'emscripten_realloc_buffer',
+  'growMemory',
   'ENV',
   'MONTH_DAYS_REGULAR',
   'MONTH_DAYS_LEAP',
@@ -9894,7 +9842,6 @@ var unexportedSymbols = [
   'getEnvStrings',
   'doReadv',
   'doWritev',
-  'dlopenMissingError',
   'promiseMap',
   'getExceptionMessageCommon',
   'getCppExceptionTag',
