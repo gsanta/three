@@ -99,6 +99,18 @@ bool is_circle_tool_filled()
     return circleTool->isFilled();
 }
 
+bool is_rectangle_tool_filled()
+{
+    RectangleTool *rectangleTool = static_cast<RectangleTool *>(editor->getToolHandler()->getTool("rectangle"));
+    return rectangleTool->isFilled();
+}
+
+void set_rectangle_tool_filled(bool isFilled)
+{
+    RectangleTool *rectangleTool = static_cast<RectangleTool *>(editor->getToolHandler()->getTool("rectangle"));
+    rectangleTool->setFilled(isFilled);
+}
+
 EMSCRIPTEN_BINDINGS(spright)
 {
     emscripten::function("getFrames", &getFrames);
@@ -116,6 +128,8 @@ EMSCRIPTEN_BINDINGS(spright)
     emscripten::function("flipHorizontal", &api_flip_horizontal);
     emscripten::function("setCircleToolFilled", &set_circle_tool_filled);
     emscripten::function("isCircleToolFilled", &is_circle_tool_filled);
+    emscripten::function("setRectangleToolFilled", &set_rectangle_tool_filled);
+    emscripten::function("isRectangleToolFilled", &is_rectangle_tool_filled);
 }
 
 #endif

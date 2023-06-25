@@ -14,6 +14,7 @@ namespace maths
 
         Vec2();
         Vec2(const float &x, const float &y);
+        Vec2(const float &xy);
 
         Vec2 &add(const Vec2 &other);
         Vec2 &subtract(const Vec2 &other);

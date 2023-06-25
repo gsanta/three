@@ -43,7 +43,7 @@ namespace editor
         m_toolHandler->addTool(new LineTool());
         m_toolHandler->addTool(new CircleTool());
         m_toolHandler->addActiveTool("zoom");
-        m_toolHandler->setSelectedTool("brush");
+        m_toolHandler->setSelectedTool("rectangle");
 
         m_RunLoop.add(m_FramePlayerHandler);
     }

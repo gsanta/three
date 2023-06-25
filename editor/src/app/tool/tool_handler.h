@@ -11,7 +11,7 @@
 #include "../service/services.h"
 #include "brush_tool.h"
 #include "eraser_tool/eraser_tool.h"
-#include "rectangle_tool.h"
+#include "rectangle_tool/rectangle_tool.h"
 #include "tool/document_info.h"
 #include "tool/pointer_info.h"
 #include "tool/tool.h"

@@ -10,6 +10,7 @@ interface ToolState {
   editor?: EditorApi;
 
   isCircleFilled: boolean;
+  isRectangleFilled: boolean;
 }
 
 const initialState: ToolState = {
@@ -27,6 +28,7 @@ const initialState: ToolState = {
   ],
   selectedTool: ToolName.Brush,
   isCircleFilled: false,
+  isRectangleFilled: false,
 };
 
 export const toolSlice = createSlice({
@@ -76,9 +78,22 @@ export const toolSlice = createSlice({
       state.editor?.setCircleToolFilled(action.payload);
       state.isCircleFilled = action.payload;
     },
+
+    setRectangleFilled: (state, action: PayloadAction<boolean>) => {
+      state.editor?.setRectangleToolFilled(action.payload);
+      state.isRectangleFilled = action.payload;
+    },
   },
 });
 
-export const { activateTool, addTool, deActivateTool, initTools, setCircleFilled, setSelectedTool } = toolSlice.actions;
+export const {
+  activateTool,
+  addTool,
+  deActivateTool,
+  initTools,
+  setCircleFilled,
+  setRectangleFilled,
+  setSelectedTool,
+} = toolSlice.actions;
 
 export default toolSlice.reducer;

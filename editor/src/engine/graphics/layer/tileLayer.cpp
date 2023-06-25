@@ -141,7 +141,7 @@ namespace engine
         return m_Group.getRenderables();
     }
 
-    Vec2 TileLayer::getBottomLeftPos(Vec2 pointer) const
+    Vec2 TileLayer::getCenterPos(Vec2 pointer) const
     {
         Vec2Int tilePos = getTilePos(pointer);
         float tileSize = m_TileSize;
@@ -152,7 +152,7 @@ namespace engine
         return Vec2(x, y);
     }
 
-    Vec2 TileLayer::getBottomLeftPos(int tileIndex) const
+    Vec2 TileLayer::getCenterPos(int tileIndex) const
     {
         int y = tileIndex / m_TileBounds.getWidth();
         int x = tileIndex % m_TileBounds.getWidth();
@@ -161,7 +161,7 @@ namespace engine
 
     Vec2 TileLayer::getWorldPos(int tileIndex) const
     {
-        return getBottomLeftPos(tileIndex);
+        return getCenterPos(tileIndex);
     }
 
     Vec2 TileLayer::getWorldPos(const Vec2Int tilePos) const
@@ -212,7 +212,8 @@ namespace engine
 
     void TileLayer::setTilePos(Rect2D *tile, const Vec2Int &newPos)
     {
-        tile->setPosition(getWorldPos(newPos));
+        Vec2 halfTileSize(getTileSize() / 2.0f);
+        tile->setPosition(getWorldPos(newPos) - halfTileSize);
 
         int newTileIndex = getTileIndex(newPos.x, newPos.y);
         updateTileIndex(tile, newTileIndex);

@@ -63,10 +63,9 @@ namespace engine
 
         const std::vector<Rect2D *> &getRenderables() const;
 
-        // TODO: find a better name
-        Vec2 getBottomLeftPos(Vec2 pointer) const;
+        Vec2 getCenterPos(Vec2 pointer) const;
 
-        Vec2 getBottomLeftPos(int tileIndex) const;
+        Vec2 getCenterPos(int tileIndex) const;
 
         Vec2 getWorldPos(int tileIndex) const;
 
