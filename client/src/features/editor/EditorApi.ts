@@ -69,6 +69,10 @@ interface EditorApi {
   setCircleToolFilled(isFilled: boolean): void;
 
   isCircleToolFilled(): boolean;
+
+  setRectangleToolFilled(isFilled: boolean): void;
+
+  isRectangleToolFilled(): boolean;
 }
 
 export default EditorApi;

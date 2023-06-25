@@ -111,7 +111,7 @@ void QueueLinearFloodFill::setColor(TileLayer &layer, int x, int y, int color)
     if (renderable == nullptr)
     {
         float tileSize = layer.getTileSize();
-        Vec2 bottomLeftPos = layer.getBottomLeftPos(tileIndex) - Vec2(tileSize / 2.0f, tileSize / 2.0f);
+        Vec2 bottomLeftPos = layer.getCenterPos(tileIndex) - Vec2(tileSize / 2.0f, tileSize / 2.0f);
         layer.add(Rect2D(bottomLeftPos.x, bottomLeftPos.y, tileSize, tileSize, color));
     }
     else
