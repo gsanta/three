@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   root "editor#index"
   get "/editor", to: "editor#index"
 
+  resources :drawings, only: %i[index show create update destroy]
+
   devise_for :users, controllers: {
     sessions: 'users/sessions',
     registrations: 'users/registrations',
