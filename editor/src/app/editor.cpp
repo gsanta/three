@@ -11,7 +11,7 @@ namespace editor
         m_EditorState = std::make_shared<EditorState>();
 
         m_Window = new GLWindow("Editor", 1200, 800);
-        m_DocumentFactory = new DocumentFactory(m_Window, new GLRendererProvider(), m_EventEmitter.get());
+        m_DocumentFactory = new DocumentFactory(m_Window, new GLRendererProvider());
 
         m_DocumentStore = std::make_unique<DocumentStore>();
 

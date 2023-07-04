@@ -1,30 +1,38 @@
 #pragma once
 
-#include <cstddef>
-#include <memory>
+#include "../../buffer/indexBuffer.h"
+#include "../../buffer/vertexArray.h"
+#include "../../renderable/renderable2d.h"
 #include "../../renderer/renderer2d.h"
 #include "../../renderer/vertex_data.h"
-#include "../../buffer/vertexArray.h"
-#include "../../buffer/indexBuffer.h"
-#include "../../renderable/renderable2d.h"
 #include "../../shader/shader.h"
 #include "headless_shader.h"
 
-namespace spright { namespace engine {
+#include <cstddef>
+#include <memory>
 
-	class HeadlessRenderer2D : public Renderer2D
-	{
-	private:
-		VertexData* m_Buffer = nullptr;
-		HeadlessShader m_Shader;
-	public:
+namespace spright
+{
+namespace engine
+{
 
-		HeadlessRenderer2D* clone() const override;
+    class HeadlessRenderer2D : public Renderer2D
+    {
+    private:
+        VertexData *m_Buffer = nullptr;
+        HeadlessShader m_Shader;
 
-		void begin() override;
-		void end() override;
-		void flush() override;
-		VertexData*& getBuffer() override;
-		Shader& getShader() override;
-	};
-}}
+    public:
+        HeadlessRenderer2D();
+        HeadlessRenderer2D(const HeadlessRenderer2D &);
+
+        HeadlessRenderer2D *clone() const override;
+
+        void begin() override;
+        void end() override;
+        void flush() override;
+        VertexData *&getBuffer() override;
+        Shader &getShader() override;
+    };
+} // namespace engine
+} // namespace spright

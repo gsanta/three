@@ -30,9 +30,42 @@ DrawingBuilder &DrawingBuilder::withTileLayer()
     return *this;
 }
 
+DrawingBuilder &DrawingBuilder::withFrame(FrameBuilder frameBuilder)
+{
+    m_Frames.push_back(frameBuilder);
+
+    return *this;
+}
+
+DrawingBuilder &DrawingBuilder::withFrame(FrameBuilder frameBuilder, size_t repeat)
+{
+    for (size_t i = 0; i < repeat; i++)
+    {
+        m_Frames.push_back(frameBuilder);
+    }
+
+    return *this;
+}
+
+
 Drawing DrawingBuilder::build()
 {
-    Drawing drawing(m_Bounds, &TestDocumentFactory::eventEmitter);
+    if (m_TileLayers.size() > 0 && m_Frames.size() > 0)
+    {
+        throw "Either configure DrawingBuilder with LayerBuilders or FrameBuilders, but both are not allowed";
+    }
+
+    if (m_Frames.size() > 0)
+    {
+        return buildFromFrames();
+    }
+
+    return buildFromLayers();
+}
+
+Drawing DrawingBuilder::buildFromLayers()
+{
+    Drawing drawing(m_Bounds);
 
     const FrameImpl frame(0);
 
@@ -52,6 +85,18 @@ Drawing DrawingBuilder::build()
     if (m_TileLayers.empty())
     {
         drawing.addLayer(TileLayerBuilder().withTileSize(m_TileSize).withBounds(m_Bounds).build());
+    }
+
+    return drawing;
+}
+
+Drawing DrawingBuilder::buildFromFrames()
+{
+    Drawing drawing(m_Bounds);
+
+    for (FrameBuilder &frameBuilder : m_Frames)
+    {
+        drawing.getFrameStore().addFrame(frameBuilder.build());
     }
 
     return drawing;

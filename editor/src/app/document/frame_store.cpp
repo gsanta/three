@@ -20,7 +20,7 @@ namespace editor
         }
     }
 
-    void FrameStore::addFrame(const Frame &frame)
+    Frame &FrameStore::addFrame(const Frame &frame)
     {
         int index = m_Frames.size();
         m_Frames.push_back(frame);
@@ -30,6 +30,8 @@ namespace editor
         {
             setActiveFrame(index);
         }
+
+        return m_Frames.back();
     }
 
     void FrameStore::removeFrame(size_t index)
