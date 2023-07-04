@@ -5,7 +5,7 @@ namespace spright
 namespace editor
 {
     ActiveFrame::ActiveFrame(std::vector<FrameImpl> &frames, size_t activeFrameIndex)
-        : m_Frames(frames), m_ActiveFrameIndex(activeFrameIndex), m_ActiveLayerIndex(0)
+        : m_Frames(&frames), m_ActiveFrameIndex(activeFrameIndex), m_ActiveLayerIndex(0)
     {
         int a = 2;
         int b = 3;
@@ -132,7 +132,7 @@ namespace editor
             throw "No active frame";
         }
 
-        return m_Frames[m_ActiveFrameIndex];
+        return (*m_Frames)[m_ActiveFrameIndex];
     }
 
     nlohmann::json ActiveFrame::getJson() const

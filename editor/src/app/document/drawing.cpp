@@ -5,20 +5,34 @@ namespace spright
 namespace editor
 {
 
-    Drawing::Drawing(Bounds bounds, EventEmitter *eventEmitter) : Container(bounds), m_EventEmitter(eventEmitter)
+    Drawing resize_drawing(Drawing &orig, Bounds bounds);
+
+    Drawing::Drawing(Bounds bounds) : Container(bounds)
     {
-        m_FramePlayer = new FramePlayer(m_FrameStore, eventEmitter);
+        m_FramePlayer = new FramePlayer(m_FrameStore);
     }
 
-    Drawing::Drawing(const Drawing &other) : Container(other.getBounds()), m_EventEmitter(other.m_EventEmitter)
+    Drawing::Drawing(const Drawing &other) : Container(other.getBounds())
     {
         m_FrameStore = other.m_FrameStore;
-        m_FramePlayer = new FramePlayer(m_FrameStore, m_EventEmitter);
+        m_FramePlayer = new FramePlayer(m_FrameStore);
     }
 
     Drawing::~Drawing()
     {
         delete m_FramePlayer;
+    }
+
+    Drawing &Drawing::operator=(const Drawing &other)
+    {
+        m_FrameStore = other.m_FrameStore;
+        FramePlayer *framePlayer = new FramePlayer(m_FrameStore);
+        m_DrawingState = other.m_DrawingState;
+
+        delete m_FramePlayer;
+        m_FramePlayer = framePlayer;
+
+        return *this;
     }
 
     FrameStore &Drawing::getFrameStore()
@@ -96,6 +110,11 @@ namespace editor
     DrawingState &Drawing::getState()
     {
         return m_DrawingState;
+    }
+
+    void Drawing::resize(Bounds newBounds)
+    {
+        *this = resize_drawing(*this, newBounds);
     }
 
 } // namespace editor

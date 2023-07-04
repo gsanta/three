@@ -12,14 +12,6 @@ namespace editor
 
     class ActiveFrame : public Frame
     {
-    private:
-        std::vector<TileLayer> m_BackgroundLayers;
-        std::vector<TileLayer> m_ForegroundLayers;
-
-        std::vector<FrameImpl> &m_Frames;
-        size_t m_ActiveFrameIndex;
-        size_t m_ActiveLayerIndex;
-
     public:
         ActiveFrame(std::vector<FrameImpl> &frames, size_t activeFrameIndex = -1);
         ~ActiveFrame();
@@ -64,6 +56,17 @@ namespace editor
 
     private:
         FrameImpl &getActiveFrame() const;
+
+    private:
+        std::vector<TileLayer> m_BackgroundLayers;
+
+        std::vector<TileLayer> m_ForegroundLayers;
+
+        std::vector<FrameImpl> *m_Frames;
+
+        size_t m_ActiveFrameIndex;
+
+        size_t m_ActiveLayerIndex;
     };
 } // namespace editor
 } // namespace spright

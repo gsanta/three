@@ -5,10 +5,8 @@ namespace spright
 namespace editor
 {
 
-    DocumentFactory::DocumentFactory(Container *windowContainer,
-                                     RendererProvider *rendererProvider,
-                                     EventEmitter *eventEmitter)
-        : m_WindowContainer(windowContainer), m_RendererProvider(rendererProvider), m_EventEmitter(eventEmitter)
+    DocumentFactory::DocumentFactory(Container *windowContainer, RendererProvider *rendererProvider)
+        : m_WindowContainer(windowContainer), m_RendererProvider(rendererProvider)
     {
     }
 
@@ -48,7 +46,7 @@ namespace editor
 
     Drawing DocumentFactory::createDrawing(Bounds bounds, bool checkerboard, float zPos)
     {
-        Drawing drawing(bounds, m_EventEmitter);
+        Drawing drawing(bounds);
 
         float tileSize = TileLayer::defaultTileSize;
 
@@ -72,19 +70,48 @@ namespace editor
         return drawing;
     }
 
+    Drawing DocumentFactory::resizeDrawing(Drawing &orig, Bounds bounds, bool checkerboard, float zPos)
+    {
+        Drawing newDrawing(bounds);
+        for (Frame &frame : orig.getFrameStore().getFrames())
+        {
+            Frame &newFrame = newDrawing.getFrameStore().addFrame(FrameImpl(frame.getIndex()));
+            for (TileLayer &layer : frame.getLayers())
+            {
+                TileLayer &newLayer = newFrame.addLayer(TileLayer(layer.getName(),
+                                                                  Group<Rect2D>(m_RendererProvider->createRenderer2D()),
+                                                                  bounds,
+                                                                  layer.getTileSize(),
+                                                                  zPos));
+                for (Rect2D *rect : layer.getRenderables())
+                {
+                    Vec2 rectCenter = rect->getCenterPosition2d();
+                    if (newLayer.getBounds().contains(rectCenter.x, rectCenter.y))
+                    {
+                        newLayer.add(*rect);
+                    }
+                }
+            }
+        }
+
+        orig = newDrawing;
+
+        return newDrawing;
+    }
+
     Document DocumentFactory::createDocument()
     {
         float pixelCount = 32.0f;
-        Bounds documentBounds =
+        Bounds drawingBounds =
             Bounds::createWithPositions(-pixelCount / 2.0f, pixelCount / 2.0f, -pixelCount / 2.0f, pixelCount / 2.0f);
 
         Camera camera(m_WindowContainer->getBounds().getWidth(),
                       m_WindowContainer->getBounds().getHeight(),
-                      documentBounds,
+                      drawingBounds,
                       -1.0f,
                       1.0f);
 
-        Document document(documentBounds, camera, createDrawing(documentBounds, false, 0.01f));
+        Document document(drawingBounds, camera, createDrawing(drawingBounds, false, 0.01f));
 
         document.addDrawing(
             createDrawing(Bounds::createWithPositions(-16.0f, 16.0f, -pixelCount / 2.0f, pixelCount / 2.0f)));

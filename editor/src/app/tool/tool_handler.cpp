@@ -172,11 +172,19 @@ namespace editor
         }
         else if (key == GLFW_KEY_N)
         {
-            setSelectedTool("new_drawing");
+            float pixelCount = 32.0f;
+            Bounds documentBounds = Bounds::createWithPositions(-pixelCount / 2.0f,
+                                                                pixelCount / 2.0f,
+                                                                -pixelCount / 2.0f,
+                                                                pixelCount / 2.0f);
         }
         else if (key == GLFW_KEY_X)
         {
-            m_ImageExport->exportImage(m_DocumentStore->getActiveDocument());
+            float pixelCount = 16.0f;
+            Bounds documentBounds = Bounds::createWithPositions(-pixelCount / 2.0f,
+                                                                pixelCount / 2.0f,
+                                                                -pixelCount / 2.0f,
+                                                                pixelCount / 2.0f);
         }
         else if (key == GLFW_KEY_F)
         {

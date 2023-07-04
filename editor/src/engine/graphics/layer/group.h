@@ -123,6 +123,11 @@ namespace engine
             }
             m_Renderables.clear();
 
+            for (T *item : that.m_Renderables)
+            {
+                m_Renderables.push_back(new T(*item));
+            }
+
             m_Renderer = that.m_Renderer->clone();
         }
 
