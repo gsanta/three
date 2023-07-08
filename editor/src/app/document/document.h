@@ -9,7 +9,7 @@
 #include "../event/event_emitter.h"
 #include "../feature/frame/frame_player.h"
 #include "drawing.h"
-#include "frame_store.h"
+#include "frame.h"
 
 #include <algorithm>
 #include <memory>
@@ -26,9 +26,7 @@ namespace editor
     public:
         Document(Bounds bounds, Camera m_Camera, Drawing canvas);
 
-        FrameStore &getFrameStore();
-
-        ActiveFrame &getActiveFrame();
+        Frame &getActiveFrame();
 
         TileLayer &getActiveLayer();
 
@@ -49,8 +47,6 @@ namespace editor
         std::string getJson();
 
         void render();
-
-        FramePlayer &getFramePlayer();
 
     private:
         std::vector<Drawing> m_Drawings;

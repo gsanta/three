@@ -6,12 +6,12 @@ extern class Editor *editor;
 
 void setLayerIndex(size_t oldIndex, size_t newIndex)
 {
-    editor->getActiveFrame().changeLayerOrder(oldIndex, newIndex);
+    editor->getActiveDocument().getActiveDrawing().getActiveFrame().changeLayerOrder(oldIndex, newIndex);
 }
 
 void removeLayer(size_t layerIndex)
 {
-    editor->getActiveFrame().removeLayer(layerIndex);
+    editor->getActiveDocument().getActiveDrawing().getActiveFrame().removeLayer(layerIndex);
 }
 
 std::string exportDocument()
@@ -31,7 +31,7 @@ std::string getToolData(std::string tool)
 
 std::vector<std::string> getFrames()
 {
-    const std::vector<FrameImpl> &frames = editor->getActiveDocument().getFrameStore().getFrames();
+    const std::vector<Frame> &frames = editor->getActiveDocument().getActiveDrawing().getFrames();
 
     std::vector<std::string> target;
 
@@ -50,27 +50,27 @@ void addFrame()
 
 void removeFrame(size_t index)
 {
-    editor->getActiveDocument().getFrameStore().removeFrame(index);
+    editor->getActiveDocument().getActiveDrawing().removeFrame(index);
 }
 
 void setActiveFrame(size_t index)
 {
-    editor->getActiveDocument().getFrameStore().setActiveFrame(index);
+    editor->getActiveDocument().getActiveDrawing().setActiveFrame(index);
 }
 
 std::string getActiveFrame()
 {
-    return editor->getActiveFrame().getJson().dump();
+    return editor->getActiveDocument().getActiveDrawing().getActiveFrame().getJson().dump();
 }
 
 void activateFramePlayer()
 {
-    editor->getActiveDocument().getFramePlayer().setIsActive(true);
+    // editor->getActiveDocument().getFramePlayer().setIsActive(true);
 }
 
 void deActivateFramePlayer()
 {
-    editor->getActiveDocument().getFramePlayer().setIsActive(false);
+    // editor->getActiveDocument().getFramePlayer().setIsActive(false);
 }
 
 void api_flip_horizontal()
@@ -78,12 +78,11 @@ void api_flip_horizontal()
     Drawing &drawing = editor->getActiveDocument().getActiveDrawing();
     if (drawing.getState().getBounds().isNull())
     {
-        flip_horizontal(editor->getActiveDocument().getFrameStore().getActiveFrame().getLayers());
+        flip_horizontal(editor->getActiveDocument().getActiveFrame().getLayers());
     }
     else
     {
-        flip_horizontal(editor->getActiveDocument().getFrameStore().getActiveFrame().getLayers(),
-                        drawing.getState().getBounds());
+        flip_horizontal(editor->getActiveDocument().getActiveFrame().getLayers(), drawing.getState().getBounds());
     }
 }
 

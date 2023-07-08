@@ -28,7 +28,7 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
         int tileHeight = layer.getTileBounds().getHeight();
 
         Drawing &drawing = documentStore.getActiveDocument().getActiveDrawing();
-        flip_horizontal(drawing.getActiveFrame().getActiveLayer());
+        flip_horizontal(drawing.getActiveLayer());
 
         REQUIRE(layer.getAtTilePos(tileWidth - 1, 1)->getColor() == COLOR_RED);
         REQUIRE(layer.getTileIndex(tileWidth - 1, 1) == 23);

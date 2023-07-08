@@ -4,6 +4,7 @@
 #include "../test_helpers/drawing_builder.h"
 
 #include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers.hpp>
 
 using namespace spright::editor;
 
@@ -43,11 +44,100 @@ SCENARIO("Drawing")
         {
             THEN("removes pixels beyond the new bounds")
             {
-                Drawing newDrawing =
-                    documentFactory.resizeDrawing(drawing, Bounds::createWithPositions(-1.0f, 1.0f, -1.0f, 1.0f));
+                drawing.resize(Bounds::createWithPositions(-1.0f, 1.0f, -1.0f, 1.0f));
 
-                REQUIRE(newDrawing.getFrame(0).getLayers()[0].getRenderables().size() == 1);
-                REQUIRE(newDrawing.getFrame(0).getLayers()[0].getRenderables()[0]->getPosition2d() == Vec2(-1, -1));
+                REQUIRE(drawing.getFrame(0).getLayers()[0].getRenderables().size() == 1);
+                REQUIRE(drawing.getFrame(0).getLayers()[0].getRenderables()[0]->getPosition2d() == Vec2(-1, -1));
+            }
+        }
+    }
+
+    GIVEN("a drawing with frames")
+    {
+        std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(2);
+
+        Frame frame1(0);
+        frame1.addLayer(layers[0]);
+        Frame frame2(0);
+        frame2.addLayer(layers[1]);
+
+
+        Drawing drawing(Bounds::createWithPositions(-1.0f, 1.0f, -1.0f, 1.0f));
+
+        drawing.addFrame(frame1);
+        drawing.addFrame(frame2);
+
+        WHEN("getting a frame by index")
+        {
+            THEN("returns the frame")
+            {
+                REQUIRE(drawing.getFrame(0).getIndex() == 0);
+                REQUIRE(drawing.getFrame(1).getIndex() == 1);
+            }
+
+            THEN("throws if index is out of bounds")
+            {
+
+                REQUIRE_THROWS_WITH(drawing.getFrame(2), "Frame with index 2 not found");
+            }
+        }
+
+        WHEN("there is an active frame")
+        {
+            THEN("it can return it")
+            {
+                REQUIRE(drawing.getActiveFrame().getIndex() == 0);
+            }
+        }
+
+        WHEN("setting a new frame as active")
+        {
+            drawing.setActiveFrame(1);
+
+            THEN("the active frame changes")
+            {
+                REQUIRE(drawing.getActiveFrame().getIndex() == 1);
+            }
+        }
+
+        WHEN("there is only one frame left")
+        {
+            drawing.removeFrame(0);
+
+            THEN("it can not be removed")
+            {
+                REQUIRE_THROWS_WITH(drawing.removeFrame(0), "The last frame can not be removed");
+            }
+        }
+    }
+
+    GIVEN("a drawing with layers")
+    {
+        std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(2);
+
+        Frame frame(0);
+        frame.addLayer(layers[0]);
+        frame.addLayer(layers[1]);
+
+        Drawing drawing(Bounds::createWithPositions(-1.0f, 1.0f, -1.0f, 1.0f));
+
+        drawing.addFrame(frame);
+
+        WHEN("there is an active layer")
+        {
+            THEN("can return it")
+            {
+                REQUIRE(drawing.getActiveLayer().getIndex() == 0);
+            }
+        }
+
+        WHEN("setting a new layer as active")
+        {
+            THEN("the active layer changes")
+            {
+                drawing.setActiveLayer(1);
+
+                REQUIRE(drawing.getActiveLayer().getIndex() == 1);
             }
         }
     }

@@ -43,7 +43,7 @@ namespace editor
         m_toolHandler->addTool(new LineTool());
         m_toolHandler->addTool(new CircleTool());
         m_toolHandler->addActiveTool("zoom");
-        m_toolHandler->setSelectedTool("rectangle");
+        m_toolHandler->setSelectedTool("brush");
 
         m_RunLoop.add(m_FramePlayerHandler);
     }
@@ -61,16 +61,6 @@ namespace editor
     Document &Editor::getActiveDocument()
     {
         return m_DocumentStore->getActiveDocument();
-    }
-
-    ActiveFrame &Editor::getActiveFrame()
-    {
-        return m_DocumentStore->getActiveDocument().getActiveFrame();
-    }
-
-    TileLayer &Editor::getActiveLayer()
-    {
-        return getActiveFrame().getActiveLayer();
     }
 
     Window *Editor::getWindow() const

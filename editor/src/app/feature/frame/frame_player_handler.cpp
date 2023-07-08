@@ -11,9 +11,9 @@ namespace editor
             return;
         }
 
-        for (Drawing &drawing : m_DocumentStore->getActiveDocument().getDrawings())
+        for (FramePlayer *player : m_FramePlayers)
         {
-            // drawing.getFramePlayer().update(elapsed);
+            player->update(elapsed);
         }
     }
 
@@ -21,5 +21,11 @@ namespace editor
     {
         m_DocumentStore = documentStore;
     }
+
+    void FramePlayerHandler::addDrawing(Drawing &drawing)
+    {
+        m_FramePlayers.push_back(new FramePlayer(drawing));
+    }
+
 } // namespace editor
 } // namespace spright

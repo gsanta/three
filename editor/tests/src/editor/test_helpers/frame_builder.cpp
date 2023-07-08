@@ -14,10 +14,10 @@ FrameBuilder &FrameBuilder::withTileLayer(TileLayerBuilder tileLayerBuilder)
     return *this;
 }
 
-FrameImpl FrameBuilder::build()
+Frame FrameBuilder::build()
 {
 
-    FrameImpl frame(m_Index);
+    Frame frame(m_Index);
 
     for (TileLayerBuilder &layerBuilder : m_TileLayers)
     {

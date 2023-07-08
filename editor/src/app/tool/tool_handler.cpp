@@ -133,8 +133,8 @@ namespace editor
         else if (key == GLFW_KEY_C)
         {
             m_DocumentFactory->createFrame(m_DocumentStore->getActiveDocument());
-            m_DocumentStore->getActiveDocument().getFrameStore().setActiveFrame(
-                m_DocumentStore->getActiveDocument().getFrameStore().getFrames().size() - 1);
+            m_DocumentStore->getActiveDocument().getActiveDrawing().setActiveFrame(
+                m_DocumentStore->getActiveDocument().getActiveDrawing().getFrames().size() - 1);
             //setSelectedTool("color_picker");
         }
         else if (key == GLFW_KEY_1)
@@ -197,22 +197,10 @@ namespace editor
             {
                 flip_horizontal(drawing.getActiveFrame().getLayers(), drawing.getState().getBounds());
             }
-            // size_t activeIndex = m_DocumentStore->getActiveDocument().getActiveFrame().getIndex();
-            // size_t maxIndex = m_DocumentStore->getActiveDocument().getFrameStore().getFrames().size();
-
-            // if (activeIndex == maxIndex - 1)
-            // {
-            //     activeIndex = 0;
-            // }
-            // else
-            // {
-            //     activeIndex = activeIndex + 1;
-            // }
-            // m_DocumentStore->getActiveDocument().getFrameStore().setActiveFrame(activeIndex);
         }
         else if (key == GLFW_KEY_R)
         {
-            m_DocumentStore->getActiveDocument().getFrameStore().removeFrame(1);
+            m_DocumentStore->getActiveDocument().getActiveDrawing().removeFrame(1);
         }
     }
 

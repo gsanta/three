@@ -9,45 +9,65 @@ namespace editor
 
     Drawing::Drawing(Bounds bounds) : Container(bounds)
     {
-        m_FramePlayer = new FramePlayer(m_FrameStore);
     }
 
-    Drawing::Drawing(const Drawing &other) : Container(other.getBounds())
+    std::vector<Frame> &Drawing::getFrames()
     {
-        m_FrameStore = other.m_FrameStore;
-        m_FramePlayer = new FramePlayer(m_FrameStore);
+        return m_Frames;
     }
 
-    Drawing::~Drawing()
+    Frame &Drawing::getActiveFrame()
     {
-        delete m_FramePlayer;
+        return m_Frames[m_ActiveFrameIndex];
     }
 
-    Drawing &Drawing::operator=(const Drawing &other)
+    void Drawing::setActiveFrame(size_t index)
     {
-        m_FrameStore = other.m_FrameStore;
-        FramePlayer *framePlayer = new FramePlayer(m_FrameStore);
-        m_DrawingState = other.m_DrawingState;
+        if (index >= m_Frames.size())
+        {
+            throw std::invalid_argument("No frame at index " + std::to_string(index));
+        }
 
-        delete m_FramePlayer;
-        m_FramePlayer = framePlayer;
-
-        return *this;
+        m_ActiveFrameIndex = index;
     }
 
-    FrameStore &Drawing::getFrameStore()
+    Frame &Drawing::addFrame(const Frame &frame)
     {
-        return m_FrameStore;
+        int index = m_Frames.size();
+        m_Frames.push_back(frame);
+        m_Frames.back().setIndex(index);
+
+        return m_Frames.back();
     }
 
-    ActiveFrame &Drawing::getActiveFrame()
+    void Drawing::removeFrame(size_t index)
     {
-        return m_FrameStore.getActiveFrame();
+        if (m_Frames.size() <= 1)
+        {
+            throw std::invalid_argument("The last frame can not be removed");
+        }
+
+        m_Frames.erase(m_Frames.begin() + index);
+
+        for (int i = 0; i < m_Frames.size(); i++)
+        {
+            m_Frames[i].setIndex(i);
+        }
+
+        m_ActiveFrameIndex = index < m_Frames.size() ? index : 0;
     }
 
     Frame &Drawing::getFrame(size_t frameIndex)
     {
-        return m_FrameStore.getFrame(frameIndex);
+        auto it =
+            find_if(m_Frames.begin(), m_Frames.end(), [=](Frame &frame) { return frame.getIndex() == frameIndex; });
+
+        if (it != m_Frames.end())
+        {
+            return *it;
+        }
+
+        throw std::invalid_argument("Frame with index " + std::to_string(frameIndex) + " not found");
     }
 
     TileLayer &Drawing::addLayer(const TileLayer &tileLayer)
@@ -57,36 +77,51 @@ namespace editor
             throw std::invalid_argument("Can not add a TileLayer to a Drawing with different bounds");
         }
 
-        ActiveFrame &frame = m_FrameStore.getActiveFrame();
+        Frame &frame = getActiveFrame();
         // check bounds
         return frame.addLayer(tileLayer);
     }
 
     TileLayer &Drawing::getActiveLayer()
     {
-        return getFrameStore().getActiveFrame().getActiveLayer();
+        return getActiveFrame().getLayers()[m_ActiveLayerIndex];
+    }
+
+    void Drawing::setActiveLayer(size_t index)
+    {
+        m_ActiveLayerIndex = index;
     }
 
     TileLayer &Drawing::getForegroundLayer()
     {
-        return m_FrameStore.getActiveFrame().getForegroundLayers()[0];
+        return m_ForegroundLayers[0];
     }
 
     TileLayer &Drawing::getBackgroundLayer()
     {
-        return m_FrameStore.getActiveFrame().getBackgroundLayers()[0];
+        return m_BackgroundLayers[0];
+    }
+
+    void Drawing::addBackgroundLayer(const TileLayer &tileLayer)
+    {
+        m_BackgroundLayers.push_back(tileLayer);
+    }
+
+    void Drawing::addForegroundLayer(const TileLayer &tileLayer)
+    {
+        m_ForegroundLayers.push_back(tileLayer);
     }
 
     std::string Drawing::getJson()
     {
-        nlohmann::json json = m_FrameStore.getActiveFrame().getActiveLayer().getJson();
+        nlohmann::json json = getActiveFrame().getLayer(m_ActiveLayerIndex).getJson();
 
         return json.dump();
     }
 
     void Drawing::render(const Camera &camera)
     {
-        for (TileLayer &layer : getActiveFrame().getBackgroundLayers())
+        for (TileLayer &layer : m_BackgroundLayers)
         {
             layer.render(camera);
         }
@@ -96,15 +131,10 @@ namespace editor
             layer.render(camera);
         }
 
-        for (TileLayer &layer : getActiveFrame().getForegroundLayers())
+        for (TileLayer &layer : m_ForegroundLayers)
         {
             layer.render(camera);
         }
-    }
-
-    FramePlayer &Drawing::getFramePlayer()
-    {
-        return *m_FramePlayer;
     }
 
     DrawingState &Drawing::getState()

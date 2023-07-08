@@ -5,7 +5,7 @@ namespace spright
 namespace editor
 {
 
-    FramePlayer::FramePlayer(FrameStore &frameStore) : m_IsActive(false), m_Elapsed(0), m_FrameStore(frameStore)
+    FramePlayer::FramePlayer(Drawing &drawing) : m_IsActive(false), m_Elapsed(0), m_Drawing(drawing)
     {
     }
 
@@ -18,7 +18,14 @@ namespace editor
 
             if (m_IsActive)
             {
-                m_FrameStore.activateNextFrame();
+                if (m_Drawing.getActiveFrame().getIndex() == m_Drawing.getFrames().size() - 1)
+                {
+                    m_Drawing.setActiveFrame(0);
+                }
+                else
+                {
+                    m_Drawing.setActiveFrame(m_Drawing.getActiveFrame().getIndex() + 1);
+                }
             }
             m_Elapsed = 0;
         }
