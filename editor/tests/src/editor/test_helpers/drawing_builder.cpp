@@ -67,14 +67,14 @@ Drawing DrawingBuilder::buildFromLayers()
 {
     Drawing drawing(m_Bounds);
 
-    const FrameImpl frame(0);
+    const Frame frame(0);
 
     const TileLayer foregroundLayer("", Group<Rect2D>(new HeadlessRenderer2D()), m_Bounds, m_TileSize);
     const TileLayer backgroundLayer("", Group<Rect2D>(new HeadlessRenderer2D()), m_Bounds, 2.0f);
 
-    drawing.getFrameStore().addFrame(frame);
-    drawing.getActiveFrame().addBackgroundLayer(backgroundLayer);
-    drawing.getActiveFrame().addForegroundLayer(foregroundLayer);
+    drawing.addFrame(frame);
+    drawing.addBackgroundLayer(backgroundLayer);
+    drawing.addForegroundLayer(foregroundLayer);
 
     for (TileLayerBuilder &builder : m_TileLayers)
     {
@@ -96,7 +96,7 @@ Drawing DrawingBuilder::buildFromFrames()
 
     for (FrameBuilder &frameBuilder : m_Frames)
     {
-        drawing.getFrameStore().addFrame(frameBuilder.build());
+        drawing.addFrame(frameBuilder.build());
     }
 
     return drawing;

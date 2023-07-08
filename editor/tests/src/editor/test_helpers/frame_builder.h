@@ -1,5 +1,5 @@
 #pragma once
-#include "../src/app/document/frame_impl.h"
+#include "../src/app/document/frame.h"
 #include "../src/engine/graphics/renderable/bounds.h"
 #include "test_document_factory.h"
 #include "tile_layer_builder.h"
@@ -15,7 +15,7 @@ public:
 
     FrameBuilder &withTileLayer(TileLayerBuilder);
 
-    FrameImpl build();
+    Frame build();
 
 private:
     std::vector<TileLayerBuilder> m_TileLayers;

@@ -1,4 +1,4 @@
-#include "../src/app/document/frame_impl.h"
+#include "../src/app/document/frame.h"
 #include "../test_helpers/test_document_factory.h"
 
 #include <catch2/catch_test_macros.hpp>
@@ -9,7 +9,7 @@
 using namespace ::spright::engine;
 using namespace ::spright::editor;
 
-TEST_CASE("FrameImpl", "[frame_impl]")
+TEST_CASE("Frame", "[frame]")
 {
     SECTION("equals with an other Frame with the same data")
     {
@@ -21,8 +21,8 @@ TEST_CASE("FrameImpl", "[frame_impl]")
         layers[0].add(rect1);
         layers[1].add(rect2);
 
-        FrameImpl frame1;
-        FrameImpl frame2;
+        Frame frame1;
+        Frame frame2;
 
         frame1.addLayer(layers[0]);
         frame1.addLayer(layers[1]);
@@ -36,8 +36,8 @@ TEST_CASE("FrameImpl", "[frame_impl]")
     {
         std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(2);
 
-        FrameImpl frame1;
-        FrameImpl frame2;
+        Frame frame1;
+        Frame frame2;
 
         frame1.addLayer(layers[0]);
         frame2.addLayer(layers[1]);
@@ -49,7 +49,7 @@ TEST_CASE("FrameImpl", "[frame_impl]")
     {
         std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(3);
 
-        FrameImpl frame;
+        Frame frame;
 
         frame.addLayer(layers[0]);
         frame.addLayer(layers[1]);
@@ -62,7 +62,7 @@ TEST_CASE("FrameImpl", "[frame_impl]")
     {
         std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(3);
 
-        FrameImpl frame;
+        Frame frame;
 
         frame.addLayer(layers[0]);
         frame.addLayer(layers[1]);
@@ -76,7 +76,7 @@ TEST_CASE("FrameImpl", "[frame_impl]")
     {
         std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(3);
 
-        FrameImpl frame;
+        Frame frame;
 
         frame.addLayer(layers[0]);
         frame.addLayer(layers[1]);
@@ -91,7 +91,7 @@ TEST_CASE("FrameImpl", "[frame_impl]")
     {
         std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(2);
 
-        FrameImpl frame;
+        Frame frame;
 
         Rect2D rect1(-2.0f, -3.0f, 3.0f, 5.0f, 0xFF0000FF);
         Rect2D rect2(2.0f, 3.0f, 3.0f, 5.0f, 0xFF0000FF);
@@ -121,7 +121,7 @@ TEST_CASE("FrameImpl", "[frame_impl]")
     {
         std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(2);
 
-        FrameImpl frame;
+        Frame frame;
 
         frame.addLayer(layers[0]);
         frame.addLayer(layers[1]);
@@ -134,7 +134,7 @@ TEST_CASE("FrameImpl", "[frame_impl]")
     {
         std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(2);
 
-        FrameImpl frame;
+        Frame frame;
 
         frame.addLayer(layers[0]);
         frame.addLayer(layers[1]);
@@ -147,7 +147,7 @@ TEST_CASE("FrameImpl", "[frame_impl]")
     {
         std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(2);
 
-        FrameImpl frame;
+        Frame frame;
 
         frame.addLayer(layers[0]);
         frame.addLayer(layers[1]);
@@ -160,11 +160,24 @@ TEST_CASE("FrameImpl", "[frame_impl]")
     {
         std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(2);
 
-        FrameImpl frame;
+        Frame frame;
 
         frame.addLayer(layers[0]);
         frame.addLayer(layers[1]);
 
         REQUIRE_THROWS_WITH(frame.getLayer(2), "No layer at index 2");
+    }
+
+    SECTION("can get the json representation of the active layer")
+    {
+        std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(3);
+
+        Frame frame;
+
+        frame.addLayer(layers[0]);
+        frame.addLayer(layers[1]);
+        frame.addLayer(layers[2]);
+
+        REQUIRE(frame.getJson().dump() == "{\"index\":0}");
     }
 }

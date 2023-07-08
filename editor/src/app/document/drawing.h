@@ -1,9 +1,8 @@
 #pragma once
 
 #include "../../engine/graphics/camera/camera.h"
-#include "../feature/frame/frame_player.h"
 #include "drawing_state.h"
-#include "frame_store.h"
+#include "frame.h"
 
 namespace spright
 {
@@ -16,19 +15,21 @@ namespace editor
     public:
         Drawing(Bounds bounds);
 
-        Drawing(const Drawing &);
+        std::vector<Frame> &getFrames();
 
-        ~Drawing();
+        Frame &getActiveFrame();
 
-        Drawing &operator=(const Drawing &);
+        void setActiveFrame(size_t index);
 
-        FrameStore &getFrameStore();
+        Frame &addFrame(const Frame &frame);
 
-        ActiveFrame &getActiveFrame();
+        void removeFrame(size_t index);
 
         Frame &getFrame(size_t frameIndex);
 
         TileLayer &getActiveLayer();
+
+        void setActiveLayer(size_t index);
 
         TileLayer &addLayer(const TileLayer &tileLayer);
 
@@ -36,20 +37,28 @@ namespace editor
 
         TileLayer &getBackgroundLayer();
 
+        void addBackgroundLayer(const TileLayer &tileLayer);
+
+        void addForegroundLayer(const TileLayer &tileLayer);
+
         std::string getJson();
 
         void render(const Camera &camera);
-
-        FramePlayer &getFramePlayer();
 
         DrawingState &getState();
 
         void resize(Bounds newBounds);
 
     private:
-        FrameStore m_FrameStore;
+        std::vector<TileLayer> m_BackgroundLayers;
 
-        FramePlayer *m_FramePlayer;
+        std::vector<TileLayer> m_ForegroundLayers;
+
+        std::vector<Frame> m_Frames;
+
+        size_t m_ActiveFrameIndex = 0;
+
+        size_t m_ActiveLayerIndex = 0;
 
         DrawingState m_DrawingState;
     };

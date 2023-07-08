@@ -32,9 +32,9 @@ namespace editor
     Drawing resize_drawing(Drawing &orig, Bounds bounds)
     {
         Drawing newDrawing(bounds);
-        for (Frame &frame : orig.getFrameStore().getFrames())
+        for (Frame &frame : orig.getFrames())
         {
-            Frame &newFrame = newDrawing.getFrameStore().addFrame(FrameImpl(frame.getIndex()));
+            Frame &newFrame = newDrawing.addFrame(Frame(frame.getIndex()));
             for (TileLayer &layer : frame.getLayers())
             {
                 TileLayer newLayer = resize_tile_layer(layer, bounds);

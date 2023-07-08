@@ -77,7 +77,7 @@ void removeActiveTool(std::string toolName)
 
 std::vector<std::string> getLayers()
 {
-    const std::vector<TileLayer> &layers = editor->getActiveFrame().getLayers();
+    const std::vector<TileLayer> &layers = editor->getActiveDocument().getActiveDrawing().getActiveFrame().getLayers();
 
     std::vector<std::string> target;
 
@@ -93,24 +93,24 @@ size_t createLayer(std::string name)
 {
     editor->getDocumentFactory()->createUserLayer(editor->getDocumentStore()->getActiveDocument().getActiveDrawing(),
                                                   name);
-    return editor->getActiveFrame().getLayers().back().getIndex();
+    return editor->getActiveDocument().getActiveDrawing().getActiveFrame().getLayers().back().getIndex();
 }
 
 void enableLayer(size_t index)
 {
-    TileLayer &layer = editor->getActiveFrame().getLayer(index);
+    TileLayer &layer = editor->getActiveDocument().getActiveDrawing().getActiveFrame().getLayer(index);
     layer.setEnabled(true);
 }
 
 void disableLayer(size_t index)
 {
-    TileLayer &layer = editor->getActiveFrame().getLayer(index);
+    TileLayer &layer = editor->getActiveDocument().getActiveDrawing().getActiveFrame().getLayer(index);
     layer.setEnabled(false);
 }
 
 void setActiveLayer(size_t index)
 {
-    editor->getActiveFrame().setActiveLayer(index);
+    editor->getActiveDocument().getActiveDrawing().setActiveLayer(index);
 }
 
 void setBrushSize(int size)
@@ -157,7 +157,7 @@ void setEngineData(std::string json)
 {
     if (editor != nullptr)
     {
-        editor->getActiveLayer().setJson(json);
+        editor->getActiveDocument().getActiveDrawing().getActiveLayer().setJson(json);
     }
 }
 

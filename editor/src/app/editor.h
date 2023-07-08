@@ -9,11 +9,9 @@
 #include "api/emscripten_event_emitter.h"
 #include "core/canvas/canvas_listener_handler.h"
 #include "core/run_loop/run_loop.h"
-#include "document/active_frame.h"
 #include "document/document_store.h"
 #include "document/factory/document_factory.h"
 #include "document/factory/gl_renderer_provider.h"
-#include "document/frame_store.h"
 #include "editor/editor_state.h"
 #include "editor_config.h"
 #include "event/event_emitter.h"
@@ -52,10 +50,6 @@ namespace editor
         DocumentFactory *getDocumentFactory();
 
         Document &getActiveDocument();
-
-        ActiveFrame &getActiveFrame();
-
-        TileLayer &getActiveLayer();
 
         ToolHandler *getToolHandler();
 

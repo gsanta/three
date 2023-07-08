@@ -1,24 +1,24 @@
-#include "frame_impl.h"
+#include "frame.h"
 
 namespace spright
 {
 namespace editor
 {
-    FrameImpl::FrameImpl() : m_Index(0)
+    Frame::Frame() : m_Index(0)
     {
     }
 
-    FrameImpl::FrameImpl(size_t index) : m_Index(index)
+    Frame::Frame(size_t index) : m_Index(index)
     {
     }
 
-    FrameImpl::FrameImpl(const Frame &frame) : m_Index(frame.getIndex()), m_Layers(frame.getLayers())
+    Frame::Frame(const Frame &frame) : m_Index(frame.getIndex()), m_Layers(frame.getLayers())
     {
     }
 
-    bool FrameImpl::isEqual(const Frame &rhs) const
+    bool Frame::isEqual(const Frame &rhs) const
     {
-        const FrameImpl &frame = dynamic_cast<const FrameImpl &>(rhs);
+        const Frame &frame = dynamic_cast<const Frame &>(rhs);
 
         if (m_Layers.size() != frame.m_Layers.size())
         {
@@ -36,7 +36,7 @@ namespace editor
         return true;
     }
 
-    TileLayer &FrameImpl::addLayer(const TileLayer &layer)
+    TileLayer &Frame::addLayer(const TileLayer &layer)
     {
         size_t index = m_Layers.size();
         m_Layers.push_back(layer);
@@ -46,14 +46,14 @@ namespace editor
         return m_Layers.back();
     }
 
-    void FrameImpl::insertLayer(const TileLayer &layer, size_t index)
+    void Frame::insertLayer(const TileLayer &layer, size_t index)
     {
         m_Layers.insert(m_Layers.begin() + index, layer);
 
         resetLayerIndexes();
     }
 
-    TileLayer &FrameImpl::getLayer(size_t index)
+    TileLayer &Frame::getLayer(size_t index)
     {
         if (index >= m_Layers.size())
         {
@@ -62,17 +62,17 @@ namespace editor
         return *(m_Layers.begin() + index);
     }
 
-    std::vector<TileLayer> &FrameImpl::getLayers()
+    std::vector<TileLayer> &Frame::getLayers()
     {
         return m_Layers;
     }
 
-    const std::vector<TileLayer> &FrameImpl::getLayers() const
+    const std::vector<TileLayer> &Frame::getLayers() const
     {
         return m_Layers;
     }
 
-    void FrameImpl::removeLayer(size_t layerIndex)
+    void Frame::removeLayer(size_t layerIndex)
     {
         if (layerIndex > m_Layers.size())
         {
@@ -82,7 +82,7 @@ namespace editor
         resetLayerIndexes();
     }
 
-    void FrameImpl::changeLayerOrder(size_t oldOrder, size_t newOrder)
+    void Frame::changeLayerOrder(size_t oldOrder, size_t newOrder)
     {
         if (oldOrder >= m_Layers.size() || newOrder >= m_Layers.size())
         {
@@ -97,17 +97,17 @@ namespace editor
         insertLayer(tileLayer, newOrder);
     }
 
-    size_t FrameImpl::getIndex() const
+    size_t Frame::getIndex() const
     {
         return m_Index;
     }
 
-    void FrameImpl::setIndex(size_t index)
+    void Frame::setIndex(size_t index)
     {
         m_Index = index;
     }
 
-    void FrameImpl::resetLayerIndexes()
+    void Frame::resetLayerIndexes()
     {
         for (int i = 0; i < m_Layers.size(); i++)
         {
@@ -115,13 +115,24 @@ namespace editor
         }
     }
 
-    nlohmann::json FrameImpl::getJson() const
+    nlohmann::json Frame::getJson() const
     {
         nlohmann::json json = {
             {"index", m_Index},
         };
 
         return json;
+    }
+
+
+    bool operator==(const Frame &lhs, const Frame &rhs)
+    {
+        return lhs.isEqual(rhs);
+    }
+
+    bool operator!=(const Frame &lhs, const Frame &rhs)
+    {
+        return !lhs.isEqual(rhs);
     }
 } // namespace editor
 } // namespace spright
