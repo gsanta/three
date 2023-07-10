@@ -1,5 +1,5 @@
 
-RSpec.shared_examples_for 'an authenticated and authorized action for get' do
+RSpec.shared_examples_for 'an authenticated and authorized action for page' do
 
   context 'when the user is not signed in' do
     it 'redirects to the sign in page' do
@@ -17,7 +17,7 @@ RSpec.shared_examples_for 'an authenticated and authorized action for get' do
   end
 end
 
-RSpec.shared_examples_for 'an authenticated and authorized action for post' do
+RSpec.shared_examples_for 'an authenticated and authorized action for api' do
 
   context 'when the user is not signed in' do
     it 'should return 401:unauthorized' do
@@ -28,7 +28,7 @@ RSpec.shared_examples_for 'an authenticated and authorized action for post' do
 
   context "when the user is signed in" do
     it "should return 200:OK" do
-      sign_in userx
+      sign_in user
       subject
       expect(response).to have_http_status(:success)
     end

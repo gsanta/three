@@ -2,27 +2,35 @@
 
 class DrawingsController < InternalApiController
   def index
-    @drawings = Drawing.all
+    current_user
 
-    render react: {
-      pageProps: {
-        hello: "world",
-      }
-    }
+    drawings = ListDrawings.new(current_user.id).execute
+    render json: ListPresenter.new(drawings).to_a
+  end
+
+  def show
+
+    drawing = Drawing.find(params.require(:id))
+
+    render json: DrawingPresenter.new(drawing).to_h
   end
 
   def create
-    create_drawing_attributes
-    render json: {
-      pageProps: {
-        hello: "world",
-      }
-    }
+    Drawing.create! user: current_user,
+                    title: params.require(:title),
+                    content: params.require(:content)
   end
 
-  private
+  def update
+    update_params = params.permit(:title, :content)
+    drawing = Drawing.find(params.require(:id))
+    drawing.update!(update_params)
+  end
 
-  def create_drawing_attributes
-    create_params = params.require(:drawing).permit(:title, :content).require [:title, :content]
+  def destroy
+    drawing = Drawing.find(params.require(:id))
+    drawing.destroy!
+
+    render json: {}
   end
 end
