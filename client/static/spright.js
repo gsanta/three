@@ -728,19 +728,14 @@ var wasmBinaryFile;
     wasmBinaryFile = locateFile(wasmBinaryFile);
   }
 
-function getBinary(file) {
-  try {
-    if (file == wasmBinaryFile && wasmBinary) {
-      return new Uint8Array(wasmBinary);
-    }
-    if (readBinary) {
-      return readBinary(file);
-    }
-    throw "both async and sync fetching of the wasm failed";
+function getBinarySync(file) {
+  if (file == wasmBinaryFile && wasmBinary) {
+    return new Uint8Array(wasmBinary);
   }
-  catch (err) {
-    abort(err);
+  if (readBinary) {
+    return readBinary(file);
   }
+  throw "both async and sync fetching of the wasm failed";
 }
 
 function getBinaryPromise(binaryFile) {
@@ -758,20 +753,18 @@ function getBinaryPromise(binaryFile) {
           throw "failed to load wasm binary file at '" + binaryFile + "'";
         }
         return response['arrayBuffer']();
-      }).catch(() => getBinary(binaryFile));
+      }).catch(() => getBinarySync(binaryFile));
     }
-    else {
-      if (readAsync) {
-        // fetch is not available or url is file => try XHR (readAsync uses XHR internally)
-        return new Promise((resolve, reject) => {
-          readAsync(binaryFile, (response) => resolve(new Uint8Array(/** @type{!ArrayBuffer} */(response))), reject)
-        });
-      }
+    else if (readAsync) {
+      // fetch is not available or url is file => try XHR (readAsync uses XHR internally)
+      return new Promise((resolve, reject) => {
+        readAsync(binaryFile, (response) => resolve(new Uint8Array(/** @type{!ArrayBuffer} */(response))), reject)
+      });
     }
   }
 
-  // Otherwise, getBinary should be able to get it synchronously
-  return Promise.resolve().then(() => getBinary(binaryFile));
+  // Otherwise, getBinarySync should be able to get it synchronously
+  return Promise.resolve().then(() => getBinarySync(binaryFile));
 }
 
 function instantiateArrayBuffer(binaryFile, imports, receiver) {
@@ -822,9 +815,8 @@ function instantiateAsync(binary, binaryFile, imports, callback) {
           return instantiateArrayBuffer(binaryFile, imports, callback);
         });
     });
-  } else {
-    return instantiateArrayBuffer(binaryFile, imports, callback);
   }
+  return instantiateArrayBuffer(binaryFile, imports, callback);
 }
 
 // Create the wasm instance.
@@ -907,7 +899,7 @@ function legacyModuleProp(prop, newName) {
   if (!Object.getOwnPropertyDescriptor(Module, prop)) {
     Object.defineProperty(Module, prop, {
       configurable: true,
-      get: function() {
+      get() {
         abort('Module.' + prop + ' has been replaced with plain ' + newName + ' (the initial value can be provided on Module, but after startup the value is only looked for on a local variable of that name)');
       }
     });
@@ -937,7 +929,7 @@ function missingGlobal(sym, msg) {
   if (typeof globalThis !== 'undefined') {
     Object.defineProperty(globalThis, sym, {
       configurable: true,
-      get: function() {
+      get() {
         warnOnce('`' + sym + '` is not longer defined by emscripten. ' + msg);
         return undefined;
       }
@@ -951,7 +943,7 @@ function missingLibrarySymbol(sym) {
   if (typeof globalThis !== 'undefined' && !Object.getOwnPropertyDescriptor(globalThis, sym)) {
     Object.defineProperty(globalThis, sym, {
       configurable: true,
-      get: function() {
+      get() {
         // Can't `abort()` here because it would break code that does runtime
         // checks.  e.g. `if (typeof SDL === 'undefined')`.
         var msg = '`' + sym + '` is a library symbol and not included by default; add it to your library.js __deps or to DEFAULT_LIBRARY_FUNCS_TO_INCLUDE on the command line';
@@ -980,8 +972,8 @@ function unexportedRuntimeSymbol(sym) {
   if (!Object.getOwnPropertyDescriptor(Module, sym)) {
     Object.defineProperty(Module, sym, {
       configurable: true,
-      get: function() {
-        var msg = "'" + sym + "' was not exported. add it to EXPORTED_RUNTIME_METHODS (see the FAQ)";
+      get() {
+        var msg = "'" + sym + "' was not exported. add it to EXPORTED_RUNTIME_METHODS (see the Emscripten FAQ)";
         if (isExportedByForceFilesystem(sym)) {
           msg += '. Alternatively, forcing filesystem support (-sFORCE_FILESYSTEM) can export this for you';
         }
@@ -1137,7 +1129,7 @@ function dbg(text) {
       var ptr = getCppExceptionThrownObjectFromWebAssemblyException(ex);
       return getExceptionMessageCommon(ptr);
     }
-  Module["getExceptionMessage"] = getExceptionMessage;
+  Module['getExceptionMessage'] = getExceptionMessage;
 
   
     /**
@@ -1167,6 +1159,8 @@ function dbg(text) {
 
   var ptrToString = (ptr) => {
       assert(typeof ptr === 'number');
+      // With CAN_ADDRESS_2GB or MEMORY64, pointers are already unsigned.
+      ptr >>>= 0;
       return '0x' + ptr.toString(16).padStart(8, '0');
     };
 
@@ -1209,10 +1203,13 @@ function dbg(text) {
       return value;
     };
   
-  var PATH = {isAbs:(path) => path.charAt(0) === '/',splitPath:(filename) => {
+  var PATH = {
+  isAbs:(path) => path.charAt(0) === '/',
+  splitPath:(filename) => {
         var splitPathRe = /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
         return splitPathRe.exec(filename).slice(1);
-      },normalizeArray:(parts, allowAboveRoot) => {
+      },
+  normalizeArray:(parts, allowAboveRoot) => {
         // if the path tries to go above the root, `up` ends up > 0
         var up = 0;
         for (var i = parts.length - 1; i >= 0; i--) {
@@ -1234,7 +1231,8 @@ function dbg(text) {
           }
         }
         return parts;
-      },normalize:(path) => {
+      },
+  normalize:(path) => {
         var isAbsolute = PATH.isAbs(path),
             trailingSlash = path.substr(-1) === '/';
         // Normalize the path
@@ -1246,7 +1244,8 @@ function dbg(text) {
           path += '/';
         }
         return (isAbsolute ? '/' : '') + path;
-      },dirname:(path) => {
+      },
+  dirname:(path) => {
         var result = PATH.splitPath(path),
             root = result[0],
             dir = result[1];
@@ -1259,7 +1258,8 @@ function dbg(text) {
           dir = dir.substr(0, dir.length - 1);
         }
         return root + dir;
-      },basename:(path) => {
+      },
+  basename:(path) => {
         // EMSCRIPTEN return '/'' for '/', not an empty string
         if (path === '/') return '/';
         path = PATH.normalize(path);
@@ -1267,12 +1267,15 @@ function dbg(text) {
         var lastSlash = path.lastIndexOf('/');
         if (lastSlash === -1) return path;
         return path.substr(lastSlash+1);
-      },join:function() {
+      },
+  join:function() {
         var paths = Array.prototype.slice.call(arguments);
         return PATH.normalize(paths.join('/'));
-      },join2:(l, r) => {
+      },
+  join2:(l, r) => {
         return PATH.normalize(l + '/' + r);
-      }};
+      },
+  };
   
   var initRandomFill = () => {
       if (typeof crypto == 'object' && typeof crypto['getRandomValues'] == 'function') {
@@ -1309,7 +1312,8 @@ function dbg(text) {
   
   
   
-  var PATH_FS = {resolve:function() {
+  var PATH_FS = {
+  resolve:function() {
         var resolvedPath = '',
           resolvedAbsolute = false;
         for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
@@ -1327,7 +1331,8 @@ function dbg(text) {
         // handle relative paths to be safe (might happen when process.cwd() fails)
         resolvedPath = PATH.normalizeArray(resolvedPath.split('/').filter((p) => !!p), !resolvedAbsolute).join('/');
         return ((resolvedAbsolute ? '/' : '') + resolvedPath) || '.';
-      },relative:(from, to) => {
+      },
+  relative:(from, to) => {
         from = PATH_FS.resolve(from).substr(1);
         to = PATH_FS.resolve(to).substr(1);
         function trim(arr) {
@@ -1358,8 +1363,12 @@ function dbg(text) {
         }
         outputParts = outputParts.concat(toParts.slice(samePartsLength));
         return outputParts.join('/');
-      }};
+      },
+  };
   
+  
+  
+  var FS_stdin_getChar_buffer = [];
   
   var lengthBytesUTF8 = (str) => {
       var len = 0;
@@ -1437,8 +1446,63 @@ function dbg(text) {
     if (dontAddNull) u8array.length = numBytesWritten;
     return u8array;
   }
+  var FS_stdin_getChar = () => {
+      if (!FS_stdin_getChar_buffer.length) {
+        var result = null;
+        if (ENVIRONMENT_IS_NODE) {
+          // we will read data by chunks of BUFSIZE
+          var BUFSIZE = 256;
+          var buf = Buffer.alloc(BUFSIZE);
+          var bytesRead = 0;
   
-  var TTY = {ttys:[],init:function () {
+          // For some reason we must suppress a closure warning here, even though
+          // fd definitely exists on process.stdin, and is even the proper way to
+          // get the fd of stdin,
+          // https://github.com/nodejs/help/issues/2136#issuecomment-523649904
+          // This started to happen after moving this logic out of library_tty.js,
+          // so it is related to the surrounding code in some unclear manner.
+          /** @suppress {missingProperties} */
+          var fd = process.stdin.fd;
+  
+          try {
+            bytesRead = fs.readSync(fd, buf, 0, BUFSIZE, -1);
+          } catch(e) {
+            // Cross-platform differences: on Windows, reading EOF throws an exception, but on other OSes,
+            // reading EOF returns 0. Uniformize behavior by treating the EOF exception to return 0.
+            if (e.toString().includes('EOF')) bytesRead = 0;
+            else throw e;
+          }
+  
+          if (bytesRead > 0) {
+            result = buf.slice(0, bytesRead).toString('utf-8');
+          } else {
+            result = null;
+          }
+        } else
+        if (typeof window != 'undefined' &&
+          typeof window.prompt == 'function') {
+          // Browser.
+          result = window.prompt('Input: ');  // returns null on cancel
+          if (result !== null) {
+            result += '\n';
+          }
+        } else if (typeof readline == 'function') {
+          // Command line.
+          result = readline();
+          if (result !== null) {
+            result += '\n';
+          }
+        }
+        if (!result) {
+          return null;
+        }
+        FS_stdin_getChar_buffer = intArrayFromString(result, true);
+      }
+      return FS_stdin_getChar_buffer.shift();
+    };
+  var TTY = {
+  ttys:[],
+  init:function () {
         // https://github.com/emscripten-core/emscripten/pull/1555
         // if (ENVIRONMENT_IS_NODE) {
         //   // currently, FS.init does not distinguish if process.stdin is a file or TTY
@@ -1447,7 +1511,8 @@ function dbg(text) {
         //   // with text files until FS.init can be refactored.
         //   process.stdin.setEncoding('utf8');
         // }
-      },shutdown:function() {
+      },
+  shutdown:function() {
         // https://github.com/emscripten-core/emscripten/pull/1555
         // if (ENVIRONMENT_IS_NODE) {
         //   // inolen: any idea as to why node -e 'process.stdin.read()' wouldn't exit immediately (with process.stdin being a tty)?
@@ -1457,22 +1522,28 @@ function dbg(text) {
         //   // isaacs: do process.stdin.pause() and i'd think it'd probably close the pending call
         //   process.stdin.pause();
         // }
-      },register:function(dev, ops) {
+      },
+  register:function(dev, ops) {
         TTY.ttys[dev] = { input: [], output: [], ops: ops };
         FS.registerDevice(dev, TTY.stream_ops);
-      },stream_ops:{open:function(stream) {
+      },
+  stream_ops:{
+  open:function(stream) {
           var tty = TTY.ttys[stream.node.rdev];
           if (!tty) {
             throw new FS.ErrnoError(43);
           }
           stream.tty = tty;
           stream.seekable = false;
-        },close:function(stream) {
+        },
+  close:function(stream) {
           // flush any pending line data
           stream.tty.ops.fsync(stream.tty);
-        },fsync:function(stream) {
+        },
+  fsync:function(stream) {
           stream.tty.ops.fsync(stream.tty);
-        },read:function(stream, buffer, offset, length, pos /* ignored */) {
+        },
+  read:function(stream, buffer, offset, length, pos /* ignored */) {
           if (!stream.tty || !stream.tty.ops.get_char) {
             throw new FS.ErrnoError(60);
           }
@@ -1495,7 +1566,8 @@ function dbg(text) {
             stream.node.timestamp = Date.now();
           }
           return bytesRead;
-        },write:function(stream, buffer, offset, length, pos) {
+        },
+  write:function(stream, buffer, offset, length, pos) {
           if (!stream.tty || !stream.tty.ops.put_char) {
             throw new FS.ErrnoError(60);
           }
@@ -1510,63 +1582,27 @@ function dbg(text) {
             stream.node.timestamp = Date.now();
           }
           return i;
-        }},default_tty_ops:{get_char:function(tty) {
-          if (!tty.input.length) {
-            var result = null;
-            if (ENVIRONMENT_IS_NODE) {
-              // we will read data by chunks of BUFSIZE
-              var BUFSIZE = 256;
-              var buf = Buffer.alloc(BUFSIZE);
-              var bytesRead = 0;
-  
-              try {
-                bytesRead = fs.readSync(process.stdin.fd, buf, 0, BUFSIZE, -1);
-              } catch(e) {
-                // Cross-platform differences: on Windows, reading EOF throws an exception, but on other OSes,
-                // reading EOF returns 0. Uniformize behavior by treating the EOF exception to return 0.
-                if (e.toString().includes('EOF')) bytesRead = 0;
-                else throw e;
-              }
-  
-              if (bytesRead > 0) {
-                result = buf.slice(0, bytesRead).toString('utf-8');
-              } else {
-                result = null;
-              }
-            } else
-            if (typeof window != 'undefined' &&
-              typeof window.prompt == 'function') {
-              // Browser.
-              result = window.prompt('Input: ');  // returns null on cancel
-              if (result !== null) {
-                result += '\n';
-              }
-            } else if (typeof readline == 'function') {
-              // Command line.
-              result = readline();
-              if (result !== null) {
-                result += '\n';
-              }
-            }
-            if (!result) {
-              return null;
-            }
-            tty.input = intArrayFromString(result, true);
-          }
-          return tty.input.shift();
-        },put_char:function(tty, val) {
+        },
+  },
+  default_tty_ops:{
+  get_char:function(tty) {
+          return FS_stdin_getChar();
+        },
+  put_char:function(tty, val) {
           if (val === null || val === 10) {
             out(UTF8ArrayToString(tty.output, 0));
             tty.output = [];
           } else {
             if (val != 0) tty.output.push(val); // val == 0 would cut text output off in the middle.
           }
-        },fsync:function(tty) {
+        },
+  fsync:function(tty) {
           if (tty.output && tty.output.length > 0) {
             out(UTF8ArrayToString(tty.output, 0));
             tty.output = [];
           }
-        },ioctl_tcgets:function(tty) {
+        },
+  ioctl_tcgets:function(tty) {
           // typical setting
           return {
             c_iflag: 25856,
@@ -1579,24 +1615,32 @@ function dbg(text) {
               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             ]
           };
-        },ioctl_tcsets:function(tty, optional_actions, data) {
+        },
+  ioctl_tcsets:function(tty, optional_actions, data) {
           // currently just ignore
           return 0;
-        },ioctl_tiocgwinsz:function(tty) {
+        },
+  ioctl_tiocgwinsz:function(tty) {
           return [24, 80];
-        }},default_tty1_ops:{put_char:function(tty, val) {
+        },
+  },
+  default_tty1_ops:{
+  put_char:function(tty, val) {
           if (val === null || val === 10) {
             err(UTF8ArrayToString(tty.output, 0));
             tty.output = [];
           } else {
             if (val != 0) tty.output.push(val);
           }
-        },fsync:function(tty) {
+        },
+  fsync:function(tty) {
           if (tty.output && tty.output.length > 0) {
             err(UTF8ArrayToString(tty.output, 0));
             tty.output = [];
           }
-        }}};
+        },
+  },
+  };
   
   
   var zeroMemory = (address, size) => {
@@ -1611,9 +1655,12 @@ function dbg(text) {
   var mmapAlloc = (size) => {
       abort('internal error: mmapAlloc called but `emscripten_builtin_memalign` native symbol not exported');
     };
-  var MEMFS = {ops_table:null,mount:function(mount) {
+  var MEMFS = {
+  ops_table:null,
+  mount(mount) {
         return MEMFS.createNode(null, '/', 16384 | 511 /* 0777 */, 0);
-      },createNode:function(parent, name, mode, dev) {
+      },
+  createNode(parent, name, mode, dev) {
         if (FS.isBlkdev(mode) || FS.isFIFO(mode)) {
           // no supported
           throw new FS.ErrnoError(63);
@@ -1694,11 +1741,13 @@ function dbg(text) {
           parent.timestamp = node.timestamp;
         }
         return node;
-      },getFileDataAsTypedArray:function(node) {
+      },
+  getFileDataAsTypedArray(node) {
         if (!node.contents) return new Uint8Array(0);
         if (node.contents.subarray) return node.contents.subarray(0, node.usedBytes); // Make sure to not return excess unused bytes.
         return new Uint8Array(node.contents);
-      },expandFileStorage:function(node, newCapacity) {
+      },
+  expandFileStorage(node, newCapacity) {
         var prevCapacity = node.contents ? node.contents.length : 0;
         if (prevCapacity >= newCapacity) return; // No need to expand, the storage was already large enough.
         // Don't expand strictly to the given requested limit if it's only a very small increase, but instead geometrically grow capacity.
@@ -1710,7 +1759,8 @@ function dbg(text) {
         var oldContents = node.contents;
         node.contents = new Uint8Array(newCapacity); // Allocate new storage.
         if (node.usedBytes > 0) node.contents.set(oldContents.subarray(0, node.usedBytes), 0); // Copy old data over to the new storage.
-      },resizeFileStorage:function(node, newSize) {
+      },
+  resizeFileStorage(node, newSize) {
         if (node.usedBytes == newSize) return;
         if (newSize == 0) {
           node.contents = null; // Fully decommit when requesting a resize to zero.
@@ -1723,7 +1773,9 @@ function dbg(text) {
           }
           node.usedBytes = newSize;
         }
-      },node_ops:{getattr:function(node) {
+      },
+  node_ops:{
+  getattr(node) {
           var attr = {};
           // device numbers reuse inode numbers.
           attr.dev = FS.isChrdev(node.mode) ? node.id : 1;
@@ -1750,7 +1802,8 @@ function dbg(text) {
           attr.blksize = 4096;
           attr.blocks = Math.ceil(attr.size / attr.blksize);
           return attr;
-        },setattr:function(node, attr) {
+        },
+  setattr(node, attr) {
           if (attr.mode !== undefined) {
             node.mode = attr.mode;
           }
@@ -1760,11 +1813,14 @@ function dbg(text) {
           if (attr.size !== undefined) {
             MEMFS.resizeFileStorage(node, attr.size);
           }
-        },lookup:function(parent, name) {
+        },
+  lookup(parent, name) {
           throw FS.genericErrors[44];
-        },mknod:function(parent, name, mode, dev) {
+        },
+  mknod(parent, name, mode, dev) {
           return MEMFS.createNode(parent, name, mode, dev);
-        },rename:function(old_node, new_dir, new_name) {
+        },
+  rename(old_node, new_dir, new_name) {
           // if we're overwriting a directory at new_name, make sure it's empty.
           if (FS.isDir(old_node.mode)) {
             var new_node;
@@ -1785,17 +1841,20 @@ function dbg(text) {
           new_dir.contents[new_name] = old_node;
           new_dir.timestamp = old_node.parent.timestamp;
           old_node.parent = new_dir;
-        },unlink:function(parent, name) {
+        },
+  unlink(parent, name) {
           delete parent.contents[name];
           parent.timestamp = Date.now();
-        },rmdir:function(parent, name) {
+        },
+  rmdir(parent, name) {
           var node = FS.lookupNode(parent, name);
           for (var i in node.contents) {
             throw new FS.ErrnoError(55);
           }
           delete parent.contents[name];
           parent.timestamp = Date.now();
-        },readdir:function(node) {
+        },
+  readdir(node) {
           var entries = ['.', '..'];
           for (var key in node.contents) {
             if (!node.contents.hasOwnProperty(key)) {
@@ -1804,16 +1863,21 @@ function dbg(text) {
             entries.push(key);
           }
           return entries;
-        },symlink:function(parent, newname, oldpath) {
+        },
+  symlink(parent, newname, oldpath) {
           var node = MEMFS.createNode(parent, newname, 511 /* 0777 */ | 40960, 0);
           node.link = oldpath;
           return node;
-        },readlink:function(node) {
+        },
+  readlink(node) {
           if (!FS.isLink(node.mode)) {
             throw new FS.ErrnoError(28);
           }
           return node.link;
-        }},stream_ops:{read:function(stream, buffer, offset, length, position) {
+        },
+  },
+  stream_ops:{
+  read(stream, buffer, offset, length, position) {
           var contents = stream.node.contents;
           if (position >= stream.node.usedBytes) return 0;
           var size = Math.min(stream.node.usedBytes - position, length);
@@ -1824,7 +1888,8 @@ function dbg(text) {
             for (var i = 0; i < size; i++) buffer[offset + i] = contents[position + i];
           }
           return size;
-        },write:function(stream, buffer, offset, length, position, canOwn) {
+        },
+  write(stream, buffer, offset, length, position, canOwn) {
           // The data buffer should be a typed array view
           assert(!(buffer instanceof ArrayBuffer));
           // If the buffer is located in main memory (HEAP), and if
@@ -1867,7 +1932,8 @@ function dbg(text) {
           }
           node.usedBytes = Math.max(node.usedBytes, position + length);
           return length;
-        },llseek:function(stream, offset, whence) {
+        },
+  llseek(stream, offset, whence) {
           var position = offset;
           if (whence === 1) {
             position += stream.position;
@@ -1880,10 +1946,12 @@ function dbg(text) {
             throw new FS.ErrnoError(28);
           }
           return position;
-        },allocate:function(stream, offset, length) {
+        },
+  allocate(stream, offset, length) {
           MEMFS.expandFileStorage(stream.node, offset + length);
           stream.node.usedBytes = Math.max(stream.node.usedBytes, offset + length);
-        },mmap:function(stream, length, position, prot, flags) {
+        },
+  mmap(stream, length, position, prot, flags) {
           if (!FS.isFile(stream.node.mode)) {
             throw new FS.ErrnoError(43);
           }
@@ -1913,11 +1981,14 @@ function dbg(text) {
             HEAP8.set(contents, ptr);
           }
           return { ptr, allocated };
-        },msync:function(stream, buffer, offset, length, mmapFlags) {
+        },
+  msync(stream, buffer, offset, length, mmapFlags) {
           MEMFS.stream_ops.write(stream, buffer, 0, length, offset, false);
           // should we check if bytesWritten and length are the same?
           return 0;
-        }}};
+        },
+  },
+  };
   
   /** @param {boolean=} noRunDep */
   var asyncLoad = (url, onload, onerror, noRunDep) => {
@@ -2008,9 +2079,130 @@ function dbg(text) {
   
   
   
-  var ERRNO_MESSAGES = {0:"Success",1:"Arg list too long",2:"Permission denied",3:"Address already in use",4:"Address not available",5:"Address family not supported by protocol family",6:"No more processes",7:"Socket already connected",8:"Bad file number",9:"Trying to read unreadable message",10:"Mount device busy",11:"Operation canceled",12:"No children",13:"Connection aborted",14:"Connection refused",15:"Connection reset by peer",16:"File locking deadlock error",17:"Destination address required",18:"Math arg out of domain of func",19:"Quota exceeded",20:"File exists",21:"Bad address",22:"File too large",23:"Host is unreachable",24:"Identifier removed",25:"Illegal byte sequence",26:"Connection already in progress",27:"Interrupted system call",28:"Invalid argument",29:"I/O error",30:"Socket is already connected",31:"Is a directory",32:"Too many symbolic links",33:"Too many open files",34:"Too many links",35:"Message too long",36:"Multihop attempted",37:"File or path name too long",38:"Network interface is not configured",39:"Connection reset by network",40:"Network is unreachable",41:"Too many open files in system",42:"No buffer space available",43:"No such device",44:"No such file or directory",45:"Exec format error",46:"No record locks available",47:"The link has been severed",48:"Not enough core",49:"No message of desired type",50:"Protocol not available",51:"No space left on device",52:"Function not implemented",53:"Socket is not connected",54:"Not a directory",55:"Directory not empty",56:"State not recoverable",57:"Socket operation on non-socket",59:"Not a typewriter",60:"No such device or address",61:"Value too large for defined data type",62:"Previous owner died",63:"Not super-user",64:"Broken pipe",65:"Protocol error",66:"Unknown protocol",67:"Protocol wrong type for socket",68:"Math result not representable",69:"Read only file system",70:"Illegal seek",71:"No such process",72:"Stale file handle",73:"Connection timed out",74:"Text file busy",75:"Cross-device link",100:"Device not a stream",101:"Bad font file fmt",102:"Invalid slot",103:"Invalid request code",104:"No anode",105:"Block device required",106:"Channel number out of range",107:"Level 3 halted",108:"Level 3 reset",109:"Link number out of range",110:"Protocol driver not attached",111:"No CSI structure available",112:"Level 2 halted",113:"Invalid exchange",114:"Invalid request descriptor",115:"Exchange full",116:"No data (for no delay io)",117:"Timer expired",118:"Out of streams resources",119:"Machine is not on the network",120:"Package not installed",121:"The object is remote",122:"Advertise error",123:"Srmount error",124:"Communication error on send",125:"Cross mount point (not really error)",126:"Given log. name not unique",127:"f.d. invalid for this operation",128:"Remote address changed",129:"Can   access a needed shared lib",130:"Accessing a corrupted shared lib",131:".lib section in a.out corrupted",132:"Attempting to link in too many libs",133:"Attempting to exec a shared library",135:"Streams pipe error",136:"Too many users",137:"Socket type not supported",138:"Not supported",139:"Protocol family not supported",140:"Can't send after socket shutdown",141:"Too many references",142:"Host is down",148:"No medium (in tape drive)",156:"Level 2 not synchronized"};
+  var ERRNO_MESSAGES = {
+  0:"Success",
+  1:"Arg list too long",
+  2:"Permission denied",
+  3:"Address already in use",
+  4:"Address not available",
+  5:"Address family not supported by protocol family",
+  6:"No more processes",
+  7:"Socket already connected",
+  8:"Bad file number",
+  9:"Trying to read unreadable message",
+  10:"Mount device busy",
+  11:"Operation canceled",
+  12:"No children",
+  13:"Connection aborted",
+  14:"Connection refused",
+  15:"Connection reset by peer",
+  16:"File locking deadlock error",
+  17:"Destination address required",
+  18:"Math arg out of domain of func",
+  19:"Quota exceeded",
+  20:"File exists",
+  21:"Bad address",
+  22:"File too large",
+  23:"Host is unreachable",
+  24:"Identifier removed",
+  25:"Illegal byte sequence",
+  26:"Connection already in progress",
+  27:"Interrupted system call",
+  28:"Invalid argument",
+  29:"I/O error",
+  30:"Socket is already connected",
+  31:"Is a directory",
+  32:"Too many symbolic links",
+  33:"Too many open files",
+  34:"Too many links",
+  35:"Message too long",
+  36:"Multihop attempted",
+  37:"File or path name too long",
+  38:"Network interface is not configured",
+  39:"Connection reset by network",
+  40:"Network is unreachable",
+  41:"Too many open files in system",
+  42:"No buffer space available",
+  43:"No such device",
+  44:"No such file or directory",
+  45:"Exec format error",
+  46:"No record locks available",
+  47:"The link has been severed",
+  48:"Not enough core",
+  49:"No message of desired type",
+  50:"Protocol not available",
+  51:"No space left on device",
+  52:"Function not implemented",
+  53:"Socket is not connected",
+  54:"Not a directory",
+  55:"Directory not empty",
+  56:"State not recoverable",
+  57:"Socket operation on non-socket",
+  59:"Not a typewriter",
+  60:"No such device or address",
+  61:"Value too large for defined data type",
+  62:"Previous owner died",
+  63:"Not super-user",
+  64:"Broken pipe",
+  65:"Protocol error",
+  66:"Unknown protocol",
+  67:"Protocol wrong type for socket",
+  68:"Math result not representable",
+  69:"Read only file system",
+  70:"Illegal seek",
+  71:"No such process",
+  72:"Stale file handle",
+  73:"Connection timed out",
+  74:"Text file busy",
+  75:"Cross-device link",
+  100:"Device not a stream",
+  101:"Bad font file fmt",
+  102:"Invalid slot",
+  103:"Invalid request code",
+  104:"No anode",
+  105:"Block device required",
+  106:"Channel number out of range",
+  107:"Level 3 halted",
+  108:"Level 3 reset",
+  109:"Link number out of range",
+  110:"Protocol driver not attached",
+  111:"No CSI structure available",
+  112:"Level 2 halted",
+  113:"Invalid exchange",
+  114:"Invalid request descriptor",
+  115:"Exchange full",
+  116:"No data (for no delay io)",
+  117:"Timer expired",
+  118:"Out of streams resources",
+  119:"Machine is not on the network",
+  120:"Package not installed",
+  121:"The object is remote",
+  122:"Advertise error",
+  123:"Srmount error",
+  124:"Communication error on send",
+  125:"Cross mount point (not really error)",
+  126:"Given log. name not unique",
+  127:"f.d. invalid for this operation",
+  128:"Remote address changed",
+  129:"Can   access a needed shared lib",
+  130:"Accessing a corrupted shared lib",
+  131:".lib section in a.out corrupted",
+  132:"Attempting to link in too many libs",
+  133:"Attempting to exec a shared library",
+  135:"Streams pipe error",
+  136:"Too many users",
+  137:"Socket type not supported",
+  138:"Not supported",
+  139:"Protocol family not supported",
+  140:"Can't send after socket shutdown",
+  141:"Too many references",
+  142:"Host is down",
+  148:"No medium (in tape drive)",
+  156:"Level 2 not synchronized",
+  };
   
-  var ERRNO_CODES = {};
+  var ERRNO_CODES = {
+  };
   
   function demangle(func) {
       warnOnce('warning: build with -sDEMANGLE_SUPPORT to link in libcxxabi demangling');
@@ -2025,7 +2217,23 @@ function dbg(text) {
           return x === y ? x : (y + ' [' + x + ']');
         });
     }
-  var FS = {root:null,mounts:[],devices:{},streams:[],nextInode:1,nameTable:null,currentPath:"/",initialized:false,ignorePermissions:true,ErrnoError:null,genericErrors:{},filesystems:null,syncFSRequests:0,lookupPath:(path, opts = {}) => {
+  var FS = {
+  root:null,
+  mounts:[],
+  devices:{
+  },
+  streams:[],
+  nextInode:1,
+  nameTable:null,
+  currentPath:"/",
+  initialized:false,
+  ignorePermissions:true,
+  ErrnoError:null,
+  genericErrors:{
+  },
+  filesystems:null,
+  syncFSRequests:0,
+  lookupPath:(path, opts = {}) => {
         path = PATH_FS.resolve(path);
   
         if (!path) return { path: '', node: null };
@@ -2083,7 +2291,8 @@ function dbg(text) {
         }
   
         return { path: current_path, node: current };
-      },getPath:(node) => {
+      },
+  getPath:(node) => {
         var path;
         while (true) {
           if (FS.isRoot(node)) {
@@ -2094,18 +2303,21 @@ function dbg(text) {
           path = path ? `${node.name}/${path}` : node.name;
           node = node.parent;
         }
-      },hashName:(parentid, name) => {
+      },
+  hashName:(parentid, name) => {
         var hash = 0;
   
         for (var i = 0; i < name.length; i++) {
           hash = ((hash << 5) - hash + name.charCodeAt(i)) | 0;
         }
         return ((parentid + hash) >>> 0) % FS.nameTable.length;
-      },hashAddNode:(node) => {
+      },
+  hashAddNode:(node) => {
         var hash = FS.hashName(node.parent.id, node.name);
         node.name_next = FS.nameTable[hash];
         FS.nameTable[hash] = node;
-      },hashRemoveNode:(node) => {
+      },
+  hashRemoveNode:(node) => {
         var hash = FS.hashName(node.parent.id, node.name);
         if (FS.nameTable[hash] === node) {
           FS.nameTable[hash] = node.name_next;
@@ -2119,7 +2331,8 @@ function dbg(text) {
             current = current.name_next;
           }
         }
-      },lookupNode:(parent, name) => {
+      },
+  lookupNode:(parent, name) => {
         var errCode = FS.mayLookup(parent);
         if (errCode) {
           throw new FS.ErrnoError(errCode, parent);
@@ -2133,40 +2346,53 @@ function dbg(text) {
         }
         // if we failed to find it in the cache, call into the VFS
         return FS.lookup(parent, name);
-      },createNode:(parent, name, mode, rdev) => {
+      },
+  createNode:(parent, name, mode, rdev) => {
         assert(typeof parent == 'object')
         var node = new FS.FSNode(parent, name, mode, rdev);
   
         FS.hashAddNode(node);
   
         return node;
-      },destroyNode:(node) => {
+      },
+  destroyNode:(node) => {
         FS.hashRemoveNode(node);
-      },isRoot:(node) => {
+      },
+  isRoot:(node) => {
         return node === node.parent;
-      },isMountpoint:(node) => {
+      },
+  isMountpoint:(node) => {
         return !!node.mounted;
-      },isFile:(mode) => {
+      },
+  isFile:(mode) => {
         return (mode & 61440) === 32768;
-      },isDir:(mode) => {
+      },
+  isDir:(mode) => {
         return (mode & 61440) === 16384;
-      },isLink:(mode) => {
+      },
+  isLink:(mode) => {
         return (mode & 61440) === 40960;
-      },isChrdev:(mode) => {
+      },
+  isChrdev:(mode) => {
         return (mode & 61440) === 8192;
-      },isBlkdev:(mode) => {
+      },
+  isBlkdev:(mode) => {
         return (mode & 61440) === 24576;
-      },isFIFO:(mode) => {
+      },
+  isFIFO:(mode) => {
         return (mode & 61440) === 4096;
-      },isSocket:(mode) => {
+      },
+  isSocket:(mode) => {
         return (mode & 49152) === 49152;
-      },flagsToPermissionString:(flag) => {
+      },
+  flagsToPermissionString:(flag) => {
         var perms = ['r', 'w', 'rw'][flag & 3];
         if ((flag & 512)) {
           perms += 'w';
         }
         return perms;
-      },nodePermissions:(node, perms) => {
+      },
+  nodePermissions:(node, perms) => {
         if (FS.ignorePermissions) {
           return 0;
         }
@@ -2179,19 +2405,22 @@ function dbg(text) {
           return 2;
         }
         return 0;
-      },mayLookup:(dir) => {
+      },
+  mayLookup:(dir) => {
         var errCode = FS.nodePermissions(dir, 'x');
         if (errCode) return errCode;
         if (!dir.node_ops.lookup) return 2;
         return 0;
-      },mayCreate:(dir, name) => {
+      },
+  mayCreate:(dir, name) => {
         try {
           var node = FS.lookupNode(dir, name);
           return 20;
         } catch (e) {
         }
         return FS.nodePermissions(dir, 'wx');
-      },mayDelete:(dir, name, isdir) => {
+      },
+  mayDelete:(dir, name, isdir) => {
         var node;
         try {
           node = FS.lookupNode(dir, name);
@@ -2215,7 +2444,8 @@ function dbg(text) {
           }
         }
         return 0;
-      },mayOpen:(node, flags) => {
+      },
+  mayOpen:(node, flags) => {
         if (!node) {
           return 44;
         }
@@ -2228,20 +2458,25 @@ function dbg(text) {
           }
         }
         return FS.nodePermissions(node, FS.flagsToPermissionString(flags));
-      },MAX_OPEN_FDS:4096,nextfd:() => {
+      },
+  MAX_OPEN_FDS:4096,
+  nextfd:() => {
         for (var fd = 0; fd <= FS.MAX_OPEN_FDS; fd++) {
           if (!FS.streams[fd]) {
             return fd;
           }
         }
         throw new FS.ErrnoError(33);
-      },getStreamChecked:(fd) => {
+      },
+  getStreamChecked:(fd) => {
         var stream = FS.getStream(fd);
         if (!stream) {
           throw new FS.ErrnoError(8);
         }
         return stream;
-      },getStream:(fd) => FS.streams[fd],createStream:(stream, fd = -1) => {
+      },
+  getStream:(fd) => FS.streams[fd],
+  createStream:(stream, fd = -1) => {
         if (!FS.FSStream) {
           FS.FSStream = /** @constructor */ function() {
             this.shared = { };
@@ -2250,33 +2485,33 @@ function dbg(text) {
           Object.defineProperties(FS.FSStream.prototype, {
             object: {
               /** @this {FS.FSStream} */
-              get: function() { return this.node; },
+              get() { return this.node; },
               /** @this {FS.FSStream} */
-              set: function(val) { this.node = val; }
+              set(val) { this.node = val; }
             },
             isRead: {
               /** @this {FS.FSStream} */
-              get: function() { return (this.flags & 2097155) !== 1; }
+              get() { return (this.flags & 2097155) !== 1; }
             },
             isWrite: {
               /** @this {FS.FSStream} */
-              get: function() { return (this.flags & 2097155) !== 0; }
+              get() { return (this.flags & 2097155) !== 0; }
             },
             isAppend: {
               /** @this {FS.FSStream} */
-              get: function() { return (this.flags & 1024); }
+              get() { return (this.flags & 1024); }
             },
             flags: {
               /** @this {FS.FSStream} */
-              get: function() { return this.shared.flags; },
+              get() { return this.shared.flags; },
               /** @this {FS.FSStream} */
-              set: function(val) { this.shared.flags = val; },
+              set(val) { this.shared.flags = val; },
             },
             position : {
               /** @this {FS.FSStream} */
-              get: function() { return this.shared.position; },
+              get() { return this.shared.position; },
               /** @this {FS.FSStream} */
-              set: function(val) { this.shared.position = val; },
+              set(val) { this.shared.position = val; },
             },
           });
         }
@@ -2288,9 +2523,12 @@ function dbg(text) {
         stream.fd = fd;
         FS.streams[fd] = stream;
         return stream;
-      },closeStream:(fd) => {
+      },
+  closeStream:(fd) => {
         FS.streams[fd] = null;
-      },chrdev_stream_ops:{open:(stream) => {
+      },
+  chrdev_stream_ops:{
+  open:(stream) => {
           var device = FS.getDevice(stream.node.rdev);
           // override node's stream ops with the device's
           stream.stream_ops = device.stream_ops;
@@ -2298,11 +2536,19 @@ function dbg(text) {
           if (stream.stream_ops.open) {
             stream.stream_ops.open(stream);
           }
-        },llseek:() => {
+        },
+  llseek:() => {
           throw new FS.ErrnoError(70);
-        }},major:(dev) => ((dev) >> 8),minor:(dev) => ((dev) & 0xff),makedev:(ma, mi) => ((ma) << 8 | (mi)),registerDevice:(dev, ops) => {
+        },
+  },
+  major:(dev) => ((dev) >> 8),
+  minor:(dev) => ((dev) & 0xff),
+  makedev:(ma, mi) => ((ma) << 8 | (mi)),
+  registerDevice:(dev, ops) => {
         FS.devices[dev] = { stream_ops: ops };
-      },getDevice:(dev) => FS.devices[dev],getMounts:(mount) => {
+      },
+  getDevice:(dev) => FS.devices[dev],
+  getMounts:(mount) => {
         var mounts = [];
         var check = [mount];
   
@@ -2315,7 +2561,8 @@ function dbg(text) {
         }
   
         return mounts;
-      },syncfs:(populate, callback) => {
+      },
+  syncfs:(populate, callback) => {
         if (typeof populate == 'function') {
           callback = populate;
           populate = false;
@@ -2356,7 +2603,8 @@ function dbg(text) {
           }
           mount.type.syncfs(mount, populate, done);
         });
-      },mount:(type, opts, mountpoint) => {
+      },
+  mount:(type, opts, mountpoint) => {
         if (typeof type == 'string') {
           // The filesystem was not included, and instead we have an error
           // message stored in the variable.
@@ -2408,7 +2656,8 @@ function dbg(text) {
         }
   
         return mountRoot;
-      },unmount:(mountpoint) => {
+      },
+  unmount:(mountpoint) => {
         var lookup = FS.lookupPath(mountpoint, { follow_mount: false });
   
         if (!FS.isMountpoint(lookup.node)) {
@@ -2441,9 +2690,11 @@ function dbg(text) {
         var idx = node.mount.mounts.indexOf(mount);
         assert(idx !== -1);
         node.mount.mounts.splice(idx, 1);
-      },lookup:(parent, name) => {
+      },
+  lookup:(parent, name) => {
         return parent.node_ops.lookup(parent, name);
-      },mknod:(path, mode, dev) => {
+      },
+  mknod:(path, mode, dev) => {
         var lookup = FS.lookupPath(path, { parent: true });
         var parent = lookup.node;
         var name = PATH.basename(path);
@@ -2458,17 +2709,20 @@ function dbg(text) {
           throw new FS.ErrnoError(63);
         }
         return parent.node_ops.mknod(parent, name, mode, dev);
-      },create:(path, mode) => {
+      },
+  create:(path, mode) => {
         mode = mode !== undefined ? mode : 438 /* 0666 */;
         mode &= 4095;
         mode |= 32768;
         return FS.mknod(path, mode, 0);
-      },mkdir:(path, mode) => {
+      },
+  mkdir:(path, mode) => {
         mode = mode !== undefined ? mode : 511 /* 0777 */;
         mode &= 511 | 512;
         mode |= 16384;
         return FS.mknod(path, mode, 0);
-      },mkdirTree:(path, mode) => {
+      },
+  mkdirTree:(path, mode) => {
         var dirs = path.split('/');
         var d = '';
         for (var i = 0; i < dirs.length; ++i) {
@@ -2480,14 +2734,16 @@ function dbg(text) {
             if (e.errno != 20) throw e;
           }
         }
-      },mkdev:(path, mode, dev) => {
+      },
+  mkdev:(path, mode, dev) => {
         if (typeof dev == 'undefined') {
           dev = mode;
           mode = 438 /* 0666 */;
         }
         mode |= 8192;
         return FS.mknod(path, mode, dev);
-      },symlink:(oldpath, newpath) => {
+      },
+  symlink:(oldpath, newpath) => {
         if (!PATH_FS.resolve(oldpath)) {
           throw new FS.ErrnoError(44);
         }
@@ -2505,7 +2761,8 @@ function dbg(text) {
           throw new FS.ErrnoError(63);
         }
         return parent.node_ops.symlink(parent, newname, oldpath);
-      },rename:(old_path, new_path) => {
+      },
+  rename:(old_path, new_path) => {
         var old_dirname = PATH.dirname(old_path);
         var new_dirname = PATH.dirname(new_path);
         var old_name = PATH.basename(old_path);
@@ -2586,7 +2843,8 @@ function dbg(text) {
           // changed its name)
           FS.hashAddNode(old_node);
         }
-      },rmdir:(path) => {
+      },
+  rmdir:(path) => {
         var lookup = FS.lookupPath(path, { parent: true });
         var parent = lookup.node;
         var name = PATH.basename(path);
@@ -2603,14 +2861,16 @@ function dbg(text) {
         }
         parent.node_ops.rmdir(parent, name);
         FS.destroyNode(node);
-      },readdir:(path) => {
+      },
+  readdir:(path) => {
         var lookup = FS.lookupPath(path, { follow: true });
         var node = lookup.node;
         if (!node.node_ops.readdir) {
           throw new FS.ErrnoError(54);
         }
         return node.node_ops.readdir(node);
-      },unlink:(path) => {
+      },
+  unlink:(path) => {
         var lookup = FS.lookupPath(path, { parent: true });
         var parent = lookup.node;
         if (!parent) {
@@ -2633,7 +2893,8 @@ function dbg(text) {
         }
         parent.node_ops.unlink(parent, name);
         FS.destroyNode(node);
-      },readlink:(path) => {
+      },
+  readlink:(path) => {
         var lookup = FS.lookupPath(path);
         var link = lookup.node;
         if (!link) {
@@ -2643,7 +2904,8 @@ function dbg(text) {
           throw new FS.ErrnoError(28);
         }
         return PATH_FS.resolve(FS.getPath(link.parent), link.node_ops.readlink(link));
-      },stat:(path, dontFollow) => {
+      },
+  stat:(path, dontFollow) => {
         var lookup = FS.lookupPath(path, { follow: !dontFollow });
         var node = lookup.node;
         if (!node) {
@@ -2653,9 +2915,11 @@ function dbg(text) {
           throw new FS.ErrnoError(63);
         }
         return node.node_ops.getattr(node);
-      },lstat:(path) => {
+      },
+  lstat:(path) => {
         return FS.stat(path, true);
-      },chmod:(path, mode, dontFollow) => {
+      },
+  chmod:(path, mode, dontFollow) => {
         var node;
         if (typeof path == 'string') {
           var lookup = FS.lookupPath(path, { follow: !dontFollow });
@@ -2670,12 +2934,15 @@ function dbg(text) {
           mode: (mode & 4095) | (node.mode & ~4095),
           timestamp: Date.now()
         });
-      },lchmod:(path, mode) => {
+      },
+  lchmod:(path, mode) => {
         FS.chmod(path, mode, true);
-      },fchmod:(fd, mode) => {
+      },
+  fchmod:(fd, mode) => {
         var stream = FS.getStreamChecked(fd);
         FS.chmod(stream.node, mode);
-      },chown:(path, uid, gid, dontFollow) => {
+      },
+  chown:(path, uid, gid, dontFollow) => {
         var node;
         if (typeof path == 'string') {
           var lookup = FS.lookupPath(path, { follow: !dontFollow });
@@ -2690,12 +2957,15 @@ function dbg(text) {
           timestamp: Date.now()
           // we ignore the uid / gid for now
         });
-      },lchown:(path, uid, gid) => {
+      },
+  lchown:(path, uid, gid) => {
         FS.chown(path, uid, gid, true);
-      },fchown:(fd, uid, gid) => {
+      },
+  fchown:(fd, uid, gid) => {
         var stream = FS.getStreamChecked(fd);
         FS.chown(stream.node, uid, gid);
-      },truncate:(path, len) => {
+      },
+  truncate:(path, len) => {
         if (len < 0) {
           throw new FS.ErrnoError(28);
         }
@@ -2723,19 +2993,22 @@ function dbg(text) {
           size: len,
           timestamp: Date.now()
         });
-      },ftruncate:(fd, len) => {
+      },
+  ftruncate:(fd, len) => {
         var stream = FS.getStreamChecked(fd);
         if ((stream.flags & 2097155) === 0) {
           throw new FS.ErrnoError(28);
         }
         FS.truncate(stream.node, len);
-      },utime:(path, atime, mtime) => {
+      },
+  utime:(path, atime, mtime) => {
         var lookup = FS.lookupPath(path, { follow: true });
         var node = lookup.node;
         node.node_ops.setattr(node, {
           timestamp: Math.max(atime, mtime)
         });
-      },open:(path, flags, mode) => {
+      },
+  open:(path, flags, mode) => {
         if (path === "") {
           throw new FS.ErrnoError(44);
         }
@@ -2824,7 +3097,8 @@ function dbg(text) {
           }
         }
         return stream;
-      },close:(stream) => {
+      },
+  close:(stream) => {
         if (FS.isClosed(stream)) {
           throw new FS.ErrnoError(8);
         }
@@ -2839,9 +3113,11 @@ function dbg(text) {
           FS.closeStream(stream.fd);
         }
         stream.fd = null;
-      },isClosed:(stream) => {
+      },
+  isClosed:(stream) => {
         return stream.fd === null;
-      },llseek:(stream, offset, whence) => {
+      },
+  llseek:(stream, offset, whence) => {
         if (FS.isClosed(stream)) {
           throw new FS.ErrnoError(8);
         }
@@ -2854,7 +3130,9 @@ function dbg(text) {
         stream.position = stream.stream_ops.llseek(stream, offset, whence);
         stream.ungotten = [];
         return stream.position;
-      },read:(stream, buffer, offset, length, position) => {
+      },
+  read:(stream, buffer, offset, length, position) => {
+        assert(offset >= 0);
         if (length < 0 || position < 0) {
           throw new FS.ErrnoError(28);
         }
@@ -2879,7 +3157,9 @@ function dbg(text) {
         var bytesRead = stream.stream_ops.read(stream, buffer, offset, length, position);
         if (!seeking) stream.position += bytesRead;
         return bytesRead;
-      },write:(stream, buffer, offset, length, position, canOwn) => {
+      },
+  write:(stream, buffer, offset, length, position, canOwn) => {
+        assert(offset >= 0);
         if (length < 0 || position < 0) {
           throw new FS.ErrnoError(28);
         }
@@ -2908,7 +3188,8 @@ function dbg(text) {
         var bytesWritten = stream.stream_ops.write(stream, buffer, offset, length, position, canOwn);
         if (!seeking) stream.position += bytesWritten;
         return bytesWritten;
-      },allocate:(stream, offset, length) => {
+      },
+  allocate:(stream, offset, length) => {
         if (FS.isClosed(stream)) {
           throw new FS.ErrnoError(8);
         }
@@ -2925,7 +3206,8 @@ function dbg(text) {
           throw new FS.ErrnoError(138);
         }
         stream.stream_ops.allocate(stream, offset, length);
-      },mmap:(stream, length, position, prot, flags) => {
+      },
+  mmap:(stream, length, position, prot, flags) => {
         // User requests writing to file (prot & PROT_WRITE != 0).
         // Checking if we have permissions to write to the file unless
         // MAP_PRIVATE flag is set. According to POSIX spec it is possible
@@ -2944,17 +3226,22 @@ function dbg(text) {
           throw new FS.ErrnoError(43);
         }
         return stream.stream_ops.mmap(stream, length, position, prot, flags);
-      },msync:(stream, buffer, offset, length, mmapFlags) => {
+      },
+  msync:(stream, buffer, offset, length, mmapFlags) => {
+        assert(offset >= 0);
         if (!stream.stream_ops.msync) {
           return 0;
         }
         return stream.stream_ops.msync(stream, buffer, offset, length, mmapFlags);
-      },munmap:(stream) => 0,ioctl:(stream, cmd, arg) => {
+      },
+  munmap:(stream) => 0,
+  ioctl:(stream, cmd, arg) => {
         if (!stream.stream_ops.ioctl) {
           throw new FS.ErrnoError(59);
         }
         return stream.stream_ops.ioctl(stream, cmd, arg);
-      },readFile:(path, opts = {}) => {
+      },
+  readFile:(path, opts = {}) => {
         opts.flags = opts.flags || 0;
         opts.encoding = opts.encoding || 'binary';
         if (opts.encoding !== 'utf8' && opts.encoding !== 'binary') {
@@ -2973,7 +3260,8 @@ function dbg(text) {
         }
         FS.close(stream);
         return ret;
-      },writeFile:(path, data, opts = {}) => {
+      },
+  writeFile:(path, data, opts = {}) => {
         opts.flags = opts.flags || 577;
         var stream = FS.open(path, opts.flags, opts.mode);
         if (typeof data == 'string') {
@@ -2986,7 +3274,9 @@ function dbg(text) {
           throw new Error('Unsupported data type');
         }
         FS.close(stream);
-      },cwd:() => FS.currentPath,chdir:(path) => {
+      },
+  cwd:() => FS.currentPath,
+  chdir:(path) => {
         var lookup = FS.lookupPath(path, { follow: true });
         if (lookup.node === null) {
           throw new FS.ErrnoError(44);
@@ -2999,11 +3289,13 @@ function dbg(text) {
           throw new FS.ErrnoError(errCode);
         }
         FS.currentPath = lookup.path;
-      },createDefaultDirectories:() => {
+      },
+  createDefaultDirectories:() => {
         FS.mkdir('/tmp');
         FS.mkdir('/home');
         FS.mkdir('/home/web_user');
-      },createDefaultDevices:() => {
+      },
+  createDefaultDevices:() => {
         // create /dev
         FS.mkdir('/dev');
         // setup /dev/null
@@ -3034,7 +3326,8 @@ function dbg(text) {
         // just create the tmp dirs that reside in it commonly
         FS.mkdir('/dev/shm');
         FS.mkdir('/dev/shm/tmp');
-      },createSpecialDirectories:() => {
+      },
+  createSpecialDirectories:() => {
         // create /proc/self/fd which allows /proc/self/fd/6 => readlink gives the
         // name of the stream for fd 6 (see test_unistd_ttyname)
         FS.mkdir('/proc');
@@ -3059,7 +3352,8 @@ function dbg(text) {
             return node;
           }
         }, {}, '/proc/self/fd');
-      },createStandardStreams:() => {
+      },
+  createStandardStreams:() => {
         // TODO deprecate the old functionality of a single
         // input / output callback and that utilizes FS.createDevice
         // and instead require a unique set of stream ops
@@ -3091,7 +3385,8 @@ function dbg(text) {
         assert(stdin.fd === 0, `invalid handle for stdin (${stdin.fd})`);
         assert(stdout.fd === 1, `invalid handle for stdout (${stdout.fd})`);
         assert(stderr.fd === 2, `invalid handle for stderr (${stderr.fd})`);
-      },ensureErrnoError:() => {
+      },
+  ensureErrnoError:() => {
         if (FS.ErrnoError) return;
         FS.ErrnoError = /** @this{Object} */ function ErrnoError(errno, node) {
           // We set the `name` property to be able to identify `FS.ErrnoError`
@@ -3129,7 +3424,8 @@ function dbg(text) {
           FS.genericErrors[code] = new FS.ErrnoError(code);
           FS.genericErrors[code].stack = '<generic error, no stack>';
         });
-      },staticInit:() => {
+      },
+  staticInit:() => {
         FS.ensureErrnoError();
   
         FS.nameTable = new Array(4096);
@@ -3143,7 +3439,8 @@ function dbg(text) {
         FS.filesystems = {
           'MEMFS': MEMFS,
         };
-      },init:(input, output, error) => {
+      },
+  init:(input, output, error) => {
         assert(!FS.init.initialized, 'FS.init was previously called. If you want to initialize later with custom parameters, remove any earlier calls (note that one is automatically added to the generated code)');
         FS.init.initialized = true;
   
@@ -3155,7 +3452,8 @@ function dbg(text) {
         Module['stderr'] = error || Module['stderr'];
   
         FS.createStandardStreams();
-      },quit:() => {
+      },
+  quit:() => {
         FS.init.initialized = false;
         // force-flush all streams, so we get musl std streams printed out
         _fflush(0);
@@ -3167,13 +3465,15 @@ function dbg(text) {
           }
           FS.close(stream);
         }
-      },findObject:(path, dontResolveLastLink) => {
+      },
+  findObject:(path, dontResolveLastLink) => {
         var ret = FS.analyzePath(path, dontResolveLastLink);
         if (!ret.exists) {
           return null;
         }
         return ret.object;
-      },analyzePath:(path, dontResolveLastLink) => {
+      },
+  analyzePath:(path, dontResolveLastLink) => {
         // operate from within the context of the symlink's target
         try {
           var lookup = FS.lookupPath(path, { follow: !dontResolveLastLink });
@@ -3200,7 +3500,8 @@ function dbg(text) {
           ret.error = e.errno;
         };
         return ret;
-      },createPath:(parent, path, canRead, canWrite) => {
+      },
+  createPath:(parent, path, canRead, canWrite) => {
         parent = typeof parent == 'string' ? parent : FS.getPath(parent);
         var parts = path.split('/').reverse();
         while (parts.length) {
@@ -3215,11 +3516,13 @@ function dbg(text) {
           parent = current;
         }
         return current;
-      },createFile:(parent, name, properties, canRead, canWrite) => {
+      },
+  createFile:(parent, name, properties, canRead, canWrite) => {
         var path = PATH.join2(typeof parent == 'string' ? parent : FS.getPath(parent), name);
         var mode = FS_getMode(canRead, canWrite);
         return FS.create(path, mode);
-      },createDataFile:(parent, name, data, canRead, canWrite, canOwn) => {
+      },
+  createDataFile:(parent, name, data, canRead, canWrite, canOwn) => {
         var path = name;
         if (parent) {
           parent = typeof parent == 'string' ? parent : FS.getPath(parent);
@@ -3241,7 +3544,8 @@ function dbg(text) {
           FS.chmod(node, mode);
         }
         return node;
-      },createDevice:(parent, name, input, output) => {
+      },
+  createDevice:(parent, name, input, output) => {
         var path = PATH.join2(typeof parent == 'string' ? parent : FS.getPath(parent), name);
         var mode = FS_getMode(!!input, !!output);
         if (!FS.createDevice.major) FS.createDevice.major = 64;
@@ -3294,7 +3598,8 @@ function dbg(text) {
           }
         });
         return FS.mkdev(path, mode, dev);
-      },forceLoadFile:(obj) => {
+      },
+  forceLoadFile:(obj) => {
         if (obj.isDevice || obj.isFolder || obj.link || obj.contents) return true;
         if (typeof XMLHttpRequest != 'undefined') {
           throw new Error("Lazy loading should have been performed (contents set) in createLazyFile, but it was not. Lazy loading only works in web workers. Use --embed-file or --preload-file in emcc on the main thread.");
@@ -3311,7 +3616,8 @@ function dbg(text) {
         } else {
           throw new Error('Cannot load without read() or XMLHttpRequest.');
         }
-      },createLazyFile:(parent, name, url, canRead, canWrite) => {
+      },
+  createLazyFile:(parent, name, url, canRead, canWrite) => {
         // Lazy chunked Uint8Array (implements get and length from Uint8Array). Actual getting is abstracted away for eventual reuse.
         /** @constructor */
         function LazyUint8Array() {
@@ -3478,21 +3784,30 @@ function dbg(text) {
         };
         node.stream_ops = stream_ops;
         return node;
-      },absolutePath:() => {
+      },
+  absolutePath:() => {
         abort('FS.absolutePath has been removed; use PATH_FS.resolve instead');
-      },createFolder:() => {
+      },
+  createFolder:() => {
         abort('FS.createFolder has been removed; use FS.mkdir instead');
-      },createLink:() => {
+      },
+  createLink:() => {
         abort('FS.createLink has been removed; use FS.symlink instead');
-      },joinPath:() => {
+      },
+  joinPath:() => {
         abort('FS.joinPath has been removed; use PATH.join instead');
-      },mmapAlloc:() => {
+      },
+  mmapAlloc:() => {
         abort('FS.mmapAlloc has been replaced by the top level function mmapAlloc');
-      },standardizePath:() => {
+      },
+  standardizePath:() => {
         abort('FS.standardizePath has been removed; use PATH.normalize instead');
-      }};
+      },
+  };
   
-  var SYSCALLS = {DEFAULT_POLLMASK:5,calculateAt:function(dirfd, path, allowEmpty) {
+  var SYSCALLS = {
+  DEFAULT_POLLMASK:5,
+  calculateAt:function(dirfd, path, allowEmpty) {
         if (PATH.isAbs(path)) {
           return path;
         }
@@ -3511,7 +3826,8 @@ function dbg(text) {
           return dir;
         }
         return PATH.join2(dir, path);
-      },doStat:function(func, path, buf) {
+      },
+  doStat:function(func, path, buf) {
         try {
           var stat = func(path);
         } catch (e) {
@@ -3541,7 +3857,8 @@ function dbg(text) {
         HEAPU32[(((buf)+(80))>>2)] = (ctime % 1000) * 1000;
         (tempI64 = [stat.ino>>>0,(tempDouble=stat.ino,(+(Math.abs(tempDouble))) >= 1.0 ? (tempDouble > 0.0 ? (+(Math.floor((tempDouble)/4294967296.0)))>>>0 : (~~((+(Math.ceil((tempDouble - +(((~~(tempDouble)))>>>0))/4294967296.0)))))>>>0) : 0)], HEAP32[(((buf)+(88))>>2)] = tempI64[0],HEAP32[(((buf)+(92))>>2)] = tempI64[1]);
         return 0;
-      },doMsync:function(addr, stream, len, flags, offset) {
+      },
+  doMsync:function(addr, stream, len, flags, offset) {
         if (!FS.isFile(stream.node.mode)) {
           throw new FS.ErrnoError(43);
         }
@@ -3551,18 +3868,23 @@ function dbg(text) {
         }
         var buffer = HEAPU8.slice(addr, addr + len);
         FS.msync(stream, buffer, offset, len, flags);
-      },varargs:undefined,get:function() {
+      },
+  varargs:undefined,
+  get() {
         assert(SYSCALLS.varargs != undefined);
         SYSCALLS.varargs += 4;
         var ret = HEAP32[(((SYSCALLS.varargs)-(4))>>2)];
         return ret;
-      },getStr:function(ptr) {
+      },
+  getStr(ptr) {
         var ret = UTF8ToString(ptr);
         return ret;
-      },getStreamFromFD:function(fd) {
+      },
+  getStreamFromFD:function(fd) {
         var stream = FS.getStreamChecked(fd);
         return stream;
-      }};
+      },
+  };
   function ___syscall_fcntl64(fd, cmd, varargs) {
   SYSCALLS.varargs = varargs;
   try {
@@ -3781,59 +4103,15 @@ function dbg(text) {
       return ret;
     }
   
-  var awaitingDependencies = {};
+  var awaitingDependencies = {
+  };
   
-  var registeredTypes = {};
+  var registeredTypes = {
+  };
   
-  var typeDependencies = {};
+  var typeDependencies = {
+  };
   
-  var char_0 = 48;
-  
-  var char_9 = 57;
-  function makeLegalFunctionName(name) {
-      if (undefined === name) {
-        return '_unknown';
-      }
-      name = name.replace(/[^a-zA-Z0-9_]/g, '$');
-      var f = name.charCodeAt(0);
-      if (f >= char_0 && f <= char_9) {
-        return `_${name}`;
-      }
-      return name;
-    }
-  function createNamedFunction(name, body) {
-      name = makeLegalFunctionName(name);
-      // Use an abject with a computed property name to create a new function with
-      // a name specified at runtime, but without using `new Function` or `eval`.
-      return {
-        [name]: function() {
-          return body.apply(this, arguments);
-        }
-      }[name];
-    }
-  function extendError(baseErrorType, errorName) {
-      var errorClass = createNamedFunction(errorName, function(message) {
-        this.name = errorName;
-        this.message = message;
-  
-        var stack = (new Error(message)).stack;
-        if (stack !== undefined) {
-          this.stack = this.toString() + '\n' +
-              stack.replace(/^Error(:[^\n]*)?\n/, '');
-        }
-      });
-      errorClass.prototype = Object.create(baseErrorType.prototype);
-      errorClass.prototype.constructor = errorClass;
-      errorClass.prototype.toString = function() {
-        if (this.message === undefined) {
-          return this.name;
-        } else {
-          return `${this.name}: ${this.message}`;
-        }
-      };
-  
-      return errorClass;
-    }
   var BindingError = undefined;
   function throwBindingError(message) {
       throw new BindingError(message);
@@ -3886,11 +4164,7 @@ function dbg(text) {
       }
     }
   /** @param {Object=} options */
-  function registerType(rawType, registeredInstance, options = {}) {
-      if (!('argPackAdvance' in registeredInstance)) {
-        throw new TypeError('registerType registeredInstance requires argPackAdvance');
-      }
-  
+  function sharedRegisterType(rawType, registeredInstance, options = {}) {
       var name = registeredInstance.name;
       if (!rawType) {
         throwBindingError(`type "${name}" must have a positive integer typeid pointer`);
@@ -3911,6 +4185,13 @@ function dbg(text) {
         delete awaitingDependencies[rawType];
         callbacks.forEach((cb) => cb());
       }
+    }
+  /** @param {Object=} options */
+  function registerType(rawType, registeredInstance, options = {}) {
+      if (!('argPackAdvance' in registeredInstance)) {
+        throw new TypeError('registerType registeredInstance requires argPackAdvance');
+      }
+      return sharedRegisterType(rawType, registeredInstance, options);
     }
   function __embind_register_bool(rawType, name, size, trueValue, falseValue) {
       var shift = getShiftFromSize(size);
@@ -4025,7 +4306,8 @@ function dbg(text) {
       return desiredClass.downcast(rv);
     }
   
-  var registeredPointers = {};
+  var registeredPointers = {
+  };
   
   function getInheritedInstanceCount() {
       return Object.keys(registeredInstances).length;
@@ -4065,7 +4347,8 @@ function dbg(text) {
       Module['flushPendingDeletes'] = flushPendingDeletes;
       Module['setDelayFunction'] = setDelayFunction;
     }
-  var registeredInstances = {};
+  var registeredInstances = {
+  };
   
   function getBasestPointer(class_, ptr) {
       if (ptr === undefined) {
@@ -4284,6 +4567,30 @@ function dbg(text) {
   function ClassHandle() {
     }
   
+  var char_0 = 48;
+  
+  var char_9 = 57;
+  function makeLegalFunctionName(name) {
+      if (undefined === name) {
+        return '_unknown';
+      }
+      name = name.replace(/[^a-zA-Z0-9_]/g, '$');
+      var f = name.charCodeAt(0);
+      if (f >= char_0 && f <= char_9) {
+        return `_${name}`;
+      }
+      return name;
+    }
+  function createNamedFunction(name, body) {
+      name = makeLegalFunctionName(name);
+      // Use an abject with a computed property name to create a new function with
+      // a name specified at runtime, but without using `new Function` or `eval`.
+      return {
+        [name]: function() {
+          return body.apply(this, arguments);
+        }
+      }[name];
+    }
   
   
   function ensureOverloadTable(proto, methodName, humanName) {
@@ -4647,6 +4954,29 @@ function dbg(text) {
   
   
   
+  function extendError(baseErrorType, errorName) {
+      var errorClass = createNamedFunction(errorName, function(message) {
+        this.name = errorName;
+        this.message = message;
+  
+        var stack = (new Error(message)).stack;
+        if (stack !== undefined) {
+          this.stack = this.toString() + '\n' +
+              stack.replace(/^Error(:[^\n]*)?\n/, '');
+        }
+      });
+      errorClass.prototype = Object.create(baseErrorType.prototype);
+      errorClass.prototype.constructor = errorClass;
+      errorClass.prototype.toString = function() {
+        if (this.message === undefined) {
+          return this.name;
+        } else {
+          return `${this.name}: ${this.message}`;
+        }
+      };
+  
+      return errorClass;
+    }
   var UnboundTypeError = undefined;
   
   
@@ -5045,30 +5375,34 @@ function dbg(text) {
       });
     }
 
+  function handleAllocatorInit() {
+      Object.assign(HandleAllocator.prototype, /** @lends {HandleAllocator.prototype} */ {
+        get(id) {
+          assert(this.allocated[id] !== undefined, `invalid handle: ${id}`);
+          return this.allocated[id];
+        },
+        has(id) {
+          return this.allocated[id] !== undefined;
+        },
+        allocate(handle) {
+          var id = this.freelist.pop() || this.allocated.length;
+          this.allocated[id] = handle;
+          return id;
+        },
+        free(id) {
+          assert(this.allocated[id] !== undefined);
+          // Set the slot to `undefined` rather than using `delete` here since
+          // apparently arrays with holes in them can be less efficient.
+          this.allocated[id] = undefined;
+          this.freelist.push(id);
+        }
+      });
+    }
   /** @constructor */
   function HandleAllocator() {
       // Reserve slot 0 so that 0 is always an invalid handle
       this.allocated = [undefined];
       this.freelist = [];
-      this.get = function(id) {
-        assert(this.allocated[id] !== undefined, `invalid handle: ${id}`);
-        return this.allocated[id];
-      };
-      this.has = function(id) {
-        return this.allocated[id] !== undefined;
-      };
-      this.allocate = function(handle) {
-        var id = this.freelist.pop() || this.allocated.length;
-        this.allocated[id] = handle;
-        return id;
-      };
-      this.free = function(id) {
-        assert(this.allocated[id] !== undefined);
-        // Set the slot to `undefined` rather than using `delete` here since
-        // apparently arrays with holes in them can be less efficient.
-        this.allocated[id] = undefined;
-        this.freelist.push(id);
-      };
     }
   var emval_handles = new HandleAllocator();;
   function __emval_decref(handle) {
@@ -5101,12 +5435,14 @@ function dbg(text) {
       emval_handles.reserved = emval_handles.allocated.length
       Module['count_emval_handles'] = count_emval_handles;
     }
-  var Emval = {toValue:(handle) => {
+  var Emval = {
+  toValue:(handle) => {
         if (!handle) {
             throwBindingError('Cannot use deleted val. handle = ' + handle);
         }
         return emval_handles.get(handle).value;
-      },toHandle:(value) => {
+      },
+  toHandle:(value) => {
         switch (value) {
           case undefined: return 1;
           case null: return 2;
@@ -5116,7 +5452,8 @@ function dbg(text) {
             return emval_handles.allocate({refcount: 1, value: value});
           }
         }
-      }};
+      },
+  };
   
   
   
@@ -5657,7 +5994,8 @@ function dbg(text) {
       return destructors;
     }
   
-  var emval_symbols = {};
+  var emval_symbols = {
+  };
   
   function getStringOrSymbol(address) {
       var symbol = emval_symbols[address];
@@ -5831,7 +6169,8 @@ function dbg(text) {
     };
   var _emscripten_resize_heap = (requestedSize) => {
       var oldSize = HEAPU8.length;
-      requestedSize = requestedSize >>> 0;
+      // With CAN_ADDRESS_2GB or MEMORY64, pointers are already unsigned.
+      requestedSize >>>= 0;
       // With multithreaded builds, races can happen (another thread might increase the size
       // in between), so return a failure, and let the caller retry.
       assert(requestedSize > oldSize);
@@ -5962,11 +6301,24 @@ function dbg(text) {
   
   
   
-  var Browser = {mainLoop:{running:false,scheduler:null,method:"",currentlyRunningMainloop:0,func:null,arg:0,timingMode:0,timingValue:0,currentFrameNumber:0,queue:[],pause:function() {
+  var Browser = {
+  mainLoop:{
+  running:false,
+  scheduler:null,
+  method:"",
+  currentlyRunningMainloop:0,
+  func:null,
+  arg:0,
+  timingMode:0,
+  timingValue:0,
+  currentFrameNumber:0,
+  queue:[],
+  pause:function() {
           Browser.mainLoop.scheduler = null;
           // Incrementing this signals the previous main loop that it's now become old, and it must return.
           Browser.mainLoop.currentlyRunningMainloop++;
-        },resume:function() {
+        },
+  resume:function() {
           Browser.mainLoop.currentlyRunningMainloop++;
           var timingMode = Browser.mainLoop.timingMode;
           var timingValue = Browser.mainLoop.timingValue;
@@ -5976,7 +6328,8 @@ function dbg(text) {
           setMainLoop(func, 0, false, Browser.mainLoop.arg, true);
           _emscripten_set_main_loop_timing(timingMode, timingValue);
           Browser.mainLoop.scheduler();
-        },updateStatus:function() {
+        },
+  updateStatus:function() {
           if (Module['setStatus']) {
             var message = Module['statusMessage'] || 'Please wait...';
             var remaining = Browser.mainLoop.remainingBlockers;
@@ -5991,7 +6344,8 @@ function dbg(text) {
               Module['setStatus']('');
             }
           }
-        },runIter:function(func) {
+        },
+  runIter:function(func) {
           if (ABORT) return;
           if (Module['preMainLoop']) {
             var preRet = Module['preMainLoop']();
@@ -6001,7 +6355,13 @@ function dbg(text) {
           }
           callUserCallback(func);
           if (Module['postMainLoop']) Module['postMainLoop']();
-        }},isFullscreen:false,pointerLock:false,moduleContextCreatedCallbacks:[],workers:[],init:function() {
+        },
+  },
+  isFullscreen:false,
+  pointerLock:false,
+  moduleContextCreatedCallbacks:[],
+  workers:[],
+  init:function() {
         if (Browser.initted) return;
         Browser.initted = true;
   
@@ -6145,7 +6505,8 @@ function dbg(text) {
             }, false);
           }
         }
-      },createContext:function(/** @type {HTMLCanvasElement} */ canvas, useWebGL, setInModule, webGLContextAttributes) {
+      },
+  createContext:function(/** @type {HTMLCanvasElement} */ canvas, useWebGL, setInModule, webGLContextAttributes) {
         if (useWebGL && Module.ctx && canvas == Module.canvas) return Module.ctx; // no need to recreate GL context if it's already been created for this canvas.
   
         var ctx;
@@ -6189,7 +6550,12 @@ function dbg(text) {
           Browser.init();
         }
         return ctx;
-      },destroyContext:function(canvas, useWebGL, setInModule) {},fullscreenHandlersInstalled:false,lockPointer:undefined,resizeCanvas:undefined,requestFullscreen:function(lockPointer, resizeCanvas) {
+      },
+  destroyContext:function(canvas, useWebGL, setInModule) {},
+  fullscreenHandlersInstalled:false,
+  lockPointer:undefined,
+  resizeCanvas:undefined,
+  requestFullscreen:function(lockPointer, resizeCanvas) {
         Browser.lockPointer = lockPointer;
         Browser.resizeCanvas = resizeCanvas;
         if (typeof Browser.lockPointer == 'undefined') Browser.lockPointer = true;
@@ -6246,9 +6612,11 @@ function dbg(text) {
                                            (canvasContainer['webkitRequestFullScreen'] ? () => canvasContainer['webkitRequestFullScreen'](Element['ALLOW_KEYBOARD_INPUT']) : null);
   
         canvasContainer.requestFullscreen();
-      },requestFullScreen:function() {
+      },
+  requestFullScreen:function() {
         abort('Module.requestFullScreen has been replaced by Module.requestFullscreen (without a capital S)');
-      },exitFullscreen:function() {
+      },
+  exitFullscreen:function() {
         // This is workaround for chrome. Trying to exit from fullscreen
         // not in fullscreen state will cause "TypeError: Document not active"
         // in chrome. See https://github.com/emscripten-core/emscripten/pull/8236
@@ -6264,7 +6632,9 @@ function dbg(text) {
             (() => {});
         CFS.apply(document, []);
         return true;
-      },nextRAF:0,fakeRequestAnimationFrame:function(func) {
+      },
+  nextRAF:0,
+  fakeRequestAnimationFrame:function(func) {
         // try to keep 60fps between calls to here
         var now = Date.now();
         if (Browser.nextRAF === 0) {
@@ -6276,25 +6646,29 @@ function dbg(text) {
         }
         var delay = Math.max(Browser.nextRAF - now, 0);
         setTimeout(func, delay);
-      },requestAnimationFrame:function(func) {
+      },
+  requestAnimationFrame:function(func) {
         if (typeof requestAnimationFrame == 'function') {
           requestAnimationFrame(func);
           return;
         }
         var RAF = Browser.fakeRequestAnimationFrame;
         RAF(func);
-      },safeSetTimeout:function(func, timeout) {
+      },
+  safeSetTimeout:function(func, timeout) {
         // Legacy function, this is used by the SDL2 port so we need to keep it
         // around at least until that is updated.
         // See https://github.com/libsdl-org/SDL/pull/6304
         return safeSetTimeout(func, timeout);
-      },safeRequestAnimationFrame:function(func) {
+      },
+  safeRequestAnimationFrame:function(func) {
         
         return Browser.requestAnimationFrame(() => {
           
           callUserCallback(func);
         });
-      },getMimetype:function(name) {
+      },
+  getMimetype:function(name) {
         return {
           'jpg': 'image/jpeg',
           'jpeg': 'image/jpeg',
@@ -6304,23 +6678,27 @@ function dbg(text) {
           'wav': 'audio/wav',
           'mp3': 'audio/mpeg'
         }[name.substr(name.lastIndexOf('.')+1)];
-      },getUserMedia:function(func) {
+      },
+  getUserMedia:function(func) {
         if (!window.getUserMedia) {
           window.getUserMedia = navigator['getUserMedia'] ||
                                 navigator['mozGetUserMedia'];
         }
         window.getUserMedia(func);
-      },getMovementX:function(event) {
+      },
+  getMovementX:function(event) {
         return event['movementX'] ||
                event['mozMovementX'] ||
                event['webkitMovementX'] ||
                0;
-      },getMovementY:function(event) {
+      },
+  getMovementY:function(event) {
         return event['movementY'] ||
                event['mozMovementY'] ||
                event['webkitMovementY'] ||
                0;
-      },getMouseWheelDelta:function(event) {
+      },
+  getMouseWheelDelta:function(event) {
         var delta = 0;
         switch (event.type) {
           case 'DOMMouseScroll':
@@ -6354,7 +6732,16 @@ function dbg(text) {
             throw 'unrecognized mouse wheel event: ' + event.type;
         }
         return delta;
-      },mouseX:0,mouseY:0,mouseMovementX:0,mouseMovementY:0,touches:{},lastTouches:{},calculateMouseEvent:function(event) { // event should be mousemove, mousedown or mouseup
+      },
+  mouseX:0,
+  mouseY:0,
+  mouseMovementX:0,
+  mouseMovementY:0,
+  touches:{
+  },
+  lastTouches:{
+  },
+  calculateMouseEvent:function(event) { // event should be mousemove, mousedown or mouseup
         if (Browser.pointerLock) {
           // When the pointer is locked, calculate the coordinates
           // based on the movement of the mouse.
@@ -6433,14 +6820,20 @@ function dbg(text) {
           Browser.mouseX = x;
           Browser.mouseY = y;
         }
-      },resizeListeners:[],updateResizeListeners:function() {
+      },
+  resizeListeners:[],
+  updateResizeListeners:function() {
         var canvas = Module['canvas'];
         Browser.resizeListeners.forEach((listener) => listener(canvas.width, canvas.height));
-      },setCanvasSize:function(width, height, noUpdates) {
+      },
+  setCanvasSize:function(width, height, noUpdates) {
         var canvas = Module['canvas'];
         Browser.updateCanvasDimensions(canvas, width, height);
         if (!noUpdates) Browser.updateResizeListeners();
-      },windowedWidth:0,windowedHeight:0,setFullscreenCanvasSize:function() {
+      },
+  windowedWidth:0,
+  windowedHeight:0,
+  setFullscreenCanvasSize:function() {
         // check if SDL is available
         if (typeof SDL != "undefined") {
           var flags = HEAPU32[((SDL.screen)>>2)];
@@ -6449,7 +6842,8 @@ function dbg(text) {
         }
         Browser.updateCanvasDimensions(Module['canvas']);
         Browser.updateResizeListeners();
-      },setWindowedCanvasSize:function() {
+      },
+  setWindowedCanvasSize:function() {
         // check if SDL is available
         if (typeof SDL != "undefined") {
           var flags = HEAPU32[((SDL.screen)>>2)];
@@ -6458,7 +6852,8 @@ function dbg(text) {
         }
         Browser.updateCanvasDimensions(Module['canvas']);
         Browser.updateResizeListeners();
-      },updateCanvasDimensions:function(canvas, wNative, hNative) {
+      },
+  updateCanvasDimensions:function(canvas, wNative, hNative) {
         if (wNative && hNative) {
           canvas.widthNative = wNative;
           canvas.heightNative = hNative;
@@ -6502,7 +6897,8 @@ function dbg(text) {
             }
           }
         }
-      }};
+      },
+  };
   function _emscripten_set_main_loop_timing(mode, value) {
       Browser.mainLoop.timingMode = mode;
       Browser.mainLoop.timingValue = value;
@@ -6673,7 +7069,8 @@ function dbg(text) {
       setMainLoop(browserIterationFunc, fps, simulateInfiniteLoop, arg);
     };
 
-  var ENV = {};
+  var ENV = {
+  };
   
   var getExecutableName = () => {
       return thisProgram || './this.program';
@@ -6784,20 +7181,19 @@ function dbg(text) {
   }
   }
 
+  
   function convertI32PairToI53Checked(lo, hi) {
       assert(lo == (lo >>> 0) || lo == (lo|0)); // lo should either be a i32 or a u32
       assert(hi === (hi|0));                    // hi should be a i32
       return ((hi + 0x200000) >>> 0 < 0x400001 - !!lo) ? (lo >>> 0) + hi * 4294967296 : NaN;
     }
+  function _fd_seek(fd,offset_low, offset_high,whence,newOffset) {
+    var offset = convertI32PairToI53Checked(offset_low, offset_high);;
   
-  
-  
-  
-  
-  function _fd_seek(fd, offset_low, offset_high, whence, newOffset) {
+    
   try {
   
-      var offset = convertI32PairToI53Checked(offset_low, offset_high); if (isNaN(offset)) return 61;
+      if (isNaN(offset)) return 61;
       var stream = SYSCALLS.getStreamFromFD(fd);
       FS.llseek(stream, offset, whence);
       (tempI64 = [stream.position>>>0,(tempDouble=stream.position,(+(Math.abs(tempDouble))) >= 1.0 ? (tempDouble > 0.0 ? (+(Math.floor((tempDouble)/4294967296.0)))>>>0 : (~~((+(Math.ceil((tempDouble - +(((~~(tempDouble)))>>>0))/4294967296.0)))))>>>0) : 0)], HEAP32[((newOffset)>>2)] = tempI64[0],HEAP32[(((newOffset)+(4))>>2)] = tempI64[1]);
@@ -6807,6 +7203,7 @@ function dbg(text) {
     if (typeof FS == 'undefined' || !(e.name === 'ErrnoError')) throw e;
     return e.errno;
   }
+  ;
   }
 
   /** @param {number=} offset */
@@ -6887,19 +7284,49 @@ function dbg(text) {
     }
   
   
-  var GL = {counter:1,buffers:[],mappedBuffers:{},programs:[],framebuffers:[],renderbuffers:[],textures:[],shaders:[],vaos:[],contexts:[],offscreenCanvases:{},queries:[],samplers:[],transformFeedbacks:[],syncs:[],byteSizeByTypeRoot:5120,byteSizeByType:[1,1,2,2,4,4,4,2,3,4,8],stringCache:{},stringiCache:{},unpackAlignment:4,recordError:function recordError(errorCode) {
+  var GL = {
+  counter:1,
+  buffers:[],
+  mappedBuffers:{
+  },
+  programs:[],
+  framebuffers:[],
+  renderbuffers:[],
+  textures:[],
+  shaders:[],
+  vaos:[],
+  contexts:[],
+  offscreenCanvases:{
+  },
+  queries:[],
+  samplers:[],
+  transformFeedbacks:[],
+  syncs:[],
+  byteSizeByTypeRoot:5120,
+  byteSizeByType:[1,1,2,2,4,4,4,2,3,4,8],
+  stringCache:{
+  },
+  stringiCache:{
+  },
+  unpackAlignment:4,
+  recordError:function recordError(errorCode) {
         if (!GL.lastError) {
           GL.lastError = errorCode;
         }
-      },getNewId:function(table) {
+      },
+  getNewId:function(table) {
         var ret = GL.counter++;
         for (var i = table.length; i < ret; i++) {
           table[i] = null;
         }
         return ret;
-      },MAX_TEMP_BUFFER_SIZE:2097152,numTempVertexBuffersPerSize:64,log2ceilLookup:function(i) {
+      },
+  MAX_TEMP_BUFFER_SIZE:2097152,
+  numTempVertexBuffersPerSize:64,
+  log2ceilLookup:function(i) {
         return 32 - Math.clz32(i === 0 ? 0 : i - 1);
-      },generateTempBuffers:function(quads, context) {
+      },
+  generateTempBuffers:function(quads, context) {
         var largestIndex = GL.log2ceilLookup(GL.MAX_TEMP_BUFFER_SIZE);
         context.tempVertexBufferCounters1 = [];
         context.tempVertexBufferCounters2 = [];
@@ -6948,7 +7375,8 @@ function dbg(text) {
           context.GLctx.bufferData(0x8893 /*GL_ELEMENT_ARRAY_BUFFER*/, quadIndexes, 0x88E4 /*GL_STATIC_DRAW*/);
           context.GLctx.bindBuffer(0x8893 /*GL_ELEMENT_ARRAY_BUFFER*/, null);
         }
-      },getTempVertexBuffer:function getTempVertexBuffer(sizeBytes) {
+      },
+  getTempVertexBuffer:function getTempVertexBuffer(sizeBytes) {
         var idx = GL.log2ceilLookup(sizeBytes);
         var ringbuffer = GL.currentContext.tempVertexBuffers1[idx];
         var nextFreeBufferIndex = GL.currentContext.tempVertexBufferCounters1[idx];
@@ -6963,7 +7391,8 @@ function dbg(text) {
         GLctx.bufferData(0x8892 /*GL_ARRAY_BUFFER*/, 1 << idx, 0x88E8 /*GL_DYNAMIC_DRAW*/);
         GLctx.bindBuffer(0x8892 /*GL_ARRAY_BUFFER*/, prevVBO);
         return ringbuffer[nextFreeBufferIndex];
-      },getTempIndexBuffer:function getTempIndexBuffer(sizeBytes) {
+      },
+  getTempIndexBuffer:function getTempIndexBuffer(sizeBytes) {
         var idx = GL.log2ceilLookup(sizeBytes);
         var ibo = GL.currentContext.tempIndexBuffers[idx];
         if (ibo) {
@@ -6975,7 +7404,8 @@ function dbg(text) {
         GLctx.bufferData(0x8893 /*GL_ELEMENT_ARRAY_BUFFER*/, 1 << idx, 0x88E8 /*GL_DYNAMIC_DRAW*/);
         GLctx.bindBuffer(0x8893 /*GL_ELEMENT_ARRAY_BUFFER*/, prevIBO);
         return GL.currentContext.tempIndexBuffers[idx];
-      },newRenderingFrameStarted:function newRenderingFrameStarted() {
+      },
+  newRenderingFrameStarted:function newRenderingFrameStarted() {
         if (!GL.currentContext) {
           return;
         }
@@ -6989,20 +7419,24 @@ function dbg(text) {
         for (var i = 0; i <= largestIndex; ++i) {
           GL.currentContext.tempVertexBufferCounters1[i] = 0;
         }
-      },getSource:function(shader, count, string, length) {
+      },
+  getSource:function(shader, count, string, length) {
         var source = '';
         for (var i = 0; i < count; ++i) {
           var len = length ? HEAP32[(((length)+(i*4))>>2)] : -1;
           source += UTF8ToString(HEAP32[(((string)+(i*4))>>2)], len < 0 ? undefined : len);
         }
         return source;
-      },calcBufLength:function calcBufLength(size, type, stride, count) {
+      },
+  calcBufLength:function calcBufLength(size, type, stride, count) {
         if (stride > 0) {
           return count * stride;  // XXXvlad this is not exactly correct I don't think
         }
         var typeSize = GL.byteSizeByType[type - GL.byteSizeByTypeRoot];
         return size * typeSize * count;
-      },usedTempBuffers:[],preDrawHandleClientVertexAttribBindings:function preDrawHandleClientVertexAttribBindings(count) {
+      },
+  usedTempBuffers:[],
+  preDrawHandleClientVertexAttribBindings:function preDrawHandleClientVertexAttribBindings(count) {
         GL.resetBufferBinding = false;
   
         // TODO: initial pass to detect ranges we need to upload, might not need an upload per attrib
@@ -7020,11 +7454,13 @@ function dbg(text) {
                                    HEAPU8.subarray(cb.ptr, cb.ptr + size));
           cb.vertexAttribPointerAdaptor.call(GLctx, i, cb.size, cb.type, cb.normalized, cb.stride, 0);
         }
-      },postDrawHandleClientVertexAttribBindings:function postDrawHandleClientVertexAttribBindings() {
+      },
+  postDrawHandleClientVertexAttribBindings:function postDrawHandleClientVertexAttribBindings() {
         if (GL.resetBufferBinding) {
           GLctx.bindBuffer(0x8892 /*GL_ARRAY_BUFFER*/, GL.buffers[GLctx.currentArrayBufferBinding]);
         }
-      },createContext:function(/** @type {HTMLCanvasElement} */ canvas, webGLContextAttributes) {
+      },
+  createContext:function(/** @type {HTMLCanvasElement} */ canvas, webGLContextAttributes) {
   
         // BUG: Workaround Safari WebGL issue: After successfully acquiring WebGL context on a canvas,
         // calling .getContext() will always return that context independent of which 'webgl' or 'webgl2'
@@ -7055,7 +7491,8 @@ function dbg(text) {
         var handle = GL.registerContext(ctx, webGLContextAttributes);
   
         return handle;
-      },registerContext:function(ctx, webGLContextAttributes) {
+      },
+  registerContext:function(ctx, webGLContextAttributes) {
         // without pthreads a context is just an integer ID
         var handle = GL.getNewId(GL.contexts);
   
@@ -7082,19 +7519,23 @@ function dbg(text) {
         GL.generateTempBuffers(false, context);
   
         return handle;
-      },makeContextCurrent:function(contextHandle) {
+      },
+  makeContextCurrent:function(contextHandle) {
   
         GL.currentContext = GL.contexts[contextHandle]; // Active Emscripten GL layer context object.
         Module.ctx = GLctx = GL.currentContext && GL.currentContext.GLctx; // Active WebGL context object.
         return !(contextHandle && !GLctx);
-      },getContext:function(contextHandle) {
+      },
+  getContext:function(contextHandle) {
         return GL.contexts[contextHandle];
-      },deleteContext:function(contextHandle) {
+      },
+  deleteContext:function(contextHandle) {
         if (GL.currentContext === GL.contexts[contextHandle]) GL.currentContext = null;
         if (typeof JSEvents == 'object') JSEvents.removeAllHandlersOnTarget(GL.contexts[contextHandle].GLctx.canvas); // Release all JS event handlers on the DOM element that the GL context is associated with since the context is now deleted.
         if (GL.contexts[contextHandle] && GL.contexts[contextHandle].GLctx.canvas) GL.contexts[contextHandle].GLctx.canvas.GLctxObject = undefined; // Make sure the canvas object no longer refers to the context object so there are no GC surprises.
         GL.contexts[contextHandle] = null;
-      },initExtensions:function(context) {
+      },
+  initExtensions:function(context) {
         // If this function is called without a specific context object, init the extensions of the currently active context.
         if (!context) context = GL.currentContext;
   
@@ -7139,7 +7580,8 @@ function dbg(text) {
             GLctx.getExtension(ext);
           }
         });
-      }};
+      },
+  };
   function _glAttachShader(program, shader) {
       GLctx.attachShader(GL.programs[program], GL.shaders[shader]);
     }
@@ -7866,7 +8308,27 @@ function dbg(text) {
   
   
   
-  var GLEW = {isLinaroFork:1,extensions:null,error:{0:null,1:null,2:null,3:null,4:null,5:null,6:null,7:null,8:null},version:{1:null,2:null,3:null,4:null},errorStringConstantFromCode:function(error) {
+  var GLEW = {
+  isLinaroFork:1,
+  extensions:null,
+  error:{
+  0:null,
+  1:null,
+  2:null,
+  3:null,
+  4:null,
+  5:null,
+  6:null,
+  7:null,
+  8:null,
+  },
+  version:{
+  1:null,
+  2:null,
+  3:null,
+  4:null,
+  },
+  errorStringConstantFromCode:function(error) {
         if (GLEW.isLinaroFork) {
           switch (error) {
             case 4:return "OpenGL ES lib expected, found OpenGL lib"; // GLEW_ERROR_NOT_GLES_VERSION
@@ -7884,7 +8346,8 @@ function dbg(text) {
           case 3:return "GLX 1.2 and up are supported"; // GLEW_ERROR_GLX_VERSION_11_ONLY
           default:return null;
         }
-      },errorString:function(error) {
+      },
+  errorString:function(error) {
         if (!GLEW.error[error]) {
           var string = GLEW.errorStringConstantFromCode(error);
           if (!string) {
@@ -7894,7 +8357,8 @@ function dbg(text) {
           GLEW.error[error] = stringToNewUTF8(string);
         }
         return GLEW.error[error];
-      },versionStringConstantFromCode:function(name) {
+      },
+  versionStringConstantFromCode:function(name) {
         switch (name) {
           case 1:return "1.10.0"; // GLEW_VERSION
           case 2:return "1"; // GLEW_VERSION_MAJOR
@@ -7902,7 +8366,8 @@ function dbg(text) {
           case 4:return "0"; // GLEW_VERSION_MICRO
           default:return null;
         }
-      },versionString:function(name) {
+      },
+  versionString:function(name) {
         if (!GLEW.version[name]) {
           var string = GLEW.versionStringConstantFromCode(name);
           if (!string)
@@ -7910,7 +8375,8 @@ function dbg(text) {
           GLEW.version[name] = stringToNewUTF8(string);
         }
         return GLEW.version[name];
-      },extensionIsSupported:function(name) {
+      },
+  extensionIsSupported:function(name) {
         if (!GLEW.extensions) {
           GLEW.extensions = UTF8ToString(_glGetString(0x1F03)).split(' ');
         }
@@ -7921,7 +8387,8 @@ function dbg(text) {
         // extensions from GLEmulations do not come unprefixed
         // so, try with prefix
         return (GLEW.extensions.includes("GL_" + name));
-      }};
+      },
+  };
   function _glewInit() { return 0; }
 
   
@@ -7976,10 +8443,56 @@ function dbg(text) {
   
   
   
-  var GLFW = {WindowFromId:function(id) {
+  var GLFW = {
+  WindowFromId:function(id) {
         if (id <= 0 || !GLFW.windows) return null;
         return GLFW.windows[id - 1];
-      },joystickFunc:null,errorFunc:null,monitorFunc:null,active:null,scale:null,windows:null,monitors:null,monitorString:null,versionString:null,initialTime:null,extensions:null,hints:null,defaultHints:{131073:0,131074:0,131075:1,131076:1,131077:1,131082:0,135169:8,135170:8,135171:8,135172:8,135173:24,135174:8,135175:0,135176:0,135177:0,135178:0,135179:0,135180:0,135181:0,135182:0,135183:0,139265:196609,139266:1,139267:0,139268:0,139269:0,139270:0,139271:0,139272:0,139276:0},DOMToGLFWKeyCode:function(keycode) {
+      },
+  joystickFunc:null,
+  errorFunc:null,
+  monitorFunc:null,
+  active:null,
+  scale:null,
+  windows:null,
+  monitors:null,
+  monitorString:null,
+  versionString:null,
+  initialTime:null,
+  extensions:null,
+  hints:null,
+  defaultHints:{
+  131073:0,
+  131074:0,
+  131075:1,
+  131076:1,
+  131077:1,
+  131082:0,
+  135169:8,
+  135170:8,
+  135171:8,
+  135172:8,
+  135173:24,
+  135174:8,
+  135175:0,
+  135176:0,
+  135177:0,
+  135178:0,
+  135179:0,
+  135180:0,
+  135181:0,
+  135182:0,
+  135183:0,
+  139265:196609,
+  139266:1,
+  139267:0,
+  139268:0,
+  139269:0,
+  139270:0,
+  139271:0,
+  139272:0,
+  139276:0,
+  },
+  DOMToGLFWKeyCode:function(keycode) {
         switch (keycode) {
           // these keycodes are only defined for GLFW3, assume they are the same for GLFW2
           case 0x20:return 32; // DOM_VK_SPACE -> GLFW_KEY_SPACE
@@ -8106,7 +8619,8 @@ function dbg(text) {
           // XXX: GLFW_KEY_WORLD_1, GLFW_KEY_WORLD_2 what are these?
           default:return -1; // GLFW_KEY_UNKNOWN
         };
-      },getModBits:function(win) {
+      },
+  getModBits:function(win) {
         var mod = 0;
         if (win.keys[340]) mod |= 0x0001; // GLFW_MOD_SHIFT
         if (win.keys[341]) mod |= 0x0002; // GLFW_MOD_CONTROL
@@ -8114,7 +8628,8 @@ function dbg(text) {
         if (win.keys[343]) mod |= 0x0008; // GLFW_MOD_SUPER
         // add caps and num lock keys? only if lock_key_mod is set
         return mod;
-      },onKeyPress:function(event) {
+      },
+  onKeyPress:function(event) {
         if (!GLFW.active || !GLFW.active.charFunc) return;
         if (event.ctrlKey || event.metaKey) return;
   
@@ -8123,7 +8638,8 @@ function dbg(text) {
         if (charCode == 0 || (charCode >= 0x00 && charCode <= 0x1F)) return;
   
         getWasmTableEntry(GLFW.active.charFunc)(GLFW.active.id, charCode);
-      },onKeyChanged:function(keyCode, status) {
+      },
+  onKeyChanged:function(keyCode, status) {
         if (!GLFW.active) return;
   
         var key = GLFW.DOMToGLFWKeyCode(keyCode);
@@ -8137,11 +8653,14 @@ function dbg(text) {
           if (repeat) status = 2; // GLFW_REPEAT
           getWasmTableEntry(GLFW.active.keyFunc)(GLFW.active.id, key, keyCode, status, GLFW.getModBits(GLFW.active));
         }
-      },onGamepadConnected:function(event) {
+      },
+  onGamepadConnected:function(event) {
         GLFW.refreshJoysticks();
-      },onGamepadDisconnected:function(event) {
+      },
+  onGamepadDisconnected:function(event) {
         GLFW.refreshJoysticks();
-      },onKeydown:function(event) {
+      },
+  onKeydown:function(event) {
         GLFW.onKeyChanged(event.keyCode, 1); // GLFW_PRESS or GLFW_REPEAT
   
         // This logic comes directly from the sdl implementation. We cannot
@@ -8150,9 +8669,11 @@ function dbg(text) {
         if (event.keyCode === 8 /* backspace */ || event.keyCode === 9 /* tab */) {
           event.preventDefault();
         }
-      },onKeyup:function(event) {
+      },
+  onKeyup:function(event) {
         GLFW.onKeyChanged(event.keyCode, 0); // GLFW_RELEASE
-      },onBlur:function(event) {
+      },
+  onBlur:function(event) {
         if (!GLFW.active) return;
   
         for (var i = 0; i < GLFW.active.domKeys.length; ++i) {
@@ -8160,7 +8681,8 @@ function dbg(text) {
             GLFW.onKeyChanged(i, 0); // GLFW_RELEASE
           }
         }
-      },onMousemove:function(event) {
+      },
+  onMousemove:function(event) {
         if (!GLFW.active) return;
   
         Browser.calculateMouseEvent(event);
@@ -8170,7 +8692,8 @@ function dbg(text) {
         if (GLFW.active.cursorPosFunc) {
           getWasmTableEntry(GLFW.active.cursorPosFunc)(GLFW.active.id, Browser.mouseX, Browser.mouseY);
         }
-      },DOMToGLFWMouseButton:function(event) {
+      },
+  DOMToGLFWMouseButton:function(event) {
         // DOM and glfw have different button codes.
         // See http://www.w3schools.com/jsref/event_button.asp.
         var eventButton = event['button'];
@@ -8182,7 +8705,8 @@ function dbg(text) {
           }
         }
         return eventButton;
-      },onMouseenter:function(event) {
+      },
+  onMouseenter:function(event) {
         if (!GLFW.active) return;
   
         if (event.target != Module["canvas"]) return;
@@ -8190,7 +8714,8 @@ function dbg(text) {
         if (GLFW.active.cursorEnterFunc) {
           getWasmTableEntry(GLFW.active.cursorEnterFunc)(GLFW.active.id, 1);
         }
-      },onMouseleave:function(event) {
+      },
+  onMouseleave:function(event) {
         if (!GLFW.active) return;
   
         if (event.target != Module["canvas"]) return;
@@ -8198,7 +8723,8 @@ function dbg(text) {
         if (GLFW.active.cursorEnterFunc) {
           getWasmTableEntry(GLFW.active.cursorEnterFunc)(GLFW.active.id, 0);
         }
-      },onMouseButtonChanged:function(event, status) {
+      },
+  onMouseButtonChanged:function(event, status) {
         if (!GLFW.active) return;
   
         Browser.calculateMouseEvent(event);
@@ -8219,13 +8745,16 @@ function dbg(text) {
         if (GLFW.active.mouseButtonFunc) {
           getWasmTableEntry(GLFW.active.mouseButtonFunc)(GLFW.active.id, eventButton, status, GLFW.getModBits(GLFW.active));
         }
-      },onMouseButtonDown:function(event) {
+      },
+  onMouseButtonDown:function(event) {
         if (!GLFW.active) return;
         GLFW.onMouseButtonChanged(event, 1); // GLFW_PRESS
-      },onMouseButtonUp:function(event) {
+      },
+  onMouseButtonUp:function(event) {
         if (!GLFW.active) return;
         GLFW.onMouseButtonChanged(event, 0); // GLFW_RELEASE
-      },onMouseWheel:function(event) {
+      },
+  onMouseWheel:function(event) {
         // Note the minus sign that flips browser wheel direction (positive direction scrolls page down) to native wheel direction (positive direction is mouse wheel up)
         var delta = -Browser.getMouseWheelDelta(event);
         delta = (delta == 0) ? 0 : (delta > 0 ? Math.max(delta, 1) : Math.min(delta, -1)); // Quantize to integer so that minimum scroll is at least +/- 1.
@@ -8243,7 +8772,8 @@ function dbg(text) {
         getWasmTableEntry(GLFW.active.scrollFunc)(GLFW.active.id, sx, sy);
   
         event.preventDefault();
-      },onCanvasResize:function(width, height) {
+      },
+  onCanvasResize:function(width, height) {
         if (!GLFW.active) return;
   
         var resizeNeeded = true;
@@ -8284,28 +8814,33 @@ function dbg(text) {
           GLFW.onWindowSizeChanged();
           GLFW.onFramebufferSizeChanged();
         }
-      },onWindowSizeChanged:function() {
+      },
+  onWindowSizeChanged:function() {
         if (!GLFW.active) return;
   
         if (GLFW.active.windowSizeFunc) {
           getWasmTableEntry(GLFW.active.windowSizeFunc)(GLFW.active.id, GLFW.active.width, GLFW.active.height);
         }
-      },onFramebufferSizeChanged:function() {
+      },
+  onFramebufferSizeChanged:function() {
         if (!GLFW.active) return;
   
         if (GLFW.active.framebufferSizeFunc) {
           getWasmTableEntry(GLFW.active.framebufferSizeFunc)(GLFW.active.id, GLFW.active.width, GLFW.active.height);
         }
-      },onWindowContentScaleChanged:function(scale) {
+      },
+  onWindowContentScaleChanged:function(scale) {
         GLFW.scale = scale;
         if (!GLFW.active) return;
   
         if (GLFW.active.windowContentScaleFunc) {
           getWasmTableEntry(GLFW.active.windowContentScaleFunc)(GLFW.active.id, GLFW.scale, GLFW.scale);
         }
-      },getTime:function() {
+      },
+  getTime:function() {
         return _emscripten_get_now() / 1000;
-      },setWindowTitle:function(winid, title) {
+      },
+  setWindowTitle:function(winid, title) {
         var win = GLFW.WindowFromId(winid);
         if (!win) return;
   
@@ -8313,10 +8848,16 @@ function dbg(text) {
         if (GLFW.active.id == win.id) {
           document.title = win.title;
         }
-      },setJoystickCallback:function(cbfun) {
+      },
+  setJoystickCallback:function(cbfun) {
         GLFW.joystickFunc = cbfun;
         GLFW.refreshJoysticks();
-      },joys:{},lastGamepadState:[],lastGamepadStateFrame:null,refreshJoysticks:function() {
+      },
+  joys:{
+  },
+  lastGamepadState:[],
+  lastGamepadStateFrame:null,
+  refreshJoysticks:function() {
         // Produce a new Gamepad API sample if we are ticking a new game frame, or if not using emscripten_set_main_loop() at all to drive animation.
         if (Browser.mainLoop.currentFrameNumber !== GLFW.lastGamepadStateFrame || !Browser.mainLoop.currentFrameNumber) {
           GLFW.lastGamepadState = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
@@ -8367,43 +8908,50 @@ function dbg(text) {
             }
           }
         }
-      },setKeyCallback:function(winid, cbfun) {
+      },
+  setKeyCallback:function(winid, cbfun) {
         var win = GLFW.WindowFromId(winid);
         if (!win) return null;
         var prevcbfun = win.keyFunc;
         win.keyFunc = cbfun;
         return prevcbfun;
-      },setCharCallback:function(winid, cbfun) {
+      },
+  setCharCallback:function(winid, cbfun) {
         var win = GLFW.WindowFromId(winid);
         if (!win) return null;
         var prevcbfun = win.charFunc;
         win.charFunc = cbfun;
         return prevcbfun;
-      },setMouseButtonCallback:function(winid, cbfun) {
+      },
+  setMouseButtonCallback:function(winid, cbfun) {
         var win = GLFW.WindowFromId(winid);
         if (!win) return null;
         var prevcbfun = win.mouseButtonFunc;
         win.mouseButtonFunc = cbfun;
         return prevcbfun;
-      },setCursorPosCallback:function(winid, cbfun) {
+      },
+  setCursorPosCallback:function(winid, cbfun) {
         var win = GLFW.WindowFromId(winid);
         if (!win) return null;
         var prevcbfun = win.cursorPosFunc;
         win.cursorPosFunc = cbfun;
         return prevcbfun;
-      },setScrollCallback:function(winid, cbfun) {
+      },
+  setScrollCallback:function(winid, cbfun) {
         var win = GLFW.WindowFromId(winid);
         if (!win) return null;
         var prevcbfun = win.scrollFunc;
         win.scrollFunc = cbfun;
         return prevcbfun;
-      },setDropCallback:function(winid, cbfun) {
+      },
+  setDropCallback:function(winid, cbfun) {
         var win = GLFW.WindowFromId(winid);
         if (!win) return null;
         var prevcbfun = win.dropFunc;
         win.dropFunc = cbfun;
         return prevcbfun;
-      },onDrop:function(event) {
+      },
+  onDrop:function(event) {
         if (!GLFW.active || !GLFW.active.dropFunc) return;
         if (!event.dataTransfer || !event.dataTransfer.files || event.dataTransfer.files.length == 0) return;
   
@@ -8451,36 +8999,42 @@ function dbg(text) {
         }
   
         return false;
-      },onDragover:function(event) {
+      },
+  onDragover:function(event) {
         if (!GLFW.active || !GLFW.active.dropFunc) return;
   
         event.preventDefault();
         return false;
-      },setWindowSizeCallback:function(winid, cbfun) {
+      },
+  setWindowSizeCallback:function(winid, cbfun) {
         var win = GLFW.WindowFromId(winid);
         if (!win) return null;
         var prevcbfun = win.windowSizeFunc;
         win.windowSizeFunc = cbfun;
   
         return prevcbfun;
-      },setWindowCloseCallback:function(winid, cbfun) {
+      },
+  setWindowCloseCallback:function(winid, cbfun) {
         var win = GLFW.WindowFromId(winid);
         if (!win) return null;
         var prevcbfun = win.windowCloseFunc;
         win.windowCloseFunc = cbfun;
         return prevcbfun;
-      },setWindowRefreshCallback:function(winid, cbfun) {
+      },
+  setWindowRefreshCallback:function(winid, cbfun) {
         var win = GLFW.WindowFromId(winid);
         if (!win) return null;
         var prevcbfun = win.windowRefreshFunc;
         win.windowRefreshFunc = cbfun;
         return prevcbfun;
-      },onClickRequestPointerLock:function(e) {
+      },
+  onClickRequestPointerLock:function(e) {
         if (!Browser.pointerLock && Module['canvas'].requestPointerLock) {
           Module['canvas'].requestPointerLock();
           e.preventDefault();
         }
-      },setInputMode:function(winid, mode, value) {
+      },
+  setInputMode:function(winid, mode, value) {
         var win = GLFW.WindowFromId(winid);
         if (!win) return;
   
@@ -8531,22 +9085,28 @@ function dbg(text) {
             break;
           }
         }
-      },getKey:function(winid, key) {
+      },
+  getKey:function(winid, key) {
         var win = GLFW.WindowFromId(winid);
         if (!win) return 0;
         return win.keys[key];
-      },getMouseButton:function(winid, button) {
+      },
+  getMouseButton:function(winid, button) {
         var win = GLFW.WindowFromId(winid);
         if (!win) return 0;
         return (win.buttons & (1 << button)) > 0;
-      },getCursorPos:function(winid, x, y) {
+      },
+  getCursorPos:function(winid, x, y) {
         HEAPF64[((x)>>3)] = Browser.mouseX;
         HEAPF64[((y)>>3)] = Browser.mouseY;
-      },getMousePos:function(winid, x, y) {
+      },
+  getMousePos:function(winid, x, y) {
         HEAP32[((x)>>2)] = Browser.mouseX;
         HEAP32[((y)>>2)] = Browser.mouseY;
-      },setCursorPos:function(winid, x, y) {
-      },getWindowPos:function(winid, x, y) {
+      },
+  setCursorPos:function(winid, x, y) {
+      },
+  getWindowPos:function(winid, x, y) {
         var wx = 0;
         var wy = 0;
   
@@ -8563,12 +9123,14 @@ function dbg(text) {
         if (y) {
           HEAP32[((y)>>2)] = wy;
         }
-      },setWindowPos:function(winid, x, y) {
+      },
+  setWindowPos:function(winid, x, y) {
         var win = GLFW.WindowFromId(winid);
         if (!win) return;
         win.x = x;
         win.y = y;
-      },getWindowSize:function(winid, width, height) {
+      },
+  getWindowSize:function(winid, width, height) {
         var ww = 0;
         var wh = 0;
   
@@ -8585,7 +9147,8 @@ function dbg(text) {
         if (height) {
           HEAP32[((height)>>2)] = wh;
         }
-      },setWindowSize:function(winid, width, height) {
+      },
+  setWindowSize:function(winid, width, height) {
         var win = GLFW.WindowFromId(winid);
         if (!win) return;
   
@@ -8603,7 +9166,8 @@ function dbg(text) {
         if (win.windowSizeFunc) {
           getWasmTableEntry(win.windowSizeFunc)(win.id, width, height);
         }
-      },createWindow:function(width, height, title, monitor, share) {
+      },
+  createWindow:function(width, height, title, monitor, share) {
         var i, id;
         for (i = 0; i < GLFW.windows.length && GLFW.windows[i] !== null; i++) {
           // no-op
@@ -8656,7 +9220,8 @@ function dbg(text) {
   
         GLFW.active = win;
         return win.id;
-      },destroyWindow:function(winid) {
+      },
+  destroyWindow:function(winid) {
         var win = GLFW.WindowFromId(winid);
         if (!win) return;
   
@@ -8673,8 +9238,10 @@ function dbg(text) {
           if (GLFW.windows[i] !== null) return;
   
         Module.ctx = Browser.destroyContext(Module['canvas'], true, true);
-      },swapBuffers:function(winid) {
-      },GLFW2ParamToGLFW3Param:function(param) {
+      },
+  swapBuffers:function(winid) {
+      },
+  GLFW2ParamToGLFW3Param:function(param) {
         var table = {
           0x00030001:0, // GLFW_MOUSE_CURSOR
           0x00030002:0, // GLFW_STICKY_KEYS
@@ -8708,7 +9275,8 @@ function dbg(text) {
           0x00020018:0x00022008, // GLFW_OPENGL_PROFILE
         };
         return table[param];
-      }};
+      },
+  };
   function _glfwCreateWindow(width, height, title, monitor, share) {
       return GLFW.createWindow(width, height, title, monitor, share);
     }
@@ -9354,12 +9922,13 @@ ERRNO_CODES = {
       'ESTRPIPE': 135,
     };;
 embind_init_charCodes();
-BindingError = Module['BindingError'] = extendError(Error, 'BindingError');;
-InternalError = Module['InternalError'] = extendError(Error, 'InternalError');;
+BindingError = Module['BindingError'] = class BindingError extends Error { constructor(message) { super(message); this.name = 'BindingError'; }};
+InternalError = Module['InternalError'] = class InternalError extends Error { constructor(message) { super(message); this.name = 'InternalError'; }};
 init_ClassHandle();
 init_embind();;
 init_RegisteredPointer();
 UnboundTypeError = Module['UnboundTypeError'] = extendError(Error, 'UnboundTypeError');;
+handleAllocatorInit();
 init_emval();;
 
       // exports
@@ -9388,112 +9957,112 @@ function checkIncomingModuleAPI() {
   ignoredModuleProp('fetchSettings');
 }
 var wasmImports = {
-  "__assert_fail": ___assert_fail,
-  "__syscall_fcntl64": ___syscall_fcntl64,
-  "__syscall_ioctl": ___syscall_ioctl,
-  "__syscall_openat": ___syscall_openat,
-  "__throw_exception_with_stack_trace": ___throw_exception_with_stack_trace,
-  "_embind_register_bigint": __embind_register_bigint,
-  "_embind_register_bool": __embind_register_bool,
-  "_embind_register_class": __embind_register_class,
-  "_embind_register_class_constructor": __embind_register_class_constructor,
-  "_embind_register_class_function": __embind_register_class_function,
-  "_embind_register_emval": __embind_register_emval,
-  "_embind_register_float": __embind_register_float,
-  "_embind_register_function": __embind_register_function,
-  "_embind_register_integer": __embind_register_integer,
-  "_embind_register_memory_view": __embind_register_memory_view,
-  "_embind_register_std_string": __embind_register_std_string,
-  "_embind_register_std_wstring": __embind_register_std_wstring,
-  "_embind_register_void": __embind_register_void,
-  "_emscripten_fs_load_embedded_files": __emscripten_fs_load_embedded_files,
-  "_emval_call_method": __emval_call_method,
-  "_emval_decref": __emval_decref,
-  "_emval_get_global": __emval_get_global,
-  "_emval_get_method_caller": __emval_get_method_caller,
-  "_emval_incref": __emval_incref,
-  "_emval_run_destructors": __emval_run_destructors,
-  "_emval_take_value": __emval_take_value,
-  "abort": _abort,
-  "emscripten_get_now": _emscripten_get_now,
-  "emscripten_memcpy_big": _emscripten_memcpy_big,
-  "emscripten_resize_heap": _emscripten_resize_heap,
-  "emscripten_set_main_loop_arg": _emscripten_set_main_loop_arg,
-  "environ_get": _environ_get,
-  "environ_sizes_get": _environ_sizes_get,
-  "fd_close": _fd_close,
-  "fd_read": _fd_read,
-  "fd_seek": _fd_seek,
-  "fd_write": _fd_write,
-  "glAttachShader": _glAttachShader,
-  "glBindBuffer": _glBindBuffer,
-  "glBindFramebuffer": _glBindFramebuffer,
-  "glBindTexture": _glBindTexture,
-  "glBindVertexArray": _glBindVertexArray,
-  "glBlendFunc": _glBlendFunc,
-  "glBufferData": _glBufferData,
-  "glBufferSubData": _glBufferSubData,
-  "glCheckFramebufferStatus": _glCheckFramebufferStatus,
-  "glClear": _glClear,
-  "glClearColor": _glClearColor,
-  "glCompileShader": _glCompileShader,
-  "glCreateProgram": _glCreateProgram,
-  "glCreateShader": _glCreateShader,
-  "glDeleteBuffers": _glDeleteBuffers,
-  "glDeleteFramebuffers": _glDeleteFramebuffers,
-  "glDeleteProgram": _glDeleteProgram,
-  "glDeleteShader": _glDeleteShader,
-  "glDeleteTextures": _glDeleteTextures,
-  "glDrawElements": _glDrawElements,
-  "glEnable": _glEnable,
-  "glEnableVertexAttribArray": _glEnableVertexAttribArray,
-  "glFramebufferTexture2D": _glFramebufferTexture2D,
-  "glGenBuffers": _glGenBuffers,
-  "glGenFramebuffers": _glGenFramebuffers,
-  "glGenTextures": _glGenTextures,
-  "glGenVertexArrays": _glGenVertexArrays,
-  "glGetError": _glGetError,
-  "glGetShaderInfoLog": _glGetShaderInfoLog,
-  "glGetShaderiv": _glGetShaderiv,
-  "glGetUniformLocation": _glGetUniformLocation,
-  "glLinkProgram": _glLinkProgram,
-  "glReadPixels": _glReadPixels,
-  "glShaderSource": _glShaderSource,
-  "glTexImage2D": _glTexImage2D,
-  "glTexParameteri": _glTexParameteri,
-  "glUniform1f": _glUniform1f,
-  "glUniform1fv": _glUniform1fv,
-  "glUniform1i": _glUniform1i,
-  "glUniform1iv": _glUniform1iv,
-  "glUniform2f": _glUniform2f,
-  "glUniform3f": _glUniform3f,
-  "glUniform4f": _glUniform4f,
-  "glUniformMatrix4fv": _glUniformMatrix4fv,
-  "glUseProgram": _glUseProgram,
-  "glValidateProgram": _glValidateProgram,
-  "glVertexAttribPointer": _glVertexAttribPointer,
-  "glViewport": _glViewport,
-  "glewInit": _glewInit,
-  "glfwCreateWindow": _glfwCreateWindow,
-  "glfwGetFramebufferSize": _glfwGetFramebufferSize,
-  "glfwGetTime": _glfwGetTime,
-  "glfwGetWindowUserPointer": _glfwGetWindowUserPointer,
-  "glfwInit": _glfwInit,
-  "glfwMakeContextCurrent": _glfwMakeContextCurrent,
-  "glfwPollEvents": _glfwPollEvents,
-  "glfwSetCursorPosCallback": _glfwSetCursorPosCallback,
-  "glfwSetFramebufferSizeCallback": _glfwSetFramebufferSizeCallback,
-  "glfwSetKeyCallback": _glfwSetKeyCallback,
-  "glfwSetMouseButtonCallback": _glfwSetMouseButtonCallback,
-  "glfwSetScrollCallback": _glfwSetScrollCallback,
-  "glfwSetWindowSize": _glfwSetWindowSize,
-  "glfwSetWindowUserPointer": _glfwSetWindowUserPointer,
-  "glfwSwapBuffers": _glfwSwapBuffers,
-  "glfwSwapInterval": _glfwSwapInterval,
-  "glfwTerminate": _glfwTerminate,
-  "glfwWindowHint": _glfwWindowHint,
-  "glfwWindowShouldClose": _glfwWindowShouldClose,
-  "strftime_l": _strftime_l
+  __assert_fail: ___assert_fail,
+  __syscall_fcntl64: ___syscall_fcntl64,
+  __syscall_ioctl: ___syscall_ioctl,
+  __syscall_openat: ___syscall_openat,
+  __throw_exception_with_stack_trace: ___throw_exception_with_stack_trace,
+  _embind_register_bigint: __embind_register_bigint,
+  _embind_register_bool: __embind_register_bool,
+  _embind_register_class: __embind_register_class,
+  _embind_register_class_constructor: __embind_register_class_constructor,
+  _embind_register_class_function: __embind_register_class_function,
+  _embind_register_emval: __embind_register_emval,
+  _embind_register_float: __embind_register_float,
+  _embind_register_function: __embind_register_function,
+  _embind_register_integer: __embind_register_integer,
+  _embind_register_memory_view: __embind_register_memory_view,
+  _embind_register_std_string: __embind_register_std_string,
+  _embind_register_std_wstring: __embind_register_std_wstring,
+  _embind_register_void: __embind_register_void,
+  _emscripten_fs_load_embedded_files: __emscripten_fs_load_embedded_files,
+  _emval_call_method: __emval_call_method,
+  _emval_decref: __emval_decref,
+  _emval_get_global: __emval_get_global,
+  _emval_get_method_caller: __emval_get_method_caller,
+  _emval_incref: __emval_incref,
+  _emval_run_destructors: __emval_run_destructors,
+  _emval_take_value: __emval_take_value,
+  abort: _abort,
+  emscripten_get_now: _emscripten_get_now,
+  emscripten_memcpy_big: _emscripten_memcpy_big,
+  emscripten_resize_heap: _emscripten_resize_heap,
+  emscripten_set_main_loop_arg: _emscripten_set_main_loop_arg,
+  environ_get: _environ_get,
+  environ_sizes_get: _environ_sizes_get,
+  fd_close: _fd_close,
+  fd_read: _fd_read,
+  fd_seek: _fd_seek,
+  fd_write: _fd_write,
+  glAttachShader: _glAttachShader,
+  glBindBuffer: _glBindBuffer,
+  glBindFramebuffer: _glBindFramebuffer,
+  glBindTexture: _glBindTexture,
+  glBindVertexArray: _glBindVertexArray,
+  glBlendFunc: _glBlendFunc,
+  glBufferData: _glBufferData,
+  glBufferSubData: _glBufferSubData,
+  glCheckFramebufferStatus: _glCheckFramebufferStatus,
+  glClear: _glClear,
+  glClearColor: _glClearColor,
+  glCompileShader: _glCompileShader,
+  glCreateProgram: _glCreateProgram,
+  glCreateShader: _glCreateShader,
+  glDeleteBuffers: _glDeleteBuffers,
+  glDeleteFramebuffers: _glDeleteFramebuffers,
+  glDeleteProgram: _glDeleteProgram,
+  glDeleteShader: _glDeleteShader,
+  glDeleteTextures: _glDeleteTextures,
+  glDrawElements: _glDrawElements,
+  glEnable: _glEnable,
+  glEnableVertexAttribArray: _glEnableVertexAttribArray,
+  glFramebufferTexture2D: _glFramebufferTexture2D,
+  glGenBuffers: _glGenBuffers,
+  glGenFramebuffers: _glGenFramebuffers,
+  glGenTextures: _glGenTextures,
+  glGenVertexArrays: _glGenVertexArrays,
+  glGetError: _glGetError,
+  glGetShaderInfoLog: _glGetShaderInfoLog,
+  glGetShaderiv: _glGetShaderiv,
+  glGetUniformLocation: _glGetUniformLocation,
+  glLinkProgram: _glLinkProgram,
+  glReadPixels: _glReadPixels,
+  glShaderSource: _glShaderSource,
+  glTexImage2D: _glTexImage2D,
+  glTexParameteri: _glTexParameteri,
+  glUniform1f: _glUniform1f,
+  glUniform1fv: _glUniform1fv,
+  glUniform1i: _glUniform1i,
+  glUniform1iv: _glUniform1iv,
+  glUniform2f: _glUniform2f,
+  glUniform3f: _glUniform3f,
+  glUniform4f: _glUniform4f,
+  glUniformMatrix4fv: _glUniformMatrix4fv,
+  glUseProgram: _glUseProgram,
+  glValidateProgram: _glValidateProgram,
+  glVertexAttribPointer: _glVertexAttribPointer,
+  glViewport: _glViewport,
+  glewInit: _glewInit,
+  glfwCreateWindow: _glfwCreateWindow,
+  glfwGetFramebufferSize: _glfwGetFramebufferSize,
+  glfwGetTime: _glfwGetTime,
+  glfwGetWindowUserPointer: _glfwGetWindowUserPointer,
+  glfwInit: _glfwInit,
+  glfwMakeContextCurrent: _glfwMakeContextCurrent,
+  glfwPollEvents: _glfwPollEvents,
+  glfwSetCursorPosCallback: _glfwSetCursorPosCallback,
+  glfwSetFramebufferSizeCallback: _glfwSetFramebufferSizeCallback,
+  glfwSetKeyCallback: _glfwSetKeyCallback,
+  glfwSetMouseButtonCallback: _glfwSetMouseButtonCallback,
+  glfwSetScrollCallback: _glfwSetScrollCallback,
+  glfwSetWindowSize: _glfwSetWindowSize,
+  glfwSetWindowUserPointer: _glfwSetWindowUserPointer,
+  glfwSwapBuffers: _glfwSwapBuffers,
+  glfwSwapInterval: _glfwSwapInterval,
+  glfwTerminate: _glfwTerminate,
+  glfwWindowHint: _glfwWindowHint,
+  glfwWindowShouldClose: _glfwWindowShouldClose,
+  strftime_l: _strftime_l
 };
 var asm = createWasm();
 /** @type {function(...*):?} */
@@ -9503,38 +10072,38 @@ var _malloc = createExportWrapper("malloc");
 /** @type {function(...*):?} */
 var ___errno_location = createExportWrapper("__errno_location");
 /** @type {function(...*):?} */
-var _free = Module["_free"] = createExportWrapper("free");
+var _free = Module['_free'] = createExportWrapper("free");
 /** @type {function(...*):?} */
-var _main = Module["_main"] = createExportWrapper("main");
+var _main = Module['_main'] = createExportWrapper("main");
 /** @type {function(...*):?} */
 var ___getTypeName = createExportWrapper("__getTypeName");
 /** @type {function(...*):?} */
-var __embind_initialize_bindings = Module["__embind_initialize_bindings"] = createExportWrapper("_embind_initialize_bindings");
+var __embind_initialize_bindings = Module['__embind_initialize_bindings'] = createExportWrapper("_embind_initialize_bindings");
 /** @type {function(...*):?} */
-var _fflush = Module["_fflush"] = createExportWrapper("fflush");
+var _fflush = Module['_fflush'] = createExportWrapper("fflush");
 /** @type {function(...*):?} */
 var ___trap = function() {
-  return (___trap = Module["asm"]["__trap"]).apply(null, arguments);
+  return (___trap = Module['asm']['__trap']).apply(null, arguments);
 };
 
 /** @type {function(...*):?} */
 var _emscripten_stack_init = function() {
-  return (_emscripten_stack_init = Module["asm"]["emscripten_stack_init"]).apply(null, arguments);
+  return (_emscripten_stack_init = Module['asm']['emscripten_stack_init']).apply(null, arguments);
 };
 
 /** @type {function(...*):?} */
 var _emscripten_stack_get_free = function() {
-  return (_emscripten_stack_get_free = Module["asm"]["emscripten_stack_get_free"]).apply(null, arguments);
+  return (_emscripten_stack_get_free = Module['asm']['emscripten_stack_get_free']).apply(null, arguments);
 };
 
 /** @type {function(...*):?} */
 var _emscripten_stack_get_base = function() {
-  return (_emscripten_stack_get_base = Module["asm"]["emscripten_stack_get_base"]).apply(null, arguments);
+  return (_emscripten_stack_get_base = Module['asm']['emscripten_stack_get_base']).apply(null, arguments);
 };
 
 /** @type {function(...*):?} */
 var _emscripten_stack_get_end = function() {
-  return (_emscripten_stack_get_end = Module["asm"]["emscripten_stack_get_end"]).apply(null, arguments);
+  return (_emscripten_stack_get_end = Module['asm']['emscripten_stack_get_end']).apply(null, arguments);
 };
 
 /** @type {function(...*):?} */
@@ -9545,27 +10114,27 @@ var stackRestore = createExportWrapper("stackRestore");
 var stackAlloc = createExportWrapper("stackAlloc");
 /** @type {function(...*):?} */
 var _emscripten_stack_get_current = function() {
-  return (_emscripten_stack_get_current = Module["asm"]["emscripten_stack_get_current"]).apply(null, arguments);
+  return (_emscripten_stack_get_current = Module['asm']['emscripten_stack_get_current']).apply(null, arguments);
 };
 
 /** @type {function(...*):?} */
-var ___cxa_decrement_exception_refcount = Module["___cxa_decrement_exception_refcount"] = createExportWrapper("__cxa_decrement_exception_refcount");
+var ___cxa_decrement_exception_refcount = Module['___cxa_decrement_exception_refcount'] = createExportWrapper("__cxa_decrement_exception_refcount");
 /** @type {function(...*):?} */
-var ___cxa_increment_exception_refcount = Module["___cxa_increment_exception_refcount"] = createExportWrapper("__cxa_increment_exception_refcount");
+var ___cxa_increment_exception_refcount = Module['___cxa_increment_exception_refcount'] = createExportWrapper("__cxa_increment_exception_refcount");
 /** @type {function(...*):?} */
-var ___thrown_object_from_unwind_exception = Module["___thrown_object_from_unwind_exception"] = createExportWrapper("__thrown_object_from_unwind_exception");
+var ___thrown_object_from_unwind_exception = Module['___thrown_object_from_unwind_exception'] = createExportWrapper("__thrown_object_from_unwind_exception");
 /** @type {function(...*):?} */
-var ___get_exception_message = Module["___get_exception_message"] = createExportWrapper("__get_exception_message");
+var ___get_exception_message = Module['___get_exception_message'] = createExportWrapper("__get_exception_message");
 /** @type {function(...*):?} */
-var dynCall_jiji = Module["dynCall_jiji"] = createExportWrapper("dynCall_jiji");
+var dynCall_jiji = Module['dynCall_jiji'] = createExportWrapper("dynCall_jiji");
 /** @type {function(...*):?} */
-var dynCall_viijii = Module["dynCall_viijii"] = createExportWrapper("dynCall_viijii");
+var dynCall_viijii = Module['dynCall_viijii'] = createExportWrapper("dynCall_viijii");
 /** @type {function(...*):?} */
-var dynCall_iiiiij = Module["dynCall_iiiiij"] = createExportWrapper("dynCall_iiiiij");
+var dynCall_iiiiij = Module['dynCall_iiiiij'] = createExportWrapper("dynCall_iiiiij");
 /** @type {function(...*):?} */
-var dynCall_iiiiijj = Module["dynCall_iiiiijj"] = createExportWrapper("dynCall_iiiiijj");
+var dynCall_iiiiijj = Module['dynCall_iiiiijj'] = createExportWrapper("dynCall_iiiiijj");
 /** @type {function(...*):?} */
-var dynCall_iiiiiijj = Module["dynCall_iiiiiijj"] = createExportWrapper("dynCall_iiiiiijj");
+var dynCall_iiiiiijj = Module['dynCall_iiiiiijj'] = createExportWrapper("dynCall_iiiiiijj");
 var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 88436;
 
 // include: postamble.js
@@ -9602,15 +10171,24 @@ function tryParseAsDataURI(filename) {
   return intArrayFromBase64(filename.slice(dataURIPrefix.length));
 }
 // end include: base64Utils.js
-Module["addRunDependency"] = addRunDependency;
-Module["removeRunDependency"] = removeRunDependency;
-Module["FS_createPath"] = FS.createPath;
-Module["FS_createDataFile"] = FS.createDataFile;
-Module["FS_createLazyFile"] = FS.createLazyFile;
-Module["FS_createDevice"] = FS.createDevice;
-Module["FS_unlink"] = FS.unlink;
-Module["FS_createPreloadedFile"] = FS.createPreloadedFile;
+Module['addRunDependency'] = addRunDependency;
+Module['removeRunDependency'] = removeRunDependency;
+Module['FS_createPath'] = FS.createPath;
+Module['FS_createDataFile'] = FS.createDataFile;
+Module['FS_createLazyFile'] = FS.createLazyFile;
+Module['FS_createDevice'] = FS.createDevice;
+Module['FS_unlink'] = FS.unlink;
+Module['FS_createPreloadedFile'] = FS.createPreloadedFile;
 var missingLibrarySymbols = [
+  'writeI53ToI64',
+  'writeI53ToI64Clamped',
+  'writeI53ToI64Signaling',
+  'writeI53ToU64Clamped',
+  'writeI53ToU64Signaling',
+  'readI53FromI64',
+  'readI53FromU64',
+  'convertI32PairToI53',
+  'convertU32PairToI53',
   'ydayFromDate',
   'inetPton4',
   'inetNtop4',
@@ -9635,15 +10213,6 @@ var missingLibrarySymbols = [
   'STACK_ALIGN',
   'POINTER_SIZE',
   'ASSERTIONS',
-  'writeI53ToI64',
-  'writeI53ToI64Clamped',
-  'writeI53ToI64Signaling',
-  'writeI53ToU64Clamped',
-  'writeI53ToU64Signaling',
-  'readI53FromI64',
-  'readI53FromU64',
-  'convertI32PairToI53',
-  'convertU32PairToI53',
   'getCFunc',
   'ccall',
   'cwrap',
@@ -9770,6 +10339,7 @@ var unexportedSymbols = [
   'setTempRet0',
   'writeStackCookie',
   'checkStackCookie',
+  'convertI32PairToI53Checked',
   'ptrToString',
   'zeroMemory',
   'exitJS',
@@ -9807,8 +10377,8 @@ var unexportedSymbols = [
   'asyncLoad',
   'alignMemory',
   'mmapAlloc',
+  'handleAllocatorInit',
   'HandleAllocator',
-  'convertI32PairToI53Checked',
   'freeTableIndexes',
   'functionsInTableMap',
   'setValue',
@@ -9856,6 +10426,8 @@ var unexportedSymbols = [
   'preloadPlugins',
   'FS_modeStringToFlags',
   'FS_getMode',
+  'FS_stdin_getChar_buffer',
+  'FS_stdin_getChar',
   'FS',
   'MEMFS',
   'TTY',
@@ -9894,11 +10466,24 @@ var unexportedSymbols = [
   'allocateUTF8OnStack',
   'InternalError',
   'BindingError',
+  'throwInternalError',
+  'throwBindingError',
+  'registeredTypes',
+  'awaitingDependencies',
+  'typeDependencies',
+  'tupleRegistrations',
+  'structRegistrations',
+  'sharedRegisterType',
+  'whenDependentTypesAreResolved',
+  'embind_charCodes',
+  'embind_init_charCodes',
+  'readLatin1String',
+  'getTypeName',
+  'heap32VectorToArray',
+  'requireRegisteredType',
   'UnboundTypeError',
   'PureVirtualError',
   'init_embind',
-  'throwInternalError',
-  'throwBindingError',
   'throwUnboundTypeError',
   'ensureOverloadTable',
   'exposePublicSymbol',
@@ -9911,18 +10496,8 @@ var unexportedSymbols = [
   'getInheritedInstance',
   'getInheritedInstanceCount',
   'getLiveInheritedInstances',
-  'registeredTypes',
-  'awaitingDependencies',
-  'typeDependencies',
   'registeredPointers',
   'registerType',
-  'whenDependentTypesAreResolved',
-  'embind_charCodes',
-  'embind_init_charCodes',
-  'readLatin1String',
-  'getTypeName',
-  'heap32VectorToArray',
-  'requireRegisteredType',
   'getShiftFromSize',
   'integerReadValueFromPointer',
   'floatReadValueFromPointer',
@@ -9931,8 +10506,6 @@ var unexportedSymbols = [
   'newFunc',
   'craftInvokerFunction',
   'embind__requireFunction',
-  'tupleRegistrations',
-  'structRegistrations',
   'genericPointerToWireType',
   'constNoSmartPtrRawPointerToWireType',
   'nonConstNoSmartPtrRawPointerToWireType',
@@ -10110,7 +10683,7 @@ function checkUnflushedContent() {
   out = oldOut;
   err = oldErr;
   if (has) {
-    warnOnce('stdio streams had content in them that was not flushed. you should set EXIT_RUNTIME to 1 (see the FAQ), or make sure to emit a newline when you printf etc.');
+    warnOnce('stdio streams had content in them that was not flushed. you should set EXIT_RUNTIME to 1 (see the Emscripten FAQ), or make sure to emit a newline when you printf etc.');
   }
 }
 
