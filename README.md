@@ -2,6 +2,7 @@
 
 [![build](https://circleci.com/gh/gsanta/spright.svg?style=shield)](https://app.circleci.com/pipelines/github/gsanta/spright?branch=master)
 
+Try out the editor at [spright](https://spright-editor.com/)
 
 Spright is a pixel art drawing tool similar to [Aseprite](https://github.com/aseprite/aseprite) or [Piskel](https://github.com/piskelapp/piskel) with the ambition of providing a better user experience for generating art.
 
