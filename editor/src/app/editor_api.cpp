@@ -110,6 +110,26 @@ void set_rectangle_tool_filled(bool isFilled)
     rectangleTool->setFilled(isFilled);
 }
 
+std::string get_canvas_size()
+{
+    const Bounds &bounds = editor->getActiveDocument().getActiveDrawing().getBounds();
+
+    nlohmann::json json = {
+        {"width", bounds.getWidth()},
+        {"height", bounds.getHeight()},
+    };
+
+    return json.dump();
+}
+
+void set_canvas_size(int width, int height)
+{
+    Drawing &drawing = editor->getActiveDocument().getActiveDrawing();
+    drawing = resize_drawing(drawing,
+                             Bounds::createWithPositions(-width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f),
+                             editor->getDocumentFactory());
+}
+
 EMSCRIPTEN_BINDINGS(spright)
 {
     emscripten::function("getFrames", &getFrames);
@@ -129,6 +149,8 @@ EMSCRIPTEN_BINDINGS(spright)
     emscripten::function("isCircleToolFilled", &is_circle_tool_filled);
     emscripten::function("setRectangleToolFilled", &set_rectangle_tool_filled);
     emscripten::function("isRectangleToolFilled", &is_rectangle_tool_filled);
+    emscripten::function("getCanvasSize", &get_canvas_size);
+    emscripten::function("setCanvasSize", &set_canvas_size);
 }
 
 #endif

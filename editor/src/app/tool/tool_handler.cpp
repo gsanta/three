@@ -200,7 +200,13 @@ namespace editor
         }
         else if (key == GLFW_KEY_R)
         {
-            m_DocumentStore->getActiveDocument().getActiveDrawing().removeFrame(1);
+            float pixelCount = 16.0f;
+            Bounds drawingBounds = Bounds::createWithPositions(-pixelCount / 2.0f,
+                                                               pixelCount / 2.0f,
+                                                               -pixelCount / 2.0f,
+                                                               pixelCount / 2.0f);
+            Drawing &drawing = m_DocumentStore->getActiveDocument().getActiveDrawing();
+            drawing = resize_drawing(drawing, drawingBounds, m_DocumentFactory);
         }
     }
 

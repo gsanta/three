@@ -14,6 +14,14 @@ DrawingBuilder &DrawingBuilder::withTileLayer(TileLayerBuilder props)
     return *this;
 }
 
+DrawingBuilder &DrawingBuilder::withBackgroundLayerTileSize(float tileSize)
+{
+    m_BackgroundLayerTileSize = tileSize;
+
+    return *this;
+}
+
+
 DrawingBuilder &DrawingBuilder::withTileSize(float tileSize)
 {
 
@@ -55,36 +63,42 @@ Drawing DrawingBuilder::build()
         throw "Either configure DrawingBuilder with LayerBuilders or FrameBuilders, but both are not allowed";
     }
 
-    if (m_Frames.size() > 0)
-    {
-        return buildFromFrames();
-    }
+    Drawing drawing = m_Frames.size() > 0 ? buildFromFrames() : buildFromLayers();
 
-    return buildFromLayers();
+    // if (m_Frames.size() > 0)
+    // {
+    //     drawing = buildFromFrames();
+    // } else {
+    //     drawing = buildFromLayers();
+    // }
+
+    Checkerboard checkerboard;
+    checkerboard.create(drawing.getBackgroundLayer());
+
+    return drawing;
 }
 
 Drawing DrawingBuilder::buildFromLayers()
 {
-    Drawing drawing(m_Bounds);
+
+    TileLayer initialLayer = m_TileLayers.empty()
+                                 ? TileLayerBuilder().withTileSize(m_TileSize).withBounds(m_Bounds).build()
+                                 : m_TileLayers[0].withBounds(m_Bounds).withTileSize(m_TileSize).build();
+
+    TileLayer backgroundLayer = TileLayerBuilder().withTileSize(m_BackgroundLayerTileSize).withBounds(m_Bounds).build();
+
+    Drawing drawing(initialLayer, backgroundLayer);
 
     const Frame frame(0);
 
     const TileLayer foregroundLayer("", Group<Rect2D>(new HeadlessRenderer2D()), m_Bounds, m_TileSize);
-    const TileLayer backgroundLayer("", Group<Rect2D>(new HeadlessRenderer2D()), m_Bounds, 2.0f);
 
-    drawing.addFrame(frame);
-    drawing.addBackgroundLayer(backgroundLayer);
     drawing.addForegroundLayer(foregroundLayer);
 
-    for (TileLayerBuilder &builder : m_TileLayers)
+    for (size_t i = 1; i < m_TileLayers.size(); i++)
     {
-        const TileLayer layer = builder.withBounds(m_Bounds).withTileSize(m_TileSize).build();
+        const TileLayer layer = m_TileLayers[i].withBounds(m_Bounds).withTileSize(m_TileSize).build();
         drawing.addLayer(layer);
-    }
-
-    if (m_TileLayers.empty())
-    {
-        drawing.addLayer(TileLayerBuilder().withTileSize(m_TileSize).withBounds(m_Bounds).build());
     }
 
     return drawing;
@@ -92,12 +106,16 @@ Drawing DrawingBuilder::buildFromLayers()
 
 Drawing DrawingBuilder::buildFromFrames()
 {
-    Drawing drawing(m_Bounds);
+    TileLayer backgroundLayer = TileLayerBuilder().withTileSize(m_BackgroundLayerTileSize).withBounds(m_Bounds).build();
+
+    std::vector<Frame> frames;
 
     for (FrameBuilder &frameBuilder : m_Frames)
     {
-        drawing.addFrame(frameBuilder.build());
+        frames.push_back(frameBuilder.build());
     }
+
+    Drawing drawing(frames, backgroundLayer);
 
     return drawing;
 }

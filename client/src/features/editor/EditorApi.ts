@@ -73,6 +73,10 @@ interface EditorApi {
   setRectangleToolFilled(isFilled: boolean): void;
 
   isRectangleToolFilled(): boolean;
+
+  getCanvasSize(): string;
+
+  setCanvasSize(width: number, height: number): string;
 }
 
 export default EditorApi;

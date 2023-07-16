@@ -1,4 +1,3 @@
-import Editor from '@/features/editor/Editor';
 import EditorApi from '@/features/editor/EditorApi';
 import { toRGBAColor } from '@/utils/colorUtils';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
@@ -6,18 +5,27 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface SettingsState {
   color: string;
   editor?: EditorApi;
+  canvasSize: {
+    width: number;
+    height: number;
+  };
 }
 
 const initialState: SettingsState = {
   color: '#000000',
+  canvasSize: {
+    width: 0,
+    height: 0,
+  },
 };
 
 export const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    initSettings: (state, action: PayloadAction<Editor>) => {
-      state.editor = action.payload;
+    initSettings: (state, action: PayloadAction<Pick<SettingsState, 'editor' | 'canvasSize'>>) => {
+      state.editor = action.payload.editor;
+      state.canvasSize = action.payload.canvasSize;
     },
 
     // receives the color from the c++ editor
@@ -40,12 +48,18 @@ export const settingsSlice = createSlice({
       state.editor?.setColor(hexColor);
     },
 
+    setCanvasSize: (state, action: PayloadAction<SettingsState['canvasSize']>) => {
+      state.canvasSize = action.payload;
+
+      state.editor?.setCanvasSize(state.canvasSize.width, state.canvasSize.height);
+    },
+
     flipHorizontal: (state) => {
       state.editor?.flipHorizontal();
     },
   },
 });
 
-export const { flipHorizontal, initSettings, receiveColor, setColor } = settingsSlice.actions;
+export const { flipHorizontal, initSettings, receiveColor, setCanvasSize, setColor } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

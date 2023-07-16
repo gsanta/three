@@ -2,15 +2,11 @@
 
 namespace spright
 {
-namespace engine
+namespace editor
 {
-    TileLayer resize_tile_layer(TileLayer &orig, const Bounds &bounds)
+    TileLayer resize_tile_layer(const TileLayer &orig, const Bounds &bounds, DocumentFactory *documentFactory)
     {
-        TileLayer newTileLayer(orig.getName(),
-                               Group<Rect2D>(orig.m_Group.getRenderer()->clone()),
-                               bounds,
-                               orig.getTileSize(),
-                               orig.getZPos());
+        TileLayer newTileLayer = documentFactory->createTileLayer(orig.getName(), bounds, orig.getTileSize());
         for (Rect2D *rect : orig.getRenderables())
         {
             Vec2 rectCenter = rect->getCenterPosition2d();
@@ -22,25 +18,27 @@ namespace engine
 
         return newTileLayer;
     }
-} // namespace engine
-} // namespace spright
 
-namespace spright
-{
-namespace editor
-{
-    Drawing resize_drawing(Drawing &orig, Bounds bounds)
+    Drawing resize_drawing(const Drawing &orig, const Bounds &bounds, DocumentFactory *documentFactory)
     {
-        Drawing newDrawing(bounds);
-        for (Frame &frame : orig.getFrames())
+        std::vector<Frame> frames;
+
+        for (const Frame &frame : orig.getFrames())
         {
-            Frame &newFrame = newDrawing.addFrame(Frame(frame.getIndex()));
-            for (TileLayer &layer : frame.getLayers())
+            Frame newFrame(frame.getIndex());
+            for (const TileLayer &layer : frame.getLayers())
             {
-                TileLayer newLayer = resize_tile_layer(layer, bounds);
+                TileLayer newLayer = resize_tile_layer(layer, bounds, documentFactory);
                 newFrame.addLayer(newLayer);
             }
+
+            frames.push_back(std::move(newFrame));
         }
+
+        TileLayer backgroundLayer =
+            documentFactory->createBackgroundLayer(bounds, orig.getBackgroundLayer().getTileSize());
+
+        Drawing newDrawing(frames, backgroundLayer);
 
         return newDrawing;
     }
