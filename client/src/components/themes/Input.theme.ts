@@ -1,11 +1,8 @@
 import { inputAnatomy as parts } from '@chakra-ui/anatomy';
 import { createMultiStyleConfigHelpers } from '@chakra-ui/styled-system';
 const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(parts.keys);
-import { getColor } from '@chakra-ui/theme-tools';
 
-const OutlineVariant = definePartsStyle((props) => {
-  const { theme } = props;
-
+const OutlineVariant = definePartsStyle(() => {
   return {
     field: {
       border: '1px solid',
@@ -13,8 +10,8 @@ const OutlineVariant = definePartsStyle((props) => {
       bg: 'brand.background',
       _focusVisible: {
         zIndex: 1,
-        borderColor: 'brand.primary',
-        boxShadow: `0 0 0 1px ${getColor(theme, 'brand.primary')}`,
+        borderColor: 'orange.400',
+        boxShadow: `0 0 0 1px var(--chakra-colors-orange-600)`,
       },
     },
   };

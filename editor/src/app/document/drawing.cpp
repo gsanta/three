@@ -7,11 +7,32 @@ namespace editor
 
     Drawing resize_drawing(Drawing &orig, Bounds bounds);
 
-    Drawing::Drawing(Bounds bounds) : Container(bounds)
+    Drawing::Drawing(const TileLayer &initialLayer, const TileLayer &backgroundLayer)
+        : Container(initialLayer.getBounds())
     {
+        Frame frame(0);
+        frame.addLayer(initialLayer);
+        m_Frames.push_back(frame);
+        m_BackgroundLayer = std::make_shared<TileLayer>(backgroundLayer);
+    }
+
+    Drawing::Drawing(const std::vector<Frame> &frames, const TileLayer &backgroundLayer)
+        : Container(backgroundLayer.getBounds())
+    {
+        m_Frames = frames;
+        for (size_t i = 0; i < m_Frames.size(); i++)
+        {
+            m_Frames[i].setIndex(i);
+        }
+        m_BackgroundLayer = std::make_shared<TileLayer>(backgroundLayer);
     }
 
     std::vector<Frame> &Drawing::getFrames()
+    {
+        return m_Frames;
+    }
+
+    const std::vector<Frame> &Drawing::getFrames() const
     {
         return m_Frames;
     }
@@ -99,12 +120,17 @@ namespace editor
 
     TileLayer &Drawing::getBackgroundLayer()
     {
-        return m_BackgroundLayers[0];
+        return *m_BackgroundLayer;
+    }
+
+    TileLayer &Drawing::getBackgroundLayer() const
+    {
+        return *m_BackgroundLayer;
     }
 
     void Drawing::addBackgroundLayer(const TileLayer &tileLayer)
     {
-        m_BackgroundLayers.push_back(tileLayer);
+        m_BackgroundLayer = std::make_shared<TileLayer>(tileLayer);
     }
 
     void Drawing::addForegroundLayer(const TileLayer &tileLayer)
@@ -121,9 +147,9 @@ namespace editor
 
     void Drawing::render(const Camera &camera)
     {
-        for (TileLayer &layer : m_BackgroundLayers)
+        if (m_BackgroundLayer)
         {
-            layer.render(camera);
+            m_BackgroundLayer->render(camera);
         }
 
         for (TileLayer &layer : getActiveFrame().getLayers())
@@ -142,10 +168,6 @@ namespace editor
         return m_DrawingState;
     }
 
-    void Drawing::resize(Bounds newBounds)
-    {
-        *this = resize_drawing(*this, newBounds);
-    }
 
 } // namespace editor
 } // namespace spright

@@ -30,6 +30,32 @@ namespace editor
         }
     }
 
+    TileLayer DocumentFactory::createTileLayer(std::string name, const Bounds &bounds, float tileSize)
+    {
+        TileLayer tileLayer("",
+                            Group<Rect2D>(m_RendererProvider->createRenderer2D()),
+                            bounds,
+                            tileSize,
+                            m_BackgroundZPos);
+
+        return tileLayer;
+    }
+
+
+    TileLayer DocumentFactory::createBackgroundLayer(const Bounds &bounds, float tileSize)
+    {
+        TileLayer backgroundLayer("",
+                                  Group<Rect2D>(m_RendererProvider->createRenderer2D()),
+                                  bounds,
+                                  tileSize,
+                                  m_BackgroundZPos);
+
+        Checkerboard checkerboard;
+        checkerboard.create(backgroundLayer);
+
+        return backgroundLayer;
+    }
+
     void DocumentFactory::createFrame(Document &document)
     {
         Frame frame(0);
@@ -46,21 +72,16 @@ namespace editor
 
     Drawing DocumentFactory::createDrawing(Bounds bounds, bool checkerboard, float zPos)
     {
-        Drawing drawing(bounds);
+        TileLayer initialLayer("layer1", Group<Rect2D>(m_RendererProvider->createRenderer2D()), bounds);
+        TileLayer backgroundLayer("", Group<Rect2D>(m_RendererProvider->createRenderer2D()), bounds, 2.0f, zPos);
+
+        Drawing drawing(initialLayer, backgroundLayer);
 
         float tileSize = TileLayer::defaultTileSize;
 
         TileLayer tempLayer("", Group<Rect2D>(m_RendererProvider->createRenderer2D()), bounds, tileSize, zPos);
-        TileLayer backgroundLayer("", Group<Rect2D>(m_RendererProvider->createRenderer2D()), bounds, 2.0f, zPos);
 
-        Frame frame(0);
-
-        drawing.addFrame(frame);
-        drawing.addBackgroundLayer(backgroundLayer);
         drawing.addForegroundLayer(tempLayer);
-
-        createUserLayer(drawing, "layer1");
-        createUserLayer(drawing, "layer2");
 
         if (checkerboard)
         {

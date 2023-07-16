@@ -12,6 +12,7 @@ import {
   ModalFooter,
   ModalFooterProps,
   ButtonGroup,
+  HTMLChakraProps,
 } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
 import { BiX } from 'react-icons/bi';
@@ -21,7 +22,7 @@ export type DialogProps = {
   isOpen: boolean;
   onClose(): void;
   title: string;
-};
+} & Omit<HTMLChakraProps<'section'>, 'scrollBehavior'>;
 
 export type DialogBodyProps = ModalBodyProps;
 
@@ -49,7 +50,7 @@ export const DialogButtons = ({ children, ...rest }: DialogFooterProps) => {
   );
 };
 
-const Dialog = ({ children, isOpen, onClose, title }: DialogProps) => {
+const Dialog = ({ children, isOpen, onClose, title, ...rest }: DialogProps) => {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
@@ -62,7 +63,7 @@ const Dialog = ({ children, isOpen, onClose, title }: DialogProps) => {
       trapFocus={true}
     >
       <ModalOverlay />
-      <ModalContent bgColor="chakra-body-bg">
+      <ModalContent {...rest} bgColor="chakra-body-bg">
         <ModalHeader>
           <Text as="h1" color="gray.300" size="3" textTransform="uppercase">
             {title}

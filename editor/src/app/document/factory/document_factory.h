@@ -37,6 +37,10 @@ namespace editor
 
         Drawing createDrawing(Bounds bounds, bool checkerboard = true, float zPos = 0);
 
+        TileLayer createTileLayer(std::string name, const Bounds &bounds, float tileSize);
+
+        TileLayer createBackgroundLayer(const Bounds &bounds, float tileSize);
+
         void createFrame(Document &document);
 
         void createUserLayer(Drawing &drawing, std::string name);
@@ -47,6 +51,8 @@ namespace editor
         Checkerboard m_Checkerboard;
 
         RendererProvider *m_RendererProvider = nullptr;
+
+        float m_BackgroundZPos = 0;
     };
 } // namespace editor
 } // namespace spright

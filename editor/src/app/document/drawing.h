@@ -4,6 +4,8 @@
 #include "drawing_state.h"
 #include "frame.h"
 
+#include <memory>
+
 namespace spright
 {
 namespace editor
@@ -13,9 +15,13 @@ namespace editor
     class Drawing : public Container
     {
     public:
-        Drawing(Bounds bounds);
+        Drawing(const TileLayer &initialLayer, const TileLayer &backgroundLayer);
+
+        Drawing(const std::vector<Frame> &frames, const TileLayer &backgroundLayer);
 
         std::vector<Frame> &getFrames();
+
+        const std::vector<Frame> &getFrames() const;
 
         Frame &getActiveFrame();
 
@@ -37,6 +43,8 @@ namespace editor
 
         TileLayer &getBackgroundLayer();
 
+        TileLayer &getBackgroundLayer() const;
+
         void addBackgroundLayer(const TileLayer &tileLayer);
 
         void addForegroundLayer(const TileLayer &tileLayer);
@@ -47,10 +55,8 @@ namespace editor
 
         DrawingState &getState();
 
-        void resize(Bounds newBounds);
-
     private:
-        std::vector<TileLayer> m_BackgroundLayers;
+        std::shared_ptr<TileLayer> m_BackgroundLayer;
 
         std::vector<TileLayer> m_ForegroundLayers;
 

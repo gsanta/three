@@ -19,6 +19,8 @@ public:
 
     DrawingBuilder &withTileLayer();
 
+    DrawingBuilder &withBackgroundLayerTileSize(float tileSize);
+
     DrawingBuilder &withFrame(FrameBuilder);
 
     DrawingBuilder &withFrame(FrameBuilder, size_t repeat);
@@ -36,6 +38,8 @@ private:
     vector<TileLayerBuilder> m_TileLayers;
 
     vector<FrameBuilder> m_Frames;
+
+    float m_BackgroundLayerTileSize = TileLayer::defaultTileSize;
 
     float m_TileSize = 0.5f;
 };

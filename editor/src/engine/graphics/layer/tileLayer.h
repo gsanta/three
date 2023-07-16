@@ -21,8 +21,6 @@ namespace engine
 
     class TileLayer
     {
-        friend TileLayer resize_tile_layer(TileLayer &orig, const Bounds &bounds);
-
     public:
         const static float defaultTileSize;
 

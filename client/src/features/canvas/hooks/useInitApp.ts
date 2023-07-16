@@ -18,9 +18,9 @@ const useInitApp = (appContext: App, canvasNode?: HTMLCanvasElement) => {
       store.dispatch(initFrames(appContext.editorApi));
       store.dispatch(initLayers(appContext.editorApi));
       store.dispatch(initTools(appContext.editorApi));
-      store.dispatch(initSettings(appContext.editorApi));
 
-      console.log('hello');
+      const canvasSize = JSON.parse(appContext.editorApi.getCanvasSize());
+      store.dispatch(initSettings({ editor: appContext.editorApi, canvasSize }));
     }
   });
 
