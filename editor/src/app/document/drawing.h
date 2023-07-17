@@ -41,6 +41,8 @@ namespace editor
 
         TileLayer &getForegroundLayer();
 
+        std::vector<TileLayer> &getForegroundLayers();
+
         TileLayer &getBackgroundLayer();
 
         TileLayer &getBackgroundLayer() const;
@@ -49,9 +51,9 @@ namespace editor
 
         void addForegroundLayer(const TileLayer &tileLayer);
 
-        std::string getJson();
+        Camera &getCamera();
 
-        void render(const Camera &camera);
+        std::string getJson();
 
         DrawingState &getState();
 

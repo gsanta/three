@@ -36,7 +36,7 @@ namespace editor
                             Group<Rect2D>(m_RendererProvider->createRenderer2D()),
                             bounds,
                             tileSize,
-                            m_BackgroundZPos);
+                            m_TileLayerZPos);
 
         return tileLayer;
     }
@@ -72,8 +72,8 @@ namespace editor
 
     Drawing DocumentFactory::createDrawing(Bounds bounds, bool checkerboard, float zPos)
     {
-        TileLayer initialLayer("layer1", Group<Rect2D>(m_RendererProvider->createRenderer2D()), bounds);
-        TileLayer backgroundLayer("", Group<Rect2D>(m_RendererProvider->createRenderer2D()), bounds, 2.0f, zPos);
+        TileLayer backgroundLayer("", Group<Rect2D>(m_RendererProvider->createRenderer2D()), bounds, 2.0f, zPos - 0.1f);
+        TileLayer initialLayer("layer1", Group<Rect2D>(m_RendererProvider->createRenderer2D()), bounds, 0.5f, zPos);
 
         Drawing drawing(initialLayer, backgroundLayer);
 

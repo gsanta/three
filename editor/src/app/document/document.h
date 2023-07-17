@@ -46,8 +46,6 @@ namespace editor
 
         std::string getJson();
 
-        void render();
-
     private:
         std::vector<Drawing> m_Drawings;
 
