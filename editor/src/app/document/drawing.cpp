@@ -118,6 +118,11 @@ namespace editor
         return m_ForegroundLayers[0];
     }
 
+    std::vector<TileLayer> &Drawing::getForegroundLayers()
+    {
+        return m_ForegroundLayers;
+    }
+
     TileLayer &Drawing::getBackgroundLayer()
     {
         return *m_BackgroundLayer;
@@ -143,24 +148,6 @@ namespace editor
         nlohmann::json json = getActiveFrame().getLayer(m_ActiveLayerIndex).getJson();
 
         return json.dump();
-    }
-
-    void Drawing::render(const Camera &camera)
-    {
-        if (m_BackgroundLayer)
-        {
-            m_BackgroundLayer->render(camera);
-        }
-
-        for (TileLayer &layer : getActiveFrame().getLayers())
-        {
-            layer.render(camera);
-        }
-
-        for (TileLayer &layer : m_ForegroundLayers)
-        {
-            layer.render(camera);
-        }
     }
 
     DrawingState &Drawing::getState()

@@ -6,7 +6,7 @@
 #include "../../../maths/vec2_int.h"
 #include "../../../stb_image_write.h"
 #include "../../document/document.h"
-#include "../../rendering.h"
+#include "../../rendering/rendering.h"
 #include "./image_data.h"
 
 #include <cstring>

@@ -70,15 +70,5 @@ namespace editor
 
         return json.dump();
     }
-
-    void Document::render()
-    {
-        for (Drawing &drawing : m_Drawings)
-        {
-            drawing.render(m_Camera);
-        }
-
-        m_Canvas.render(m_Camera);
-    }
 } // namespace editor
 } // namespace spright

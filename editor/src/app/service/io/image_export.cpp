@@ -27,10 +27,10 @@ namespace editor
 
         m_Rendering->enableImageTarget();
 
-        document.render();
+        m_Rendering->render();
         writeImageData(intBounds);
 
-        m_Rendering->disableImageTarget();
+        m_Rendering->enableScreenTarget();
     }
 
     void ImageExport::writeImageData(BoundsInt bounds)
