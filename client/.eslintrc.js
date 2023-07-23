@@ -32,7 +32,6 @@ module.exports = {
     'plugin:jest/style',
     'plugin:prettier/recommended',
     'prettier/prettier',
-    'plugin:storybook/recommended',
   ],
   plugins: [
     /*** Uncommented plugins are here for clarity, DON'T remove them!!! ***/

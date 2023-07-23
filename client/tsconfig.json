@@ -10,12 +10,9 @@
     "outDir": "./build",
     "typeRoots": [
       "./node_modules/@types",
-      "@testing-library/jest-dom"
     ],
     "types": [
       "node",
-      "jest",
-      "@testing-library/jest-dom"
     ],
     "target": "es6",
     "lib": [
@@ -46,18 +43,12 @@
     "experimentalDecorators": true,
   },
   "include": [
-    ".storybook/**/*.tsx",
     ".eslintrc.js",
     "webpack.config.js",
-    "jest.config.js",
     "src/pages/**/*.tsx",
     "src/pages/**/*.jsx",
     "src/**/*.ts",
     "src/**/*.tsx",
-    "test/**/*.ts",
-    "test/**/*.tsx",
-    "msw_mock_api/**/*.ts",
-    "public/mockServiceWorker.js",
     "src/pages/app.tsx",
     "src/pages/_app.js",
     "engine/**/*.ts",
