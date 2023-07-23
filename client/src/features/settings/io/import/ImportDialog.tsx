@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Dialog, { DialogProps, DialogBody, DialogFooter } from '@/components/dialog/Dialog';
 import { Button } from '@chakra-ui/react';
 import DropZone from './DropZone';
@@ -9,6 +9,8 @@ const ImportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children
   const editor = useAppSelector((state) => state.tool.editor);
   const dispatch = useAppDispatch();
 
+  const [isImporting, setImporting] = useState(false);
+
   const [fileName, setFileName] = useState<string>();
   const [fileContent, setFileContent] = useState<string>();
 
@@ -17,11 +19,16 @@ const ImportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children
     setFileContent(content);
   };
 
-  const handleImport = () => {
-    if (fileContent && editor) {
+  useEffect(() => {
+    if (isImporting && fileContent && editor) {
       dispatch(importDocument(fileContent, editor));
+      setImporting(false);
+      onClose();
     }
-    onClose();
+  }, [isImporting, setImporting, dispatch, fileContent, editor, onClose]);
+
+  const handleImport = () => {
+    setImporting(true);
   };
 
   return (
@@ -33,7 +40,13 @@ const ImportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children
         <Button size="sm" onClick={onClose}>
           Close
         </Button>
-        <Button size="sm" colorScheme="orange" disabled={fileName === undefined} onClick={handleImport}>
+        <Button
+          size="sm"
+          colorScheme="orange"
+          isLoading={isImporting}
+          disabled={fileName === undefined}
+          onClick={handleImport}
+        >
           Import
         </Button>
       </DialogFooter>

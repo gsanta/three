@@ -43,6 +43,8 @@ namespace editor
 
         ~Editor();
 
+        void init();
+
         Window *getWindow() const;
 
         DocumentStore *getDocumentStore();

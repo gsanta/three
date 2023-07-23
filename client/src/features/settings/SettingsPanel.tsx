@@ -11,7 +11,7 @@ import ResizeCanvasDialog from './edit/ResizeCanvasDialog';
 
 const SettingsPanel = () => {
   const [isExportDialogOpen, setExportDialogOpen] = useState(false);
-  const [isImportDialogOpen, setImportDialogOpen] = useState(false);
+  const { value: isImportDialogOpen, setTrue: openImportDialog, setFalse: closeImportDialog } = useBoolean(false);
 
   const dispatch = useAppDispatch();
 
@@ -28,7 +28,7 @@ const SettingsPanel = () => {
       <Menu>
         <MenuButton as={IconButton} aria-label="Options" icon={<Icon name="CiSettings" />} size="sm" variant="solid" />
         <MenuList>
-          <MenuItem onClick={() => setImportDialogOpen(true)}>Import</MenuItem>
+          <MenuItem onClick={openImportDialog}>Import</MenuItem>
           <MenuItem onClick={() => setExportDialogOpen(true)}>Export</MenuItem>
         </MenuList>
       </Menu>
@@ -39,7 +39,7 @@ const SettingsPanel = () => {
           <MenuItem onClick={openResizeCanvasDialog}>Resize canvas</MenuItem>
         </MenuList>
       </Menu>
-      <ImportDialog isOpen={isImportDialogOpen} onClose={() => setImportDialogOpen(false)} />
+      <ImportDialog isOpen={isImportDialogOpen} onClose={closeImportDialog} />
       <ExportDialog isOpen={isExportDialogOpen} onClose={() => setExportDialogOpen(false)} />
       <ResizeCanvasDialog isOpen={isResizeCanvasDialogOpen} onClose={closeResizeCanvasDialog} />
     </Box>

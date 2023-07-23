@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
+const Dotenv = require('dotenv-webpack');
 
 const path = require('path');
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -84,6 +85,9 @@ module.exports = (env) => {
         output: 'manifest.json',
         entrypointsUseAssets: true,
       }),
+      new Dotenv({
+        path: '../backend/.env'
+      })
     ],
     resolve: {
       extensions: ['.tsx', '.ts', '.js', 'scss', '.css'],

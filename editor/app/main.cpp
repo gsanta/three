@@ -54,7 +54,7 @@ void setWindowSize(int width, int height)
 {
     if (window != nullptr)
     {
-        window->setSize(width, height);
+        editor->getWindow()->setSize(width, height);
         editor->getDocumentStore()->getActiveDocument().getCamera().updateWindowSize(width, height);
     }
 }
@@ -219,7 +219,8 @@ int main()
 #endif
 
     editor = new spright::Editor(RunLoop(timer));
-    window = editor->getWindow();
+    editor->init();
+
 
     // Group* group = new Group(Mat4::translation(maths::Vec3(-5.0f, 5.0f, 0.0f)));
     // group->add(new Rect2D(0, 0, 6, 3, maths::Vec4(1, 1, 1, 1)));
@@ -237,7 +238,7 @@ int main()
 #ifdef SPARKY_EMSCRIPTEN
     std::function<void()> mainLoop = [&]() {
 #else
-    while (!editor->getWindow()->closed())
+    while (!editor || !editor->getWindow()->closed())
     {
 #endif
         editor->getWindow()->clear();
