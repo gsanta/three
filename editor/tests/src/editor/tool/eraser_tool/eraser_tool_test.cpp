@@ -67,8 +67,8 @@ TEST_CASE("EraseTool pointerDown", "[erase-tool]")
     {
         DocumentStore documentStore =
             DocumentStoreBuilder()
-                .withDrawing(DrawingBuilder().withBounds(Bounds::createWithPositions(0.0f, 2.0f, 0.0f, 2.0f)))
-                .withDrawing(DrawingBuilder().withBounds(Bounds::createWithPositions(0.0f, 5.0f, 0.0f, 5.0f)))
+                .withDrawing(DrawingBuilder().withBounds(Bounds::createWithPositions(0.0f, 0.0f, 2.0f, 2.0f)))
+                .withDrawing(DrawingBuilder().withBounds(Bounds::createWithPositions(0.0f, 0.0f, 5.0f, 5.0f)))
                 .build();
 
         TileLayer &foregroundLayer1 = documentStore.getActiveDocument().getDrawings()[0].getForegroundLayer();

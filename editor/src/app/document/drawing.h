@@ -51,8 +51,6 @@ namespace editor
 
         void addForegroundLayer(const TileLayer &tileLayer);
 
-        Camera &getCamera();
-
         std::string getJson();
 
         DrawingState &getState();

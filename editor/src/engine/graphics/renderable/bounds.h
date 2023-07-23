@@ -2,6 +2,7 @@
 #include "../../../maths/vec2.h"
 
 #include <sstream>
+#include <vector>
 
 namespace spright
 {
@@ -25,7 +26,7 @@ namespace engine
 
         Bounds();
 
-        static Bounds createWithPositions(float minX, float maxX, float minY, float maxY);
+        static Bounds createWithPositions(float minX, float minY, float maxX, float maxY);
 
         friend bool operator==(const Bounds &, const Bounds &);
 
@@ -44,6 +45,8 @@ namespace engine
         void translate(float x, float y);
 
         bool isNull() const;
+
+        std::vector<float> toArray() const;
 
         Vec2 getBottomLeft() const;
 

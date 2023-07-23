@@ -135,7 +135,7 @@ namespace engine
             width = height * ratio; // docDimensions.getRatio();
         }
 
-        return Bounds::createWithPositions(-width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f);
+        return Bounds::createWithPositions(-width / 2.0f, -height / 2.0f, width / 2.0f, height / 2.0f);
     }
 } // namespace engine
 } // namespace spright

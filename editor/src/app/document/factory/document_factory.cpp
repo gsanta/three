@@ -20,14 +20,9 @@ namespace editor
         delete m_RendererProvider;
     }
 
-    void DocumentFactory::createUserLayer(Drawing &drawing, std::string name)
+    TileLayer DocumentFactory::createUserLayer(const Bounds &bounds, std::string name, float tileSize) const
     {
-        TileLayer layer(name, Group<Rect2D>(m_RendererProvider->createRenderer2D()), drawing.getBounds());
-
-        for (Frame &frame : drawing.getFrames())
-        {
-            frame.addLayer(std::move(layer));
-        }
+        return TileLayer(name, Group<Rect2D>(m_RendererProvider->createRenderer2D()), bounds, tileSize);
     }
 
     TileLayer DocumentFactory::createTileLayer(std::string name, const Bounds &bounds, float tileSize)
@@ -70,16 +65,25 @@ namespace editor
         document.getActiveDrawing().addFrame(std::move(frame));
     }
 
-    Drawing DocumentFactory::createDrawing(Bounds bounds, bool checkerboard, float zPos)
+    Drawing DocumentFactory::createDrawing(std::vector<Frame> &frames, bool checkerboard) const
     {
-        TileLayer backgroundLayer("", Group<Rect2D>(m_RendererProvider->createRenderer2D()), bounds, 2.0f, zPos - 0.1f);
-        TileLayer initialLayer("layer1", Group<Rect2D>(m_RendererProvider->createRenderer2D()), bounds, 0.5f, zPos);
+        TileLayer &aLayer = frames[0].getLayers()[0];
 
-        Drawing drawing(initialLayer, backgroundLayer);
+        TileLayer backgroundLayer("",
+                                  Group<Rect2D>(m_RendererProvider->createRenderer2D()),
+                                  aLayer.getBounds(),
+                                  2.0f,
+                                  m_BackgroundZPos);
+
+        Drawing drawing(frames, backgroundLayer);
 
         float tileSize = TileLayer::defaultTileSize;
 
-        TileLayer tempLayer("", Group<Rect2D>(m_RendererProvider->createRenderer2D()), bounds, tileSize, zPos);
+        TileLayer tempLayer("",
+                            Group<Rect2D>(m_RendererProvider->createRenderer2D()),
+                            aLayer.getBounds(),
+                            tileSize,
+                            aLayer.getZPos());
 
         drawing.addForegroundLayer(tempLayer);
 
@@ -91,11 +95,25 @@ namespace editor
         return drawing;
     }
 
-    Document DocumentFactory::createDocument()
+    Drawing DocumentFactory::createDrawing(Bounds bounds, bool checkerboard, float zPos) const
+    {
+        TileLayer initialLayer("layer1", Group<Rect2D>(m_RendererProvider->createRenderer2D()), bounds, 0.5f, zPos);
+
+        std::vector<Frame> frames;
+
+        Frame frame(0);
+
+        frame.addLayer(initialLayer);
+        frames.push_back(frame);
+
+        return createDrawing(frames, checkerboard);
+    }
+
+    Document DocumentFactory::createEmptyDocument() const
     {
         float pixelCount = 32.0f;
         Bounds drawingBounds =
-            Bounds::createWithPositions(-pixelCount / 2.0f, pixelCount / 2.0f, -pixelCount / 2.0f, pixelCount / 2.0f);
+            Bounds::createWithPositions(-pixelCount / 2.0f, -pixelCount / 2.0f, pixelCount / 2.0f, pixelCount / 2.0f);
 
         Camera camera(m_WindowContainer->getBounds().getWidth(),
                       m_WindowContainer->getBounds().getHeight(),
@@ -105,8 +123,17 @@ namespace editor
 
         Document document(drawingBounds, camera, createDrawing(drawingBounds, false, 0.01f));
 
+        return document;
+    }
+
+    Document DocumentFactory::createDocument()
+    {
+        float pixelCount = 32.0f;
+
+        Document document = createEmptyDocument();
+
         document.addDrawing(
-            createDrawing(Bounds::createWithPositions(-16.0f, 16.0f, -pixelCount / 2.0f, pixelCount / 2.0f)));
+            createDrawing(Bounds::createWithPositions(-16.0f, -pixelCount / 2.0f, 16.0f, pixelCount / 2.0f)));
 
         return document;
     }

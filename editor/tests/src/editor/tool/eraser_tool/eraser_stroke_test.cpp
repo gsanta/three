@@ -18,7 +18,7 @@ TEST_CASE("EraserStroke draw", "[eraser-stroke]")
         float tileSize = 0.5f;
 
         TileLayer drawLayer =
-            TestDocumentFactory::createTileLayer(0, tileSize, Bounds::createWithPositions(-5.0f, 5.0f, -5.0f, 5.0f));
+            TestDocumentFactory::createTileLayer(0, tileSize, Bounds::createWithPositions(-5.0f, -5.0f, 5.0f, 5.0f));
 
         EraserStroke eraserStroke(eraserSize);
 
@@ -57,7 +57,7 @@ TEST_CASE("EraserStroke draw", "[eraser-stroke]")
         float tileSize = 0.5f;
 
         TileLayer drawLayer =
-            TestDocumentFactory::createTileLayer(0, tileSize, Bounds::createWithPositions(-5.0f, 5.0f, -5.0f, 5.0f));
+            TestDocumentFactory::createTileLayer(0, tileSize, Bounds::createWithPositions(-5.0f, -5.0f, 5.0f, 5.0f));
 
         EraserStroke eraserStroke(eraserSize);
 
@@ -97,10 +97,10 @@ TEST_CASE("EraserStroke draw", "[eraser-stroke]")
         float translateX = 2.0f;
         float translateY = 3.0f;
 
-        Container container(Bounds::createWithPositions(-5.0f, 5.0f, -5.0f, 5.0f));
+        Container container(Bounds::createWithPositions(-5.0f, -5.0f, 5.0f, 5.0f));
 
         TileLayer drawLayer =
-            TestDocumentFactory::createTileLayer(0, tileSize, Bounds::createWithPositions(-5.0f, 5.0f, -5.0f, 5.0f));
+            TestDocumentFactory::createTileLayer(0, tileSize, Bounds::createWithPositions(-5.0f, -5.0f, 5.0f, 5.0f));
 
         EraserStroke eraserStroke(eraserSize);
 

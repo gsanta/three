@@ -11,7 +11,7 @@ SCENARIO("resize_drawing")
 {
     GIVEN("the user resizes the drawing")
     {
-        Container container(Bounds::createWithPositions(-2.0f, 2.0f, -2.0f, 2.0f));
+        Container container(Bounds::createWithPositions(-2.0f, -2.0f, 2.0f, 2.0f));
         DocumentFactory documentFactory = TestDocumentFactory::createDocumentFactory(container);
 
         WHEN("new size is smaller than the previous")
@@ -20,7 +20,7 @@ SCENARIO("resize_drawing")
                                   .withFrame(FrameBuilder().withTileLayer(
                                                  TileLayerBuilder()
                                                      .withTileSize(1)
-                                                     .withBounds(Bounds::createWithPositions(-2.0f, 2.0f, -2.0f, 2.0f))
+                                                     .withBounds(Bounds::createWithPositions(-2.0f, -2.0f, 2.0f, 2.0f))
                                                      //   .withTile(Vec2Int(-5, 0), COLOR_RED)
                                                      .withTile(Vec2Int(0, 0), COLOR_RED)
                                                      .withTile(Vec2Int(1, 0), COLOR_RED)
@@ -33,7 +33,7 @@ SCENARIO("resize_drawing")
                 THEN("removes pixels beyond the new bounds")
                 {
                     drawing = resize_drawing(drawing,
-                                             Bounds::createWithPositions(-1.0f, 1.0f, -2.0f, 2.0f),
+                                             Bounds::createWithPositions(-1.0f, -2.0f, 1.0f, 2.0f),
                                              &documentFactory);
 
                     REQUIRE(drawing.getFrame(0).getLayers()[0].getRenderables().size() == 2);
@@ -47,7 +47,7 @@ SCENARIO("resize_drawing")
                 THEN("removes pixels beyond the new bounds")
                 {
                     drawing = resize_drawing(drawing,
-                                             Bounds::createWithPositions(-1.0f, 1.0f, -1.0f, 1.0f),
+                                             Bounds::createWithPositions(-1.0f, -1.0f, 1.0f, 1.0f),
                                              &documentFactory);
 
                     REQUIRE(drawing.getFrame(0).getLayers()[0].getRenderables().size() == 1);
@@ -61,12 +61,12 @@ SCENARIO("resize_drawing")
             THEN("checkerboard fills the new canvas size")
             {
                 Drawing drawing = DrawingBuilder()
-                                      .withBounds(Bounds::createWithPositions(-1.0f, 1.0f, -1.0f, 1.0f))
+                                      .withBounds(Bounds::createWithPositions(-1.0f, -1.0f, 1.0f, 1.0f))
                                       .withBackgroundLayerTileSize(1.0f)
                                       .build();
 
                 drawing =
-                    resize_drawing(drawing, Bounds::createWithPositions(-2.0f, 1.0f, -2.0f, 1.0f), &documentFactory);
+                    resize_drawing(drawing, Bounds::createWithPositions(-2.0f, -2.0f, 1.0f, 1.0f), &documentFactory);
 
                 REQUIRE(drawing.getBackgroundLayer().getRenderables().size() == 9);
                 REQUIRE(drawing.getBackgroundLayer().getAtTileIndex(0)->getColor() == COLOR_DARK_GREY);

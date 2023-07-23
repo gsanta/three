@@ -16,7 +16,7 @@ class TileLayerBuilder
 private:
     size_t m_Index;
     float m_TileSize = TileLayer::defaultTileSize;
-    Bounds m_Bounds = Bounds::createWithPositions(-3.0f, 3.0f, -3.0f, 3.0f);
+    Bounds m_Bounds = Bounds::createWithPositions(-3.0f, -3.0f, 3.0f, 3.0f);
     std::vector<Vec2Int> m_TilePositions;
     std::vector<unsigned int> m_TileColors;
 

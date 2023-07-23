@@ -39,13 +39,13 @@ TEST_CASE("SelectionBox", "[selection-box]")
         selectionBox.setMoveEnd(Vec2(1.1f, 1.1f));
 
         REQUIRE_THAT(tileLayer.getRenderables()[0]->getBounds(),
-                     EqualsBounds(Bounds::createWithPositions(1.0f, 3.0f, 1.0f, 1.1f)));
+                     EqualsBounds(Bounds::createWithPositions(1.0f, 1.0f, 3.0f, 1.1f)));
         REQUIRE_THAT(tileLayer.getRenderables()[1]->getBounds(),
                      EqualsBounds(Bounds::createWithPositions(1.0f, 3.0f, 3.0f, 3.1f)));
         REQUIRE_THAT(tileLayer.getRenderables()[2]->getBounds(),
-                     EqualsBounds(Bounds::createWithPositions(1.0f, 1.1f, 1.0f, 3.0f)));
+                     EqualsBounds(Bounds::createWithPositions(1.0f, 1.0f, 1.1f, 3.0f)));
         REQUIRE_THAT(tileLayer.getRenderables()[3]->getBounds(),
-                     EqualsBounds(Bounds::createWithPositions(3.0f, 3.1f, 1.0f, 3.0f)));
+                     EqualsBounds(Bounds::createWithPositions(3.0f, 1.0f, 3.1f, 3.0f)));
     }
 
     SECTION("can determine if a coordinate is inside of the selection")

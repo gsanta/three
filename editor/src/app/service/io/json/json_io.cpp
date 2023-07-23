@@ -1,37 +1,72 @@
 #include "json_io.h"
 
-namespace spright { namespace editor {
+namespace spright
+{
+namespace editor
+{
 
-	JsonIO::JsonIO(DocumentStore* documentStore, DocumentFactory* documentFactory): m_DocumentStore(documentStore), m_DocumentFactory(documentFactory) {
-		m_TileLayerExport = new TileLayerExport(documentStore, documentFactory);
-	}
+    JsonIO::JsonIO(DocumentFactory *documentFactory) : m_DocumentFactory(documentFactory)
+    {
+        m_TileLayerExport = new TileLayerExport(documentFactory);
+    }
 
-	std::string JsonIO::exportDocument(Document& document) {
+    JsonIO::~JsonIO()
+    {
+        delete m_TileLayerExport;
+    }
 
-		nlohmann::json json = {
-			{"layers", {}}
-		};
+    nlohmann::json JsonIO::exportDocument(Document &document)
+    {
 
-		for (TileLayer& layer : document.getActiveFrame().getLayers()) {
-			nlohmann::json jsonLayer = m_TileLayerExport->exportLayer(document, layer.getIndex());
-			json["layers"] += jsonLayer;
-		}
+        nlohmann::json framesJson = {{"frames", {}}};
 
-		return json.dump();
-	}
+        for (Frame &frame : document.getActiveDrawing().getFrames())
+        {
+
+            nlohmann::json layersJson = {{"layers", {}}};
+
+            for (TileLayer &layer : frame.getLayers())
+            {
+                nlohmann::json jsonLayer = m_TileLayerExport->exportLayer(layer);
+                layersJson["layers"] += jsonLayer;
+            }
+
+            framesJson["frames"] += layersJson;
+        }
 
 
-	void JsonIO::importDocument(std::string string)
-	{
-		nlohmann::json json = nlohmann::json::parse(string);
-		int layerCount = json["layers"].size();
+        return framesJson;
+    }
 
-		Document document = m_DocumentFactory->createDocument();
-		m_DocumentStore->addDocument(document);
-		for (int i = 0; i < layerCount; i++) {
-			nlohmann::json layer = json["layers"][i];
 
-			m_TileLayerExport->importLayer(layer);
-		}
-	}
-}}
+    Document JsonIO::importDocument(std::string string) const
+    {
+        nlohmann::json json = nlohmann::json::parse(string);
+        int frameCount = json["frames"].size();
+
+        Document document = m_DocumentFactory->createEmptyDocument();
+        std::vector<Frame> frames;
+
+        for (int i = 0; i < frameCount; i++)
+        {
+            Frame frame;
+            nlohmann::json frameJson = json["frames"][i];
+
+            size_t layerCount = frameJson["layers"].size();
+
+            for (int j = 0; j < layerCount; j++)
+            {
+                TileLayer tileLayer = m_TileLayerExport->importLayer(frameJson["layers"][j]);
+                frame.addLayer(tileLayer);
+            }
+            frames.push_back(frame);
+        }
+
+        Drawing drawing = m_DocumentFactory->createDrawing(frames, true);
+
+        document.addDrawing(drawing);
+
+        return document;
+    }
+} // namespace editor
+} // namespace spright

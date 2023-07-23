@@ -1,18 +1,34 @@
 #pragma once
-#include <vector>
 #include "document.h"
 
-namespace spright { namespace editor {
+#include <vector>
 
-	class DocumentStore {
-	private:
-		std::vector<Document> m_Documents;
-		size_t m_ActiveDocument;
-	public:
-		DocumentStore();
-		Document& getActiveDocument();
-		void addDocument(Document document);
-		void setActiveDocument(size_t index);
-		bool hasActiveDocument() const;
-	};
-}}
+namespace spright
+{
+namespace editor
+{
+
+    class DocumentStore
+    {
+    public:
+        DocumentStore();
+
+        Document &getActiveDocument();
+
+        void addDocument(const Document &document);
+
+        void setDocument(const Document &document);
+
+        void setActiveDocument(size_t index);
+
+        bool hasActiveDocument() const;
+
+    private:
+        std::vector<Document> m_Documents;
+
+        size_t m_ActiveDocument;
+    };
+
+
+} // namespace editor
+} // namespace spright

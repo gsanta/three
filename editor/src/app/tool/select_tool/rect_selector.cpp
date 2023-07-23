@@ -51,7 +51,7 @@ namespace editor
         float startY = pos1.y < pos2.y ? pos1.y : pos2.y;
         float endY = pos1.y < pos2.y ? pos2.y : pos1.y;
 
-        Bounds selectionBounds = Bounds::createWithPositions(startX, endX, startY, endY);
+        Bounds selectionBounds = Bounds::createWithPositions(startX, startY, endX, endY);
 
         auto it = m_Layer->getRenderables().begin();
         while (it != m_Layer->getRenderables().end())

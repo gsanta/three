@@ -18,7 +18,7 @@ namespace engine
     {
     }
 
-    Bounds Bounds::createWithPositions(float x1, float x2, float y1, float y2)
+    Bounds Bounds::createWithPositions(float x1, float y1, float x2, float y2)
     {
         float minX = x1 < x2 ? x1 : x2;
         float maxX = x1 < x2 ? x2 : x1;
@@ -75,6 +75,10 @@ namespace engine
         return minX == 0 && maxX == 0 && minY == 0 && maxY == 0;
     }
 
+    std::vector<float> Bounds::toArray() const
+    {
+        return std::vector<float>{minX, minY, maxX, maxY};
+    }
 
     bool operator==(const Bounds &lhs, const Bounds &rhs)
     {

@@ -278,7 +278,7 @@ namespace engine
 
     nlohmann::json TileLayer::getJson() const
     {
-        nlohmann::json json;
+        nlohmann::json json = {{"tiles", nlohmann::json::array()}};
 
         for (Renderable2D *renderable : m_Group.getRenderables())
         {
