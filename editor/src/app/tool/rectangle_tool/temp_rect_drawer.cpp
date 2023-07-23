@@ -47,7 +47,7 @@ namespace editor
         Vec2 downTilePos = tileLayer.getCenterPos(from) - tileSize / 2;
         Vec2 currTilePos = tileLayer.getCenterPos(to) - tileSize / 2;
 
-        Bounds bounds = Bounds::createWithPositions(downTilePos.x, currTilePos.x, downTilePos.y, currTilePos.y);
+        Bounds bounds = Bounds::createWithPositions(downTilePos.x, downTilePos.y, currTilePos.x, currTilePos.y);
 
         if (m_OutlinedTop == nullptr)
         {

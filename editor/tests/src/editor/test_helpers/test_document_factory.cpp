@@ -8,7 +8,7 @@ std::vector<TileLayer> TestDocumentFactory::createTileLayers(size_t num)
     {
         TileLayer layer("layer_" + std::to_string(i),
                         Group<Rect2D>(new HeadlessRenderer2D()),
-                        Bounds::createWithPositions(-3.0f, 3.0f, -3.0f, 3.0f),
+                        Bounds::createWithPositions(-3.0f, -3.0f, 3.0f, 3.0f),
                         1.0f);
 
         layers.push_back(layer);

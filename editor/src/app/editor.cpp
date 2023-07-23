@@ -25,7 +25,7 @@ namespace editor
 
         m_ImageExport = new ImageExport(m_Window, m_Rendering);
 
-        m_JsonExport = std::make_unique<JsonIO>(getDocumentStore(), m_DocumentFactory);
+        m_JsonExport = std::make_unique<JsonIO>(m_DocumentFactory);
 
         m_FramePlayerHandler.setDocumentStore(getDocumentStore());
 

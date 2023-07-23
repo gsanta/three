@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import Dialog, { DialogProps, DialogBody, DialogFooter } from '@/components/dialog/Dialog';
 import { Button } from '@chakra-ui/react';
 import DropZone from './DropZone';
-import { useAppSelector } from '@/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { importDocument } from '../../state/settingsSlice';
 
 const ImportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children'>) => {
   const editor = useAppSelector((state) => state.tool.editor);
+  const dispatch = useAppDispatch();
 
   const [fileName, setFileName] = useState<string>();
   const [fileContent, setFileContent] = useState<string>();
@@ -17,7 +19,7 @@ const ImportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children
 
   const handleImport = () => {
     if (fileContent && editor) {
-      editor.importDocument(fileContent);
+      dispatch(importDocument(fileContent, editor));
     }
     onClose();
   };

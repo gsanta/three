@@ -40,9 +40,13 @@ namespace editor
 
         std::vector<Drawing> &getDrawings();
 
+        void empty();
+
         Drawing &getCanvas();
 
         Camera &getCamera();
+
+        void setCamera(const Camera &camera);
 
         std::string getJson();
 

@@ -35,7 +35,11 @@ namespace editor
 
         Document createDocument();
 
-        Drawing createDrawing(Bounds bounds, bool checkerboard = true, float zPos = 0);
+        Document createEmptyDocument() const;
+
+        Drawing createDrawing(std::vector<Frame> &frames, bool checkerboard) const;
+
+        Drawing createDrawing(Bounds bounds, bool checkerboard = true, float zPos = 0) const;
 
         TileLayer createTileLayer(std::string name, const Bounds &bounds, float tileSize);
 
@@ -43,7 +47,7 @@ namespace editor
 
         void createFrame(Document &document);
 
-        void createUserLayer(Drawing &drawing, std::string name);
+        TileLayer createUserLayer(const Bounds &bounds, std::string name, float tileSize = 0.5f) const;
 
     private:
         Container *m_WindowContainer;

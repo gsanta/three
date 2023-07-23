@@ -54,6 +54,11 @@ namespace editor
         return m_Drawings;
     }
 
+    void Document::empty()
+    {
+        m_Drawings.clear();
+    }
+
     Drawing &Document::getCanvas()
     {
         return m_Canvas;
@@ -62,6 +67,11 @@ namespace editor
     Camera &Document::getCamera()
     {
         return m_Camera;
+    }
+
+    void Document::setCamera(const Camera &camera)
+    {
+        m_Camera = camera;
     }
 
     std::string Document::getJson()

@@ -91,9 +91,16 @@ std::vector<std::string> getLayers()
 
 size_t createLayer(std::string name)
 {
-    editor->getDocumentFactory()->createUserLayer(editor->getDocumentStore()->getActiveDocument().getActiveDrawing(),
-                                                  name);
-    return editor->getActiveDocument().getActiveDrawing().getActiveFrame().getLayers().back().getIndex();
+    Drawing &drawing = editor->getDocumentStore()->getActiveDocument().getActiveDrawing();
+
+    TileLayer tileLayer = editor->getDocumentFactory()->createUserLayer(drawing.getBounds(), name);
+
+    for (Frame &frame : drawing.getFrames())
+    {
+        frame.addLayer(tileLayer);
+    }
+
+    return drawing.getActiveFrame().getLayers().back().getIndex();
 }
 
 void enableLayer(size_t index)

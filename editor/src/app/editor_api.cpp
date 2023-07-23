@@ -16,12 +16,15 @@ void removeLayer(size_t layerIndex)
 
 std::string exportDocument()
 {
-    return editor->getJsonIO()->exportDocument(editor->getDocumentStore()->getActiveDocument());
+    return editor->getJsonIO()->exportDocument(editor->getDocumentStore()->getActiveDocument()).dump();
 }
 
 void importDocument(std::string json)
 {
-    return editor->getJsonIO()->importDocument(json);
+    Document document = editor->getJsonIO()->importDocument(json);
+    Document &activeDocument = editor->getDocumentStore()->getActiveDocument();
+    document.setCamera(activeDocument.getCamera());
+    editor->getDocumentStore()->setDocument(document);
 }
 
 std::string getToolData(std::string tool)
@@ -126,7 +129,7 @@ void set_canvas_size(int width, int height)
 {
     Drawing &drawing = editor->getActiveDocument().getActiveDrawing();
     drawing = resize_drawing(drawing,
-                             Bounds::createWithPositions(-width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f),
+                             Bounds::createWithPositions(-width / 2.0f, -height / 2.0f, width / 2.0f, height / 2.0f),
                              editor->getDocumentFactory());
 }
 

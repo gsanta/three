@@ -8,7 +8,7 @@ class DocumentStoreBuilder
 {
 private:
     vector<DrawingBuilder> m_Drawings;
-    Bounds m_DocumentBounds = Bounds::createWithPositions(-32.0f / 2.0f, 32.0f / 2.0f, -32.0f / 2.0f, 32.0f / 2.0f);
+    Bounds m_DocumentBounds = Bounds::createWithPositions(-32.0f / 2.0f, -32.0f / 2.0f, 32.0f / 2.0f, 32.0f / 2.0f);
     int m_WindowSize = 500;
 
 public:

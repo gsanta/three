@@ -103,7 +103,7 @@ namespace editor
         Vec2 down = context.pointer.down;
         Vec2 curr = context.pointer.curr;
 
-        Bounds bounds = Bounds::createWithPositions(down.x, curr.x, down.y, curr.y);
+        Bounds bounds = Bounds::createWithPositions(down.x, down.y, curr.x, curr.y);
         Vec2Int bottomLeftTile = tileLayer.getTilePos(bounds.getBottomLeft());
         Vec2Int topRightTile = tileLayer.getTilePos(bounds.getTopRight());
         BoundsInt boundsInt(bottomLeftTile.x, topRightTile.x, bottomLeftTile.y, topRightTile.y);
