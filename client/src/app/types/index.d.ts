@@ -8,8 +8,12 @@ declare global {
 
   var Module: Editor | undefined;
 
+  var editor: Editor;
+
   var EditorEvents: EditorEvents;
   var EditorListener: EditorListener;
+
+  var Editor: Editor;
 }
 
 export {};

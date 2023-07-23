@@ -6,6 +6,20 @@ namespace editor
 {
     Editor::Editor(RunLoop runLoop) : m_RunLoop(runLoop)
     {
+    }
+
+    Editor::~Editor()
+    {
+        m_Window->getInputHandler()->unRegisterListener(m_toolHandler);
+
+        delete m_Rendering;
+        delete m_Window;
+        delete m_DocumentFactory;
+        delete m_Services;
+    }
+
+    void Editor::init()
+    {
         m_EventEmitter = std::make_unique<EmscriptenEventEmitter>();
 
         m_EditorState = std::make_shared<EditorState>();
@@ -46,16 +60,6 @@ namespace editor
         m_toolHandler->setSelectedTool("brush");
 
         m_RunLoop.add(m_FramePlayerHandler);
-    }
-
-    Editor::~Editor()
-    {
-        m_Window->getInputHandler()->unRegisterListener(m_toolHandler);
-
-        delete m_Rendering;
-        delete m_Window;
-        delete m_DocumentFactory;
-        delete m_Services;
     }
 
     Document &Editor::getActiveDocument()

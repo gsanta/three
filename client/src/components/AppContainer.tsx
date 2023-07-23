@@ -19,11 +19,15 @@ import ToolEventListener from '@/features/tool/toolbar/ToolEventListener';
 import Toolbar from '@/features/tool/toolbar/ui/Toolbar';
 
 const AppContainer = () => {
-  const [canvasContainer, setCanvasContainer] = useState<HTMLCanvasElement | undefined>();
-
   console.log('app container runs');
+  const [canvasNode, setCanvasNode] = useState<HTMLCanvasElement>();
 
-  const canvasRef = useCallback((node: HTMLCanvasElement) => node && setCanvasContainer(node), []);
+  const canvasRef = useCallback((node: HTMLCanvasElement) => {
+    if (node) {
+      Module.canvas = node;
+      setCanvasNode(node);
+    }
+  }, []);
 
   const app: App = useMemo(
     () => ({
@@ -34,7 +38,7 @@ const AppContainer = () => {
     [],
   );
 
-  useInitApp(app, canvasContainer);
+  useInitApp(app, canvasNode);
 
   useEffect(() => {
     const toolEventListener = new ToolEventListener(app.editorApi);
