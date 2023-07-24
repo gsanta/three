@@ -20,9 +20,8 @@ const entryPoints = glob.sync(path.join(pagesPath, '*.ts')).reduce((entries, fil
   return entries;
 }, {});
 
-console.log(entryPoints);
-
 module.exports = (env, argv) => {
+
   return {
     // entry: {
     //   app: './src/index.tsx',
@@ -85,7 +84,7 @@ module.exports = (env, argv) => {
         output: 'manifest.json',
         entrypointsUseAssets: true,
       }),
-      argv.mode === 'production' ?
+      process.env.NODE_ENV === 'production' ?
         new webpack.EnvironmentPlugin(['RENDER_EXTERNAL_URL']) :
         new Dotenv({ path: '../backend/.env'})
     ],

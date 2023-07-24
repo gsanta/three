@@ -9,9 +9,10 @@
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "scripts": {
-    "build": "webpack",
-    "build:deploy": "yarn && yarn build && ./scripts/build.sh",
-    "start": "webpack-dev-server",
+    "build": "NODE_ENV=development webpack",
+    "build:production": "NODE_ENV=production webpack",
+    "deploy": "yarn && yarn build:production  && ./scripts/build.sh",
+    "start": "NODE_ENV=development webpack-dev-server",
     "lint": "eslint",
     "lint:fix": "eslint --fix"
   },
