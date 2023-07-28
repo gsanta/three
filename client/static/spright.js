@@ -143,17 +143,14 @@ if (ENVIRONMENT_IS_SHELL) {
   if ((typeof process == 'object' && typeof require === 'function') || typeof window == 'object' || typeof importScripts == 'function') throw new Error('not compiled for this environment (did you build to HTML and try to run it not on the web, or set ENVIRONMENT to something - like node - and run it someplace else - like on the web?)');
 
   if (typeof read != 'undefined') {
-    read_ = (f) => {
-      return read(f);
-    };
+    read_ = read;
   }
 
   readBinary = (f) => {
-    let data;
     if (typeof readbuffer == 'function') {
       return new Uint8Array(readbuffer(f));
     }
-    data = read(f, 'binary');
+    let data = read(f, 'binary');
     assert(typeof data == 'object');
     return data;
   };
@@ -239,19 +236,19 @@ if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
   {
 // include: web_or_worker_shell_read.js
 read_ = (url) => {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', url, false);
-      xhr.send(null);
-      return xhr.responseText;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, false);
+    xhr.send(null);
+    return xhr.responseText;
   }
 
   if (ENVIRONMENT_IS_WORKER) {
     readBinary = (url) => {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', url, false);
-        xhr.responseType = 'arraybuffer';
-        xhr.send(null);
-        return new Uint8Array(/** @type{!ArrayBuffer} */(xhr.response));
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, false);
+      xhr.responseType = 'arraybuffer';
+      xhr.send(null);
+      return new Uint8Array(/** @type{!ArrayBuffer} */(xhr.response));
     };
   }
 
@@ -311,6 +308,7 @@ assert(typeof Module['readAsync'] == 'undefined', 'Module.readAsync option was r
 assert(typeof Module['readBinary'] == 'undefined', 'Module.readBinary option was removed (modify readBinary in JS)');
 assert(typeof Module['setWindowTitle'] == 'undefined', 'Module.setWindowTitle option was removed (modify setWindowTitle in JS)');
 assert(typeof Module['TOTAL_MEMORY'] == 'undefined', 'Module.TOTAL_MEMORY has been renamed Module.INITIAL_MEMORY');
+legacyModuleProp('asm', 'wasmExports');
 legacyModuleProp('read', 'read_');
 legacyModuleProp('readAsync', 'readAsync');
 legacyModuleProp('readBinary', 'readBinary');
@@ -346,6 +344,7 @@ if (typeof WebAssembly != 'object') {
 // Wasm globals
 
 var wasmMemory;
+var wasmExports;
 
 //========================================
 // Runtime essentials
@@ -667,7 +666,7 @@ function abort(what) {
   // TODO(https://github.com/google/closure-compiler/pull/3913): Remove if/when upstream closure gets fixed.
   // See above, in the meantime, we resort to wasm code for trapping.
   //
-  // In case abort() is called before the module is initialized, Module['asm']
+  // In case abort() is called before the module is initialized, wasmExports
   // and its exported '__trap' function is not available, in which case we throw
   // a RuntimeError.
   //
@@ -704,19 +703,12 @@ function isFileURI(filename) {
   return filename.startsWith('file://');
 }
 // end include: URIUtils.js
-/** @param {boolean=} fixedasm */
-function createExportWrapper(name, fixedasm) {
+function createExportWrapper(name) {
   return function() {
-    var displayName = name;
-    var asm = fixedasm;
-    if (!fixedasm) {
-      asm = Module['asm'];
-    }
-    assert(runtimeInitialized, 'native function `' + displayName + '` called before runtime initialization');
-    if (!asm[name]) {
-      assert(asm[name], 'exported native function `' + displayName + '` not found');
-    }
-    return asm[name].apply(null, arguments);
+    assert(runtimeInitialized, `native function \`${name}\` called before runtime initialization`);
+    var f = wasmExports[name];
+    assert(f, `exported native function \`${name}\` not found`);
+    return f.apply(null, arguments);
   };
 }
 
@@ -744,7 +736,8 @@ function getBinaryPromise(binaryFile) {
   // See https://github.com/github/fetch/pull/92#issuecomment-140665932
   // Cordova or Electron apps are typically loaded from a file:// url.
   // So use fetch if it is available and the url is not a file, otherwise fall back to XHR.
-  if (!wasmBinary && (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER)) {
+  if (!wasmBinary
+      && (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER)) {
     if (typeof fetch == 'function'
       && !isFileURI(binaryFile)
     ) {
@@ -834,9 +827,11 @@ function createWasm() {
   function receiveInstance(instance, module) {
     var exports = instance.exports;
 
-    Module['asm'] = exports;
+    wasmExports = exports;
+    
 
-    wasmMemory = Module['asm']['memory'];
+    wasmMemory = wasmExports['memory'];
+    
     assert(wasmMemory, "memory not found in wasm exports");
     // This assertion doesn't hold when emscripten is run in --post-link
     // mode.
@@ -844,10 +839,11 @@ function createWasm() {
     //assert(wasmMemory.buffer.byteLength === 16777216);
     updateMemoryViews();
 
-    wasmTable = Module['asm']['__indirect_function_table'];
+    wasmTable = wasmExports['__indirect_function_table'];
+    
     assert(wasmTable, "table not found in wasm exports");
 
-    addOnInit(Module['asm']['__wasm_call_ctors']);
+    addOnInit(wasmExports['__wasm_call_ctors']);
 
     removeRunDependency('wasm-instantiate');
     return exports;
@@ -895,12 +891,14 @@ var tempDouble;
 var tempI64;
 
 // include: runtime_debug.js
-function legacyModuleProp(prop, newName) {
+function legacyModuleProp(prop, newName, incomming=true) {
   if (!Object.getOwnPropertyDescriptor(Module, prop)) {
     Object.defineProperty(Module, prop, {
       configurable: true,
       get() {
-        abort('Module.' + prop + ' has been replaced with plain ' + newName + ' (the initial value can be provided on Module, but after startup the value is only looked for on a local variable of that name)');
+        let extra = incomming ? ' (the initial value can be provided on Module, but after startup the value is only looked for on a local variable of that name)' : '';
+        abort(`\`Module.${prop}\` has been replaced by \`${newName}\`` + extra);
+
       }
     });
   }
@@ -908,7 +906,7 @@ function legacyModuleProp(prop, newName) {
 
 function ignoredModuleProp(prop) {
   if (Object.getOwnPropertyDescriptor(Module, prop)) {
-    abort('`Module.' + prop + '` was supplied but `' + prop + '` not included in INCOMING_MODULE_JS_API');
+    abort(`\`Module.${prop}\` was supplied but \`${prop}\` not included in INCOMING_MODULE_JS_API`);
   }
 }
 
@@ -1013,7 +1011,7 @@ function dbg(text) {
       // In static linking, tags are defined within the wasm module and are
       // exported, whereas in dynamic linking, tags are defined in library.js in
       // JS code and wasm modules import them.
-      return Module['asm']['__cpp_exception'];
+      return wasmExports['__cpp_exception'];
     }
   
   function getCppExceptionThrownObjectFromWebAssemblyException(ex) {
@@ -3910,9 +3908,7 @@ function dbg(text) {
           stream.flags |= arg;
           return 0;
         }
-        case 5:
-        /* case 5: Currently in musl F_GETLK64 has same value as F_GETLK, so omitted to avoid duplicate case blocks. If that changes, uncomment this */ {
-          
+        case 5: {
           var arg = SYSCALLS.get();
           var offset = 0;
           // We're always unlocked.
@@ -3921,10 +3917,6 @@ function dbg(text) {
         }
         case 6:
         case 7:
-        /* case 6: Currently in musl F_SETLK64 has same value as F_SETLK, so omitted to avoid duplicate case blocks. If that changes, uncomment this */
-        /* case 7: Currently in musl F_SETLKW64 has same value as F_SETLKW, so omitted to avoid duplicate case blocks. If that changes, uncomment this */
-          
-          
           return 0; // Pretend that the locking is successful.
         case 16:
         case 8:
@@ -10065,76 +10057,32 @@ var wasmImports = {
   strftime_l: _strftime_l
 };
 var asm = createWasm();
-/** @type {function(...*):?} */
-var ___wasm_call_ctors = createExportWrapper("__wasm_call_ctors");
-/** @type {function(...*):?} */
-var _malloc = createExportWrapper("malloc");
-/** @type {function(...*):?} */
-var ___errno_location = createExportWrapper("__errno_location");
-/** @type {function(...*):?} */
-var _free = Module['_free'] = createExportWrapper("free");
-/** @type {function(...*):?} */
-var _main = Module['_main'] = createExportWrapper("main");
-/** @type {function(...*):?} */
-var ___getTypeName = createExportWrapper("__getTypeName");
-/** @type {function(...*):?} */
-var __embind_initialize_bindings = Module['__embind_initialize_bindings'] = createExportWrapper("_embind_initialize_bindings");
-/** @type {function(...*):?} */
-var _fflush = Module['_fflush'] = createExportWrapper("fflush");
-/** @type {function(...*):?} */
-var ___trap = function() {
-  return (___trap = Module['asm']['__trap']).apply(null, arguments);
-};
-
-/** @type {function(...*):?} */
-var _emscripten_stack_init = function() {
-  return (_emscripten_stack_init = Module['asm']['emscripten_stack_init']).apply(null, arguments);
-};
-
-/** @type {function(...*):?} */
-var _emscripten_stack_get_free = function() {
-  return (_emscripten_stack_get_free = Module['asm']['emscripten_stack_get_free']).apply(null, arguments);
-};
-
-/** @type {function(...*):?} */
-var _emscripten_stack_get_base = function() {
-  return (_emscripten_stack_get_base = Module['asm']['emscripten_stack_get_base']).apply(null, arguments);
-};
-
-/** @type {function(...*):?} */
-var _emscripten_stack_get_end = function() {
-  return (_emscripten_stack_get_end = Module['asm']['emscripten_stack_get_end']).apply(null, arguments);
-};
-
-/** @type {function(...*):?} */
-var stackSave = createExportWrapper("stackSave");
-/** @type {function(...*):?} */
-var stackRestore = createExportWrapper("stackRestore");
-/** @type {function(...*):?} */
-var stackAlloc = createExportWrapper("stackAlloc");
-/** @type {function(...*):?} */
-var _emscripten_stack_get_current = function() {
-  return (_emscripten_stack_get_current = Module['asm']['emscripten_stack_get_current']).apply(null, arguments);
-};
-
-/** @type {function(...*):?} */
-var ___cxa_decrement_exception_refcount = Module['___cxa_decrement_exception_refcount'] = createExportWrapper("__cxa_decrement_exception_refcount");
-/** @type {function(...*):?} */
-var ___cxa_increment_exception_refcount = Module['___cxa_increment_exception_refcount'] = createExportWrapper("__cxa_increment_exception_refcount");
-/** @type {function(...*):?} */
-var ___thrown_object_from_unwind_exception = Module['___thrown_object_from_unwind_exception'] = createExportWrapper("__thrown_object_from_unwind_exception");
-/** @type {function(...*):?} */
-var ___get_exception_message = Module['___get_exception_message'] = createExportWrapper("__get_exception_message");
-/** @type {function(...*):?} */
-var dynCall_jiji = Module['dynCall_jiji'] = createExportWrapper("dynCall_jiji");
-/** @type {function(...*):?} */
-var dynCall_viijii = Module['dynCall_viijii'] = createExportWrapper("dynCall_viijii");
-/** @type {function(...*):?} */
-var dynCall_iiiiij = Module['dynCall_iiiiij'] = createExportWrapper("dynCall_iiiiij");
-/** @type {function(...*):?} */
-var dynCall_iiiiijj = Module['dynCall_iiiiijj'] = createExportWrapper("dynCall_iiiiijj");
-/** @type {function(...*):?} */
-var dynCall_iiiiiijj = Module['dynCall_iiiiiijj'] = createExportWrapper("dynCall_iiiiiijj");
+var ___wasm_call_ctors = createExportWrapper('__wasm_call_ctors');
+var _malloc = createExportWrapper('malloc');
+var ___errno_location = createExportWrapper('__errno_location');
+var _free = Module['_free'] = createExportWrapper('free');
+var _main = Module['_main'] = createExportWrapper('main');
+var ___getTypeName = createExportWrapper('__getTypeName');
+var __embind_initialize_bindings = Module['__embind_initialize_bindings'] = createExportWrapper('_embind_initialize_bindings');
+var _fflush = Module['_fflush'] = createExportWrapper('fflush');
+var ___trap = () => (___trap = wasmExports['__trap'])();
+var _emscripten_stack_init = () => (_emscripten_stack_init = wasmExports['emscripten_stack_init'])();
+var _emscripten_stack_get_free = () => (_emscripten_stack_get_free = wasmExports['emscripten_stack_get_free'])();
+var _emscripten_stack_get_base = () => (_emscripten_stack_get_base = wasmExports['emscripten_stack_get_base'])();
+var _emscripten_stack_get_end = () => (_emscripten_stack_get_end = wasmExports['emscripten_stack_get_end'])();
+var stackSave = createExportWrapper('stackSave');
+var stackRestore = createExportWrapper('stackRestore');
+var stackAlloc = createExportWrapper('stackAlloc');
+var _emscripten_stack_get_current = () => (_emscripten_stack_get_current = wasmExports['emscripten_stack_get_current'])();
+var ___cxa_decrement_exception_refcount = Module['___cxa_decrement_exception_refcount'] = createExportWrapper('__cxa_decrement_exception_refcount');
+var ___cxa_increment_exception_refcount = Module['___cxa_increment_exception_refcount'] = createExportWrapper('__cxa_increment_exception_refcount');
+var ___thrown_object_from_unwind_exception = Module['___thrown_object_from_unwind_exception'] = createExportWrapper('__thrown_object_from_unwind_exception');
+var ___get_exception_message = Module['___get_exception_message'] = createExportWrapper('__get_exception_message');
+var dynCall_jiji = Module['dynCall_jiji'] = createExportWrapper('dynCall_jiji');
+var dynCall_viijii = Module['dynCall_viijii'] = createExportWrapper('dynCall_viijii');
+var dynCall_iiiiij = Module['dynCall_iiiiij'] = createExportWrapper('dynCall_iiiiij');
+var dynCall_iiiiijj = Module['dynCall_iiiiijj'] = createExportWrapper('dynCall_iiiiijj');
+var dynCall_iiiiiijj = Module['dynCall_iiiiiijj'] = createExportWrapper('dynCall_iiiiiijj');
 var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 88760;
 
 // include: postamble.js
@@ -10197,7 +10145,6 @@ var missingLibrarySymbols = [
   'readSockaddr',
   'writeSockaddr',
   'getHostByName',
-  'traverseStack',
   'getCallstack',
   'emscriptenLog',
   'convertPCtoSourceLocation',
@@ -10332,6 +10279,8 @@ var unexportedSymbols = [
   'abort',
   'keepRuntimeAlive',
   'wasmMemory',
+  'wasmTable',
+  'wasmExports',
   'stackAlloc',
   'stackSave',
   'stackRestore',
