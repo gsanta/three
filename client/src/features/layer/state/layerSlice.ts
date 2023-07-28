@@ -1,5 +1,4 @@
 import Editor from '@/features/editor/Editor';
-import EditorApi from '@/features/editor/EditorApi';
 import ToolDescription from '@/features/editor/ToolDescription';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import Layer from './Layer';
@@ -7,7 +6,7 @@ import Layer from './Layer';
 interface LayerState {
   activeLayer: Layer | null;
   layers: Layer[];
-  editor?: EditorApi;
+  editor?: Editor;
 }
 
 const initialState: LayerState = {

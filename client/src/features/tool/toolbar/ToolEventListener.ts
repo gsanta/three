@@ -1,14 +1,14 @@
 import { activeFrameChanged } from '@/features/frame/state/frameSlice';
 import { receiveColor } from '@/features/settings/state/settingsSlice';
-import EditorApi from '@/features/editor/EditorApi';
+import Editor from '@/features/editor/Editor';
 import EditorEvents from '@/features/editor/EditorEvents';
 import ToolName from '../state/ToolName';
 import { store } from '@/utils/store';
 
 class ToolEventListener {
-  private editorApi: EditorApi;
+  private editorApi: Editor;
 
-  constructor(editorApi: EditorApi) {
+  constructor(editorApi: Editor) {
     this.editorApi = editorApi;
 
     this.onToolDataChanged = this.onToolDataChanged.bind(this);

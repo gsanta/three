@@ -8,6 +8,8 @@ class EditorRuntime {
 
   setStatus() {}
 
+  HEAPU8: any;
+
   canvas?: HTMLCanvasElement;
 }
 

@@ -2,7 +2,7 @@ import { SystemStyleObject } from '@chakra-ui/react';
 
 const TooltipTheme: SystemStyleObject = {
   baseStyle: {
-    bg: 'brand.foreground',
+    bg: 'orange.600',
     color: 'brand.background',
   },
 };

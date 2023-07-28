@@ -2,7 +2,7 @@ import { extendTheme } from '@chakra-ui/react';
 import Checkbox from './checkbox/Checkbox.theme';
 import Select from './select/Select.theme';
 import Button from './button/Button.theme';
-import Tooltip from './tooltip/Tooltip.theme';
+import Tooltip from './Tooltip.theme';
 import Dialog from './dialog/Dialog.theme';
 import IconButton from './themes/IconButton.theme';
 import MenuTheme from './themes/Menu.theme';

@@ -7,26 +7,53 @@ import { mode } from '@chakra-ui/theme-tools';
 // };
 
 const variantOutline = defineStyle((props) => {
-  const { colorScheme: c } = props;
+  const { colorScheme } = props;
+
+  const getBackgroundColor = () => {
+    if (colorScheme === 'orange') {
+      return mode(`${colorScheme}.200`, `${colorScheme}.500`)(props);
+    } else {
+      return mode(`${colorScheme}.200`, `whiteAlpha.200`)(props);
+    }
+  };
+
+  const getBorderColor = () => {
+    if (colorScheme === 'gray') {
+      return mode(`gray.200`, `whiteAlpha.400`)(props);
+    } else {
+      return mode(`gray.200`, `${colorScheme}.400`)(props);
+    }
+  };
+
+  const getHoverBackgroundColor = () => {
+    if (colorScheme === 'gray') {
+      return mode(`${colorScheme}.200`, `whiteAlpha.300`)(props);
+    } else {
+      return mode(`${colorScheme}.50`, `${colorScheme}.400`)(props);
+    }
+  };
+
+  const getActiveBackgroundColor = () => {
+    if (colorScheme === 'gray') {
+      return mode(`${colorScheme}.200`, `whiteAlpha.400`)(props);
+    } else {
+      return mode(`${colorScheme}.100`, `${colorScheme}.300`)(props);
+    }
+  };
+
   const defaultTheme = theme.components.Button.variants?.outline(props);
-
-  if (c === 'gray') {
-    return { ...defaultTheme };
-  }
-
-  const borderColor = mode(`gray.200`, `${c}.400`)(props);
 
   return {
     ...defaultTheme,
-    bg: mode(`${c}.200`, `${c}.500`)(props),
+    bg: getBackgroundColor(),
     color: 'white',
     border: '1px solid',
-    borderColor,
+    borderColor: getBorderColor(),
     _hover: {
-      bg: mode(`${c}.50`, `${c}.400`)(props),
+      bg: getHoverBackgroundColor(),
     },
     _active: {
-      bg: mode(`${c}.100`, `${c}.300`)(props),
+      bg: getActiveBackgroundColor(),
     },
   };
 });
