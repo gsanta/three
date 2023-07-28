@@ -1,3 +1,4 @@
+import editorSlice from '@/features/editor/editorSlice';
 import frameSlice from '@/features/frame/state/frameSlice';
 import layerSlice from '@/features/layer/state/layerSlice';
 import settingsSlice from '@/features/settings/state/settingsSlice';
@@ -7,6 +8,7 @@ import { configureStore } from '@reduxjs/toolkit';
 
 export const store = configureStore({
   reducer: {
+    editor: editorSlice,
     frame: frameSlice,
     layer: layerSlice,
     settings: settingsSlice,

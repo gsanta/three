@@ -1,13 +1,12 @@
 import ToolName from '@/features/tool/state/ToolName';
 import Editor from '@/features/editor/Editor';
-import EditorApi from '@/features/editor/EditorApi';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import Tool from './Tool';
 
 interface ToolState {
   tools: Tool[];
   selectedTool: ToolName;
-  editor?: EditorApi;
+  editor?: Editor;
 
   isCircleFilled: boolean;
   isRectangleFilled: boolean;

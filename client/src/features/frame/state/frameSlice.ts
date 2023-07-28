@@ -1,11 +1,10 @@
 import Editor from '@/features/editor/Editor';
-import EditorApi from '@/features/editor/EditorApi';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import Frame from './Frame';
 
 interface FrameState {
   activeIndex: number;
-  editor?: EditorApi;
+  editor?: Editor;
   frames: Frame[];
   isPlaying: boolean;
 }

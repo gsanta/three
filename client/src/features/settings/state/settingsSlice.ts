@@ -1,8 +1,9 @@
 import Editor from '@/features/editor/Editor';
-import EditorApi from '@/features/editor/EditorApi';
 import { initLayers } from '@/features/layer/state/layerSlice';
 import { toRGBAColor } from '@/utils/colorUtils';
-import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit';
+import type { RootState } from '@/utils/store';
+// import type { RootState } from '@/utils/store';
+import { Action, createSlice, Dispatch, PayloadAction, ThunkDispatch } from '@reduxjs/toolkit';
 
 interface SettingsState {
   color: string;
@@ -39,32 +40,47 @@ export const settingsSlice = createSlice({
     setColor: (state, action: PayloadAction<string>) => {
       const color = action.payload;
       state.color = color;
-
-      const r = color.substring(1, 3);
-      const g = color.substring(3, 5);
-      const b = color.substring(5, 7);
-      const a = color.substring(7, 9);
-      const hexColor = Number('0x' + a + b + g + r);
-      editor.setColor(hexColor);
     },
 
     setCanvasSize: (state, action: PayloadAction<SettingsState['canvasSize']>) => {
       state.canvasSize = action.payload;
-
-      editor.setCanvasSize(state.canvasSize.width, state.canvasSize.height);
-    },
-
-    flipHorizontal: () => {
-      editor.flipHorizontal();
     },
   },
 });
 
-export const { flipHorizontal, initSettings, receiveColor, setCanvasSize, setColor } = settingsSlice.actions;
+export const { initSettings, receiveColor } = settingsSlice.actions;
 
-export const importDocument = (fileContent: string, editor: EditorApi) => async (dispatch: Dispatch) => {
+const actions = settingsSlice.actions;
+
+export function flipHorizontal() {
+  return (_dispatch: ThunkDispatch<unknown, unknown, Action>, getState: () => RootState) => {
+    getState().editor.editor?.flipHorizontal();
+  };
+}
+
+export function setColor(color: string) {
+  return (dispatch: ThunkDispatch<unknown, unknown, Action>, getState: () => RootState) => {
+    dispatch(actions.setColor(color));
+
+    const r = color.substring(1, 3);
+    const g = color.substring(3, 5);
+    const b = color.substring(5, 7);
+    const a = color.substring(7, 9);
+    const hexColor = Number('0x' + a + b + g + r);
+    getState().editor.editor?.setColor(hexColor);
+  };
+}
+
+export const importDocument = (fileContent: string, editor: Editor) => async (dispatch: Dispatch) => {
   editor.importDocument(fileContent);
-  dispatch(initLayers(editor as Editor));
+  dispatch(initLayers(editor));
+};
+
+export const setCanvasSize = (canvasSize: SettingsState['canvasSize']) => {
+  return (_dispatch: ThunkDispatch<unknown, unknown, Action>, getState: () => RootState) => {
+    getState().editor.editor.setCanvasSize(canvasSize.width, canvasSize.height);
+    actions.setCanvasSize(canvasSize);
+  };
 };
 
 export default settingsSlice.reducer;

@@ -19,7 +19,11 @@ const StoreSetup = ({ children }: { children: ReactNode }): JSX.Element => {
   return <>{children}</>;
 };
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { refetchOnWindowFocus: false, retry: false },
+  },
+});
 
 const ProtectedPage = ({ children }: ProtectedPageProps) => {
   return (

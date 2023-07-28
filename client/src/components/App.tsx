@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { ChakraProvider, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import './app.scss';
 import Layout from './layout/Layout';
 import Box from './box/Box';
-import theme from './theme';
 import Split from 'react-split';
 import Canvas from '../features/canvas/Canvas';
-import App, { AppContext } from '../app/App';
 import useInitApp from '../features/canvas/hooks/useInitApp';
 import LayerPanel from '../features/layer/ui/components/LayerPanel';
 import ToolOptionsPanel from '@/features/tool/tool_options/ui/ToolOptionsPanel';
@@ -14,12 +12,10 @@ import SceneViewer from '@/features/scene_viewer/SceneViewer';
 import KeyboardHandler from '@/features/keyboard/KeyboardHandler';
 import { editor } from '@/features/editor/Editor';
 import Header from './header/Header';
-import ProtectedPage from './layout/ProtectedPage';
 import ToolEventListener from '@/features/tool/toolbar/ToolEventListener';
 import Toolbar from '@/features/tool/toolbar/ui/Toolbar';
 
-const AppContainer = () => {
-  console.log('app container runs');
+const App = () => {
   const [canvasNode, setCanvasNode] = useState<HTMLCanvasElement>();
 
   const canvasRef = useCallback((node: HTMLCanvasElement) => {
@@ -29,7 +25,7 @@ const AppContainer = () => {
     }
   }, []);
 
-  const app: App = useMemo(
+  const app = useMemo(
     () => ({
       editorApi: editor,
       editorEvents: window.EditorEvents,
@@ -38,7 +34,7 @@ const AppContainer = () => {
     [],
   );
 
-  useInitApp(app, canvasNode);
+  useInitApp(canvasNode);
 
   useEffect(() => {
     const toolEventListener = new ToolEventListener(app.editorApi);
@@ -65,40 +61,34 @@ const AppContainer = () => {
   }, []);
 
   return (
-    <ProtectedPage>
-      <ChakraProvider theme={theme} cssVarsRoot="body">
-        <AppContext.Provider value={app}>
-          <Layout header={<Header />} footer={<Box bgColor="orange.400" height="40px"></Box>}>
-            <Box width="50px">
-              <Toolbar />
-            </Box>
-            <Split className="split" direction="horizontal" sizes={[75, 25]}>
-              <Canvas ref={canvasRef} />
-              <Split className="split-vertical" direction="vertical" sizes={[50, 50]}>
-                <Box overflowY="auto">
-                  <LayerPanel />
-                </Box>
-                <Tabs display="flex" flexDir="column" isLazy>
-                  <TabList>
-                    <Tab>Options</Tab>
-                    <Tab>3D Viewer</Tab>
-                  </TabList>
-                  <TabPanels alignItems="stretch" display="flex" flex="1">
-                    <TabPanel flex="1">
-                      <ToolOptionsPanel />
-                    </TabPanel>
-                    <TabPanel display="flex" flex="1">
-                      <SceneViewer />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Split>
-            </Split>
-          </Layout>
-        </AppContext.Provider>
-      </ChakraProvider>
-    </ProtectedPage>
+    <Layout header={<Header />} footer={<Box bgColor="orange.400" height="40px"></Box>}>
+      <Box width="50px">
+        <Toolbar />
+      </Box>
+      <Split className="split" direction="horizontal" sizes={[75, 25]}>
+        <Canvas ref={canvasRef} />
+        <Split className="split-vertical" direction="vertical" sizes={[50, 50]}>
+          <Box overflowY="auto">
+            <LayerPanel />
+          </Box>
+          <Tabs display="flex" flexDir="column" isLazy>
+            <TabList>
+              <Tab>Options</Tab>
+              <Tab>3D Viewer</Tab>
+            </TabList>
+            <TabPanels alignItems="stretch" display="flex" flex="1">
+              <TabPanel flex="1">
+                <ToolOptionsPanel />
+              </TabPanel>
+              <TabPanel display="flex" flex="1">
+                <SceneViewer />
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </Split>
+      </Split>
+    </Layout>
   );
 };
 
-export default AppContainer;
+export default App;
