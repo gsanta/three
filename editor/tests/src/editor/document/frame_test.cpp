@@ -16,7 +16,7 @@ TEST_CASE("Frame", "[frame]")
         std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(2);
 
         Rect2D rect1(-2.0f, -3.0f, 3.0f, 5.0f, 0xFF0000FF);
-        Rect2D rect2(2.0f, 3.0f, 3.0f, 5.0f, 0xFF0000FF);
+        Rect2D rect2(2.0f, 2.0f, 1.0f, 1.0f, 0xFF0000FF);
 
         layers[0].add(rect1);
         layers[1].add(rect2);
@@ -94,7 +94,7 @@ TEST_CASE("Frame", "[frame]")
         Frame frame;
 
         Rect2D rect1(-2.0f, -3.0f, 3.0f, 5.0f, 0xFF0000FF);
-        Rect2D rect2(2.0f, 3.0f, 3.0f, 5.0f, 0xFF0000FF);
+        Rect2D rect2(2.0f, 2.0f, 1.0f, 1.0f, 0xFF0000FF);
 
         layers[0].add(rect1);
         layers[0].add(rect2);

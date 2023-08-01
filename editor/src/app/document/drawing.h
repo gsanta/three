@@ -25,6 +25,8 @@ namespace editor
 
         Frame &getActiveFrame();
 
+        size_t getActiveFrameIndex() const;
+
         void setActiveFrame(size_t index);
 
         Frame &addFrame(const Frame &frame);
@@ -34,6 +36,8 @@ namespace editor
         Frame &getFrame(size_t frameIndex);
 
         TileLayer &getActiveLayer();
+
+        size_t getActiveLayerIndex() const;
 
         void setActiveLayer(size_t index);
 

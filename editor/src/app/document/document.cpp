@@ -5,8 +5,8 @@ namespace spright
 namespace editor
 {
 
-    Document::Document(Bounds bounds, Camera camera, Drawing canvas)
-        : Container(bounds), m_Camera(camera), m_Canvas(canvas), m_ActiveDrawing(0)
+    Document::Document(Bounds bounds, Camera camera, Drawing canvas, std::shared_ptr<DocumentHistory> history)
+        : Container(bounds), m_Camera(camera), m_Canvas(canvas), m_History(history), m_ActiveDrawing(0)
     {
     }
 
@@ -24,6 +24,11 @@ namespace editor
     Drawing &Document::getActiveDrawing()
     {
         return m_Drawings[m_ActiveDrawing];
+    }
+
+    size_t Document::getActiveDrawingIndex() const
+    {
+        return m_ActiveDrawing;
     }
 
     Drawing &Document::getDrawing(size_t index)
@@ -52,6 +57,11 @@ namespace editor
     std::vector<Drawing> &Document::getDrawings()
     {
         return m_Drawings;
+    }
+
+    std::shared_ptr<DocumentHistory> Document::getHistory()
+    {
+        return m_History;
     }
 
     void Document::empty()

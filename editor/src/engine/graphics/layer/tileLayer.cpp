@@ -88,17 +88,19 @@ namespace engine
 
     Rect2D &TileLayer::add(const Rect2D &rect)
     {
+        Vec2 pos = rect.getBounds().getCenter();
+        Vec2Int tilePos = getTilePos(pos);
+        int tileIndex = m_TileBounds.getWidth() * tilePos.y + tilePos.x;
+
+        if (getAtTileIndex(tileIndex))
+        {
+            remove(*getAtTileIndex(tileIndex));
+        }
+
         Rect2D &newRect = m_Group.add(rect);
 
-        Vec2 pos = newRect.getBounds().getCenter();
-        Vec2Int tilePos = getTilePos(pos);
-
-        int index = m_TileBounds.getWidth() * tilePos.y + tilePos.x;
-        if (m_IndexSize > index)
-        {
-            m_TileIndexes[index] = &newRect;
-            newRect.setTileIndex(index);
-        }
+        m_TileIndexes[tileIndex] = &newRect;
+        newRect.setTileIndex(tileIndex);
 
         return newRect;
     }

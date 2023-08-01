@@ -12,6 +12,8 @@ namespace editor
 
         Drawing *activeDrawing = nullptr;
 
+        Document *document = nullptr;
+
         bool hasActiveDrawing() const;
 
         bool hasPrevDrawing() const;

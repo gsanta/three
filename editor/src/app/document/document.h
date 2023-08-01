@@ -19,12 +19,14 @@ namespace spright
 {
 namespace editor
 {
+    class DocumentHistory;
+
     using namespace ::spright::engine;
 
     class Document : public Container
     {
     public:
-        Document(Bounds bounds, Camera m_Camera, Drawing canvas);
+        Document(Bounds bounds, Camera m_Camera, Drawing canvas, std::shared_ptr<DocumentHistory> history);
 
         Frame &getActiveFrame();
 
@@ -34,11 +36,15 @@ namespace editor
 
         Drawing &getDrawing(size_t index);
 
+        size_t getActiveDrawingIndex() const;
+
         Drawing *getDrawingAt(const Vec2 &pos);
 
         void addDrawing(const Drawing &drawing);
 
         std::vector<Drawing> &getDrawings();
+
+        std::shared_ptr<DocumentHistory> getHistory();
 
         void empty();
 
@@ -58,6 +64,8 @@ namespace editor
         size_t m_ActiveDrawing;
 
         Camera m_Camera;
+
+        std::shared_ptr<DocumentHistory> m_History;
     };
 } // namespace editor
 } // namespace spright

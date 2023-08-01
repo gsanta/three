@@ -42,6 +42,11 @@ namespace editor
         return m_Frames[m_ActiveFrameIndex];
     }
 
+    size_t Drawing::getActiveFrameIndex() const
+    {
+        return m_ActiveFrameIndex;
+    }
+
     void Drawing::setActiveFrame(size_t index)
     {
         if (index >= m_Frames.size())
@@ -106,6 +111,11 @@ namespace editor
     TileLayer &Drawing::getActiveLayer()
     {
         return getActiveFrame().getLayers()[m_ActiveLayerIndex];
+    }
+
+    size_t Drawing::getActiveLayerIndex() const
+    {
+        return m_ActiveLayerIndex;
     }
 
     void Drawing::setActiveLayer(size_t index)

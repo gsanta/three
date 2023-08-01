@@ -121,7 +121,10 @@ namespace editor
                       -1.0f,
                       1.0f);
 
-        Document document(drawingBounds, camera, createDrawing(drawingBounds, false, 0.01f));
+        Document document(drawingBounds,
+                          camera,
+                          createDrawing(drawingBounds, false, 0.01f),
+                          std::make_shared<DocumentHistory>());
 
         return document;
     }
