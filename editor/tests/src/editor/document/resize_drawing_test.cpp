@@ -7,7 +7,7 @@
 #include <catch2/catch_test_macros.hpp>
 using namespace spright::editor;
 
-SCENARIO("resize_drawing")
+SCENARIO("Resize drawing")
 {
     GIVEN("the user resizes the drawing")
     {

@@ -17,7 +17,8 @@ ToolContextBuilder &ToolContextBuilder::withActiveDrawing(DocumentStore &documen
 {
     Drawing &activeDrawing = documentStore.getActiveDocument().getDrawings()[0];
 
-    return withDocumentInfo(DocumentInfoBuilder().withActiveDrawing(&activeDrawing));
+    return withDocumentInfo(
+        DocumentInfoBuilder().withActiveDrawing(&activeDrawing).withDocument(&documentStore.getActiveDocument()));
 }
 
 

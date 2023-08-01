@@ -9,6 +9,7 @@
 #include "../../../engine/graphics/shader/shader.h"
 #include "../../../engine/layout/container.h"
 #include "../../../engine/system/window/window.h"
+#include "../../core/history/document_history.h"
 #include "../checkerboard.h"
 #include "./../document.h"
 #include "./../drawing.h"

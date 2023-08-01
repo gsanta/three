@@ -67,6 +67,12 @@ namespace editor
         return m_DocumentStore->getActiveDocument();
     }
 
+    void Editor::setDocument(const Document &document)
+    {
+        m_DocumentStore->setDocument(document);
+        m_DocumentStore->setActiveDocument(0);
+    }
+
     Window *Editor::getWindow() const
     {
         return m_Window;
