@@ -18,8 +18,14 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['frame/initFrames', 'layer/initLayers', 'tool/initTools', 'settings/initSettings'],
-        ignoredPaths: ['frame.editor', 'layer.editor', 'settings.editor', 'tool.editor'],
+        ignoredActions: [
+          'frame/initFrames',
+          'layer/initLayers',
+          'tool/initTools',
+          'settings/initSettings',
+          'editor/setEditor',
+        ],
+        ignoredPaths: ['frame.editor', 'layer.editor', 'settings.editor', 'tool.editor', 'editor.editor'],
       },
     }),
 });

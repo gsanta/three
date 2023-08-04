@@ -52,9 +52,9 @@ namespace editor
         if (m_OutlinedTop == nullptr)
         {
             m_OutlinedTop = &tileLayer.add(Rect2D(0, 0, 0.1f, 0.1f, color));
-            m_OutlinedRight = &tileLayer.add(Rect2D(0, 0, 0.1f, 0.1f, color));
-            m_OutlinedBottom = &tileLayer.add(Rect2D(0, 0, 0.1f, 0.1f, color));
-            m_OutlinedLeft = &tileLayer.add(Rect2D(0, 0, 0.1f, 0.1f, color));
+            m_OutlinedRight = &tileLayer.add(Rect2D(1, 0, 0.1f, 0.1f, color));
+            m_OutlinedBottom = &tileLayer.add(Rect2D(2, 0, 0.1f, 0.1f, color));
+            m_OutlinedLeft = &tileLayer.add(Rect2D(3, 0, 0.1f, 0.1f, color));
         }
 
         m_OutlinedTop->setSize(Vec2(bounds.getWidth(), tileSize));

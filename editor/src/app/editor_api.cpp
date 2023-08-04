@@ -133,6 +133,16 @@ void set_canvas_size(int width, int height)
                              editor->getDocumentFactory());
 }
 
+void undo()
+{
+    editor->getActiveDocument().getHistory()->undo(editor->getActiveDocument());
+}
+
+void redo()
+{
+    editor->getActiveDocument().getHistory()->redo(editor->getActiveDocument());
+}
+
 EMSCRIPTEN_BINDINGS(spright)
 {
     emscripten::function("getFrames", &getFrames);
@@ -154,6 +164,8 @@ EMSCRIPTEN_BINDINGS(spright)
     emscripten::function("isRectangleToolFilled", &is_rectangle_tool_filled);
     emscripten::function("getCanvasSize", &get_canvas_size);
     emscripten::function("setCanvasSize", &set_canvas_size);
+    emscripten::function("undo", &undo);
+    emscripten::function("redo", &redo);
 }
 
 #endif
