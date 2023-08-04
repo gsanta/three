@@ -1,10 +1,10 @@
 import Box from '@/components/box/Box';
 import Icon from '@/components/icon/Icon';
-import { Button, IconButton, Menu, MenuButton, MenuItem, MenuList, Tooltip } from '@chakra-ui/react';
+import { Button, ButtonGroup, IconButton, Menu, MenuButton, MenuItem, MenuList, Tooltip } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import ExportDialog from './io/ExportDialog';
 import ImportDialog from './io/import/ImportDialog';
-import { useAppDispatch } from '@/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import { flipHorizontal } from '@/features/settings/state/settingsSlice';
 import { useBoolean } from 'usehooks-ts';
 import ResizeCanvasDialog from './components/ResizeCanvasDialog';
@@ -25,6 +25,8 @@ const SettingsPanel = () => {
   const handleFlipHorizontal = () => dispatch(flipHorizontal());
 
   const { save, isLoading: isSaveLoading } = useSaveDrawing();
+
+  const { editor } = useAppSelector((state) => state.editor);
 
   const {
     value: isResizeCanvasDialogOpen,
@@ -57,16 +59,30 @@ const SettingsPanel = () => {
           <MenuItem onClick={openResizeCanvasDialog}>Resize canvas</MenuItem>
         </MenuList>
       </Menu>
-      <Tooltip label="Save to server">
-        <Button variant="outline" size="sm" isLoading={isSaveLoading} onClick={save}>
-          <Icon name="BiCloudUpload" />
-        </Button>
-      </Tooltip>
-      <Tooltip label="Download from server">
-        <Button variant="outline" size="sm" isLoading={isSaveLoading} onClick={openLoadDrawingDialog}>
-          <Icon name="BiCloudDownload" />
-        </Button>
-      </Tooltip>
+      <ButtonGroup>
+        <Tooltip label="Save to server">
+          <Button variant="outline" size="sm" isLoading={isSaveLoading} onClick={save}>
+            <Icon name="BiCloudUpload" />
+          </Button>
+        </Tooltip>
+        <Tooltip label="Download from server">
+          <Button variant="outline" size="sm" isLoading={isSaveLoading} onClick={openLoadDrawingDialog}>
+            <Icon name="BiCloudDownload" />
+          </Button>
+        </Tooltip>
+      </ButtonGroup>
+      <ButtonGroup>
+        <Tooltip label="Undo">
+          <Button variant="outline" size="sm" onClick={() => editor.undo()}>
+            <Icon name="BiUndo" />
+          </Button>
+        </Tooltip>
+        <Tooltip label="Redo">
+          <Button variant="outline" size="sm" onClick={() => editor.redo()}>
+            <Icon name="BiRedo" />
+          </Button>
+        </Tooltip>
+      </ButtonGroup>
       <ImportDialog isOpen={isImportDialogOpen} onClose={closeImportDialog} />
       <ExportDialog isOpen={isExportDialogOpen} onClose={() => setExportDialogOpen(false)} />
       <LoadDrawingDialog isOpen={isLoadDrawingDialogOpen} onClose={cloaseLoadDrawingDialog} />

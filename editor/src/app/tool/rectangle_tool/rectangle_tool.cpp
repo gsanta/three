@@ -35,8 +35,6 @@ namespace editor
                 m_TempRectDrawer.getBounds(),
                 color,
                 [&](std::shared_ptr<Rect2D> prev, std::shared_ptr<Rect2D> next) { tileUndo.addTile(prev, next); });
-
-            context.doc.document->getHistory()->add(std::make_shared<TileUndo>(tileUndo));
         }
         else
         {
@@ -47,6 +45,7 @@ namespace editor
                 [&](std::shared_ptr<Rect2D> prev, std::shared_ptr<Rect2D> next) { tileUndo.addTile(prev, next); });
         }
 
+        context.doc.document->getHistory()->add(std::make_shared<TileUndo>(tileUndo));
         context.doc.activeDrawing->getForegroundLayer().clear();
         m_TempRectDrawer.reset();
     }

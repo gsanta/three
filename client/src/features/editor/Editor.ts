@@ -66,6 +66,10 @@ interface Editor {
   //edit
   flipHorizontal(): void;
 
+  undo(): void;
+
+  redo(): void;
+
   //tool
   setCircleToolFilled(isFilled: boolean): void;
 
