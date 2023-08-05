@@ -23,7 +23,7 @@ namespace editor
     private:
         void init(TileLayer &drawLayer, float tileSize);
 
-        void setPosition(const TileLayer &drawLayer, const Vec2 &pos);
+        void setPosition(TileLayer &drawLayer, const Vec2 &pos);
 
     private:
         int m_Size;

@@ -62,6 +62,9 @@ namespace editor
             return m_Name;
         }
 
+    protected:
+        std::shared_ptr<Cursor> getCursor() const;
+
     private:
         string m_Name;
 

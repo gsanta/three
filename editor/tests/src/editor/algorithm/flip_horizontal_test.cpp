@@ -1,5 +1,6 @@
 #include "../src/app/algorithm/flip_horizontal.h"
 #include "../src/app/core/colors.h"
+#include "../test_helpers/document_builder.h"
 #include "../test_helpers/document_store_builder.h"
 
 #include <catch2/catch_test_macros.hpp>
@@ -11,23 +12,23 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
 {
     SECTION("can flip a layer horizontally")
     {
-        DocumentStore documentStore =
-            DocumentStoreBuilder()
-                .withDrawing(DrawingBuilder().withTileLayer(TileLayerBuilder()
-                                                                .withTile(Vec2Int(0, 1), COLOR_RED)
-                                                                .withTile(Vec2Int(1, 1), COLOR_RED)
-                                                                .withTile(Vec2Int(0, 2), COLOR_RED)
-                                                                .withTile(Vec2Int(11, 1), COLOR_BLUE)
-                                                                .withTile(Vec2Int(10, 1), COLOR_BLUE)
-                                                                .withTile(Vec2Int(11, 2), COLOR_BLUE)))
-                .build();
+        Document document = DocumentBuilder()
+                                .withDrawing(DrawingBuilder().withTileSize(0.5f).withTileLayer(
+                                    TileLayerBuilder()
+                                        .withTile(Vec2Int(0, 1), COLOR_RED)
+                                        .withTile(Vec2Int(1, 1), COLOR_RED)
+                                        .withTile(Vec2Int(0, 2), COLOR_RED)
+                                        .withTile(Vec2Int(11, 1), COLOR_BLUE)
+                                        .withTile(Vec2Int(10, 1), COLOR_BLUE)
+                                        .withTile(Vec2Int(11, 2), COLOR_BLUE)))
+                                .build();
 
-        TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing().getActiveLayer();
+        TileLayer &layer = document.getActiveDrawing().getActiveLayer();
 
         int tileWidth = layer.getTileBounds().getWidth();
         int tileHeight = layer.getTileBounds().getHeight();
 
-        Drawing &drawing = documentStore.getActiveDocument().getActiveDrawing();
+        Drawing &drawing = document.getActiveDrawing();
         flip_horizontal(drawing.getActiveLayer());
 
         REQUIRE(layer.getAtTilePos(tileWidth - 1, 1)->getColor() == COLOR_RED);

@@ -68,6 +68,7 @@ namespace engine
     void Rect2D::setCenterPosition(Vec2 position)
     {
         this->m_Position = Vec3(position.x - m_Size.x / 2.0f, position.y - m_Size.y / 2.0f, m_Position.z);
+        updateBounds();
     }
 
     Vec2 Rect2D::getCenterPosition2d() const

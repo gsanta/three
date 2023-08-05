@@ -7,23 +7,26 @@ using namespace ::spright::engine;
 
 struct EqualsBoundsMatcher : Catch::Matchers::MatcherGenericBase
 {
-    inline EqualsBoundsMatcher(const Bounds &bounds) : bounds{bounds}
+    inline EqualsBoundsMatcher(const Bounds &bounds) : m_Bounds{bounds}
     {
     }
 
     inline bool match(const Bounds &other) const
     {
-        return bounds.minX == Catch::Approx(other.minX) && bounds.maxX == Catch::Approx(other.maxX) &&
-               bounds.minY == Catch::Approx(other.minY) && bounds.maxY == Catch::Approx(other.maxY);
+        m_Other = other;
+        return m_Bounds.minX == Catch::Approx(other.minX) && m_Bounds.maxX == Catch::Approx(other.maxX) &&
+               m_Bounds.minY == Catch::Approx(other.minY) && m_Bounds.maxY == Catch::Approx(other.maxY);
     }
 
     inline std::string describe() const override
     {
-        return "Equal Bounds";
+        return "Not equal: \nexpected: " + m_Bounds.toString() + " \ngot: " + m_Other.toString();
     }
 
 private:
-    const Bounds &bounds;
+    const Bounds &m_Bounds;
+
+    mutable Bounds m_Other;
 };
 
 inline auto EqualsBounds(const Bounds &bounds) -> EqualsBoundsMatcher

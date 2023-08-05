@@ -11,6 +11,11 @@ namespace editor
         m_UndoList.push_back(undoable);
     }
 
+    void DocumentHistory::mergeToTop(const Undoable &undoable)
+    {
+        m_UndoList.back()->merge(undoable);
+    }
+
     void DocumentHistory::undo(Document &document)
     {
         if (m_UndoList.size() > 0)
@@ -29,6 +34,11 @@ namespace editor
             m_UndoList.push_back(m_RedoList.back());
             m_RedoList.pop_back();
         }
+    }
+
+    Undoable *DocumentHistory::peek()
+    {
+        return m_UndoList.back().get();
     }
 
     size_t DocumentHistory::undoSize()

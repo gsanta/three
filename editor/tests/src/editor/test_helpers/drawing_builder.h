@@ -41,5 +41,5 @@ private:
 
     float m_BackgroundLayerTileSize = TileLayer::defaultTileSize;
 
-    float m_TileSize = 0.5f;
+    float m_TileSize = 1.0f;
 };

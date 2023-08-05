@@ -83,7 +83,8 @@ namespace editor
                             Group<Rect2D>(m_RendererProvider->createRenderer2D()),
                             aLayer.getBounds(),
                             tileSize,
-                            aLayer.getZPos());
+                            aLayer.getZPos(),
+                            true);
 
         drawing.addForegroundLayer(tempLayer);
 

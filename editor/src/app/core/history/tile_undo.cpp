@@ -49,6 +49,16 @@ namespace editor
         }
     }
 
+    void TileUndo::merge(const Undoable &other)
+    {
+        const TileUndo *tileUndo = dynamic_cast<const TileUndo *>(&other);
+        if (tileUndo)
+        {
+            m_NewList.insert(m_NewList.end(), tileUndo->m_NewList.begin(), tileUndo->m_NewList.end());
+            m_PrevList.insert(m_PrevList.end(), tileUndo->m_PrevList.begin(), tileUndo->m_PrevList.end());
+        }
+    }
+
     TileUndo TileUndo::createForActiveTileLayer(Document &document)
     {
         return TileUndo(document);

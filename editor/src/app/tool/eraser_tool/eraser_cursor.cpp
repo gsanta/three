@@ -17,5 +17,10 @@ namespace editor
     {
         m_EraserStroke.clear(foregroundLayer);
     }
+
+    EraserStroke &EraserCursor::getEraserStroke()
+    {
+        return m_EraserStroke;
+    }
 } // namespace editor
 } // namespace spright
