@@ -8,6 +8,8 @@ class ToolContextBuilder
 public:
     ToolContextBuilder &withDocumentInfo(DocumentInfoBuilder builder);
 
+    ToolContextBuilder &withDocument(Document &document);
+
     ToolContextBuilder &withPointerInfo(PointerInfoBuilder builder);
 
     ToolContextBuilder &withActiveDrawing(DocumentStore &documentStore);
@@ -18,4 +20,6 @@ private:
     DocumentInfoBuilder m_DocInfo;
 
     PointerInfoBuilder m_PointerInfo;
+
+    Document *m_Document;
 };

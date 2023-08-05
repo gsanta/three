@@ -35,7 +35,7 @@ SCENARIO("JsonIO")
             Container container(bounds);
             DocumentFactory documentFactory = TestDocumentFactory::createDocumentFactory(container);
 
-            Document document = DocumentBuilder().build();
+            Document document = DocumentBuilder().withEmptyDocument().build();
 
             document.addDrawing(drawing);
 

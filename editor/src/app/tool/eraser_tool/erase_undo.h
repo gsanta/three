@@ -1,33 +1,30 @@
+
 #pragma once
 
 #include "../../../engine/graphics/layer/tileLayer.h"
 #include "../../../engine/graphics/renderable/rect2d.h"
+#include "../../core/history/undoable.h"
 #include "../../document/document.h"
-#include "./undoable.h"
 
 namespace spright
 {
 namespace editor
 {
-    class TileUndo : public Undoable
+    class EraseUndo : public Undoable
     {
     public:
-        static TileUndo createForActiveTileLayer(Document &document);
+        EraseUndo(Document &document);
 
         void undo(Document &document) const override;
 
         void redo(Document &document) const override;
 
-        void addTile(std::shared_ptr<Rect2D> prevRect, std::shared_ptr<Rect2D> newRect);
+        void addTile(std::shared_ptr<Rect2D> rect);
 
         void merge(const Undoable &other) override;
 
     private:
-        TileUndo(Document &document);
-
-        std::vector<std::shared_ptr<Rect2D>> m_PrevList;
-
-        std::vector<std::shared_ptr<Rect2D>> m_NewList;
+        std::vector<std::shared_ptr<Rect2D>> m_Rects;
 
         size_t m_TileLayerPos;
 

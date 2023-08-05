@@ -14,6 +14,8 @@ namespace editor
         virtual void undo(Document &document) const = 0;
 
         virtual void redo(Document &document) const = 0;
+
+        virtual void merge(const Undoable &other) = 0;
     };
 } // namespace editor
 } // namespace spright

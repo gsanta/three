@@ -16,8 +16,7 @@ namespace editor
             return;
         }
 
-        TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
-        m_Eraser.erase(activeLayer, activeLayer.getTilePos(context.pointer.curr), m_Size);
+        erase(context, false);
     }
 
     void EraserTool::pointerMove(const ToolContext &context)
@@ -27,13 +26,32 @@ namespace editor
             return;
         }
 
-        TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
-        TileLayer &drawLayer = context.doc.activeDrawing->getForegroundLayer();
-
         if (context.pointer.isDown)
         {
-            m_Eraser.erase(activeLayer, activeLayer.getTilePos(context.pointer.curr), m_Size);
+            erase(context, true);
         }
+    }
+
+    void EraserTool::erase(const ToolContext &context, bool isPointerMove)
+    {
+        if (!isPointerMove)
+        {
+            context.doc.document->getHistory()->add(std::make_shared<EraseUndo>(*context.doc.document));
+        }
+
+        EraseUndo *eraseUndo = dynamic_cast<EraseUndo *>(context.doc.document->getHistory()->peek());
+
+        TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
+        m_Eraser.erase(activeLayer,
+                       activeLayer.getTilePos(context.pointer.curr),
+                       m_Size,
+                       [&](std::shared_ptr<Rect2D> tile) { eraseUndo->addTile(tile); });
+    }
+
+    float EraserTool::getStrokeSize() const
+    {
+        auto eraserCursor = std::dynamic_pointer_cast<EraserCursor>(getCursor());
+        return eraserCursor->getEraserStroke().getStrokeWidth();
     }
 
     void EraserTool::setOptions(std::string json)

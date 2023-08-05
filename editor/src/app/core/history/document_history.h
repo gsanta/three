@@ -15,10 +15,13 @@ namespace editor
 
     public:
         void add(std::shared_ptr<Undoable> undoable);
+        void mergeToTop(const Undoable &undoable);
 
         void undo(Document &document);
 
         void redo(Document &document);
+
+        Undoable *peek();
 
         size_t undoSize();
 

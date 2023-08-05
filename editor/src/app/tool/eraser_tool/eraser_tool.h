@@ -2,10 +2,12 @@
 
 #include "../../../engine/graphics/renderable/rect2d.h"
 #include "../../../engine/graphics/renderable/renderable2d.h"
+#include "../../core/history/document_history.h"
 #include "../../document/document_store.h"
 #include "../../document/drawing.h"
 #include "../tool/tool.h"
 #include "../tool/tool_context.h"
+#include "./erase_undo.h"
 #include "eraser.h"
 #include "eraser_cursor.h"
 #include "eraser_stroke.h"
@@ -29,9 +31,13 @@ namespace editor
 
         void pointerMove(const ToolContext &) override;
 
+        float getStrokeSize() const;
+
         void setOptions(std::string json) override;
 
         std::string getOptions() override;
+
+        void erase(const ToolContext &context, bool isPointerMove);
 
     private:
         DocumentStore *m_documentStore;
@@ -39,8 +45,6 @@ namespace editor
         Eraser m_Eraser;
 
         int m_Size = 3;
-
-        float m_DashSize = 0.2f;
 
         bool m_IsMoveSelection = false;
 

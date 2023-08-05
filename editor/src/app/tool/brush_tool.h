@@ -1,6 +1,8 @@
 #pragma once
 #include "../../engine/graphics/renderable/rect2d.h"
 #include "../../engine/graphics/renderable/renderable2d.h"
+#include "../core/history/document_history.h"
+#include "../core/history/tile_undo.h"
 #include "../document/document_store.h"
 #include "../document/drawing.h"
 #include "../editor_config.h"
@@ -21,8 +23,6 @@ namespace editor
     class BrushTool : public Tool, public Colorable
     {
     private:
-        DocumentStore *m_documentStore;
-
         int m_Size = 1;
 
         Rect2D *sprite;
@@ -30,7 +30,7 @@ namespace editor
         Brush brush;
 
     public:
-        BrushTool(DocumentStore *documentStore);
+        BrushTool();
 
         void setSize(int size);
 
@@ -39,7 +39,7 @@ namespace editor
         void pointerDown(const ToolContext &) override;
 
     private:
-        void paint(const PointerInfo &pointerInfo);
+        void paint(const ToolContext &context, bool isPointerMove);
     };
 } // namespace editor
 } // namespace spright

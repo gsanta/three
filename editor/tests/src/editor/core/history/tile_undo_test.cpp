@@ -9,26 +9,26 @@
 
 SCENARIO("TileUndo")
 {
+    Document document = DocumentBuilder().build();
+
+    Drawing drawing = DrawingBuilder()
+                          .withFrame(FrameBuilder().withTileLayer(TileLayerBuilder().withTileSize(1).withBounds(
+                                         Bounds::createWithPositions(-2.0f, -2.0f, 2.0f, 2.0f))),
+                                     2)
+                          .build();
+
+    document.addDrawing(drawing);
+
+    TileLayer &layer = document.getActiveDrawing().getActiveLayer();
+
+    TileBuilder tileBuilder(layer);
+
+    layer.add(tileBuilder.withPos(Vec2Int(0, 0)).withColor(COLOR_RED).build());
+    layer.add(tileBuilder.withPos(Vec2Int(1, 0)).withColor(COLOR_RED).build());
+    layer.add(tileBuilder.withPos(Vec2Int(0, 1)).withColor(COLOR_RED).build());
+
     GIVEN("an undoable action for a tile layer")
     {
-        Document document = DocumentBuilder().build();
-
-        Drawing drawing = DrawingBuilder()
-                              .withFrame(FrameBuilder().withTileLayer(TileLayerBuilder().withTileSize(1).withBounds(
-                                             Bounds::createWithPositions(-2.0f, -2.0f, 2.0f, 2.0f))),
-                                         2)
-                              .build();
-
-        document.addDrawing(drawing);
-
-        TileLayer &layer = document.getActiveDrawing().getActiveLayer();
-
-        TileBuilder tileBuilder(layer);
-
-        layer.add(tileBuilder.withPos(Vec2Int(0, 0)).withColor(COLOR_RED).build());
-        layer.add(tileBuilder.withPos(Vec2Int(1, 0)).withColor(COLOR_RED).build());
-        layer.add(tileBuilder.withPos(Vec2Int(0, 1)).withColor(COLOR_RED).build());
-
         TileUndo tileUndo = TileUndo::createForActiveTileLayer(document);
 
         Rect2D *prevRect1 = layer.getAtTilePos(1, 0);
@@ -40,7 +40,7 @@ SCENARIO("TileUndo")
         tileUndo.addTile(std::shared_ptr<Rect2D>(nullptr), std::make_shared<Rect2D>(nextRect2));
         layer.add(nextRect2);
 
-        WHEN("the user calls undo")
+        WHEN("undo is called")
         {
             THEN("it undoes the changes on the tile layer")
             {
@@ -53,7 +53,7 @@ SCENARIO("TileUndo")
             }
         }
 
-        WHEN("the user calls redo")
+        WHEN("redo is called")
         {
             THEN("it redoes the changes on the tile layer")
             {
@@ -65,6 +65,56 @@ SCENARIO("TileUndo")
                 REQUIRE(layer.getAtTilePos(0, 1)->getColor() == COLOR_RED);
                 REQUIRE(layer.getAtTilePos(1, 0)->getColor() == COLOR_YELLOW);
                 REQUIRE(layer.getAtTilePos(1, 1)->getColor() == COLOR_YELLOW);
+            }
+        }
+    }
+
+    GIVEN("two undoable actions for a tile layer")
+    {
+        WHEN("merging the two undo actions")
+        {
+            TileUndo tileUndo1 = TileUndo::createForActiveTileLayer(document);
+
+            Rect2D *prevRect1 = layer.getAtTilePos(1, 0);
+            Rect2D nextRect1 = tileBuilder.withPos(Vec2Int(1, 0)).withColor(COLOR_YELLOW).build();
+            tileUndo1.addTile(std::make_shared<Rect2D>(*prevRect1), std::make_shared<Rect2D>(nextRect1));
+            layer.add(nextRect1);
+
+            TileUndo tileUndo2 = TileUndo::createForActiveTileLayer(document);
+
+            Rect2D nextRect2 = tileBuilder.withPos(Vec2Int(1, 1)).withColor(COLOR_YELLOW).build();
+            tileUndo2.addTile(std::shared_ptr<Rect2D>(nullptr), std::make_shared<Rect2D>(nextRect2));
+            layer.add(nextRect2);
+
+            tileUndo1.merge(tileUndo2);
+
+
+            WHEN("undo is called")
+            {
+                THEN("undo is executed for both actions")
+                {
+                    tileUndo1.undo(document);
+
+                    REQUIRE(layer.getRenderables().size() == 3);
+                    REQUIRE(layer.getRenderables()[0]->getColor() == COLOR_RED);
+                    REQUIRE(layer.getRenderables()[1]->getColor() == COLOR_RED);
+                    REQUIRE(layer.getRenderables()[2]->getColor() == COLOR_RED);
+                }
+            }
+
+            WHEN("redo is called")
+            {
+                THEN("redo is executed for both actions")
+                {
+                    tileUndo1.undo(document);
+                    tileUndo1.redo(document);
+
+                    REQUIRE(layer.getRenderables().size() == 4);
+                    REQUIRE(layer.getAtTilePos(0, 0)->getColor() == COLOR_RED);
+                    REQUIRE(layer.getAtTilePos(0, 1)->getColor() == COLOR_RED);
+                    REQUIRE(layer.getAtTilePos(1, 0)->getColor() == COLOR_YELLOW);
+                    REQUIRE(layer.getAtTilePos(1, 1)->getColor() == COLOR_YELLOW);
+                }
             }
         }
     }

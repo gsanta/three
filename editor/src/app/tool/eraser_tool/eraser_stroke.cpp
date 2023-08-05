@@ -14,11 +14,6 @@ namespace editor
 
     void editor::EraserStroke::draw(TileLayer &drawLayer, const Vec2 &pos)
     {
-        if (!m_TopLine)
-        {
-            init(drawLayer, drawLayer.getTileSize());
-        }
-
         setPosition(drawLayer, pos);
     }
 
@@ -48,7 +43,7 @@ namespace editor
         m_LeftLine = &drawLayer.add(Rect2D(-eraserArea / 2.0f, -eraserArea / 2.0f, m_StrokeWidth, eraserArea, color));
     }
 
-    void EraserStroke::setPosition(const TileLayer &drawLayer, const Vec2 &pos)
+    void EraserStroke::setPosition(TileLayer &drawLayer, const Vec2 &pos)
     {
         float halfEraserSize = drawLayer.getTileSize() * static_cast<float>(m_Size) / 2.0f;
 
@@ -61,9 +56,32 @@ namespace editor
             tileCenterPos += Vec2(-halfTileSize, -halfTileSize);
         }
 
+        float eraserArea = drawLayer.getTileSize() * static_cast<float>(m_Size);
+
+        unsigned int color = 0xff0099ff;
+
+        if (!m_TopLine)
+        {
+            m_TopLine = &drawLayer.add(Rect2D(-eraserArea / 2.0f, eraserArea / 2.0f, eraserArea, m_StrokeWidth, color));
+        }
         m_TopLine->setCenterPosition(tileCenterPos + Vec2(0, halfEraserSize));
+        if (!m_RightLine)
+        {
+            m_RightLine =
+                &drawLayer.add(Rect2D(eraserArea / 2.0f, -eraserArea / 2.0f, m_StrokeWidth, eraserArea, color));
+        }
         m_RightLine->setCenterPosition(tileCenterPos + Vec2(halfEraserSize, 0));
+        if (!m_BottomLine)
+        {
+            m_BottomLine =
+                &drawLayer.add(Rect2D(-eraserArea / 2.0f, -eraserArea / 2.0f, eraserArea, m_StrokeWidth, color));
+        }
         m_BottomLine->setCenterPosition(tileCenterPos + Vec2(0, -halfEraserSize));
+        if (!m_LeftLine)
+        {
+            m_LeftLine =
+                &drawLayer.add(Rect2D(-eraserArea / 2.0f, -eraserArea / 2.0f, m_StrokeWidth, eraserArea, color));
+        }
         m_LeftLine->setCenterPosition(tileCenterPos + Vec2(-halfEraserSize, 0));
     }
 } // namespace editor

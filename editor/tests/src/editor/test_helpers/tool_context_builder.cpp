@@ -7,6 +7,12 @@ ToolContextBuilder &ToolContextBuilder::withDocumentInfo(DocumentInfoBuilder bui
     return *this;
 }
 
+ToolContextBuilder &ToolContextBuilder::withDocument(Document &document)
+{
+    m_Document = &document;
+    return *this;
+}
+
 ToolContextBuilder &ToolContextBuilder::withPointerInfo(PointerInfoBuilder builder)
 {
     m_PointerInfo = builder;
@@ -27,7 +33,14 @@ ToolContext ToolContextBuilder::build()
     ToolContext toolContext(std::make_shared<EditorState>());
 
     PointerInfo pointer = m_PointerInfo.build();
+
     DocumentInfo doc = m_DocInfo.build();
+
+    if (m_Document)
+    {
+        doc.document = m_Document;
+        doc.activeDrawing = &m_Document->getActiveDrawing();
+    }
 
     toolContext.pointer = pointer;
     toolContext.doc = doc;

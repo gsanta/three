@@ -17,6 +17,8 @@ namespace editor
 
         virtual void destroy(TileLayer &foregroundLayer);
 
+        EraserStroke &getEraserStroke();
+
     private:
         EraserStroke m_EraserStroke;
     };

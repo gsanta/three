@@ -29,7 +29,8 @@ namespace engine
                   Group<Rect2D> group,
                   Bounds bounds,
                   float tileSize = TileLayer::defaultTileSize,
-                  float zPos = 0);
+                  float zPos = 0,
+                  bool allowDuplicatedPixels = false);
 
         TileLayer(const TileLayer &tileLayer);
 
@@ -143,6 +144,8 @@ namespace engine
         float m_ZPos;
 
         Mat4 m_Transformation;
+
+        bool m_AllowDuplicatedPixels;
     };
 } // namespace engine
 } // namespace spright

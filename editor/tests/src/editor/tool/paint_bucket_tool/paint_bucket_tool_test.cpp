@@ -1,6 +1,7 @@
 
 #include "../src/app/core/colors.h"
 #include "../src/app/tool/paint_bucket/paint_bucket_tool.h"
+#include "src/editor/test_helpers/document_builder.h"
 #include "src/editor/test_helpers/document_store_builder.h"
 #include "src/editor/test_helpers/tool_context_builder.h"
 
@@ -12,14 +13,14 @@ TEST_CASE("PaintBucketTool", "[paint-bucket-tool]")
 {
     SECTION("can fill an empty layer")
     {
-        DocumentStore documentStore = DocumentStoreBuilder().withDocumentBounds(Bounds(0, 0, 1, 1)).build();
-        ToolContext toolContext = ToolContextBuilder().withActiveDrawing(documentStore).build();
+        Document document = DocumentBuilder().withDrawing(DrawingBuilder().withBounds(Bounds(0, 0, 2, 2))).build();
+        ToolContext toolContext = ToolContextBuilder().withDocument(document).build();
 
         PaintBucketTool paintBucketTool;
 
         paintBucketTool.execPointerUp(toolContext);
 
-        TileLayer &layer = documentStore.getActiveDocument().getActiveLayer();
+        TileLayer &layer = document.getActiveLayer();
 
         REQUIRE(layer.getRenderables().size() == 4);
         REQUIRE(layer.getRenderables()[0]->getColor() == COLOR_SPRIGHT_ORANGE);
