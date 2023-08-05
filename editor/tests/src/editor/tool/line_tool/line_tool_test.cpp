@@ -2,238 +2,222 @@
 #include "../src/app/core/colors.h"
 #include "../src/app/tool/line_tool/line_tool.h"
 #include "catch2/catch_test_macros.hpp"
+#include "src/editor/test_helpers/document_builder.h"
 #include "src/editor/test_helpers/document_store_builder.h"
 #include "src/editor/test_helpers/tool_context_builder.h"
 
 using namespace spright::editor;
 
-TEST_CASE("LineTool", "[line-tool]")
+SCENARIO("Line tool")
 {
-    SECTION("can draw a straight horizontal line")
+    GIVEN("an empty drawing and a line tool")
     {
-        DocumentStore documentStore = DocumentStoreBuilder().build();
-        ToolContext toolContext = ToolContextBuilder().withActiveDrawing(documentStore).build();
+        Document document = DocumentBuilder().build();
+        ToolContext toolContext = ToolContextBuilder().withDocument(document).build();
+
+        TileLayer &layer = document.getActiveLayer();
 
         LineTool lineTool;
 
-        TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing().getActiveLayer();
+        WHEN("dragging in a perfect diagonal direction")
+        {
+            toolContext.pointer.down = layer.getWorldPos(Vec2Int(0, 0));
 
-        toolContext.pointer.curr = layer.getWorldPos(Vec2Int(0, 0));
-        toolContext.pointer.down = toolContext.pointer.curr;
+            lineTool.execPointerDown(toolContext);
+
+            toolContext.pointer.isDown = true;
 
-        lineTool.execPointerDown(toolContext);
+            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(4, 4));
+
+            lineTool.execPointerMove(toolContext);
+            lineTool.execPointerUp(toolContext);
+
+            THEN("it draws a perfect diagonal line")
+            {
+                REQUIRE(layer.getRenderables().size() == 4);
+                REQUIRE(layer.getAtTilePos(0, 0) != nullptr);
+                REQUIRE(layer.getAtTilePos(1, 1) != nullptr);
+                REQUIRE(layer.getAtTilePos(2, 2) != nullptr);
+                REQUIRE(layer.getAtTilePos(3, 3) != nullptr);
+            }
+
+            WHEN("undoing the last action")
+            {
+                document.getHistory()->undo(document);
+
+                THEN("it removes the line")
+                {
+                    REQUIRE(layer.getRenderables().size() == 0);
+                }
 
-        toolContext.pointer.isDown = true;
+                WHEN("redoing the last action")
+                {
+                    document.getHistory()->redo(document);
+
+                    THEN("it restores the line")
+                    {
+                        REQUIRE(layer.getRenderables().size() == 4);
+                    }
+                }
+            }
+        }
+
+        WHEN("dragging in the horizontal direction")
+        {
+            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(0, 0));
+            toolContext.pointer.down = toolContext.pointer.curr;
+
+            lineTool.execPointerDown(toolContext);
+
+            toolContext.pointer.isDown = true;
 
-        toolContext.pointer.curr = layer.getWorldPos(Vec2Int(4, 0));
+            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(4, 0));
+
+            lineTool.execPointerMove(toolContext);
+            lineTool.execPointerUp(toolContext);
 
-        lineTool.execPointerMove(toolContext);
-        lineTool.execPointerUp(toolContext);
+            THEN("it draws a horizontal line")
+            {
+                REQUIRE(layer.getRenderables().size() == 4);
+                REQUIRE(layer.getAtTilePos(0, 0) != nullptr);
+                REQUIRE(layer.getAtTilePos(1, 0) != nullptr);
+                REQUIRE(layer.getAtTilePos(2, 0) != nullptr);
+                REQUIRE(layer.getAtTilePos(3, 0) != nullptr);
+            }
+        }
+
+        WHEN("dragging in the vertical direction")
+        {
+            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(0, 0));
+            toolContext.pointer.down = toolContext.pointer.curr;
+
+            lineTool.execPointerDown(toolContext);
+
+            toolContext.pointer.isDown = true;
 
-        REQUIRE(layer.getRenderables().size() == 4);
-        REQUIRE(layer.getAtTilePos(0, 0) != nullptr);
-        REQUIRE(layer.getAtTilePos(1, 0) != nullptr);
-        REQUIRE(layer.getAtTilePos(2, 0) != nullptr);
-        REQUIRE(layer.getAtTilePos(3, 0) != nullptr);
-    }
+            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(0, 5));
 
-    SECTION("can draw a straight vertical line")
-    {
-        DocumentStore documentStore = DocumentStoreBuilder().build();
-        ToolContext toolContext = ToolContextBuilder().withActiveDrawing(documentStore).build();
+            lineTool.execPointerMove(toolContext);
+            lineTool.execPointerUp(toolContext);
 
-        LineTool lineTool;
+            THEN("it draws a vertical line")
+            {
+                REQUIRE(layer.getRenderables().size() == 5);
+                REQUIRE(layer.getAtTilePos(0, 0) != nullptr);
+                REQUIRE(layer.getAtTilePos(0, 1) != nullptr);
+                REQUIRE(layer.getAtTilePos(0, 2) != nullptr);
+                REQUIRE(layer.getAtTilePos(0, 3) != nullptr);
+                REQUIRE(layer.getAtTilePos(0, 4) != nullptr);
+            }
+        }
 
-        TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing().getActiveLayer();
+        WHEN("Dragging in the positive direction more horizontally than vertically")
+        {
+            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(0, 0));
+            toolContext.pointer.down = toolContext.pointer.curr;
 
-        toolContext.pointer.curr = layer.getWorldPos(Vec2Int(0, 0));
-        toolContext.pointer.down = toolContext.pointer.curr;
+            lineTool.execPointerDown(toolContext);
 
-        lineTool.execPointerDown(toolContext);
+            toolContext.pointer.isDown = true;
 
-        toolContext.pointer.isDown = true;
+            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(4, 3));
 
-        toolContext.pointer.curr = layer.getWorldPos(Vec2Int(0, 5));
+            lineTool.execPointerMove(toolContext);
+            lineTool.execPointerUp(toolContext);
 
-        lineTool.execPointerMove(toolContext);
-        lineTool.execPointerUp(toolContext);
+            THEN("it draws a line which is longer than high")
+            {
+                REQUIRE(layer.getRenderables().size() == 4);
+                REQUIRE(layer.getAtTilePos(0, 0) != nullptr);
+                REQUIRE(layer.getAtTilePos(1, 1) != nullptr);
+                REQUIRE(layer.getAtTilePos(2, 2) != nullptr);
+                REQUIRE(layer.getAtTilePos(3, 2) != nullptr);
+            }
+        }
 
-        REQUIRE(layer.getRenderables().size() == 5);
-        REQUIRE(layer.getAtTilePos(0, 0) != nullptr);
-        REQUIRE(layer.getAtTilePos(0, 1) != nullptr);
-        REQUIRE(layer.getAtTilePos(0, 2) != nullptr);
-        REQUIRE(layer.getAtTilePos(0, 3) != nullptr);
-        REQUIRE(layer.getAtTilePos(0, 4) != nullptr);
-    }
+        WHEN("Dragging in the negative direction more horizontally than vertically")
+        {
+            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(4, 0));
+            toolContext.pointer.down = toolContext.pointer.curr;
 
+            lineTool.execPointerDown(toolContext);
 
-    SECTION("can draw a perfect diagonal line")
-    {
-        DocumentStore documentStore = DocumentStoreBuilder().build();
-        ToolContext toolContext = ToolContextBuilder().withActiveDrawing(documentStore).build();
+            toolContext.pointer.isDown = true;
 
-        LineTool lineTool;
+            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(0, 3));
 
-        TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing().getActiveLayer();
+            lineTool.execPointerMove(toolContext);
+            lineTool.execPointerUp(toolContext);
 
-        toolContext.pointer.down = layer.getWorldPos(Vec2Int(0, 0));
+            THEN("it draws a line which is longer than high in the negative direction")
+            {
+                REQUIRE(layer.getRenderables().size() == 4);
+                REQUIRE(layer.getAtTilePos(4, 0) != nullptr);
+                REQUIRE(layer.getAtTilePos(3, 1) != nullptr);
+                REQUIRE(layer.getAtTilePos(2, 2) != nullptr);
+                REQUIRE(layer.getAtTilePos(1, 2) != nullptr);
+            }
+        }
 
-        lineTool.execPointerDown(toolContext);
+        WHEN("Dragging in the positive direction more vertically than horizontally")
+        {
+            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(0, 0));
+            toolContext.pointer.down = toolContext.pointer.curr;
 
-        toolContext.pointer.isDown = true;
+            lineTool.execPointerDown(toolContext);
 
-        toolContext.pointer.curr = layer.getWorldPos(Vec2Int(4, 4));
+            toolContext.pointer.isDown = true;
 
-        lineTool.execPointerMove(toolContext);
-        lineTool.execPointerUp(toolContext);
+            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(2, 4));
 
-        REQUIRE(layer.getRenderables().size() == 4);
-        REQUIRE(layer.getAtTilePos(0, 0) != nullptr);
-        REQUIRE(layer.getAtTilePos(1, 1) != nullptr);
-        REQUIRE(layer.getAtTilePos(2, 2) != nullptr);
-        REQUIRE(layer.getAtTilePos(3, 3) != nullptr);
-    }
+            lineTool.execPointerMove(toolContext);
+            lineTool.execPointerUp(toolContext);
 
-    SECTION("can draw a diagonal line in the positive direction where line width is bigger than it's height")
-    {
-        DocumentStore documentStore = DocumentStoreBuilder().build();
-        ToolContext toolContext = ToolContextBuilder().withActiveDrawing(documentStore).build();
+            THEN("it draws a line which is higher than long")
+            {
+                REQUIRE(layer.getRenderables().size() == 4);
+                REQUIRE(layer.getAtTilePos(0, 0) != nullptr);
+                REQUIRE(layer.getAtTilePos(1, 1) != nullptr);
+                REQUIRE(layer.getAtTilePos(1, 2) != nullptr);
+                REQUIRE(layer.getAtTilePos(2, 3) != nullptr);
+            }
+        }
 
-        LineTool lineTool;
+        WHEN("drag is in progress")
+        {
+            TileLayer &foregroundLayer = document.getActiveDrawing().getForegroundLayer();
 
-        TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing().getActiveLayer();
+            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(0, 0));
+            toolContext.pointer.down = toolContext.pointer.curr;
 
-        toolContext.pointer.curr = layer.getWorldPos(Vec2Int(0, 0));
-        toolContext.pointer.down = toolContext.pointer.curr;
+            lineTool.execPointerDown(toolContext);
 
-        lineTool.execPointerDown(toolContext);
+            toolContext.pointer.isDown = true;
 
-        toolContext.pointer.isDown = true;
+            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(4, 4));
 
-        toolContext.pointer.curr = layer.getWorldPos(Vec2Int(4, 3));
+            lineTool.execPointerMove(toolContext);
 
-        lineTool.execPointerMove(toolContext);
-        lineTool.execPointerUp(toolContext);
+            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(4, 0));
 
-        REQUIRE(layer.getRenderables().size() == 4);
-        REQUIRE(layer.getAtTilePos(0, 0) != nullptr);
-        REQUIRE(layer.getAtTilePos(1, 1) != nullptr);
-        REQUIRE(layer.getAtTilePos(2, 2) != nullptr);
-        REQUIRE(layer.getAtTilePos(3, 2) != nullptr);
-    }
+            lineTool.execPointerMove(toolContext);
 
-    SECTION("can draw a diagonal line in the negative direction where line width is bigger than it's height")
-    {
-        DocumentStore documentStore = DocumentStoreBuilder().build();
-        ToolContext toolContext = ToolContextBuilder().withActiveDrawing(documentStore).build();
+            THEN("it draws to the foreground layer")
+            {
+                REQUIRE(layer.getRenderables().size() == 0);
+                REQUIRE(foregroundLayer.getRenderables().size() == 4);
+            }
 
-        LineTool lineTool;
+            WHEN("dragging ends")
+            {
+                lineTool.execPointerUp(toolContext);
 
-        TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing().getActiveLayer();
-
-        toolContext.pointer.curr = layer.getWorldPos(Vec2Int(4, 0));
-        toolContext.pointer.down = toolContext.pointer.curr;
-
-        lineTool.execPointerDown(toolContext);
-
-        toolContext.pointer.isDown = true;
-
-        toolContext.pointer.curr = layer.getWorldPos(Vec2Int(0, 3));
-
-        lineTool.execPointerMove(toolContext);
-        lineTool.execPointerUp(toolContext);
-
-        REQUIRE(layer.getRenderables().size() == 4);
-        REQUIRE(layer.getAtTilePos(4, 0) != nullptr);
-        REQUIRE(layer.getAtTilePos(3, 1) != nullptr);
-        REQUIRE(layer.getAtTilePos(2, 2) != nullptr);
-        REQUIRE(layer.getAtTilePos(1, 2) != nullptr);
-    }
-
-    SECTION("can draw a diagonal line in the positive direction where line height is bigger than it's width")
-    {
-        DocumentStore documentStore = DocumentStoreBuilder().build();
-        ToolContext toolContext = ToolContextBuilder().withActiveDrawing(documentStore).build();
-
-        LineTool lineTool;
-
-        TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing().getActiveLayer();
-
-        toolContext.pointer.curr = layer.getWorldPos(Vec2Int(0, 0));
-        toolContext.pointer.down = toolContext.pointer.curr;
-
-        lineTool.execPointerDown(toolContext);
-
-        toolContext.pointer.isDown = true;
-
-        toolContext.pointer.curr = layer.getWorldPos(Vec2Int(2, 4));
-
-        lineTool.execPointerMove(toolContext);
-        lineTool.execPointerUp(toolContext);
-
-        REQUIRE(layer.getRenderables().size() == 4);
-        REQUIRE(layer.getAtTilePos(0, 0) != nullptr);
-        REQUIRE(layer.getAtTilePos(1, 1) != nullptr);
-        REQUIRE(layer.getAtTilePos(1, 2) != nullptr);
-        REQUIRE(layer.getAtTilePos(2, 3) != nullptr);
-    }
-
-    SECTION("draws to the foreground layer when pointerMove")
-    {
-        DocumentStore documentStore = DocumentStoreBuilder().build();
-        ToolContext toolContext = ToolContextBuilder().withActiveDrawing(documentStore).build();
-
-        LineTool lineTool;
-
-        TileLayer &activeLayer = documentStore.getActiveDocument().getActiveDrawing().getActiveLayer();
-        TileLayer &foregroundLayer = documentStore.getActiveDocument().getActiveDrawing().getForegroundLayer();
-
-        toolContext.pointer.curr = activeLayer.getWorldPos(Vec2Int(0, 0));
-        toolContext.pointer.down = toolContext.pointer.curr;
-
-        lineTool.execPointerDown(toolContext);
-
-        toolContext.pointer.isDown = true;
-
-        toolContext.pointer.curr = activeLayer.getWorldPos(Vec2Int(4, 4));
-
-        lineTool.execPointerMove(toolContext);
-
-        toolContext.pointer.curr = activeLayer.getWorldPos(Vec2Int(4, 0));
-
-        lineTool.execPointerMove(toolContext);
-
-        REQUIRE(activeLayer.getRenderables().size() == 0);
-        REQUIRE(foregroundLayer.getRenderables().size() == 4);
-    }
-
-    SECTION("draws to the active layer and clears the foreground layer when pointerUp")
-    {
-        DocumentStore documentStore = DocumentStoreBuilder().build();
-        ToolContext toolContext = ToolContextBuilder().withActiveDrawing(documentStore).build();
-
-        LineTool lineTool;
-
-        TileLayer &activeLayer = documentStore.getActiveDocument().getActiveDrawing().getActiveLayer();
-        TileLayer &foregroundLayer = documentStore.getActiveDocument().getActiveDrawing().getForegroundLayer();
-
-        toolContext.pointer.curr = activeLayer.getWorldPos(Vec2Int(0, 0));
-        toolContext.pointer.down = toolContext.pointer.curr;
-
-        lineTool.execPointerDown(toolContext);
-
-        toolContext.pointer.isDown = true;
-
-        toolContext.pointer.curr = activeLayer.getWorldPos(Vec2Int(4, 4));
-
-        lineTool.execPointerMove(toolContext);
-
-        toolContext.pointer.curr = activeLayer.getWorldPos(Vec2Int(4, 0));
-
-        lineTool.execPointerMove(toolContext);
-        lineTool.execPointerUp(toolContext);
-
-        REQUIRE(activeLayer.getRenderables().size() == 4);
-        REQUIRE(foregroundLayer.getRenderables().size() == 0);
+                THEN("draws to the active layer and clears the foreground layer")
+                {
+                    REQUIRE(layer.getRenderables().size() == 4);
+                    REQUIRE(foregroundLayer.getRenderables().size() == 0);
+                }
+            }
+        }
     }
 }

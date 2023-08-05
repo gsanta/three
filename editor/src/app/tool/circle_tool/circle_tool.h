@@ -1,4 +1,6 @@
 #pragma once
+#include "../../core/history/document_history.h"
+#include "../../core/history/tile_undo.h"
 #include "../brush.h"
 #include "../paint_bucket/queue_linear_flood_fill.h"
 #include "../tool/tool.h"
@@ -21,7 +23,10 @@ namespace editor
         bool isFilled();
 
     private:
-        void drawCircle(BoundsInt &bounds, int color, TileLayer &layer);
+        void drawCircle(BoundsInt &bounds,
+                        TileLayer &tileLayer,
+                        const ToolContext &context,
+                        TileUndo *tileUndo = nullptr);
 
         BoundsInt getCircleBounds(const ToolContext &, const TileLayer &);
 

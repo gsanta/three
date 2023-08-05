@@ -21,8 +21,6 @@ namespace editor
 
         void addTile(std::shared_ptr<Rect2D> rect);
 
-        void merge(const Undoable &other) override;
-
     private:
         std::vector<std::shared_ptr<Rect2D>> m_Rects;
 

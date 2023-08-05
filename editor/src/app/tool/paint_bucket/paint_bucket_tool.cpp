@@ -19,7 +19,16 @@ namespace editor
         TileLayer &tileLayer = context.doc.activeDrawing->getActiveLayer();
         Vec2Int tilePos = tileLayer.getTilePos(context.pointer.curr);
 
-        m_FloodFill.floodFill(tileLayer, tilePos.x, tilePos.y, context.editorState->color);
+        TileUndo tileUndo = TileUndo::createForActiveTileLayer(*context.doc.document);
+
+        m_FloodFill.floodFill(
+            tileLayer,
+            tilePos.x,
+            tilePos.y,
+            context.editorState->color,
+            [&](std::shared_ptr<Rect2D> prev, std::shared_ptr<Rect2D> next) { tileUndo.addTile(prev, next); });
+
+        context.doc.document->getHistory()->add(std::make_shared<TileUndo>(tileUndo));
     }
 } // namespace editor
 } // namespace spright

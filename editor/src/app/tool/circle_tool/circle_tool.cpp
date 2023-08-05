@@ -28,23 +28,29 @@ namespace editor
             foregroundLayer.clear();
             m_PrevCircleBounds = bounds;
         }
-        drawCircle(bounds, context.editorState->color, foregroundLayer);
+        drawCircle(bounds, foregroundLayer, context);
     }
 
     void CircleTool::pointerUp(const ToolContext &context)
     {
-        BoundsInt bounds = getCircleBounds(context, context.doc.activeDrawing->getActiveLayer());
+        TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
+        BoundsInt bounds = getCircleBounds(context, activeLayer);
 
-        drawCircle(bounds, context.editorState->color, context.doc.activeDrawing->getActiveLayer());
+        TileUndo tileUndo = TileUndo::createForActiveTileLayer(*context.doc.document);
+
+        drawCircle(bounds, activeLayer, context, &tileUndo);
 
         if (m_IsFilled)
         {
-            m_FloodFill.floodFill(context.doc.activeDrawing->getActiveLayer(),
-                                  bounds.getCenter().x,
-                                  bounds.getCenter().y,
-                                  context.editorState->color);
+            m_FloodFill.floodFill(
+                context.doc.activeDrawing->getActiveLayer(),
+                bounds.getCenter().x,
+                bounds.getCenter().y,
+                context.editorState->color,
+                [&](std::shared_ptr<Rect2D> prev, std::shared_ptr<Rect2D> next) { tileUndo.addTile(prev, next); });
         }
 
+        context.doc.document->getHistory()->add(std::make_shared<TileUndo>(tileUndo));
         TileLayer &foregroundLayer = context.doc.activeDrawing->getForegroundLayer();
         foregroundLayer.clear();
     }
@@ -59,8 +65,9 @@ namespace editor
         return m_IsFilled;
     }
 
-    void CircleTool::drawCircle(BoundsInt &bounds, int color, TileLayer &tileLayer)
+    void CircleTool::drawCircle(BoundsInt &bounds, TileLayer &tileLayer, const ToolContext &context, TileUndo *tileUndo)
     {
+        int color = context.editorState->color;
         std::vector<Rect2D> tiles;
 
         int centerX = std::round((bounds.minX + bounds.maxX) / 2);
@@ -74,16 +81,25 @@ namespace editor
 
         Brush brush;
 
+        onRect2DCreate handleOnRect2DCreate = defaultRect2DCreate;
+
+        if (tileUndo)
+        {
+
+            handleOnRect2DCreate = [&](std::shared_ptr<Rect2D> prev, std::shared_ptr<Rect2D> next) {
+                tileUndo->addTile(prev, next);
+            };
+        }
+
         for (int x = bounds.minX; x <= centerX; x++)
         {
             float angle = std::acos((x - centerX) / radiusX);
             int y = std::round(radiusY * std::sin(angle) + centerY);
             float halfTileSize = tileLayer.getTileSize() / 2;
-
-            brush.paint(tileLayer, Vec2Int(x - evenX, y), color);
-            brush.paint(tileLayer, Vec2Int(x - evenX, 2 * centerY - y - evenY), color);
-            brush.paint(tileLayer, Vec2Int(2 * centerX - x, y), color);
-            brush.paint(tileLayer, Vec2Int(2 * centerX - x, 2 * centerY - y - evenY), color);
+            brush.paint(tileLayer, Vec2Int(x - evenX, y), color, handleOnRect2DCreate);
+            brush.paint(tileLayer, Vec2Int(x - evenX, 2 * centerY - y - evenY), color, handleOnRect2DCreate);
+            brush.paint(tileLayer, Vec2Int(2 * centerX - x, y), color, handleOnRect2DCreate);
+            brush.paint(tileLayer, Vec2Int(2 * centerX - x, 2 * centerY - y - evenY), color, handleOnRect2DCreate);
         }
 
         for (int y = bounds.minY; y <= centerY; y++)
@@ -91,10 +107,10 @@ namespace editor
             float angle = std::asin((y - centerY) / radiusY);
             int x = std::round(radiusX * std::cos(angle) + centerX);
             float halfTileSize = tileLayer.getTileSize() / 2;
-            brush.paint(tileLayer, Vec2Int(x, y - evenY), color);
-            brush.paint(tileLayer, Vec2Int(2 * centerX - x - evenX, y - evenY), color);
-            brush.paint(tileLayer, Vec2Int(x, 2 * centerY - y), color);
-            brush.paint(tileLayer, Vec2Int(2 * centerX - x - evenX, 2 * centerY - y), color);
+            brush.paint(tileLayer, Vec2Int(x, y - evenY), color, handleOnRect2DCreate);
+            brush.paint(tileLayer, Vec2Int(2 * centerX - x - evenX, y - evenY), color, handleOnRect2DCreate);
+            brush.paint(tileLayer, Vec2Int(x, 2 * centerY - y), color, handleOnRect2DCreate);
+            brush.paint(tileLayer, Vec2Int(2 * centerX - x - evenX, 2 * centerY - y), color, handleOnRect2DCreate);
         }
     }
 
