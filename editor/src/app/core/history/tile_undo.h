@@ -5,10 +5,30 @@
 #include "../../document/document.h"
 #include "./undoable.h"
 
+#include <set>
+
 namespace spright
 {
 namespace editor
 {
+    struct SharedPtrCompare
+    {
+        inline bool operator()(const std::shared_ptr<Rect2D> &ptr1, const std::shared_ptr<Rect2D> &ptr2) const
+        {
+            if (ptr1->getCenterPosition2d().y < ptr2->getCenterPosition2d().y)
+            {
+                return true;
+            }
+            else if (ptr1->getCenterPosition2d().y > ptr2->getCenterPosition2d().y)
+            {
+                return false;
+            }
+
+            return ptr1->getCenterPosition2d().x < ptr2->getCenterPosition2d().x;
+        }
+    };
+
+
     class TileUndo : public Undoable
     {
     public:
@@ -20,14 +40,12 @@ namespace editor
 
         void addTile(std::shared_ptr<Rect2D> prevRect, std::shared_ptr<Rect2D> newRect);
 
-        void merge(const Undoable &other) override;
-
     private:
         TileUndo(Document &document);
 
-        std::vector<std::shared_ptr<Rect2D>> m_PrevList;
+        std::set<std::shared_ptr<Rect2D>, SharedPtrCompare> m_PrevList;
 
-        std::vector<std::shared_ptr<Rect2D>> m_NewList;
+        std::set<std::shared_ptr<Rect2D>, SharedPtrCompare> m_NewList;
 
         size_t m_TileLayerPos;
 

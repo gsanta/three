@@ -28,18 +28,37 @@ namespace editor
         TileLayer &foregroundLayer = context.doc.activeDrawing->getForegroundLayer();
         TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
 
-        for (Rect2D *rect : foregroundLayer.getRenderables())
-        {
-            activeLayer.add(*rect);
-        }
-
         foregroundLayer.clear();
 
-        drawLine(context.pointer.down, context.pointer.curr, context.editorState->color, activeLayer, activeLayer);
+        TileUndo tileUndo = TileUndo::createForActiveTileLayer(*context.doc.document);
+
+        drawLine(context.pointer.down,
+                 context.pointer.curr,
+                 context.editorState->color,
+                 activeLayer,
+                 activeLayer,
+                 &tileUndo);
+
+        context.doc.document->getHistory()->add(std::make_shared<TileUndo>(tileUndo));
     }
 
-    void LineTool::drawLine(Vec2 start, Vec2 end, int color, TileLayer &tileLayer, TileLayer &drawLayer)
+    void LineTool::drawLine(Vec2 start,
+                            Vec2 end,
+                            int color,
+                            TileLayer &tileLayer,
+                            TileLayer &drawLayer,
+                            TileUndo *tileUndo)
     {
+
+        onRect2DCreate handleOnRect2DCreate = defaultRect2DCreate;
+
+        if (tileUndo)
+        {
+            handleOnRect2DCreate = [&](std::shared_ptr<Rect2D> prev, std::shared_ptr<Rect2D> next) {
+                tileUndo->addTile(prev, next);
+            };
+        }
+
         bool isHorizontalDir = std::abs(end.x - start.x) > std::abs(end.y - start.y);
         float xDelta = start.x - end.x == 0 ? 0.01 : start.x - end.x;
         float yDelta = start.y - end.y == 0 ? 0.01 : start.y - end.y;
@@ -57,7 +76,7 @@ namespace editor
                 float y = start.y + (x - start.x) / slope;
                 Vec2Int tilePos = tileLayer.getTilePos(Vec2(x, y));
 
-                m_Brush.paint(drawLayer, tilePos, color);
+                m_Brush.paint(drawLayer, tilePos, color, handleOnRect2DCreate);
             }
         }
         else
@@ -72,7 +91,7 @@ namespace editor
                 float x = start.x + (y - start.y) / slope;
                 Vec2Int tilePos = tileLayer.getTilePos(Vec2(x, y));
 
-                m_Brush.paint(drawLayer, tilePos, color);
+                m_Brush.paint(drawLayer, tilePos, color, handleOnRect2DCreate);
             }
         }
     }

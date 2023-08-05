@@ -39,9 +39,5 @@ namespace editor
         }
     }
 
-    void EraseUndo::merge(const Undoable &other)
-    {
-    }
-
 } // namespace editor
 } // namespace spright

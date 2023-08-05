@@ -9,57 +9,95 @@
 
 using namespace spright::engine;
 
-TEST_CASE("PaintBucketTool", "[paint-bucket-tool]")
+SCENARIO("Paint bucket tool")
 {
-    SECTION("can fill an empty layer")
+
+    GIVEN("an empty drawing")
     {
         Document document = DocumentBuilder().withDrawing(DrawingBuilder().withBounds(Bounds(0, 0, 2, 2))).build();
         ToolContext toolContext = ToolContextBuilder().withDocument(document).build();
 
         PaintBucketTool paintBucketTool;
 
-        paintBucketTool.execPointerUp(toolContext);
+        WHEN("clicking on the drawing with the paint bucket tool")
+        {
+            paintBucketTool.execPointerUp(toolContext);
+
+            THEN("the entire drawing gets filled")
+            {
+                TileLayer &layer = document.getActiveLayer();
+
+                REQUIRE(layer.getRenderables().size() == 4);
+                REQUIRE(layer.getRenderables()[0]->getColor() == COLOR_SPRIGHT_ORANGE);
+                REQUIRE(layer.getRenderables()[1]->getColor() == COLOR_SPRIGHT_ORANGE);
+                REQUIRE(layer.getRenderables()[2]->getColor() == COLOR_SPRIGHT_ORANGE);
+                REQUIRE(layer.getRenderables()[3]->getColor() == COLOR_SPRIGHT_ORANGE);
+            }
+        }
+    }
+
+    GIVEN("a drawing with a continues area drawn onto it")
+    {
+        Document document = DocumentBuilder()
+                                .withDrawing(DrawingBuilder().withTileLayer(TileLayerBuilder()
+                                                                                .withTile(Vec2Int(0, 1))
+                                                                                .withTile(Vec2Int(0, 2))
+                                                                                .withTile(Vec2Int(0, 3))
+                                                                                .withTile(Vec2Int(1, 3))
+                                                                                .withTile(Vec2Int(2, 3))
+                                                                                .withTile(Vec2Int(3, 3))
+                                                                                .withTile(Vec2Int(3, 2))
+                                                                                .withTile(Vec2Int(3, 1))
+                                                                                .withTile(Vec2Int(3, 0))
+                                                                                .withTile(Vec2Int(2, 0))
+                                                                                .withTile(Vec2Int(1, 0))
+                                                                                .withTile(Vec2Int(0, 0))))
+                                .build();
+        ToolContext toolContext = ToolContextBuilder().withDocument(document).build();
 
         TileLayer &layer = document.getActiveLayer();
 
-        REQUIRE(layer.getRenderables().size() == 4);
-        REQUIRE(layer.getRenderables()[0]->getColor() == COLOR_SPRIGHT_ORANGE);
-        REQUIRE(layer.getRenderables()[1]->getColor() == COLOR_SPRIGHT_ORANGE);
-        REQUIRE(layer.getRenderables()[2]->getColor() == COLOR_SPRIGHT_ORANGE);
-        REQUIRE(layer.getRenderables()[3]->getColor() == COLOR_SPRIGHT_ORANGE);
-    }
-
-    SECTION("can fill a continuous area")
-    {
-        DocumentStore documentStore = DocumentStoreBuilder()
-                                          .withDrawing(DrawingBuilder().withTileLayer(TileLayerBuilder()
-                                                                                          .withTile(Vec2Int(0, 1))
-                                                                                          .withTile(Vec2Int(0, 2))
-                                                                                          .withTile(Vec2Int(0, 3))
-                                                                                          .withTile(Vec2Int(1, 3))
-                                                                                          .withTile(Vec2Int(2, 3))
-                                                                                          .withTile(Vec2Int(3, 3))
-                                                                                          .withTile(Vec2Int(3, 2))
-                                                                                          .withTile(Vec2Int(3, 1))
-                                                                                          .withTile(Vec2Int(3, 0))
-                                                                                          .withTile(Vec2Int(2, 0))
-                                                                                          .withTile(Vec2Int(1, 0))
-                                                                                          .withTile(Vec2Int(0, 0))))
-                                          .build();
-        ToolContext toolContext = ToolContextBuilder().withActiveDrawing(documentStore).build();
-
-        TileLayer &layer = documentStore.getActiveDocument().getActiveLayer();
-
         PaintBucketTool paintBucketTool;
 
-        toolContext.pointer.curr = layer.getWorldPos(1, 1);
+        WHEN("clicking in the middle of the continues area")
+        {
 
-        paintBucketTool.execPointerUp(toolContext);
+            toolContext.pointer.curr = layer.getWorldPos(1, 1);
+            paintBucketTool.execPointerUp(toolContext);
 
-        REQUIRE(layer.getAtTilePos(1, 1)->getColor() == COLOR_SPRIGHT_ORANGE);
-        REQUIRE(layer.getAtTilePos(1, 2)->getColor() == COLOR_SPRIGHT_ORANGE);
-        REQUIRE(layer.getAtTilePos(2, 1)->getColor() == COLOR_SPRIGHT_ORANGE);
-        REQUIRE(layer.getAtTilePos(2, 2)->getColor() == COLOR_SPRIGHT_ORANGE);
-        REQUIRE(layer.getAtTilePos(4, 2) == nullptr);
+            THEN("it fills that area")
+            {
+                REQUIRE(layer.getRenderables().size() == 16);
+                REQUIRE(layer.getAtTilePos(1, 1)->getColor() == COLOR_SPRIGHT_ORANGE);
+                REQUIRE(layer.getAtTilePos(1, 2)->getColor() == COLOR_SPRIGHT_ORANGE);
+                REQUIRE(layer.getAtTilePos(2, 1)->getColor() == COLOR_SPRIGHT_ORANGE);
+                REQUIRE(layer.getAtTilePos(2, 2)->getColor() == COLOR_SPRIGHT_ORANGE);
+                REQUIRE(layer.getAtTilePos(4, 2) == nullptr);
+            }
+
+            WHEN("undoing the last action")
+            {
+                document.getHistory()->undo(document);
+
+                THEN("it removes the fill")
+                {
+                    REQUIRE(layer.getRenderables().size() == 12);
+                    REQUIRE(layer.getAtTilePos(1, 1) == nullptr);
+                    REQUIRE(layer.getAtTilePos(1, 2) == nullptr);
+                    REQUIRE(layer.getAtTilePos(2, 1) == nullptr);
+                    REQUIRE(layer.getAtTilePos(2, 2) == nullptr);
+                }
+
+                WHEN("redoing the last action")
+                {
+                    document.getHistory()->redo(document);
+
+                    THEN("it re-applies the removed fill")
+                    {
+                        REQUIRE(layer.getRenderables().size() == 16);
+                    }
+                }
+            }
+        }
     }
 }

@@ -30,18 +30,6 @@ public:
         }
     }
 
-    void merge(const Undoable &other) override
-    {
-        const TestUndoable *undoable = dynamic_cast<const TestUndoable *>(&other);
-        if (undoable)
-        {
-            for (int data : undoable->m_Data)
-            {
-                m_Data.push_back(data);
-            }
-        }
-    }
-
 private:
     std::set<int> &m_DataHolder;
 
@@ -111,37 +99,6 @@ SCENARIO("DocumentHistory")
                         REQUIRE(dataHolder.find(1) == dataHolder.end());
                         REQUIRE(history.undoSize() == 1);
                         REQUIRE(history.redoSize() == 0);
-                    }
-                }
-            }
-
-            WHEN("merging a new undoable to top")
-            {
-                history.mergeToTop(TestUndoable(2, dataHolder));
-
-                THEN("the undo size does not change")
-                {
-                    REQUIRE(history.undoSize() == 1);
-                }
-
-                WHEN("calling undo")
-                {
-                    history.undo(document);
-
-                    THEN("both undoables's undo actions are executed")
-                    {
-                        REQUIRE(dataHolder.find(1) != dataHolder.end());
-                        REQUIRE(dataHolder.find(2) != dataHolder.end());
-                    }
-
-                    WHEN("calling redo")
-                    {
-                        THEN("both undoables's redo actions are executed")
-                        {
-                            history.redo(document);
-
-                            REQUIRE(dataHolder.size() == 0);
-                        }
                     }
                 }
             }

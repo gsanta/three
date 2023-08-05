@@ -2,121 +2,127 @@
 
 namespace spright
 {
-void QueueLinearFloodFill::floodFill(TileLayer &layer, int x, int y, int color)
+namespace editor
 {
-    int tileIndex = layer.getTileIndex(x, y);
-    Renderable2D *renderable = layer.getAtTileIndex(tileIndex);
-
-    m_IsEmptyTile = renderable == nullptr;
-
-    if (renderable)
+    void QueueLinearFloodFill::floodFill(TileLayer &layer, int x, int y, int color, const onRect2DCreate &operation)
     {
-        m_SourceColor = renderable->getColor();
-    }
+        int tileIndex = layer.getTileIndex(x, y);
+        Renderable2D *renderable = layer.getAtTileIndex(tileIndex);
 
-    linearFill(layer, x, y, color);
+        m_IsEmptyTile = renderable == nullptr;
 
-    while (m_Queue.getCount() > 0)
-    {
-
-        FloodFillRange range = m_Queue.popFirst();
-
-        int up = range.y - 1;
-        int down = range.y + 1;
-
-        for (int i = range.startX; i <= range.endX; i++)
+        if (renderable)
         {
-            if (checkPoint(layer, i, up, color))
+            m_SourceColor = renderable->getColor();
+        }
+
+        linearFill(layer, x, y, color, operation);
+
+        while (m_Queue.getCount() > 0)
+        {
+
+            FloodFillRange range = m_Queue.popFirst();
+
+            int up = range.y - 1;
+            int down = range.y + 1;
+
+            for (int i = range.startX; i <= range.endX; i++)
             {
-                linearFill(layer, i, up, color);
-            }
+                if (checkPoint(layer, i, up, color))
+                {
+                    linearFill(layer, i, up, color, operation);
+                }
 
-            if (checkPoint(layer, i, down, color))
+                if (checkPoint(layer, i, down, color))
+                {
+                    linearFill(layer, i, down, color, operation);
+                }
+            }
+        }
+    }
+
+    void QueueLinearFloodFill::linearFill(TileLayer &layer, int x, int y, int color, const onRect2DCreate &operation)
+    {
+
+        int leftMostX = x;
+
+        while (true)
+        {
+            setColor(layer, leftMostX, y, color, operation);
+
+            m_VisitedIndexes.insert(layer.getTileIndex(leftMostX, y));
+            leftMostX -= 1;
+            if (!checkPoint(layer, leftMostX, y, color))
             {
-                linearFill(layer, i, down, color);
+                break;
             }
         }
-    }
-}
+        leftMostX += 1;
 
-void QueueLinearFloodFill::linearFill(TileLayer &layer, int x, int y, int color)
-{
-
-    int leftMostX = x;
-
-    while (true)
-    {
-        setColor(layer, leftMostX, y, color);
-
-        m_VisitedIndexes.insert(layer.getTileIndex(leftMostX, y));
-        leftMostX -= 1;
-        if (!checkPoint(layer, leftMostX, y, color))
+        int rightMostX = x;
+        while (true)
         {
-            break;
+            auto testTile = layer.getAtTileIndex(1851);
+
+            setColor(layer, rightMostX, y, color, operation);
+
+            m_VisitedIndexes.insert(layer.getTileIndex(leftMostX, y));
+            rightMostX += 1;
+            if (!checkPoint(layer, rightMostX, y, color))
+            {
+                break;
+            }
         }
+        rightMostX -= 1;
+
+        m_Queue.addToEnd(FloodFillRange(leftMostX, rightMostX, y));
     }
-    leftMostX += 1;
 
-    int rightMostX = x;
-    while (true)
+    bool QueueLinearFloodFill::checkPoint(TileLayer &layer, int x, int y, int targetColor)
     {
-        auto testTile = layer.getAtTileIndex(1851);
+        int tileIndex = layer.getTileIndex(x, y);
 
-        setColor(layer, rightMostX, y, color);
+        bool notVisited = m_VisitedIndexes.find(tileIndex) == m_VisitedIndexes.end();
 
-        m_VisitedIndexes.insert(layer.getTileIndex(leftMostX, y));
-        rightMostX += 1;
-        if (!checkPoint(layer, rightMostX, y, color))
+        if (x >= 0 && x < layer.getTileBounds().getWidth() && y >= 0 && y < layer.getTileBounds().getHeight() &&
+            notVisited && isPixelWithinColorTolerance(layer, tileIndex))
         {
-            break;
+            return true;
         }
-    }
-    rightMostX -= 1;
-
-    m_Queue.addToEnd(FloodFillRange(leftMostX, rightMostX, y));
-}
-
-bool QueueLinearFloodFill::checkPoint(TileLayer &layer, int x, int y, int targetColor)
-{
-    int tileIndex = layer.getTileIndex(x, y);
-
-    bool notVisited = m_VisitedIndexes.find(tileIndex) == m_VisitedIndexes.end();
-
-    if (x >= 0 && x < layer.getTileBounds().getWidth() && y >= 0 && y < layer.getTileBounds().getHeight() &&
-        notVisited && isPixelWithinColorTolerance(layer, tileIndex))
-    {
-        return true;
-    }
-    return false;
-}
-
-bool QueueLinearFloodFill::isPixelWithinColorTolerance(TileLayer &layer, int tileIndex)
-{
-    Renderable2D *renderable = layer.getAtTileIndex(tileIndex);
-
-    if (renderable == nullptr)
-    {
-        return m_IsEmptyTile;
+        return false;
     }
 
-    return renderable->getColor() == m_SourceColor;
-}
-
-void QueueLinearFloodFill::setColor(TileLayer &layer, int x, int y, int color)
-{
-    int tileIndex = layer.getTileIndex(x, y);
-
-    Renderable2D *renderable = layer.getAtTileIndex(tileIndex);
-
-    if (renderable == nullptr)
+    bool QueueLinearFloodFill::isPixelWithinColorTolerance(TileLayer &layer, int tileIndex)
     {
+        Renderable2D *renderable = layer.getAtTileIndex(tileIndex);
+
+        if (renderable == nullptr)
+        {
+            return m_IsEmptyTile;
+        }
+
+        return renderable->getColor() == m_SourceColor;
+    }
+
+    void QueueLinearFloodFill::setColor(TileLayer &layer, int x, int y, int color, const onRect2DCreate &operation)
+    {
+        int tileIndex = layer.getTileIndex(x, y);
+
+        Renderable2D *renderable = layer.getAtTileIndex(tileIndex);
+
         float tileSize = layer.getTileSize();
         Vec2 bottomLeftPos = layer.getCenterPos(tileIndex) - Vec2(tileSize / 2.0f, tileSize / 2.0f);
-        layer.add(Rect2D(bottomLeftPos.x, bottomLeftPos.y, tileSize, tileSize, color));
+
+        std::shared_ptr<Rect2D> prev;
+
+        if (auto tile = layer.getAtTilePos(x, y))
+        {
+            prev.reset(new Rect2D(*tile));
+        }
+
+        Rect2D &rect = layer.add(Rect2D(bottomLeftPos.x, bottomLeftPos.y, tileSize, tileSize, color));
+        std::shared_ptr<Rect2D> newRect = std::make_shared<Rect2D>(rect);
+        operation(prev, newRect);
     }
-    else
-    {
-        renderable->setColor(color);
-    }
-}
+} // namespace editor
 } // namespace spright
