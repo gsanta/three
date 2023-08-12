@@ -2,9 +2,11 @@ import { signOut } from '@/features/user/userSlice';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { Avatar, Button, ButtonGroup, useDisclosure, useToast } from '@chakra-ui/react';
 import React from 'react';
-import SignUpDialog from './SignUpDialog';
-import SignInDialog from './SignInDialog';
+import RegistrationDialog from './RegistrationDialog';
+import LoginDialog from './LoginDialog';
 import UserDialog from './UserDialog';
+import { useMutation } from 'react-query';
+import api from '@/utils/api';
 
 const UserSettings = () => {
   const toast = useToast();
@@ -15,21 +17,21 @@ const UserSettings = () => {
   const { isOpen: isSignUpDialogOpen, onOpen: onSignUpDialogOpen, onClose: onSignUpDialogClose } = useDisclosure();
   const { isOpen: isUserDialogOpen, onOpen: onUserDialogOpen, onClose: onUserDialogClose } = useDisclosure();
 
-  const logOut = async () => {
-    try {
-      await fetch('/users/sign_out', {
-        method: 'DELETE',
-        headers: {
-          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
-        },
-      });
+  const { mutate: logOut } = useMutation(() => api.delete('/users/sign_out'), {
+    onSuccess() {
       dispatch(signOut());
       toast({
         title: 'Logged out successfully',
         position: 'top',
       });
-    } catch (e) {}
-  };
+    },
+    onError() {
+      toast({
+        title: 'Failed to log out',
+        position: 'top',
+      });
+    },
+  });
 
   return (
     <>
@@ -38,7 +40,7 @@ const UserSettings = () => {
           <Button size="sm" variant="ghost" onClick={onUserDialogOpen}>
             <Avatar name="Dan Abrahmov" size="sm" />
           </Button>
-          <Button size="sm" onClick={logOut}>
+          <Button size="sm" onClick={() => logOut()}>
             Log out
           </Button>
         </ButtonGroup>
@@ -52,8 +54,8 @@ const UserSettings = () => {
           </Button>
         </ButtonGroup>
       )}
-      <SignInDialog isOpen={isSignInDialogOpen} onClose={onSignInDialogClose} />
-      <SignUpDialog isOpen={isSignUpDialogOpen} onClose={onSignUpDialogClose} />
+      <LoginDialog isOpen={isSignInDialogOpen} onClose={onSignInDialogClose} />
+      <RegistrationDialog isOpen={isSignUpDialogOpen} onClose={onSignUpDialogClose} />
       <UserDialog isOpen={isUserDialogOpen} onClose={onUserDialogClose} />
     </>
   );

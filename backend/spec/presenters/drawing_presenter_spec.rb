@@ -11,6 +11,7 @@ RSpec.describe DrawingPresenter do
 
   let(:expected_drawing) do
     {
+      'id' => drawing.id,
       'title' => drawing.title,
       "content" => drawing.content
     }

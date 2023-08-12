@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-      <meta charset="utf-8">
-      <title>Spright</title>
-    <%= csrf_meta_tags %>
+    <meta charset="utf-8">
+    <title>Spright</title>
     <%= css_asset_tag(react.pack_name) %>
     <script type="text/javascript">
+        var google = null;
         window.pageProps = <%=raw json_escape(react.props) %>;
         window.globalProps = <%=raw json_escape(react.globalProps) %>;
     </script>
@@ -13,6 +13,7 @@
   <body>
         <div id="react-mount" style="height: 100vh"/>
         <%= javascript_asset_tag(react.pack_name) %>
+        <script src="https://accounts.google.com/gsi/client" async defer></script>
         <script type='text/javascript'>
           window.onerror = function (event) {
               // TODO: do not warn on ok events like simulating an infinite loop or exitStatus

@@ -3,27 +3,15 @@
 class Users::SessionsController < Devise::SessionsController
   respond_to :html, :js, :json
 
-  # before_action :configure_sign_in_params, only: [:create]
+  after_action :set_csrf_cookie
 
-  # GET /resource/sign_in
-  # def new
-  #   super
-  # end
-
-  # POST /resource/sign_in
   def create
     super
   end
 
-  # DELETE /resource/sign_out
-  # def destroy
-  #   super
-  # end
+  private
 
-  # protected
-
-  # If you have extra params to permit, append them to the sanitizer.
-  # def configure_sign_in_params
-  #   devise_parameter_sanitizer.permit(:sign_in, keys: [:attribute])
-  # end
+  def set_csrf_cookie
+    cookies["X-CSRF-Token"] = form_authenticity_token
+  end
 end

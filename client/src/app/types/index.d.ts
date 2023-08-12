@@ -11,6 +11,8 @@ declare global {
 
   var EditorEvents: EditorEvents;
   var EditorListener: EditorListener;
+
+  var google: any;
 }
 
 export {};

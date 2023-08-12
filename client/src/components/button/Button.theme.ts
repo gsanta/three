@@ -45,6 +45,7 @@ const variantOutline = defineStyle((props) => {
 
   return {
     ...defaultTheme,
+    borderRadius: 'sm',
     bg: getBackgroundColor(),
     color: 'white',
     border: '1px solid',
@@ -65,6 +66,7 @@ const variantSolid = defineStyle((props) => {
 
   return {
     ...defaultTheme,
+    borderRadius: 'sm',
     bg,
     color: 'white',
     _hover: {
@@ -74,7 +76,7 @@ const variantSolid = defineStyle((props) => {
       },
     },
     _active: {
-      bg: mode(`${c}.100`, `${c}.500`)(props),
+      bg: mode(`${c}.100`, `${c}.400`)(props),
     },
   };
 });

@@ -7,7 +7,8 @@ const OutlineVariant = definePartsStyle(() => {
     field: {
       border: '1px solid',
       borderColor: 'inherit',
-      bg: 'brand.background',
+      bg: 'gray.600',
+      borderRadius: 'sm',
       _focusVisible: {
         zIndex: 1,
         borderColor: 'orange.400',
