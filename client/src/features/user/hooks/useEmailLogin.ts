@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { setUser } from '../userSlice';
 import { useAppDispatch } from '@/hooks';
+import { useCallback } from 'react';
 
 type LoginRequestData = {
   email: string;
@@ -47,10 +48,13 @@ const useEmailLogin = ({ onClose, resetLogin }: UseEmailLoginProps) => {
     mode: 'onBlur',
   });
 
-  const loginEmail = async (data: LoginRequestData) => {
-    resetLogin();
-    mutate(data);
-  };
+  const loginEmail = useCallback(
+    async (data: LoginRequestData) => {
+      resetLogin();
+      mutate(data);
+    },
+    [mutate, resetLogin],
+  );
 
   return {
     query: {

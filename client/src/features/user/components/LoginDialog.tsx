@@ -22,9 +22,7 @@ const LoginDialog = ({ isOpen, onClose }: LoginDialogProps) => {
     query: { loginEmail, loginEmailError, isLoginEmailLoding },
   } = useEmailLogin({
     onClose,
-    resetLogin: () => {
-      loginGoogleReset();
-    },
+    resetLogin: loginGoogleReset,
   });
 
   const handleClose = () => {

@@ -1,140 +1,113 @@
-import { setUser } from '@/features/user/userSlice';
-import { useAppDispatch } from '@/hooks';
-import Dialog, { DialogBody, DialogButtons } from '@/components/dialog/Dialog';
-import api from '@/utils/api';
-import { usersPath } from '@/utils/routes';
-import { FormControl, FormLabel, Input, FormErrorMessage, Button, Text } from '@chakra-ui/react';
-import { AxiosError } from 'axios';
+import Dialog, { DialogBody, DialogButtons, DialogFooter } from '@/components/dialog/Dialog';
+import { FormControl, FormLabel, Input, FormErrorMessage, Button, Box } from '@chakra-ui/react';
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import { useMutation } from 'react-query';
 import { emailRegex } from '../utils/userUtils';
+import useEmailRegistration from '../hooks/useEmailRegistration';
+import GoogleLogin from './GoogleLogin';
+import useGoogleLogin from '../hooks/useGoogleLogin';
+import ErrorMessage from '@/components/ErrorMessage';
 
 type RegistrationDialogProps = {
   isOpen: boolean;
   onClose(): void;
 };
 
-type RegistrationRequestData = {
-  email: string;
-  password: string;
-  password_confirmation: string;
-};
-
 const RegistrationDialog = ({ isOpen, onClose }: RegistrationDialogProps) => {
-  const dispatch = useAppDispatch();
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset: resetForm,
-    watch,
-  } = useForm<RegistrationRequestData>({
-    defaultValues: {
-      email: '',
-      password: '',
-      password_confirmation: '',
-    },
-    mode: 'onTouched',
+  const { loginGoogle, loginGooglError, isLoginGoogleLoading, loginGoogleReset } = useGoogleLogin({
+    onClose,
   });
 
   const {
-    mutateAsync: mutateSignUp,
-    isError: isSignUpError,
-    isLoading: isSignUpLoading,
-    error: signUpError,
-  } = useMutation<unknown, AxiosError<unknown>, RegistrationRequestData>(
-    async (data) => {
-      const resp = await api.post(usersPath, {
-        user: data,
-      });
-
-      return resp;
-    },
-    {
-      onError: (error) => {
-        console.log(error);
-      },
-    },
-  );
+    form: { handleSubmit, formErrors, register, watch, reset },
+    query: { registerEmail, registerEmailError, isRegisterEmailLoading },
+  } = useEmailRegistration({ onClose, resetLogin: loginGoogleReset });
 
   const handleClose = () => {
-    resetForm();
+    reset();
+    loginGoogleReset();
     onClose();
   };
 
-  const onSubmit = async (data: RegistrationRequestData) => {
-    await mutateSignUp(data);
-    dispatch(setUser({ isLoggedIn: true, email: data.email }));
-    handleClose();
-  };
-
   return (
-    <Dialog isOpen={isOpen} onClose={onClose} title="Sign up">
-      <DialogBody as="form" onSubmit={handleSubmit(onSubmit)}>
-        <FormControl isInvalid={Boolean(errors.email)}>
-          <FormLabel>Email</FormLabel>
-          <Input
-            {...register('email', {
-              required: {
-                value: true,
-                message: 'Email is required',
-              },
-              pattern: {
-                value: emailRegex,
-                message: 'Invalid email address',
-              },
-            })}
-            autoFocus
-          />
-          <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
-        </FormControl>
-        <FormControl isInvalid={Boolean(errors.password)}>
-          <FormLabel>Password</FormLabel>
-          <Input
-            type="password"
-            {...register('password', {
-              required: {
-                value: true,
-                message: 'Password is required',
-              },
-            })}
-          />
-        </FormControl>
-        <FormControl isInvalid={Boolean(errors.password_confirmation)}>
-          <FormLabel>Password Confirmation</FormLabel>
-          <Input
-            type="password"
-            {...register('password_confirmation', {
-              required: {
-                value: true,
-                message: 'Password confirmation is required',
-              },
-              validate: (val: string) => {
-                if (watch('password') != val) {
-                  return 'Your passwords do no match';
-                }
-                return undefined;
-              },
-            })}
-          />
-          <FormErrorMessage>{errors.password_confirmation?.message}</FormErrorMessage>
-        </FormControl>
-        {isSignUpError && (
-          <Text color="red.300" fontSize="sm">
-            {signUpError?.response?.statusText}
-          </Text>
-        )}
-        <DialogButtons>
-          <Button size="sm" onClick={handleClose}>
-            Close
-          </Button>
-          <Button size="sm" colorScheme="orange" type="submit" isLoading={isSignUpLoading}>
-            Sign Up
-          </Button>
-        </DialogButtons>
-      </DialogBody>
+    <Dialog isOpen={isOpen} onClose={handleClose} title="Sign up">
+      <form onSubmit={handleSubmit(registerEmail)}>
+        <DialogBody>
+          <FormControl isInvalid={Boolean(formErrors.email)}>
+            <FormLabel>Email</FormLabel>
+            <Input
+              {...register('email', {
+                required: {
+                  value: true,
+                  message: 'Email is required',
+                },
+                pattern: {
+                  value: emailRegex,
+                  message: 'Invalid email address',
+                },
+              })}
+            />
+            <FormErrorMessage>{formErrors.email?.message}</FormErrorMessage>
+          </FormControl>
+          <FormControl isInvalid={Boolean(formErrors.password)}>
+            <FormLabel>Password</FormLabel>
+            <Input
+              type="password"
+              {...register('password', {
+                required: {
+                  value: true,
+                  message: 'Password is required',
+                },
+              })}
+            />
+          </FormControl>
+          <FormControl isInvalid={Boolean(formErrors.password_confirmation)}>
+            <FormLabel>Password Confirmation</FormLabel>
+            <Input
+              type="password"
+              {...register('password_confirmation', {
+                required: {
+                  value: true,
+                  message: 'Password confirmation is required',
+                },
+                validate: (val: string) => {
+                  if (watch('password') != val) {
+                    return 'Your passwords do no match';
+                  }
+                  return undefined;
+                },
+              })}
+            />
+            <FormErrorMessage>{formErrors.password_confirmation?.message}</FormErrorMessage>
+          </FormControl>
+          <Box display="flex" marginTop="4" justifyContent="space-around">
+            <GoogleLogin onLogin={loginGoogle} />
+          </Box>
+          {registerEmailError && (
+            <ErrorMessage
+              error={registerEmailError}
+              fallbackMessage={
+                registerEmailError?.response?.status === 401 ? 'Invalid email or password' : 'Failed to log in'
+              }
+            />
+          )}
+          {loginGooglError && <ErrorMessage error={loginGooglError} />}
+        </DialogBody>
+        <DialogFooter>
+          <DialogButtons>
+            <Button size="sm" onClick={handleClose} isDisabled={isRegisterEmailLoading || isLoginGoogleLoading}>
+              Close
+            </Button>
+            <Button
+              size="sm"
+              colorScheme="orange"
+              type="submit"
+              isLoading={isRegisterEmailLoading || isLoginGoogleLoading}
+            >
+              Sign Up
+            </Button>
+          </DialogButtons>
+        </DialogFooter>
+      </form>
     </Dialog>
   );
 };
