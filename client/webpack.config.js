@@ -85,7 +85,7 @@ module.exports = (env, argv) => {
         entrypointsUseAssets: true,
       }),
       process.env.NODE_ENV === 'production' ?
-        new webpack.EnvironmentPlugin(['RENDER_EXTERNAL_URL']) :
+        new webpack.EnvironmentPlugin(['RENDER_EXTERNAL_URL', 'GOOGLE_OAUTH_CLIENT_ID', 'FACEBOOK_APP_ID']) :
         new Dotenv({ path: '../backend/.env'})
     ],
     resolve: {

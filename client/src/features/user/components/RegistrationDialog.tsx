@@ -10,18 +10,18 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { emailRegex } from '../utils/userUtils';
 
-type SignUpDialogProps = {
+type RegistrationDialogProps = {
   isOpen: boolean;
   onClose(): void;
 };
 
-type SignUpRequestData = {
+type RegistrationRequestData = {
   email: string;
   password: string;
   password_confirmation: string;
 };
 
-const SignUpDialog = ({ isOpen, onClose }: SignUpDialogProps) => {
+const RegistrationDialog = ({ isOpen, onClose }: RegistrationDialogProps) => {
   const dispatch = useAppDispatch();
 
   const {
@@ -30,7 +30,7 @@ const SignUpDialog = ({ isOpen, onClose }: SignUpDialogProps) => {
     formState: { errors },
     reset: resetForm,
     watch,
-  } = useForm<SignUpRequestData>({
+  } = useForm<RegistrationRequestData>({
     defaultValues: {
       email: '',
       password: '',
@@ -44,7 +44,7 @@ const SignUpDialog = ({ isOpen, onClose }: SignUpDialogProps) => {
     isError: isSignUpError,
     isLoading: isSignUpLoading,
     error: signUpError,
-  } = useMutation<unknown, AxiosError<unknown>, SignUpRequestData>(
+  } = useMutation<unknown, AxiosError<unknown>, RegistrationRequestData>(
     async (data) => {
       const resp = await api.post(usersPath, {
         user: data,
@@ -64,7 +64,7 @@ const SignUpDialog = ({ isOpen, onClose }: SignUpDialogProps) => {
     onClose();
   };
 
-  const onSubmit = async (data: SignUpRequestData) => {
+  const onSubmit = async (data: RegistrationRequestData) => {
     await mutateSignUp(data);
     dispatch(setUser({ isLoggedIn: true, email: data.email }));
     handleClose();
@@ -139,4 +139,4 @@ const SignUpDialog = ({ isOpen, onClose }: SignUpDialogProps) => {
   );
 };
 
-export default SignUpDialog;
+export default RegistrationDialog;
