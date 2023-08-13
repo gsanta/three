@@ -2,7 +2,7 @@ import Dialog, { DialogFooter, DialogBody } from '@/components/dialog/Dialog';
 import React, { useState } from 'react';
 import { Button, Input } from '@chakra-ui/react';
 import { useAppDispatch } from '@/hooks';
-import { createLayer } from '../../state/layerSlice';
+import { createLayer } from '../state/layerSlice';
 
 type LayerDialogProps = {
   isOpen: boolean;

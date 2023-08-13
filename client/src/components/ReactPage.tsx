@@ -1,4 +1,4 @@
-import GlobalProps from '@/components/layout/GlobalProps';
+import GlobalProps from '@/types/GlobalProps';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 

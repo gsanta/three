@@ -1,6 +1,6 @@
 import { useDrag } from 'react-dnd';
-import layerDragType from '../layerDragType';
-import Layer from '../../state/Layer';
+import layerDragType from '../types/layerDragType';
+import Layer from '../state/Layer';
 
 const useDragLayer = (layer: Layer) => {
   const [{ opacity }, ref] = useDrag(

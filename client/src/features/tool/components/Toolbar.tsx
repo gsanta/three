@@ -1,7 +1,6 @@
 import ToolName from '@/features/tool/state/ToolName';
 import React from 'react';
-import { Tooltip } from '@chakra-ui/react';
-import Box from '@/components/box/Box';
+import { Box, Tooltip } from '@chakra-ui/react';
 import ToggleButton from '@/components/button/ToggleButton';
 import Icon from '@/components/icon/Icon';
 import { useAppDispatch, useAppSelector } from '@/hooks';

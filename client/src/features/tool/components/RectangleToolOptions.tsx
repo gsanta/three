@@ -1,15 +1,15 @@
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { FormControl, FormLabel, Switch } from '@chakra-ui/react';
 import React from 'react';
-import { setCircleFilled } from '../../state/toolSlice';
+import { setRectangleFilled } from '../state/toolSlice';
 
-const CircleToolOptions = () => {
-  const isFilled = useAppSelector((state) => state.tool.isCircleFilled);
+const RectangleToolOptions = () => {
+  const isFilled = useAppSelector((state) => state.tool.isRectangleFilled);
 
   const dispatch = useAppDispatch();
 
   const handleFilledChange = () => {
-    dispatch(setCircleFilled(!isFilled));
+    dispatch(setRectangleFilled(!isFilled));
   };
 
   return (
@@ -20,4 +20,4 @@ const CircleToolOptions = () => {
   );
 };
 
-export default CircleToolOptions;
+export default RectangleToolOptions;

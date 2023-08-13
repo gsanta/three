@@ -1,9 +1,8 @@
 import { useAppSelector } from '@/hooks';
-import Box from '@/components/box/Box';
-import { useResizeObserver } from './hooks/useResizeObserver';
-import { forwardRef } from '@chakra-ui/react';
+import { Box, forwardRef } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDebounce } from 'usehooks-ts';
+import { useResizeObserver } from '../hooks/useResizeObserver';
 
 const Canvas = forwardRef((_props, ref) => {
   const editor = useAppSelector((state) => state.tool.editor);
