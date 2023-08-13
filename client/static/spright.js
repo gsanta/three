@@ -990,6 +990,9 @@ function dbg(text) {
 // end include: runtime_debug.js
 // === Body ===
 
+function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrameChanged(index); }
+
+
 // end include: preamble.js
 
   /** @constructor */
@@ -10054,6 +10057,7 @@ var wasmImports = {
   glfwTerminate: _glfwTerminate,
   glfwWindowHint: _glfwWindowHint,
   glfwWindowShouldClose: _glfwWindowShouldClose,
+  on_active_frame_changed_callback: on_active_frame_changed_callback,
   strftime_l: _strftime_l
 };
 var asm = createWasm();
@@ -10084,6 +10088,8 @@ var dynCall_iiiiij = Module['dynCall_iiiiij'] = createExportWrapper('dynCall_iii
 var dynCall_iiiiijj = Module['dynCall_iiiiijj'] = createExportWrapper('dynCall_iiiiijj');
 var dynCall_iiiiiijj = Module['dynCall_iiiiiijj'] = createExportWrapper('dynCall_iiiiiijj');
 var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 92792;
+var ___start_em_js = Module['___start_em_js'] = 125104;
+var ___stop_em_js = Module['___stop_em_js'] = 125168;
 
 // include: postamble.js
 // === Auto-generated postamble setup entry stuff ===
