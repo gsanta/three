@@ -1,10 +1,15 @@
 #pragma once
 
-namespace spright { namespace editor {
+namespace spright
+{
+namespace editor
+{
 
-	class Timed {
+    class Timed
+    {
 
-	public:
-		virtual void update(double elapsed) = 0;
-	};
-}}
+    public:
+        virtual void update(int elapsed) = 0;
+    };
+} // namespace editor
+} // namespace spright

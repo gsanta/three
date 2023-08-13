@@ -7,6 +7,7 @@ import { store } from '@/utils/store';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { setEditor } from '@/features/editor/editorSlice';
 import Editor from '@/features/editor/Editor';
+import { EditorCallbacks } from '@/features/editor/EditorCallbacks';
 
 const loadEditor = () => {
   const script = document.createElement('script');
@@ -28,6 +29,8 @@ const useInitApp = (canvasNode?: HTMLCanvasElement) => {
       loadEditor();
 
       dispatch(setEditor(window.Module as unknown as Editor));
+
+      window.editorCallbacks = new EditorCallbacks();
 
       isEditorInitialized.current = true;
     }

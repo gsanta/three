@@ -11,6 +11,7 @@ declare global {
 
   var EditorEvents: EditorEvents;
   var EditorListener: EditorListener;
+  var editorCallbacks: EditorCallbacks;
 
   var google: any;
 }

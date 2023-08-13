@@ -42,6 +42,7 @@ const LayerPanel = () => {
                 key={layer.name}
                 layer={layer}
                 setActiveLayer={() => dispatch(setActiveLayer(layer))}
+                isDeleteDisabled={layers.length === 1}
               />
               <LayerDropTarget key={index + 1} layerIndex={index + 1} />
             </React.Fragment>
