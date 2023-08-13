@@ -4,12 +4,16 @@
 
 using namespace spright::editor;
 
-class TimedMock : public Timed {
+class TimedMock : public Timed
+{
 public:
-	int id;
-public:
-	inline TimedMock(int id) : id(id) {}
-	inline void update(double elapsed) override {
+    int id;
 
-	};
+public:
+    inline TimedMock(int id) : id(id)
+    {
+    }
+    inline void update(int elapsed) override{
+
+    };
 };

@@ -76,7 +76,7 @@ const App = () => {
               <Tab>Options</Tab>
               <Tab>3D Viewer</Tab>
             </TabList>
-            <TabPanels alignItems="stretch" display="flex" flex="1">
+            <TabPanels alignItems="stretch" display="flex" flex="1" overflow="auto">
               <TabPanel flex="1">
                 <ToolOptionsPanel />
               </TabPanel>

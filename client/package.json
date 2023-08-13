@@ -7,7 +7,7 @@
   },
   "description": "",
   "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
+  "types": "dist/src/window.d.ts",
   "scripts": {
     "build": "NODE_ENV=development webpack",
     "build:production": "NODE_ENV=production webpack",

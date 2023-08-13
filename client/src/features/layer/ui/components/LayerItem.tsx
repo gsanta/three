@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import ToggleButton from '@/components/button/ToggleButton';
 import Icon from '@/components/icon/Icon';
-import { Button, ListItem } from '@chakra-ui/react';
+import { Button, ListItem, Tooltip } from '@chakra-ui/react';
 import React from 'react';
 import Layer from '../../state/Layer';
 import { removeLayer, setLayerVisible } from '../../state/layerSlice';
@@ -11,9 +11,10 @@ type LayerItemProps = {
   layer: Layer;
   isActive: boolean;
   setActiveLayer(): void;
+  isDeleteDisabled: boolean;
 };
 
-const LayerItem = ({ isActive, layer, setActiveLayer }: LayerItemProps) => {
+const LayerItem = ({ isActive, layer, setActiveLayer, isDeleteDisabled }: LayerItemProps) => {
   const layers = useAppSelector((state) => state.layer.layers);
   const dispatch = useAppDispatch();
 
@@ -34,9 +35,11 @@ const LayerItem = ({ isActive, layer, setActiveLayer }: LayerItemProps) => {
       <ToggleButton toggle={isActive} onToggle={setActiveLayer} size="sm" width="100%">
         {layer.name}
       </ToggleButton>
-      <Button className="iconOnly" onClick={handleLayerDelete} size="sm">
-        <Icon name="BiTrashAlt" />
-      </Button>
+      <Tooltip label={isDeleteDisabled ? "can't remove last layer" : 'remove layer'}>
+        <Button className="iconOnly" onClick={handleLayerDelete} size="sm" isDisabled={isDeleteDisabled}>
+          <Icon name="BiTrashAlt" />
+        </Button>
+      </Tooltip>
     </ListItem>
   );
 };

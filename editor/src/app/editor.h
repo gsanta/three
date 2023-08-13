@@ -16,7 +16,6 @@
 #include "editor_config.h"
 #include "event/event_emitter.h"
 #include "feature/frame/frame_player.h"
-#include "feature/frame/frame_player_handler.h"
 #include "tool/circle_tool/circle_tool.h"
 #include "tool/color_picker_tool.h"
 #include "tool/eraser_tool/eraser_tool.h"
@@ -65,6 +64,8 @@ namespace editor
 
         RunLoop &getRunLoop();
 
+        FramePlayer &getFramePlayer();
+
         std::shared_ptr<EditorState> getState();
 
     private:
@@ -88,9 +89,9 @@ namespace editor
 
         std::unique_ptr<EventEmitter> m_EventEmitter;
 
-        FramePlayerHandler m_FramePlayerHandler;
-
         RunLoop m_RunLoop;
+
+        FramePlayer m_FramePlayer;
 
         std::shared_ptr<EditorState> m_EditorState;
     };

@@ -41,8 +41,6 @@ namespace editor
 
         m_JsonExport = std::make_unique<JsonIO>(m_DocumentFactory);
 
-        m_FramePlayerHandler.setDocumentStore(getDocumentStore());
-
         m_toolHandler =
             new ToolHandler(m_EditorState, m_Window, getDocumentStore(), m_Services, m_ImageExport, m_DocumentFactory);
         m_toolHandler->addTool(new BrushTool());
@@ -59,7 +57,7 @@ namespace editor
         m_toolHandler->addActiveTool("zoom");
         m_toolHandler->setSelectedTool("brush");
 
-        m_RunLoop.add(m_FramePlayerHandler);
+        m_RunLoop.add(m_FramePlayer);
     }
 
     Document &Editor::getActiveDocument()
@@ -111,6 +109,11 @@ namespace editor
     RunLoop &Editor::getRunLoop()
     {
         return m_RunLoop;
+    }
+
+    FramePlayer &Editor::getFramePlayer()
+    {
+        return m_FramePlayer;
     }
 
     std::shared_ptr<EditorState> Editor::getState()

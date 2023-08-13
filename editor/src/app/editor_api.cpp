@@ -53,7 +53,11 @@ void addFrame()
 
 void removeFrame(size_t index)
 {
-    editor->getActiveDocument().getActiveDrawing().removeFrame(index);
+    Drawing &drawing = editor->getActiveDocument().getActiveDrawing();
+    if (drawing.getFrames().size() > 1)
+    {
+        drawing.removeFrame(index);
+    }
 }
 
 void setActiveFrame(size_t index)
@@ -68,12 +72,14 @@ std::string getActiveFrame()
 
 void activateFramePlayer()
 {
-    // editor->getActiveDocument().getFramePlayer().setIsActive(true);
+    editor->getFramePlayer().setIsActive(true);
+    editor->getFramePlayer().setDrawing(&editor->getActiveDocument().getActiveDrawing());
 }
 
 void deActivateFramePlayer()
 {
-    // editor->getActiveDocument().getFramePlayer().setIsActive(false);
+    editor->getFramePlayer().setIsActive(false);
+    editor->getFramePlayer().clearDrawing();
 }
 
 void api_flip_horizontal()

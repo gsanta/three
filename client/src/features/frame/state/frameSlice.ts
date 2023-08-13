@@ -19,9 +19,8 @@ export const frameSlice = createSlice({
   name: 'frame',
   initialState,
   reducers: {
-    activeFrameChanged: (state) => {
-      const activeFrameJson = state.editor?.getActiveFrame() || '';
-      state.activeIndex = JSON.parse(activeFrameJson).index;
+    activeFrameChanged: (state, action: PayloadAction<number>) => {
+      state.activeIndex = action.payload;
     },
 
     activateFramePlayer: (state) => {
