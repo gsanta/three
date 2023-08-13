@@ -1,4 +1,4 @@
-import useDropLayer from '@/features/layer/ui/hooks/useDropLayer';
+import useDropLayer from '@/features/layer/hooks/useDropLayer';
 import { Box, Divider } from '@chakra-ui/react';
 import React from 'react';
 

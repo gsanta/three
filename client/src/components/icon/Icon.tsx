@@ -7,8 +7,8 @@ export interface IconProps {
 }
 
 const Icon = ({ name }: IconProps) => {
-  const TheIcon = icons[name];
-  return <TheIcon size="24px" />;
+  const IconComponent = icons[name];
+  return <IconComponent size="24px" />;
 };
 
 export default Icon;

@@ -3,8 +3,8 @@ import ToggleButton from '@/components/button/ToggleButton';
 import Icon from '@/components/icon/Icon';
 import { Button, ListItem, Tooltip } from '@chakra-ui/react';
 import React from 'react';
-import Layer from '../../state/Layer';
-import { removeLayer, setLayerVisible } from '../../state/layerSlice';
+import Layer from '../state/Layer';
+import { removeLayer, setLayerVisible } from '../state/layerSlice';
 import useDragLayer from '../hooks/useDragLayer';
 
 type LayerItemProps = {

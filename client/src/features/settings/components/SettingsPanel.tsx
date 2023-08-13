@@ -1,15 +1,14 @@
-import Box from '@/components/box/Box';
 import Icon from '@/components/icon/Icon';
-import { Button, ButtonGroup, IconButton, Menu, MenuButton, MenuItem, MenuList, Tooltip } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, IconButton, Menu, MenuButton, MenuItem, MenuList, Tooltip } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import ExportDialog from './io/ExportDialog';
-import ImportDialog from './io/import/ImportDialog';
+import ExportDialog from './ExportDialog';
+import ImportDialog from './import/ImportDialog';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { flipHorizontal } from '@/features/settings/state/settingsSlice';
 import { useBoolean } from 'usehooks-ts';
-import ResizeCanvasDialog from './components/ResizeCanvasDialog';
-import useSaveDrawing from './hooks/useSaveDrawing';
-import LoadDrawingDialog from './components/LoadDrawingDialog';
+import ResizeCanvasDialog from './ResizeCanvasDialog';
+import useSaveDrawing from '../hooks/useSaveDrawing';
+import LoadDrawingDialog from './LoadDrawingDialog';
 
 const SettingsPanel = () => {
   const [isExportDialogOpen, setExportDialogOpen] = useState(false);

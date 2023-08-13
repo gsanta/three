@@ -1,4 +1,4 @@
-import SettingsPanel from '@/features/settings/SettingsPanel';
+import SettingsPanel from '@/features/settings/components/SettingsPanel';
 import UserSettings from '@/features/user/components/UserSettings';
 import { Box } from '@chakra-ui/react';
 import React from 'react';

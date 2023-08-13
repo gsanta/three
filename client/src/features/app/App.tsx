@@ -1,19 +1,18 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import './app.scss';
-import Layout from './layout/Layout';
-import Box from './box/Box';
+import Layout from '../../components/Layout';
 import Split from 'react-split';
-import Canvas from '../features/canvas/Canvas';
-import useInitApp from '../features/canvas/hooks/useInitApp';
-import LayerPanel from '../features/layer/ui/components/LayerPanel';
-import ToolOptionsPanel from '@/features/tool/tool_options/ui/ToolOptionsPanel';
+import Canvas from '../editor/components/Canvas';
+import useInitApp from '../editor/hooks/useInitApp';
+import LayerPanel from '../layer/components/LayerPanel';
 import SceneViewer from '@/features/scene_viewer/SceneViewer';
 import KeyboardHandler from '@/features/keyboard/KeyboardHandler';
 import { editor } from '@/features/editor/Editor';
-import Header from './header/Header';
-import ToolEventListener from '@/features/tool/toolbar/ToolEventListener';
-import Toolbar from '@/features/tool/toolbar/ui/Toolbar';
+import Header from '../../components/Header';
+import ToolEventListener from '@/features/tool/utils/ToolEventListener';
+import Toolbar from '@/features/tool/components/Toolbar';
+import ToolOptionsPanel from '../tool/components/ToolOptionsPanel';
 
 const App = () => {
   const [canvasNode, setCanvasNode] = useState<HTMLCanvasElement>();

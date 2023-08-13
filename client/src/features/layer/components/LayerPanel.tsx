@@ -1,4 +1,4 @@
-import Panel from '@/components/panel/Panel';
+import Panel from '@/components/Panel';
 import { List, Tooltip, Button } from '@chakra-ui/react';
 import { useBoolean } from 'usehooks-ts';
 import React from 'react';
@@ -8,9 +8,9 @@ import LayerDropTarget from './LayerDropTarget';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import Icon from '@/components/icon/Icon';
-import Frames from '../../../frame/components/Frames';
+import Frames from '../../frame/components/Frames';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import { setActiveLayer } from '../../state/layerSlice';
+import { setActiveLayer } from '../state/layerSlice';
 
 const LayerPanel = () => {
   const { value: isAddPanelOpen, setTrue: setOpenAddPanel, setFalse: setCloseAddPanel } = useBoolean(false);

@@ -1,8 +1,8 @@
 import { useAppDispatch } from '@/hooks';
-import layerDragType from '@/features/layer/ui/layerDragType';
+import layerDragType from '@/features/layer/types/layerDragType';
 import { useDrop } from 'react-dnd';
-import LayerItemDragType from '../LayerItemDragType';
-import { setLayerIndex } from '../../state/layerSlice';
+import LayerItemDragType from '../types/LayerItemDragType';
+import { setLayerIndex } from '../state/layerSlice';
 
 const useDropLayer = (layerIndex: number) => {
   const dispatch = useAppDispatch();

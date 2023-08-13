@@ -1,6 +1,6 @@
 import ToolName from '@/features/tool/state/ToolName';
 import BrushToolOptions from './BrushToolOptions';
-import Panel from '@/components/panel/Panel';
+import Panel from '@/components/Panel';
 import React from 'react';
 import ColorPicker from '@/components/color_picker/ColorPicker';
 import { useAppSelector } from '@/hooks';

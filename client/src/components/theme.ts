@@ -1,5 +1,5 @@
 import { extendTheme } from '@chakra-ui/react';
-import Checkbox from './checkbox/Checkbox.theme';
+import Checkbox from './themes/Checkbox.theme';
 import Select from './select/Select.theme';
 import Button from './button/Button.theme';
 import Tooltip from './Tooltip.theme';
