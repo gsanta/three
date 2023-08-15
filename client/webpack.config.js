@@ -23,9 +23,6 @@ const entryPoints = glob.sync(path.join(pagesPath, '*.ts')).reduce((entries, fil
 module.exports = (env, argv) => {
 
   return {
-    // entry: {
-    //   app: './src/index.tsx',
-    // },
     entry: entryPoints,
     module: {
       rules: [
@@ -85,7 +82,7 @@ module.exports = (env, argv) => {
         entrypointsUseAssets: true,
       }),
       process.env.NODE_ENV === 'production' ?
-        new webpack.EnvironmentPlugin(['RENDER_EXTERNAL_URL', 'GOOGLE_OAUTH_CLIENT_ID', 'FACEBOOK_APP_ID']) :
+        new webpack.EnvironmentPlugin(['RENDER_EXTERNAL_URL', 'GOOGLE_OAUTH_CLIENT_ID']) :
         new Dotenv({ path: '../backend/.env'})
     ],
     resolve: {
