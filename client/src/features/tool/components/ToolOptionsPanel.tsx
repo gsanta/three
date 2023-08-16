@@ -6,6 +6,8 @@ import ColorPicker from '@/components/color_picker/ColorPicker';
 import { useAppSelector } from '@/hooks';
 import CircleToolOptions from './CircleToolOptions';
 import RectangleToolOptions from './RectangleToolOptions';
+import EraseToolOptions from './EraseToolOptions';
+import { Box } from '@chakra-ui/react';
 
 const ToolOptionsPanel = () => {
   const selectedTool = useAppSelector((state) => state.tool.selectedTool);
@@ -18,6 +20,8 @@ const ToolOptionsPanel = () => {
         return <CircleToolOptions />;
       case ToolName.Rectangle:
         return <RectangleToolOptions />;
+      case ToolName.Erase:
+        return <EraseToolOptions />;
       default:
         return null;
     }
@@ -25,7 +29,10 @@ const ToolOptionsPanel = () => {
 
   return (
     <Panel>
-      <ColorPicker />
+      <Box paddingInline="2" paddingBottom="4">
+        <ColorPicker />
+      </Box>
+      <Panel.Header title="Tool options" />
       {getOptions()}
     </Panel>
   );

@@ -57,9 +57,11 @@ namespace editor
 
         RendererProvider *m_RendererProvider = nullptr;
 
-        float m_BackgroundZPos = -0.1f;
+        float m_BackgroundZPos = -0.2f;
 
-        float m_TileLayerZPos = 0;
+        float m_TileLayerZPos = -0.05f;
+
+        float m_ForegroundZPos = 0;
     };
 } // namespace editor
 } // namespace spright

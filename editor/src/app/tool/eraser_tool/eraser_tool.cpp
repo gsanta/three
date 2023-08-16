@@ -5,7 +5,7 @@ namespace spright
 namespace editor
 {
     EraserTool::EraserTool(int eraserSize)
-        : m_Size(eraserSize), Tool("erase", std::make_shared<EraserCursor>(eraserSize))
+        : m_Size(eraserSize), Tool("erase", std::make_shared<RectangleCursor>(eraserSize))
     {
     }
 
@@ -50,8 +50,8 @@ namespace editor
 
     float EraserTool::getStrokeSize() const
     {
-        auto eraserCursor = std::dynamic_pointer_cast<EraserCursor>(getCursor());
-        return eraserCursor->getEraserStroke().getStrokeWidth();
+        auto cursor = std::dynamic_pointer_cast<RectangleCursor>(getCursor());
+        return cursor->getRectangleStroke().getStrokeWidth();
     }
 
     void EraserTool::setOptions(std::string json)

@@ -25,17 +25,15 @@ namespace editor
             m_Filled = &tileLayer.add(Rect2D(0, 0, 0.1f, 0.1f, color));
         }
 
-        maths::Vec2 downTilePos = tileLayer.getCenterPos(from);
-        maths::Vec2 currTilePos = tileLayer.getCenterPos(to);
+        Bounds initialBounds = Bounds::createWithPositions(tileLayer.getCenterPos(from), tileLayer.getCenterPos(to));
 
-        float left = downTilePos.x < currTilePos.x ? downTilePos.x : currTilePos.x;
-        float right = downTilePos.x > currTilePos.x ? downTilePos.x : currTilePos.x;
-        float bottom = downTilePos.y < currTilePos.y ? downTilePos.y : currTilePos.y;
-        float top = downTilePos.y > currTilePos.y ? downTilePos.y : currTilePos.y;
+        float tileSize = tileLayer.getTileSize();
 
-        float halfTileSize = tileLayer.getTileSize() / 2.0f;
-        m_Filled->setPosition(maths::Vec2(left - halfTileSize, bottom - halfTileSize));
-        m_Filled->setSize(maths::Vec2(right - left, top - bottom));
+        Vec2 bottomLeft = initialBounds.getBottomLeft() - tileSize / 2;
+        Vec2 topRight = initialBounds.getTopRight() + tileSize / 2;
+
+        m_Filled->setPosition(bottomLeft);
+        m_Filled->setSize(topRight - bottomLeft);
 
         m_Bounds = m_Filled->getBounds();
     }
@@ -44,10 +42,12 @@ namespace editor
     {
         float tileSize = tileLayer.getTileSize();
 
-        Vec2 downTilePos = tileLayer.getCenterPos(from) - tileSize / 2;
-        Vec2 currTilePos = tileLayer.getCenterPos(to) - tileSize / 2;
+        Bounds initialBounds = Bounds::createWithPositions(tileLayer.getCenterPos(from), tileLayer.getCenterPos(to));
 
-        Bounds bounds = Bounds::createWithPositions(downTilePos.x, downTilePos.y, currTilePos.x, currTilePos.y);
+        Vec2 bottomLeft = initialBounds.getBottomLeft() - tileSize / 2;
+        Vec2 topRight = initialBounds.getTopRight() + tileSize / 2;
+
+        Bounds bounds = Bounds::createWithPositions(bottomLeft.x, bottomLeft.y, topRight.x, topRight.y);
 
         if (m_OutlinedTop == nullptr)
         {

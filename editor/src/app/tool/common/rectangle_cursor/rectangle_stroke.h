@@ -1,5 +1,5 @@
 #pragma once
-#include "../../../engine/graphics/layer/tileLayer.h"
+#include "../../../../engine/graphics/layer/tileLayer.h"
 
 namespace spright
 {
@@ -7,12 +7,12 @@ namespace editor
 {
     using namespace engine;
 
-    class EraserStroke
+    class RectangleStroke
     {
     public:
-        EraserStroke();
+        RectangleStroke();
 
-        EraserStroke(int eraserSize);
+        RectangleStroke(int rectangleSize);
 
         void draw(TileLayer &drawLayer, const Vec2 &pos);
 

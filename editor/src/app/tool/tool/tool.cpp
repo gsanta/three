@@ -17,12 +17,17 @@ namespace editor
 
     void Tool::execPointerMove(const ToolContext &context)
     {
-        if (context.doc.isLeavingDrawing() && context.doc.prevDrawing != nullptr)
+        if (context.pointer.isDown && m_Cursor->shouldDisableOnDrag())
+        {
+            m_Cursor->setDisabled(true, context.doc.activeDrawing->getForegroundLayer());
+        }
+
+        if (context.doc.isLeavingDrawing() && context.doc.prevDrawing != nullptr && !m_Cursor->isDisabled())
         {
             m_Cursor->destroy(context.doc.prevDrawing->getForegroundLayer());
         }
 
-        if (context.doc.activeDrawing != nullptr)
+        if (context.doc.activeDrawing != nullptr && !m_Cursor->isDisabled())
         {
             m_Cursor->update(context.doc.activeDrawing->getForegroundLayer(), context.pointer);
         }
@@ -32,6 +37,7 @@ namespace editor
     void Tool::execPointerUp(const ToolContext &toolContext)
     {
         pointerUp(toolContext);
+        m_Cursor->setDisabled(false, toolContext.doc.activeDrawing->getForegroundLayer());
     }
 
     void Tool::execDeactivate(const ToolContext &context)
