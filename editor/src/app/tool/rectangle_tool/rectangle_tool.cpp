@@ -5,7 +5,7 @@ namespace spright
 namespace editor
 {
 
-    RectangleTool::RectangleTool() : Tool("rectangle")
+    RectangleTool::RectangleTool() : Tool("rectangle", std::make_shared<RectangleCursor>(1))
     {
     }
 
@@ -46,6 +46,7 @@ namespace editor
         }
 
         context.doc.document->getHistory()->add(std::make_shared<TileUndo>(tileUndo));
+        getCursor()->destroy(context.doc.activeDrawing->getForegroundLayer());
         context.doc.activeDrawing->getForegroundLayer().clear();
         m_TempRectDrawer.reset();
     }

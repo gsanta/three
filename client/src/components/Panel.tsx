@@ -26,7 +26,7 @@ type PanelHeaderProps = {
 
 Panel.Header = ({ children, title }: PanelHeaderProps) => (
   <Box paddingInline="2" paddingBlock="2">
-    <Box alignItems="center" display="flex" justifyContent="space-between">
+    <Box alignItems="center" display="flex" justifyContent="space-between" backgroundColor="gray.700">
       <Text color="gray.300" fontWeight="bold" paddingInlineStart="2" textTransform="uppercase">
         {title}
       </Text>

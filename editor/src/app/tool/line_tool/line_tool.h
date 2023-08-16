@@ -4,6 +4,7 @@
 #include "../../core/history/tile_undo.h"
 #include "../../utils/declarations.h"
 #include "../brush.h"
+#include "../common/rectangle_cursor/rectangle_cursor.h"
 #include "../tool/tool.h"
 #include "../tool/tool_context.h"
 

@@ -22,11 +22,14 @@ namespace engine
 
         Bounds(float minX, float minY, float width, float height);
 
+        //@deprecated use createWithPositions instead
         Bounds(Vec2 bottomLeft, Vec2 topRight);
 
         Bounds();
 
         static Bounds createWithPositions(float minX, float minY, float maxX, float maxY);
+
+        static Bounds createWithPositions(const Vec2 &pos1, const Vec2 &pos2);
 
         friend bool operator==(const Bounds &, const Bounds &);
 
@@ -51,6 +54,8 @@ namespace engine
         Vec2 getBottomLeft() const;
 
         Vec2 getTopRight() const;
+
+        Vec2 getSize() const;
 
         std::string toString() const;
     };

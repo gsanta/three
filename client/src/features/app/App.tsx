@@ -60,7 +60,7 @@ const App = () => {
   }, []);
 
   return (
-    <Layout header={<Header />} footer={<Box bgColor="orange.400" height="40px"></Box>}>
+    <Layout header={<Header />} footer={<Box bgColor="orange.600" height="40px"></Box>}>
       <Box width="50px">
         <Toolbar />
       </Box>
@@ -76,7 +76,7 @@ const App = () => {
               <Tab>3D Viewer</Tab>
             </TabList>
             <TabPanels alignItems="stretch" display="flex" flex="1" overflow="auto">
-              <TabPanel flex="1">
+              <TabPanel flex="1" paddingInline={0}>
                 <ToolOptionsPanel />
               </TabPanel>
               <TabPanel display="flex" flex="1">

@@ -4,7 +4,7 @@ namespace spright
 {
 namespace editor
 {
-    CircleTool::CircleTool() : Tool("circle")
+    CircleTool::CircleTool() : Tool("circle", std::make_shared<RectangleCursor>(1, true))
     {
     }
 

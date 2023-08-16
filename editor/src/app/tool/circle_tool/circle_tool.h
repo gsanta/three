@@ -2,8 +2,10 @@
 #include "../../core/history/document_history.h"
 #include "../../core/history/tile_undo.h"
 #include "../brush.h"
+#include "../common/rectangle_cursor/rectangle_cursor.h"
 #include "../paint_bucket/queue_linear_flood_fill.h"
 #include "../tool/tool.h"
+
 
 namespace spright
 {

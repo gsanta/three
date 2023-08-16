@@ -5,7 +5,7 @@ namespace spright
 namespace editor
 {
 
-    BrushTool::BrushTool() : Tool("brush")
+    BrushTool::BrushTool() : Tool("brush", std::make_shared<RectangleCursor>(1))
     {
     }
 

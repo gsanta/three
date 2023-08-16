@@ -5,6 +5,7 @@
 #include "../../../maths/vec3.h"
 #include "../../core/history/document_history.h"
 #include "../../core/history/tile_undo.h"
+#include "../common/rectangle_cursor/rectangle_cursor.h"
 #include "../tool/tool.h"
 #include "../tool/tool_context.h"
 #include "draw_rect.h"

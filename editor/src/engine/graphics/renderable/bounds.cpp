@@ -28,6 +28,11 @@ namespace engine
         return Bounds(minX, minY, maxX - minX, maxY - minY);
     }
 
+    Bounds Bounds::createWithPositions(const Vec2 &pos1, const Vec2 &pos2)
+    {
+        return createWithPositions(pos1.x, pos1.y, pos2.x, pos2.y);
+    }
+
     Vec2 Bounds::getCenter() const
     {
         return Vec2(minX + (maxX - minX) / 2.0, minY + (maxY - minY) / 2.0);
@@ -98,6 +103,11 @@ namespace engine
     Vec2 Bounds::getTopRight() const
     {
         return Vec2(maxX, maxY);
+    }
+
+    Vec2 Bounds::getSize() const
+    {
+        return getTopRight() - getBottomLeft();
     }
 
     std::string Bounds::toString() const

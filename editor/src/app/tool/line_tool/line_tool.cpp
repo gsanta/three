@@ -4,7 +4,7 @@ namespace spright
 {
 namespace editor
 {
-    LineTool::LineTool() : Tool("line")
+    LineTool::LineTool() : Tool("line", std::make_shared<RectangleCursor>(1, true))
     {
     }
 

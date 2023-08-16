@@ -137,9 +137,11 @@ namespace editor
         }
         else if (key == GLFW_KEY_C)
         {
-            m_DocumentFactory->createFrame(m_DocumentStore->getActiveDocument());
-            m_DocumentStore->getActiveDocument().getActiveDrawing().setActiveFrame(
-                m_DocumentStore->getActiveDocument().getActiveDrawing().getFrames().size() - 1);
+            setSelectedTool("circle");
+
+            // m_DocumentFactory->createFrame(m_DocumentStore->getActiveDocument());
+            // m_DocumentStore->getActiveDocument().getActiveDrawing().setActiveFrame(
+            //     m_DocumentStore->getActiveDocument().getActiveDrawing().getFrames().size() - 1);
             //setSelectedTool("color_picker");
         }
         else if (key == GLFW_KEY_1)
