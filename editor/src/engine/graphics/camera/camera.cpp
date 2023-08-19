@@ -5,15 +5,20 @@ namespace spright
 namespace engine
 {
 
-    Camera::Camera(const Window *window, float near, float far, int scaleFactor)
-        : m_Window(window), m_Near(near), m_Far(far), m_ScaleFactor(scaleFactor)
+    Camera::Camera(const Window *window, float near, float far, int zoomFactor)
+        : m_Window(window), m_Near(near), m_Far(far), m_ZoomFactor(zoomFactor)
     {
         m_View = Mat4::lookAt(Vec3(0, 0, m_Z), Vec3(0, 0, 0), Vec3(0, 1, 0));
     }
 
-    void Camera::translate2D(Vec2 translate)
+    void Camera::translate2D(Vec2 delta)
     {
-        m_Translate += translate;
+        setTranslate(m_Translate + delta);
+    }
+
+    void Camera::setTranslate(Vec2 translate)
+    {
+        m_Translate = translate;
         Vec3 eye(m_Translate.x, m_Translate.y, m_Z);
         Vec3 at(m_Translate.x, m_Translate.y, 0);
         m_View = Mat4::lookAt(eye, at, Vec3(0, 1, 0));
@@ -32,6 +37,27 @@ namespace engine
     void Camera::zoomOut()
     {
         m_Zoom /= 1.05;
+    }
+
+    void Camera::zoomToFit(const Bounds &bounds)
+    {
+        float windowRatio = m_Window->getWidth() / m_Window->getHeight();
+
+        float zoom = m_Zoom;
+
+        if (bounds.getWidth() / windowRatio > bounds.getHeight())
+        {
+            float width = bounds.getWidth();
+            zoom = m_Window->getWidth() / width / m_ZoomFactor;
+        }
+        else
+        {
+            float height = bounds.getHeight();
+            zoom = m_Window->getHeight() / height / m_ZoomFactor;
+        }
+
+        setZoom(zoom);
+        setTranslate(bounds.getCenter());
     }
 
     float Camera::getZoom()
@@ -83,11 +109,9 @@ namespace engine
 
         const Mat4 translateMatrix = spright::maths::Mat4::translation(
             Vec3(-m_Translate.x + scaleX / 2.0f, -m_Translate.y - scaleY / 2.0f, 0.0f));
-        // Vec4 result = mat4 * Vec4(x, -y, 0.0f, 1.0f);
-        // pos -= m_Translate;
+
         const Mat4 scaleMatrix = spright::maths::Mat4::scale(Vec3(getScaleFactor(), getScaleFactor(), 1));
 
-        // pos *= Vec2(scaleX, scaleY);
         Vec4 result = scaleMatrix * translateMatrix * Vec4(x, y, 0.0f, 1.0f);
 
         return {(int)result.x, (int)-result.y};
@@ -95,7 +119,7 @@ namespace engine
 
     float Camera::getScaleFactor() const
     {
-        return ((float)m_ScaleFactor) * m_Zoom;
+        return ((float)m_ZoomFactor) * m_Zoom;
     }
 } // namespace engine
 } // namespace spright

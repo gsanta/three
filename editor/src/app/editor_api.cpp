@@ -170,6 +170,11 @@ void reset_zoom()
     editor->getActiveDocument().getCamera().setZoom(1.0f);
 }
 
+void zoom_to_fit()
+{
+    editor->getActiveDocument().getCamera().zoomToFit(editor->getActiveDocument().getActiveDrawing().getBounds());
+}
+
 EMSCRIPTEN_BINDINGS(spright)
 {
     emscripten::function("getFrames", &getFrames);
@@ -197,6 +202,7 @@ EMSCRIPTEN_BINDINGS(spright)
     emscripten::function("zoomIn", &zoom_in);
     emscripten::function("zoomOut", &zoom_out);
     emscripten::function("resetZoom", &reset_zoom);
+    emscripten::function("zoomToFit", &zoom_to_fit);
 }
 
 #endif

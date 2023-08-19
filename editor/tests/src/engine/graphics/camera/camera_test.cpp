@@ -87,5 +87,47 @@ SCENARIO("Camera")
                 }
             }
         }
+
+        WHEN("zooming to fit a bounds")
+        {
+
+            THEN("camera is zoomed so that the bounds is visible and centered")
+            {
+
+                camera.zoomToFit(Bounds::createWithPositions(Vec2(-2.5f, -2.0f), Vec2(2.5f, 2.0f)));
+
+                REQUIRE(camera.worldToScreenPos(-2.5f, 2.0f) == Vec2Int(0, 0));
+            }
+
+            WHEN("the height of the bounds is much bigger then it's width")
+            {
+                THEN("the bounds is fitted around it's height")
+                {
+                    camera.zoomToFit(Bounds::createWithPositions(Vec2(-1.0f, -2.0f), Vec2(1.0f, 2.0f)));
+
+                    REQUIRE(camera.worldToScreenPos(-2.5f, 2.0f) == Vec2Int(0, 0));
+                }
+            }
+
+            WHEN("the width of the bounds is much bigger then it's height")
+            {
+                THEN("the bounds is fitted around it's width")
+                {
+                    camera.zoomToFit(Bounds::createWithPositions(Vec2(-2.5f, -1.0f), Vec2(2.5f, 1.0f)));
+
+                    REQUIRE(camera.worldToScreenPos(-2.5f, 2.0f) == Vec2Int(0, 0));
+                }
+            }
+
+            WHEN("the bounds is not centered")
+            {
+                THEN("camera is moved to make the bounds centered")
+                {
+                    camera.zoomToFit(Bounds::createWithPositions(Vec2(-5.0f, -4.0f), Vec2(0, 0)));
+
+                    REQUIRE(camera.worldToScreenPos(-2.5f, -2.0f) == Vec2Int(5, 4));
+                }
+            }
+        }
     }
 }

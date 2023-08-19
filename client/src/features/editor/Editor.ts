@@ -90,6 +90,8 @@ interface Editor {
   zoomOut(): void;
 
   resetZoom(): void;
+
+  zoomToFit(): void;
 }
 
 window.Module = new EditorRuntime();
