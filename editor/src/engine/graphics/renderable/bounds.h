@@ -31,6 +31,8 @@ namespace engine
 
         static Bounds createWithPositions(const Vec2 &pos1, const Vec2 &pos2);
 
+        Bounds operator*(float ratio);
+
         friend bool operator==(const Bounds &, const Bounds &);
 
         friend bool operator!=(const Bounds &, const Bounds &);

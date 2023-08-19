@@ -1,8 +1,13 @@
 #include "document_store_builder.h"
 
+
+DocumentStoreBuilder::DocumentStoreBuilder() : m_Window(500, 500)
+{
+}
+
 DocumentStoreBuilder &DocumentStoreBuilder::withWindowSize(int windowSize)
 {
-    m_WindowSize = windowSize;
+    m_Window = HeadlessWindow(windowSize, windowSize);
 
     return *this;
 }
@@ -31,7 +36,7 @@ DocumentStoreBuilder &DocumentStoreBuilder::withDrawing()
 
 DocumentStore DocumentStoreBuilder::build()
 {
-    Camera camera(m_WindowSize, m_WindowSize, m_DocumentBounds, -1.0f, 1.0f);
+    Camera camera(&m_Window);
 
     Document document(m_DocumentBounds,
                       camera,

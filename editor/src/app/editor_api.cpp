@@ -155,6 +155,21 @@ void redo()
     editor->getActiveDocument().getHistory()->redo(editor->getActiveDocument());
 }
 
+void zoom_in()
+{
+    editor->getActiveDocument().getCamera().zoomIn();
+}
+
+void zoom_out()
+{
+    editor->getActiveDocument().getCamera().zoomOut();
+}
+
+void reset_zoom()
+{
+    editor->getActiveDocument().getCamera().setZoom(1.0f);
+}
+
 EMSCRIPTEN_BINDINGS(spright)
 {
     emscripten::function("getFrames", &getFrames);
@@ -179,6 +194,9 @@ EMSCRIPTEN_BINDINGS(spright)
     emscripten::function("setEraserSize", &set_eraser_size);
     emscripten::function("undo", &undo);
     emscripten::function("redo", &redo);
+    emscripten::function("zoomIn", &zoom_in);
+    emscripten::function("zoomOut", &zoom_out);
+    emscripten::function("resetZoom", &reset_zoom);
 }
 
 #endif

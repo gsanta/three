@@ -31,5 +31,11 @@ namespace maths
     {
         return !(left == right);
     }
+
+    std::ostream &operator<<(std::ostream &stream, const Vec2Int &vec)
+    {
+        stream << "vec2: {" << vec.x << ", " << vec.y << "}";
+        return stream;
+    }
 } // namespace maths
 } // namespace spright

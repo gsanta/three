@@ -82,6 +82,23 @@ const SettingsPanel = () => {
           </Button>
         </Tooltip>
       </ButtonGroup>
+      <ButtonGroup>
+        <Tooltip label="Zoom in">
+          <Button variant="outline" size="sm" onClick={() => editor.zoomIn()}>
+            <Icon name="BiZoomIn" />
+          </Button>
+        </Tooltip>
+        <Tooltip label="Reset zoom">
+          <Button variant="outline" size="sm" onClick={() => editor.resetZoom()}>
+            Reset
+          </Button>
+        </Tooltip>
+        <Tooltip label="Zoom out">
+          <Button variant="outline" size="sm" onClick={() => editor.zoomOut()}>
+            <Icon name="BiZoomOut" />
+          </Button>
+        </Tooltip>
+      </ButtonGroup>
       <ImportDialog isOpen={isImportDialogOpen} onClose={closeImportDialog} />
       <ExportDialog isOpen={isExportDialogOpen} onClose={() => setExportDialogOpen(false)} />
       <LoadDrawingDialog isOpen={isLoadDrawingDialogOpen} onClose={cloaseLoadDrawingDialog} />

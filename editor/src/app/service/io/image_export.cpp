@@ -23,7 +23,7 @@ namespace editor
         Vec2Int bottomLeft = camera.worldToScreenPos(bounds.minX, bounds.minY);
         Vec2Int topRight = camera.worldToScreenPos(bounds.maxX, bounds.maxY);
 
-        const BoundsInt intBounds(bottomLeft.x, topRight.x, bottomLeft.y, topRight.y);
+        const BoundsInt intBounds(bottomLeft.x, topRight.x, topRight.y, bottomLeft.y);
 
         m_Rendering->enableImageTarget();
 

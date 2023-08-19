@@ -21,5 +21,5 @@ public:
     static TileLayer createTileLayer(size_t index,
                                      float tileSize = TileLayer::defaultTileSize,
                                      Bounds bounds = Bounds::createWithPositions(-3.0f, -3.0f, 3.0f, 3.0f));
-    static DocumentFactory createDocumentFactory(Container &windowContainer);
+    static DocumentFactory createDocumentFactory(Window &window);
 };
