@@ -139,6 +139,12 @@ void set_canvas_size(int width, int height)
                              editor->getDocumentFactory());
 }
 
+void set_eraser_size(int size)
+{
+    Tool *tool = editor->getToolHandler()->getTool("erase");
+    dynamic_cast<EraserTool *>(tool)->setEraserSize(size);
+}
+
 void undo()
 {
     editor->getActiveDocument().getHistory()->undo(editor->getActiveDocument());
@@ -170,6 +176,7 @@ EMSCRIPTEN_BINDINGS(spright)
     emscripten::function("isRectangleToolFilled", &is_rectangle_tool_filled);
     emscripten::function("getCanvasSize", &get_canvas_size);
     emscripten::function("setCanvasSize", &set_canvas_size);
+    emscripten::function("setEraserSize", &set_eraser_size);
     emscripten::function("undo", &undo);
     emscripten::function("redo", &redo);
 }

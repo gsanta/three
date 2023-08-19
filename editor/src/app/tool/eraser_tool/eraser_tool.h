@@ -37,6 +37,9 @@ namespace editor
 
         std::string getOptions() override;
 
+        void setEraserSize(int size);
+
+    private:
         void erase(const ToolContext &context, bool isPointerMove);
 
     private:
@@ -44,7 +47,7 @@ namespace editor
 
         Eraser m_Eraser;
 
-        int m_Size = 3;
+        int m_Size;
 
         bool m_IsMoveSelection = false;
 

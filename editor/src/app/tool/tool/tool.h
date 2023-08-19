@@ -65,6 +65,8 @@ namespace editor
     protected:
         std::shared_ptr<Cursor> getCursor() const;
 
+        void setCursor(std::shared_ptr<Cursor> cursor);
+
     private:
         string m_Name;
 
