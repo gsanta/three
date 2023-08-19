@@ -158,7 +158,10 @@ namespace editor
         }
         else if (key == GLFW_KEY_I)
         {
-            m_ImageExport->exportImage(m_DocumentStore->getActiveDocument());
+            m_DocumentStore->getActiveDocument().getCamera().zoomToFit(
+                m_DocumentStore->getActiveDocument().getActiveDrawing().getBounds());
+            // m_ImageExport->exportImage(m_DocumentStore->getActiveDocument());
+
             // m_DocumentStore->getActiveDocument().getCamera().updateWindowSize(m_Window->getWidth(),
             //                                                                   m_Window->getHeight());
             //std::string str = m_JsonExport->exportDocument(m_DocumentHandler->getActiveDocument());

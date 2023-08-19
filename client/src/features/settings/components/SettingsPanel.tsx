@@ -88,9 +88,14 @@ const SettingsPanel = () => {
             <Icon name="BiZoomIn" />
           </Button>
         </Tooltip>
-        <Tooltip label="Reset zoom">
+        <Tooltip label="Reset zoom to 1">
           <Button variant="outline" size="sm" onClick={() => editor.resetZoom()}>
             Reset
+          </Button>
+        </Tooltip>
+        <Tooltip label="Fit drawing to viewport">
+          <Button variant="outline" size="sm" onClick={() => editor.zoomToFit()}>
+            Fit
           </Button>
         </Tooltip>
         <Tooltip label="Zoom out">
