@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 namespace spright
 {
@@ -18,6 +19,8 @@ namespace maths
         friend bool operator==(const Vec2Int &, const Vec2Int &);
 
         friend bool operator!=(const Vec2Int &, const Vec2Int &);
+
+        friend std::ostream &operator<<(std::ostream &stream, const Vec2Int &vec);
 
     public:
         int x;

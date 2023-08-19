@@ -1,5 +1,9 @@
 #include "document_builder.h"
 
+DocumentBuilder::DocumentBuilder() : m_Window(500, 500)
+{
+}
+
 DocumentBuilder &DocumentBuilder::withEmptyDocument()
 {
     m_IsEmptyDocument = true;
@@ -15,7 +19,7 @@ DocumentBuilder &DocumentBuilder::withDrawing(const DrawingBuilder &drawing)
 
 Document DocumentBuilder::build()
 {
-    Camera camera(m_WindowSize, m_WindowSize, m_DocumentBounds, -1.0f, 1.0f);
+    Camera camera(&m_Window, -1.0f, 1.0f);
 
     Document document(m_DocumentBounds,
                       camera,

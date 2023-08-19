@@ -5,8 +5,8 @@ namespace spright
 namespace editor
 {
 
-    DocumentFactory::DocumentFactory(Container *windowContainer, RendererProvider *rendererProvider)
-        : m_WindowContainer(windowContainer), m_RendererProvider(rendererProvider)
+    DocumentFactory::DocumentFactory(Window *window, RendererProvider *rendererProvider)
+        : m_Window(window), m_RendererProvider(rendererProvider)
     {
     }
 
@@ -116,11 +116,7 @@ namespace editor
         Bounds drawingBounds =
             Bounds::createWithPositions(-pixelCount / 2.0f, -pixelCount / 2.0f, pixelCount / 2.0f, pixelCount / 2.0f);
 
-        Camera camera(m_WindowContainer->getBounds().getWidth(),
-                      m_WindowContainer->getBounds().getHeight(),
-                      drawingBounds,
-                      -1.0f,
-                      1.0f);
+        Camera camera(m_Window, -1.0f, 1.0f);
 
         Document document(drawingBounds,
                           camera,

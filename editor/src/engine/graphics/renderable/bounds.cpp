@@ -116,5 +116,14 @@ namespace engine
         ss << "(" << minX << "," << minY << "),(" << maxX << "," << maxY << ")";
         return ss.str();
     }
+
+    Bounds Bounds::operator*(float ratio)
+    {
+        float newWidth = getWidth() * ratio;
+        minX = getCenter().x - newWidth / 2;
+        maxX = getCenter().x + newWidth / 2;
+
+        return Bounds::createWithPositions(getBottomLeft(), getTopRight());
+    }
 } // namespace engine
 } // namespace spright

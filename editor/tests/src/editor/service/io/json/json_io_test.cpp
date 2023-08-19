@@ -3,6 +3,7 @@
 #include "../src/app/core/colors.h"
 #include "../src/app/document/drawing.h"
 #include "../src/app/service/io/json/json_io.h"
+#include "../src/engine/system/window/impl/headless/headless_window.h"
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -32,8 +33,8 @@ SCENARIO("JsonIO")
                                                                                                           COLOR_BLUE)))
                     .build();
 
-            Container container(bounds);
-            DocumentFactory documentFactory = TestDocumentFactory::createDocumentFactory(container);
+            HeadlessWindow window(bounds.getWidth(), bounds.getHeight());
+            DocumentFactory documentFactory = TestDocumentFactory::createDocumentFactory(window);
 
             Document document = DocumentBuilder().withEmptyDocument().build();
 
@@ -112,8 +113,8 @@ SCENARIO("JsonIO")
 
             Bounds bounds = Bounds::createWithPositions(-1.0f, -1.0f, 1.0f, 1.0f);
 
-            Container container(bounds);
-            DocumentFactory documentFactory = TestDocumentFactory::createDocumentFactory(container);
+            HeadlessWindow window(bounds.getWidth(), bounds.getHeight());
+            DocumentFactory documentFactory = TestDocumentFactory::createDocumentFactory(window);
 
             JsonIO jsonIO(&documentFactory);
 

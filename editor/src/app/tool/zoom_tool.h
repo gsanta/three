@@ -16,7 +16,7 @@ namespace editor
     {
     private:
         DocumentStore *m_DocumentStore;
-        float m_ZoomFactor = 1.0f;
+        float m_ZoomFactor = 0.01f;
 
     public:
         ZoomTool(DocumentStore *documentStore);

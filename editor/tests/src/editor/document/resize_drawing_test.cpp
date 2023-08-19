@@ -2,6 +2,7 @@
 #include "../src/app/document/drawing.h"
 #include "../src/app/document/factory/document_factory.h"
 #include "../src/app/document/resize_drawing.h"
+#include "../src/engine/system/window/impl/headless/headless_window.h"
 #include "../test_helpers/drawing_builder.h"
 
 #include <catch2/catch_test_macros.hpp>
@@ -11,8 +12,8 @@ SCENARIO("Resize drawing")
 {
     GIVEN("the user resizes the drawing")
     {
-        Container container(Bounds::createWithPositions(-2.0f, -2.0f, 2.0f, 2.0f));
-        DocumentFactory documentFactory = TestDocumentFactory::createDocumentFactory(container);
+        HeadlessWindow window(4, 4);
+        DocumentFactory documentFactory = TestDocumentFactory::createDocumentFactory(window);
 
         WHEN("new size is smaller than the previous")
         {

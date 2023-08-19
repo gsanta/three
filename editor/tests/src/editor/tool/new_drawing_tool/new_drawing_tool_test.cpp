@@ -3,6 +3,7 @@
 #include "../../test_helpers/pointer_info_builder.h"
 #include "../../test_helpers/tool_context_builder.h"
 #include "../src/app/tool/new_drawing_tool/new_drawing_tool.h"
+#include "../src/engine/system/window/impl/headless/headless_window.h"
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -12,10 +13,10 @@ TEST_CASE("NewDrawingTool", "[new-drawing-tool]")
 {
     SECTION("can create a new drawing with selection")
     {
-        Container windowContainer(Bounds(0, 0, 500, 500));
+        HeadlessWindow window(500, 500);
 
         DocumentStore documentStore = DocumentStoreBuilder().build();
-        DocumentFactory documentFactory = TestDocumentFactory::createDocumentFactory(windowContainer);
+        DocumentFactory documentFactory = TestDocumentFactory::createDocumentFactory(window);
 
         Drawing &canvas = documentStore.getActiveDocument().getCanvas();
         Drawing &activeDrawing = documentStore.getActiveDocument().getDrawings()[0];

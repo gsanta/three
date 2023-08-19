@@ -3,6 +3,7 @@
 #include "../../../test_helpers/tile_layer_builder.h"
 #include "../src/app/core/colors.h"
 #include "../src/app/service/io/json/tile_layer_export.h"
+#include "../src/engine/system/window/impl/headless/headless_window.h"
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -23,8 +24,8 @@ SCENARIO("TileLayerExport")
                                       .withTile(Vec2Int(1, 1), COLOR_YELLOW)
                                       .build();
 
-            Container container(bounds);
-            DocumentFactory documentFactory = TestDocumentFactory::createDocumentFactory(container);
+            HeadlessWindow window(bounds.getWidth(), bounds.getHeight());
+            DocumentFactory documentFactory = TestDocumentFactory::createDocumentFactory(window);
 
 
             TileLayerExport exporter(&documentFactory);
@@ -57,8 +58,8 @@ SCENARIO("TileLayerExport")
 
                 Bounds bounds = Bounds::createWithPositions(-1.0f, -1.0f, 1.0f, 1.0f);
 
-                Container container(bounds);
-                DocumentFactory documentFactory = TestDocumentFactory::createDocumentFactory(container);
+                HeadlessWindow window(bounds.getWidth(), bounds.getHeight());
+                DocumentFactory documentFactory = TestDocumentFactory::createDocumentFactory(window);
 
 
                 TileLayerExport exporter(&documentFactory);

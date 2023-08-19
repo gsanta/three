@@ -28,7 +28,7 @@ namespace editor
     class DocumentFactory
     {
     public:
-        DocumentFactory(Container *windowContainer, RendererProvider *rendererProvider);
+        DocumentFactory(Window *window, RendererProvider *rendererProvider);
 
         DocumentFactory(const DocumentFactory &);
 
@@ -51,7 +51,7 @@ namespace editor
         TileLayer createUserLayer(const Bounds &bounds, std::string name, float tileSize = 0.5f) const;
 
     private:
-        Container *m_WindowContainer;
+        Window *m_Window;
 
         Checkerboard m_Checkerboard;
 

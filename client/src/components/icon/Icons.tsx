@@ -19,3 +19,5 @@ export { BiCloudUpload } from 'react-icons/bi';
 export { BiCloudDownload } from 'react-icons/bi';
 export { BiUndo } from 'react-icons/bi';
 export { BiRedo } from 'react-icons/bi';
+export { BiZoomIn } from 'react-icons/bi';
+export { BiZoomOut } from 'react-icons/bi';
