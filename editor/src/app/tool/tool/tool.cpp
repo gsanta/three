@@ -54,5 +54,10 @@ namespace editor
         return m_Cursor;
     }
 
+    void Tool::setCursor(std::shared_ptr<Cursor> cursor)
+    {
+        m_Cursor = cursor;
+    }
+
 } // namespace editor
 } // namespace spright

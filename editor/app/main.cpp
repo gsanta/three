@@ -52,11 +52,8 @@ Editor *editor = nullptr;
 
 void setWindowSize(int width, int height)
 {
-    if (window != nullptr)
-    {
-        editor->getWindow()->setSize(width, height);
-        editor->getDocumentStore()->getActiveDocument().getCamera().updateWindowSize(width, height);
-    }
+    editor->getWindow()->setSize(width, height);
+    editor->getDocumentStore()->getActiveDocument().getCamera().updateWindowSize(width, height);
 }
 
 void addActiveTool(std::string toolName)

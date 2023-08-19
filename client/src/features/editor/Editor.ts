@@ -82,6 +82,8 @@ interface Editor {
   getCanvasSize(): string;
 
   setCanvasSize(width: number, height: number): string;
+
+  setEraserSize(size: number): void;
 }
 
 window.Module = new EditorRuntime();
