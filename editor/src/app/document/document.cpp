@@ -54,6 +54,12 @@ namespace editor
         m_Drawings.push_back(drawing);
     }
 
+    void Document::removeActiveDrawing()
+    {
+        m_Drawings.erase(m_Drawings.begin() + m_ActiveDrawing);
+    }
+
+
     std::vector<Drawing> &Document::getDrawings()
     {
         return m_Drawings;

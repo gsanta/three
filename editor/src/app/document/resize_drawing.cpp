@@ -40,6 +40,11 @@ namespace editor
 
         Drawing newDrawing(frames, backgroundLayer);
 
+        TileLayer foregroundLayer =
+            documentFactory->createForegroundLayer(bounds, orig.getForegroundLayer().getTileSize());
+
+        newDrawing.addForegroundLayer(foregroundLayer);
+
         return newDrawing;
     }
 } // namespace editor

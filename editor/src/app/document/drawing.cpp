@@ -128,6 +128,11 @@ namespace editor
         return m_ForegroundLayers[0];
     }
 
+    const TileLayer &Drawing::getForegroundLayer() const
+    {
+        return m_ForegroundLayers[0];
+    }
+
     std::vector<TileLayer> &Drawing::getForegroundLayers()
     {
         return m_ForegroundLayers;

@@ -117,5 +117,9 @@ Drawing DrawingBuilder::buildFromFrames()
 
     Drawing drawing(frames, backgroundLayer);
 
+    TileLayer foregroundLayer = TileLayerBuilder().withTileSize(m_TileSize).withBounds(m_Bounds).build();
+
+    drawing.addForegroundLayer(foregroundLayer);
+
     return drawing;
 }

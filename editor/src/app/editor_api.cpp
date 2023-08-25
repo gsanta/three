@@ -134,9 +134,13 @@ std::string get_canvas_size()
 void set_canvas_size(int width, int height)
 {
     Drawing &drawing = editor->getActiveDocument().getActiveDrawing();
-    drawing = resize_drawing(drawing,
-                             Bounds::createWithPositions(-width / 2.0f, -height / 2.0f, width / 2.0f, height / 2.0f),
-                             editor->getDocumentFactory());
+    Drawing newDrawing =
+        resize_drawing(drawing,
+                       Bounds::createWithPositions(-width / 2.0f, -height / 2.0f, width / 2.0f, height / 2.0f),
+                       editor->getDocumentFactory());
+
+    editor->getActiveDocument().removeActiveDrawing();
+    editor->getActiveDocument().addDrawing(newDrawing);
 }
 
 void set_eraser_size(int size)
