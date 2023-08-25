@@ -90,6 +90,8 @@ namespace editor
             m_ToolContext.doc.setActiveDocumentChanging(false);
         }
 
+        m_ToolContext.doc.activeDrawing = activeDrawing;
+
         x_tmp = x;
         y_tmp = y;
         Vec2 pos = m_DocumentStore->getActiveDocument().getCamera().screenToWorldPos(x, y);
@@ -158,9 +160,9 @@ namespace editor
         }
         else if (key == GLFW_KEY_I)
         {
-            m_DocumentStore->getActiveDocument().getCamera().zoomToFit(
-                m_DocumentStore->getActiveDocument().getActiveDrawing().getBounds());
-            // m_ImageExport->exportImage(m_DocumentStore->getActiveDocument());
+            // m_DocumentStore->getActiveDocument().getCamera().zoomToFit(
+            //     m_DocumentStore->getActiveDocument().getActiveDrawing().getBounds());
+            m_ImageExport->exportImage(m_DocumentStore->getActiveDocument());
 
             // m_DocumentStore->getActiveDocument().getCamera().updateWindowSize(m_Window->getWidth(),
             //                                                                   m_Window->getHeight());
@@ -171,7 +173,9 @@ namespace editor
         }
         else if (key == GLFW_KEY_L)
         {
-            setSelectedTool("line");
+            m_DocumentStore->getActiveDocument().getCamera().zoomToFit(
+                m_DocumentStore->getActiveDocument().getActiveDrawing().getBounds());
+            // setSelectedTool("line");
         }
         else if (key == GLFW_KEY_N)
         {
@@ -203,14 +207,16 @@ namespace editor
         }
         else if (key == GLFW_KEY_R)
         {
-            // float pixelCount = 16.0f;
-            // Bounds drawingBounds = Bounds::createWithPositions(-pixelCount / 2.0f,
-            //                                                    -pixelCount / 2.0f,
-            //                                                    pixelCount / 2.0f,
-            //                                                    pixelCount / 2.0f);
-            // Drawing &drawing = m_DocumentStore->getActiveDocument().getActiveDrawing();
-            // drawing = resize_drawing(drawing, drawingBounds, m_DocumentFactory);
-            setSelectedTool("rectangle");
+            float pixelCount = 16.0f;
+            Bounds drawingBounds = Bounds::createWithPositions(-pixelCount / 2.0f,
+                                                               -pixelCount / 2.0f,
+                                                               pixelCount / 2.0f,
+                                                               pixelCount / 2.0f);
+            Drawing &drawing = m_DocumentStore->getActiveDocument().getActiveDrawing();
+            Drawing newDrawing = resize_drawing(drawing, drawingBounds, m_DocumentFactory);
+            m_DocumentStore->getActiveDocument().removeActiveDrawing();
+            m_DocumentStore->getActiveDocument().addDrawing(newDrawing);
+            // setSelectedTool("rectangle");
         }
         else if (key == GLFW_KEY_U)
         {
@@ -267,7 +273,6 @@ namespace editor
         {
             removeActiveTool(m_SelectedTool->getName());
 
-            Drawing *activeDrawing = m_DocumentStore->getActiveDocument().getDrawingAt(m_ToolContext.pointer.curr);
             m_SelectedTool->execDeactivate(m_ToolContext);
         }
 

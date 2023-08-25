@@ -51,6 +51,18 @@ namespace editor
         return backgroundLayer;
     }
 
+    TileLayer DocumentFactory::createForegroundLayer(const Bounds &bounds, float tileSize)
+    {
+        TileLayer foregroundLayer("",
+                                  Group<Rect2D>(m_RendererProvider->createRenderer2D()),
+                                  bounds,
+                                  tileSize,
+                                  m_ForegroundZPos,
+                                  true);
+
+        return foregroundLayer;
+    }
+
     void DocumentFactory::createFrame(Document &document)
     {
         Frame frame(0);

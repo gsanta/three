@@ -42,6 +42,8 @@ namespace editor
 
         void addDrawing(const Drawing &drawing);
 
+        void removeActiveDrawing();
+
         std::vector<Drawing> &getDrawings();
 
         std::shared_ptr<DocumentHistory> getHistory();

@@ -46,6 +46,8 @@ namespace editor
 
         TileLayer createBackgroundLayer(const Bounds &bounds, float tileSize);
 
+        TileLayer createForegroundLayer(const Bounds &bounds, float tileSize);
+
         void createFrame(Document &document);
 
         TileLayer createUserLayer(const Bounds &bounds, std::string name, float tileSize = 0.5f) const;
