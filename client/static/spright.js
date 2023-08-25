@@ -316,6 +316,11 @@ legacyModuleProp('setWindowTitle', 'setWindowTitle');
 var IDBFS = 'IDBFS is no longer included by default; build with -lidbfs.js';
 var PROXYFS = 'PROXYFS is no longer included by default; build with -lproxyfs.js';
 var WORKERFS = 'WORKERFS is no longer included by default; build with -lworkerfs.js';
+var FETCHFS = 'FETCHFS is no longer included by default; build with -lfetchfs.js';
+var ICASEFS = 'ICASEFS is no longer included by default; build with -licasefs.js';
+var JSFILEFS = 'JSFILEFS is no longer included by default; build with -ljsfilefs.js';
+var OPFS = 'OPFS is no longer included by default; build with -lopfs.js';
+
 var NODEFS = 'NODEFS is no longer included by default; build with -lnodefs.js';
 
 assert(!ENVIRONMENT_IS_SHELL, "shell environment detected but not enabled at build time.  Add 'shell' to `-sENVIRONMENT` to enable.");
@@ -344,7 +349,6 @@ if (typeof WebAssembly != 'object') {
 // Wasm globals
 
 var wasmMemory;
-var wasmExports;
 
 //========================================
 // Runtime essentials
@@ -393,9 +397,9 @@ function updateMemoryViews() {
   var b = wasmMemory.buffer;
   Module['HEAP8'] = HEAP8 = new Int8Array(b);
   Module['HEAP16'] = HEAP16 = new Int16Array(b);
-  Module['HEAP32'] = HEAP32 = new Int32Array(b);
   Module['HEAPU8'] = HEAPU8 = new Uint8Array(b);
   Module['HEAPU16'] = HEAPU16 = new Uint16Array(b);
+  Module['HEAP32'] = HEAP32 = new Int32Array(b);
   Module['HEAPU32'] = HEAPU32 = new Uint32Array(b);
   Module['HEAPF32'] = HEAPF32 = new Float32Array(b);
   Module['HEAPF64'] = HEAPF64 = new Float64Array(b);
@@ -599,7 +603,7 @@ function addRunDependency(id) {
             shown = true;
             err('still waiting on run dependencies:');
           }
-          err('dependency: ' + dep);
+          err(`dependency: ${dep}`);
         }
         if (shown) {
           err('(end of list)');
@@ -766,11 +770,11 @@ function instantiateArrayBuffer(binaryFile, imports, receiver) {
   }).then((instance) => {
     return instance;
   }).then(receiver, (reason) => {
-    err('failed to asynchronously prepare wasm: ' + reason);
+    err(`failed to asynchronously prepare wasm: ${reason}`);
 
     // Warn on some common problems.
     if (isFileURI(wasmBinaryFile)) {
-      err('warning: Loading from a file URI (' + wasmBinaryFile + ') is not supported in most browsers. See https://emscripten.org/docs/getting_started/FAQ.html#how-do-i-run-a-local-webserver-for-testing-why-does-my-program-stall-in-downloading-or-preparing');
+      err(`warning: Loading from a file URI (${wasmBinaryFile}) is not supported in most browsers. See https://emscripten.org/docs/getting_started/FAQ.html#how-do-i-run-a-local-webserver-for-testing-why-does-my-program-stall-in-downloading-or-preparing`);
     }
     abort(reason);
   });
@@ -803,7 +807,7 @@ function instantiateAsync(binary, binaryFile, imports, callback) {
         function(reason) {
           // We expect the most common failure cause to be a bad MIME type for the binary,
           // in which case falling back to ArrayBuffer instantiation should work.
-          err('wasm streaming compile failed: ' + reason);
+          err(`wasm streaming compile failed: ${reason}`);
           err('falling back to ArrayBuffer instantiation');
           return instantiateArrayBuffer(binaryFile, imports, callback);
         });
@@ -877,7 +881,7 @@ function createWasm() {
     try {
       return Module['instantiateWasm'](info, receiveInstance);
     } catch(e) {
-      err('Module.instantiateWasm callback failed with error: ' + e);
+      err(`Module.instantiateWasm callback failed with error: ${e}`);
         return false;
     }
   }
@@ -936,6 +940,7 @@ function missingGlobal(sym, msg) {
 }
 
 missingGlobal('buffer', 'Please use HEAP8.buffer or wasmMemory.buffer');
+missingGlobal('asm', 'Please use wasmExports instead');
 
 function missingLibrarySymbol(sym) {
   if (typeof globalThis !== 'undefined' && !Object.getOwnPropertyDescriptor(globalThis, sym)) {
@@ -1010,23 +1015,22 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
     };
 
   
-  function getCppExceptionTag() {
+  var getCppExceptionTag = () =>
       // In static linking, tags are defined within the wasm module and are
       // exported, whereas in dynamic linking, tags are defined in library.js in
       // JS code and wasm modules import them.
-      return wasmExports['__cpp_exception'];
-    }
+      wasmExports['__cpp_exception'];
   
-  function getCppExceptionThrownObjectFromWebAssemblyException(ex) {
+  var getCppExceptionThrownObjectFromWebAssemblyException = (ex) => {
       // In Wasm EH, the value extracted from WebAssembly.Exception is a pointer
       // to the unwind header. Convert it to the actual thrown value.
       var unwind_header = ex.getArg(getCppExceptionTag(), 0);
       return ___thrown_object_from_unwind_exception(unwind_header);
-    }
-  function decrementExceptionRefcount(ex) {
+    };
+  var decrementExceptionRefcount = (ex) => {
       var ptr = getCppExceptionThrownObjectFromWebAssemblyException(ex);
       ___cxa_decrement_exception_refcount(ptr);
-    }
+    };
 
   
   
@@ -1126,10 +1130,10 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       }
       return [type, message];
     });
-  function getExceptionMessage(ex) {
+  var getExceptionMessage = (ex) => {
       var ptr = getCppExceptionThrownObjectFromWebAssemblyException(ex);
       return getExceptionMessageCommon(ptr);
-    }
+    };
   Module['getExceptionMessage'] = getExceptionMessage;
 
   
@@ -1153,10 +1157,10 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   }
 
   
-  function incrementExceptionRefcount(ex) {
+  var incrementExceptionRefcount = (ex) => {
       var ptr = getCppExceptionThrownObjectFromWebAssemblyException(ex);
       ___cxa_increment_exception_refcount(ptr);
-    }
+    };
 
   var ptrToString = (ptr) => {
       assert(typeof ptr === 'number');
@@ -1466,7 +1470,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           var fd = process.stdin.fd;
   
           try {
-            bytesRead = fs.readSync(fd, buf, 0, BUFSIZE, -1);
+            bytesRead = fs.readSync(fd, buf);
           } catch(e) {
             // Cross-platform differences: on Windows, reading EOF throws an exception, but on other OSes,
             // reading EOF returns 0. Uniformize behavior by treating the EOF exception to return 0.
@@ -1503,7 +1507,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
     };
   var TTY = {
   ttys:[],
-  init:function () {
+  init() {
         // https://github.com/emscripten-core/emscripten/pull/1555
         // if (ENVIRONMENT_IS_NODE) {
         //   // currently, FS.init does not distinguish if process.stdin is a file or TTY
@@ -1513,7 +1517,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         //   process.stdin.setEncoding('utf8');
         // }
       },
-  shutdown:function() {
+  shutdown() {
         // https://github.com/emscripten-core/emscripten/pull/1555
         // if (ENVIRONMENT_IS_NODE) {
         //   // inolen: any idea as to why node -e 'process.stdin.read()' wouldn't exit immediately (with process.stdin being a tty)?
@@ -1524,12 +1528,12 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         //   process.stdin.pause();
         // }
       },
-  register:function(dev, ops) {
+  register(dev, ops) {
         TTY.ttys[dev] = { input: [], output: [], ops: ops };
         FS.registerDevice(dev, TTY.stream_ops);
       },
   stream_ops:{
-  open:function(stream) {
+  open(stream) {
           var tty = TTY.ttys[stream.node.rdev];
           if (!tty) {
             throw new FS.ErrnoError(43);
@@ -1537,14 +1541,14 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           stream.tty = tty;
           stream.seekable = false;
         },
-  close:function(stream) {
+  close(stream) {
           // flush any pending line data
           stream.tty.ops.fsync(stream.tty);
         },
-  fsync:function(stream) {
+  fsync(stream) {
           stream.tty.ops.fsync(stream.tty);
         },
-  read:function(stream, buffer, offset, length, pos /* ignored */) {
+  read(stream, buffer, offset, length, pos /* ignored */) {
           if (!stream.tty || !stream.tty.ops.get_char) {
             throw new FS.ErrnoError(60);
           }
@@ -1568,7 +1572,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           }
           return bytesRead;
         },
-  write:function(stream, buffer, offset, length, pos) {
+  write(stream, buffer, offset, length, pos) {
           if (!stream.tty || !stream.tty.ops.put_char) {
             throw new FS.ErrnoError(60);
           }
@@ -1586,10 +1590,10 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         },
   },
   default_tty_ops:{
-  get_char:function(tty) {
+  get_char(tty) {
           return FS_stdin_getChar();
         },
-  put_char:function(tty, val) {
+  put_char(tty, val) {
           if (val === null || val === 10) {
             out(UTF8ArrayToString(tty.output, 0));
             tty.output = [];
@@ -1597,13 +1601,13 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
             if (val != 0) tty.output.push(val); // val == 0 would cut text output off in the middle.
           }
         },
-  fsync:function(tty) {
+  fsync(tty) {
           if (tty.output && tty.output.length > 0) {
             out(UTF8ArrayToString(tty.output, 0));
             tty.output = [];
           }
         },
-  ioctl_tcgets:function(tty) {
+  ioctl_tcgets(tty) {
           // typical setting
           return {
             c_iflag: 25856,
@@ -1617,16 +1621,16 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
             ]
           };
         },
-  ioctl_tcsets:function(tty, optional_actions, data) {
+  ioctl_tcsets(tty, optional_actions, data) {
           // currently just ignore
           return 0;
         },
-  ioctl_tiocgwinsz:function(tty) {
+  ioctl_tiocgwinsz(tty) {
           return [24, 80];
         },
   },
   default_tty1_ops:{
-  put_char:function(tty, val) {
+  put_char(tty, val) {
           if (val === null || val === 10) {
             err(UTF8ArrayToString(tty.output, 0));
             tty.output = [];
@@ -1634,7 +1638,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
             if (val != 0) tty.output.push(val);
           }
         },
-  fsync:function(tty) {
+  fsync(tty) {
           if (tty.output && tty.output.length > 0) {
             err(UTF8ArrayToString(tty.output, 0));
             tty.output = [];
@@ -2010,12 +2014,12 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
   
   var preloadPlugins = Module['preloadPlugins'] || [];
-  function FS_handledByPreloadPlugin(byteArray, fullname, finish, onerror) {
+  var FS_handledByPreloadPlugin = (byteArray, fullname, finish, onerror) => {
       // Ensure plugins are ready.
       if (typeof Browser != 'undefined') Browser.init();
   
       var handled = false;
-      preloadPlugins.forEach(function(plugin) {
+      preloadPlugins.forEach((plugin) => {
         if (handled) return;
         if (plugin['canHandle'](fullname)) {
           plugin['handle'](byteArray, fullname, finish, onerror);
@@ -2023,8 +2027,8 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
       });
       return handled;
-    }
-  function FS_createPreloadedFile(parent, name, url, canRead, canWrite, onload, onerror, dontCreateFile, canOwn, preFinish) {
+    };
+  var FS_createPreloadedFile = (parent, name, url, canRead, canWrite, onload, onerror, dontCreateFile, canOwn, preFinish) => {
       // TODO we should allow people to just pass in a complete filename instead
       // of parent and name being that we just join them anyways
       var fullname = name ? PATH_FS.resolve(PATH.join2(parent, name)) : parent;
@@ -2052,9 +2056,9 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       } else {
         processData(url);
       }
-    }
+    };
   
-  function FS_modeStringToFlags(str) {
+  var FS_modeStringToFlags = (str) => {
       var flagModes = {
         'r': 0,
         'r+': 2,
@@ -2068,14 +2072,14 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         throw new Error(`Unknown file open mode: ${str}`);
       }
       return flags;
-    }
+    };
   
-  function FS_getMode(canRead, canWrite) {
+  var FS_getMode = (canRead, canWrite) => {
       var mode = 0;
       if (canRead) mode |= 292 | 73;
       if (canWrite) mode |= 146;
       return mode;
-    }
+    };
   
   
   
@@ -2205,11 +2209,11 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   var ERRNO_CODES = {
   };
   
-  function demangle(func) {
+  var demangle = (func) => {
       warnOnce('warning: build with -sDEMANGLE_SUPPORT to link in libcxxabi demangling');
       return func;
-    }
-  function demangleAll(text) {
+    };
+  var demangleAll = (text) => {
       var regex =
         /\b_Z[\w\d_]+/g;
       return text.replace(regex,
@@ -2217,7 +2221,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           var y = demangle(x);
           return x === y ? x : (y + ' [' + x + ']');
         });
-    }
+    };
   var FS = {
   root:null,
   mounts:[],
@@ -2234,7 +2238,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   },
   filesystems:null,
   syncFSRequests:0,
-  lookupPath:(path, opts = {}) => {
+  lookupPath(path, opts = {}) {
         path = PATH_FS.resolve(path);
   
         if (!path) return { path: '', node: null };
@@ -2293,7 +2297,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
         return { path: current_path, node: current };
       },
-  getPath:(node) => {
+  getPath(node) {
         var path;
         while (true) {
           if (FS.isRoot(node)) {
@@ -2305,7 +2309,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           node = node.parent;
         }
       },
-  hashName:(parentid, name) => {
+  hashName(parentid, name) {
         var hash = 0;
   
         for (var i = 0; i < name.length; i++) {
@@ -2313,12 +2317,12 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         return ((parentid + hash) >>> 0) % FS.nameTable.length;
       },
-  hashAddNode:(node) => {
+  hashAddNode(node) {
         var hash = FS.hashName(node.parent.id, node.name);
         node.name_next = FS.nameTable[hash];
         FS.nameTable[hash] = node;
       },
-  hashRemoveNode:(node) => {
+  hashRemoveNode(node) {
         var hash = FS.hashName(node.parent.id, node.name);
         if (FS.nameTable[hash] === node) {
           FS.nameTable[hash] = node.name_next;
@@ -2333,7 +2337,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           }
         }
       },
-  lookupNode:(parent, name) => {
+  lookupNode(parent, name) {
         var errCode = FS.mayLookup(parent);
         if (errCode) {
           throw new FS.ErrnoError(errCode, parent);
@@ -2348,7 +2352,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         // if we failed to find it in the cache, call into the VFS
         return FS.lookup(parent, name);
       },
-  createNode:(parent, name, mode, rdev) => {
+  createNode(parent, name, mode, rdev) {
         assert(typeof parent == 'object')
         var node = new FS.FSNode(parent, name, mode, rdev);
   
@@ -2356,44 +2360,44 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
         return node;
       },
-  destroyNode:(node) => {
+  destroyNode(node) {
         FS.hashRemoveNode(node);
       },
-  isRoot:(node) => {
+  isRoot(node) {
         return node === node.parent;
       },
-  isMountpoint:(node) => {
+  isMountpoint(node) {
         return !!node.mounted;
       },
-  isFile:(mode) => {
+  isFile(mode) {
         return (mode & 61440) === 32768;
       },
-  isDir:(mode) => {
+  isDir(mode) {
         return (mode & 61440) === 16384;
       },
-  isLink:(mode) => {
+  isLink(mode) {
         return (mode & 61440) === 40960;
       },
-  isChrdev:(mode) => {
+  isChrdev(mode) {
         return (mode & 61440) === 8192;
       },
-  isBlkdev:(mode) => {
+  isBlkdev(mode) {
         return (mode & 61440) === 24576;
       },
-  isFIFO:(mode) => {
+  isFIFO(mode) {
         return (mode & 61440) === 4096;
       },
-  isSocket:(mode) => {
+  isSocket(mode) {
         return (mode & 49152) === 49152;
       },
-  flagsToPermissionString:(flag) => {
+  flagsToPermissionString(flag) {
         var perms = ['r', 'w', 'rw'][flag & 3];
         if ((flag & 512)) {
           perms += 'w';
         }
         return perms;
       },
-  nodePermissions:(node, perms) => {
+  nodePermissions(node, perms) {
         if (FS.ignorePermissions) {
           return 0;
         }
@@ -2407,13 +2411,13 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         return 0;
       },
-  mayLookup:(dir) => {
+  mayLookup(dir) {
         var errCode = FS.nodePermissions(dir, 'x');
         if (errCode) return errCode;
         if (!dir.node_ops.lookup) return 2;
         return 0;
       },
-  mayCreate:(dir, name) => {
+  mayCreate(dir, name) {
         try {
           var node = FS.lookupNode(dir, name);
           return 20;
@@ -2421,7 +2425,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         return FS.nodePermissions(dir, 'wx');
       },
-  mayDelete:(dir, name, isdir) => {
+  mayDelete(dir, name, isdir) {
         var node;
         try {
           node = FS.lookupNode(dir, name);
@@ -2446,7 +2450,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         return 0;
       },
-  mayOpen:(node, flags) => {
+  mayOpen(node, flags) {
         if (!node) {
           return 44;
         }
@@ -2461,7 +2465,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         return FS.nodePermissions(node, FS.flagsToPermissionString(flags));
       },
   MAX_OPEN_FDS:4096,
-  nextfd:() => {
+  nextfd() {
         for (var fd = 0; fd <= FS.MAX_OPEN_FDS; fd++) {
           if (!FS.streams[fd]) {
             return fd;
@@ -2469,7 +2473,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         throw new FS.ErrnoError(33);
       },
-  getStreamChecked:(fd) => {
+  getStreamChecked(fd) {
         var stream = FS.getStream(fd);
         if (!stream) {
           throw new FS.ErrnoError(8);
@@ -2477,7 +2481,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         return stream;
       },
   getStream:(fd) => FS.streams[fd],
-  createStream:(stream, fd = -1) => {
+  createStream(stream, fd = -1) {
         if (!FS.FSStream) {
           FS.FSStream = /** @constructor */ function() {
             this.shared = { };
@@ -2525,11 +2529,11 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         FS.streams[fd] = stream;
         return stream;
       },
-  closeStream:(fd) => {
+  closeStream(fd) {
         FS.streams[fd] = null;
       },
   chrdev_stream_ops:{
-  open:(stream) => {
+  open(stream) {
           var device = FS.getDevice(stream.node.rdev);
           // override node's stream ops with the device's
           stream.stream_ops = device.stream_ops;
@@ -2538,18 +2542,18 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
             stream.stream_ops.open(stream);
           }
         },
-  llseek:() => {
+  llseek() {
           throw new FS.ErrnoError(70);
         },
   },
   major:(dev) => ((dev) >> 8),
   minor:(dev) => ((dev) & 0xff),
   makedev:(ma, mi) => ((ma) << 8 | (mi)),
-  registerDevice:(dev, ops) => {
+  registerDevice(dev, ops) {
         FS.devices[dev] = { stream_ops: ops };
       },
   getDevice:(dev) => FS.devices[dev],
-  getMounts:(mount) => {
+  getMounts(mount) {
         var mounts = [];
         var check = [mount];
   
@@ -2563,7 +2567,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
         return mounts;
       },
-  syncfs:(populate, callback) => {
+  syncfs(populate, callback) {
         if (typeof populate == 'function') {
           callback = populate;
           populate = false;
@@ -2605,7 +2609,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           mount.type.syncfs(mount, populate, done);
         });
       },
-  mount:(type, opts, mountpoint) => {
+  mount(type, opts, mountpoint) {
         if (typeof type == 'string') {
           // The filesystem was not included, and instead we have an error
           // message stored in the variable.
@@ -2658,7 +2662,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
         return mountRoot;
       },
-  unmount:(mountpoint) => {
+  unmount(mountpoint) {
         var lookup = FS.lookupPath(mountpoint, { follow_mount: false });
   
         if (!FS.isMountpoint(lookup.node)) {
@@ -2692,10 +2696,10 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         assert(idx !== -1);
         node.mount.mounts.splice(idx, 1);
       },
-  lookup:(parent, name) => {
+  lookup(parent, name) {
         return parent.node_ops.lookup(parent, name);
       },
-  mknod:(path, mode, dev) => {
+  mknod(path, mode, dev) {
         var lookup = FS.lookupPath(path, { parent: true });
         var parent = lookup.node;
         var name = PATH.basename(path);
@@ -2711,19 +2715,19 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         return parent.node_ops.mknod(parent, name, mode, dev);
       },
-  create:(path, mode) => {
+  create(path, mode) {
         mode = mode !== undefined ? mode : 438 /* 0666 */;
         mode &= 4095;
         mode |= 32768;
         return FS.mknod(path, mode, 0);
       },
-  mkdir:(path, mode) => {
+  mkdir(path, mode) {
         mode = mode !== undefined ? mode : 511 /* 0777 */;
         mode &= 511 | 512;
         mode |= 16384;
         return FS.mknod(path, mode, 0);
       },
-  mkdirTree:(path, mode) => {
+  mkdirTree(path, mode) {
         var dirs = path.split('/');
         var d = '';
         for (var i = 0; i < dirs.length; ++i) {
@@ -2736,7 +2740,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           }
         }
       },
-  mkdev:(path, mode, dev) => {
+  mkdev(path, mode, dev) {
         if (typeof dev == 'undefined') {
           dev = mode;
           mode = 438 /* 0666 */;
@@ -2744,7 +2748,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         mode |= 8192;
         return FS.mknod(path, mode, dev);
       },
-  symlink:(oldpath, newpath) => {
+  symlink(oldpath, newpath) {
         if (!PATH_FS.resolve(oldpath)) {
           throw new FS.ErrnoError(44);
         }
@@ -2763,7 +2767,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         return parent.node_ops.symlink(parent, newname, oldpath);
       },
-  rename:(old_path, new_path) => {
+  rename(old_path, new_path) {
         var old_dirname = PATH.dirname(old_path);
         var new_dirname = PATH.dirname(new_path);
         var old_name = PATH.basename(old_path);
@@ -2845,7 +2849,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           FS.hashAddNode(old_node);
         }
       },
-  rmdir:(path) => {
+  rmdir(path) {
         var lookup = FS.lookupPath(path, { parent: true });
         var parent = lookup.node;
         var name = PATH.basename(path);
@@ -2863,7 +2867,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         parent.node_ops.rmdir(parent, name);
         FS.destroyNode(node);
       },
-  readdir:(path) => {
+  readdir(path) {
         var lookup = FS.lookupPath(path, { follow: true });
         var node = lookup.node;
         if (!node.node_ops.readdir) {
@@ -2871,7 +2875,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         return node.node_ops.readdir(node);
       },
-  unlink:(path) => {
+  unlink(path) {
         var lookup = FS.lookupPath(path, { parent: true });
         var parent = lookup.node;
         if (!parent) {
@@ -2895,7 +2899,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         parent.node_ops.unlink(parent, name);
         FS.destroyNode(node);
       },
-  readlink:(path) => {
+  readlink(path) {
         var lookup = FS.lookupPath(path);
         var link = lookup.node;
         if (!link) {
@@ -2906,7 +2910,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         return PATH_FS.resolve(FS.getPath(link.parent), link.node_ops.readlink(link));
       },
-  stat:(path, dontFollow) => {
+  stat(path, dontFollow) {
         var lookup = FS.lookupPath(path, { follow: !dontFollow });
         var node = lookup.node;
         if (!node) {
@@ -2917,10 +2921,10 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         return node.node_ops.getattr(node);
       },
-  lstat:(path) => {
+  lstat(path) {
         return FS.stat(path, true);
       },
-  chmod:(path, mode, dontFollow) => {
+  chmod(path, mode, dontFollow) {
         var node;
         if (typeof path == 'string') {
           var lookup = FS.lookupPath(path, { follow: !dontFollow });
@@ -2936,14 +2940,14 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           timestamp: Date.now()
         });
       },
-  lchmod:(path, mode) => {
+  lchmod(path, mode) {
         FS.chmod(path, mode, true);
       },
-  fchmod:(fd, mode) => {
+  fchmod(fd, mode) {
         var stream = FS.getStreamChecked(fd);
         FS.chmod(stream.node, mode);
       },
-  chown:(path, uid, gid, dontFollow) => {
+  chown(path, uid, gid, dontFollow) {
         var node;
         if (typeof path == 'string') {
           var lookup = FS.lookupPath(path, { follow: !dontFollow });
@@ -2959,14 +2963,14 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           // we ignore the uid / gid for now
         });
       },
-  lchown:(path, uid, gid) => {
+  lchown(path, uid, gid) {
         FS.chown(path, uid, gid, true);
       },
-  fchown:(fd, uid, gid) => {
+  fchown(fd, uid, gid) {
         var stream = FS.getStreamChecked(fd);
         FS.chown(stream.node, uid, gid);
       },
-  truncate:(path, len) => {
+  truncate(path, len) {
         if (len < 0) {
           throw new FS.ErrnoError(28);
         }
@@ -2995,21 +2999,21 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           timestamp: Date.now()
         });
       },
-  ftruncate:(fd, len) => {
+  ftruncate(fd, len) {
         var stream = FS.getStreamChecked(fd);
         if ((stream.flags & 2097155) === 0) {
           throw new FS.ErrnoError(28);
         }
         FS.truncate(stream.node, len);
       },
-  utime:(path, atime, mtime) => {
+  utime(path, atime, mtime) {
         var lookup = FS.lookupPath(path, { follow: true });
         var node = lookup.node;
         node.node_ops.setattr(node, {
           timestamp: Math.max(atime, mtime)
         });
       },
-  open:(path, flags, mode) => {
+  open(path, flags, mode) {
         if (path === "") {
           throw new FS.ErrnoError(44);
         }
@@ -3099,7 +3103,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         return stream;
       },
-  close:(stream) => {
+  close(stream) {
         if (FS.isClosed(stream)) {
           throw new FS.ErrnoError(8);
         }
@@ -3115,10 +3119,10 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         stream.fd = null;
       },
-  isClosed:(stream) => {
+  isClosed(stream) {
         return stream.fd === null;
       },
-  llseek:(stream, offset, whence) => {
+  llseek(stream, offset, whence) {
         if (FS.isClosed(stream)) {
           throw new FS.ErrnoError(8);
         }
@@ -3132,7 +3136,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         stream.ungotten = [];
         return stream.position;
       },
-  read:(stream, buffer, offset, length, position) => {
+  read(stream, buffer, offset, length, position) {
         assert(offset >= 0);
         if (length < 0 || position < 0) {
           throw new FS.ErrnoError(28);
@@ -3159,7 +3163,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         if (!seeking) stream.position += bytesRead;
         return bytesRead;
       },
-  write:(stream, buffer, offset, length, position, canOwn) => {
+  write(stream, buffer, offset, length, position, canOwn) {
         assert(offset >= 0);
         if (length < 0 || position < 0) {
           throw new FS.ErrnoError(28);
@@ -3190,7 +3194,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         if (!seeking) stream.position += bytesWritten;
         return bytesWritten;
       },
-  allocate:(stream, offset, length) => {
+  allocate(stream, offset, length) {
         if (FS.isClosed(stream)) {
           throw new FS.ErrnoError(8);
         }
@@ -3208,7 +3212,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         stream.stream_ops.allocate(stream, offset, length);
       },
-  mmap:(stream, length, position, prot, flags) => {
+  mmap(stream, length, position, prot, flags) {
         // User requests writing to file (prot & PROT_WRITE != 0).
         // Checking if we have permissions to write to the file unless
         // MAP_PRIVATE flag is set. According to POSIX spec it is possible
@@ -3228,7 +3232,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         return stream.stream_ops.mmap(stream, length, position, prot, flags);
       },
-  msync:(stream, buffer, offset, length, mmapFlags) => {
+  msync(stream, buffer, offset, length, mmapFlags) {
         assert(offset >= 0);
         if (!stream.stream_ops.msync) {
           return 0;
@@ -3236,13 +3240,13 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         return stream.stream_ops.msync(stream, buffer, offset, length, mmapFlags);
       },
   munmap:(stream) => 0,
-  ioctl:(stream, cmd, arg) => {
+  ioctl(stream, cmd, arg) {
         if (!stream.stream_ops.ioctl) {
           throw new FS.ErrnoError(59);
         }
         return stream.stream_ops.ioctl(stream, cmd, arg);
       },
-  readFile:(path, opts = {}) => {
+  readFile(path, opts = {}) {
         opts.flags = opts.flags || 0;
         opts.encoding = opts.encoding || 'binary';
         if (opts.encoding !== 'utf8' && opts.encoding !== 'binary') {
@@ -3262,7 +3266,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         FS.close(stream);
         return ret;
       },
-  writeFile:(path, data, opts = {}) => {
+  writeFile(path, data, opts = {}) {
         opts.flags = opts.flags || 577;
         var stream = FS.open(path, opts.flags, opts.mode);
         if (typeof data == 'string') {
@@ -3277,7 +3281,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         FS.close(stream);
       },
   cwd:() => FS.currentPath,
-  chdir:(path) => {
+  chdir(path) {
         var lookup = FS.lookupPath(path, { follow: true });
         if (lookup.node === null) {
           throw new FS.ErrnoError(44);
@@ -3291,12 +3295,12 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         FS.currentPath = lookup.path;
       },
-  createDefaultDirectories:() => {
+  createDefaultDirectories() {
         FS.mkdir('/tmp');
         FS.mkdir('/home');
         FS.mkdir('/home/web_user');
       },
-  createDefaultDevices:() => {
+  createDefaultDevices() {
         // create /dev
         FS.mkdir('/dev');
         // setup /dev/null
@@ -3328,17 +3332,17 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         FS.mkdir('/dev/shm');
         FS.mkdir('/dev/shm/tmp');
       },
-  createSpecialDirectories:() => {
+  createSpecialDirectories() {
         // create /proc/self/fd which allows /proc/self/fd/6 => readlink gives the
         // name of the stream for fd 6 (see test_unistd_ttyname)
         FS.mkdir('/proc');
         var proc_self = FS.mkdir('/proc/self');
         FS.mkdir('/proc/self/fd');
         FS.mount({
-          mount: () => {
+          mount() {
             var node = FS.createNode(proc_self, 'fd', 16384 | 511 /* 0777 */, 73);
             node.node_ops = {
-              lookup: (parent, name) => {
+              lookup(parent, name) {
                 var fd = +name;
                 var stream = FS.getStreamChecked(fd);
                 var ret = {
@@ -3354,7 +3358,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           }
         }, {}, '/proc/self/fd');
       },
-  createStandardStreams:() => {
+  createStandardStreams() {
         // TODO deprecate the old functionality of a single
         // input / output callback and that utilizes FS.createDevice
         // and instead require a unique set of stream ops
@@ -3387,7 +3391,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         assert(stdout.fd === 1, `invalid handle for stdout (${stdout.fd})`);
         assert(stderr.fd === 2, `invalid handle for stderr (${stderr.fd})`);
       },
-  ensureErrnoError:() => {
+  ensureErrnoError() {
         if (FS.ErrnoError) return;
         FS.ErrnoError = /** @this{Object} */ function ErrnoError(errno, node) {
           // We set the `name` property to be able to identify `FS.ErrnoError`
@@ -3426,7 +3430,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           FS.genericErrors[code].stack = '<generic error, no stack>';
         });
       },
-  staticInit:() => {
+  staticInit() {
         FS.ensureErrnoError();
   
         FS.nameTable = new Array(4096);
@@ -3441,7 +3445,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           'MEMFS': MEMFS,
         };
       },
-  init:(input, output, error) => {
+  init(input, output, error) {
         assert(!FS.init.initialized, 'FS.init was previously called. If you want to initialize later with custom parameters, remove any earlier calls (note that one is automatically added to the generated code)');
         FS.init.initialized = true;
   
@@ -3454,7 +3458,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
         FS.createStandardStreams();
       },
-  quit:() => {
+  quit() {
         FS.init.initialized = false;
         // force-flush all streams, so we get musl std streams printed out
         _fflush(0);
@@ -3467,14 +3471,14 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           FS.close(stream);
         }
       },
-  findObject:(path, dontResolveLastLink) => {
+  findObject(path, dontResolveLastLink) {
         var ret = FS.analyzePath(path, dontResolveLastLink);
         if (!ret.exists) {
           return null;
         }
         return ret.object;
       },
-  analyzePath:(path, dontResolveLastLink) => {
+  analyzePath(path, dontResolveLastLink) {
         // operate from within the context of the symlink's target
         try {
           var lookup = FS.lookupPath(path, { follow: !dontResolveLastLink });
@@ -3502,7 +3506,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         };
         return ret;
       },
-  createPath:(parent, path, canRead, canWrite) => {
+  createPath(parent, path, canRead, canWrite) {
         parent = typeof parent == 'string' ? parent : FS.getPath(parent);
         var parts = path.split('/').reverse();
         while (parts.length) {
@@ -3518,12 +3522,12 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         return current;
       },
-  createFile:(parent, name, properties, canRead, canWrite) => {
+  createFile(parent, name, properties, canRead, canWrite) {
         var path = PATH.join2(typeof parent == 'string' ? parent : FS.getPath(parent), name);
         var mode = FS_getMode(canRead, canWrite);
         return FS.create(path, mode);
       },
-  createDataFile:(parent, name, data, canRead, canWrite, canOwn) => {
+  createDataFile(parent, name, data, canRead, canWrite, canOwn) {
         var path = name;
         if (parent) {
           parent = typeof parent == 'string' ? parent : FS.getPath(parent);
@@ -3546,7 +3550,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         return node;
       },
-  createDevice:(parent, name, input, output) => {
+  createDevice(parent, name, input, output) {
         var path = PATH.join2(typeof parent == 'string' ? parent : FS.getPath(parent), name);
         var mode = FS_getMode(!!input, !!output);
         if (!FS.createDevice.major) FS.createDevice.major = 64;
@@ -3554,16 +3558,16 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         // Create a fake device that a set of stream ops to emulate
         // the old behavior.
         FS.registerDevice(dev, {
-          open: (stream) => {
+          open(stream) {
             stream.seekable = false;
           },
-          close: (stream) => {
+          close(stream) {
             // flush any pending line data
             if (output && output.buffer && output.buffer.length) {
               output(10);
             }
           },
-          read: (stream, buffer, offset, length, pos /* ignored */) => {
+          read(stream, buffer, offset, length, pos /* ignored */) {
             var bytesRead = 0;
             for (var i = 0; i < length; i++) {
               var result;
@@ -3584,7 +3588,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
             }
             return bytesRead;
           },
-          write: (stream, buffer, offset, length, pos) => {
+          write(stream, buffer, offset, length, pos) {
             for (var i = 0; i < length; i++) {
               try {
                 output(buffer[offset+i]);
@@ -3600,7 +3604,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         });
         return FS.mkdev(path, mode, dev);
       },
-  forceLoadFile:(obj) => {
+  forceLoadFile(obj) {
         if (obj.isDevice || obj.isFolder || obj.link || obj.contents) return true;
         if (typeof XMLHttpRequest != 'undefined') {
           throw new Error("Lazy loading should have been performed (contents set) in createLazyFile, but it was not. Lazy loading only works in web workers. Use --embed-file or --preload-file in emcc on the main thread.");
@@ -3618,7 +3622,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           throw new Error('Cannot load without read() or XMLHttpRequest.');
         }
       },
-  createLazyFile:(parent, name, url, canRead, canWrite) => {
+  createLazyFile(parent, name, url, canRead, canWrite) {
         // Lazy chunked Uint8Array (implements get and length from Uint8Array). Actual getting is abstracted away for eventual reuse.
         /** @constructor */
         function LazyUint8Array() {
@@ -3786,29 +3790,29 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         node.stream_ops = stream_ops;
         return node;
       },
-  absolutePath:() => {
+  absolutePath() {
         abort('FS.absolutePath has been removed; use PATH_FS.resolve instead');
       },
-  createFolder:() => {
+  createFolder() {
         abort('FS.createFolder has been removed; use FS.mkdir instead');
       },
-  createLink:() => {
+  createLink() {
         abort('FS.createLink has been removed; use FS.symlink instead');
       },
-  joinPath:() => {
+  joinPath() {
         abort('FS.joinPath has been removed; use PATH.join instead');
       },
-  mmapAlloc:() => {
+  mmapAlloc() {
         abort('FS.mmapAlloc has been replaced by the top level function mmapAlloc');
       },
-  standardizePath:() => {
+  standardizePath() {
         abort('FS.standardizePath has been removed; use PATH.normalize instead');
       },
   };
   
   var SYSCALLS = {
   DEFAULT_POLLMASK:5,
-  calculateAt:function(dirfd, path, allowEmpty) {
+  calculateAt(dirfd, path, allowEmpty) {
         if (PATH.isAbs(path)) {
           return path;
         }
@@ -3828,7 +3832,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         return PATH.join2(dir, path);
       },
-  doStat:function(func, path, buf) {
+  doStat(func, path, buf) {
         try {
           var stat = func(path);
         } catch (e) {
@@ -3859,7 +3863,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         (tempI64 = [stat.ino>>>0,(tempDouble=stat.ino,(+(Math.abs(tempDouble))) >= 1.0 ? (tempDouble > 0.0 ? (+(Math.floor((tempDouble)/4294967296.0)))>>>0 : (~~((+(Math.ceil((tempDouble - +(((~~(tempDouble)))>>>0))/4294967296.0)))))>>>0) : 0)], HEAP32[(((buf)+(88))>>2)] = tempI64[0],HEAP32[(((buf)+(92))>>2)] = tempI64[1]);
         return 0;
       },
-  doMsync:function(addr, stream, len, flags, offset) {
+  doMsync(addr, stream, len, flags, offset) {
         if (!FS.isFile(stream.node.mode)) {
           throw new FS.ErrnoError(43);
         }
@@ -3873,15 +3877,16 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   varargs:undefined,
   get() {
         assert(SYSCALLS.varargs != undefined);
+        var ret = HEAP32[((SYSCALLS.varargs)>>2)];
         SYSCALLS.varargs += 4;
-        var ret = HEAP32[(((SYSCALLS.varargs)-(4))>>2)];
         return ret;
       },
+  getp() { return SYSCALLS.get() },
   getStr(ptr) {
         var ret = UTF8ToString(ptr);
         return ret;
       },
-  getStreamFromFD:function(fd) {
+  getStreamFromFD(fd) {
         var stream = FS.getStreamChecked(fd);
         return stream;
       },
@@ -3896,6 +3901,9 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           var arg = SYSCALLS.get();
           if (arg < 0) {
             return -28;
+          }
+          while (FS.streams[arg]) {
+            arg++;
           }
           var newStream;
           newStream = FS.createStream(stream, arg);
@@ -3912,7 +3920,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           return 0;
         }
         case 5: {
-          var arg = SYSCALLS.get();
+          var arg = SYSCALLS.getp();
           var offset = 0;
           // We're always unlocked.
           HEAP16[(((arg)+(offset))>>1)] = 2;
@@ -3952,7 +3960,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           if (!stream.tty) return -59;
           if (stream.tty.ops.ioctl_tcgets) {
             var termios = stream.tty.ops.ioctl_tcgets(stream);
-            var argp = SYSCALLS.get();
+            var argp = SYSCALLS.getp();
             HEAP32[((argp)>>2)] = termios.c_iflag || 0;
             HEAP32[(((argp)+(4))>>2)] = termios.c_oflag || 0;
             HEAP32[(((argp)+(8))>>2)] = termios.c_cflag || 0;
@@ -3975,7 +3983,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         case 21508: {
           if (!stream.tty) return -59;
           if (stream.tty.ops.ioctl_tcsets) {
-            var argp = SYSCALLS.get();
+            var argp = SYSCALLS.getp();
             var c_iflag = HEAP32[((argp)>>2)];
             var c_oflag = HEAP32[(((argp)+(4))>>2)];
             var c_cflag = HEAP32[(((argp)+(8))>>2)];
@@ -3990,7 +3998,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         case 21519: {
           if (!stream.tty) return -59;
-          var argp = SYSCALLS.get();
+          var argp = SYSCALLS.getp();
           HEAP32[((argp)>>2)] = 0;
           return 0;
         }
@@ -3999,7 +4007,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           return -28; // not supported
         }
         case 21531: {
-          var argp = SYSCALLS.get();
+          var argp = SYSCALLS.getp();
           return FS.ioctl(stream, op, argp);
         }
         case 21523: {
@@ -4008,7 +4016,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           if (!stream.tty) return -59;
           if (stream.tty.ops.ioctl_tiocgwinsz) {
             var winsize = stream.tty.ops.ioctl_tiocgwinsz(stream.tty);
-            var argp = SYSCALLS.get();
+            var argp = SYSCALLS.getp();
             HEAP16[((argp)>>1)] = winsize[0];
             HEAP16[(((argp)+(2))>>1)] = winsize[1];
           }
@@ -4048,7 +4056,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   }
 
   
-  function ___throw_exception_with_stack_trace(ex) {
+  var ___throw_exception_with_stack_trace = (ex) => {
       var e = new WebAssembly.Exception(getCppExceptionTag(), [ex], {traceStack: true});
       e.message = getExceptionMessage(e);
       // The generated stack trace will be in the form of:
@@ -4066,37 +4074,26 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         e.stack = arr.join('\n');
       }
       throw e;
-    }
+    };
 
-  function __embind_register_bigint(primitiveType, name, size, minRange, maxRange) {}
+  var __embind_register_bigint = (primitiveType, name, size, minRange, maxRange) => {};
 
-  function getShiftFromSize(size) {
-      switch (size) {
-          case 1: return 0;
-          case 2: return 1;
-          case 4: return 2;
-          case 8: return 3;
-          default:
-              throw new TypeError(`Unknown type size: ${size}`);
-      }
-    }
-  
-  function embind_init_charCodes() {
+  var embind_init_charCodes = () => {
       var codes = new Array(256);
       for (var i = 0; i < 256; ++i) {
           codes[i] = String.fromCharCode(i);
       }
       embind_charCodes = codes;
-    }
+    };
   var embind_charCodes = undefined;
-  function readLatin1String(ptr) {
+  var readLatin1String = (ptr) => {
       var ret = "";
       var c = ptr;
       while (HEAPU8[c]) {
           ret += embind_charCodes[HEAPU8[c++]];
       }
       return ret;
-    }
+    };
   
   var awaitingDependencies = {
   };
@@ -4108,18 +4105,14 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   };
   
   var BindingError = undefined;
-  function throwBindingError(message) {
-      throw new BindingError(message);
-    }
+  var throwBindingError = (message) => { throw new BindingError(message); };
   
   
   
   
   var InternalError = undefined;
-  function throwInternalError(message) {
-      throw new InternalError(message);
-    }
-  function whenDependentTypesAreResolved(myTypes, dependentTypes, getTypeConverters) {
+  var throwInternalError = (message) => { throw new InternalError(message); };
+  var whenDependentTypesAreResolved = (myTypes, dependentTypes, getTypeConverters) => {
       myTypes.forEach(function(type) {
           typeDependencies[type] = dependentTypes;
       });
@@ -4157,7 +4150,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       if (0 === unregisteredTypes.length) {
         onComplete(typeConverters);
       }
-    }
+    };
   /** @param {Object=} options */
   function sharedRegisterType(rawType, registeredInstance, options = {}) {
       var name = registeredInstance.name;
@@ -4188,9 +4181,9 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       }
       return sharedRegisterType(rawType, registeredInstance, options);
     }
-  function __embind_register_bool(rawType, name, size, trueValue, falseValue) {
-      var shift = getShiftFromSize(size);
   
+  var GenericWireTypeSize = 8;
+  var __embind_register_bool = (rawType, name, trueValue, falseValue) => {
       name = readLatin1String(name);
       registerType(rawType, {
           name,
@@ -4202,24 +4195,13 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           'toWireType': function(destructors, o) {
               return o ? trueValue : falseValue;
           },
-          'argPackAdvance': 8,
+          'argPackAdvance': GenericWireTypeSize,
           'readValueFromPointer': function(pointer) {
-              // TODO: if heap is fixed (like in asm.js) this could be executed outside
-              var heap;
-              if (size === 1) {
-                  heap = HEAP8;
-              } else if (size === 2) {
-                  heap = HEAP16;
-              } else if (size === 4) {
-                  heap = HEAP32;
-              } else {
-                  throw new TypeError("Unknown boolean type size: " + name);
-              }
-              return this['fromWireType'](heap[pointer >> shift]);
+              return this['fromWireType'](HEAPU8[pointer]);
           },
           destructorFunction: null, // This type does not need a destructor
       });
-    }
+    };
 
   
   function ClassHandle_isAliasOf(other) {
@@ -4248,7 +4230,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       return leftClass === rightClass && left === right;
     }
   
-  function shallowCopyInternalPointer(o) {
+  var shallowCopyInternalPointer = (o) => {
       return {
         count: o.count,
         deleteScheduled: o.deleteScheduled,
@@ -4258,35 +4240,35 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         smartPtr: o.smartPtr,
         smartPtrType: o.smartPtrType,
       };
-    }
+    };
   
-  function throwInstanceAlreadyDeleted(obj) {
+  var throwInstanceAlreadyDeleted = (obj) => {
       function getInstanceTypeName(handle) {
         return handle.$$.ptrType.registeredClass.name;
       }
       throwBindingError(getInstanceTypeName(obj) + ' instance already deleted');
-    }
+    };
   
   var finalizationRegistry = false;
   
-  function detachFinalizer(handle) {}
+  var detachFinalizer = (handle) => {};
   
-  function runDestructor($$) {
+  var runDestructor = ($$) => {
       if ($$.smartPtr) {
         $$.smartPtrType.rawDestructor($$.smartPtr);
       } else {
         $$.ptrType.registeredClass.rawDestructor($$.ptr);
       }
-    }
-  function releaseClassHandle($$) {
+    };
+  var releaseClassHandle = ($$) => {
       $$.count.value -= 1;
       var toDelete = 0 === $$.count.value;
       if (toDelete) {
         runDestructor($$);
       }
-    }
+    };
   
-  function downcastPointer(ptr, ptrClass, desiredClass) {
+  var downcastPointer = (ptr, ptrClass, desiredClass) => {
       if (ptrClass === desiredClass) {
         return ptr;
       }
@@ -4299,16 +4281,16 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         return null;
       }
       return desiredClass.downcast(rv);
-    }
+    };
   
   var registeredPointers = {
   };
   
-  function getInheritedInstanceCount() {
+  var getInheritedInstanceCount = () => {
       return Object.keys(registeredInstances).length;
-    }
+    };
   
-  function getLiveInheritedInstances() {
+  var getLiveInheritedInstances = () => {
       var rv = [];
       for (var k in registeredInstances) {
         if (registeredInstances.hasOwnProperty(k)) {
@@ -4316,36 +4298,36 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
       }
       return rv;
-    }
+    };
   
   var deletionQueue = [];
-  function flushPendingDeletes() {
+  var flushPendingDeletes = () => {
       while (deletionQueue.length) {
         var obj = deletionQueue.pop();
         obj.$$.deleteScheduled = false;
         obj['delete']();
       }
-    }
+    };
   
   var delayFunction = undefined;
   
   
-  function setDelayFunction(fn) {
+  var setDelayFunction = (fn) => {
       delayFunction = fn;
       if (deletionQueue.length && delayFunction) {
         delayFunction(flushPendingDeletes);
       }
-    }
-  function init_embind() {
+    };
+  var init_embind = () => {
       Module['getInheritedInstanceCount'] = getInheritedInstanceCount;
       Module['getLiveInheritedInstances'] = getLiveInheritedInstances;
       Module['flushPendingDeletes'] = flushPendingDeletes;
       Module['setDelayFunction'] = setDelayFunction;
-    }
+    };
   var registeredInstances = {
   };
   
-  function getBasestPointer(class_, ptr) {
+  var getBasestPointer = (class_, ptr) => {
       if (ptr === undefined) {
           throwBindingError('ptr should not be undefined');
       }
@@ -4354,14 +4336,14 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           class_ = class_.baseClass;
       }
       return ptr;
-    }
-  function getInheritedInstance(class_, ptr) {
+    };
+  var getInheritedInstance = (class_, ptr) => {
       ptr = getBasestPointer(class_, ptr);
       return registeredInstances[ptr];
-    }
+    };
   
   
-  function makeClassHandle(prototype, record) {
+  var makeClassHandle = (prototype, record) => {
       if (!record.ptrType || !record.ptr) {
         throwInternalError('makeClassHandle requires ptr and ptrType');
       }
@@ -4376,7 +4358,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
             value: record,
         },
       }));
-    }
+    };
   function RegisteredPointer_fromWireType(ptr) {
       // ptr is a raw pointer (or a raw smartpointer)
   
@@ -4452,7 +4434,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         });
       }
     }
-  var attachFinalizer = function(handle) {
+  var attachFinalizer = (handle) => {
       if ('undefined' === typeof FinalizationRegistry) {
         attachFinalizer = (handle) => handle;
         return handle;
@@ -4552,20 +4534,21 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       this.$$.deleteScheduled = true;
       return this;
     }
-  function init_ClassHandle() {
+  var init_ClassHandle = () => {
       ClassHandle.prototype['isAliasOf'] = ClassHandle_isAliasOf;
       ClassHandle.prototype['clone'] = ClassHandle_clone;
       ClassHandle.prototype['delete'] = ClassHandle_delete;
       ClassHandle.prototype['isDeleted'] = ClassHandle_isDeleted;
       ClassHandle.prototype['deleteLater'] = ClassHandle_deleteLater;
-    }
+    };
+  /** @constructor */
   function ClassHandle() {
     }
   
   var char_0 = 48;
   
   var char_9 = 57;
-  function makeLegalFunctionName(name) {
+  var makeLegalFunctionName = (name) => {
       if (undefined === name) {
         return '_unknown';
       }
@@ -4575,7 +4558,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         return `_${name}`;
       }
       return name;
-    }
+    };
   function createNamedFunction(name, body) {
       name = makeLegalFunctionName(name);
       // Use an abject with a computed property name to create a new function with
@@ -4588,7 +4571,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
     }
   
   
-  function ensureOverloadTable(proto, methodName, humanName) {
+  var ensureOverloadTable = (proto, methodName, humanName) => {
       if (undefined === proto[methodName].overloadTable) {
         var prevFunc = proto[methodName];
         // Inject an overload resolver function that routes to the appropriate overload based on the number of arguments.
@@ -4603,10 +4586,10 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         proto[methodName].overloadTable = [];
         proto[methodName].overloadTable[prevFunc.argCount] = prevFunc;
       }
-    }
+    };
   
   /** @param {number=} numArguments */
-  function exposePublicSymbol(name, value, numArguments) {
+  var exposePublicSymbol = (name, value, numArguments) => {
       if (Module.hasOwnProperty(name)) {
         if (undefined === numArguments || (undefined !== Module[name].overloadTable && undefined !== Module[name].overloadTable[numArguments])) {
           throwBindingError(`Cannot register public name '${name}' twice`);
@@ -4627,7 +4610,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           Module[name].numArguments = numArguments;
         }
       }
-    }
+    };
   
   
   
@@ -4652,7 +4635,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
     }
   
   
-  function upcastPointer(ptr, ptrClass, desiredClass) {
+  var upcastPointer = (ptr, ptrClass, desiredClass) => {
       while (ptrClass !== desiredClass) {
         if (!ptrClass.upcast) {
           throwBindingError(`Expected null or instance of ${desiredClass.name}, got an instance of ${ptrClass.name}`);
@@ -4661,7 +4644,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         ptrClass = ptrClass.baseClass;
       }
       return ptr;
-    }
+    };
   function constNoSmartPtrRawPointerToWireType(destructors, handle) {
       if (handle === null) {
         if (this.isReference) {
@@ -4741,9 +4724,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
               var clonedHandle = handle['clone']();
               ptr = this.rawShare(
                 ptr,
-                Emval.toHandle(function() {
-                  clonedHandle['delete']();
-                })
+                Emval.toHandle(() => clonedHandle['delete']())
               );
               if (destructors !== null) {
                 destructors.push(this.rawDestructor, ptr);
@@ -4781,8 +4762,8 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       return ptr;
     }
   
-  function simpleReadValueFromPointer(pointer) {
-      return this['fromWireType'](HEAP32[((pointer)>>2)]);
+  function readPointer(pointer) {
+      return this['fromWireType'](HEAPU32[((pointer)>>2)]);
     }
   
   function RegisteredPointer_getPointee(ptr) {
@@ -4798,20 +4779,20 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       }
     }
   
-  function RegisteredPointer_deleteObject(handle) {
+  var RegisteredPointer_deleteObject = (handle) => {
       if (handle !== null) {
         handle['delete']();
       }
-    }
+    };
   
-  function init_RegisteredPointer() {
+  var init_RegisteredPointer = () => {
       RegisteredPointer.prototype.getPointee = RegisteredPointer_getPointee;
       RegisteredPointer.prototype.destructor = RegisteredPointer_destructor;
-      RegisteredPointer.prototype['argPackAdvance'] = 8;
-      RegisteredPointer.prototype['readValueFromPointer'] = simpleReadValueFromPointer;
+      RegisteredPointer.prototype['argPackAdvance'] = GenericWireTypeSize;
+      RegisteredPointer.prototype['readValueFromPointer'] = readPointer;
       RegisteredPointer.prototype['deleteObject'] = RegisteredPointer_deleteObject;
       RegisteredPointer.prototype['fromWireType'] = RegisteredPointer_fromWireType;
-    }
+    };
   /** @constructor
       @param {*=} pointeeType,
       @param {*=} sharingPolicy,
@@ -4867,7 +4848,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
     }
   
   /** @param {number=} numArguments */
-  function replacePublicSymbol(name, value, numArguments) {
+  var replacePublicSymbol = (name, value, numArguments) => {
       if (!Module.hasOwnProperty(name)) {
         throwInternalError('Replacing nonexistant public symbol');
       }
@@ -4879,7 +4860,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         Module[name] = value;
         Module[name].argCount = numArguments;
       }
-    }
+    };
   
   
   
@@ -4917,7 +4898,6 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       assert(getWasmTableEntry(ptr), `missing table entry in dynCall: ${ptr}`);
       var rtn = getWasmTableEntry(ptr).apply(null, args);
       return rtn;
-  
     };
   var getDynCaller = (sig, ptr) => {
       assert(sig.includes('j') || sig.includes('p'), 'getDynCaller should only be called with i64 sigs')
@@ -4930,7 +4910,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
     };
   
   
-  function embind__requireFunction(signature, rawFunction) {
+  var embind__requireFunction = (signature, rawFunction) => {
       signature = readLatin1String(signature);
   
       function makeDynCaller() {
@@ -4945,11 +4925,11 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           throwBindingError(`unknown function pointer with signature ${signature}: ${rawFunction}`);
       }
       return fp;
-    }
+    };
   
   
   
-  function extendError(baseErrorType, errorName) {
+  var extendError = (baseErrorType, errorName) => {
       var errorClass = createNamedFunction(errorName, function(message) {
         this.name = errorName;
         this.message = message;
@@ -4971,18 +4951,18 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       };
   
       return errorClass;
-    }
+    };
   var UnboundTypeError = undefined;
   
   
   
-  function getTypeName(type) {
+  var getTypeName = (type) => {
       var ptr = ___getTypeName(type);
       var rv = readLatin1String(ptr);
       _free(ptr);
       return rv;
-    }
-  function throwUnboundTypeError(message, types) {
+    };
+  var throwUnboundTypeError = (message, types) => {
       var unboundTypes = [];
       var seen = {};
       function visit(type) {
@@ -5002,21 +4982,21 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       types.forEach(visit);
   
       throw new UnboundTypeError(`${message}: ` + unboundTypes.map(getTypeName).join([', ']));
-    }
+    };
   
-  function __embind_register_class(rawType,
-                                     rawPointerType,
-                                     rawConstPointerType,
-                                     baseClassRawType,
-                                     getActualTypeSignature,
-                                     getActualType,
-                                     upcastSignature,
-                                     upcast,
-                                     downcastSignature,
-                                     downcast,
-                                     name,
-                                     destructorSignature,
-                                     rawDestructor) {
+  var __embind_register_class = (rawType,
+                             rawPointerType,
+                             rawConstPointerType,
+                             baseClassRawType,
+                             getActualTypeSignature,
+                             getActualType,
+                             upcastSignature,
+                             upcast,
+                             downcastSignature,
+                             downcast,
+                             name,
+                             destructorSignature,
+                             rawDestructor) => {
       name = readLatin1String(name);
       getActualType = embind__requireFunction(getActualTypeSignature, getActualType);
       if (upcast) {
@@ -5114,9 +5094,9 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           return [referenceConverter, pointerConverter, constPointerConverter];
         }
       );
-    }
+    };
 
-  function heap32VectorToArray(count, firstElement) {
+  var heap32VectorToArray = (count, firstElement) => {
       var array = [];
       for (var i = 0; i < count; i++) {
           // TODO(https://github.com/emscripten-core/emscripten/issues/17310):
@@ -5124,16 +5104,16 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           array.push(HEAPU32[(((firstElement)+(i * 4))>>2)]);
       }
       return array;
-    }
+    };
   
   
-  function runDestructors(destructors) {
+  var runDestructors = (destructors) => {
       while (destructors.length) {
         var ptr = destructors.pop();
         var del = destructors.pop();
         del(ptr);
       }
-    }
+    };
   
   
   
@@ -5211,7 +5191,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       var invokerFnBody = `
         return function ${makeLegalFunctionName(humanName)}(${argsList}) {
         if (arguments.length !== ${argCount - 2}) {
-          throwBindingError('function ${humanName} called with ${arguments.length} arguments, expected ${argCount - 2} args!');
+          throwBindingError('function ${humanName} called with ' + arguments.length + ' arguments, expected ${argCount - 2}');
         }`;
   
       if (needsDestructorStack) {
@@ -5264,14 +5244,14 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
       return newFunc(Function, args1).apply(null, args2);
     }
-  function __embind_register_class_constructor(
+  var __embind_register_class_constructor = (
       rawClassType,
       argCount,
       rawArgTypesAddr,
       invokerSignature,
       invoker,
       rawConstructor
-    ) {
+    ) => {
       assert(argCount > 0);
       var rawArgTypes = heap32VectorToArray(argCount, rawArgTypesAddr);
       invoker = embind__requireFunction(invokerSignature, invoker);
@@ -5292,7 +5272,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           throwUnboundTypeError(`Cannot construct ${classType.name} due to unbound types`, rawArgTypes);
         };
   
-        whenDependentTypesAreResolved([], rawArgTypes, function(argTypes) {
+        whenDependentTypesAreResolved([], rawArgTypes, (argTypes) => {
           // Insert empty slot for context type (argTypes[1]).
           argTypes.splice(1, 0, null);
           classType.registeredClass.constructor_body[argCount - 1] = craftInvokerFunction(humanName, argTypes, null, invoker, rawConstructor);
@@ -5300,22 +5280,22 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         });
         return [];
       });
-    }
+    };
 
   
   
   
   
   
-  function __embind_register_class_function(rawClassType,
-                                              methodName,
-                                              argCount,
-                                              rawArgTypesAddr, // [ReturnType, ThisType, Args...]
-                                              invokerSignature,
-                                              rawInvoker,
-                                              context,
-                                              isPureVirtual,
-                                              isAsync) {
+  var __embind_register_class_function = (rawClassType,
+                                      methodName,
+                                      argCount,
+                                      rawArgTypesAddr, // [ReturnType, ThisType, Args...]
+                                      invokerSignature,
+                                      rawInvoker,
+                                      context,
+                                      isPureVirtual,
+                                      isAsync) => {
       var rawArgTypes = heap32VectorToArray(argCount, rawArgTypesAddr);
       methodName = readLatin1String(methodName);
       rawInvoker = embind__requireFunction(invokerSignature, rawInvoker);
@@ -5368,7 +5348,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         });
         return [];
       });
-    }
+    };
 
   function handleAllocatorInit() {
       Object.assign(HandleAllocator.prototype, /** @lends {HandleAllocator.prototype} */ {
@@ -5400,15 +5380,15 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       this.freelist = [];
     }
   var emval_handles = new HandleAllocator();;
-  function __emval_decref(handle) {
+  var __emval_decref = (handle) => {
       if (handle >= emval_handles.reserved && 0 === --emval_handles.get(handle).refcount) {
         emval_handles.free(handle);
       }
-    }
+    };
   
   
   
-  function count_emval_handles() {
+  var count_emval_handles = () => {
       var count = 0;
       for (var i = emval_handles.reserved; i < emval_handles.allocated.length; ++i) {
         if (emval_handles.allocated[i] !== undefined) {
@@ -5416,9 +5396,9 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
       }
       return count;
-    }
+    };
   
-  function init_emval() {
+  var init_emval = () => {
       // reserve some special values. These never get de-allocated.
       // The HandleAllocator takes care of reserving zero.
       emval_handles.allocated.push(
@@ -5429,7 +5409,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       );
       emval_handles.reserved = emval_handles.allocated.length
       Module['count_emval_handles'] = count_emval_handles;
-    }
+    };
   var Emval = {
   toValue:(handle) => {
         if (!handle) {
@@ -5452,28 +5432,29 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
   
   
-  function __embind_register_emval(rawType, name) {
+  function simpleReadValueFromPointer(pointer) {
+      return this['fromWireType'](HEAP32[((pointer)>>2)]);
+    }
+  var __embind_register_emval = (rawType, name) => {
       name = readLatin1String(name);
       registerType(rawType, {
         name,
-        'fromWireType': function(handle) {
+        'fromWireType': (handle) => {
           var rv = Emval.toValue(handle);
           __emval_decref(handle);
           return rv;
         },
-        'toWireType': function(destructors, value) {
-          return Emval.toHandle(value);
-        },
-        'argPackAdvance': 8,
+        'toWireType': (destructors, value) => Emval.toHandle(value),
+        'argPackAdvance': GenericWireTypeSize,
         'readValueFromPointer': simpleReadValueFromPointer,
         destructorFunction: null, // This type does not need a destructor
   
         // TODO: do we need a deleteObject here?  write a test where
         // emval is passed into JS via an interface
       });
-    }
+    };
 
-  function embindRepr(v) {
+  var embindRepr = (v) => {
       if (v === null) {
           return 'null';
       }
@@ -5483,32 +5464,28 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       } else {
           return '' + v;
       }
-    }
+    };
   
-  function floatReadValueFromPointer(name, shift) {
-      switch (shift) {
-          case 2: return function(pointer) {
-              return this['fromWireType'](HEAPF32[pointer >> 2]);
+  var floatReadValueFromPointer = (name, width) => {
+      switch (width) {
+          case 4: return function(pointer) {
+              return this['fromWireType'](HEAPF32[((pointer)>>2)]);
           };
-          case 3: return function(pointer) {
-              return this['fromWireType'](HEAPF64[pointer >> 3]);
+          case 8: return function(pointer) {
+              return this['fromWireType'](HEAPF64[((pointer)>>3)]);
           };
           default:
-              throw new TypeError("Unknown float type: " + name);
+              throw new TypeError(`invalid float width (${width}): ${name}`);
       }
-    }
+    };
   
   
-  
-  function __embind_register_float(rawType, name, size) {
-      var shift = getShiftFromSize(size);
+  var __embind_register_float = (rawType, name, size) => {
       name = readLatin1String(name);
       registerType(rawType, {
         name,
-        'fromWireType': function(value) {
-           return value;
-        },
-        'toWireType': function(destructors, value) {
+        'fromWireType': (value) => value,
+        'toWireType': (destructors, value) => {
           if (typeof value != "number" && typeof value != "boolean") {
             throw new TypeError(`Cannot convert ${embindRepr(value)} to ${this.name}`);
           }
@@ -5516,11 +5493,11 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           // https://www.w3.org/TR/wasm-js-api-1/#towebassemblyvalue
           return value;
         },
-        'argPackAdvance': 8,
-        'readValueFromPointer': floatReadValueFromPointer(name, shift),
+        'argPackAdvance': GenericWireTypeSize,
+        'readValueFromPointer': floatReadValueFromPointer(name, size),
         destructorFunction: null, // This type does not need a destructor
       });
-    }
+    };
 
   
   
@@ -5529,7 +5506,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
   
   
-  function __embind_register_function(name, argCount, rawArgTypesAddr, signature, rawInvoker, fn, isAsync) {
+  var __embind_register_function = (name, argCount, rawArgTypesAddr, signature, rawInvoker, fn, isAsync) => {
       var argTypes = heap32VectorToArray(argCount, rawArgTypesAddr);
       name = readLatin1String(name);
   
@@ -5544,43 +5521,40 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         replacePublicSymbol(name, craftInvokerFunction(name, invokerArgsArray, null /* no class 'this'*/, rawInvoker, fn, isAsync), argCount - 1);
         return [];
       });
-    }
+    };
 
   
-  
-  function integerReadValueFromPointer(name, shift, signed) {
+  var integerReadValueFromPointer = (name, width, signed) => {
       // integers are quite common, so generate very specialized functions
-      switch (shift) {
-          case 0: return signed ?
-              function readS8FromPointer(pointer) { return HEAP8[pointer]; } :
-              function readU8FromPointer(pointer) { return HEAPU8[pointer]; };
+      switch (width) {
           case 1: return signed ?
-              function readS16FromPointer(pointer) { return HEAP16[pointer >> 1]; } :
-              function readU16FromPointer(pointer) { return HEAPU16[pointer >> 1]; };
+              (pointer) => HEAP8[((pointer)>>0)] :
+              (pointer) => HEAPU8[((pointer)>>0)];
           case 2: return signed ?
-              function readS32FromPointer(pointer) { return HEAP32[pointer >> 2]; } :
-              function readU32FromPointer(pointer) { return HEAPU32[pointer >> 2]; };
+              (pointer) => HEAP16[((pointer)>>1)] :
+              (pointer) => HEAPU16[((pointer)>>1)]
+          case 4: return signed ?
+              (pointer) => HEAP32[((pointer)>>2)] :
+              (pointer) => HEAPU32[((pointer)>>2)]
           default:
-              throw new TypeError("Unknown integer type: " + name);
+              throw new TypeError(`invalid integer width (${width}): ${name}`);
       }
-    }
+    };
   
   
-  function __embind_register_integer(primitiveType, name, size, minRange, maxRange) {
+  var __embind_register_integer = (primitiveType, name, size, minRange, maxRange) => {
       name = readLatin1String(name);
       // LLVM doesn't have signed and unsigned 32-bit types, so u32 literals come
       // out as 'i32 -1'. Always treat those as max u32.
       if (maxRange === -1) {
-          maxRange = 4294967295;
+        maxRange = 4294967295;
       }
-  
-      var shift = getShiftFromSize(size);
   
       var fromWireType = (value) => value;
   
       if (minRange === 0) {
-          var bitshift = 32 - 8*size;
-          fromWireType = (value) => (value << bitshift) >>> bitshift;
+        var bitshift = 32 - 8*size;
+        fromWireType = (value) => (value << bitshift) >>> bitshift;
       }
   
       var isUnsignedType = (name.includes('unsigned'));
@@ -5610,14 +5584,14 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         name,
         'fromWireType': fromWireType,
         'toWireType': toWireType,
-        'argPackAdvance': 8,
-        'readValueFromPointer': integerReadValueFromPointer(name, shift, minRange !== 0),
+        'argPackAdvance': GenericWireTypeSize,
+        'readValueFromPointer': integerReadValueFromPointer(name, size, minRange !== 0),
         destructorFunction: null, // This type does not need a destructor
       });
-    }
+    };
 
   
-  function __embind_register_memory_view(rawType, dataTypeIndex, name) {
+  var __embind_register_memory_view = (rawType, dataTypeIndex, name) => {
       var typeMapping = [
         Int8Array,
         Uint8Array,
@@ -5632,23 +5606,21 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       var TA = typeMapping[dataTypeIndex];
   
       function decodeMemoryView(handle) {
-        handle = handle >> 2;
-        var heap = HEAPU32;
-        var size = heap[handle]; // in elements
-        var data = heap[handle + 1]; // byte offset into emscripten heap
-        return new TA(heap.buffer, data, size);
+        var size = HEAPU32[((handle)>>2)];
+        var data = HEAPU32[(((handle)+(4))>>2)];
+        return new TA(HEAP8.buffer, data, size);
       }
   
       name = readLatin1String(name);
       registerType(rawType, {
         name,
         'fromWireType': decodeMemoryView,
-        'argPackAdvance': 8,
+        'argPackAdvance': GenericWireTypeSize,
         'readValueFromPointer': decodeMemoryView,
       }, {
         ignoreDuplicateRegistrations: true,
       });
-    }
+    };
 
   
   
@@ -5656,13 +5628,13 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
   var stringToUTF8 = (str, outPtr, maxBytesToWrite) => {
       assert(typeof maxBytesToWrite == 'number', 'stringToUTF8(str, outPtr, maxBytesToWrite) is missing the third parameter that specifies the length of the output buffer!');
-      return stringToUTF8Array(str, HEAPU8,outPtr, maxBytesToWrite);
+      return stringToUTF8Array(str, HEAPU8, outPtr, maxBytesToWrite);
     };
   
   
   
   
-  function __embind_register_std_string(rawType, name) {
+  var __embind_register_std_string = (rawType, name) => {
       name = readLatin1String(name);
       var stdStringIsUTF8
       //process only std::string bindings with UTF8 support, in contrast to e.g. std::basic_string<unsigned char>
@@ -5670,7 +5642,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
       registerType(rawType, {
         name,
-        'fromWireType': function(value) {
+        'fromWireType': (value) => {
           var length = HEAPU32[((value)>>2)];
           var payload = value + 4;
   
@@ -5704,7 +5676,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
           return str;
         },
-        'toWireType': function(destructors, value) {
+        'toWireType': (destructors, value) => {
           if (value instanceof ArrayBuffer) {
             value = new Uint8Array(value);
           }
@@ -5749,11 +5721,11 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           }
           return base;
         },
-        'argPackAdvance': 8,
-        'readValueFromPointer': simpleReadValueFromPointer,
-        destructorFunction: function(ptr) { _free(ptr); },
+        'argPackAdvance': GenericWireTypeSize,
+        'readValueFromPointer': readPointer,
+        destructorFunction: (ptr) => _free(ptr),
       });
-    }
+    };
 
   
   
@@ -5881,7 +5853,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
       return len;
     };
-  var __embind_register_std_wstring = function(rawType, charSize, name) {
+  var __embind_register_std_wstring = (rawType, charSize, name) => {
       name = readLatin1String(name);
       var decodeString, encodeString, getHeap, lengthBytesUTF, shift;
       if (charSize === 2) {
@@ -5899,9 +5871,9 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       }
       registerType(rawType, {
         name,
-        'fromWireType': function(value) {
+        'fromWireType': (value) => {
           // Code mostly taken from _embind_register_std_string fromWireType
-          var length = HEAPU32[value >> 2];
+          var length = HEAPU32[((value)>>2)];
           var HEAP = getHeap();
           var str;
   
@@ -5926,7 +5898,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
           return str;
         },
-        'toWireType': function(destructors, value) {
+        'toWireType': (destructors, value) => {
           if (!(typeof value == 'string')) {
             throwBindingError(`Cannot pass non-string to C++ string type ${name}`);
           }
@@ -5943,28 +5915,24 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           }
           return ptr;
         },
-        'argPackAdvance': 8,
+        'argPackAdvance': GenericWireTypeSize,
         'readValueFromPointer': simpleReadValueFromPointer,
-        destructorFunction: function(ptr) { _free(ptr); },
+        destructorFunction: (ptr) => _free(ptr),
       });
     };
 
   
-  function __embind_register_void(rawType, name) {
+  var __embind_register_void = (rawType, name) => {
       name = readLatin1String(name);
       registerType(rawType, {
-          isVoid: true, // void return values can be optimized out sometimes
-          name,
-          'argPackAdvance': 0,
-          'fromWireType': function() {
-              return undefined;
-          },
-          'toWireType': function(destructors, o) {
-              // TODO: assert if anything else is given?
-              return undefined;
-          },
+        isVoid: true, // void return values can be optimized out sometimes
+        name,
+        'argPackAdvance': 0,
+        'fromWireType': () => undefined,
+        // TODO: assert if anything else is given?
+        'toWireType': (destructors, o) => undefined,
       });
-    }
+    };
 
   
   
@@ -5983,80 +5951,80 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       } while (HEAPU32[((ptr)>>2)]);
     };
 
-  function emval_allocateDestructors(destructorsRef) {
+  var emval_allocateDestructors = (destructorsRef) => {
       var destructors = [];
       HEAPU32[((destructorsRef)>>2)] = Emval.toHandle(destructors);
       return destructors;
-    }
+    };
   
   var emval_symbols = {
   };
   
-  function getStringOrSymbol(address) {
+  var getStringOrSymbol = (address) => {
       var symbol = emval_symbols[address];
       if (symbol === undefined) {
         return readLatin1String(address);
       }
       return symbol;
-    }
+    };
   
   var emval_methodCallers = [];
   
-  function __emval_call_method(caller, handle, methodName, destructorsRef, args) {
+  var __emval_call_method = (caller, handle, methodName, destructorsRef, args) => {
       caller = emval_methodCallers[caller];
       handle = Emval.toValue(handle);
       methodName = getStringOrSymbol(methodName);
       return caller(handle, methodName, emval_allocateDestructors(destructorsRef), args);
-    }
+    };
 
 
   
   
-  function emval_get_global() {
+  var emval_get_global = () => {
       if (typeof globalThis == 'object') {
         return globalThis;
       }
       return (function(){
         return Function;
       })()('return this')();
-    }
-  function __emval_get_global(name) {
+    };
+  var __emval_get_global = (name) => {
       if (name===0) {
         return Emval.toHandle(emval_get_global());
       } else {
         name = getStringOrSymbol(name);
         return Emval.toHandle(emval_get_global()[name]);
       }
-    }
+    };
 
-  function emval_addMethodCaller(caller) {
+  var emval_addMethodCaller = (caller) => {
       var id = emval_methodCallers.length;
       emval_methodCallers.push(caller);
       return id;
-    }
+    };
   
   
   
-  function requireRegisteredType(rawType, humanName) {
+  var requireRegisteredType = (rawType, humanName) => {
       var impl = registeredTypes[rawType];
       if (undefined === impl) {
           throwBindingError(humanName + " has unknown type " + getTypeName(rawType));
       }
       return impl;
-    }
-  function emval_lookupTypes(argCount, argTypes) {
+    };
+  var emval_lookupTypes = (argCount, argTypes) => {
       var a = new Array(argCount);
       for (var i = 0; i < argCount; ++i) {
         a[i] = requireRegisteredType(HEAPU32[(((argTypes)+(i * 4))>>2)],
                                      "parameter " + i);
       }
       return a;
-    }
+    };
   
   
   var emval_registeredMethods = [];
   
-  function __emval_get_method_caller(argCount, argTypes) {
+  var __emval_get_method_caller = (argCount, argTypes) => {
       var types = emval_lookupTypes(argCount, argTypes);
       var retType = types[0];
       var signatureName = retType.name + "_$" + types.slice(1).map(function (t) { return t.name; }).join("_") + "$";
@@ -6105,28 +6073,28 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       returnId = emval_addMethodCaller(invokerFunction);
       emval_registeredMethods[signatureName] = returnId;
       return returnId;
-    }
+    };
 
-  function __emval_incref(handle) {
+  var __emval_incref = (handle) => {
       if (handle > 4) {
         emval_handles.get(handle).refcount += 1;
       }
-    }
+    };
 
   
   
-  function __emval_run_destructors(handle) {
+  var __emval_run_destructors = (handle) => {
       var destructors = Emval.toValue(handle);
       runDestructors(destructors);
       __emval_decref(handle);
-    }
+    };
 
   
-  function __emval_take_value(type, arg) {
+  var __emval_take_value = (type, arg) => {
       type = requireRegisteredType(type, '_emval_take_value');
       var v = type['readValueFromPointer'](arg);
       return Emval.toHandle(v);
-    }
+    };
 
   var _abort = () => {
       abort('native code called abort()');
@@ -6150,7 +6118,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
   var growMemory = (size) => {
       var b = wasmMemory.buffer;
-      var pages = (size - b.byteLength + 65535) >>> 16;
+      var pages = (size - b.byteLength + 65535) / 65536;
       try {
         // round size grow request up to wasm page size (fixed 64KB per spec)
         wasmMemory.grow(pages); // .grow() takes a delta compared to the previous size
@@ -6191,7 +6159,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       // (the wasm binary specifies it, so if we tried, we'd fail anyhow).
       var maxHeapSize = getHeapMax();
       if (requestedSize > maxHeapSize) {
-        err(`Cannot enlarge memory, asked to go up to ${requestedSize} bytes, but the limit is ${maxHeapSize} bytes!`);
+        err(`Cannot enlarge memory, requested ${requestedSize} bytes, but the limit is ${maxHeapSize} bytes!`);
         return false;
       }
   
@@ -6308,12 +6276,12 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   timingValue:0,
   currentFrameNumber:0,
   queue:[],
-  pause:function() {
+  pause() {
           Browser.mainLoop.scheduler = null;
           // Incrementing this signals the previous main loop that it's now become old, and it must return.
           Browser.mainLoop.currentlyRunningMainloop++;
         },
-  resume:function() {
+  resume() {
           Browser.mainLoop.currentlyRunningMainloop++;
           var timingMode = Browser.mainLoop.timingMode;
           var timingValue = Browser.mainLoop.timingValue;
@@ -6324,7 +6292,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           _emscripten_set_main_loop_timing(timingMode, timingValue);
           Browser.mainLoop.scheduler();
         },
-  updateStatus:function() {
+  updateStatus() {
           if (Module['setStatus']) {
             var message = Module['statusMessage'] || 'Please wait...';
             var remaining = Browser.mainLoop.remainingBlockers;
@@ -6340,7 +6308,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
             }
           }
         },
-  runIter:function(func) {
+  runIter(func) {
           if (ABORT) return;
           if (Module['preMainLoop']) {
             var preRet = Module['preMainLoop']();
@@ -6356,7 +6324,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   pointerLock:false,
   moduleContextCreatedCallbacks:[],
   workers:[],
-  init:function() {
+  init() {
         if (Browser.initted) return;
         Browser.initted = true;
   
@@ -6382,7 +6350,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           assert(typeof url == 'string', 'createObjectURL must return a url as a string');
           var img = new Image();
           img.onload = () => {
-            assert(img.complete, 'Image ' + name + ' could not be decoded');
+            assert(img.complete, `Image ${name} could not be decoded`);
             var canvas = /** @type {!HTMLCanvasElement} */ (document.createElement('canvas'));
             canvas.width = img.width;
             canvas.height = img.height;
@@ -6393,7 +6361,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
             if (onload) onload(byteArray);
           };
           img.onerror = (event) => {
-            out('Image ' + url + ' could not be decoded');
+            err(`Image ${url} could not be decoded`);
             if (onerror) onerror();
           };
           img.src = url;
@@ -6425,7 +6393,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           audio.addEventListener('canplaythrough', () => finish(audio), false); // use addEventListener due to chromium bug 124926
           audio.onerror = function audio_onerror(event) {
             if (done) return;
-            err('warning: browser could not fully decode audio ' + name + ', trying slower base64 approach');
+            err(`warning: browser could not fully decode audio ${name}, trying slower base64 approach`);
             function encode64(data) {
               var BASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
               var PAD = '=';
@@ -6501,7 +6469,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           }
         }
       },
-  createContext:function(/** @type {HTMLCanvasElement} */ canvas, useWebGL, setInModule, webGLContextAttributes) {
+  createContext(/** @type {HTMLCanvasElement} */ canvas, useWebGL, setInModule, webGLContextAttributes) {
         if (useWebGL && Module.ctx && canvas == Module.canvas) return Module.ctx; // no need to recreate GL context if it's already been created for this canvas.
   
         var ctx;
@@ -6546,11 +6514,11 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         return ctx;
       },
-  destroyContext:function(canvas, useWebGL, setInModule) {},
+  destroyContext(canvas, useWebGL, setInModule) {},
   fullscreenHandlersInstalled:false,
   lockPointer:undefined,
   resizeCanvas:undefined,
-  requestFullscreen:function(lockPointer, resizeCanvas) {
+  requestFullscreen(lockPointer, resizeCanvas) {
         Browser.lockPointer = lockPointer;
         Browser.resizeCanvas = resizeCanvas;
         if (typeof Browser.lockPointer == 'undefined') Browser.lockPointer = true;
@@ -6608,10 +6576,10 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
         canvasContainer.requestFullscreen();
       },
-  requestFullScreen:function() {
+  requestFullScreen() {
         abort('Module.requestFullScreen has been replaced by Module.requestFullscreen (without a capital S)');
       },
-  exitFullscreen:function() {
+  exitFullscreen() {
         // This is workaround for chrome. Trying to exit from fullscreen
         // not in fullscreen state will cause "TypeError: Document not active"
         // in chrome. See https://github.com/emscripten-core/emscripten/pull/8236
@@ -6629,7 +6597,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         return true;
       },
   nextRAF:0,
-  fakeRequestAnimationFrame:function(func) {
+  fakeRequestAnimationFrame(func) {
         // try to keep 60fps between calls to here
         var now = Date.now();
         if (Browser.nextRAF === 0) {
@@ -6642,7 +6610,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         var delay = Math.max(Browser.nextRAF - now, 0);
         setTimeout(func, delay);
       },
-  requestAnimationFrame:function(func) {
+  requestAnimationFrame(func) {
         if (typeof requestAnimationFrame == 'function') {
           requestAnimationFrame(func);
           return;
@@ -6650,20 +6618,20 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         var RAF = Browser.fakeRequestAnimationFrame;
         RAF(func);
       },
-  safeSetTimeout:function(func, timeout) {
+  safeSetTimeout(func, timeout) {
         // Legacy function, this is used by the SDL2 port so we need to keep it
         // around at least until that is updated.
         // See https://github.com/libsdl-org/SDL/pull/6304
         return safeSetTimeout(func, timeout);
       },
-  safeRequestAnimationFrame:function(func) {
+  safeRequestAnimationFrame(func) {
         
         return Browser.requestAnimationFrame(() => {
           
           callUserCallback(func);
         });
       },
-  getMimetype:function(name) {
+  getMimetype(name) {
         return {
           'jpg': 'image/jpeg',
           'jpeg': 'image/jpeg',
@@ -6674,26 +6642,26 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           'mp3': 'audio/mpeg'
         }[name.substr(name.lastIndexOf('.')+1)];
       },
-  getUserMedia:function(func) {
+  getUserMedia(func) {
         if (!window.getUserMedia) {
           window.getUserMedia = navigator['getUserMedia'] ||
                                 navigator['mozGetUserMedia'];
         }
         window.getUserMedia(func);
       },
-  getMovementX:function(event) {
+  getMovementX(event) {
         return event['movementX'] ||
                event['mozMovementX'] ||
                event['webkitMovementX'] ||
                0;
       },
-  getMovementY:function(event) {
+  getMovementY(event) {
         return event['movementY'] ||
                event['mozMovementY'] ||
                event['webkitMovementY'] ||
                0;
       },
-  getMouseWheelDelta:function(event) {
+  getMouseWheelDelta(event) {
         var delta = 0;
         switch (event.type) {
           case 'DOMMouseScroll':
@@ -6736,7 +6704,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   },
   lastTouches:{
   },
-  calculateMouseEvent:function(event) { // event should be mousemove, mousedown or mouseup
+  calculateMouseEvent(event) { // event should be mousemove, mousedown or mouseup
         if (Browser.pointerLock) {
           // When the pointer is locked, calculate the coordinates
           // based on the movement of the mouse.
@@ -6817,18 +6785,18 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
       },
   resizeListeners:[],
-  updateResizeListeners:function() {
+  updateResizeListeners() {
         var canvas = Module['canvas'];
         Browser.resizeListeners.forEach((listener) => listener(canvas.width, canvas.height));
       },
-  setCanvasSize:function(width, height, noUpdates) {
+  setCanvasSize(width, height, noUpdates) {
         var canvas = Module['canvas'];
         Browser.updateCanvasDimensions(canvas, width, height);
         if (!noUpdates) Browser.updateResizeListeners();
       },
   windowedWidth:0,
   windowedHeight:0,
-  setFullscreenCanvasSize:function() {
+  setFullscreenCanvasSize() {
         // check if SDL is available
         if (typeof SDL != "undefined") {
           var flags = HEAPU32[((SDL.screen)>>2)];
@@ -6838,7 +6806,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         Browser.updateCanvasDimensions(Module['canvas']);
         Browser.updateResizeListeners();
       },
-  setWindowedCanvasSize:function() {
+  setWindowedCanvasSize() {
         // check if SDL is available
         if (typeof SDL != "undefined") {
           var flags = HEAPU32[((SDL.screen)>>2)];
@@ -6848,7 +6816,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         Browser.updateCanvasDimensions(Module['canvas']);
         Browser.updateResizeListeners();
       },
-  updateCanvasDimensions:function(canvas, wNative, hNative) {
+  updateCanvasDimensions(canvas, wNative, hNative) {
         if (wNative && hNative) {
           canvas.widthNative = wNative;
           canvas.heightNative = hNative;
@@ -6894,7 +6862,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
       },
   };
-  function _emscripten_set_main_loop_timing(mode, value) {
+  var _emscripten_set_main_loop_timing = (mode, value) => {
       Browser.mainLoop.timingMode = mode;
       Browser.mainLoop.timingValue = value;
   
@@ -6940,7 +6908,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
               Module['setImmediates'].push(func);
               postMessage({target: emscriptenMainLoopMessageId}); // In --proxy-to-worker, route the message via proxyClient.js
             } else postMessage(emscriptenMainLoopMessageId, "*"); // On the main thread, can just send the message to itself.
-          })
+          });
         }
         Browser.mainLoop.scheduler = function Browser_mainLoop_scheduler_setImmediate() {
           setImmediate(Browser.mainLoop.runner);
@@ -6948,7 +6916,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         Browser.mainLoop.method = 'immediate';
       }
       return 0;
-    }
+    };
   
   
   
@@ -6956,7 +6924,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
      * @param {number=} arg
      * @param {boolean=} noSetTiming
      */
-  function setMainLoop(browserIterationFunc, fps, simulateInfiniteLoop, arg, noSetTiming) {
+  var setMainLoop = (browserIterationFunc, fps, simulateInfiniteLoop, arg, noSetTiming) => {
       assert(!Browser.mainLoop.func, 'emscripten_set_main_loop: there can only be one main loop function at once: call emscripten_cancel_main_loop to cancel the previous one before setting a new one with different parameters.');
   
       Browser.mainLoop.func = browserIterationFunc;
@@ -6994,7 +6962,6 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
               Browser.mainLoop.remainingBlockers = (8*remaining + next)/9;
             }
           }
-          out('main loop blocker "' + blocker.name + '" took ' + (Date.now() - start) + ' ms'); //, left: ' + Browser.mainLoop.remainingBlockers);
           Browser.mainLoop.updateStatus();
   
           // catches pause/resume main loop from blocker execution
@@ -7056,10 +7023,10 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       if (simulateInfiniteLoop) {
         throw 'unwind';
       }
-    }
+    };
   
   
-  var _emscripten_set_main_loop_arg = function(func, arg, fps, simulateInfiniteLoop) {
+  var _emscripten_set_main_loop_arg = (func, arg, fps, simulateInfiniteLoop) => {
       var browserIterationFunc = () => getWasmTableEntry(func)(arg);
       setMainLoop(browserIterationFunc, fps, simulateInfiniteLoop, arg);
     };
@@ -7112,7 +7079,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
   var _environ_get = (__environ, environ_buf) => {
       var bufSize = 0;
-      getEnvStrings().forEach(function(string, i) {
+      getEnvStrings().forEach((string, i) => {
         var ptr = environ_buf + bufSize;
         HEAPU32[(((__environ)+(i*4))>>2)] = ptr;
         stringToAscii(string, ptr);
@@ -7126,9 +7093,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       var strings = getEnvStrings();
       HEAPU32[((penviron_count)>>2)] = strings.length;
       var bufSize = 0;
-      strings.forEach(function(string) {
-        bufSize += string.length + 1;
-      });
+      strings.forEach((string) => bufSize += string.length + 1);
       HEAPU32[((penviron_buf_size)>>2)] = bufSize;
       return 0;
     };
@@ -7152,7 +7117,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         var ptr = HEAPU32[((iov)>>2)];
         var len = HEAPU32[(((iov)+(4))>>2)];
         iov += 8;
-        var curr = FS.read(stream, HEAP8,ptr, len, offset);
+        var curr = FS.read(stream, HEAP8, ptr, len, offset);
         if (curr < 0) return -1;
         ret += curr;
         if (curr < len) break; // nothing more to read
@@ -7177,11 +7142,11 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   }
 
   
-  function convertI32PairToI53Checked(lo, hi) {
+  var convertI32PairToI53Checked = (lo, hi) => {
       assert(lo == (lo >>> 0) || lo == (lo|0)); // lo should either be a i32 or a u32
       assert(hi === (hi|0));                    // hi should be a i32
       return ((hi + 0x200000) >>> 0 < 0x400001 - !!lo) ? (lo >>> 0) + hi * 4294967296 : NaN;
-    }
+    };
   function _fd_seek(fd,offset_low, offset_high,whence,newOffset) {
     var offset = convertI32PairToI53Checked(offset_low, offset_high);;
   
@@ -7208,7 +7173,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         var ptr = HEAPU32[((iov)>>2)];
         var len = HEAPU32[(((iov)+(4))>>2)];
         iov += 8;
-        var curr = FS.write(stream, HEAP8,ptr, len, offset);
+        var curr = FS.write(stream, HEAP8, ptr, len, offset);
         if (curr < 0) return -1;
         ret += curr;
         if (typeof offset !== 'undefined') {
@@ -7231,52 +7196,51 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   }
   }
 
-  function webgl_enable_ANGLE_instanced_arrays(ctx) {
+  var webgl_enable_ANGLE_instanced_arrays = (ctx) => {
       // Extension available in WebGL 1 from Firefox 26 and Google Chrome 30 onwards. Core feature in WebGL 2.
       var ext = ctx.getExtension('ANGLE_instanced_arrays');
       if (ext) {
-        ctx['vertexAttribDivisor'] = function(index, divisor) { ext['vertexAttribDivisorANGLE'](index, divisor); };
-        ctx['drawArraysInstanced'] = function(mode, first, count, primcount) { ext['drawArraysInstancedANGLE'](mode, first, count, primcount); };
-        ctx['drawElementsInstanced'] = function(mode, count, type, indices, primcount) { ext['drawElementsInstancedANGLE'](mode, count, type, indices, primcount); };
+        ctx['vertexAttribDivisor'] = (index, divisor) => ext['vertexAttribDivisorANGLE'](index, divisor);
+        ctx['drawArraysInstanced'] = (mode, first, count, primcount) => ext['drawArraysInstancedANGLE'](mode, first, count, primcount);
+        ctx['drawElementsInstanced'] = (mode, count, type, indices, primcount) => ext['drawElementsInstancedANGLE'](mode, count, type, indices, primcount);
         return 1;
       }
-    }
+    };
   
-  function webgl_enable_OES_vertex_array_object(ctx) {
+  var webgl_enable_OES_vertex_array_object = (ctx) => {
       // Extension available in WebGL 1 from Firefox 25 and WebKit 536.28/desktop Safari 6.0.3 onwards. Core feature in WebGL 2.
       var ext = ctx.getExtension('OES_vertex_array_object');
       if (ext) {
-        ctx['createVertexArray'] = function() { return ext['createVertexArrayOES'](); };
-        ctx['deleteVertexArray'] = function(vao) { ext['deleteVertexArrayOES'](vao); };
-        ctx['bindVertexArray'] = function(vao) { ext['bindVertexArrayOES'](vao); };
-        ctx['isVertexArray'] = function(vao) { return ext['isVertexArrayOES'](vao); };
+        ctx['createVertexArray'] = () => ext['createVertexArrayOES']();
+        ctx['deleteVertexArray'] = (vao) => ext['deleteVertexArrayOES'](vao);
+        ctx['bindVertexArray'] = (vao) => ext['bindVertexArrayOES'](vao);
+        ctx['isVertexArray'] = (vao) => ext['isVertexArrayOES'](vao);
         return 1;
       }
-    }
+    };
   
-  function webgl_enable_WEBGL_draw_buffers(ctx) {
+  var webgl_enable_WEBGL_draw_buffers = (ctx) => {
       // Extension available in WebGL 1 from Firefox 28 onwards. Core feature in WebGL 2.
       var ext = ctx.getExtension('WEBGL_draw_buffers');
       if (ext) {
-        ctx['drawBuffers'] = function(n, bufs) { ext['drawBuffersWEBGL'](n, bufs); };
+        ctx['drawBuffers'] = (n, bufs) => ext['drawBuffersWEBGL'](n, bufs);
         return 1;
       }
-    }
+    };
   
-  function webgl_enable_WEBGL_draw_instanced_base_vertex_base_instance(ctx) {
+  var webgl_enable_WEBGL_draw_instanced_base_vertex_base_instance = (ctx) =>
       // Closure is expected to be allowed to minify the '.dibvbi' property, so not accessing it quoted.
-      return !!(ctx.dibvbi = ctx.getExtension('WEBGL_draw_instanced_base_vertex_base_instance'));
-    }
+      !!(ctx.dibvbi = ctx.getExtension('WEBGL_draw_instanced_base_vertex_base_instance'));
   
-  function webgl_enable_WEBGL_multi_draw_instanced_base_vertex_base_instance(ctx) {
+  var webgl_enable_WEBGL_multi_draw_instanced_base_vertex_base_instance = (ctx) => {
       // Closure is expected to be allowed to minify the '.mdibvbi' property, so not accessing it quoted.
       return !!(ctx.mdibvbi = ctx.getExtension('WEBGL_multi_draw_instanced_base_vertex_base_instance'));
-    }
+    };
   
-  function webgl_enable_WEBGL_multi_draw(ctx) {
+  var webgl_enable_WEBGL_multi_draw = (ctx) => {
       // Closure is expected to be allowed to minify the '.multiDrawWebgl' property, so not accessing it quoted.
       return !!(ctx.multiDrawWebgl = ctx.getExtension('WEBGL_multi_draw'));
-    }
+    };
   
   
   var GL = {
@@ -7309,7 +7273,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           GL.lastError = errorCode;
         }
       },
-  getNewId:function(table) {
+  getNewId:(table) => {
         var ret = GL.counter++;
         for (var i = table.length; i < ret; i++) {
           table[i] = null;
@@ -7318,10 +7282,10 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       },
   MAX_TEMP_BUFFER_SIZE:2097152,
   numTempVertexBuffersPerSize:64,
-  log2ceilLookup:function(i) {
+  log2ceilLookup:(i) => {
         return 32 - Math.clz32(i === 0 ? 0 : i - 1);
       },
-  generateTempBuffers:function(quads, context) {
+  generateTempBuffers:(quads, context) => {
         var largestIndex = GL.log2ceilLookup(GL.MAX_TEMP_BUFFER_SIZE);
         context.tempVertexBufferCounters1 = [];
         context.tempVertexBufferCounters2 = [];
@@ -7415,7 +7379,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           GL.currentContext.tempVertexBufferCounters1[i] = 0;
         }
       },
-  getSource:function(shader, count, string, length) {
+  getSource:(shader, count, string, length) => {
         var source = '';
         for (var i = 0; i < count; ++i) {
           var len = length ? HEAP32[(((length)+(i*4))>>2)] : -1;
@@ -7455,7 +7419,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           GLctx.bindBuffer(0x8892 /*GL_ARRAY_BUFFER*/, GL.buffers[GLctx.currentArrayBufferBinding]);
         }
       },
-  createContext:function(/** @type {HTMLCanvasElement} */ canvas, webGLContextAttributes) {
+  createContext:(/** @type {HTMLCanvasElement} */ canvas, webGLContextAttributes) => {
   
         // BUG: Workaround Safari WebGL issue: After successfully acquiring WebGL context on a canvas,
         // calling .getContext() will always return that context independent of which 'webgl' or 'webgl2'
@@ -7487,7 +7451,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
         return handle;
       },
-  registerContext:function(ctx, webGLContextAttributes) {
+  registerContext:(ctx, webGLContextAttributes) => {
         // without pthreads a context is just an integer ID
         var handle = GL.getNewId(GL.contexts);
   
@@ -7515,22 +7479,22 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
         return handle;
       },
-  makeContextCurrent:function(contextHandle) {
+  makeContextCurrent:(contextHandle) => {
   
         GL.currentContext = GL.contexts[contextHandle]; // Active Emscripten GL layer context object.
         Module.ctx = GLctx = GL.currentContext && GL.currentContext.GLctx; // Active WebGL context object.
         return !(contextHandle && !GLctx);
       },
-  getContext:function(contextHandle) {
+  getContext:(contextHandle) => {
         return GL.contexts[contextHandle];
       },
-  deleteContext:function(contextHandle) {
+  deleteContext:(contextHandle) => {
         if (GL.currentContext === GL.contexts[contextHandle]) GL.currentContext = null;
         if (typeof JSEvents == 'object') JSEvents.removeAllHandlersOnTarget(GL.contexts[contextHandle].GLctx.canvas); // Release all JS event handlers on the DOM element that the GL context is associated with since the context is now deleted.
         if (GL.contexts[contextHandle] && GL.contexts[contextHandle].GLctx.canvas) GL.contexts[contextHandle].GLctx.canvas.GLctxObject = undefined; // Make sure the canvas object no longer refers to the context object so there are no GC surprises.
         GL.contexts[contextHandle] = null;
       },
-  initExtensions:function(context) {
+  initExtensions:(context) => {
         // If this function is called without a specific context object, init the extensions of the currently active context.
         if (!context) context = GL.currentContext;
   
@@ -7539,7 +7503,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
         var GLctx = context.GLctx;
   
-        // Detect the presence of a few extensions manually, this GL interop layer itself will need to know if they exist.
+        // Detect the presence of a few extensions manually, ction GL interop layer itself will need to know if they exist.
   
         // Extensions that are only available in WebGL 1 (the calls will be no-ops if called on a WebGL 2 context active)
         webgl_enable_ANGLE_instanced_arrays(GLctx);
@@ -7568,7 +7532,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
         // .getSupportedExtensions() can return null if context is lost, so coerce to empty array.
         var exts = GLctx.getSupportedExtensions() || [];
-        exts.forEach(function(ext) {
+        exts.forEach((ext) => {
           // WEBGL_lose_context, WEBGL_debug_renderer_info and WEBGL_debug_shaders are not enabled by default.
           if (!ext.includes('lose_context') && !ext.includes('debug')) {
             // Call .getExtension() to enable that extension permanently.
@@ -7577,11 +7541,11 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         });
       },
   };
-  function _glAttachShader(program, shader) {
+  var _glAttachShader = (program, shader) => {
       GLctx.attachShader(GL.programs[program], GL.shaders[shader]);
-    }
+    };
 
-  function _glBindBuffer(target, buffer) {
+  var _glBindBuffer = (target, buffer) => {
       if (target == 0x8892 /*GL_ARRAY_BUFFER*/) {
         GLctx.currentArrayBufferBinding = buffer;
       } else if (target == 0x8893 /*GL_ELEMENT_ARRAY_BUFFER*/) {
@@ -7602,27 +7566,27 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         GLctx.currentPixelUnpackBufferBinding = buffer;
       }
       GLctx.bindBuffer(target, GL.buffers[buffer]);
-    }
+    };
 
-  function _glBindFramebuffer(target, framebuffer) {
+  var _glBindFramebuffer = (target, framebuffer) => {
   
       GLctx.bindFramebuffer(target, GL.framebuffers[framebuffer]);
   
-    }
+    };
 
-  function _glBindTexture(target, texture) {
+  var _glBindTexture = (target, texture) => {
       GLctx.bindTexture(target, GL.textures[texture]);
-    }
+    };
 
-  function _glBindVertexArray(vao) {
+  var _glBindVertexArray = (vao) => {
       GLctx.bindVertexArray(GL.vaos[vao]);
       var ibo = GLctx.getParameter(0x8895 /*ELEMENT_ARRAY_BUFFER_BINDING*/);
       GLctx.currentElementArrayBufferBinding = ibo ? (ibo.name | 0) : 0;
-    }
+    };
 
   function _glBlendFunc(x0, x1) { GLctx.blendFunc(x0, x1) }
 
-  function _glBufferData(target, size, data, usage) {
+  var _glBufferData = (target, size, data, usage) => {
   
       if (GL.currentContext.version >= 2) { // WebGL 2 provides new garbage-free entry points to call to WebGL. Use those always when possible.
         // If size is zero, WebGL would interpret uploading the whole input arraybuffer (starting from given offset), which would
@@ -7638,15 +7602,15 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         // randomly mixing both uses in calling code, to avoid any potential JS engine JIT issues.
         GLctx.bufferData(target, data ? HEAPU8.subarray(data, data+size) : size, usage);
       }
-    }
+    };
 
-  function _glBufferSubData(target, offset, size, data) {
+  var _glBufferSubData = (target, offset, size, data) => {
       if (GL.currentContext.version >= 2) { // WebGL 2 provides new garbage-free entry points to call to WebGL. Use those always when possible.
         size && GLctx.bufferSubData(target, offset, HEAPU8, data, size);
         return;
       }
       GLctx.bufferSubData(target, offset, HEAPU8.subarray(data, data+size));
-    }
+    };
 
   function _glCheckFramebufferStatus(x0) { return GLctx.checkFramebufferStatus(x0) }
 
@@ -7654,11 +7618,11 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
 
   function _glClearColor(x0, x1, x2, x3) { GLctx.clearColor(x0, x1, x2, x3) }
 
-  function _glCompileShader(shader) {
+  var _glCompileShader = (shader) => {
       GLctx.compileShader(GL.shaders[shader]);
-    }
+    };
 
-  function _glCreateProgram() {
+  var _glCreateProgram = () => {
       var id = GL.getNewId(GL.programs);
       var program = GLctx.createProgram();
       // Store additional information needed for each shader program:
@@ -7668,16 +7632,16 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       program.uniformIdCounter = 1;
       GL.programs[id] = program;
       return id;
-    }
+    };
 
-  function _glCreateShader(shaderType) {
+  var _glCreateShader = (shaderType) => {
       var id = GL.getNewId(GL.shaders);
       GL.shaders[id] = GLctx.createShader(shaderType);
   
       return id;
-    }
+    };
 
-  function _glDeleteBuffers(n, buffers) {
+  var _glDeleteBuffers = (n, buffers) => {
       for (var i = 0; i < n; i++) {
         var id = HEAP32[(((buffers)+(i*4))>>2)];
         var buffer = GL.buffers[id];
@@ -7695,9 +7659,9 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         if (id == GLctx.currentPixelPackBufferBinding) GLctx.currentPixelPackBufferBinding = 0;
         if (id == GLctx.currentPixelUnpackBufferBinding) GLctx.currentPixelUnpackBufferBinding = 0;
       }
-    }
+    };
 
-  function _glDeleteFramebuffers(n, framebuffers) {
+  var _glDeleteFramebuffers = (n, framebuffers) => {
       for (var i = 0; i < n; ++i) {
         var id = HEAP32[(((framebuffers)+(i*4))>>2)];
         var framebuffer = GL.framebuffers[id];
@@ -7706,9 +7670,9 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         framebuffer.name = 0;
         GL.framebuffers[id] = null;
       }
-    }
+    };
 
-  function _glDeleteProgram(id) {
+  var _glDeleteProgram = (id) => {
       if (!id) return;
       var program = GL.programs[id];
       if (!program) { // glDeleteProgram actually signals an error when deleting a nonexisting object, unlike some other GL delete functions.
@@ -7718,9 +7682,9 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       GLctx.deleteProgram(program);
       program.name = 0;
       GL.programs[id] = null;
-    }
+    };
 
-  function _glDeleteShader(id) {
+  var _glDeleteShader = (id) => {
       if (!id) return;
       var shader = GL.shaders[id];
       if (!shader) { // glDeleteShader actually signals an error when deleting a nonexisting object, unlike some other GL delete functions.
@@ -7729,9 +7693,9 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       }
       GLctx.deleteShader(shader);
       GL.shaders[id] = null;
-    }
+    };
 
-  function _glDeleteTextures(n, textures) {
+  var _glDeleteTextures = (n, textures) => {
       for (var i = 0; i < n; i++) {
         var id = HEAP32[(((textures)+(i*4))>>2)];
         var texture = GL.textures[id];
@@ -7740,9 +7704,9 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         texture.name = 0;
         GL.textures[id] = null;
       }
-    }
+    };
 
-  function _glDrawElements(mode, count, type, indices) {
+  var _glDrawElements = (mode, count, type, indices) => {
       var buf;
       if (!GLctx.currentElementArrayBufferBinding) {
         var size = GL.calcBufLength(1, type, 0, count);
@@ -7765,23 +7729,23 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       if (!GLctx.currentElementArrayBufferBinding) {
         GLctx.bindBuffer(0x8893 /*GL_ELEMENT_ARRAY_BUFFER*/, null);
       }
-    }
+    };
 
   function _glEnable(x0) { GLctx.enable(x0) }
 
-  function _glEnableVertexAttribArray(index) {
+  var _glEnableVertexAttribArray = (index) => {
       var cb = GL.currentContext.clientBuffers[index];
       cb.enabled = true;
       GLctx.enableVertexAttribArray(index);
-    }
+    };
 
-  function _glFramebufferTexture2D(target, attachment, textarget, texture, level) {
+  var _glFramebufferTexture2D = (target, attachment, textarget, texture, level) => {
       GLctx.framebufferTexture2D(target, attachment, textarget,
                                       GL.textures[texture], level);
-    }
+    };
 
-  function __glGenObject(n, buffers, createFunction, objectTable
-      ) {
+  var __glGenObject = (n, buffers, createFunction, objectTable
+      ) => {
       for (var i = 0; i < n; i++) {
         var buffer = GLctx[createFunction]();
         var id = buffer && GL.getNewId(objectTable);
@@ -7793,24 +7757,24 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         HEAP32[(((buffers)+(i*4))>>2)] = id;
       }
-    }
+    };
   
-  function _glGenBuffers(n, buffers) {
+  var _glGenBuffers = (n, buffers) => {
       __glGenObject(n, buffers, 'createBuffer', GL.buffers
         );
-    }
+    };
 
   
-  function _glGenFramebuffers(n, ids) {
+  var _glGenFramebuffers = (n, ids) => {
       __glGenObject(n, ids, 'createFramebuffer', GL.framebuffers
         );
-    }
+    };
 
   
-  function _glGenTextures(n, textures) {
+  var _glGenTextures = (n, textures) => {
       __glGenObject(n, textures, 'createTexture', GL.textures
         );
-    }
+    };
 
   
   function _glGenVertexArrays(n, arrays) {
@@ -7818,21 +7782,21 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         );
     }
 
-  function _glGetError() {
+  var _glGetError = () => {
       var error = GLctx.getError() || GL.lastError;
       GL.lastError = 0/*GL_NO_ERROR*/;
       return error;
-    }
+    };
 
   
-  function _glGetShaderInfoLog(shader, maxLength, length, infoLog) {
+  var _glGetShaderInfoLog = (shader, maxLength, length, infoLog) => {
       var log = GLctx.getShaderInfoLog(GL.shaders[shader]);
       if (log === null) log = '(unknown error)';
       var numBytesWrittenExclNull = (maxLength > 0 && infoLog) ? stringToUTF8(log, infoLog, maxLength) : 0;
       if (length) HEAP32[((length)>>2)] = numBytesWrittenExclNull;
-    }
+    };
 
-  function _glGetShaderiv(shader, pname, p) {
+  var _glGetShaderiv = (shader, pname, p) => {
       if (!p) {
         // GLES2 specification does not specify how to behave if p is a null pointer. Since calling this function does not make sense
         // if p == null, issue a GL error to notify user about it.
@@ -7857,17 +7821,17 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       } else {
         HEAP32[((p)>>2)] = GLctx.getShaderParameter(GL.shaders[shader], pname);
       }
-    }
+    };
 
   /** @suppress {checkTypes} */
   var jstoi_q = (str) => parseInt(str);
   
   /** @noinline */
-  function webglGetLeftBracePos(name) {
+  var webglGetLeftBracePos = (name) => {
       return name.slice(-1) == ']' && name.lastIndexOf('[');
-    }
+    };
   
-  function webglPrepareUniformLocationsBeforeFirstUse(program) {
+  var webglPrepareUniformLocationsBeforeFirstUse = (program) => {
       var uniformLocsById = program.uniformLocsById, // Maps GLuint -> WebGLUniformLocation
         uniformSizeAndIdsByName = program.uniformSizeAndIdsByName, // Maps name -> [uniform array length, GLuint]
         i, j;
@@ -7899,17 +7863,17 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
           // Store placeholder integers in place that highlight that these
           // >0 index locations are array indices pending population.
-          for(j = 0; j < sz; ++j) {
+          for (j = 0; j < sz; ++j) {
             uniformLocsById[id] = j;
             program.uniformArrayNamesById[id++] = arrayName;
           }
         }
       }
-    }
+    };
   
   
   
-  function _glGetUniformLocation(program, name) {
+  var _glGetUniformLocation = (program, name) => {
   
       name = UTF8ToString(name);
   
@@ -7950,27 +7914,27 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         GL.recordError(0x501 /* GL_INVALID_VALUE */);
       }
       return -1;
-    }
+    };
 
-  function _glLinkProgram(program) {
+  var _glLinkProgram = (program) => {
       program = GL.programs[program];
       GLctx.linkProgram(program);
       // Invalidate earlier computed uniform->ID mappings, those have now become stale
       program.uniformLocsById = 0; // Mark as null-like so that glGetUniformLocation() knows to populate this again.
       program.uniformSizeAndIdsByName = {};
   
-    }
+    };
 
-  function computeUnpackAlignedImageSize(width, height, sizePerPixel, alignment) {
+  var computeUnpackAlignedImageSize = (width, height, sizePerPixel, alignment) => {
       function roundedToNextMultipleOf(x, y) {
         return (x + y - 1) & -y;
       }
       var plainRowSize = width * sizePerPixel;
       var alignedRowSize = roundedToNextMultipleOf(plainRowSize, alignment);
       return height * alignedRowSize;
-    }
+    };
   
-  function colorChannelsInGlTextureFormat(format) {
+  var colorChannelsInGlTextureFormat = (format) => {
       // Micro-optimizations for size: map format to size by subtracting smallest enum value (0x1902) from all values first.
       // Also omit the most common size value (1) from the list, which is assumed by formats not on the list.
       var colorChannels = {
@@ -7990,9 +7954,9 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         29847: 4
       };
       return colorChannels[format - 0x1902]||1;
-    }
+    };
   
-  function heapObjectForWebGLType(type) {
+  var heapObjectForWebGLType = (type) => {
       // Micro-optimization for size: Subtract lowest GL enum number (0x1400/* GL_BYTE */) from type to compare
       // smaller values for the heap, for shorter generated code size.
       // Also the type HEAPU16 is not tested for explicitly, but any unrecognized type will return out HEAPU16.
@@ -8017,24 +7981,24 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         return HEAPU32;
   
       return HEAPU16;
-    }
+    };
   
-  function heapAccessShiftForWebGLHeap(heap) {
+  var heapAccessShiftForWebGLHeap = (heap) => {
       return 31 - Math.clz32(heap.BYTES_PER_ELEMENT);
-    }
+    };
   
-  function emscriptenWebGLGetTexPixelData(type, format, width, height, pixels, internalFormat) {
+  var emscriptenWebGLGetTexPixelData = (type, format, width, height, pixels, internalFormat) => {
       var heap = heapObjectForWebGLType(type);
       var shift = heapAccessShiftForWebGLHeap(heap);
       var byteSize = 1<<shift;
       var sizePerPixel = colorChannelsInGlTextureFormat(format) * byteSize;
       var bytes = computeUnpackAlignedImageSize(width, height, sizePerPixel, GL.unpackAlignment);
       return heap.subarray(pixels >> shift, pixels + bytes >> shift);
-    }
+    };
   
   
   
-  function _glReadPixels(x, y, width, height, format, type, pixels) {
+  var _glReadPixels = (x, y, width, height, format, type, pixels) => {
       if (GL.currentContext.version >= 2) { // WebGL 2 provides new garbage-free entry points to call to WebGL. Use those always when possible.
         if (GLctx.currentPixelPackBufferBinding) {
           GLctx.readPixels(x, y, width, height, format, type, pixels);
@@ -8050,18 +8014,18 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         return;
       }
       GLctx.readPixels(x, y, width, height, format, type, pixelData);
-    }
+    };
 
-  function _glShaderSource(shader, count, string, length) {
+  var _glShaderSource = (shader, count, string, length) => {
       var source = GL.getSource(shader, count, string, length);
   
       GLctx.shaderSource(GL.shaders[shader], source);
-    }
+    };
 
   
   
   
-  function _glTexImage2D(target, level, internalFormat, width, height, border, format, type, pixels) {
+  var _glTexImage2D = (target, level, internalFormat, width, height, border, format, type, pixels) => {
       if (GL.currentContext.version >= 2) {
         // WebGL 2 provides new garbage-free entry points to call to WebGL. Use those always when possible.
         if (GLctx.currentPixelUnpackBufferBinding) {
@@ -8075,11 +8039,11 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         return;
       }
       GLctx.texImage2D(target, level, internalFormat, width, height, border, format, type, pixels ? emscriptenWebGLGetTexPixelData(type, format, width, height, pixels, internalFormat) : null);
-    }
+    };
 
   function _glTexParameteri(x0, x1, x2) { GLctx.texParameteri(x0, x1, x2) }
 
-  function webglGetUniformLocation(location) {
+  var webglGetUniformLocation = (location) => {
       var p = GLctx.currentProgram;
   
       if (p) {
@@ -8096,16 +8060,16 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       } else {
         GL.recordError(0x502/*GL_INVALID_OPERATION*/);
       }
-    }
+    };
   
-  function _glUniform1f(location, v0) {
+  var _glUniform1f = (location, v0) => {
       GLctx.uniform1f(webglGetUniformLocation(location), v0);
-    }
+    };
 
   
   var miniTempWebGLFloatBuffers = [];
   
-  function _glUniform1fv(location, count, value) {
+  var _glUniform1fv = (location, count, value) => {
   
       if (GL.currentContext.version >= 2) { // WebGL 2 provides new garbage-free entry points to call to WebGL. Use those always when possible.
         count && GLctx.uniform1fv(webglGetUniformLocation(location), HEAPF32, value>>2, count);
@@ -8123,17 +8087,17 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         var view = HEAPF32.subarray((value)>>2, (value+count*4)>>2);
       }
       GLctx.uniform1fv(webglGetUniformLocation(location), view);
-    }
+    };
 
   
-  function _glUniform1i(location, v0) {
+  var _glUniform1i = (location, v0) => {
       GLctx.uniform1i(webglGetUniformLocation(location), v0);
-    }
+    };
 
   
   var miniTempWebGLIntBuffers = [];
   
-  function _glUniform1iv(location, count, value) {
+  var _glUniform1iv = (location, count, value) => {
   
       if (GL.currentContext.version >= 2) { // WebGL 2 provides new garbage-free entry points to call to WebGL. Use those always when possible.
         count && GLctx.uniform1iv(webglGetUniformLocation(location), HEAP32, value>>2, count);
@@ -8151,26 +8115,26 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         var view = HEAP32.subarray((value)>>2, (value+count*4)>>2);
       }
       GLctx.uniform1iv(webglGetUniformLocation(location), view);
-    }
+    };
 
   
-  function _glUniform2f(location, v0, v1) {
+  var _glUniform2f = (location, v0, v1) => {
       GLctx.uniform2f(webglGetUniformLocation(location), v0, v1);
-    }
+    };
 
   
-  function _glUniform3f(location, v0, v1, v2) {
+  var _glUniform3f = (location, v0, v1, v2) => {
       GLctx.uniform3f(webglGetUniformLocation(location), v0, v1, v2);
-    }
+    };
 
   
-  function _glUniform4f(location, v0, v1, v2, v3) {
+  var _glUniform4f = (location, v0, v1, v2, v3) => {
       GLctx.uniform4f(webglGetUniformLocation(location), v0, v1, v2, v3);
-    }
+    };
 
   
   
-  function _glUniformMatrix4fv(location, count, transpose, value) {
+  var _glUniformMatrix4fv = (location, count, transpose, value) => {
   
       if (GL.currentContext.version >= 2) { // WebGL 2 provides new garbage-free entry points to call to WebGL. Use those always when possible.
         count && GLctx.uniformMatrix4fv(webglGetUniformLocation(location), !!transpose, HEAPF32, value>>2, count*16);
@@ -8207,21 +8171,21 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         var view = HEAPF32.subarray((value)>>2, (value+count*64)>>2);
       }
       GLctx.uniformMatrix4fv(webglGetUniformLocation(location), !!transpose, view);
-    }
+    };
 
-  function _glUseProgram(program) {
+  var _glUseProgram = (program) => {
       program = GL.programs[program];
       GLctx.useProgram(program);
       // Record the currently active program so that we can access the uniform
       // mapping table of that program.
       GLctx.currentProgram = program;
-    }
+    };
 
-  function _glValidateProgram(program) {
+  var _glValidateProgram = (program) => {
       GLctx.validateProgram(GL.programs[program]);
-    }
+    };
 
-  function _glVertexAttribPointer(index, size, type, normalized, stride, ptr) {
+  var _glVertexAttribPointer = (index, size, type, normalized, stride, ptr) => {
       var cb = GL.currentContext.clientBuffers[index];
       if (!GLctx.currentArrayBufferBinding) {
         cb.size = size;
@@ -8237,7 +8201,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       }
       cb.clientside = false;
       GLctx.vertexAttribPointer(index, size, type, !!normalized, stride, ptr);
-    }
+    };
 
   function _glViewport(x0, x1, x2, x3) { GLctx.viewport(x0, x1, x2, x3) }
 
@@ -8250,13 +8214,13 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       return ret;
     };
   
-  function _glGetString(name_) {
+  var _glGetString = (name_) => {
       var ret = GL.stringCache[name_];
       if (!ret) {
         switch (name_) {
           case 0x1F03 /* GL_EXTENSIONS */:
             var exts = GLctx.getSupportedExtensions() || []; // .getSupportedExtensions() can return null if context is lost, so coerce to empty array.
-            exts = exts.concat(exts.map(function(e) { return "GL_" + e; }));
+            exts = exts.concat(exts.map((e) => "GL_" + e));
             ret = stringToNewUTF8(exts.join(' '));
             break;
           case 0x1F00 /* GL_VENDOR */:
@@ -8298,7 +8262,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         GL.stringCache[name_] = ret;
       }
       return ret;
-    }
+    };
   
   
   
@@ -8323,7 +8287,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   3:null,
   4:null,
   },
-  errorStringConstantFromCode:function(error) {
+  errorStringConstantFromCode(error) {
         if (GLEW.isLinaroFork) {
           switch (error) {
             case 4:return "OpenGL ES lib expected, found OpenGL lib"; // GLEW_ERROR_NOT_GLES_VERSION
@@ -8342,7 +8306,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           default:return null;
         }
       },
-  errorString:function(error) {
+  errorString(error) {
         if (!GLEW.error[error]) {
           var string = GLEW.errorStringConstantFromCode(error);
           if (!string) {
@@ -8353,7 +8317,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         return GLEW.error[error];
       },
-  versionStringConstantFromCode:function(name) {
+  versionStringConstantFromCode(name) {
         switch (name) {
           case 1:return "1.10.0"; // GLEW_VERSION
           case 2:return "1"; // GLEW_VERSION_MAJOR
@@ -8362,7 +8326,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           default:return null;
         }
       },
-  versionString:function(name) {
+  versionString(name) {
         if (!GLEW.version[name]) {
           var string = GLEW.versionStringConstantFromCode(name);
           if (!string)
@@ -8371,7 +8335,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         return GLEW.version[name];
       },
-  extensionIsSupported:function(name) {
+  extensionIsSupported(name) {
         if (!GLEW.extensions) {
           GLEW.extensions = UTF8ToString(_glGetString(0x1F03)).split(' ');
         }
@@ -8384,7 +8348,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         return (GLEW.extensions.includes("GL_" + name));
       },
   };
-  function _glewInit() { return 0; }
+  var _glewInit = () => 0;
 
   
   
@@ -8439,7 +8403,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
   
   var GLFW = {
-  WindowFromId:function(id) {
+  WindowFromId:(id) => {
         if (id <= 0 || !GLFW.windows) return null;
         return GLFW.windows[id - 1];
       },
@@ -8487,7 +8451,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   139272:0,
   139276:0,
   },
-  DOMToGLFWKeyCode:function(keycode) {
+  DOMToGLFWKeyCode:(keycode) => {
         switch (keycode) {
           // these keycodes are only defined for GLFW3, assume they are the same for GLFW2
           case 0x20:return 32; // DOM_VK_SPACE -> GLFW_KEY_SPACE
@@ -8615,7 +8579,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           default:return -1; // GLFW_KEY_UNKNOWN
         };
       },
-  getModBits:function(win) {
+  getModBits:(win) => {
         var mod = 0;
         if (win.keys[340]) mod |= 0x0001; // GLFW_MOD_SHIFT
         if (win.keys[341]) mod |= 0x0002; // GLFW_MOD_CONTROL
@@ -8624,7 +8588,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         // add caps and num lock keys? only if lock_key_mod is set
         return mod;
       },
-  onKeyPress:function(event) {
+  onKeyPress:(event) => {
         if (!GLFW.active || !GLFW.active.charFunc) return;
         if (event.ctrlKey || event.metaKey) return;
   
@@ -8634,7 +8598,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
         getWasmTableEntry(GLFW.active.charFunc)(GLFW.active.id, charCode);
       },
-  onKeyChanged:function(keyCode, status) {
+  onKeyChanged:(keyCode, status) => {
         if (!GLFW.active) return;
   
         var key = GLFW.DOMToGLFWKeyCode(keyCode);
@@ -8649,13 +8613,13 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           getWasmTableEntry(GLFW.active.keyFunc)(GLFW.active.id, key, keyCode, status, GLFW.getModBits(GLFW.active));
         }
       },
-  onGamepadConnected:function(event) {
+  onGamepadConnected:(event) => {
         GLFW.refreshJoysticks();
       },
-  onGamepadDisconnected:function(event) {
+  onGamepadDisconnected:(event) => {
         GLFW.refreshJoysticks();
       },
-  onKeydown:function(event) {
+  onKeydown:(event) => {
         GLFW.onKeyChanged(event.keyCode, 1); // GLFW_PRESS or GLFW_REPEAT
   
         // This logic comes directly from the sdl implementation. We cannot
@@ -8665,10 +8629,10 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           event.preventDefault();
         }
       },
-  onKeyup:function(event) {
+  onKeyup:(event) => {
         GLFW.onKeyChanged(event.keyCode, 0); // GLFW_RELEASE
       },
-  onBlur:function(event) {
+  onBlur:(event) => {
         if (!GLFW.active) return;
   
         for (var i = 0; i < GLFW.active.domKeys.length; ++i) {
@@ -8677,7 +8641,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           }
         }
       },
-  onMousemove:function(event) {
+  onMousemove:(event) => {
         if (!GLFW.active) return;
   
         Browser.calculateMouseEvent(event);
@@ -8688,7 +8652,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           getWasmTableEntry(GLFW.active.cursorPosFunc)(GLFW.active.id, Browser.mouseX, Browser.mouseY);
         }
       },
-  DOMToGLFWMouseButton:function(event) {
+  DOMToGLFWMouseButton:(event) => {
         // DOM and glfw have different button codes.
         // See http://www.w3schools.com/jsref/event_button.asp.
         var eventButton = event['button'];
@@ -8701,7 +8665,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         }
         return eventButton;
       },
-  onMouseenter:function(event) {
+  onMouseenter:(event) => {
         if (!GLFW.active) return;
   
         if (event.target != Module["canvas"]) return;
@@ -8710,7 +8674,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           getWasmTableEntry(GLFW.active.cursorEnterFunc)(GLFW.active.id, 1);
         }
       },
-  onMouseleave:function(event) {
+  onMouseleave:(event) => {
         if (!GLFW.active) return;
   
         if (event.target != Module["canvas"]) return;
@@ -8719,7 +8683,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           getWasmTableEntry(GLFW.active.cursorEnterFunc)(GLFW.active.id, 0);
         }
       },
-  onMouseButtonChanged:function(event, status) {
+  onMouseButtonChanged:(event, status) => {
         if (!GLFW.active) return;
   
         Browser.calculateMouseEvent(event);
@@ -8741,15 +8705,15 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           getWasmTableEntry(GLFW.active.mouseButtonFunc)(GLFW.active.id, eventButton, status, GLFW.getModBits(GLFW.active));
         }
       },
-  onMouseButtonDown:function(event) {
+  onMouseButtonDown:(event) => {
         if (!GLFW.active) return;
         GLFW.onMouseButtonChanged(event, 1); // GLFW_PRESS
       },
-  onMouseButtonUp:function(event) {
+  onMouseButtonUp:(event) => {
         if (!GLFW.active) return;
         GLFW.onMouseButtonChanged(event, 0); // GLFW_RELEASE
       },
-  onMouseWheel:function(event) {
+  onMouseWheel:(event) => {
         // Note the minus sign that flips browser wheel direction (positive direction scrolls page down) to native wheel direction (positive direction is mouse wheel up)
         var delta = -Browser.getMouseWheelDelta(event);
         delta = (delta == 0) ? 0 : (delta > 0 ? Math.max(delta, 1) : Math.min(delta, -1)); // Quantize to integer so that minimum scroll is at least +/- 1.
@@ -8768,7 +8732,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
         event.preventDefault();
       },
-  onCanvasResize:function(width, height) {
+  onCanvasResize:(width, height) => {
         if (!GLFW.active) return;
   
         var resizeNeeded = true;
@@ -8810,21 +8774,21 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           GLFW.onFramebufferSizeChanged();
         }
       },
-  onWindowSizeChanged:function() {
+  onWindowSizeChanged:() => {
         if (!GLFW.active) return;
   
         if (GLFW.active.windowSizeFunc) {
           getWasmTableEntry(GLFW.active.windowSizeFunc)(GLFW.active.id, GLFW.active.width, GLFW.active.height);
         }
       },
-  onFramebufferSizeChanged:function() {
+  onFramebufferSizeChanged:() => {
         if (!GLFW.active) return;
   
         if (GLFW.active.framebufferSizeFunc) {
           getWasmTableEntry(GLFW.active.framebufferSizeFunc)(GLFW.active.id, GLFW.active.width, GLFW.active.height);
         }
       },
-  onWindowContentScaleChanged:function(scale) {
+  onWindowContentScaleChanged:(scale) => {
         GLFW.scale = scale;
         if (!GLFW.active) return;
   
@@ -8832,10 +8796,10 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           getWasmTableEntry(GLFW.active.windowContentScaleFunc)(GLFW.active.id, GLFW.scale, GLFW.scale);
         }
       },
-  getTime:function() {
+  getTime:() => {
         return _emscripten_get_now() / 1000;
       },
-  setWindowTitle:function(winid, title) {
+  setWindowTitle:(winid, title) => {
         var win = GLFW.WindowFromId(winid);
         if (!win) return;
   
@@ -8844,7 +8808,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           document.title = win.title;
         }
       },
-  setJoystickCallback:function(cbfun) {
+  setJoystickCallback:(cbfun) => {
         GLFW.joystickFunc = cbfun;
         GLFW.refreshJoysticks();
       },
@@ -8852,7 +8816,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   },
   lastGamepadState:[],
   lastGamepadStateFrame:null,
-  refreshJoysticks:function() {
+  refreshJoysticks:() => {
         // Produce a new Gamepad API sample if we are ticking a new game frame, or if not using emscripten_set_main_loop() at all to drive animation.
         if (Browser.mainLoop.currentFrameNumber !== GLFW.lastGamepadStateFrame || !Browser.mainLoop.currentFrameNumber) {
           GLFW.lastGamepadState = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
@@ -8904,49 +8868,49 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           }
         }
       },
-  setKeyCallback:function(winid, cbfun) {
+  setKeyCallback:(winid, cbfun) => {
         var win = GLFW.WindowFromId(winid);
         if (!win) return null;
         var prevcbfun = win.keyFunc;
         win.keyFunc = cbfun;
         return prevcbfun;
       },
-  setCharCallback:function(winid, cbfun) {
+  setCharCallback:(winid, cbfun) => {
         var win = GLFW.WindowFromId(winid);
         if (!win) return null;
         var prevcbfun = win.charFunc;
         win.charFunc = cbfun;
         return prevcbfun;
       },
-  setMouseButtonCallback:function(winid, cbfun) {
+  setMouseButtonCallback:(winid, cbfun) => {
         var win = GLFW.WindowFromId(winid);
         if (!win) return null;
         var prevcbfun = win.mouseButtonFunc;
         win.mouseButtonFunc = cbfun;
         return prevcbfun;
       },
-  setCursorPosCallback:function(winid, cbfun) {
+  setCursorPosCallback:(winid, cbfun) => {
         var win = GLFW.WindowFromId(winid);
         if (!win) return null;
         var prevcbfun = win.cursorPosFunc;
         win.cursorPosFunc = cbfun;
         return prevcbfun;
       },
-  setScrollCallback:function(winid, cbfun) {
+  setScrollCallback:(winid, cbfun) => {
         var win = GLFW.WindowFromId(winid);
         if (!win) return null;
         var prevcbfun = win.scrollFunc;
         win.scrollFunc = cbfun;
         return prevcbfun;
       },
-  setDropCallback:function(winid, cbfun) {
+  setDropCallback:(winid, cbfun) => {
         var win = GLFW.WindowFromId(winid);
         if (!win) return null;
         var prevcbfun = win.dropFunc;
         win.dropFunc = cbfun;
         return prevcbfun;
       },
-  onDrop:function(event) {
+  onDrop:(event) => {
         if (!GLFW.active || !GLFW.active.dropFunc) return;
         if (!event.dataTransfer || !event.dataTransfer.files || event.dataTransfer.files.length == 0) return;
   
@@ -8995,13 +8959,13 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
         return false;
       },
-  onDragover:function(event) {
+  onDragover:(event) => {
         if (!GLFW.active || !GLFW.active.dropFunc) return;
   
         event.preventDefault();
         return false;
       },
-  setWindowSizeCallback:function(winid, cbfun) {
+  setWindowSizeCallback:(winid, cbfun) => {
         var win = GLFW.WindowFromId(winid);
         if (!win) return null;
         var prevcbfun = win.windowSizeFunc;
@@ -9009,27 +8973,27 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
         return prevcbfun;
       },
-  setWindowCloseCallback:function(winid, cbfun) {
+  setWindowCloseCallback:(winid, cbfun) => {
         var win = GLFW.WindowFromId(winid);
         if (!win) return null;
         var prevcbfun = win.windowCloseFunc;
         win.windowCloseFunc = cbfun;
         return prevcbfun;
       },
-  setWindowRefreshCallback:function(winid, cbfun) {
+  setWindowRefreshCallback:(winid, cbfun) => {
         var win = GLFW.WindowFromId(winid);
         if (!win) return null;
         var prevcbfun = win.windowRefreshFunc;
         win.windowRefreshFunc = cbfun;
         return prevcbfun;
       },
-  onClickRequestPointerLock:function(e) {
+  onClickRequestPointerLock:(e) => {
         if (!Browser.pointerLock && Module['canvas'].requestPointerLock) {
           Module['canvas'].requestPointerLock();
           e.preventDefault();
         }
       },
-  setInputMode:function(winid, mode, value) {
+  setInputMode:(winid, mode, value) => {
         var win = GLFW.WindowFromId(winid);
         if (!win) return;
   
@@ -9043,7 +9007,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
                 break;
               }
               case 0x00034002: { // GLFW_CURSOR_HIDDEN
-                out("glfwSetInputMode called with GLFW_CURSOR_HIDDEN value not implemented.");
+                err('glfwSetInputMode called with GLFW_CURSOR_HIDDEN value not implemented');
                 break;
               }
               case 0x00034003: { // GLFW_CURSOR_DISABLED
@@ -9053,55 +9017,55 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
                 break;
               }
               default: {
-                out("glfwSetInputMode called with unknown value parameter value: " + value + ".");
+                err(`glfwSetInputMode called with unknown value parameter value: ${value}`);
                 break;
               }
             }
             break;
           }
           case 0x00033002: { // GLFW_STICKY_KEYS
-            out("glfwSetInputMode called with GLFW_STICKY_KEYS mode not implemented.");
+            err('glfwSetInputMode called with GLFW_STICKY_KEYS mode not implemented');
             break;
           }
           case 0x00033003: { // GLFW_STICKY_MOUSE_BUTTONS
-            out("glfwSetInputMode called with GLFW_STICKY_MOUSE_BUTTONS mode not implemented.");
+            err('glfwSetInputMode called with GLFW_STICKY_MOUSE_BUTTONS mode not implemented');
             break;
           }
           case 0x00033004: { // GLFW_LOCK_KEY_MODS
-            out("glfwSetInputMode called with GLFW_LOCK_KEY_MODS mode not implemented.");
+            err('glfwSetInputMode called with GLFW_LOCK_KEY_MODS mode not implemented');
             break;
           }
           case 0x000330005: { // GLFW_RAW_MOUSE_MOTION
-            out("glfwSetInputMode called with GLFW_RAW_MOUSE_MOTION mode not implemented.");
+            err('glfwSetInputMode called with GLFW_RAW_MOUSE_MOTION mode not implemented');
             break;
           }
           default: {
-            out("glfwSetInputMode called with unknown mode parameter value: " + mode + ".");
+            err(`glfwSetInputMode called with unknown mode parameter value: ${mode}`);
             break;
           }
         }
       },
-  getKey:function(winid, key) {
+  getKey:(winid, key) => {
         var win = GLFW.WindowFromId(winid);
         if (!win) return 0;
         return win.keys[key];
       },
-  getMouseButton:function(winid, button) {
+  getMouseButton:(winid, button) => {
         var win = GLFW.WindowFromId(winid);
         if (!win) return 0;
         return (win.buttons & (1 << button)) > 0;
       },
-  getCursorPos:function(winid, x, y) {
+  getCursorPos:(winid, x, y) => {
         HEAPF64[((x)>>3)] = Browser.mouseX;
         HEAPF64[((y)>>3)] = Browser.mouseY;
       },
-  getMousePos:function(winid, x, y) {
+  getMousePos:(winid, x, y) => {
         HEAP32[((x)>>2)] = Browser.mouseX;
         HEAP32[((y)>>2)] = Browser.mouseY;
       },
-  setCursorPos:function(winid, x, y) {
+  setCursorPos:(winid, x, y) => {
       },
-  getWindowPos:function(winid, x, y) {
+  getWindowPos:(winid, x, y) => {
         var wx = 0;
         var wy = 0;
   
@@ -9119,13 +9083,13 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           HEAP32[((y)>>2)] = wy;
         }
       },
-  setWindowPos:function(winid, x, y) {
+  setWindowPos:(winid, x, y) => {
         var win = GLFW.WindowFromId(winid);
         if (!win) return;
         win.x = x;
         win.y = y;
       },
-  getWindowSize:function(winid, width, height) {
+  getWindowSize:(winid, width, height) => {
         var ww = 0;
         var wh = 0;
   
@@ -9143,7 +9107,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           HEAP32[((height)>>2)] = wh;
         }
       },
-  setWindowSize:function(winid, width, height) {
+  setWindowSize:(winid, width, height) => {
         var win = GLFW.WindowFromId(winid);
         if (!win) return;
   
@@ -9162,7 +9126,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
           getWasmTableEntry(win.windowSizeFunc)(win.id, width, height);
         }
       },
-  createWindow:function(width, height, title, monitor, share) {
+  createWindow:(width, height, title, monitor, share) => {
         var i, id;
         for (i = 0; i < GLFW.windows.length && GLFW.windows[i] !== null; i++) {
           // no-op
@@ -9216,7 +9180,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         GLFW.active = win;
         return win.id;
       },
-  destroyWindow:function(winid) {
+  destroyWindow:(winid) => {
         var win = GLFW.WindowFromId(winid);
         if (!win) return;
   
@@ -9234,9 +9198,9 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
         Module.ctx = Browser.destroyContext(Module['canvas'], true, true);
       },
-  swapBuffers:function(winid) {
+  swapBuffers:(winid) => {
       },
-  GLFW2ParamToGLFW3Param:function(param) {
+  GLFW2ParamToGLFW3Param:(param) => {
         var table = {
           0x00030001:0, // GLFW_MOUSE_CURSOR
           0x00030002:0, // GLFW_STICKY_KEYS
@@ -9272,11 +9236,9 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         return table[param];
       },
   };
-  function _glfwCreateWindow(width, height, title, monitor, share) {
-      return GLFW.createWindow(width, height, title, monitor, share);
-    }
+  var _glfwCreateWindow = (width, height, title, monitor, share) => GLFW.createWindow(width, height, title, monitor, share);
 
-  function _glfwGetFramebufferSize(winid, width, height) {
+  var _glfwGetFramebufferSize = (winid, width, height) => {
       var ww = 0;
       var wh = 0;
   
@@ -9293,25 +9255,23 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       if (height) {
         HEAP32[((height)>>2)] = wh;
       }
-    }
+    };
 
-  function _glfwGetTime() {
-      return GLFW.getTime() - GLFW.initialTime;
-    }
+  var _glfwGetTime = () => GLFW.getTime() - GLFW.initialTime;
 
-  function _glfwGetWindowUserPointer(winid) {
+  var _glfwGetWindowUserPointer = (winid) => {
       var win = GLFW.WindowFromId(winid);
       if (!win) return 0;
       return win.userptr;
-    }
+    };
 
-  function _emscripten_get_device_pixel_ratio() {
+  var _emscripten_get_device_pixel_ratio = () => {
       return (typeof devicePixelRatio == 'number' && devicePixelRatio) || 1.0;
-    }
+    };
   
   
   
-  function _glfwInit() {
+  var _glfwInit = () => {
       if (GLFW.windows) return 1; // GL_TRUE
   
       GLFW.initialTime = GLFW.getTime();
@@ -9351,58 +9311,46 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
          GLFW.onCanvasResize(width, height);
       });
       return 1; // GL_TRUE
-    }
+    };
 
-  function _glfwMakeContextCurrent(winid) {}
+  var _glfwMakeContextCurrent = (winid) => {};
 
-  function _glfwPollEvents() {}
+  var _glfwPollEvents = () => {};
 
-  function _glfwSetCursorPosCallback(winid, cbfun) {
-      return GLFW.setCursorPosCallback(winid, cbfun);
-    }
+  var _glfwSetCursorPosCallback = (winid, cbfun) => GLFW.setCursorPosCallback(winid, cbfun);
 
-  function _glfwSetFramebufferSizeCallback(winid, cbfun) {
+  var _glfwSetFramebufferSizeCallback = (winid, cbfun) => {
       var win = GLFW.WindowFromId(winid);
       if (!win) return null;
       var prevcbfun = win.framebufferSizeFunc;
       win.framebufferSizeFunc = cbfun;
       return prevcbfun;
-    }
+    };
 
-  function _glfwSetKeyCallback(winid, cbfun) {
-      return GLFW.setKeyCallback(winid, cbfun);
-    }
+  var _glfwSetKeyCallback = (winid, cbfun) => GLFW.setKeyCallback(winid, cbfun);
 
-  function _glfwSetMouseButtonCallback(winid, cbfun) {
-      return GLFW.setMouseButtonCallback(winid, cbfun);
-    }
+  var _glfwSetMouseButtonCallback = (winid, cbfun) => GLFW.setMouseButtonCallback(winid, cbfun);
 
-  function _glfwSetScrollCallback(winid, cbfun) {
-      return GLFW.setScrollCallback(winid, cbfun);
-    }
+  var _glfwSetScrollCallback = (winid, cbfun) => GLFW.setScrollCallback(winid, cbfun);
 
-  function _glfwSetWindowSize(winid, width, height) {
-      GLFW.setWindowSize(winid, width, height);
-    }
+  var _glfwSetWindowSize = (winid, width, height) => GLFW.setWindowSize(winid, width, height);
 
-  function _glfwSetWindowUserPointer(winid, ptr) {
+  var _glfwSetWindowUserPointer = (winid, ptr) => {
       var win = GLFW.WindowFromId(winid);
       if (!win) return;
       win.userptr = ptr;
-    }
+    };
 
-  function _glfwSwapBuffers(winid) {
-      GLFW.swapBuffers(winid);
-    }
+  var _glfwSwapBuffers = (winid) => GLFW.swapBuffers(winid);
 
   
-  function _glfwSwapInterval(interval) {
+  var _glfwSwapInterval = (interval) => {
       interval = Math.abs(interval); // GLFW uses negative values to enable GLX_EXT_swap_control_tear, which we don't have, so just treat negative and positive the same.
       if (interval == 0) _emscripten_set_main_loop_timing(0, 0);
       else _emscripten_set_main_loop_timing(1, interval);
-    }
+    };
 
-  function _glfwTerminate() {
+  var _glfwTerminate = () => {
       window.removeEventListener("gamepadconnected", GLFW.onGamepadConnected, true);
       window.removeEventListener("gamepaddisconnected", GLFW.onGamepadDisconnected, true);
       window.removeEventListener("keydown", GLFW.onKeydown, true);
@@ -9426,17 +9374,17 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       Module["canvas"].width = Module["canvas"].height = 1;
       GLFW.windows = null;
       GLFW.active = null;
-    }
+    };
 
-  function _glfwWindowHint(target, hint) {
+  var _glfwWindowHint = (target, hint) => {
       GLFW.hints[target] = hint;
-    }
+    };
 
-  function _glfwWindowShouldClose(winid) {
+  var _glfwWindowShouldClose = (winid) => {
       var win = GLFW.WindowFromId(winid);
       if (!win) return 0;
       return win.shouldClose;
-    }
+    };
 
   var isLeapYear = (year) => {
         return year%4 === 0 && (year%100 !== 0 || year%400 === 0);
@@ -9493,7 +9441,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       // size_t strftime(char *restrict s, size_t maxsize, const char *restrict format, const struct tm *restrict timeptr);
       // http://pubs.opengroup.org/onlinepubs/009695399/functions/strftime.html
   
-      var tm_zone = HEAP32[(((tm)+(40))>>2)];
+      var tm_zone = HEAPU32[(((tm)+(40))>>2)];
   
       var date = {
         tm_sec: HEAP32[((tm)>>2)],
@@ -9927,14 +9875,14 @@ handleAllocatorInit();
 init_emval();;
 
       // exports
-      Module["requestFullscreen"] = function Module_requestFullscreen(lockPointer, resizeCanvas) { Browser.requestFullscreen(lockPointer, resizeCanvas) };
-      Module["requestFullScreen"] = function Module_requestFullScreen() { Browser.requestFullScreen() };
-      Module["requestAnimationFrame"] = function Module_requestAnimationFrame(func) { Browser.requestAnimationFrame(func) };
-      Module["setCanvasSize"] = function Module_setCanvasSize(width, height, noUpdates) { Browser.setCanvasSize(width, height, noUpdates) };
-      Module["pauseMainLoop"] = function Module_pauseMainLoop() { Browser.mainLoop.pause() };
-      Module["resumeMainLoop"] = function Module_resumeMainLoop() { Browser.mainLoop.resume() };
-      Module["getUserMedia"] = function Module_getUserMedia() { Browser.getUserMedia() };
-      Module["createContext"] = function Module_createContext(canvas, useWebGL, setInModule, webGLContextAttributes) { return Browser.createContext(canvas, useWebGL, setInModule, webGLContextAttributes) };
+      Module["requestFullscreen"] = (lockPointer, resizeCanvas) => Browser.requestFullscreen(lockPointer, resizeCanvas);
+      Module["requestFullScreen"] = () => Browser.requestFullScreen();
+      Module["requestAnimationFrame"] = (func) => Browser.requestAnimationFrame(func);
+      Module["setCanvasSize"] = (width, height, noUpdates) => Browser.setCanvasSize(width, height, noUpdates);
+      Module["pauseMainLoop"] = () => Browser.mainLoop.pause();
+      Module["resumeMainLoop"] = () => Browser.mainLoop.resume();
+      Module["getUserMedia"] = () => Browser.getUserMedia();
+      Module["createContext"] = (canvas, useWebGL, setInModule, webGLContextAttributes) => Browser.createContext(canvas, useWebGL, setInModule, webGLContextAttributes);
       var preloadedImages = {};
       var preloadedAudios = {};;
 var GLctx;;
@@ -10060,7 +10008,7 @@ var wasmImports = {
   on_active_frame_changed_callback: on_active_frame_changed_callback,
   strftime_l: _strftime_l
 };
-var asm = createWasm();
+var wasmExports = createWasm();
 var ___wasm_call_ctors = createExportWrapper('__wasm_call_ctors');
 var _malloc = createExportWrapper('malloc');
 var ___errno_location = createExportWrapper('__errno_location');
@@ -10087,9 +10035,9 @@ var dynCall_viijii = Module['dynCall_viijii'] = createExportWrapper('dynCall_vii
 var dynCall_iiiiij = Module['dynCall_iiiiij'] = createExportWrapper('dynCall_iiiiij');
 var dynCall_iiiiijj = Module['dynCall_iiiiijj'] = createExportWrapper('dynCall_iiiiijj');
 var dynCall_iiiiiijj = Module['dynCall_iiiiiijj'] = createExportWrapper('dynCall_iiiiiijj');
-var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 92848;
-var ___start_em_js = Module['___start_em_js'] = 125168;
-var ___stop_em_js = Module['___stop_em_js'] = 125232;
+var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 92736;
+var ___start_em_js = Module['___start_em_js'] = 125056;
+var ___stop_em_js = Module['___stop_em_js'] = 125120;
 
 // include: postamble.js
 // === Auto-generated postamble setup entry stuff ===
@@ -10100,7 +10048,7 @@ var ___stop_em_js = Module['___stop_em_js'] = 125232;
 function intArrayFromBase64(s) {
   if (typeof ENVIRONMENT_IS_NODE != 'undefined' && ENVIRONMENT_IS_NODE) {
     var buf = Buffer.from(s, 'base64');
-    return new Uint8Array(buf['buffer'], buf['byteOffset'], buf['byteLength']);
+    return new Uint8Array(buf.buffer, buf.byteOffset, buf.length);
   }
 
   try {
@@ -10279,6 +10227,7 @@ var unexportedSymbols = [
   'addOnPostRun',
   'FS_createFolder',
   'FS_createLink',
+  'FS_readFile',
   'out',
   'err',
   'callMain',
@@ -10438,6 +10387,7 @@ var unexportedSymbols = [
   'requireRegisteredType',
   'UnboundTypeError',
   'PureVirtualError',
+  'GenericWireTypeSize',
   'init_embind',
   'throwUnboundTypeError',
   'ensureOverloadTable',
@@ -10453,10 +10403,10 @@ var unexportedSymbols = [
   'getLiveInheritedInstances',
   'registeredPointers',
   'registerType',
-  'getShiftFromSize',
   'integerReadValueFromPointer',
   'floatReadValueFromPointer',
   'simpleReadValueFromPointer',
+  'readPointer',
   'runDestructors',
   'newFunc',
   'craftInvokerFunction',
