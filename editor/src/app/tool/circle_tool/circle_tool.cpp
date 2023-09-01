@@ -122,7 +122,7 @@ namespace editor
         Bounds bounds = Bounds::createWithPositions(down.x, down.y, curr.x, curr.y);
         Vec2Int bottomLeftTile = tileLayer.getTilePos(bounds.getBottomLeft());
         Vec2Int topRightTile = tileLayer.getTilePos(bounds.getTopRight());
-        BoundsInt boundsInt(bottomLeftTile.x, topRightTile.x, bottomLeftTile.y, topRightTile.y);
+        BoundsInt boundsInt(bottomLeftTile.x, bottomLeftTile.y, topRightTile.x, topRightTile.y);
 
         return boundsInt;
     }

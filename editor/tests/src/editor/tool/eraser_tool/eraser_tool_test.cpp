@@ -56,7 +56,7 @@ SCENARIO("Erase tool")
 
             THEN("it erases the pixels at the click position")
             {
-                REQUIRE(activeLayer.getRenderables().size() == 8);
+                REQUIRE(activeLayer.getTiles().size() == 8);
                 REQUIRE(activeLayer.getAtTilePos(0, 0) != nullptr);
                 REQUIRE(activeLayer.getAtTilePos(1, 0) != nullptr);
                 REQUIRE(activeLayer.getAtTilePos(2, 0) != nullptr);
@@ -75,7 +75,7 @@ SCENARIO("Erase tool")
                 THEN("it restores the erased pixels")
                 {
 
-                    REQUIRE(activeLayer.getRenderables().size() == 9);
+                    REQUIRE(activeLayer.getTiles().size() == 9);
                     REQUIRE(activeLayer.getAtTilePos(1, 1) != nullptr);
                 }
 
@@ -85,7 +85,7 @@ SCENARIO("Erase tool")
                     {
                         document.getHistory()->redo(document);
 
-                        REQUIRE(activeLayer.getRenderables().size() == 8);
+                        REQUIRE(activeLayer.getTiles().size() == 8);
                         REQUIRE(activeLayer.getAtTilePos(1, 1) == nullptr);
                     }
                 }
@@ -110,7 +110,7 @@ SCENARIO("Erase tool")
 
             THEN("it erases the pixels at the drag positions")
             {
-                REQUIRE(activeLayer.getRenderables().size() == 6);
+                REQUIRE(activeLayer.getTiles().size() == 6);
                 REQUIRE(activeLayer.getAtTilePos(1, 0) == nullptr);
                 REQUIRE(activeLayer.getAtTilePos(2, 0) == nullptr);
                 REQUIRE(activeLayer.getAtTilePos(2, 1) == nullptr);
@@ -122,7 +122,7 @@ SCENARIO("Erase tool")
 
                 THEN("it restores all of the pixels erased during the drag")
                 {
-                    REQUIRE(activeLayer.getRenderables().size() == 9);
+                    REQUIRE(activeLayer.getTiles().size() == 9);
                     REQUIRE(activeLayer.getAtTilePos(1, 0) != nullptr);
                     REQUIRE(activeLayer.getAtTilePos(2, 0) != nullptr);
                     REQUIRE(activeLayer.getAtTilePos(2, 1) != nullptr);
@@ -149,36 +149,36 @@ SCENARIO("Erase tool")
             {
                 float dashSize = eraseTool.getStrokeSize();
 
-                REQUIRE(foregroundLayer1.getRenderables().size() == 4);
+                REQUIRE(foregroundLayer1.getTiles().size() == 4);
                 // top
-                REQUIRE_THAT(foregroundLayer1.getRenderables()[0]->getBounds(),
-                             EqualsBounds(Bounds(2.0f, 2.0 - dashSize / 2.0f, 1.0f, dashSize)));
+                REQUIRE_THAT(foregroundLayer1.getTiles()[0]->getBounds(),
+                             EqualsBounds(Bounds::createWithSize(2.0f, 2.0 - dashSize / 2.0f, 1.0f, dashSize)));
                 // bottom
-                REQUIRE_THAT(foregroundLayer1.getRenderables()[2]->getBounds(),
-                             EqualsBounds(Bounds(2.0f, 1.0 - dashSize / 2.0f, 1.0f, dashSize)));
+                REQUIRE_THAT(foregroundLayer1.getTiles()[2]->getBounds(),
+                             EqualsBounds(Bounds::createWithSize(2.0f, 1.0 - dashSize / 2.0f, 1.0f, dashSize)));
                 // left
-                REQUIRE_THAT(foregroundLayer1.getRenderables()[1]->getBounds(),
-                             EqualsBounds(Bounds(3.0 - dashSize / 2.0, 1.0, dashSize, 1.0)));
+                REQUIRE_THAT(foregroundLayer1.getTiles()[1]->getBounds(),
+                             EqualsBounds(Bounds::createWithSize(3.0 - dashSize / 2.0, 1.0, dashSize, 1.0)));
                 // right
-                REQUIRE_THAT(foregroundLayer1.getRenderables()[3]->getBounds(),
-                             EqualsBounds(Bounds(2.0 - dashSize / 2.0, 1.0, dashSize, 1.0)));
+                REQUIRE_THAT(foregroundLayer1.getTiles()[3]->getBounds(),
+                             EqualsBounds(Bounds::createWithSize(2.0 - dashSize / 2.0, 1.0, dashSize, 1.0)));
 
                 toolContext.pointer.curr = foregroundLayer1.getWorldPos(Vec2Int(3, 1));
                 eraseTool.execPointerMove(toolContext);
 
-                REQUIRE(foregroundLayer1.getRenderables().size() == 4);
+                REQUIRE(foregroundLayer1.getTiles().size() == 4);
                 // top
-                REQUIRE_THAT(foregroundLayer1.getRenderables()[0]->getBounds(),
-                             EqualsBounds(Bounds(3.0f, 2.0 - dashSize / 2.0f, 1.0f, dashSize)));
+                REQUIRE_THAT(foregroundLayer1.getTiles()[0]->getBounds(),
+                             EqualsBounds(Bounds::createWithSize(3.0f, 2.0 - dashSize / 2.0f, 1.0f, dashSize)));
                 // bottom
-                REQUIRE_THAT(foregroundLayer1.getRenderables()[2]->getBounds(),
-                             EqualsBounds(Bounds(3.0f, 1.0 - dashSize / 2.0f, 1.0f, dashSize)));
+                REQUIRE_THAT(foregroundLayer1.getTiles()[2]->getBounds(),
+                             EqualsBounds(Bounds::createWithSize(3.0f, 1.0 - dashSize / 2.0f, 1.0f, dashSize)));
                 // left
-                REQUIRE_THAT(foregroundLayer1.getRenderables()[1]->getBounds(),
-                             EqualsBounds(Bounds(4.0 - dashSize / 2.0, 1.0, dashSize, 1.0)));
+                REQUIRE_THAT(foregroundLayer1.getTiles()[1]->getBounds(),
+                             EqualsBounds(Bounds::createWithSize(4.0 - dashSize / 2.0, 1.0, dashSize, 1.0)));
                 // // right
-                REQUIRE_THAT(foregroundLayer1.getRenderables()[3]->getBounds(),
-                             EqualsBounds(Bounds(3.0 - dashSize / 2.0, 1.0, dashSize, 1.0)));
+                REQUIRE_THAT(foregroundLayer1.getTiles()[3]->getBounds(),
+                             EqualsBounds(Bounds::createWithSize(3.0 - dashSize / 2.0, 1.0, dashSize, 1.0)));
             }
         }
     }

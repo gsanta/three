@@ -83,7 +83,7 @@ namespace editor
         float tiledDeltaY = static_cast<int>(delta.y / tileSize) * tileSize;
         Vec2 tileDelta = Vec2(tiledDeltaX, tiledDeltaY);
 
-        for (Rect2D *sprite : m_Layer->getRenderables())
+        for (Rect2D *sprite : m_Layer->getTiles())
         {
             sprite->translate(-tileDeltaPrev);
             sprite->translate(tileDelta);

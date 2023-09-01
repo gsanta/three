@@ -24,7 +24,7 @@ TEST_CASE("Rectangle stroke draw", "[rectangle-stroke]")
 
         rectangleStroke.draw(drawLayer, Vec2(0, 0));
 
-        std::vector<Rect2D *> &rects = drawLayer.getRenderables();
+        std::vector<Rect2D *> &rects = drawLayer.getTiles();
 
         // Top line
         REQUIRE(rects[0]->getCenterPosition2d().x == Catch::Approx(0.0f));
@@ -63,7 +63,7 @@ TEST_CASE("Rectangle stroke draw", "[rectangle-stroke]")
 
         rectangleStroke.draw(drawLayer, Vec2(0, 0));
 
-        std::vector<Rect2D *> &rects = drawLayer.getRenderables();
+        std::vector<Rect2D *> &rects = drawLayer.getTiles();
 
         // Top line
         REQUIRE(rects[0]->getCenterPosition2d().x == Catch::Approx(0.25f));
@@ -106,7 +106,7 @@ TEST_CASE("Rectangle stroke draw", "[rectangle-stroke]")
 
         rectangleStroke.draw(drawLayer, Vec2(translateX, translateY));
 
-        std::vector<Rect2D *> &rects = drawLayer.getRenderables();
+        std::vector<Rect2D *> &rects = drawLayer.getTiles();
 
         // Top line
         REQUIRE(rects[0]->getCenterPosition2d().x == Catch::Approx(0.0f + translateX));

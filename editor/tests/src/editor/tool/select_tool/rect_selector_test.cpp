@@ -64,7 +64,7 @@ TEST_CASE("RectSelector", "[rect-selector]")
 
     SECTION("can make a point selection")
     {
-        Vec2 pos = layer.getRenderables()[0]->getCenterPosition2d();
+        Vec2 pos = layer.getTiles()[0]->getCenterPosition2d();
 
         rectSelector.setSelection(pos, pos + Vec2(0.11, 0.11));
 

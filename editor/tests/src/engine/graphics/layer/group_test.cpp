@@ -16,20 +16,17 @@ TEST_CASE("Group", "[group]")
         Rect2D rect2(-2.0f, -3.0f, 3.0f, 5.0f, 0xFF0000FF);
         Mat4 translation = Mat4::translation(Vec3(1, 2, 3));
 
-        Group<Rect2D> group1(new HeadlessRenderer2D());
+        Group<Rect2D> group1;
         group1.add(rect1);
         group1.add(rect2);
 
-        group1.getRenderer()->push(translation);
-
-        Group<Rect2D> group2(new HeadlessRenderer2D());
+        Group<Rect2D> group2;
 
         group2 = group1;
 
         REQUIRE(group2.getRenderables().size() == 2);
         REQUIRE(group2.getRenderables()[0]->getBounds() == group1.getRenderables()[0]->getBounds());
         REQUIRE(group2.getRenderables()[1]->getBounds() == group1.getRenderables()[1]->getBounds());
-        REQUIRE(*(group2.getRenderer()->getTransformation()) == translation);
     }
 
     SECTION("equals with an other Group with the same data")
@@ -37,11 +34,11 @@ TEST_CASE("Group", "[group]")
         Rect2D rect1(2.0f, 3.0f, 3.0f, 5.0f, 0xFF0000FF);
         Rect2D rect2(-2.0f, -3.0f, 3.0f, 5.0f, 0xFF0000FF);
 
-        Group<Rect2D> group1(new HeadlessRenderer2D());
+        Group<Rect2D> group1;
         group1.add(rect1);
         group1.add(rect2);
 
-        Group<Rect2D> group2(new HeadlessRenderer2D());
+        Group<Rect2D> group2;
         group2.add(rect1);
         group2.add(rect2);
 
@@ -53,11 +50,11 @@ TEST_CASE("Group", "[group]")
         Rect2D rect1(2.0f, 3.0f, 3.0f, 5.0f, 0xFF0000FF);
         Rect2D rect2(-2.0f, -3.0f, 3.0f, 5.0f, 0xFF0000FF);
 
-        Group<Rect2D> group1(new HeadlessRenderer2D());
+        Group<Rect2D> group1;
         group1.add(rect1);
         group1.add(rect2);
 
-        Group<Rect2D> group2(new HeadlessRenderer2D());
+        Group<Rect2D> group2;
         group2.add(rect2);
         group2.add(rect2);
 

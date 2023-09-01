@@ -34,7 +34,7 @@ SCENARIO("Line tool")
 
             THEN("it draws a perfect diagonal line")
             {
-                REQUIRE(layer.getRenderables().size() == 4);
+                REQUIRE(layer.getTiles().size() == 4);
                 REQUIRE(layer.getAtTilePos(0, 0) != nullptr);
                 REQUIRE(layer.getAtTilePos(1, 1) != nullptr);
                 REQUIRE(layer.getAtTilePos(2, 2) != nullptr);
@@ -47,7 +47,7 @@ SCENARIO("Line tool")
 
                 THEN("it removes the line")
                 {
-                    REQUIRE(layer.getRenderables().size() == 0);
+                    REQUIRE(layer.getTiles().size() == 0);
                 }
 
                 WHEN("redoing the last action")
@@ -56,7 +56,7 @@ SCENARIO("Line tool")
 
                     THEN("it restores the line")
                     {
-                        REQUIRE(layer.getRenderables().size() == 4);
+                        REQUIRE(layer.getTiles().size() == 4);
                     }
                 }
             }
@@ -78,7 +78,7 @@ SCENARIO("Line tool")
 
             THEN("it draws a horizontal line")
             {
-                REQUIRE(layer.getRenderables().size() == 4);
+                REQUIRE(layer.getTiles().size() == 4);
                 REQUIRE(layer.getAtTilePos(0, 0) != nullptr);
                 REQUIRE(layer.getAtTilePos(1, 0) != nullptr);
                 REQUIRE(layer.getAtTilePos(2, 0) != nullptr);
@@ -102,7 +102,7 @@ SCENARIO("Line tool")
 
             THEN("it draws a vertical line")
             {
-                REQUIRE(layer.getRenderables().size() == 5);
+                REQUIRE(layer.getTiles().size() == 5);
                 REQUIRE(layer.getAtTilePos(0, 0) != nullptr);
                 REQUIRE(layer.getAtTilePos(0, 1) != nullptr);
                 REQUIRE(layer.getAtTilePos(0, 2) != nullptr);
@@ -127,7 +127,7 @@ SCENARIO("Line tool")
 
             THEN("it draws a line which is longer than high")
             {
-                REQUIRE(layer.getRenderables().size() == 4);
+                REQUIRE(layer.getTiles().size() == 4);
                 REQUIRE(layer.getAtTilePos(0, 0) != nullptr);
                 REQUIRE(layer.getAtTilePos(1, 1) != nullptr);
                 REQUIRE(layer.getAtTilePos(2, 2) != nullptr);
@@ -151,7 +151,7 @@ SCENARIO("Line tool")
 
             THEN("it draws a line which is longer than high in the negative direction")
             {
-                REQUIRE(layer.getRenderables().size() == 4);
+                REQUIRE(layer.getTiles().size() == 4);
                 REQUIRE(layer.getAtTilePos(4, 0) != nullptr);
                 REQUIRE(layer.getAtTilePos(3, 1) != nullptr);
                 REQUIRE(layer.getAtTilePos(2, 2) != nullptr);
@@ -175,7 +175,7 @@ SCENARIO("Line tool")
 
             THEN("it draws a line which is higher than long")
             {
-                REQUIRE(layer.getRenderables().size() == 4);
+                REQUIRE(layer.getTiles().size() == 4);
                 REQUIRE(layer.getAtTilePos(0, 0) != nullptr);
                 REQUIRE(layer.getAtTilePos(1, 1) != nullptr);
                 REQUIRE(layer.getAtTilePos(1, 2) != nullptr);
@@ -204,8 +204,8 @@ SCENARIO("Line tool")
 
             THEN("it draws to the foreground layer")
             {
-                REQUIRE(layer.getRenderables().size() == 0);
-                REQUIRE(foregroundLayer.getRenderables().size() == 4);
+                REQUIRE(layer.getTiles().size() == 0);
+                REQUIRE(foregroundLayer.getTiles().size() == 4);
             }
 
             WHEN("dragging ends")
@@ -214,8 +214,8 @@ SCENARIO("Line tool")
 
                 THEN("draws to the active layer and clears the foreground layer")
                 {
-                    REQUIRE(layer.getRenderables().size() == 4);
-                    REQUIRE(foregroundLayer.getRenderables().size() == 0);
+                    REQUIRE(layer.getTiles().size() == 4);
+                    REQUIRE(foregroundLayer.getTiles().size() == 0);
                 }
             }
         }

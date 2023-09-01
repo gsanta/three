@@ -7,7 +7,7 @@ namespace editor
     void flip_horizontal(TileLayer &layer)
     {
         const int layerWidth = layer.getTileBounds().getWidth();
-        for (Rect2D *tile : layer.getRenderables())
+        for (Rect2D *tile : layer.getTiles())
         {
             const Vec2Int tilePos = layer.getTilePos(tile->getPosition2d());
             layer.setTilePos(tile, Vec2Int(layerWidth - 1 - tilePos.x, tilePos.y));
@@ -26,7 +26,6 @@ namespace editor
 
         for (Rect2D *tile : tiles)
         {
-            const Vec2 bottomLeft = tile->getPosition2d();
             const Vec2Int tilePos = layer.getTilePos(tile->getPosition2d());
             int xStart = tilePos.x - boundsTileX;
 

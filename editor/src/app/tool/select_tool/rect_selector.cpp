@@ -53,8 +53,8 @@ namespace editor
 
         Bounds selectionBounds = Bounds::createWithPositions(startX, startY, endX, endY);
 
-        auto it = m_Layer->getRenderables().begin();
-        while (it != m_Layer->getRenderables().end())
+        auto it = m_Layer->getTiles().begin();
+        while (it != m_Layer->getTiles().end())
         {
             Vec2 pos = (*it)->getCenterPosition2d();
 

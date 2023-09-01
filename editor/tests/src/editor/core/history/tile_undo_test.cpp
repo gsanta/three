@@ -46,10 +46,10 @@ SCENARIO("TileUndo")
             {
                 tileUndo.undo(document);
 
-                REQUIRE(layer.getRenderables().size() == 3);
-                REQUIRE(layer.getRenderables()[0]->getColor() == COLOR_RED);
-                REQUIRE(layer.getRenderables()[1]->getColor() == COLOR_RED);
-                REQUIRE(layer.getRenderables()[2]->getColor() == COLOR_RED);
+                REQUIRE(layer.getTiles().size() == 3);
+                REQUIRE(layer.getTiles()[0]->getColor() == COLOR_RED);
+                REQUIRE(layer.getTiles()[1]->getColor() == COLOR_RED);
+                REQUIRE(layer.getTiles()[2]->getColor() == COLOR_RED);
             }
         }
 
@@ -60,7 +60,7 @@ SCENARIO("TileUndo")
                 tileUndo.undo(document);
                 tileUndo.redo(document);
 
-                REQUIRE(layer.getRenderables().size() == 4);
+                REQUIRE(layer.getTiles().size() == 4);
                 REQUIRE(layer.getAtTilePos(0, 0)->getColor() == COLOR_RED);
                 REQUIRE(layer.getAtTilePos(0, 1)->getColor() == COLOR_RED);
                 REQUIRE(layer.getAtTilePos(1, 0)->getColor() == COLOR_YELLOW);

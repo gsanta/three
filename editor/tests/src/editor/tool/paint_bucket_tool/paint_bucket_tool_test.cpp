@@ -27,11 +27,11 @@ SCENARIO("Paint bucket tool")
             {
                 TileLayer &layer = document.getActiveLayer();
 
-                REQUIRE(layer.getRenderables().size() == 4);
-                REQUIRE(layer.getRenderables()[0]->getColor() == COLOR_SPRIGHT_ORANGE);
-                REQUIRE(layer.getRenderables()[1]->getColor() == COLOR_SPRIGHT_ORANGE);
-                REQUIRE(layer.getRenderables()[2]->getColor() == COLOR_SPRIGHT_ORANGE);
-                REQUIRE(layer.getRenderables()[3]->getColor() == COLOR_SPRIGHT_ORANGE);
+                REQUIRE(layer.getTiles().size() == 4);
+                REQUIRE(layer.getTiles()[0]->getColor() == COLOR_SPRIGHT_ORANGE);
+                REQUIRE(layer.getTiles()[1]->getColor() == COLOR_SPRIGHT_ORANGE);
+                REQUIRE(layer.getTiles()[2]->getColor() == COLOR_SPRIGHT_ORANGE);
+                REQUIRE(layer.getTiles()[3]->getColor() == COLOR_SPRIGHT_ORANGE);
             }
         }
     }
@@ -67,7 +67,7 @@ SCENARIO("Paint bucket tool")
 
             THEN("it fills that area")
             {
-                REQUIRE(layer.getRenderables().size() == 16);
+                REQUIRE(layer.getTiles().size() == 16);
                 REQUIRE(layer.getAtTilePos(1, 1)->getColor() == COLOR_SPRIGHT_ORANGE);
                 REQUIRE(layer.getAtTilePos(1, 2)->getColor() == COLOR_SPRIGHT_ORANGE);
                 REQUIRE(layer.getAtTilePos(2, 1)->getColor() == COLOR_SPRIGHT_ORANGE);
@@ -81,7 +81,7 @@ SCENARIO("Paint bucket tool")
 
                 THEN("it removes the fill")
                 {
-                    REQUIRE(layer.getRenderables().size() == 12);
+                    REQUIRE(layer.getTiles().size() == 12);
                     REQUIRE(layer.getAtTilePos(1, 1) == nullptr);
                     REQUIRE(layer.getAtTilePos(1, 2) == nullptr);
                     REQUIRE(layer.getAtTilePos(2, 1) == nullptr);
@@ -94,7 +94,7 @@ SCENARIO("Paint bucket tool")
 
                     THEN("it re-applies the removed fill")
                     {
-                        REQUIRE(layer.getRenderables().size() == 16);
+                        REQUIRE(layer.getTiles().size() == 16);
                     }
                 }
             }

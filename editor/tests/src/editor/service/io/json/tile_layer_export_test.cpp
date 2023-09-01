@@ -34,7 +34,6 @@ SCENARIO("TileLayerExport")
             nlohmann::json json = exporter.exportLayer(tileLayer);
 
             std::string a = json["tiles"].dump();
-            std::cout << json["tiles"].dump() << std::endl;
 
             REQUIRE(json["tile_size"].dump() == "1.0");
             REQUIRE(json["bounds"].dump() == "[-1.0,-1.0,1.0,1.0]");
@@ -68,7 +67,7 @@ SCENARIO("TileLayerExport")
                 TileLayer tileLayer = exporter.importLayer(json);
 
                 REQUIRE(tileLayer.getName() == "layer23");
-                REQUIRE(tileLayer.getRenderables().size() == 2);
+                REQUIRE(tileLayer.getTiles().size() == 2);
                 REQUIRE(tileLayer.getAtTileIndex(0) != nullptr);
                 REQUIRE(tileLayer.getAtTileIndex(0)->getColor() == COLOR_RED);
                 REQUIRE(tileLayer.getAtTileIndex(2) != nullptr);
