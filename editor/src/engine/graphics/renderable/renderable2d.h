@@ -20,31 +20,22 @@ namespace engine
 
     class Renderable2D
     {
-
-    protected:
-        Renderable2D()
-        {
-            setUVDefaults();
-        }
-
-        int m_VertexCount;
-        unsigned int m_Color;
-        Bounds m_bounds;
-        std::vector<Vec2> m_UV;
-
     public:
         Renderable2D(const Bounds &bounds, unsigned int color);
 
         friend bool operator==(const Renderable2D &, const Renderable2D &);
+
         friend bool operator!=(const Renderable2D &, const Renderable2D &);
+
         virtual bool isEqual(const Renderable2D &obj) const;
 
-        virtual void submit(Renderer2D *renderer) const = 0;
+        virtual void submit(Renderer2D &renderer) const = 0;
 
         inline void setColor(unsigned int color)
         {
             m_Color = color;
         }
+
         inline void setColor(const Vec4 &color)
         {
             int r = (color.x * 255.0f);
@@ -74,10 +65,27 @@ namespace engine
         }
 
         virtual nlohmann::json getJson() = 0;
+
         inline const GLuint getTID() const
         {
             return 0;
         }
+
+        static std::shared_ptr<Renderable2D> create(double width, double height);
+
+    protected:
+        Renderable2D()
+        {
+            setUVDefaults();
+        }
+
+        int m_VertexCount;
+
+        unsigned int m_Color;
+
+        Bounds m_bounds;
+
+        std::vector<Vec2> m_UV;
 
     private:
         void setUVDefaults();

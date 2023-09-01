@@ -179,6 +179,25 @@ void zoom_to_fit()
     editor->getActiveDocument().getCamera().zoomToFit(editor->getActiveDocument().getActiveDrawing().getBounds());
 }
 
+void shear_horizontal_func()
+{
+    Drawing &drawing = editor->getActiveDocument().getActiveDrawing();
+    Bounds bounds = editor->getActiveDocument().getActiveDrawing().getState().getBounds();
+    TileLayer &currentLayer = editor->getActiveDocument().getActiveDrawing().getActiveLayer();
+
+    (bounds.minX - drawing.getBounds().minX) / currentLayer.getTileSize();
+
+    int x = (bounds.minX - drawing.getBounds().minX) / currentLayer.getTileSize();
+    int y = (bounds.minY - drawing.getBounds().minY) / currentLayer.getTileSize();
+
+    BoundsInt bInt(x,
+                   y,
+                   x + bounds.getWidth() / currentLayer.getTileSize(),
+                   y + bounds.getHeight() / currentLayer.getTileSize());
+
+    rotate(currentLayer, editor->getDocumentFactory(), bInt, 0.785398f);
+}
+
 EMSCRIPTEN_BINDINGS(spright)
 {
     emscripten::function("getFrames", &getFrames);
@@ -207,6 +226,7 @@ EMSCRIPTEN_BINDINGS(spright)
     emscripten::function("zoomOut", &zoom_out);
     emscripten::function("resetZoom", &reset_zoom);
     emscripten::function("zoomToFit", &zoom_to_fit);
+    emscripten::function("shearHorizontal", &shear_horizontal_func);
 }
 
 #endif

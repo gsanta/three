@@ -8,21 +8,25 @@ namespace engine
     const float TileLayer::defaultTileSize = 0.5f;
 
     TileLayer::TileLayer(std::string name,
+                         const Renderer2D &renderer,
                          Group<Rect2D> group,
                          Bounds bounds,
                          float tileSize,
                          float zPos,
                          bool allowDuplicatedPixels)
-        : m_Group(group), m_TileSize(tileSize), m_Name(name), m_Bounds(bounds), m_ZPos(zPos),
+        : TileView(BoundsInt(0,
+                             0,
+                             ceil((bounds.maxX - bounds.minX) / tileSize),
+                             ceil((bounds.maxY - bounds.minY) / tileSize))),
+          m_TileSize(tileSize), m_Name(name), m_Bounds(bounds), m_Renderer(renderer.clone()), m_ZPos(zPos),
           m_AllowDuplicatedPixels(allowDuplicatedPixels)
     {
         init();
     }
 
     TileLayer::TileLayer(const TileLayer &tileLayer)
-        : m_Index(tileLayer.m_Index), m_Name(tileLayer.m_Name),
-          m_Group(Group<Rect2D>(tileLayer.m_Group.getRenderer()->clone())), m_Bounds(tileLayer.m_Bounds),
-          m_TileSize(tileLayer.m_TileSize), m_ZPos(tileLayer.m_ZPos),
+        : TileView(tileLayer), m_Index(tileLayer.m_Index), m_Name(tileLayer.m_Name), m_Bounds(tileLayer.m_Bounds),
+          m_Renderer(tileLayer.m_Renderer->clone()), m_TileSize(tileLayer.m_TileSize), m_ZPos(tileLayer.m_ZPos),
           m_AllowDuplicatedPixels(tileLayer.m_AllowDuplicatedPixels)
     {
 
@@ -30,25 +34,18 @@ namespace engine
         copyGroup(tileLayer.m_Group);
     }
 
-
-    TileLayer::~TileLayer()
-    {
-        delete[] m_TileIndexes;
-    }
-
     TileLayer &TileLayer::operator=(const TileLayer &that)
     {
         if (this != &that)
         {
+            TileView::operator=(that);
+
             m_Index = that.m_Index;
             m_Name = that.m_Name;
             m_Bounds = that.m_Bounds;
             m_TileSize = that.m_TileSize;
             m_ZPos = that.m_ZPos;
             m_AllowDuplicatedPixels = that.m_AllowDuplicatedPixels;
-
-            m_Group.clear();
-            delete[] m_TileIndexes;
 
             init();
             copyGroup(that.m_Group);
@@ -112,6 +109,13 @@ namespace engine
         return newRect;
     }
 
+    Rect2D &TileLayer::add(const Rect2D &rect, const Vec2Int &tilePos)
+    {
+        Rect2D newRect(rect);
+        newRect.setCenterPosition(getWorldPos(tilePos));
+        return add(newRect);
+    }
+
     void TileLayer::remove(const Rect2D &rect)
     {
         Vec2 pos = rect.getBounds().getCenter();
@@ -135,18 +139,8 @@ namespace engine
     {
         if (m_IsEnabled)
         {
-            m_Group.render(camera);
+            m_Group.render(camera, *m_Renderer.get());
         }
-    }
-
-    std::vector<Rect2D *> &TileLayer::getRenderables()
-    {
-        return m_Group.getRenderables();
-    }
-
-    const std::vector<Rect2D *> &TileLayer::getRenderables() const
-    {
-        return m_Group.getRenderables();
     }
 
     Vec2 TileLayer::getCenterPos(Vec2 pointer) const
@@ -172,13 +166,13 @@ namespace engine
         return getCenterPos(tileIndex);
     }
 
-    Vec2 TileLayer::getWorldPos(const Vec2Int tilePos) const
+    Vec2 TileLayer::getWorldPos(const Vec2Int &tilePos) const
     {
-        return getWorldPos(getTileIndex(tilePos.x, tilePos.y));
+        return getWorldPos(TileView::getTileIndex(tilePos.x, tilePos.y));
     }
 
     // TODO: check if it works for both even and odd number of tiles
-    Vec2Int TileLayer::getTilePos(Vec2 pos) const
+    Vec2Int TileLayer::getTilePos(const Vec2 &pos) const
     {
         Vec2 adjustedPos(pos.x - m_Bounds.minX, pos.y - m_Bounds.minY);
         float tileSize = m_TileSize;
@@ -214,7 +208,7 @@ namespace engine
         tile->translate(delta);
 
         Vec2Int tilePos = getTilePos(tile->getPosition2d());
-        int newTileIndex = getTileIndex(tilePos.x, tilePos.y);
+        int newTileIndex = TileView::getTileIndex(tilePos.x, tilePos.y);
         updateTileIndex(tile, newTileIndex);
     }
 
@@ -223,35 +217,20 @@ namespace engine
         Vec2 halfTileSize(getTileSize() / 2.0f);
         tile->setPosition(getWorldPos(newPos) - halfTileSize);
 
-        int newTileIndex = getTileIndex(newPos.x, newPos.y);
+        int newTileIndex = TileView::getTileIndex(newPos.x, newPos.y);
         updateTileIndex(tile, newTileIndex);
-    }
-
-    int TileLayer::getTileIndex(int tileX, int tileY) const
-    {
-        return m_TileBounds.getWidth() * tileY + tileX;
     }
 
     int TileLayer::getTileIndex(Vec2 worldPos) const
     {
         Vec2Int tilePos = getTilePos(worldPos);
 
-        return getTileIndex(tilePos.x, tilePos.y);
+        return TileView::getTileIndex(tilePos.x, tilePos.y);
     }
 
-    const BoundsInt &TileLayer::getTileBounds() const
+    bool TileLayer::containsTile(int x, int y) const
     {
-        return m_TileBounds;
-    }
-
-    Rect2D *TileLayer::getAtTileIndex(int tilePos) const
-    {
-        return static_cast<Rect2D *>(m_TileIndexes[tilePos]);
-    }
-
-    Rect2D *TileLayer::getAtTilePos(int x, int y) const
-    {
-        return getAtTileIndex(getTileIndex(x, y));
+        return 0 <= x && x < getTileBounds().getWidth() && 0 <= y && getTileBounds().getHeight() > y;
     }
 
     Rect2D *TileLayer::getAtWorldPos(Vec2 pos) const
@@ -316,17 +295,8 @@ namespace engine
 
     void TileLayer::init()
     {
-        int width = ceil((m_Bounds.maxX - m_Bounds.minX) / m_TileSize);
-        int height = ceil((m_Bounds.maxY - m_Bounds.minY) / m_TileSize);
-        int left = (m_Bounds.minX / m_TileSize) - 1;
-        int bottom = (m_Bounds.minY / m_TileSize) - 1;
-
-        m_TileBounds = BoundsInt(left, left + width, bottom, bottom + height);
-
-        m_IndexSize = width * height;
-        m_TileIndexes = new Renderable2D *[m_IndexSize]();
         Mat4 transformation = Mat4::translation(Vec3(0, 0, m_ZPos));
-        m_Group.getRenderer()->push(transformation);
+        m_Renderer->push(transformation);
     }
 
     void TileLayer::copyGroup(const Group<Rect2D> &group)

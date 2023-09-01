@@ -91,7 +91,7 @@ Drawing DrawingBuilder::buildFromLayers()
 
     const Frame frame(0);
 
-    const TileLayer foregroundLayer("", Group<Rect2D>(new HeadlessRenderer2D()), m_Bounds, m_TileSize, 0, true);
+    const TileLayer foregroundLayer("", HeadlessRenderer2D(), Group<Rect2D>(), m_Bounds, m_TileSize, 0, true);
 
     drawing.addForegroundLayer(foregroundLayer);
 

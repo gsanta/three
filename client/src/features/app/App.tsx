@@ -67,9 +67,6 @@ const App = () => {
       <Split className="split" direction="horizontal" sizes={[75, 25]}>
         <Canvas ref={canvasRef} />
         <Split className="split-vertical" direction="vertical" sizes={[50, 50]}>
-          <Box overflowY="auto">
-            <LayerPanel />
-          </Box>
           <Tabs display="flex" flexDir="column" isLazy>
             <TabList>
               <Tab>Options</Tab>
@@ -84,6 +81,9 @@ const App = () => {
               </TabPanel>
             </TabPanels>
           </Tabs>
+          <Box overflowY="auto">
+            <LayerPanel />
+          </Box>
         </Split>
       </Split>
     </Layout>

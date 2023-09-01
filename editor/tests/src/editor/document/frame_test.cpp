@@ -106,15 +106,15 @@ TEST_CASE("Frame", "[frame]")
 
         REQUIRE(frame.getLayer(0).getName() == "layer_1");
         REQUIRE(frame.getLayer(1).getName() == "layer_0");
-        REQUIRE(frame.getLayer(0).getRenderables().size() == 0);
-        REQUIRE(frame.getLayer(1).getRenderables().size() == 2);
+        REQUIRE(frame.getLayer(0).getTiles().size() == 0);
+        REQUIRE(frame.getLayer(1).getTiles().size() == 2);
 
         frame.changeLayerOrder(1, 0);
 
         REQUIRE(frame.getLayer(0).getName() == "layer_0");
         REQUIRE(frame.getLayer(1).getName() == "layer_1");
-        REQUIRE(frame.getLayer(0).getRenderables().size() == 2);
-        REQUIRE(frame.getLayer(1).getRenderables().size() == 0);
+        REQUIRE(frame.getLayer(0).getTiles().size() == 2);
+        REQUIRE(frame.getLayer(1).getTiles().size() == 0);
     }
 
     SECTION("throws when change layer order is out of bounds")

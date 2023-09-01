@@ -8,6 +8,7 @@
 #include "../renderable/bounds.h"
 #include "../renderable/bounds_int.h"
 #include "../renderable/rect2d.h"
+#include "./tile_view.h"
 #include "group.h"
 
 #include <math.h>
@@ -19,13 +20,16 @@ namespace engine
 {
     using namespace ::spright::maths;
 
-    class TileLayer
+    class TileLayer : public TileView
     {
     public:
         const static float defaultTileSize;
 
     public:
+        using TileView::getTileIndex;
+
         TileLayer(std::string name,
+                  const Renderer2D &renderer,
                   Group<Rect2D> group,
                   Bounds bounds,
                   float tileSize = TileLayer::defaultTileSize,
@@ -33,8 +37,6 @@ namespace engine
                   bool allowDuplicatedPixels = false);
 
         TileLayer(const TileLayer &tileLayer);
-
-        ~TileLayer();
 
         TileLayer &operator=(const TileLayer &);
 
@@ -54,15 +56,13 @@ namespace engine
 
         Rect2D &add(const Rect2D &rect);
 
+        Rect2D &add(const Rect2D &rect, const Vec2Int &tilePos);
+
         void remove(const Rect2D &rect);
 
         void clear();
 
         void render(const Camera &camera);
-
-        std::vector<Rect2D *> &getRenderables();
-
-        const std::vector<Rect2D *> &getRenderables() const;
 
         Vec2 getCenterPos(Vec2 pointer) const;
 
@@ -70,9 +70,9 @@ namespace engine
 
         Vec2 getWorldPos(int tileIndex) const;
 
-        Vec2 getWorldPos(const Vec2Int tilePos) const;
+        Vec2 getWorldPos(const Vec2Int &tilePos) const;
 
-        Vec2Int getTilePos(Vec2 pos) const;
+        Vec2Int getTilePos(const Vec2 &pos) const;
 
         Vec2Int getTilePos(int tileIndex) const;
 
@@ -86,17 +86,16 @@ namespace engine
 
         void setTilePos(Rect2D *tile, const Vec2Int &newPos);
 
-        Rect2D *getAtTileIndex(int tileIndex) const;
-
-        Rect2D *getAtTilePos(int x, int y) const;
-
         Rect2D *getAtWorldPos(Vec2 pos) const;
 
-        int getTileIndex(int tileX, int tileY) const;
+        int getTileIndex(int tileX, int tileY) const
+        {
+            return TileView::getTileIndex(tileX, tileY);
+        }
 
         int getTileIndex(Vec2 worldPos) const;
 
-        const BoundsInt &getTileBounds() const;
+        bool containsTile(int x, int y) const;
 
         int getIndexSize() const;
 
@@ -129,17 +128,11 @@ namespace engine
 
         Bounds m_Bounds;
 
-        Group<Rect2D> m_Group;
+        std::shared_ptr<Renderer2D> m_Renderer;
 
         float m_TileSize = 0.5f;
 
-        int m_IndexSize;
-
         bool m_IsEnabled = true;
-
-        Renderable2D **m_TileIndexes;
-
-        BoundsInt m_TileBounds;
 
         float m_ZPos;
 

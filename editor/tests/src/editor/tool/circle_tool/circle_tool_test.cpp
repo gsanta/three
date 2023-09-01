@@ -12,7 +12,7 @@ using namespace ::spright::editor;
 void REQUIRE_ELLIPSE(TileLayer &layer)
 {
     //TODO: fix this, currently foreground layer allows duplicate tiles, so there are more than 8 tiles here
-    // REQUIRE(layer.getRenderables().size() == 8);
+    // REQUIRE(layer.getTiles().size() == 8);
 
     REQUIRE(layer.getAtTilePos(0, 1) != nullptr);
     REQUIRE(layer.getAtTilePos(1, 2) != nullptr);
@@ -26,7 +26,7 @@ void REQUIRE_ELLIPSE(TileLayer &layer)
 
 void REQUIRE_CIRCLE(TileLayer &layer)
 {
-    REQUIRE(layer.getRenderables().size() == 16);
+    REQUIRE(layer.getTiles().size() == 16);
 
     REQUIRE(layer.getAtTilePos(0, 2) != nullptr);
     REQUIRE(layer.getAtTilePos(0, 3) != nullptr);
@@ -93,7 +93,7 @@ SCENARIO("Circle tool")
 
                     THEN("it removes the circle")
                     {
-                        REQUIRE(layer.getRenderables().size() == 0);
+                        REQUIRE(layer.getTiles().size() == 0);
                     }
 
                     WHEN("redoing the last action")
@@ -127,7 +127,7 @@ SCENARIO("Circle tool")
 
                 THEN("it draws a filled circle")
                 {
-                    REQUIRE(layer.getRenderables().size() == 11);
+                    REQUIRE(layer.getTiles().size() == 11);
 
                     REQUIRE(layer.getAtTilePos(0, 1) != nullptr);
                     REQUIRE(layer.getAtTilePos(1, 2) != nullptr);
@@ -150,7 +150,7 @@ SCENARIO("Circle tool")
 
                     THEN("it removes the filled circle")
                     {
-                        REQUIRE(layer.getRenderables().size() == 0);
+                        REQUIRE(layer.getTiles().size() == 0);
                     }
                 }
             }

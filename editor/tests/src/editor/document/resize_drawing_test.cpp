@@ -37,9 +37,9 @@ SCENARIO("Resize drawing")
                                              Bounds::createWithPositions(-1.0f, -2.0f, 1.0f, 2.0f),
                                              &documentFactory);
 
-                    REQUIRE(drawing.getFrame(0).getLayers()[0].getRenderables().size() == 2);
-                    REQUIRE(drawing.getFrame(0).getLayers()[0].getRenderables()[0]->getPosition2d() == Vec2(-1, -2));
-                    REQUIRE(drawing.getFrame(0).getLayers()[0].getRenderables()[1]->getPosition2d() == Vec2(-1, -1));
+                    REQUIRE(drawing.getFrame(0).getLayers()[0].getTiles().size() == 2);
+                    REQUIRE(drawing.getFrame(0).getLayers()[0].getTiles()[0]->getPosition2d() == Vec2(-1, -2));
+                    REQUIRE(drawing.getFrame(0).getLayers()[0].getTiles()[1]->getPosition2d() == Vec2(-1, -1));
                 }
             }
 
@@ -51,8 +51,8 @@ SCENARIO("Resize drawing")
                                              Bounds::createWithPositions(-1.0f, -1.0f, 1.0f, 1.0f),
                                              &documentFactory);
 
-                    REQUIRE(drawing.getFrame(0).getLayers()[0].getRenderables().size() == 1);
-                    REQUIRE(drawing.getFrame(0).getLayers()[0].getRenderables()[0]->getPosition2d() == Vec2(-1, -1));
+                    REQUIRE(drawing.getFrame(0).getLayers()[0].getTiles().size() == 1);
+                    REQUIRE(drawing.getFrame(0).getLayers()[0].getTiles()[0]->getPosition2d() == Vec2(-1, -1));
                 }
             }
         }
@@ -69,7 +69,7 @@ SCENARIO("Resize drawing")
                 drawing =
                     resize_drawing(drawing, Bounds::createWithPositions(-2.0f, -2.0f, 1.0f, 1.0f), &documentFactory);
 
-                REQUIRE(drawing.getBackgroundLayer().getRenderables().size() == 9);
+                REQUIRE(drawing.getBackgroundLayer().getTiles().size() == 9);
                 REQUIRE(drawing.getBackgroundLayer().getAtTileIndex(0)->getColor() == COLOR_DARK_GREY);
                 REQUIRE(drawing.getBackgroundLayer().getAtTileIndex(1)->getColor() == COLOR_LIGHT_GREY);
                 REQUIRE(drawing.getBackgroundLayer().getAtTileIndex(2)->getColor() == COLOR_DARK_GREY);

@@ -4,13 +4,11 @@ namespace spright
 {
 namespace engine
 {
-    Bounds::Bounds(float minX, float minY, float width, float height)
-        : minX(minX), minY(minY), maxX(minX + width), maxY(minY + height)
+    Bounds::Bounds(float minX, float minY, float maxX, float maxY) : minX(minX), minY(minY), maxX(maxX), maxY(maxY)
     {
     }
 
-    Bounds::Bounds(Vec2 bottomLeft, Vec2 topRight)
-        : Bounds(bottomLeft.x, bottomLeft.y, topRight.x - bottomLeft.x, topRight.y - bottomLeft.y)
+    Bounds::Bounds(Vec2 bottomLeft, Vec2 topRight) : Bounds(bottomLeft.x, bottomLeft.y, topRight.x, topRight.y)
     {
     }
 
@@ -25,12 +23,17 @@ namespace engine
         float minY = y1 < y2 ? y1 : y2;
         float maxY = y1 < y2 ? y2 : y1;
 
-        return Bounds(minX, minY, maxX - minX, maxY - minY);
+        return Bounds(minX, minY, maxX, maxY);
     }
 
     Bounds Bounds::createWithPositions(const Vec2 &pos1, const Vec2 &pos2)
     {
         return createWithPositions(pos1.x, pos1.y, pos2.x, pos2.y);
+    }
+
+    Bounds Bounds::createWithSize(float minX, float minY, float width, float height)
+    {
+        return Bounds(minX, minY, minX + width, minY + height);
     }
 
     Vec2 Bounds::getCenter() const

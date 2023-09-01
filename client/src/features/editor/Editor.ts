@@ -92,6 +92,8 @@ interface Editor {
   resetZoom(): void;
 
   zoomToFit(): void;
+
+  shearHorizontal(): void;
 }
 
 window.Module = new EditorRuntime();

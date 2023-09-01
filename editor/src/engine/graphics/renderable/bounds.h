@@ -20,7 +20,7 @@ namespace engine
 
         float maxY;
 
-        Bounds(float minX, float minY, float width, float height);
+        Bounds(float minX, float minY, float maxX, float maxY);
 
         //@deprecated use createWithPositions instead
         Bounds(Vec2 bottomLeft, Vec2 topRight);
@@ -30,6 +30,8 @@ namespace engine
         static Bounds createWithPositions(float minX, float minY, float maxX, float maxY);
 
         static Bounds createWithPositions(const Vec2 &pos1, const Vec2 &pos2);
+
+        static Bounds createWithSize(float minX, float minY, float width, float height);
 
         Bounds operator*(float ratio);
 

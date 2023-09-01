@@ -21,10 +21,10 @@ TEST_CASE("SelectionBox", "[selection-box]")
         selectionBox.setSelectionStart(Vec2(0, 0));
         selectionBox.setSelectionEnd(Vec2(2, 2));
 
-        REQUIRE_THAT(tileLayer.getRenderables()[0]->getBounds(), EqualsBounds(Bounds(0, 0, 2, 0.1)));
-        REQUIRE_THAT(tileLayer.getRenderables()[1]->getBounds(), EqualsBounds(Bounds(0, 2, 2, 0.1)));
-        REQUIRE_THAT(tileLayer.getRenderables()[2]->getBounds(), EqualsBounds(Bounds(0, 0, 0.1, 2)));
-        REQUIRE_THAT(tileLayer.getRenderables()[3]->getBounds(), EqualsBounds(Bounds(2, 0, 0.1, 2)));
+        REQUIRE_THAT(tileLayer.getTiles()[0]->getBounds(), EqualsBounds(Bounds(0, 0, 2, 0.1)));
+        REQUIRE_THAT(tileLayer.getTiles()[1]->getBounds(), EqualsBounds(Bounds(0, 2, 2, 2.1)));
+        REQUIRE_THAT(tileLayer.getTiles()[2]->getBounds(), EqualsBounds(Bounds(0, 0, 0.1, 2)));
+        REQUIRE_THAT(tileLayer.getTiles()[3]->getBounds(), EqualsBounds(Bounds(2, 0, 2.1, 2)));
     }
 
     SECTION("can move a selection box")
@@ -38,13 +38,13 @@ TEST_CASE("SelectionBox", "[selection-box]")
         selectionBox.setMoveStart(Vec2(0, 0));
         selectionBox.setMoveEnd(Vec2(1.1f, 1.1f));
 
-        REQUIRE_THAT(tileLayer.getRenderables()[0]->getBounds(),
+        REQUIRE_THAT(tileLayer.getTiles()[0]->getBounds(),
                      EqualsBounds(Bounds::createWithPositions(1.0f, 1.0f, 3.0f, 1.1f)));
-        REQUIRE_THAT(tileLayer.getRenderables()[1]->getBounds(),
+        REQUIRE_THAT(tileLayer.getTiles()[1]->getBounds(),
                      EqualsBounds(Bounds::createWithPositions(1.0f, 3.0f, 3.0f, 3.1f)));
-        REQUIRE_THAT(tileLayer.getRenderables()[2]->getBounds(),
+        REQUIRE_THAT(tileLayer.getTiles()[2]->getBounds(),
                      EqualsBounds(Bounds::createWithPositions(1.0f, 1.0f, 1.1f, 3.0f)));
-        REQUIRE_THAT(tileLayer.getRenderables()[3]->getBounds(),
+        REQUIRE_THAT(tileLayer.getTiles()[3]->getBounds(),
                      EqualsBounds(Bounds::createWithPositions(3.0f, 1.0f, 3.1f, 3.0f)));
     }
 

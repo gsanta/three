@@ -16,24 +16,24 @@ namespace engine
     template <typename T>
     class Group
     {
-    protected:
-        std::vector<T *> m_Renderables;
-        Renderer2D *m_Renderer = nullptr;
-
     public:
-        Group(Renderer2D *renderer);
+        Group();
+
         Group(const Group &);
+
         ~Group();
 
         bool operator==(const Group<T> &) const;
-        //friend bool operator!=(const Group<T>&, const Group<T>&);
+
         Group &operator=(const Group &);
+
         T &add(const T &renderable);
-        void render(const Camera &camera);
+
+        void render(const Camera &camera, Renderer2D &renderer);
+
         void clear();
+
         void remove(const T &renderable);
-        const Renderer2D *getRenderer() const;
-        Renderer2D *getRenderer();
 
         inline std::vector<T *> &getRenderables()
         {
@@ -44,6 +44,9 @@ namespace engine
         {
             return m_Renderables;
         }
+
+    protected:
+        std::vector<T *> m_Renderables;
     };
 
     template <typename T>
@@ -64,7 +67,7 @@ namespace engine
             }
         }
 
-        return *lhs.m_Renderer == *rhs.m_Renderer;
+        return true;
     }
 
     template <typename T>
@@ -74,26 +77,13 @@ namespace engine
     }
 
     template <typename T>
-    Group<T>::Group(Renderer2D *renderer) : m_Renderer(renderer)
+    Group<T>::Group()
     {
-    }
-
-    template <typename T>
-    const Renderer2D *Group<T>::getRenderer() const
-    {
-        return m_Renderer;
-    }
-
-    template <typename T>
-    Renderer2D *Group<T>::getRenderer()
-    {
-        return m_Renderer;
     }
 
     template <typename T>
     Group<T>::Group(const Group &group)
     {
-        m_Renderer = group.m_Renderer->clone();
         for (T *item : group.m_Renderables)
         {
             m_Renderables.push_back(new T(*item));
@@ -103,8 +93,6 @@ namespace engine
     template <typename T>
     Group<T>::~Group()
     {
-        delete m_Renderer;
-
         for (int i = 0; i < m_Renderables.size(); i++)
         {
             delete m_Renderables[i];
@@ -116,7 +104,6 @@ namespace engine
     {
         if (this != &that)
         {
-            delete m_Renderer;
             for (T *element : m_Renderables)
             {
                 delete element;
@@ -127,8 +114,6 @@ namespace engine
             {
                 m_Renderables.push_back(new T(*item));
             }
-
-            m_Renderer = that.m_Renderer->clone();
         }
 
         return *this;
@@ -168,22 +153,21 @@ namespace engine
     }
 
     template <typename T>
-    void Group<T>::render(const Camera &camera)
+    void Group<T>::render(const Camera &camera, Renderer2D &renderer)
     {
-        m_Renderer->begin();
+        renderer.begin();
 
-        m_Renderer->getShader().setUniformMat4("pr_matrix", camera.getProjectionMatrix());
+        renderer.getShader().setUniformMat4("pr_matrix", camera.getProjectionMatrix());
 
-
-        m_Renderer->push(camera.getViewMatrix());
+        renderer.push(camera.getViewMatrix());
         for (const Renderable2D *renderable : m_Renderables)
         {
-            renderable->submit(m_Renderer);
+            renderable->submit(renderer);
         }
-        m_Renderer->end();
-        m_Renderer->pop();
+        renderer.end();
+        renderer.pop();
 
-        m_Renderer->flush();
+        renderer.flush();
     }
 
 } // namespace engine

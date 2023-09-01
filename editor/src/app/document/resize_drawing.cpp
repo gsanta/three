@@ -7,7 +7,7 @@ namespace editor
     TileLayer resize_tile_layer(const TileLayer &orig, const Bounds &bounds, DocumentFactory *documentFactory)
     {
         TileLayer newTileLayer = documentFactory->createTileLayer(orig.getName(), bounds, orig.getTileSize());
-        for (Rect2D *rect : orig.getRenderables())
+        for (Rect2D *rect : orig.getTiles())
         {
             Vec2 rectCenter = rect->getCenterPosition2d();
             if (newTileLayer.getBounds().contains(rectCenter.x, rectCenter.y))

@@ -38,7 +38,7 @@ SCENARIO("Rectangle tool")
 
                 rectTool.pointerUp(toolContext);
 
-                REQUIRE(layer.getRenderables().size() == 12);
+                REQUIRE(layer.getTiles().size() == 12);
 
                 REQUIRE(layer.getAtTilePos(1, 1) != nullptr);
                 REQUIRE(layer.getAtTilePos(2, 1) != nullptr);
@@ -77,7 +77,7 @@ SCENARIO("Rectangle tool")
 
                 rectTool.pointerUp(toolContext);
 
-                REQUIRE(layer.getRenderables().size() == 10);
+                REQUIRE(layer.getTiles().size() == 10);
 
                 REQUIRE(layer.getAtTilePos(1, 1) != nullptr);
                 REQUIRE(layer.getAtTilePos(2, 1) != nullptr);

@@ -39,7 +39,7 @@ SCENARIO("Brush tool")
 
                     document.getHistory()->undo(document);
 
-                    REQUIRE(layer.getRenderables().size() == 0);
+                    REQUIRE(layer.getTiles().size() == 0);
 
                     WHEN("calling redo")
                     {
@@ -47,7 +47,7 @@ SCENARIO("Brush tool")
                         {
                             document.getHistory()->redo(document);
 
-                            REQUIRE(layer.getRenderables().size() == 3);
+                            REQUIRE(layer.getTiles().size() == 3);
                             REQUIRE(layer.getAtTilePos(1, 1) != nullptr);
                             REQUIRE(layer.getAtTilePos(2, 1) != nullptr);
                             REQUIRE(layer.getAtTilePos(2, 2) != nullptr);

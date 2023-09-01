@@ -22,13 +22,14 @@ namespace editor
 
     TileLayer DocumentFactory::createUserLayer(const Bounds &bounds, std::string name, float tileSize) const
     {
-        return TileLayer(name, Group<Rect2D>(m_RendererProvider->createRenderer2D()), bounds, tileSize);
+        return TileLayer(name, *m_RendererProvider->createRenderer2D(), Group<Rect2D>(), bounds, tileSize);
     }
 
     TileLayer DocumentFactory::createTileLayer(std::string name, const Bounds &bounds, float tileSize)
     {
         TileLayer tileLayer("",
-                            Group<Rect2D>(m_RendererProvider->createRenderer2D()),
+                            *m_RendererProvider->createRenderer2D(),
+                            Group<Rect2D>(),
                             bounds,
                             tileSize,
                             m_TileLayerZPos);
@@ -40,7 +41,8 @@ namespace editor
     TileLayer DocumentFactory::createBackgroundLayer(const Bounds &bounds, float tileSize)
     {
         TileLayer backgroundLayer("",
-                                  Group<Rect2D>(m_RendererProvider->createRenderer2D()),
+                                  *m_RendererProvider->createRenderer2D(),
+                                  Group<Rect2D>(),
                                   bounds,
                                   tileSize,
                                   m_BackgroundZPos);
@@ -54,7 +56,8 @@ namespace editor
     TileLayer DocumentFactory::createForegroundLayer(const Bounds &bounds, float tileSize)
     {
         TileLayer foregroundLayer("",
-                                  Group<Rect2D>(m_RendererProvider->createRenderer2D()),
+                                  *m_RendererProvider->createRenderer2D(),
+                                  Group<Rect2D>(),
                                   bounds,
                                   tileSize,
                                   m_ForegroundZPos,
@@ -82,7 +85,8 @@ namespace editor
         TileLayer &aLayer = frames[0].getLayers()[0];
 
         TileLayer backgroundLayer("",
-                                  Group<Rect2D>(m_RendererProvider->createRenderer2D()),
+                                  *m_RendererProvider->createRenderer2D(),
+                                  Group<Rect2D>(),
                                   aLayer.getBounds(),
                                   2.0f,
                                   m_BackgroundZPos);
@@ -92,7 +96,8 @@ namespace editor
         float tileSize = TileLayer::defaultTileSize;
 
         TileLayer tempLayer("",
-                            Group<Rect2D>(m_RendererProvider->createRenderer2D()),
+                            *m_RendererProvider->createRenderer2D(),
+                            Group<Rect2D>(),
                             aLayer.getBounds(),
                             tileSize,
                             m_ForegroundZPos,
@@ -110,7 +115,7 @@ namespace editor
 
     Drawing DocumentFactory::createDrawing(Bounds bounds, bool checkerboard, float zPos) const
     {
-        TileLayer initialLayer("layer1", Group<Rect2D>(m_RendererProvider->createRenderer2D()), bounds, 0.5f, zPos);
+        TileLayer initialLayer("layer1", *m_RendererProvider->createRenderer2D(), Group<Rect2D>(), bounds, 0.5f, zPos);
 
         std::vector<Frame> frames;
 
