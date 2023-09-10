@@ -8,6 +8,7 @@ import CircleToolOptions from './CircleToolOptions';
 import RectangleToolOptions from './RectangleToolOptions';
 import EraseToolOptions from './EraseToolOptions';
 import { Box } from '@chakra-ui/react';
+import SelectToolOptions from './SelectToolOptions';
 
 const ToolOptionsPanel = () => {
   const selectedTool = useAppSelector((state) => state.tool.selectedTool);
@@ -22,6 +23,8 @@ const ToolOptionsPanel = () => {
         return <RectangleToolOptions />;
       case ToolName.Erase:
         return <EraseToolOptions />;
+      case ToolName.SelectionRectangle:
+        return <SelectToolOptions />;
       default:
         return null;
     }

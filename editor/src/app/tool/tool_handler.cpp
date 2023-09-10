@@ -207,16 +207,17 @@ namespace editor
         }
         else if (key == GLFW_KEY_R)
         {
-            float pixelCount = 16.0f;
-            Bounds drawingBounds = Bounds::createWithPositions(-pixelCount / 2.0f,
-                                                               -pixelCount / 2.0f,
-                                                               pixelCount / 2.0f,
-                                                               pixelCount / 2.0f);
-            Drawing &drawing = m_DocumentStore->getActiveDocument().getActiveDrawing();
-            Drawing newDrawing = resize_drawing(drawing, drawingBounds, m_DocumentFactory);
-            m_DocumentStore->getActiveDocument().removeActiveDrawing();
-            m_DocumentStore->getActiveDocument().addDrawing(newDrawing);
-            // setSelectedTool("rectangle");
+            // float pixelCount = 16.0f;
+            // Bounds drawingBounds = Bounds::createWithPositions(-pixelCount / 2.0f,
+            //                                                    -pixelCount / 2.0f,
+            //                                                    pixelCount / 2.0f,
+            //                                                    pixelCount / 2.0f);
+            // Drawing &drawing = m_DocumentStore->getActiveDocument().getActiveDrawing();
+            // Drawing newDrawing = resize_drawing(drawing, drawingBounds, m_DocumentFactory);
+            // m_DocumentStore->getActiveDocument().removeActiveDrawing();
+            // m_DocumentStore->getActiveDocument().addDrawing(newDrawing);
+            setSelectedTool("rectangle");
+            dynamic_cast<RectangleTool *>(getTool("rectangle"))->setFilled(true);
         }
         else if (key == GLFW_KEY_U)
         {
@@ -229,6 +230,19 @@ namespace editor
         else if (key == GLFW_KEY_LEFT)
         {
             m_DocumentStore->getActiveDocument().getCamera().translate2D(Vec2(2.0f, 0.0f));
+        }
+        else if (key == GLFW_KEY_H)
+        {
+            Vec2 bottomLeft =
+                m_DocumentStore->getActiveDocument().getActiveDrawing().getState().getBounds().getBottomLeft();
+            Vec2 topRight =
+                m_DocumentStore->getActiveDocument().getActiveDrawing().getState().getBounds().getTopRight();
+            Vec2Int bottomLeftTile = m_DocumentStore->getActiveDocument().getActiveLayer().getTilePos(bottomLeft);
+            Vec2Int topRightTile = m_DocumentStore->getActiveDocument().getActiveLayer().getTilePos(topRight);
+            shear_horizontal(m_DocumentStore->getActiveDocument().getActiveLayer(),
+                             BoundsInt(bottomLeftTile, topRightTile),
+                             0.436332f);
+            // m_DocumentStore->getActiveDocument().getCamera().translate2D(Vec2(2.0f, 0.0f));
         }
     }
 

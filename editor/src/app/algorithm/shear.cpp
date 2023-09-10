@@ -1,4 +1,4 @@
-#include "./shear_vertical.h"
+#include "./shear.h"
 
 namespace spright
 {
@@ -14,19 +14,6 @@ namespace editor
     float get_abs(float number)
     {
         return number < 0 ? -1 * number : number;
-    }
-
-    void copy(const TileView &source, TileView &dest, const BoundsInt &bounds)
-    {
-        // RectSelector rectSelector(&source);
-        // rectSelector.setSelection(bounds.getBottomLeft(), bounds.getTopRight());
-
-        // const std::vector<Rect2D *> tiles = rectSelector.getSelection();
-
-        // for (Rect2D *tile : tiles)
-        // {
-        //     dest.add(*tile);
-        // }
     }
 
     float normalize_angle_for_shear(float radang, float mindif)
@@ -53,13 +40,12 @@ namespace editor
 
     void shear_vertical(TileView &source, const BoundsInt &bounds, float angle)
     {
-        TileView dest(source.getTileBounds());
+        TileView dest(source.getBounds(), source.getTileSize());
 
         angle = normalize_angle_for_shear(angle, MinDiffFromHalfPi);
 
         if (angle == 0.0 || tan(angle) == 0.0)
         {
-            copy(source, dest, bounds);
             return;
         }
 
@@ -104,15 +90,19 @@ namespace editor
 
             x -= xincr;
         }
+
+        tile_operation_remove_area(source, bounds);
+        tile_operation_copy_all(dest, source);
     }
 
-    void shear_horizontal(TileLayer &source, TileLayer &dest, const BoundsInt &bounds, float angle)
+    void shear_horizontal(TileLayer &source, const BoundsInt &bounds, float angle)
     {
+        TileView dest(source.getBounds(), source.getTileSize());
+
         angle = normalize_angle_for_shear(angle, MinDiffFromHalfPi);
 
         if (angle == 0.0 || tan(angle) == 0.0)
         {
-            copy(source, dest, bounds);
             return;
         }
 
@@ -155,6 +145,9 @@ namespace editor
                                      Vec2Int(bounds.minX + -sign * hShift, y - yincr));
             y -= yincr;
         }
+
+        tile_operation_remove_area(source, bounds);
+        tile_operation_copy_all(dest, source);
     }
 } // namespace editor
 } // namespace spright

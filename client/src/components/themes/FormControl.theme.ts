@@ -4,7 +4,7 @@ const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpe
 
 const baseStyle = definePartsStyle({
   container: {
-    display: 'flex',
+    // display: 'flex',
   },
 });
 

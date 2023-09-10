@@ -17,8 +17,30 @@ namespace editor
                 if (tile != nullptr)
                 {
                     Rect2D newTile(*tile);
+                    newTile.setCenterPosition(source.getWorldPos(newDestPos));
                     dest.add(newTile, newDestPos);
                 }
+            }
+        }
+    }
+
+    void tile_operation_copy_all(const TileView &source, TileView &dest)
+    {
+        if (source.getTileBounds() != dest.getTileBounds())
+        {
+            throw std::invalid_argument("Can not copy to a tile view with different size");
+        }
+
+        tile_operation_copy_area(source, dest, source.getTileBounds());
+    }
+
+    void tile_operation_remove_area(TileView &tileView, const BoundsInt &area)
+    {
+        for (int i = 0; i < area.getWidth(); i++)
+        {
+            for (int j = 0; j < area.getHeight(); j++)
+            {
+                tileView.removeAt(tileView.getTileIndex(area.minX + i, area.minY + j));
             }
         }
     }

@@ -13,6 +13,12 @@ namespace engine
     {
     }
 
+    BoundsInt::BoundsInt(Vec2Int bottomLeft, Vec2Int topRight)
+        : minX(bottomLeft.x), minY(bottomLeft.y), maxX(topRight.x), maxY(topRight.y)
+    {
+    }
+
+
     BoundsInt BoundsInt::createWithSize(int minX, int minY, int width, int height)
     {
         return BoundsInt(minX, minY, minX + width, minY + height);

@@ -179,23 +179,32 @@ void zoom_to_fit()
     editor->getActiveDocument().getCamera().zoomToFit(editor->getActiveDocument().getActiveDrawing().getBounds());
 }
 
-void shear_horizontal_func()
+void shear_horizontal_api(float angle)
 {
     Drawing &drawing = editor->getActiveDocument().getActiveDrawing();
     Bounds bounds = editor->getActiveDocument().getActiveDrawing().getState().getBounds();
     TileLayer &currentLayer = editor->getActiveDocument().getActiveDrawing().getActiveLayer();
 
-    (bounds.minX - drawing.getBounds().minX) / currentLayer.getTileSize();
+    Vec2 bottomLeft = editor->getActiveDocument().getActiveDrawing().getState().getBounds().getBottomLeft();
+    Vec2 topRight = editor->getActiveDocument().getActiveDrawing().getState().getBounds().getTopRight();
+    Vec2Int bottomLeftTile = editor->getActiveDocument().getActiveLayer().getTilePos(bottomLeft);
+    Vec2Int topRightTile = editor->getActiveDocument().getActiveLayer().getTilePos(topRight);
 
-    int x = (bounds.minX - drawing.getBounds().minX) / currentLayer.getTileSize();
-    int y = (bounds.minY - drawing.getBounds().minY) / currentLayer.getTileSize();
+    shear_horizontal(currentLayer, BoundsInt(bottomLeftTile, topRightTile), angle);
+}
 
-    BoundsInt bInt(x,
-                   y,
-                   x + bounds.getWidth() / currentLayer.getTileSize(),
-                   y + bounds.getHeight() / currentLayer.getTileSize());
+void shear_vertical_api(float angle)
+{
+    Drawing &drawing = editor->getActiveDocument().getActiveDrawing();
+    Bounds bounds = editor->getActiveDocument().getActiveDrawing().getState().getBounds();
+    TileLayer &currentLayer = editor->getActiveDocument().getActiveDrawing().getActiveLayer();
 
-    rotate(currentLayer, editor->getDocumentFactory(), bInt, 0.785398f);
+    Vec2 bottomLeft = editor->getActiveDocument().getActiveDrawing().getState().getBounds().getBottomLeft();
+    Vec2 topRight = editor->getActiveDocument().getActiveDrawing().getState().getBounds().getTopRight();
+    Vec2Int bottomLeftTile = editor->getActiveDocument().getActiveLayer().getTilePos(bottomLeft);
+    Vec2Int topRightTile = editor->getActiveDocument().getActiveLayer().getTilePos(topRight);
+
+    shear_vertical(currentLayer, BoundsInt(bottomLeftTile, topRightTile), angle);
 }
 
 EMSCRIPTEN_BINDINGS(spright)
@@ -226,7 +235,8 @@ EMSCRIPTEN_BINDINGS(spright)
     emscripten::function("zoomOut", &zoom_out);
     emscripten::function("resetZoom", &reset_zoom);
     emscripten::function("zoomToFit", &zoom_to_fit);
-    emscripten::function("shearHorizontal", &shear_horizontal_func);
+    emscripten::function("shearHorizontal", &shear_horizontal_api);
+    emscripten::function("shearVertical", &shear_vertical_api);
 }
 
 #endif
