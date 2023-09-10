@@ -86,8 +86,8 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
         Drawing &drawing = documentStore.getActiveDocument().getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
 
-        const Vec2 bottomLeft = activeLayer.getWorldPos(1, 0);
-        const Vec2 topRight = activeLayer.getWorldPos(3, 2);
+        const Vec2 bottomLeft = activeLayer.getCenterPos(Vec2Int(1, 0));
+        const Vec2 topRight = activeLayer.getCenterPos(Vec2Int(3, 2));
         const Bounds bounds(bottomLeft, topRight);
 
         drawing.getState().setBounds(bounds);
@@ -119,7 +119,7 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
         TileLayer &activeLayer = drawing.getActiveLayer();
 
         float tileSize = activeLayer.getTileSize();
-        const Vec2 bottomLeft = activeLayer.getWorldPos(1, 0) - Vec2(tileSize / 2.0f, tileSize / 2.0f);
+        const Vec2 bottomLeft = activeLayer.getBottomLeftPos(Vec2Int(1, 0));
         const Vec2 topRight = bottomLeft + Vec2(4, 2);
         const Bounds bounds(bottomLeft, topRight);
 
@@ -151,8 +151,8 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
         Drawing &drawing = documentStore.getActiveDocument().getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
 
-        const Vec2 bottomLeft = activeLayer.getWorldPos(1, 0);
-        const Vec2 topRight = activeLayer.getWorldPos(4, 2);
+        const Vec2 bottomLeft = activeLayer.getCenterPos(Vec2Int(1, 0));
+        const Vec2 topRight = activeLayer.getCenterPos(Vec2Int(4, 2));
         const Bounds bounds(bottomLeft, topRight);
 
         drawing.getState().setBounds(bounds);

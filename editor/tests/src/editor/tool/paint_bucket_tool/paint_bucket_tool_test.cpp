@@ -62,7 +62,7 @@ SCENARIO("Paint bucket tool")
         WHEN("clicking in the middle of the continues area")
         {
 
-            toolContext.pointer.curr = layer.getWorldPos(1, 1);
+            toolContext.pointer.curr = layer.getCenterPos(Vec2Int(1, 1));
             paintBucketTool.execPointerUp(toolContext);
 
             THEN("it fills that area")

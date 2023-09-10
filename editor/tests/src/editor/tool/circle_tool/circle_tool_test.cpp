@@ -61,8 +61,8 @@ SCENARIO("Circle tool")
         {
             CircleTool circleTool;
 
-            toolContext.pointer.down = layer.getWorldPos(Vec2Int(0, 0));
-            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(4.0f, 2.0f));
+            toolContext.pointer.down = layer.getCenterPos(Vec2Int(0, 0));
+            toolContext.pointer.curr = layer.getCenterPos(Vec2Int(4.0f, 2.0f));
             toolContext.pointer.isDown = true;
             circleTool.pointerMove(toolContext);
 
@@ -70,7 +70,7 @@ SCENARIO("Circle tool")
             {
                 REQUIRE_ELLIPSE(document.getActiveDrawing().getForegroundLayer());
 
-                // toolContext.pointer.curr = layer.getWorldPos(Vec2Int(6.0f, 6.0f));
+                // toolContext.pointer.curr = layer.getCenterPos(Vec2Int(6.0f, 6.0f));
                 // circleTool.pointerMove(toolContext);
 
                 // REQUIRE_CIRCLE(document.getActiveDrawing().getForegroundLayer());
@@ -78,7 +78,7 @@ SCENARIO("Circle tool")
 
             WHEN("releasing the mouse at an equal horizontal and vertical distance from mouse down")
             {
-                toolContext.pointer.curr = layer.getWorldPos(Vec2Int(6.0f, 6.0f));
+                toolContext.pointer.curr = layer.getCenterPos(Vec2Int(6.0f, 6.0f));
                 circleTool.pointerMove(toolContext);
                 circleTool.pointerUp(toolContext);
 
@@ -110,7 +110,7 @@ SCENARIO("Circle tool")
 
             WHEN("releasing the mouse at a further horizontal distance than vertical from mouse down")
             {
-                toolContext.pointer.curr = layer.getWorldPos(Vec2Int(4.0f, 2.0f));
+                toolContext.pointer.curr = layer.getCenterPos(Vec2Int(4.0f, 2.0f));
                 circleTool.pointerMove(toolContext);
                 circleTool.pointerUp(toolContext);
 

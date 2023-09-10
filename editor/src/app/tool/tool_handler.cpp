@@ -39,7 +39,7 @@ namespace editor
 
     void ToolHandler::onMouseUp(bool buttons[3])
     {
-        Drawing *activeDrawing = m_DocumentStore->getActiveDocument().getDrawingAt(m_ToolContext.pointer.curr);
+        Drawing *activeDrawing = &m_DocumentStore->getActiveDocument().getDrawings()[0];
 
         m_ToolContext.doc.document = &m_DocumentStore->getActiveDocument();
 
@@ -66,8 +66,7 @@ namespace editor
         m_ToolContext.pointer.buttons[1] = buttons[1];
         m_ToolContext.pointer.buttons[2] = buttons[2];
 
-        Drawing *activeDrawing = m_DocumentStore->getActiveDocument().getDrawingAt(m_ToolContext.pointer.curr);
-
+        Drawing *activeDrawing = &m_DocumentStore->getActiveDocument().getDrawings()[0];
         for (Tool *tool : *m_ActiveTools)
         {
             tool->execPointerDown(m_ToolContext);
@@ -78,7 +77,7 @@ namespace editor
     void ToolHandler::onMouseMove(double x, double y)
     {
         m_ToolContext.doc.document = &m_DocumentStore->getActiveDocument();
-        Drawing *activeDrawing = m_DocumentStore->getActiveDocument().getDrawingAt(m_ToolContext.pointer.curr);
+        Drawing *activeDrawing = &m_DocumentStore->getActiveDocument().getDrawings()[0];
         if (m_ToolContext.doc.activeDrawing != activeDrawing)
         {
             m_ToolContext.doc.prevDrawing = m_ToolContext.doc.activeDrawing;
@@ -239,9 +238,11 @@ namespace editor
                 m_DocumentStore->getActiveDocument().getActiveDrawing().getState().getBounds().getTopRight();
             Vec2Int bottomLeftTile = m_DocumentStore->getActiveDocument().getActiveLayer().getTilePos(bottomLeft);
             Vec2Int topRightTile = m_DocumentStore->getActiveDocument().getActiveLayer().getTilePos(topRight);
-            shear_horizontal(m_DocumentStore->getActiveDocument().getActiveLayer(),
-                             BoundsInt(bottomLeftTile, topRightTile),
-                             0.436332f);
+            std::vector<int> newIndexes = shear_horizontal(m_DocumentStore->getActiveDocument().getActiveLayer(),
+                                                           BoundsInt(bottomLeftTile, topRightTile),
+                                                           0.436332f);
+            dynamic_cast<SelectTool *>(getTool("select"))->setSelectedTiles(std::move(newIndexes));
+
             // m_DocumentStore->getActiveDocument().getCamera().translate2D(Vec2(2.0f, 0.0f));
         }
     }

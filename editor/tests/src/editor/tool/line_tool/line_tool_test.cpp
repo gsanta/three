@@ -21,13 +21,13 @@ SCENARIO("Line tool")
 
         WHEN("dragging in a perfect diagonal direction")
         {
-            toolContext.pointer.down = layer.getWorldPos(Vec2Int(0, 0));
+            toolContext.pointer.down = layer.getCenterPos(Vec2Int(0, 0));
 
             lineTool.execPointerDown(toolContext);
 
             toolContext.pointer.isDown = true;
 
-            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(4, 4));
+            toolContext.pointer.curr = layer.getCenterPos(Vec2Int(4, 4));
 
             lineTool.execPointerMove(toolContext);
             lineTool.execPointerUp(toolContext);
@@ -64,14 +64,14 @@ SCENARIO("Line tool")
 
         WHEN("dragging in the horizontal direction")
         {
-            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(0, 0));
+            toolContext.pointer.curr = layer.getCenterPos(Vec2Int(0, 0));
             toolContext.pointer.down = toolContext.pointer.curr;
 
             lineTool.execPointerDown(toolContext);
 
             toolContext.pointer.isDown = true;
 
-            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(4, 0));
+            toolContext.pointer.curr = layer.getCenterPos(Vec2Int(4, 0));
 
             lineTool.execPointerMove(toolContext);
             lineTool.execPointerUp(toolContext);
@@ -88,14 +88,14 @@ SCENARIO("Line tool")
 
         WHEN("dragging in the vertical direction")
         {
-            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(0, 0));
+            toolContext.pointer.curr = layer.getCenterPos(Vec2Int(0, 0));
             toolContext.pointer.down = toolContext.pointer.curr;
 
             lineTool.execPointerDown(toolContext);
 
             toolContext.pointer.isDown = true;
 
-            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(0, 5));
+            toolContext.pointer.curr = layer.getCenterPos(Vec2Int(0, 5));
 
             lineTool.execPointerMove(toolContext);
             lineTool.execPointerUp(toolContext);
@@ -113,14 +113,14 @@ SCENARIO("Line tool")
 
         WHEN("Dragging in the positive direction more horizontally than vertically")
         {
-            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(0, 0));
+            toolContext.pointer.curr = layer.getCenterPos(Vec2Int(0, 0));
             toolContext.pointer.down = toolContext.pointer.curr;
 
             lineTool.execPointerDown(toolContext);
 
             toolContext.pointer.isDown = true;
 
-            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(4, 3));
+            toolContext.pointer.curr = layer.getCenterPos(Vec2Int(4, 3));
 
             lineTool.execPointerMove(toolContext);
             lineTool.execPointerUp(toolContext);
@@ -137,14 +137,14 @@ SCENARIO("Line tool")
 
         WHEN("Dragging in the negative direction more horizontally than vertically")
         {
-            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(4, 0));
+            toolContext.pointer.curr = layer.getCenterPos(Vec2Int(4, 0));
             toolContext.pointer.down = toolContext.pointer.curr;
 
             lineTool.execPointerDown(toolContext);
 
             toolContext.pointer.isDown = true;
 
-            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(0, 3));
+            toolContext.pointer.curr = layer.getCenterPos(Vec2Int(0, 3));
 
             lineTool.execPointerMove(toolContext);
             lineTool.execPointerUp(toolContext);
@@ -161,14 +161,14 @@ SCENARIO("Line tool")
 
         WHEN("Dragging in the positive direction more vertically than horizontally")
         {
-            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(0, 0));
+            toolContext.pointer.curr = layer.getCenterPos(Vec2Int(0, 0));
             toolContext.pointer.down = toolContext.pointer.curr;
 
             lineTool.execPointerDown(toolContext);
 
             toolContext.pointer.isDown = true;
 
-            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(2, 4));
+            toolContext.pointer.curr = layer.getCenterPos(Vec2Int(2, 4));
 
             lineTool.execPointerMove(toolContext);
             lineTool.execPointerUp(toolContext);
@@ -187,18 +187,18 @@ SCENARIO("Line tool")
         {
             TileLayer &foregroundLayer = document.getActiveDrawing().getForegroundLayer();
 
-            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(0, 0));
+            toolContext.pointer.curr = layer.getCenterPos(Vec2Int(0, 0));
             toolContext.pointer.down = toolContext.pointer.curr;
 
             lineTool.execPointerDown(toolContext);
 
             toolContext.pointer.isDown = true;
 
-            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(4, 4));
+            toolContext.pointer.curr = layer.getCenterPos(Vec2Int(4, 4));
 
             lineTool.execPointerMove(toolContext);
 
-            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(4, 0));
+            toolContext.pointer.curr = layer.getCenterPos(Vec2Int(4, 0));
 
             lineTool.execPointerMove(toolContext);
 

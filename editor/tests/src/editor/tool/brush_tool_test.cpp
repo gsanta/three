@@ -18,17 +18,17 @@ SCENARIO("Brush tool")
         {
 
             TileLayer &layer = document.getActiveLayer();
-            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(1, 1));
+            toolContext.pointer.curr = layer.getCenterPos(Vec2Int(1, 1));
             toolContext.pointer.down = toolContext.pointer.curr;
 
             toolContext.pointer.buttons[0] = true;
             brushTool.execPointerDown(toolContext);
             brushTool.execPointerMove(toolContext);
 
-            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(2, 1));
+            toolContext.pointer.curr = layer.getCenterPos(Vec2Int(2, 1));
             brushTool.execPointerMove(toolContext);
 
-            toolContext.pointer.curr = layer.getWorldPos(Vec2Int(2, 2));
+            toolContext.pointer.curr = layer.getCenterPos(Vec2Int(2, 2));
             brushTool.execPointerMove(toolContext);
             brushTool.execPointerUp(toolContext);
 

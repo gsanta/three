@@ -62,7 +62,7 @@ namespace editor
             unsigned int index = std::stoi(tileIndexStr);
             unsigned int color = std::stoul(colorStr, nullptr, 16);
 
-            Vec2 bottomLeftPos = layer.getCenterPos(index) - halfTileSize;
+            Vec2 bottomLeftPos = layer.getBottomLeftPos(index);
             layer.add(Rect2D(bottomLeftPos.x, bottomLeftPos.y, tileSize, tileSize, color));
         }
 

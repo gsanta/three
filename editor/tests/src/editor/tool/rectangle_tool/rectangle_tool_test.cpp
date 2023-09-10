@@ -25,13 +25,13 @@ SCENARIO("Rectangle tool")
             {
                 TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing().getActiveLayer();
 
-                toolContext.pointer.curr = layer.getWorldPos(Vec2Int(1, 1));
+                toolContext.pointer.curr = layer.getCenterPos(Vec2Int(1, 1));
                 toolContext.pointer.prev = toolContext.pointer.curr;
 
                 rectTool.pointerDown(toolContext);
 
                 toolContext.pointer.down = toolContext.pointer.prev = toolContext.pointer.curr;
-                toolContext.pointer.curr = layer.getWorldPos(Vec2Int(3, 4));
+                toolContext.pointer.curr = layer.getCenterPos(Vec2Int(3, 4));
                 toolContext.pointer.isDown = true;
 
                 rectTool.pointerMove(toolContext);
@@ -64,13 +64,13 @@ SCENARIO("Rectangle tool")
 
                 TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing().getActiveLayer();
 
-                toolContext.pointer.curr = layer.getWorldPos(Vec2Int(1, 1));
+                toolContext.pointer.curr = layer.getCenterPos(Vec2Int(1, 1));
                 toolContext.pointer.prev = toolContext.pointer.curr;
 
                 rectTool.pointerDown(toolContext);
 
                 toolContext.pointer.down = toolContext.pointer.prev = toolContext.pointer.curr;
-                toolContext.pointer.curr = layer.getWorldPos(Vec2Int(3, 4));
+                toolContext.pointer.curr = layer.getCenterPos(Vec2Int(3, 4));
                 toolContext.pointer.isDown = true;
 
                 rectTool.pointerMove(toolContext);

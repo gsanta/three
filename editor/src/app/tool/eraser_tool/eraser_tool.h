@@ -6,7 +6,6 @@
 #include "../../document/document_store.h"
 #include "../../document/drawing.h"
 #include "../common/rectangle_cursor/rectangle_cursor.h"
-#include "../common/rectangle_cursor/rectangle_stroke.h"
 #include "../tool/tool.h"
 #include "../tool/tool_context.h"
 #include "./erase_undo.h"
@@ -30,8 +29,6 @@ namespace editor
         void pointerDown(const ToolContext &) override;
 
         void pointerMove(const ToolContext &) override;
-
-        float getStrokeSize() const;
 
         void setOptions(std::string json) override;
 

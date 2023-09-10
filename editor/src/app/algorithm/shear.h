@@ -14,6 +14,6 @@ namespace editor
 
     void shear_vertical(TileView &source, const BoundsInt &bounds, float angle);
 
-    void shear_horizontal(TileLayer &source, const BoundsInt &bounds, float angle);
+    std::vector<int> shear_horizontal(TileLayer &source, const BoundsInt &bounds, float angle);
 } // namespace editor
 } // namespace spright

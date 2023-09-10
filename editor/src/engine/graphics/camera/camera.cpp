@@ -67,11 +67,11 @@ namespace engine
 
     const Mat4 Camera::getProjectionMatrix() const
     {
-        int twiceScaleFactor = getScaleFactor() * 2;
-        return Mat4::otrthographic(-m_Window->getWidth() / twiceScaleFactor,
-                                   m_Window->getWidth() / twiceScaleFactor,
-                                   -m_Window->getHeight() / twiceScaleFactor,
-                                   m_Window->getHeight() / twiceScaleFactor,
+        int twiceScaleFactor = getScaleFactor() * 2.0f;
+        return Mat4::otrthographic(-m_Window->getWidth() / (twiceScaleFactor + 0.4f),
+                                   m_Window->getWidth() / (twiceScaleFactor + 0.4f),
+                                   -m_Window->getHeight() / (twiceScaleFactor + 0.4f),
+                                   m_Window->getHeight() / (twiceScaleFactor + 0.4f),
                                    m_Near,
                                    m_Far);
     }
@@ -90,8 +90,13 @@ namespace engine
     {
         float w = (float)m_Window->getWidth() / getScaleFactor();
         float h = (float)m_Window->getHeight() / getScaleFactor();
+        if ((x / getScaleFactor()) - w / 2.0f > -16.5f)
+        {
+            float a = 1;
+        }
 
-        const Mat4 scaleMatrix = spright::maths::Mat4::scale(Vec3(1.0 / getScaleFactor(), 1.0 / getScaleFactor(), 1));
+        const Mat4 scaleMatrix =
+            spright::maths::Mat4::scale(Vec3(1.0f / getScaleFactor(), 1.0f / getScaleFactor(), 1.0f));
 
         // from the screen's top/left zero pos to center zero pos
         const Mat4 translateMatrix =

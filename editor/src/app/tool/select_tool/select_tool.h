@@ -3,10 +3,13 @@
 #include "../../../engine/graphics/renderable/rect2d.h"
 #include "../../document/document_store.h"
 #include "../../document/drawing.h"
-#include "../common/selection_box.h"
+#include "../common/rectangle_cursor/rectangle_cursor.h"
 #include "../tool/tool.h"
 #include "../tool/tool_context.h"
+#include "./box_selector.h"
 #include "./rect_selector.h"
+#include "./selection_buffer.h"
+#include "./selection_mover.h"
 
 #include <memory>
 #include <vector>
@@ -30,17 +33,23 @@ namespace editor
 
         void pointerMove(const ToolContext &) override;
 
+        void setSelectedTiles(std::vector<int> indexes);
+
+        std::shared_ptr<SelectionBuffer> getSelectionBuffer();
+
     private:
-        void makePointSelection(const ToolContext &);
+        void fillTempLayer(TileLayer &tempLayer);
 
     private:
         DocumentStore *m_DocumentStore;
 
-        SelectionBox m_SelectionBox;
+        std::shared_ptr<SelectionBuffer> m_SelectionBuffer;
+
+        std::unique_ptr<BoxSelector> m_BoxSelector;
+
+        std::unique_ptr<SelectionMover> m_SelectionMover;
 
         RectSelector m_RectSelector;
-
-        vector<Rect2D *> m_Data;
 
         vector<Vec2> m_OrigPositions;
 
