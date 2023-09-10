@@ -43,7 +43,7 @@ SCENARIO("Erase tool")
 
         ToolContext toolContext =
             ToolContextBuilder()
-                .withPointerInfo(PointerInfoBuilder().withCurr(activeLayer.getWorldPos(Vec2Int(1, 1))))
+                .withPointerInfo(PointerInfoBuilder().withCurr(activeLayer.getCenterPos(Vec2Int(1, 1))))
                 .withDocumentInfo(DocumentInfoBuilder().withActiveDrawing(&document.getActiveDrawing()))
                 .build();
         toolContext.doc.document = &document;
@@ -94,17 +94,17 @@ SCENARIO("Erase tool")
 
         WHEN("dragging with the erase tool")
         {
-            toolContext.pointer.curr = activeLayer.getWorldPos(Vec2Int(1, 0));
+            toolContext.pointer.curr = activeLayer.getCenterPos(Vec2Int(1, 0));
             toolContext.pointer.down = toolContext.pointer.curr;
             toolContext.pointer.isDown = true;
 
             eraseTool.execPointerDown(toolContext);
             eraseTool.execPointerMove(toolContext);
 
-            toolContext.pointer.curr = activeLayer.getWorldPos(Vec2Int(2, 0));
+            toolContext.pointer.curr = activeLayer.getCenterPos(Vec2Int(2, 0));
             eraseTool.execPointerMove(toolContext);
 
-            toolContext.pointer.curr = activeLayer.getWorldPos(Vec2Int(2, 1));
+            toolContext.pointer.curr = activeLayer.getCenterPos(Vec2Int(2, 1));
             eraseTool.execPointerMove(toolContext);
             eraseTool.execPointerUp(toolContext);
 
@@ -134,7 +134,7 @@ SCENARIO("Erase tool")
     GIVEN("an empty document")
     {
         Document document = DocumentBuilder().withDrawing(DrawingBuilder().withBounds(Bounds(0, 0, 4, 4))).build();
-        TileLayer &foregroundLayer1 = document.getActiveDrawing().getForegroundLayer();
+        TileLayer &tempLayer = document.getActiveDrawing().getForegroundLayer();
 
         ToolContext toolContext = ToolContextBuilder().withDocument(document).build();
 
@@ -142,43 +142,29 @@ SCENARIO("Erase tool")
 
         WHEN("moving the mouse")
         {
-            toolContext.pointer.curr = foregroundLayer1.getWorldPos(Vec2Int(2, 1));
+            toolContext.pointer.curr = tempLayer.getCenterPos(Vec2Int(2, 1));
             eraseTool.execPointerMove(toolContext);
 
             THEN("erase tool cursor follows the mouse")
             {
-                float dashSize = eraseTool.getStrokeSize();
+                REQUIRE(tempLayer.getTiles().size() == 1);
 
-                REQUIRE(foregroundLayer1.getTiles().size() == 4);
-                // top
-                REQUIRE_THAT(foregroundLayer1.getTiles()[0]->getBounds(),
-                             EqualsBounds(Bounds::createWithSize(2.0f, 2.0 - dashSize / 2.0f, 1.0f, dashSize)));
-                // bottom
-                REQUIRE_THAT(foregroundLayer1.getTiles()[2]->getBounds(),
-                             EqualsBounds(Bounds::createWithSize(2.0f, 1.0 - dashSize / 2.0f, 1.0f, dashSize)));
-                // left
-                REQUIRE_THAT(foregroundLayer1.getTiles()[1]->getBounds(),
-                             EqualsBounds(Bounds::createWithSize(3.0 - dashSize / 2.0, 1.0, dashSize, 1.0)));
-                // right
-                REQUIRE_THAT(foregroundLayer1.getTiles()[3]->getBounds(),
-                             EqualsBounds(Bounds::createWithSize(2.0 - dashSize / 2.0, 1.0, dashSize, 1.0)));
+                REQUIRE_THAT(tempLayer.getTiles()[0]->getBounds(),
+                             EqualsBounds(Bounds::createWithSize(2.0f, 1, 1.0f, 1.0f)));
 
-                toolContext.pointer.curr = foregroundLayer1.getWorldPos(Vec2Int(3, 1));
+                toolContext.pointer.curr = tempLayer.getCenterPos(Vec2Int(3, 1));
                 eraseTool.execPointerMove(toolContext);
 
-                REQUIRE(foregroundLayer1.getTiles().size() == 4);
-                // top
-                REQUIRE_THAT(foregroundLayer1.getTiles()[0]->getBounds(),
-                             EqualsBounds(Bounds::createWithSize(3.0f, 2.0 - dashSize / 2.0f, 1.0f, dashSize)));
-                // bottom
-                REQUIRE_THAT(foregroundLayer1.getTiles()[2]->getBounds(),
-                             EqualsBounds(Bounds::createWithSize(3.0f, 1.0 - dashSize / 2.0f, 1.0f, dashSize)));
-                // left
-                REQUIRE_THAT(foregroundLayer1.getTiles()[1]->getBounds(),
-                             EqualsBounds(Bounds::createWithSize(4.0 - dashSize / 2.0, 1.0, dashSize, 1.0)));
-                // // right
-                REQUIRE_THAT(foregroundLayer1.getTiles()[3]->getBounds(),
-                             EqualsBounds(Bounds::createWithSize(3.0 - dashSize / 2.0, 1.0, dashSize, 1.0)));
+                REQUIRE(tempLayer.getTiles().size() == 1);
+
+                REQUIRE_THAT(tempLayer.getTiles()[0]->getBounds(),
+                             EqualsBounds(Bounds::createWithSize(3.0f, 1.0f, 1.0f, 1.0f)));
+
+                toolContext.pointer.curr = tempLayer.getCenterPos(Vec2Int(3, 2));
+                eraseTool.execPointerMove(toolContext);
+
+                REQUIRE(tempLayer.getTiles().size() == 1);
+                EqualsBounds(Bounds::createWithSize(3.0f, 2.0f, 1.0f, 1.0f));
             }
         }
     }

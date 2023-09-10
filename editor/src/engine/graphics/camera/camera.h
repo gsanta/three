@@ -62,7 +62,7 @@ namespace engine
 
         float m_Zoom = 1.0f;
 
-        int m_ZoomFactor = 35;
+        int m_ZoomFactor = 1;
 
         const Window *m_Window;
     };

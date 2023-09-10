@@ -111,7 +111,7 @@ namespace editor
         Renderable2D *renderable = layer.getAtTileIndex(tileIndex);
 
         float tileSize = layer.getTileSize();
-        Vec2 bottomLeftPos = layer.getCenterPos(tileIndex) - Vec2(tileSize / 2.0f, tileSize / 2.0f);
+        Vec2 bottomLeftPos = layer.getBottomLeftPos(tileIndex);
 
         std::shared_ptr<Rect2D> prev;
 

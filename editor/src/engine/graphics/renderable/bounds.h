@@ -20,10 +20,9 @@ namespace engine
 
         float maxY;
 
-        Bounds(float minX, float minY, float maxX, float maxY);
+        Bounds(float x1, float y1, float x2, float y2);
 
-        //@deprecated use createWithPositions instead
-        Bounds(Vec2 bottomLeft, Vec2 topRight);
+        Bounds(Vec2 vec1, Vec2 vec2);
 
         Bounds();
 

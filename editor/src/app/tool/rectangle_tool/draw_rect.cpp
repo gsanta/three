@@ -63,8 +63,6 @@ namespace editor
             positions.push_back(Vec2Int(topRight.x - 1, i));
         }
 
-        Vec2 halfTilesize(tileLayer.getTileSize() / 2);
-
         for (Vec2Int &tilePos : positions)
         {
             std::shared_ptr<Rect2D> prev;
@@ -73,7 +71,7 @@ namespace editor
                 prev.reset(new Rect2D(*tile));
             }
 
-            Vec2 worldPos = tileLayer.getWorldPos(tilePos) - halfTilesize;
+            Vec2 worldPos = tileLayer.getBottomLeftPos(tilePos);
             Rect2D &rect = tileLayer.add(Rect2D(worldPos.x, worldPos.y, tileSize, tileSize, color));
 
             std::shared_ptr<Rect2D> newRect = std::make_shared<Rect2D>(rect);

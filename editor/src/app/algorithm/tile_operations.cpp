@@ -17,7 +17,7 @@ namespace editor
                 if (tile != nullptr)
                 {
                     Rect2D newTile(*tile);
-                    newTile.setCenterPosition(source.getWorldPos(newDestPos));
+                    newTile.setCenterPosition(source.getCenterPos(newDestPos));
                     dest.add(newTile, newDestPos);
                 }
             }

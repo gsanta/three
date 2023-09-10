@@ -2,7 +2,6 @@
 
 #include "../../../../engine/graphics/layer/tileLayer.h"
 #include "../../cursor/cursor.h"
-#include "./rectangle_stroke.h"
 
 namespace spright
 {
@@ -13,14 +12,17 @@ namespace editor
     public:
         RectangleCursor(int rectangleSize, bool shouldDisableOnDrag = false);
 
-        void update(TileLayer &foregroundLayer, const PointerInfo &pointerInfo);
+        void update(TileLayer &tempLayer, const PointerInfo &pointerInfo);
 
-        virtual void destroy(TileLayer &foregroundLayer);
-
-        RectangleStroke &getRectangleStroke();
+        virtual void destroy(TileLayer &tempLayer);
 
     private:
-        RectangleStroke m_RectangleStroke;
+        void setPosition(TileLayer &tempLayer, const Vec2 &pos);
+
+    private:
+        int m_Size;
+
+        Rect2D *m_Rect = nullptr;
     };
 } // namespace editor
 } // namespace spright

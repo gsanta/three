@@ -9,8 +9,7 @@ namespace editor
     {
         int tileIndex = tileLayer.getTileIndex(tilePos.x, tilePos.y);
         Renderable2D *renderable = tileLayer.getAtTileIndex(tileIndex);
-        float halfTileSize = tileLayer.getTileSize() / 2.0f;
-        Vec2 worldPos = tileLayer.getWorldPos(tileIndex) - Vec2(halfTileSize, halfTileSize);
+        Vec2 worldPos = tileLayer.getBottomLeftPos(tileIndex);
 
         std::shared_ptr<Rect2D> prev;
 

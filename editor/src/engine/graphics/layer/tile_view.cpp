@@ -44,9 +44,9 @@ namespace engine
         return *this;
     }
 
-    Vec2 TileView::getCenterPos(Vec2 pointer) const
+    Vec2 TileView::getCenterPos(const Vec2 &worldPos) const
     {
-        Vec2Int tilePos = getTilePos(pointer);
+        Vec2Int tilePos = getTilePos(worldPos);
         float tileSize = m_TileSize;
 
         float x = static_cast<float>(tilePos.x) * tileSize + m_Bounds.minX + m_TileSize / 2;
@@ -62,14 +62,33 @@ namespace engine
         return Vec2(x * m_TileSize + m_Bounds.minX + m_TileSize / 2, y * m_TileSize + m_Bounds.minY + m_TileSize / 2);
     }
 
-    Vec2 TileView::getWorldPos(int tileIndex) const
+    Vec2 TileView::getCenterPos(const Vec2Int &tilePos) const
     {
-        return getCenterPos(tileIndex);
+        return getCenterPos(getTileIndex(tilePos.x, tilePos.y));
     }
 
-    Vec2 TileView::getWorldPos(const Vec2Int &tilePos) const
+
+    Vec2 TileView::getBottomLeftPos(int tileIndex) const
     {
-        return getWorldPos(TileView::getTileIndex(tilePos.x, tilePos.y));
+        Vec2 centerPos = getCenterPos(tileIndex);
+        centerPos.x -= m_TileSize / 2.0f;
+        centerPos.y -= m_TileSize / 2.0f;
+
+        return centerPos;
+    }
+
+    Vec2 TileView::getBottomLeftPos(const Vec2 &worldPos) const
+    {
+        Vec2 centerPos = getCenterPos(worldPos);
+        centerPos.x -= m_TileSize / 2.0f;
+        centerPos.y -= m_TileSize / 2.0f;
+
+        return centerPos;
+    }
+
+    Vec2 TileView::getBottomLeftPos(const Vec2Int &tilePos) const
+    {
+        return getBottomLeftPos(getTileIndex(tilePos.x, tilePos.y));
     }
 
     // TODO: check if it works for both even and odd number of tiles
@@ -103,6 +122,13 @@ namespace engine
     int TileView::getTileIndex(int tileX, int tileY) const
     {
         return m_TileBounds.getWidth() * tileY + tileX;
+    }
+
+    int TileView::getTileIndex(Vec2 worldPos) const
+    {
+        Vec2Int tilePos = getTilePos(worldPos);
+
+        return TileView::getTileIndex(tilePos.x, tilePos.y);
     }
 
     Vec2Int TileView::getTilePos(int tileIndex) const

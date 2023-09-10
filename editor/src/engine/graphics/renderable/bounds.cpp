@@ -4,11 +4,15 @@ namespace spright
 {
 namespace engine
 {
-    Bounds::Bounds(float minX, float minY, float maxX, float maxY) : minX(minX), minY(minY), maxX(maxX), maxY(maxY)
+    Bounds::Bounds(float x1, float y1, float x2, float y2)
     {
+        minX = x1 < x2 ? x1 : x2;
+        maxX = x1 < x2 ? x2 : x1;
+        minY = y1 < y2 ? y1 : y2;
+        maxY = y1 < y2 ? y2 : y1;
     }
 
-    Bounds::Bounds(Vec2 bottomLeft, Vec2 topRight) : Bounds(bottomLeft.x, bottomLeft.y, topRight.x, topRight.y)
+    Bounds::Bounds(Vec2 vec1, Vec2 vec2) : Bounds(vec1.x, vec1.y, vec2.x, vec2.y)
     {
     }
 

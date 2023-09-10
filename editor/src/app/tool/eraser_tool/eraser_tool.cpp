@@ -48,12 +48,6 @@ namespace editor
                        [&](std::shared_ptr<Rect2D> tile) { eraseUndo->addTile(tile); });
     }
 
-    float EraserTool::getStrokeSize() const
-    {
-        auto cursor = std::dynamic_pointer_cast<RectangleCursor>(getCursor());
-        return cursor->getRectangleStroke().getStrokeWidth();
-    }
-
     void EraserTool::setOptions(std::string json)
     {
         nlohmann::json parsedJson = nlohmann::json::parse(json);

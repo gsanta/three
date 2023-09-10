@@ -95,7 +95,7 @@ namespace editor
         tile_operation_copy_all(dest, source);
     }
 
-    void shear_horizontal(TileLayer &source, const BoundsInt &bounds, float angle)
+    std::vector<int> shear_horizontal(TileLayer &source, const BoundsInt &bounds, float angle)
     {
         TileView dest(source.getBounds(), source.getTileSize());
 
@@ -103,7 +103,7 @@ namespace editor
 
         if (angle == 0.0 || tan(angle) == 0.0)
         {
-            return;
+            return std::vector<int>();
         }
 
         int sign = get_sign(angle);
@@ -148,6 +148,15 @@ namespace editor
 
         tile_operation_remove_area(source, bounds);
         tile_operation_copy_all(dest, source);
+
+        std::vector<int> newIndexes;
+
+        for (const Rect2D *tile : dest.getTiles())
+        {
+            newIndexes.push_back(dest.getTileIndex(tile->getCenterPosition2d()));
+        }
+
+        return newIndexes;
     }
 } // namespace editor
 } // namespace spright

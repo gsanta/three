@@ -24,7 +24,6 @@ const initialState: ToolState = {
     { name: ToolName.PaintBucket, iconName: 'BiColorFill' },
     { name: ToolName.ColorPicker, iconName: 'BiHighlight' },
     { name: ToolName.Pan, iconName: 'BiMove' },
-    { name: ToolName.NewDrawing, iconName: 'BiImageAlt' },
   ],
   selectedTool: ToolName.Brush,
   isCircleFilled: false,

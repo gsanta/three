@@ -26,7 +26,7 @@
 
 //         ToolContext toolContext =
 //             ToolContextBuilder()
-//                 .withPointerInfo(PointerInfoBuilder().withCurr(tileLayer.getWorldPos(Vec2Int(0, 0))))
+//                 .withPointerInfo(PointerInfoBuilder().withCurr(tileLayer.getCenterPos(Vec2Int(0, 0))))
 //                 .withDocumentInfo(DocumentInfoBuilder().withActiveDrawing(&activeDrawing))
 //                 .build();
 
@@ -41,7 +41,7 @@
 
 //         REQUIRE(colorPickerTool.getPickedColor() == 0xFFFF0000);
 
-//         toolContext.pointer.curr = tileLayer.getWorldPos(Vec2Int(1, 1));
+//         toolContext.pointer.curr = tileLayer.getCenterPos(Vec2Int(1, 1));
 //         colorPickerTool.pointerDown(toolContext);
 
 //         REQUIRE(colorPickerTool.getPickedColor() == 0xFF00FF00);
@@ -63,7 +63,7 @@
 
 //         ToolContext toolContext =
 //             ToolContextBuilder()
-//                 .withPointerInfo(PointerInfoBuilder().withCurr(tileLayer.getWorldPos(Vec2Int(1, 1))))
+//                 .withPointerInfo(PointerInfoBuilder().withCurr(tileLayer.getCenterPos(Vec2Int(1, 1))))
 //                 .withDocumentInfo(DocumentInfoBuilder().withActiveDrawing(&activeDrawing))
 //                 .build();
 
@@ -75,7 +75,7 @@
 //         // no tile at that position
 //         REQUIRE(eventEmitter.getEmitCount() == 0);
 
-//         toolContext.pointer.curr = tileLayer.getWorldPos(Vec2Int(0, 0));
+//         toolContext.pointer.curr = tileLayer.getCenterPos(Vec2Int(0, 0));
 //         colorPickerTool.pointerDown(toolContext);
 
 //         REQUIRE(eventEmitter.getLastEventType() == "tool_data_changed");

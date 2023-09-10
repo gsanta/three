@@ -28,13 +28,18 @@ namespace engine
 
         TileView &operator=(const TileView &that);
 
-        Vec2 getCenterPos(Vec2 pointer) const;
+        Vec2 getCenterPos(const Vec2 &pointer) const;
 
         Vec2 getCenterPos(int tileIndex) const;
 
-        Vec2 getWorldPos(int tileIndex) const;
+        Vec2 getCenterPos(const Vec2Int &tilePos) const;
 
-        Vec2 getWorldPos(const Vec2Int &tilePos) const;
+        Vec2 getBottomLeftPos(int tileIndex) const;
+
+        Vec2 getBottomLeftPos(const Vec2 &worldPos) const;
+
+        Vec2 getBottomLeftPos(const Vec2Int &tilePos) const;
+
 
         Vec2Int getTilePos(const Vec2 &pos) const;
 
@@ -62,6 +67,8 @@ namespace engine
         unsigned int getRow(int tileIndex) const;
 
         int getTileIndex(int tileX, int tileY) const;
+
+        int getTileIndex(Vec2 worldPos) const;
 
         std::vector<Rect2D *> &getTiles();
 
