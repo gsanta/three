@@ -93,7 +93,9 @@ interface Editor {
 
   zoomToFit(): void;
 
-  shearHorizontal(): void;
+  shearHorizontal(angle: number): void;
+
+  shearVertical(angle: number): void;
 }
 
 window.Module = new EditorRuntime();

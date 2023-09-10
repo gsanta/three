@@ -4,6 +4,7 @@
 #include "../../engine/system/window/input_listener.h"
 #include "../../engine/system/window/window.h"
 #include "../algorithm/flip_horizontal.h"
+#include "../algorithm/shear.h"
 #include "../document/factory/document_factory.h"
 #include "../document/resize_drawing.h"
 #include "../editor/editor_state.h"

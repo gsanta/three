@@ -8,7 +8,6 @@ import {
   Box,
   FormControl,
   FormLabel,
-  Button,
 } from '@chakra-ui/react';
 import React from 'react';
 import { setEraserSize } from '../state/toolSlice';
@@ -27,10 +26,6 @@ const EraseToolOptions = () => {
   const handleChangeEnd = (val: number) => {
     editor.setEraserSize(val);
     dispatch(setEraserSize(val));
-  };
-
-  const handleShear = () => {
-    editor.shearHorizontal();
   };
 
   return (
@@ -60,7 +55,6 @@ const EraseToolOptions = () => {
           </SliderTrack>
           <SliderThumb />
         </Slider>
-        <Button onClick={handleShear}>Shear</Button>
       </FormControl>
     </Box>
   );

@@ -4,14 +4,17 @@ namespace spright
 {
 namespace engine
 {
-    TileView::TileView(const BoundsInt &tileBounds) : m_TileBounds(tileBounds)
+    TileView::TileView(const Bounds &bounds, float tileSize) : m_Bounds(bounds), m_TileSize(tileSize)
     {
-        m_IndexSize = tileBounds.getWidth() * tileBounds.getHeight();
+        m_TileBounds =
+            BoundsInt(0, 0, ceil((bounds.maxX - bounds.minX) / tileSize), ceil((bounds.maxY - bounds.minY) / tileSize));
+        m_IndexSize = m_TileBounds.getWidth() * m_TileBounds.getHeight();
         m_TileIndexes = new Renderable2D *[m_IndexSize]();
     }
 
-    TileView::TileView(const TileView &tileHolder)
-        : m_TileBounds(tileHolder.m_TileBounds), m_IndexSize(tileHolder.m_IndexSize)
+    TileView::TileView(const TileView &tileView)
+        : m_Bounds(tileView.m_Bounds), m_TileSize(tileView.m_TileSize), m_TileBounds(tileView.m_TileBounds),
+          m_IndexSize(tileView.m_IndexSize)
     {
         m_TileIndexes = new Renderable2D *[m_IndexSize]();
     }
@@ -25,6 +28,8 @@ namespace engine
     {
         if (this != &that)
         {
+            m_TileSize = that.m_TileSize;
+            m_Bounds = that.m_Bounds;
             m_TileBounds = that.m_TileBounds;
             m_IndexSize = m_TileBounds.getWidth() * m_TileBounds.getHeight();
             m_TileIndexes = new Renderable2D *[m_IndexSize]();
@@ -39,9 +44,54 @@ namespace engine
         return *this;
     }
 
+    Vec2 TileView::getCenterPos(Vec2 pointer) const
+    {
+        Vec2Int tilePos = getTilePos(pointer);
+        float tileSize = m_TileSize;
+
+        float x = static_cast<float>(tilePos.x) * tileSize + m_Bounds.minX + m_TileSize / 2;
+        float y = static_cast<float>(tilePos.y) * tileSize + m_Bounds.minY + m_TileSize / 2;
+
+        return Vec2(x, y);
+    }
+
+    Vec2 TileView::getCenterPos(int tileIndex) const
+    {
+        int y = tileIndex / m_TileBounds.getWidth();
+        int x = tileIndex % m_TileBounds.getWidth();
+        return Vec2(x * m_TileSize + m_Bounds.minX + m_TileSize / 2, y * m_TileSize + m_Bounds.minY + m_TileSize / 2);
+    }
+
+    Vec2 TileView::getWorldPos(int tileIndex) const
+    {
+        return getCenterPos(tileIndex);
+    }
+
+    Vec2 TileView::getWorldPos(const Vec2Int &tilePos) const
+    {
+        return getWorldPos(TileView::getTileIndex(tilePos.x, tilePos.y));
+    }
+
+    // TODO: check if it works for both even and odd number of tiles
+    Vec2Int TileView::getTilePos(const Vec2 &pos) const
+    {
+        Vec2 adjustedPos(pos.x - m_Bounds.minX, pos.y - m_Bounds.minY);
+        float tileSize = m_TileSize;
+        int tileX = (int)(adjustedPos.x / tileSize);
+
+        int tileY = (int)(adjustedPos.y / tileSize);
+
+        return Vec2Int(tileX, tileY);
+    }
+
 
     Rect2D *TileView::getAtTileIndex(int tilePos) const
     {
+        if (tilePos >= m_IndexSize || tilePos < 0)
+        {
+            return nullptr;
+        }
+
         return static_cast<Rect2D *>(m_TileIndexes[tilePos]);
     }
 
@@ -53,6 +103,11 @@ namespace engine
     int TileView::getTileIndex(int tileX, int tileY) const
     {
         return m_TileBounds.getWidth() * tileY + tileX;
+    }
+
+    Vec2Int TileView::getTilePos(int tileIndex) const
+    {
+        return Vec2Int(getColumn(tileIndex), getRow(tileIndex));
     }
 
     Rect2D &TileView::add(const Rect2D &rect, const Vec2Int &tilePos)
@@ -67,6 +122,22 @@ namespace engine
         return newRect;
     }
 
+    void TileView::removeAt(int tileIndex)
+    {
+        Vec2Int tilePos = getTilePos(tileIndex);
+
+        int index = m_TileBounds.getWidth() * tilePos.y + tilePos.x;
+
+        Rect2D *rect = getAtTileIndex(tileIndex);
+
+        if (rect)
+        {
+            m_TileIndexes[index] = nullptr;
+            m_Group.remove(*rect);
+        }
+    }
+
+
     std::vector<Rect2D *> &TileView::getTiles()
     {
         return m_Group.getRenderables();
@@ -77,9 +148,24 @@ namespace engine
         return m_Group.getRenderables();
     }
 
+    const Bounds &TileView::getBounds() const
+    {
+        return m_Bounds;
+    }
+
     const BoundsInt &TileView::getTileBounds() const
     {
         return m_TileBounds;
+    }
+
+    unsigned int TileView::getColumn(int tileIndex) const
+    {
+        return tileIndex % m_TileBounds.getWidth();
+    }
+
+    unsigned int TileView::getRow(int tileIndex) const
+    {
+        return tileIndex / m_TileBounds.getWidth();
     }
 } // namespace engine
 } // namespace spright

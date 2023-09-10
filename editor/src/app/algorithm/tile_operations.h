@@ -10,6 +10,14 @@ namespace editor
 {
     using namespace engine;
 
-    void tile_operation_copy_area(const TileView &source, TileView &dest, const BoundsInt &area, const Vec2Int &dstPos);
+    void tile_operation_copy_area(const TileView &source,
+                                  TileView &dest,
+                                  const BoundsInt &area,
+                                  const Vec2Int &dstPos = Vec2Int(0, 0));
+
+    void tile_operation_copy_all(const TileView &source, TileView &dest);
+
+    void tile_operation_remove_area(TileView &tileView, const BoundsInt &area);
+
 } // namespace editor
 } // namespace spright
