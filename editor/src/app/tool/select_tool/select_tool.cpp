@@ -5,100 +5,110 @@ namespace spright
 namespace editor
 {
 
-    SelectTool::SelectTool()
-        : Tool("select", std::make_shared<RectangleCursor>(1, true)),
-          m_SelectionBuffer(std::make_shared<SelectionBuffer>())
+    SelectTool::SelectTool(std::shared_ptr<DocumentStore> documentStore)
+        : Tool("select", std::make_shared<RectangleCursor>(1)), m_DocumentStore(documentStore),
+          m_SelectionBuffer(std::make_shared<SelectionBuffer>(documentStore))
     {
         m_BoxSelector = std::make_unique<BoxSelector>(m_SelectionBuffer);
-        m_SelectionMover = std::make_unique<SelectionMover>(m_SelectionBuffer);
+        m_SelectionMover = std::make_unique<SelectionMover>();
     }
 
     void SelectTool::pointerDown(const ToolContext &context)
     {
-        if (context.doc.hasActiveDrawing())
-        {
-            TileLayer &foregroundLayer = context.doc.activeDrawing->getForegroundLayer();
-            TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
+        TileLayer &tempLayer = context.doc.activeDrawing->getTempLayer();
 
-            int tileIndex = foregroundLayer.getTileIndex(context.pointer.curr);
-
-            m_IsMove = foregroundLayer.getAtTileIndex(tileIndex) != nullptr;
-        }
+        int tileIndex = tempLayer.getTileIndex(context.pointer.curr);
+        m_IsMove = tempLayer.getAtTileIndex(tileIndex) != nullptr;
     }
 
     void SelectTool::pointerMove(const ToolContext &context)
     {
-        if (!context.pointer.isLeftButtonDown())
+        if (!context.pointer.isDown)
         {
             return;
         }
 
-
-        if (context.pointer.isLeftButtonDown())
-        {
-            // std::cout << "pos: " << context.pointer.curr << std::endl;
-        }
-
-        TileLayer &tempLayer = context.doc.activeDrawing->getForegroundLayer();
+        TileLayer &tempLayer = context.doc.activeDrawing->getTempLayer();
         TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
+
         if (m_IsMove)
         {
+            // std::vector<int> tileIndexes;
+
+            // for (Rect2D *tile : tempLayer.getTiles()) {
+            //     tileIndexes.push_back(tempLayer.getTileIndex(tile->getCenterPosition2d()));
+            // }
 
             m_SelectionMover->move(tempLayer, context.pointer.curr, context.pointer.prev, context.pointer.down);
 
-            m_SelectionMover->move(activeLayer, context.pointer.curr, context.pointer.prev, context.pointer.down);
+            m_SelectionMover->move(activeLayer,
+                                   m_SelectionBuffer->getTileIndexes(),
+                                   context.pointer.curr,
+                                   context.pointer.prev,
+                                   context.pointer.down);
+
+            m_SelectionBoundsDirty = true;
         }
-        else
+        else if (m_BoxSelector->isSelectionChanged(tempLayer,
+                                                   context.pointer.curr,
+                                                   context.pointer.prev,
+                                                   context.pointer.down))
         {
-            if (m_BoxSelector->isSelectionChanged(tempLayer,
-                                                  context.pointer.curr,
-                                                  context.pointer.prev,
-                                                  context.pointer.down))
-            {
-                tempLayer.clear();
-                m_BoxSelector->select(tempLayer, context.pointer.curr, context.pointer.prev, context.pointer.down);
-                fillTempLayer(tempLayer);
-            }
+            tempLayer.clear();
+            m_BoxSelector->select(tempLayer, context.pointer.curr, context.pointer.down);
+            m_SelectionBoundsDirty = true;
+            fillTempLayer(tempLayer);
         }
     }
 
     void SelectTool::pointerUp(const ToolContext &context)
     {
-        if (!context.doc.hasActiveDrawing())
-        {
-            return;
-        }
-
         TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
+        TileLayer &tempLayer = context.doc.activeDrawing->getTempLayer();
 
-        if (m_IsMove)
-        {
-            m_SelectionMover->finish(activeLayer);
-            // else
-            // {
-            // Vec2 bottomLeft = m_BoxSelector->getBounds().getBottomLeft();
-            // Vec2 topRight = m_BoxSelector->getBounds().getTopRight();
+        recalcTileIndexesAndBounds(activeLayer, tempLayer);
 
-            // context.doc.activeDrawing->getState().setBounds(Bounds(bottomLeft, topRight));
-            // }
-        }
-        else
+        if (!m_IsMove)
         {
             if (context.pointer.downDelta().length() < m_NoMovementTolerance)
             {
-                TileLayer &foregroundLayer = context.doc.activeDrawing->getForegroundLayer();
+                TileLayer &tempLayer = context.doc.activeDrawing->getTempLayer();
 
-                m_BoxSelector->clear();
-                context.doc.activeDrawing->getState().clearBounds();
+                tempLayer.clear();
+                m_SelectionBuffer->clear();
             }
         }
 
         m_IsMove = false;
     }
 
-    void SelectTool::setSelectedTiles(std::vector<int> indexes)
+    void SelectTool::recalcTileIndexesAndBounds(TileLayer &activeLayer, TileLayer &tempLayer)
     {
+        std::vector<int> currentTileIndexes = m_SelectionBuffer->getTileIndexes();
+        std::vector<int> newTileIndexes;
+
+        for (int tileIndex : m_SelectionBuffer->getTileIndexes())
+        {
+            Rect2D *tile = activeLayer.getAtTileIndex(tileIndex);
+            if (tile != nullptr)
+            {
+                newTileIndexes.push_back(activeLayer.updateTileIndex(tile));
+            }
+        }
+
+        m_SelectionBuffer->setTileIndexes(newTileIndexes);
+
+        for (Rect2D *tile : tempLayer.getTiles())
+        {
+            tempLayer.updateTileIndex(tile);
+        }
+    }
+
+    void SelectTool::setSelectedTiles(std::vector<int> indexes, TileLayer &tempLayer)
+    {
+        m_SelectionBoundsDirty = true;
         m_SelectionBuffer->setTileIndexes(std::move(indexes));
+        fillTempLayer(tempLayer);
     }
 
 
@@ -112,12 +122,22 @@ namespace editor
         float tileSize = tempLayer.getTileSize();
         unsigned int color = 0x800099ff;
 
-        for (int index : m_SelectionBuffer->getTileIndexes())
-        {
-            Vec2 bottomLeft = tempLayer.getBottomLeftPos(index);
-            Rect2D rect(bottomLeft.x, bottomLeft.y, tileSize, tileSize, color);
+        const BoundsInt &bounds = m_SelectionBuffer->getSelectionBounds();
 
-            tempLayer.add(rect);
+        tempLayer.clear();
+
+        Vec2Int bottomLeft = bounds.getBottomLeft();
+        Vec2Int topRight = bounds.getTopRight();
+
+        for (int i = bottomLeft.x; i <= topRight.x; i++)
+        {
+            for (int j = bottomLeft.y; j <= topRight.y; j++)
+            {
+                Vec2 bottomLeft = tempLayer.getBottomLeftPos(Vec2Int(i, j));
+                Rect2D rect(bottomLeft.x, bottomLeft.y, tileSize, tileSize, color);
+
+                tempLayer.add(rect);
+            }
         }
     }
 } // namespace editor

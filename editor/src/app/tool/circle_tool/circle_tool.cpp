@@ -15,7 +15,7 @@ namespace editor
             return;
         }
 
-        TileLayer &foregroundLayer = context.doc.activeDrawing->getForegroundLayer();
+        TileLayer &foregroundLayer = context.doc.activeDrawing->getTempLayer();
         BoundsInt bounds = getCircleBounds(context, foregroundLayer);
 
         if (bounds.getWidth() <= 2 && bounds.getHeight() <= 2)
@@ -51,7 +51,7 @@ namespace editor
         }
 
         context.doc.document->getHistory()->add(std::make_shared<TileUndo>(tileUndo));
-        TileLayer &foregroundLayer = context.doc.activeDrawing->getForegroundLayer();
+        TileLayer &foregroundLayer = context.doc.activeDrawing->getTempLayer();
         foregroundLayer.clear();
     }
 

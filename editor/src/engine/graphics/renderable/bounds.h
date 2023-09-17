@@ -52,6 +52,8 @@ namespace engine
 
         bool isNull() const;
 
+        void expand(const Vec2 &vec);
+
         std::vector<float> toArray() const;
 
         Vec2 getBottomLeft() const;

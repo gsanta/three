@@ -87,6 +87,27 @@ namespace engine
         return minX == 0 && maxX == 0 && minY == 0 && maxY == 0;
     }
 
+    void Bounds::expand(const Vec2 &vec)
+    {
+        if (vec.x < minX)
+        {
+            minX = vec.x;
+        }
+        else if (vec.x > maxX)
+        {
+            maxX = vec.x;
+        }
+
+        if (vec.y < minY)
+        {
+            minY = vec.y;
+        }
+        else if (vec.y > maxY)
+        {
+            maxY = vec.y;
+        }
+    }
+
     std::vector<float> Bounds::toArray() const
     {
         return std::vector<float>{minX, minY, maxX, maxY};

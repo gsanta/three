@@ -1,3 +1,4 @@
+#include "../../test_helpers/document_store_builder.h"
 #include "../../test_helpers/matchers/equals_bounds_matcher.h"
 #include "../../test_helpers/test_document_factory.h"
 #include "../../test_helpers/tile_layer_builder.h"
@@ -16,16 +17,21 @@ SCENARIO("Box selector")
 
     GIVEN("A box selector")
     {
-        TileLayer tempLayer = TileLayerBuilder().withBounds(BoundsInt(-5, -5, 5, 5)).withTileFill().build();
+        std::shared_ptr<DocumentStore> documentStore = std::make_shared<DocumentStore>(
+            DocumentStoreBuilder()
+                .withDrawing(DrawingBuilder().withTileLayer(
+                    TileLayerBuilder().withBounds(BoundsInt(-5, -5, 5, 5)).withTileFill()))
+                .build());
 
-        std::shared_ptr<SelectionBuffer> selectionBuffer = std::make_shared<SelectionBuffer>();
+        std::shared_ptr<SelectionBuffer> selectionBuffer = std::make_shared<SelectionBuffer>(documentStore);
 
         BoxSelector boxSelector(selectionBuffer);
 
+        TileLayer &tempLayer = documentStore->getActiveDocument().getActiveDrawing().getTempLayer();
 
         WHEN("making a selection")
         {
-            boxSelector.select(tempLayer, Vec2(3, 3), Vec2(2, 2), Vec2(1, 1));
+            boxSelector.select(tempLayer, Vec2(2, 2), Vec2(1, 1));
 
             THEN("it fills the selection buffer with the selected tiles")
             {
@@ -42,7 +48,7 @@ SCENARIO("Box selector")
 
         WHEN("making a selection from top to bottom")
         {
-            boxSelector.select(tempLayer, Vec2(1, 1), Vec2(2, 2), Vec2(3, 3));
+            boxSelector.select(tempLayer, Vec2(1, 1), Vec2(2, 2));
 
             THEN("it fills the selection buffer with the selected tiles")
             {
@@ -57,7 +63,7 @@ SCENARIO("Box selector")
 
         WHEN("making a selection from right to left")
         {
-            boxSelector.select(tempLayer, Vec2(3, 1), Vec2(2, 2), Vec2(1, 3));
+            boxSelector.select(tempLayer, Vec2(2, 1), Vec2(1, 2));
 
             THEN("it fills the selection buffer with the selected tiles")
             {
@@ -72,7 +78,7 @@ SCENARIO("Box selector")
 
         WHEN("making a selection from negative range to positive")
         {
-            boxSelector.select(tempLayer, Vec2(1, 2), Vec2(0, 0), Vec2(-0.9f, -0.9f));
+            boxSelector.select(tempLayer, Vec2(0.5f, 1.5f), Vec2(-0.9f, -0.9f));
 
             THEN("it fills the selection buffer with the selected tiles")
             {

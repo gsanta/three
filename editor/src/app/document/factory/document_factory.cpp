@@ -38,7 +38,7 @@ namespace editor
     }
 
 
-    TileLayer DocumentFactory::createBackgroundLayer(const Bounds &bounds, float tileSize)
+    TileLayer DocumentFactory::createBackgroundLayer(const Bounds &bounds, float tileSize) const
     {
         TileLayer backgroundLayer("",
                                   *m_RendererProvider->createRenderer2D(),
@@ -53,17 +53,26 @@ namespace editor
         return backgroundLayer;
     }
 
-    TileLayer DocumentFactory::createForegroundLayer(const Bounds &bounds, float tileSize)
+    TileLayer DocumentFactory::createTempLayer(const Bounds &bounds, float tileSize) const
     {
-        TileLayer foregroundLayer("",
-                                  *m_RendererProvider->createRenderer2D(),
-                                  Group<Rect2D>(),
-                                  bounds,
-                                  tileSize,
-                                  m_ForegroundZPos,
-                                  true);
+        return TileLayer("",
+                         *m_RendererProvider->createRenderer2D(),
+                         Group<Rect2D>(),
+                         bounds,
+                         tileSize,
+                         m_ForegroundZPos,
+                         true);
+    }
 
-        return foregroundLayer;
+    TileLayer DocumentFactory::createCursorLayer(const Bounds &bounds, float tileSize) const
+    {
+        return TileLayer("",
+                         *m_RendererProvider->createRenderer2D(),
+                         Group<Rect2D>(),
+                         bounds,
+                         tileSize,
+                         m_ForegroundZPos,
+                         true);
     }
 
     void DocumentFactory::createFrame(Document &document)
@@ -84,26 +93,13 @@ namespace editor
     {
         TileLayer &aLayer = frames[0].getLayers()[0];
 
-        TileLayer backgroundLayer("",
-                                  *m_RendererProvider->createRenderer2D(),
-                                  Group<Rect2D>(),
-                                  aLayer.getBounds(),
-                                  2.0f,
-                                  m_BackgroundZPos);
-
-        Drawing drawing(frames, backgroundLayer);
-
         float tileSize = TileLayer::defaultTileSize;
 
-        TileLayer tempLayer("",
-                            *m_RendererProvider->createRenderer2D(),
-                            Group<Rect2D>(),
-                            aLayer.getBounds(),
-                            tileSize,
-                            m_ForegroundZPos,
-                            true);
+        Drawing drawing(frames,
+                        createBackgroundLayer(aLayer.getBounds(), aLayer.getTileSize()),
+                        createTempLayer(aLayer.getBounds(), aLayer.getTileSize()),
+                        createCursorLayer(aLayer.getBounds(), aLayer.getTileSize()));
 
-        drawing.addForegroundLayer(tempLayer);
 
         if (checkerboard)
         {
@@ -111,6 +107,22 @@ namespace editor
         }
 
         return drawing;
+    }
+
+    Drawing DocumentFactory::createEmptyDrawing(Bounds bounds, bool checkerboard) const
+    {
+        std::vector<Frame> frames;
+
+        Frame frame(0);
+
+        frames.push_back(frame);
+
+        float tileSize = TileLayer::defaultTileSize;
+
+        return Drawing(frames,
+                       createBackgroundLayer(bounds, tileSize),
+                       createTempLayer(bounds, tileSize),
+                       createCursorLayer(bounds, tileSize));
     }
 
     Drawing DocumentFactory::createDrawing(Bounds bounds, bool checkerboard, float zPos) const

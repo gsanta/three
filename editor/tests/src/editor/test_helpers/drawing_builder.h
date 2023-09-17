@@ -33,7 +33,7 @@ private:
     Drawing buildFromLayers();
 
 private:
-    Bounds m_Bounds = Bounds::createWithPositions(-3.0f, -3.0f, 3.0f, 3.0f);
+    Bounds m_Bounds = Bounds::createWithPositions(-5.0f, -5.0f, 5.0f, 5.0f);
 
     vector<TileLayerBuilder> m_TileLayers;
 

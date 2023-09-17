@@ -134,7 +134,7 @@ SCENARIO("Erase tool")
     GIVEN("an empty document")
     {
         Document document = DocumentBuilder().withDrawing(DrawingBuilder().withBounds(Bounds(0, 0, 4, 4))).build();
-        TileLayer &tempLayer = document.getActiveDrawing().getForegroundLayer();
+        TileLayer &cursorLayer = document.getActiveDrawing().getCursorLayer();
 
         ToolContext toolContext = ToolContextBuilder().withDocument(document).build();
 
@@ -142,28 +142,28 @@ SCENARIO("Erase tool")
 
         WHEN("moving the mouse")
         {
-            toolContext.pointer.curr = tempLayer.getCenterPos(Vec2Int(2, 1));
+            toolContext.pointer.curr = cursorLayer.getCenterPos(Vec2Int(2, 1));
             eraseTool.execPointerMove(toolContext);
 
             THEN("erase tool cursor follows the mouse")
             {
-                REQUIRE(tempLayer.getTiles().size() == 1);
+                REQUIRE(cursorLayer.getTiles().size() == 1);
 
-                REQUIRE_THAT(tempLayer.getTiles()[0]->getBounds(),
+                REQUIRE_THAT(cursorLayer.getTiles()[0]->getBounds(),
                              EqualsBounds(Bounds::createWithSize(2.0f, 1, 1.0f, 1.0f)));
 
-                toolContext.pointer.curr = tempLayer.getCenterPos(Vec2Int(3, 1));
+                toolContext.pointer.curr = cursorLayer.getCenterPos(Vec2Int(3, 1));
                 eraseTool.execPointerMove(toolContext);
 
-                REQUIRE(tempLayer.getTiles().size() == 1);
+                REQUIRE(cursorLayer.getTiles().size() == 1);
 
-                REQUIRE_THAT(tempLayer.getTiles()[0]->getBounds(),
+                REQUIRE_THAT(cursorLayer.getTiles()[0]->getBounds(),
                              EqualsBounds(Bounds::createWithSize(3.0f, 1.0f, 1.0f, 1.0f)));
 
-                toolContext.pointer.curr = tempLayer.getCenterPos(Vec2Int(3, 2));
+                toolContext.pointer.curr = cursorLayer.getCenterPos(Vec2Int(3, 2));
                 eraseTool.execPointerMove(toolContext);
 
-                REQUIRE(tempLayer.getTiles().size() == 1);
+                REQUIRE(cursorLayer.getTiles().size() == 1);
                 EqualsBounds(Bounds::createWithSize(3.0f, 2.0f, 1.0f, 1.0f));
             }
         }

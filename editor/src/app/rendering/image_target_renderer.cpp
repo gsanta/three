@@ -18,11 +18,6 @@ namespace editor
         {
             layer.render(camera);
         }
-
-        for (TileLayer &layer : drawing.getForegroundLayers())
-        {
-            layer.render(camera);
-        }
     }
 } // namespace editor
 } // namespace spright

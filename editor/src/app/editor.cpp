@@ -27,7 +27,7 @@ namespace editor
         m_Window = new GLWindow("Editor", 1200, 800);
         m_DocumentFactory = new DocumentFactory(m_Window, new GLRendererProvider());
 
-        m_DocumentStore = std::make_unique<DocumentStore>();
+        m_DocumentStore = std::make_shared<DocumentStore>();
 
         m_DocumentStore->addDocument(m_DocumentFactory->createDocument());
 
@@ -49,7 +49,7 @@ namespace editor
         m_toolHandler->addTool(new PanTool(getDocumentStore()));
         m_toolHandler->addTool(new ZoomTool(getDocumentStore()));
         m_toolHandler->addTool(new PaintBucketTool());
-        m_toolHandler->addTool(new SelectTool());
+        m_toolHandler->addTool(new SelectTool(m_DocumentStore));
         m_toolHandler->addTool(new ColorPickerTool(m_toolHandler, m_EventEmitter.get()));
         m_toolHandler->addTool(new LineTool());
         m_toolHandler->addTool(new CircleTool());

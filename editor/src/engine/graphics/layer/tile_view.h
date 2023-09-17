@@ -40,7 +40,6 @@ namespace engine
 
         Vec2 getBottomLeftPos(const Vec2Int &tilePos) const;
 
-
         Vec2Int getTilePos(const Vec2 &pos) const;
 
         Rect2D *getAtTilePos(int x, int y) const;

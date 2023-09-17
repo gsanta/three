@@ -16,14 +16,22 @@ namespace editor
     class SelectionMover
     {
     public:
-        SelectionMover(std::shared_ptr<SelectionBuffer> selectionBuffer);
-
         Vec2 move(TileLayer &layer, const Vec2 &curr, const Vec2 &prev, const Vec2 &start);
 
-        void finish(TileLayer &layer);
+        Vec2 move(TileLayer &layer,
+                  const std::vector<int> &tileIndexes,
+                  const Vec2 &curr,
+                  const Vec2 &prev,
+                  const Vec2 &start);
+
+        void finish(TileLayer &layer, const std::vector<int> &tileIndexes);
 
     private:
-        std::shared_ptr<SelectionBuffer> m_SelectionBuffer;
+        Vec2 calcMoveToStart(TileLayer &layer, const Vec2 &prev, const Vec2 &start);
+
+        Vec2 calcMoveToCurr(TileLayer &layer, const Vec2 &curr, const Vec2 &start);
+
+        void translate(Rect2D &tile, Vec2 &deltaToStart, const Vec2 &deltaToCurr);
     };
 } // namespace editor
 } // namespace spright

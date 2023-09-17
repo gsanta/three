@@ -81,7 +81,7 @@ namespace engine
 
         nlohmann::json getLayerDescription() const;
 
-        void updateTileIndex(Rect2D *rect);
+        int updateTileIndex(Rect2D *rect);
 
     private:
         void init();

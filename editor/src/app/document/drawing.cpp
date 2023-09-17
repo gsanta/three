@@ -7,16 +7,24 @@ namespace editor
 
     Drawing resize_drawing(Drawing &orig, Bounds bounds);
 
-    Drawing::Drawing(const TileLayer &initialLayer, const TileLayer &backgroundLayer)
+    Drawing::Drawing(const TileLayer &initialLayer,
+                     const TileLayer &backgroundLayer,
+                     const TileLayer &tempLayer,
+                     const TileLayer &cursorLayer)
         : Container(initialLayer.getBounds())
     {
         Frame frame(0);
         frame.addLayer(initialLayer);
         m_Frames.push_back(frame);
         m_BackgroundLayer = std::make_shared<TileLayer>(backgroundLayer);
+        m_TempLayer = std::make_shared<TileLayer>(tempLayer);
+        m_CursorLayer = std::make_shared<TileLayer>(cursorLayer);
     }
 
-    Drawing::Drawing(const std::vector<Frame> &frames, const TileLayer &backgroundLayer)
+    Drawing::Drawing(const std::vector<Frame> &frames,
+                     const TileLayer &backgroundLayer,
+                     const TileLayer &tempLayer,
+                     const TileLayer &cursorLayer)
         : Container(backgroundLayer.getBounds())
     {
         m_Frames = frames;
@@ -25,6 +33,8 @@ namespace editor
             m_Frames[i].setIndex(i);
         }
         m_BackgroundLayer = std::make_shared<TileLayer>(backgroundLayer);
+        m_TempLayer = std::make_shared<TileLayer>(tempLayer);
+        m_CursorLayer = std::make_shared<TileLayer>(cursorLayer);
     }
 
     std::vector<Frame> &Drawing::getFrames()
@@ -123,39 +133,34 @@ namespace editor
         m_ActiveLayerIndex = index;
     }
 
-    TileLayer &Drawing::getForegroundLayer()
-    {
-        return m_ForegroundLayers[0];
-    }
-
-    const TileLayer &Drawing::getForegroundLayer() const
-    {
-        return m_ForegroundLayers[0];
-    }
-
-    std::vector<TileLayer> &Drawing::getForegroundLayers()
-    {
-        return m_ForegroundLayers;
-    }
-
     TileLayer &Drawing::getBackgroundLayer()
     {
         return *m_BackgroundLayer;
     }
 
-    TileLayer &Drawing::getBackgroundLayer() const
+    const TileLayer &Drawing::getBackgroundLayer() const
     {
         return *m_BackgroundLayer;
+    }
+
+    TileLayer &Drawing::getTempLayer()
+    {
+        return *m_TempLayer;
+    }
+
+    const TileLayer &Drawing::getTempLayer() const
+    {
+        return *m_TempLayer;
+    }
+
+    TileLayer &Drawing::getCursorLayer()
+    {
+        return *m_CursorLayer;
     }
 
     void Drawing::addBackgroundLayer(const TileLayer &tileLayer)
     {
         m_BackgroundLayer = std::make_shared<TileLayer>(tileLayer);
-    }
-
-    void Drawing::addForegroundLayer(const TileLayer &tileLayer)
-    {
-        m_ForegroundLayers.push_back(tileLayer);
     }
 
     std::string Drawing::getJson()

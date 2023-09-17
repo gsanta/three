@@ -76,7 +76,7 @@ namespace editor
 
         DocumentFactory *m_DocumentFactory;
 
-        std::unique_ptr<DocumentStore> m_DocumentStore;
+        std::shared_ptr<DocumentStore> m_DocumentStore;
 
         Rendering *m_Rendering;
 
