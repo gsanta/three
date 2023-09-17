@@ -13,14 +13,16 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
     SECTION("can flip a layer horizontally")
     {
         Document document = DocumentBuilder()
-                                .withDrawing(DrawingBuilder().withTileSize(0.5f).withTileLayer(
-                                    TileLayerBuilder()
-                                        .withTile(Vec2Int(0, 1), COLOR_RED)
-                                        .withTile(Vec2Int(1, 1), COLOR_RED)
-                                        .withTile(Vec2Int(0, 2), COLOR_RED)
-                                        .withTile(Vec2Int(11, 1), COLOR_BLUE)
-                                        .withTile(Vec2Int(10, 1), COLOR_BLUE)
-                                        .withTile(Vec2Int(11, 2), COLOR_BLUE)))
+                                .withDrawing(DrawingBuilder()
+                                                 .withBounds(Bounds(-3.0f, -3.0f, 3.0f, 3.0f))
+                                                 .withTileSize(0.5f)
+                                                 .withTileLayer(TileLayerBuilder()
+                                                                    .withTile(Vec2Int(0, 1), COLOR_RED)
+                                                                    .withTile(Vec2Int(1, 1), COLOR_RED)
+                                                                    .withTile(Vec2Int(0, 2), COLOR_RED)
+                                                                    .withTile(Vec2Int(11, 1), COLOR_BLUE)
+                                                                    .withTile(Vec2Int(10, 1), COLOR_BLUE)
+                                                                    .withTile(Vec2Int(11, 2), COLOR_BLUE)))
                                 .build();
 
         TileLayer &layer = document.getActiveDrawing().getActiveLayer();

@@ -20,10 +20,9 @@ namespace editor
             layer.render(camera);
         }
 
-        for (TileLayer &layer : drawing.getForegroundLayers())
-        {
-            layer.render(camera);
-        }
+        drawing.getTempLayer().render(camera);
+
+        drawing.getCursorLayer().render(camera);
     }
 } // namespace editor
 } // namespace spright

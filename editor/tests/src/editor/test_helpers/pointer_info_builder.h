@@ -7,12 +7,21 @@ using namespace spright::editor;
 
 class PointerInfoBuilder
 {
-private:
-    Vec2 m_Curr;
-    PointerInfo m_Pointer;
-
 public:
     PointerInfoBuilder &withPoinerInfo(const PointerInfo &);
+
     PointerInfoBuilder &withCurr(Vec2);
+
+    PointerInfoBuilder &with(const Vec2 &curr, const Vec2 &prev, const Vec2 &down);
+
     PointerInfo build();
+
+private:
+    Vec2 m_Curr;
+
+    Vec2 m_Prev;
+
+    Vec2 m_Down;
+
+    PointerInfo m_Pointer;
 };

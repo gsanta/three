@@ -40,13 +40,15 @@ namespace engine
 
         int getHeight() const;
 
-        Vec2Int getTopRight();
+        Vec2Int getTopRight() const;
 
-        Vec2Int getBottomLeft();
+        Vec2Int getBottomLeft() const;
 
         Vec2Int getCenter() const;
 
         bool isDefault();
+
+        void expand(const Vec2Int &vec);
 
         std::string toString() const;
     };

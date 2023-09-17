@@ -232,16 +232,17 @@ namespace editor
         }
         else if (key == GLFW_KEY_H)
         {
-            Vec2 bottomLeft =
-                m_DocumentStore->getActiveDocument().getActiveDrawing().getState().getBounds().getBottomLeft();
-            Vec2 topRight =
-                m_DocumentStore->getActiveDocument().getActiveDrawing().getState().getBounds().getTopRight();
-            Vec2Int bottomLeftTile = m_DocumentStore->getActiveDocument().getActiveLayer().getTilePos(bottomLeft);
-            Vec2Int topRightTile = m_DocumentStore->getActiveDocument().getActiveLayer().getTilePos(topRight);
-            std::vector<int> newIndexes = shear_horizontal(m_DocumentStore->getActiveDocument().getActiveLayer(),
-                                                           BoundsInt(bottomLeftTile, topRightTile),
-                                                           0.436332f);
-            dynamic_cast<SelectTool *>(getTool("select"))->setSelectedTiles(std::move(newIndexes));
+            SelectTool *selectTool = dynamic_cast<SelectTool *>(getTool("select"));
+
+            const BoundsInt &selectionBounds = selectTool->getSelectionBuffer()->getSelectionBounds();
+
+            std::vector<int> newIndexes =
+                shear_horizontal(m_DocumentStore->getActiveDocument().getActiveLayer(),
+                                 BoundsInt(selectionBounds.getBottomLeft(), selectionBounds.getTopRight()),
+                                 0.436332f);
+            dynamic_cast<SelectTool *>(getTool("select"))
+                ->setSelectedTiles(std::move(newIndexes),
+                                   m_DocumentStore->getActiveDocument().getActiveDrawing().getTempLayer());
 
             // m_DocumentStore->getActiveDocument().getCamera().translate2D(Vec2(2.0f, 0.0f));
         }

@@ -38,15 +38,19 @@ namespace editor
 
         Document createEmptyDocument() const;
 
+        Drawing createEmptyDrawing(Bounds bounds, bool checkerboard) const;
+
         Drawing createDrawing(std::vector<Frame> &frames, bool checkerboard) const;
 
         Drawing createDrawing(Bounds bounds, bool checkerboard = true, float zPos = 0) const;
 
         TileLayer createTileLayer(std::string name, const Bounds &bounds, float tileSize);
 
-        TileLayer createBackgroundLayer(const Bounds &bounds, float tileSize);
+        TileLayer createBackgroundLayer(const Bounds &bounds, float tileSize) const;
 
-        TileLayer createForegroundLayer(const Bounds &bounds, float tileSize);
+        TileLayer createTempLayer(const Bounds &bounds, float tileSize) const;
+
+        TileLayer createCursorLayer(const Bounds &bounds, float tileSize) const;
 
         void createFrame(Document &document);
 

@@ -10,15 +10,17 @@ TEST_CASE("flip_vertical", "[flip-vertical]")
 {
     SECTION("can flip a layer vertically")
     {
-        DocumentStore documentStore =
-            DocumentStoreBuilder()
-                .withDocumentBounds(Bounds(0, 0, 6, 6))
-                .withDrawing(DrawingBuilder().withTileSize(1.0f).withTileLayer(TileLayerBuilder()
-                                                                                   .withTileSize(1.0f)
-                                                                                   .withTile(Vec2Int(0, 5))
-                                                                                   .withTile(Vec2Int(1, 5))
-                                                                                   .withTile(Vec2Int(0, 4))))
-                .build();
+        DocumentStore documentStore = DocumentStoreBuilder()
+                                          .withDocumentBounds(Bounds(0, 0, 6, 6))
+                                          .withDrawing(DrawingBuilder()
+                                                           .withBounds(Bounds(-3.0f, -3.0f, 3.0f, 3.0f))
+                                                           .withTileSize(1.0f)
+                                                           .withTileLayer(TileLayerBuilder()
+                                                                              .withTileSize(1.0f)
+                                                                              .withTile(Vec2Int(0, 5))
+                                                                              .withTile(Vec2Int(1, 5))
+                                                                              .withTile(Vec2Int(0, 4))))
+                                          .build();
 
         TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing().getActiveLayer();
 

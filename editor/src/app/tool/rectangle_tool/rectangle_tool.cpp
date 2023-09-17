@@ -46,8 +46,8 @@ namespace editor
         }
 
         context.doc.document->getHistory()->add(std::make_shared<TileUndo>(tileUndo));
-        getCursor()->destroy(context.doc.activeDrawing->getForegroundLayer());
-        context.doc.activeDrawing->getForegroundLayer().clear();
+        getCursor()->destroy(context.doc.activeDrawing->getTempLayer());
+        context.doc.activeDrawing->getTempLayer().clear();
         m_TempRectDrawer.reset();
     }
 
@@ -58,7 +58,7 @@ namespace editor
             return;
         }
 
-        TileLayer &tileLayer = context.doc.activeDrawing->getForegroundLayer();
+        TileLayer &tileLayer = context.doc.activeDrawing->getTempLayer();
 
         if (m_IsFilled)
         {

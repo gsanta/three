@@ -9,12 +9,15 @@ namespace engine
     {
     }
 
-    BoundsInt::BoundsInt(int minX, int minY, int maxX, int maxY) : minX(minX), maxX(maxX), minY(minY), maxY(maxY)
+    BoundsInt::BoundsInt(int x1, int y1, int x2, int y2)
     {
+        minX = x1 < x2 ? x1 : x2;
+        maxX = x1 < x2 ? x2 : x1;
+        minY = y1 < y2 ? y1 : y2;
+        maxY = y1 < y2 ? y2 : y1;
     }
 
-    BoundsInt::BoundsInt(Vec2Int bottomLeft, Vec2Int topRight)
-        : minX(bottomLeft.x), minY(bottomLeft.y), maxX(topRight.x), maxY(topRight.y)
+    BoundsInt::BoundsInt(Vec2Int vec1, Vec2Int vec2) : BoundsInt(vec1.x, vec1.y, vec2.x, vec2.y)
     {
     }
 
@@ -39,14 +42,14 @@ namespace engine
         return maxY - minY;
     }
 
-    Vec2Int BoundsInt::getTopRight()
-    {
-        return Vec2Int(minX, minY);
-    }
-
-    Vec2Int BoundsInt::getBottomLeft()
+    Vec2Int BoundsInt::getTopRight() const
     {
         return Vec2Int(maxX, maxY);
+    }
+
+    Vec2Int BoundsInt::getBottomLeft() const
+    {
+        return Vec2Int(minX, minY);
     }
 
     Vec2Int BoundsInt::getCenter() const
@@ -57,6 +60,27 @@ namespace engine
     bool BoundsInt::isDefault()
     {
         return minX == 0 && maxX == 0 && minY == 0 && maxY == 0;
+    }
+
+    void BoundsInt::expand(const Vec2Int &vec)
+    {
+        if (vec.x < minX)
+        {
+            minX = vec.x;
+        }
+        else if (vec.x > maxX)
+        {
+            maxX = vec.x;
+        }
+
+        if (vec.y < minY)
+        {
+            minY = vec.y;
+        }
+        else if (vec.y > maxY)
+        {
+            maxY = vec.y;
+        }
     }
 
     std::string BoundsInt::toString() const

@@ -7,10 +7,12 @@
 #include "../tool/tool.h"
 #include "../tool/tool_context.h"
 #include "./box_selector.h"
+#include "./calc_selection_bounds.h"
 #include "./rect_selector.h"
 #include "./selection_buffer.h"
 #include "./selection_mover.h"
 
+#include <limits>
 #include <memory>
 #include <vector>
 
@@ -20,12 +22,11 @@ namespace editor
 {
     using namespace ::spright::maths;
     using namespace ::spright::engine;
-    using namespace editor;
 
     class SelectTool : public Tool
     {
     public:
-        SelectTool();
+        SelectTool(std::shared_ptr<DocumentStore> documentStore);
 
         void pointerDown(const ToolContext &) override;
 
@@ -33,15 +34,17 @@ namespace editor
 
         void pointerMove(const ToolContext &) override;
 
-        void setSelectedTiles(std::vector<int> indexes);
+        void setSelectedTiles(std::vector<int> indexes, TileLayer &layer);
 
         std::shared_ptr<SelectionBuffer> getSelectionBuffer();
 
     private:
         void fillTempLayer(TileLayer &tempLayer);
 
+        void recalcTileIndexesAndBounds(TileLayer &activeLayer, TileLayer &tempLayer);
+
     private:
-        DocumentStore *m_DocumentStore;
+        std::shared_ptr<DocumentStore> m_DocumentStore;
 
         std::shared_ptr<SelectionBuffer> m_SelectionBuffer;
 
@@ -52,6 +55,12 @@ namespace editor
         RectSelector m_RectSelector;
 
         vector<Vec2> m_OrigPositions;
+
+        Bounds m_SelectionBounds;
+
+        BoundsInt m_SelectionTileBounds;
+
+        bool m_SelectionBoundsDirty;
 
         float m_NoMovementTolerance = 0.1f;
 

@@ -228,7 +228,7 @@ namespace engine
         }
     }
 
-    void TileLayer::updateTileIndex(Rect2D *rect)
+    int TileLayer::updateTileIndex(Rect2D *rect)
     {
         if (m_TileIndexes[rect->getTileIndex()] == rect)
         {
@@ -239,6 +239,8 @@ namespace engine
 
         rect->setTileIndex(newTileIndex);
         m_TileIndexes[newTileIndex] = rect;
+
+        return newTileIndex;
     }
 
 } // namespace engine

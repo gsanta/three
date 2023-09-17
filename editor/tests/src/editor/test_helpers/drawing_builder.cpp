@@ -86,14 +86,10 @@ Drawing DrawingBuilder::buildFromLayers()
                                  : m_TileLayers[0].withBounds(m_Bounds).withTileSize(m_TileSize).build();
 
     TileLayer backgroundLayer = TileLayerBuilder().withTileSize(m_BackgroundLayerTileSize).withBounds(m_Bounds).build();
+    const TileLayer tempLayer("", HeadlessRenderer2D(), Group<Rect2D>(), m_Bounds, m_TileSize, 0, true);
+    const TileLayer cursorLayer("", HeadlessRenderer2D(), Group<Rect2D>(), m_Bounds, m_TileSize, 0, true);
 
-    Drawing drawing(initialLayer, backgroundLayer);
-
-    const Frame frame(0);
-
-    const TileLayer foregroundLayer("", HeadlessRenderer2D(), Group<Rect2D>(), m_Bounds, m_TileSize, 0, true);
-
-    drawing.addForegroundLayer(foregroundLayer);
+    Drawing drawing(initialLayer, backgroundLayer, tempLayer, cursorLayer);
 
     for (size_t i = 1; i < m_TileLayers.size(); i++)
     {
@@ -115,11 +111,12 @@ Drawing DrawingBuilder::buildFromFrames()
         frames.push_back(frameBuilder.build());
     }
 
-    Drawing drawing(frames, backgroundLayer);
+    const TileLayer tempLayer("", HeadlessRenderer2D(), Group<Rect2D>(), m_Bounds, m_TileSize, 0, true);
+    const TileLayer cursorLayer("", HeadlessRenderer2D(), Group<Rect2D>(), m_Bounds, m_TileSize, 0, true);
+
+    Drawing drawing(frames, backgroundLayer, tempLayer, cursorLayer);
 
     TileLayer foregroundLayer = TileLayerBuilder().withTileSize(m_TileSize).withBounds(m_Bounds).build();
-
-    drawing.addForegroundLayer(foregroundLayer);
 
     return drawing;
 }

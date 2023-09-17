@@ -35,15 +35,7 @@ namespace editor
             frames.push_back(std::move(newFrame));
         }
 
-        TileLayer backgroundLayer =
-            documentFactory->createBackgroundLayer(bounds, orig.getBackgroundLayer().getTileSize());
-
-        Drawing newDrawing(frames, backgroundLayer);
-
-        TileLayer foregroundLayer =
-            documentFactory->createForegroundLayer(bounds, orig.getForegroundLayer().getTileSize());
-
-        newDrawing.addForegroundLayer(foregroundLayer);
+        Drawing newDrawing = documentFactory->createDrawing(frames, true);
 
         return newDrawing;
     }

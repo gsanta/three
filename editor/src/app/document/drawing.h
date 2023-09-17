@@ -15,9 +15,15 @@ namespace editor
     class Drawing : public Container
     {
     public:
-        Drawing(const TileLayer &initialLayer, const TileLayer &backgroundLayer);
+        Drawing(const TileLayer &initialLayer,
+                const TileLayer &backgroundLayer,
+                const TileLayer &tempLayer,
+                const TileLayer &cursorLayer);
 
-        Drawing(const std::vector<Frame> &frames, const TileLayer &backgroundLayer);
+        Drawing(const std::vector<Frame> &frames,
+                const TileLayer &backgroundLayer,
+                const TileLayer &tempLayer,
+                const TileLayer &cursorLayer);
 
         std::vector<Frame> &getFrames();
 
@@ -43,19 +49,17 @@ namespace editor
 
         TileLayer &addLayer(const TileLayer &tileLayer);
 
-        TileLayer &getForegroundLayer();
-
-        const TileLayer &getForegroundLayer() const;
-
-        std::vector<TileLayer> &getForegroundLayers();
-
         TileLayer &getBackgroundLayer();
 
-        TileLayer &getBackgroundLayer() const;
+        const TileLayer &getBackgroundLayer() const;
+
+        TileLayer &getTempLayer();
+
+        const TileLayer &getTempLayer() const;
+
+        TileLayer &getCursorLayer();
 
         void addBackgroundLayer(const TileLayer &tileLayer);
-
-        void addForegroundLayer(const TileLayer &tileLayer);
 
         std::string getJson();
 
@@ -64,7 +68,9 @@ namespace editor
     private:
         std::shared_ptr<TileLayer> m_BackgroundLayer;
 
-        std::vector<TileLayer> m_ForegroundLayers;
+        std::shared_ptr<TileLayer> m_TempLayer;
+
+        std::shared_ptr<TileLayer> m_CursorLayer;
 
         std::vector<Frame> m_Frames;
 

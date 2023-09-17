@@ -68,12 +68,7 @@ SCENARIO("Circle tool")
 
             THEN("it updates the preview on the foreground layer for each move event")
             {
-                REQUIRE_ELLIPSE(document.getActiveDrawing().getForegroundLayer());
-
-                // toolContext.pointer.curr = layer.getCenterPos(Vec2Int(6.0f, 6.0f));
-                // circleTool.pointerMove(toolContext);
-
-                // REQUIRE_CIRCLE(document.getActiveDrawing().getForegroundLayer());
+                REQUIRE_ELLIPSE(document.getActiveDrawing().getTempLayer());
             }
 
             WHEN("releasing the mouse at an equal horizontal and vertical distance from mouse down")
