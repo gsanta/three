@@ -58,8 +58,7 @@ function locateFile(path) {
 // Hooks that are implemented differently in different runtime environments.
 var read_,
     readAsync,
-    readBinary,
-    setWindowTitle;
+    readBinary;
 
 if (ENVIRONMENT_IS_NODE) {
   if (typeof process == 'undefined' || !process.release || process.release.name !== 'node') throw new Error('not compiled for this environment (did you build to HTML and try to run it not on the web, or set ENVIRONMENT to something - like node - and run it someplace else - like on the web?)');
@@ -269,8 +268,6 @@ read_ = (url) => {
 
 // end include: web_or_worker_shell_read.js
   }
-
-  setWindowTitle = (title) => document.title = title;
 } else
 {
   throw new Error('environment detection error');
@@ -306,7 +303,7 @@ assert(typeof Module['filePackagePrefixURL'] == 'undefined', 'Module.filePackage
 assert(typeof Module['read'] == 'undefined', 'Module.read option was removed (modify read_ in JS)');
 assert(typeof Module['readAsync'] == 'undefined', 'Module.readAsync option was removed (modify readAsync in JS)');
 assert(typeof Module['readBinary'] == 'undefined', 'Module.readBinary option was removed (modify readBinary in JS)');
-assert(typeof Module['setWindowTitle'] == 'undefined', 'Module.setWindowTitle option was removed (modify setWindowTitle in JS)');
+assert(typeof Module['setWindowTitle'] == 'undefined', 'Module.setWindowTitle option was removed (modify emscripten_set_window_title in JS)');
 assert(typeof Module['TOTAL_MEMORY'] == 'undefined', 'Module.TOTAL_MEMORY has been renamed Module.INITIAL_MEMORY');
 legacyModuleProp('asm', 'wasmExports');
 legacyModuleProp('read', 'read_');
@@ -414,12 +411,6 @@ assert(typeof Int32Array != 'undefined' && typeof Float64Array !== 'undefined' &
 assert(!Module['wasmMemory'], 'Use of `wasmMemory` detected.  Use -sIMPORTED_MEMORY to define wasmMemory externally');
 assert(!Module['INITIAL_MEMORY'], 'Detected runtime INITIAL_MEMORY setting.  Use -sIMPORTED_MEMORY to define wasmMemory dynamically');
 
-// include: runtime_init_table.js
-// In regular non-RELOCATABLE mode the table is exported
-// from the wasm module and this will be assigned once
-// the exports are available.
-var wasmTable;
-// end include: runtime_init_table.js
 // include: runtime_stack_check.js
 // Initializes the stack cookie. Called at the startup of main and at the startup of each thread in pthreads mode.
 function writeStackCookie() {
@@ -829,9 +820,8 @@ function createWasm() {
   // performing other necessary setup
   /** @param {WebAssembly.Module=} module*/
   function receiveInstance(instance, module) {
-    var exports = instance.exports;
+    wasmExports = instance.exports;
 
-    wasmExports = exports;
     
 
     wasmMemory = wasmExports['memory'];
@@ -850,7 +840,7 @@ function createWasm() {
     addOnInit(wasmExports['__wasm_call_ctors']);
 
     removeRunDependency('wasm-instantiate');
-    return exports;
+    return wasmExports;
   }
   // wait for the pthread pool (if any)
   addRunDependency('wasm-instantiate');
@@ -2013,6 +2003,10 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
     };
   
   
+  var FS_createDataFile = (parent, name, fileData, canRead, canWrite, canOwn) => {
+      return FS.createDataFile(parent, name, fileData, canRead, canWrite, canOwn);
+    };
+  
   var preloadPlugins = Module['preloadPlugins'] || [];
   var FS_handledByPreloadPlugin = (byteArray, fullname, finish, onerror) => {
       // Ensure plugins are ready.
@@ -2037,7 +2031,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         function finish(byteArray) {
           if (preFinish) preFinish();
           if (!dontCreateFile) {
-            FS.createDataFile(parent, name, byteArray, canRead, canWrite, canOwn);
+            FS_createDataFile(parent, name, byteArray, canRead, canWrite, canOwn);
           }
           if (onload) onload();
           removeRunDependency(dep);
@@ -3877,7 +3871,8 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   varargs:undefined,
   get() {
         assert(SYSCALLS.varargs != undefined);
-        var ret = HEAP32[((SYSCALLS.varargs)>>2)];
+        // the `+` prepended here is necessary to convince the JSCompiler that varargs is indeed a number.
+        var ret = HEAP32[((+SYSCALLS.varargs)>>2)];
         SYSCALLS.varargs += 4;
         return ret;
       },
@@ -4085,7 +4080,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       }
       embind_charCodes = codes;
     };
-  var embind_charCodes = undefined;
+  var embind_charCodes;
   var readLatin1String = (ptr) => {
       var ret = "";
       var c = ptr;
@@ -4104,13 +4099,13 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   var typeDependencies = {
   };
   
-  var BindingError = undefined;
+  var BindingError;
   var throwBindingError = (message) => { throw new BindingError(message); };
   
   
   
   
-  var InternalError = undefined;
+  var InternalError;
   var throwInternalError = (message) => { throw new InternalError(message); };
   var whenDependentTypesAreResolved = (myTypes, dependentTypes, getTypeConverters) => {
       myTypes.forEach(function(type) {
@@ -4183,6 +4178,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
     }
   
   var GenericWireTypeSize = 8;
+  /** @suppress {globalThis} */
   var __embind_register_bool = (rawType, name, trueValue, falseValue) => {
       name = readLatin1String(name);
       registerType(rawType, {
@@ -4204,31 +4200,6 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
     };
 
   
-  function ClassHandle_isAliasOf(other) {
-      if (!(this instanceof ClassHandle)) {
-        return false;
-      }
-      if (!(other instanceof ClassHandle)) {
-        return false;
-      }
-  
-      var leftClass = this.$$.ptrType.registeredClass;
-      var left = this.$$.ptr;
-      var rightClass = other.$$.ptrType.registeredClass;
-      var right = other.$$.ptr;
-  
-      while (leftClass.baseClass) {
-        left = leftClass.upcast(left);
-        leftClass = leftClass.baseClass;
-      }
-  
-      while (rightClass.baseClass) {
-        right = rightClass.upcast(right);
-        rightClass = rightClass.baseClass;
-      }
-  
-      return leftClass === rightClass && left === right;
-    }
   
   var shallowCopyInternalPointer = (o) => {
       return {
@@ -4309,7 +4280,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       }
     };
   
-  var delayFunction = undefined;
+  var delayFunction;
   
   
   var setDelayFunction = (fn) => {
@@ -4359,6 +4330,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         },
       }));
     };
+  /** @suppress {globalThis} */
   function RegisteredPointer_fromWireType(ptr) {
       // ptr is a raw pointer (or a raw smartpointer)
   
@@ -4472,74 +4444,96 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       detachFinalizer = (handle) => finalizationRegistry.unregister(handle);
       return attachFinalizer(handle);
     };
-  function ClassHandle_clone() {
-      if (!this.$$.ptr) {
-        throwInstanceAlreadyDeleted(this);
-      }
-  
-      if (this.$$.preservePointerOnDelete) {
-        this.$$.count.value += 1;
-        return this;
-      } else {
-        var clone = attachFinalizer(Object.create(Object.getPrototypeOf(this), {
-          $$: {
-            value: shallowCopyInternalPointer(this.$$),
-          }
-        }));
-  
-        clone.$$.count.value += 1;
-        clone.$$.deleteScheduled = false;
-        return clone;
-      }
-    }
   
   
   
-  
-  function ClassHandle_delete() {
-      if (!this.$$.ptr) {
-        throwInstanceAlreadyDeleted(this);
-      }
-  
-      if (this.$$.deleteScheduled && !this.$$.preservePointerOnDelete) {
-        throwBindingError('Object already scheduled for deletion');
-      }
-  
-      detachFinalizer(this);
-      releaseClassHandle(this.$$);
-  
-      if (!this.$$.preservePointerOnDelete) {
-        this.$$.smartPtr = undefined;
-        this.$$.ptr = undefined;
-      }
-    }
-  
-  function ClassHandle_isDeleted() {
-      return !this.$$.ptr;
-    }
-  
-  
-  
-  function ClassHandle_deleteLater() {
-      if (!this.$$.ptr) {
-        throwInstanceAlreadyDeleted(this);
-      }
-      if (this.$$.deleteScheduled && !this.$$.preservePointerOnDelete) {
-        throwBindingError('Object already scheduled for deletion');
-      }
-      deletionQueue.push(this);
-      if (deletionQueue.length === 1 && delayFunction) {
-        delayFunction(flushPendingDeletes);
-      }
-      this.$$.deleteScheduled = true;
-      return this;
-    }
   var init_ClassHandle = () => {
-      ClassHandle.prototype['isAliasOf'] = ClassHandle_isAliasOf;
-      ClassHandle.prototype['clone'] = ClassHandle_clone;
-      ClassHandle.prototype['delete'] = ClassHandle_delete;
-      ClassHandle.prototype['isDeleted'] = ClassHandle_isDeleted;
-      ClassHandle.prototype['deleteLater'] = ClassHandle_deleteLater;
+      Object.assign(ClassHandle.prototype, {
+        "isAliasOf"(other) {
+          if (!(this instanceof ClassHandle)) {
+            return false;
+          }
+          if (!(other instanceof ClassHandle)) {
+            return false;
+          }
+  
+          var leftClass = this.$$.ptrType.registeredClass;
+          var left = this.$$.ptr;
+          other.$$ = /** @type {Object} */ (other.$$);
+          var rightClass = other.$$.ptrType.registeredClass;
+          var right = other.$$.ptr;
+  
+          while (leftClass.baseClass) {
+            left = leftClass.upcast(left);
+            leftClass = leftClass.baseClass;
+          }
+  
+          while (rightClass.baseClass) {
+            right = rightClass.upcast(right);
+            rightClass = rightClass.baseClass;
+          }
+  
+          return leftClass === rightClass && left === right;
+        },
+  
+        "clone"() {
+          if (!this.$$.ptr) {
+            throwInstanceAlreadyDeleted(this);
+          }
+  
+          if (this.$$.preservePointerOnDelete) {
+            this.$$.count.value += 1;
+            return this;
+          } else {
+            var clone = attachFinalizer(Object.create(Object.getPrototypeOf(this), {
+              $$: {
+                value: shallowCopyInternalPointer(this.$$),
+              }
+            }));
+  
+            clone.$$.count.value += 1;
+            clone.$$.deleteScheduled = false;
+            return clone;
+          }
+        },
+  
+        "delete"() {
+          if (!this.$$.ptr) {
+            throwInstanceAlreadyDeleted(this);
+          }
+  
+          if (this.$$.deleteScheduled && !this.$$.preservePointerOnDelete) {
+            throwBindingError('Object already scheduled for deletion');
+          }
+  
+          detachFinalizer(this);
+          releaseClassHandle(this.$$);
+  
+          if (!this.$$.preservePointerOnDelete) {
+            this.$$.smartPtr = undefined;
+            this.$$.ptr = undefined;
+          }
+        },
+  
+        "isDeleted"() {
+          return !this.$$.ptr;
+        },
+  
+        "deleteLater"() {
+          if (!this.$$.ptr) {
+            throwInstanceAlreadyDeleted(this);
+          }
+          if (this.$$.deleteScheduled && !this.$$.preservePointerOnDelete) {
+            throwBindingError('Object already scheduled for deletion');
+          }
+          deletionQueue.push(this);
+          if (deletionQueue.length === 1 && delayFunction) {
+            delayFunction(flushPendingDeletes);
+          }
+          this.$$.deleteScheduled = true;
+          return this;
+        },
+      });
     };
   /** @constructor */
   function ClassHandle() {
@@ -4645,6 +4639,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       }
       return ptr;
     };
+  /** @suppress {globalThis} */
   function constNoSmartPtrRawPointerToWireType(destructors, handle) {
       if (handle === null) {
         if (this.isReference) {
@@ -4665,6 +4660,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
     }
   
   
+  /** @suppress {globalThis} */
   function genericPointerToWireType(destructors, handle) {
       var ptr;
       if (handle === null) {
@@ -4740,6 +4736,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
     }
   
   
+  /** @suppress {globalThis} */
   function nonConstNoSmartPtrRawPointerToWireType(destructors, handle) {
       if (handle === null) {
         if (this.isReference) {
@@ -4762,36 +4759,35 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       return ptr;
     }
   
+  
+  /** @suppress {globalThis} */
   function readPointer(pointer) {
       return this['fromWireType'](HEAPU32[((pointer)>>2)]);
     }
   
-  function RegisteredPointer_getPointee(ptr) {
-      if (this.rawGetPointee) {
-        ptr = this.rawGetPointee(ptr);
-      }
-      return ptr;
-    }
-  
-  function RegisteredPointer_destructor(ptr) {
-      if (this.rawDestructor) {
-        this.rawDestructor(ptr);
-      }
-    }
-  
-  var RegisteredPointer_deleteObject = (handle) => {
-      if (handle !== null) {
-        handle['delete']();
-      }
-    };
   
   var init_RegisteredPointer = () => {
-      RegisteredPointer.prototype.getPointee = RegisteredPointer_getPointee;
-      RegisteredPointer.prototype.destructor = RegisteredPointer_destructor;
-      RegisteredPointer.prototype['argPackAdvance'] = GenericWireTypeSize;
-      RegisteredPointer.prototype['readValueFromPointer'] = readPointer;
-      RegisteredPointer.prototype['deleteObject'] = RegisteredPointer_deleteObject;
-      RegisteredPointer.prototype['fromWireType'] = RegisteredPointer_fromWireType;
+      Object.assign(RegisteredPointer.prototype, {
+        getPointee(ptr) {
+          if (this.rawGetPointee) {
+            ptr = this.rawGetPointee(ptr);
+          }
+          return ptr;
+        },
+        destructor(ptr) {
+          if (this.rawDestructor) {
+            this.rawDestructor(ptr);
+          }
+        },
+        'argPackAdvance': GenericWireTypeSize,
+        'readValueFromPointer': readPointer,
+        'deleteObject'(handle) {
+          if (handle !== null) {
+            handle['delete']();
+          }
+        },
+        'fromWireType': RegisteredPointer_fromWireType,
+      });
     };
   /** @constructor
       @param {*=} pointeeType,
@@ -4877,6 +4873,8 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
     };
   
   var wasmTableMirror = [];
+  
+  var wasmTable;
   var getWasmTableEntry = (funcPtr) => {
       var func = wasmTableMirror[funcPtr];
       if (!func) {
@@ -4952,7 +4950,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
       return errorClass;
     };
-  var UnboundTypeError = undefined;
+  var UnboundTypeError;
   
   
   
@@ -5432,6 +5430,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
   
   
+  /** @suppress {globalThis} */
   function simpleReadValueFromPointer(pointer) {
       return this['fromWireType'](HEAP32[((pointer)>>2)]);
     }
@@ -5542,6 +5541,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
     };
   
   
+  /** @suppress {globalThis} */
   var __embind_register_integer = (primitiveType, name, size, minRange, maxRange) => {
       name = readLatin1String(name);
       // LLVM doesn't have signed and unsigned 32-bit types, so u32 literals come
@@ -5642,7 +5642,9 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
       registerType(rawType, {
         name,
-        'fromWireType': (value) => {
+        // For some method names we use string keys here since they are part of
+        // the public/external API and/or used by the runtime-generated code.
+        'fromWireType'(value) {
           var length = HEAPU32[((value)>>2)];
           var payload = value + 4;
   
@@ -5676,7 +5678,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
           return str;
         },
-        'toWireType': (destructors, value) => {
+        'toWireType'(destructors, value) {
           if (value instanceof ArrayBuffer) {
             value = new Uint8Array(value);
           }
@@ -5723,7 +5725,9 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         },
         'argPackAdvance': GenericWireTypeSize,
         'readValueFromPointer': readPointer,
-        destructorFunction: (ptr) => _free(ptr),
+        destructorFunction(ptr) {
+          _free(ptr);
+        },
       });
     };
 
@@ -5917,7 +5921,9 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         },
         'argPackAdvance': GenericWireTypeSize,
         'readValueFromPointer': simpleReadValueFromPointer,
-        destructorFunction: (ptr) => _free(ptr),
+        destructorFunction(ptr) {
+          _free(ptr);
+        }
       });
     };
 
@@ -6022,7 +6028,8 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
     };
   
   
-  var emval_registeredMethods = [];
+  var emval_registeredMethods = {
+  };
   
   var __emval_get_method_caller = (argCount, argTypes) => {
       var types = emval_lookupTypes(argCount, argTypes);
@@ -6107,7 +6114,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       _emscripten_get_now = () => performance.now();
   ;
 
-  var _emscripten_memcpy_big = (dest, src, num) => HEAPU8.copyWithin(dest, src, src + num);
+  var _emscripten_memcpy_js = (dest, src, num) => HEAPU8.copyWithin(dest, src, src + num);
 
   var getHeapMax = () =>
       // Stay one Wasm page short of 4GB: while e.g. Chrome is able to allocate
@@ -6930,7 +6937,16 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       Browser.mainLoop.func = browserIterationFunc;
       Browser.mainLoop.arg = arg;
   
-      var thisMainLoopId = Browser.mainLoop.currentlyRunningMainloop;
+      // Closure compiler bug(?): Closure does not see that the assignment
+      //   var thisMainLoopId = Browser.mainLoop.currentlyRunningMainloop
+      // is a value copy of a number (even with the JSDoc @type annotation)
+      // but optimizeis the code as if the assignment was a reference assignment,
+      // which results in Browser.mainLoop.pause() not working. Hence use a
+      // workaround to make Closure believe this is a value copy that should occur:
+      // (TODO: Minimize this down to a small test case and report - was unable
+      // to reproduce in a small written test case)
+      /** @type{number} */
+      var thisMainLoopId = (() => Browser.mainLoop.currentlyRunningMainloop)();
       function checkIsRunning() {
         if (thisMainLoopId < Browser.mainLoop.currentlyRunningMainloop) {
           
@@ -8400,6 +8416,8 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
   
   
+  var _emscripten_set_window_title = (title) => document.title = UTF8ToString(title);
+  
   
   
   var GLFW = {
@@ -8803,9 +8821,9 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
         var win = GLFW.WindowFromId(winid);
         if (!win) return;
   
-        win.title = UTF8ToString(title);
+        win.title = title;
         if (GLFW.active.id == win.id) {
-          document.title = win.title;
+          _emscripten_set_window_title(title);
         }
       },
   setJoystickCallback:(cbfun) => {
@@ -9694,6 +9712,9 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
 
 
 
+
+  var FS_unlink = (path) => FS.unlink(path);
+
   var FSNode = /** @constructor */ function(parent, name, mode, rdev) {
     if (!parent) {
       parent = this;  // root node sets parent to itself
@@ -9900,112 +9921,219 @@ function checkIncomingModuleAPI() {
   ignoredModuleProp('fetchSettings');
 }
 var wasmImports = {
+  /** @export */
   __assert_fail: ___assert_fail,
+  /** @export */
   __syscall_fcntl64: ___syscall_fcntl64,
+  /** @export */
   __syscall_ioctl: ___syscall_ioctl,
+  /** @export */
   __syscall_openat: ___syscall_openat,
+  /** @export */
   __throw_exception_with_stack_trace: ___throw_exception_with_stack_trace,
+  /** @export */
   _embind_register_bigint: __embind_register_bigint,
+  /** @export */
   _embind_register_bool: __embind_register_bool,
+  /** @export */
   _embind_register_class: __embind_register_class,
+  /** @export */
   _embind_register_class_constructor: __embind_register_class_constructor,
+  /** @export */
   _embind_register_class_function: __embind_register_class_function,
+  /** @export */
   _embind_register_emval: __embind_register_emval,
+  /** @export */
   _embind_register_float: __embind_register_float,
+  /** @export */
   _embind_register_function: __embind_register_function,
+  /** @export */
   _embind_register_integer: __embind_register_integer,
+  /** @export */
   _embind_register_memory_view: __embind_register_memory_view,
+  /** @export */
   _embind_register_std_string: __embind_register_std_string,
+  /** @export */
   _embind_register_std_wstring: __embind_register_std_wstring,
+  /** @export */
   _embind_register_void: __embind_register_void,
+  /** @export */
   _emscripten_fs_load_embedded_files: __emscripten_fs_load_embedded_files,
+  /** @export */
   _emval_call_method: __emval_call_method,
+  /** @export */
   _emval_decref: __emval_decref,
+  /** @export */
   _emval_get_global: __emval_get_global,
+  /** @export */
   _emval_get_method_caller: __emval_get_method_caller,
+  /** @export */
   _emval_incref: __emval_incref,
+  /** @export */
   _emval_run_destructors: __emval_run_destructors,
+  /** @export */
   _emval_take_value: __emval_take_value,
+  /** @export */
   abort: _abort,
+  /** @export */
   emscripten_get_now: _emscripten_get_now,
-  emscripten_memcpy_big: _emscripten_memcpy_big,
+  /** @export */
+  emscripten_memcpy_js: _emscripten_memcpy_js,
+  /** @export */
   emscripten_resize_heap: _emscripten_resize_heap,
+  /** @export */
   emscripten_set_main_loop_arg: _emscripten_set_main_loop_arg,
+  /** @export */
   environ_get: _environ_get,
+  /** @export */
   environ_sizes_get: _environ_sizes_get,
+  /** @export */
   fd_close: _fd_close,
+  /** @export */
   fd_read: _fd_read,
+  /** @export */
   fd_seek: _fd_seek,
+  /** @export */
   fd_write: _fd_write,
+  /** @export */
   glAttachShader: _glAttachShader,
+  /** @export */
   glBindBuffer: _glBindBuffer,
+  /** @export */
   glBindFramebuffer: _glBindFramebuffer,
+  /** @export */
   glBindTexture: _glBindTexture,
+  /** @export */
   glBindVertexArray: _glBindVertexArray,
+  /** @export */
   glBlendFunc: _glBlendFunc,
+  /** @export */
   glBufferData: _glBufferData,
+  /** @export */
   glBufferSubData: _glBufferSubData,
+  /** @export */
   glCheckFramebufferStatus: _glCheckFramebufferStatus,
+  /** @export */
   glClear: _glClear,
+  /** @export */
   glClearColor: _glClearColor,
+  /** @export */
   glCompileShader: _glCompileShader,
+  /** @export */
   glCreateProgram: _glCreateProgram,
+  /** @export */
   glCreateShader: _glCreateShader,
+  /** @export */
   glDeleteBuffers: _glDeleteBuffers,
+  /** @export */
   glDeleteFramebuffers: _glDeleteFramebuffers,
+  /** @export */
   glDeleteProgram: _glDeleteProgram,
+  /** @export */
   glDeleteShader: _glDeleteShader,
+  /** @export */
   glDeleteTextures: _glDeleteTextures,
+  /** @export */
   glDrawElements: _glDrawElements,
+  /** @export */
   glEnable: _glEnable,
+  /** @export */
   glEnableVertexAttribArray: _glEnableVertexAttribArray,
+  /** @export */
   glFramebufferTexture2D: _glFramebufferTexture2D,
+  /** @export */
   glGenBuffers: _glGenBuffers,
+  /** @export */
   glGenFramebuffers: _glGenFramebuffers,
+  /** @export */
   glGenTextures: _glGenTextures,
+  /** @export */
   glGenVertexArrays: _glGenVertexArrays,
+  /** @export */
   glGetError: _glGetError,
+  /** @export */
   glGetShaderInfoLog: _glGetShaderInfoLog,
+  /** @export */
   glGetShaderiv: _glGetShaderiv,
+  /** @export */
   glGetUniformLocation: _glGetUniformLocation,
+  /** @export */
   glLinkProgram: _glLinkProgram,
+  /** @export */
   glReadPixels: _glReadPixels,
+  /** @export */
   glShaderSource: _glShaderSource,
+  /** @export */
   glTexImage2D: _glTexImage2D,
+  /** @export */
   glTexParameteri: _glTexParameteri,
+  /** @export */
   glUniform1f: _glUniform1f,
+  /** @export */
   glUniform1fv: _glUniform1fv,
+  /** @export */
   glUniform1i: _glUniform1i,
+  /** @export */
   glUniform1iv: _glUniform1iv,
+  /** @export */
   glUniform2f: _glUniform2f,
+  /** @export */
   glUniform3f: _glUniform3f,
+  /** @export */
   glUniform4f: _glUniform4f,
+  /** @export */
   glUniformMatrix4fv: _glUniformMatrix4fv,
+  /** @export */
   glUseProgram: _glUseProgram,
+  /** @export */
   glValidateProgram: _glValidateProgram,
+  /** @export */
   glVertexAttribPointer: _glVertexAttribPointer,
+  /** @export */
   glViewport: _glViewport,
+  /** @export */
   glewInit: _glewInit,
+  /** @export */
   glfwCreateWindow: _glfwCreateWindow,
+  /** @export */
   glfwGetFramebufferSize: _glfwGetFramebufferSize,
+  /** @export */
   glfwGetTime: _glfwGetTime,
+  /** @export */
   glfwGetWindowUserPointer: _glfwGetWindowUserPointer,
+  /** @export */
   glfwInit: _glfwInit,
+  /** @export */
   glfwMakeContextCurrent: _glfwMakeContextCurrent,
+  /** @export */
   glfwPollEvents: _glfwPollEvents,
+  /** @export */
   glfwSetCursorPosCallback: _glfwSetCursorPosCallback,
+  /** @export */
   glfwSetFramebufferSizeCallback: _glfwSetFramebufferSizeCallback,
+  /** @export */
   glfwSetKeyCallback: _glfwSetKeyCallback,
+  /** @export */
   glfwSetMouseButtonCallback: _glfwSetMouseButtonCallback,
+  /** @export */
   glfwSetScrollCallback: _glfwSetScrollCallback,
+  /** @export */
   glfwSetWindowSize: _glfwSetWindowSize,
+  /** @export */
   glfwSetWindowUserPointer: _glfwSetWindowUserPointer,
+  /** @export */
   glfwSwapBuffers: _glfwSwapBuffers,
+  /** @export */
   glfwSwapInterval: _glfwSwapInterval,
+  /** @export */
   glfwTerminate: _glfwTerminate,
+  /** @export */
   glfwWindowHint: _glfwWindowHint,
+  /** @export */
   glfwWindowShouldClose: _glfwWindowShouldClose,
+  /** @export */
   on_active_frame_changed_callback: on_active_frame_changed_callback,
+  /** @export */
   strftime_l: _strftime_l
 };
 var wasmExports = createWasm();
@@ -10035,9 +10163,9 @@ var dynCall_viijii = Module['dynCall_viijii'] = createExportWrapper('dynCall_vii
 var dynCall_iiiiij = Module['dynCall_iiiiij'] = createExportWrapper('dynCall_iiiiij');
 var dynCall_iiiiijj = Module['dynCall_iiiiijj'] = createExportWrapper('dynCall_iiiiijj');
 var dynCall_iiiiiijj = Module['dynCall_iiiiiijj'] = createExportWrapper('dynCall_iiiiiijj');
-var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 93152;
-var ___start_em_js = Module['___start_em_js'] = 125472;
-var ___stop_em_js = Module['___stop_em_js'] = 125536;
+var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 93280;
+var ___start_em_js = Module['___start_em_js'] = 125600;
+var ___stop_em_js = Module['___stop_em_js'] = 125664;
 
 // include: postamble.js
 // === Auto-generated postamble setup entry stuff ===
@@ -10076,11 +10204,11 @@ function tryParseAsDataURI(filename) {
 Module['addRunDependency'] = addRunDependency;
 Module['removeRunDependency'] = removeRunDependency;
 Module['FS_createPath'] = FS.createPath;
-Module['FS_createDataFile'] = FS.createDataFile;
 Module['FS_createLazyFile'] = FS.createLazyFile;
 Module['FS_createDevice'] = FS.createDevice;
-Module['FS_unlink'] = FS.unlink;
 Module['FS_createPreloadedFile'] = FS.createPreloadedFile;
+Module['FS_createDataFile'] = FS.createDataFile;
+Module['FS_unlink'] = FS.unlink;
 var missingLibrarySymbols = [
   'writeI53ToI64',
   'writeI53ToI64Clamped',
@@ -10191,6 +10319,7 @@ var missingLibrarySymbols = [
   'makePromiseCallback',
   'getSocketFromFD',
   'getSocketAddress',
+  'FS_mkdirTree',
   '_setNetworkCallback',
   'emscriptenWebGLGet',
   'emscriptenWebGLGetUniform',
@@ -10234,7 +10363,6 @@ var unexportedSymbols = [
   'abort',
   'keepRuntimeAlive',
   'wasmMemory',
-  'wasmTable',
   'wasmExports',
   'stackAlloc',
   'stackSave',
@@ -10283,6 +10411,7 @@ var unexportedSymbols = [
   'mmapAlloc',
   'handleAllocatorInit',
   'HandleAllocator',
+  'wasmTable',
   'freeTableIndexes',
   'functionsInTableMap',
   'setValue',
@@ -10416,9 +10545,6 @@ var unexportedSymbols = [
   'nonConstNoSmartPtrRawPointerToWireType',
   'init_RegisteredPointer',
   'RegisteredPointer',
-  'RegisteredPointer_getPointee',
-  'RegisteredPointer_destructor',
-  'RegisteredPointer_deleteObject',
   'RegisteredPointer_fromWireType',
   'runDestructor',
   'releaseClassHandle',
@@ -10429,13 +10555,8 @@ var unexportedSymbols = [
   'makeClassHandle',
   'init_ClassHandle',
   'ClassHandle',
-  'ClassHandle_isAliasOf',
   'throwInstanceAlreadyDeleted',
-  'ClassHandle_clone',
-  'ClassHandle_delete',
   'deletionQueue',
-  'ClassHandle_isDeleted',
-  'ClassHandle_deleteLater',
   'flushPendingDeletes',
   'delayFunction',
   'setDelayFunction',
