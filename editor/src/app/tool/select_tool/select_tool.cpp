@@ -7,7 +7,7 @@ namespace editor
 
     SelectTool::SelectTool(std::shared_ptr<DocumentStore> documentStore)
         : Tool("select", std::make_shared<RectangleCursor>(1)), m_DocumentStore(documentStore),
-          m_SelectionBuffer(std::make_shared<SelectionBuffer>(documentStore))
+          m_SelectionBuffer(std::make_shared<SelectionBuffer>())
     {
         m_BoxSelector = std::make_unique<BoxSelector>(m_SelectionBuffer);
         m_SelectionMover = std::make_unique<SelectionMover>();
@@ -46,8 +46,6 @@ namespace editor
                                    context.pointer.curr,
                                    context.pointer.prev,
                                    context.pointer.down);
-
-            m_SelectionBoundsDirty = true;
         }
         else if (m_BoxSelector->isSelectionChanged(tempLayer,
                                                    context.pointer.curr,
@@ -55,9 +53,7 @@ namespace editor
                                                    context.pointer.down))
         {
             tempLayer.clear();
-            m_BoxSelector->select(tempLayer, context.pointer.curr, context.pointer.down);
-            m_SelectionBoundsDirty = true;
-            fillTempLayer(tempLayer);
+            m_BoxSelector->select(activeLayer, tempLayer, context.pointer.curr, context.pointer.down);
         }
     }
 
@@ -106,39 +102,13 @@ namespace editor
 
     void SelectTool::setSelectedTiles(std::vector<int> indexes, TileLayer &tempLayer)
     {
-        m_SelectionBoundsDirty = true;
         m_SelectionBuffer->setTileIndexes(std::move(indexes));
-        fillTempLayer(tempLayer);
     }
 
 
     std::shared_ptr<SelectionBuffer> SelectTool::getSelectionBuffer()
     {
         return m_SelectionBuffer;
-    }
-
-    void SelectTool::fillTempLayer(TileLayer &tempLayer)
-    {
-        float tileSize = tempLayer.getTileSize();
-        unsigned int color = 0x800099ff;
-
-        const BoundsInt &bounds = m_SelectionBuffer->getSelectionBounds();
-
-        tempLayer.clear();
-
-        Vec2Int bottomLeft = bounds.getBottomLeft();
-        Vec2Int topRight = bounds.getTopRight();
-
-        for (int i = bottomLeft.x; i <= topRight.x; i++)
-        {
-            for (int j = bottomLeft.y; j <= topRight.y; j++)
-            {
-                Vec2 bottomLeft = tempLayer.getBottomLeftPos(Vec2Int(i, j));
-                Rect2D rect(bottomLeft.x, bottomLeft.y, tileSize, tileSize, color);
-
-                tempLayer.add(rect);
-            }
-        }
     }
 } // namespace editor
 } // namespace spright

@@ -89,54 +89,46 @@ namespace editor
         document.getActiveDrawing().addFrame(std::move(frame));
     }
 
-    Drawing DocumentFactory::createDrawing(std::vector<Frame> &frames, bool checkerboard) const
+
+    Drawing DocumentFactory::createDrawing(const CreateDrawingProps &props) const
     {
-        TileLayer &aLayer = frames[0].getLayers()[0];
+        const Bounds &bounds = props.bounds;
+        float backgroundLayerTileSize = props.backgroundLayerTileSize;
+        float tileSize = props.tileSize;
+        bool hasInitialLayer = props.hasInitialLayer;
+        bool hasCheckerBoard = props.hasCheckerBoard;
+        float zPos = props.zPos;
 
-        float tileSize = TileLayer::defaultTileSize;
+        Drawing drawing(bounds,
+                        createBackgroundLayer(bounds, backgroundLayerTileSize),
+                        createTempLayer(bounds, tileSize),
+                        createCursorLayer(bounds, tileSize));
 
-        Drawing drawing(frames,
-                        createBackgroundLayer(aLayer.getBounds(), aLayer.getTileSize()),
-                        createTempLayer(aLayer.getBounds(), aLayer.getTileSize()),
-                        createCursorLayer(aLayer.getBounds(), aLayer.getTileSize()));
+        if (hasInitialLayer)
+        {
+            TileLayer initialLayer("layer1",
+                                   *m_RendererProvider->createRenderer2D(),
+                                   Group<Rect2D>(),
+                                   bounds,
+                                   0.5f,
+                                   zPos);
 
+            std::vector<Frame> frames;
 
-        if (checkerboard)
+            Frame frame(0);
+
+            frame.addLayer(initialLayer);
+            frames.push_back(frame);
+
+            drawing.addFrame(frame);
+        }
+
+        if (hasCheckerBoard)
         {
             m_Checkerboard.create(drawing.getBackgroundLayer());
         }
 
         return drawing;
-    }
-
-    Drawing DocumentFactory::createEmptyDrawing(Bounds bounds, bool checkerboard) const
-    {
-        std::vector<Frame> frames;
-
-        Frame frame(0);
-
-        frames.push_back(frame);
-
-        float tileSize = TileLayer::defaultTileSize;
-
-        return Drawing(frames,
-                       createBackgroundLayer(bounds, tileSize),
-                       createTempLayer(bounds, tileSize),
-                       createCursorLayer(bounds, tileSize));
-    }
-
-    Drawing DocumentFactory::createDrawing(Bounds bounds, bool checkerboard, float zPos) const
-    {
-        TileLayer initialLayer("layer1", *m_RendererProvider->createRenderer2D(), Group<Rect2D>(), bounds, 0.5f, zPos);
-
-        std::vector<Frame> frames;
-
-        Frame frame(0);
-
-        frame.addLayer(initialLayer);
-        frames.push_back(frame);
-
-        return createDrawing(frames, checkerboard);
     }
 
     Document DocumentFactory::createEmptyDocument() const
@@ -147,9 +139,13 @@ namespace editor
 
         Camera camera(m_Window, -1.0f, 1.0f);
 
+        CreateDrawingProps createDrawingProps(drawingBounds);
+        createDrawingProps.hasCheckerBoard = false;
+        createDrawingProps.hasInitialLayer = false;
+
         Document document(drawingBounds,
                           camera,
-                          createDrawing(drawingBounds, false, 0.01f),
+                          createDrawing(createDrawingProps),
                           std::make_shared<DocumentHistory>());
 
         return document;
@@ -161,10 +157,8 @@ namespace editor
 
         Document document = createEmptyDocument();
 
-        document.addDrawing(
-            createDrawing(Bounds::createWithPositions(-16.0f, -pixelCount / 2.0f, 16.0f, pixelCount / 2.0f),
-                          true,
-                          m_TileLayerZPos));
+        document.addDrawing(createDrawing(
+            CreateDrawingProps(Bounds::createWithPositions(-16.0f, -pixelCount / 2.0f, 16.0f, pixelCount / 2.0f))));
 
         return document;
     }

@@ -35,7 +35,15 @@ namespace editor
             frames.push_back(std::move(newFrame));
         }
 
-        Drawing newDrawing = documentFactory->createDrawing(frames, true);
+        CreateDrawingProps createDrawingProps(bounds);
+        createDrawingProps.hasInitialLayer = false;
+        createDrawingProps.backgroundLayerTileSize = orig.getBackgroundLayer().getTileSize();
+        Drawing newDrawing = documentFactory->createDrawing(createDrawingProps);
+
+        for (Frame &frame : frames)
+        {
+            newDrawing.addFrame(frame);
+        }
 
         return newDrawing;
     }

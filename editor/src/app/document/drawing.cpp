@@ -7,6 +7,17 @@ namespace editor
 
     Drawing resize_drawing(Drawing &orig, Bounds bounds);
 
+    Drawing::Drawing(const Bounds &bounds,
+                     const TileLayer &backgroundLayer,
+                     const TileLayer &tempLayer,
+                     const TileLayer &cursorLayer)
+        : Container(bounds)
+    {
+        m_BackgroundLayer = std::make_shared<TileLayer>(backgroundLayer);
+        m_TempLayer = std::make_shared<TileLayer>(tempLayer);
+        m_CursorLayer = std::make_shared<TileLayer>(cursorLayer);
+    }
+
     Drawing::Drawing(const TileLayer &initialLayer,
                      const TileLayer &backgroundLayer,
                      const TileLayer &tempLayer,
@@ -19,6 +30,7 @@ namespace editor
         m_BackgroundLayer = std::make_shared<TileLayer>(backgroundLayer);
         m_TempLayer = std::make_shared<TileLayer>(tempLayer);
         m_CursorLayer = std::make_shared<TileLayer>(cursorLayer);
+        // m_SelectionBuffer = std::make_unique<SelectionBuffer>();
     }
 
     Drawing::Drawing(const std::vector<Frame> &frames,

@@ -62,7 +62,15 @@ namespace editor
             frames.push_back(frame);
         }
 
-        Drawing drawing = m_DocumentFactory->createDrawing(frames, true);
+        CreateDrawingProps createDrawingProps(frames[0].getLayers()[0].getBounds());
+        createDrawingProps.hasInitialLayer = false;
+
+        Drawing drawing = m_DocumentFactory->createDrawing(createDrawingProps);
+
+        for (Frame &frame : frames)
+        {
+            drawing.addFrame(frame);
+        }
 
         document.addDrawing(drawing);
 

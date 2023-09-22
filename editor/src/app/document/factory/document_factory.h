@@ -14,6 +14,7 @@
 #include "./../document.h"
 #include "./../drawing.h"
 #include "./../frame.h"
+#include "create_drawing_props.h"
 #include "renderer_provider.h"
 
 #include <vector>
@@ -38,11 +39,7 @@ namespace editor
 
         Document createEmptyDocument() const;
 
-        Drawing createEmptyDrawing(Bounds bounds, bool checkerboard) const;
-
-        Drawing createDrawing(std::vector<Frame> &frames, bool checkerboard) const;
-
-        Drawing createDrawing(Bounds bounds, bool checkerboard = true, float zPos = 0) const;
+        Drawing createDrawing(const CreateDrawingProps &props) const;
 
         TileLayer createTileLayer(std::string name, const Bounds &bounds, float tileSize);
 

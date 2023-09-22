@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../../../engine/graphics/layer/tileLayer.h"
-#include "../../../engine/graphics/renderable/bounds_int.h"
-#include "../../document/document_store.h"
+#include "../../engine/graphics/layer/tileLayer.h"
+#include "../../engine/graphics/renderable/bounds_int.h"
 
 #include <algorithm>
 #include <vector>
@@ -16,7 +15,7 @@ namespace editor
     class SelectionBuffer
     {
     public:
-        SelectionBuffer(std::shared_ptr<DocumentStore> documentStore);
+        SelectionBuffer();
 
         void add(int tileIndex, const TileLayer &layer);
 
@@ -28,14 +27,10 @@ namespace editor
 
         bool containsIndex(int index);
 
-        const BoundsInt &getSelectionBounds();
-
     private:
         void updateBounds();
 
     private:
-        std::shared_ptr<DocumentStore> m_DocumentStore;
-
         std::vector<int> m_TileIndexes;
 
         BoundsInt m_SelectionTileBounds;
