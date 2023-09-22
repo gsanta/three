@@ -26,21 +26,8 @@ namespace editor
                               const Vec2 &prev,
                               const Vec2 &start)
     {
-
         Vec2 deltaToStart = calcMoveToStart(layer, prev, start);
         Vec2 deltaToCurr = calcMoveToCurr(layer, curr, start);
-        // Vec2 delta = curr - start;
-        // Vec2 deltaPrev = prev - start;
-
-        // float tileSize = layer.getTileSize();
-
-        // float tiledDeltaPrevX = static_cast<int>(deltaPrev.x / tileSize) * tileSize;
-        // float tiledDeltaPrevY = static_cast<int>(deltaPrev.y / tileSize) * tileSize;
-        // Vec2 tileDeltaPrev = Vec2(tiledDeltaPrevX, tiledDeltaPrevY);
-
-        // float tiledDeltaX = static_cast<int>(delta.x / tileSize) * tileSize;
-        // float tiledDeltaY = static_cast<int>(delta.y / tileSize) * tileSize;
-        // Vec2 tileDelta = Vec2(tiledDeltaX, tiledDeltaY);
 
         for (int tileIndex : tileIndexes)
         {
@@ -48,8 +35,6 @@ namespace editor
             if (tile != nullptr)
             {
                 translate(*tile, deltaToStart, deltaToCurr);
-                // tile->translate(-tileDeltaPrev);
-                // tile->translate(tileDelta);
             }
         }
 
@@ -84,18 +69,6 @@ namespace editor
     {
         tile.translate(-deltaToStart);
         tile.translate(deltaToCurr);
-    }
-
-    void SelectionMover::finish(TileLayer &layer, const std::vector<int> &tileIndexes)
-    {
-        for (int tileIndex : tileIndexes)
-        {
-            Rect2D *tile = layer.getAtTileIndex(tileIndex);
-            if (tile != nullptr)
-            {
-                layer.updateTileIndex(tile);
-            }
-        }
     }
 } // namespace editor
 } // namespace spright

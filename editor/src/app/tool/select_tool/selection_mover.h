@@ -3,7 +3,7 @@
 #include "../../../engine/graphics/layer/tileLayer.h"
 #include "../../../engine/graphics/renderable/rect2d.h"
 #include "../../../maths/vec2.h"
-#include "./selection_buffer.h"
+#include "../../document/selection_buffer.h"
 
 #include <memory>
 
@@ -23,8 +23,6 @@ namespace editor
                   const Vec2 &curr,
                   const Vec2 &prev,
                   const Vec2 &start);
-
-        void finish(TileLayer &layer, const std::vector<int> &tileIndexes);
 
     private:
         Vec2 calcMoveToStart(TileLayer &layer, const Vec2 &prev, const Vec2 &start);

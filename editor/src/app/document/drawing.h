@@ -3,6 +3,7 @@
 #include "../../engine/graphics/camera/camera.h"
 #include "drawing_state.h"
 #include "frame.h"
+#include "selection_buffer.h"
 
 #include <memory>
 
@@ -15,6 +16,11 @@ namespace editor
     class Drawing : public Container
     {
     public:
+        Drawing(const Bounds &bounds,
+                const TileLayer &backgroundLayer,
+                const TileLayer &tempLayer,
+                const TileLayer &cursorLayer);
+
         Drawing(const TileLayer &initialLayer,
                 const TileLayer &backgroundLayer,
                 const TileLayer &tempLayer,
@@ -71,6 +77,8 @@ namespace editor
         std::shared_ptr<TileLayer> m_TempLayer;
 
         std::shared_ptr<TileLayer> m_CursorLayer;
+
+        // std::unique_ptr<SelectionBuffer> m_SelectionBuffer;
 
         std::vector<Frame> m_Frames;
 
