@@ -14,6 +14,8 @@ namespace maths
 
         Vec2Int operator+(const Vec2Int &right);
 
+        Vec2Int operator+(int val) const;
+
         Vec2Int operator-(const Vec2Int &right);
 
         friend bool operator==(const Vec2Int &, const Vec2Int &);

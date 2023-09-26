@@ -62,9 +62,11 @@ namespace editor
 
         float m_BackgroundZPos = -0.2f;
 
-        float m_TileLayerZPos = -0.05f;
+        float m_TileLayerZPos = 0;
 
-        float m_ForegroundZPos = 0;
+        float m_CursorLayerZPos = 0.1f;
+
+        float m_TempLayerZPos = 0.05f;
     };
 } // namespace editor
 } // namespace spright

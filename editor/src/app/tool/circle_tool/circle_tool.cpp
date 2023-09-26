@@ -46,7 +46,7 @@ namespace editor
                 context.doc.activeDrawing->getActiveLayer(),
                 bounds.getCenter().x,
                 bounds.getCenter().y,
-                context.editorState->color,
+                context.tool.selectedColor,
                 [&](std::shared_ptr<Rect2D> prev, std::shared_ptr<Rect2D> next) { tileUndo.addTile(prev, next); });
         }
 
@@ -67,7 +67,7 @@ namespace editor
 
     void CircleTool::drawCircle(BoundsInt &bounds, TileLayer &tileLayer, const ToolContext &context, TileUndo *tileUndo)
     {
-        int color = context.editorState->color;
+        int color = context.tool.selectedColor;
         std::vector<Rect2D> tiles;
 
         int centerX = std::round((bounds.minX + bounds.maxX) / 2);

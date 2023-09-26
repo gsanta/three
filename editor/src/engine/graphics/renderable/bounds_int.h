@@ -26,7 +26,7 @@ namespace engine
 
         BoundsInt(int minX, int minY, int maxX, int maxY);
 
-        BoundsInt(Vec2Int bottomLeft, Vec2Int topRight);
+        BoundsInt(const Vec2Int &bottomLeft, const Vec2Int &topRight);
 
         static BoundsInt createWithSize(int minX, int minY, int width, int height);
 

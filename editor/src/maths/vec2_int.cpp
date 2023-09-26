@@ -17,6 +17,12 @@ namespace maths
         return Vec2Int(x + right.x, y + right.y);
     }
 
+    Vec2Int Vec2Int::operator+(int val) const
+    {
+        return Vec2Int(x + val, y + val);
+    }
+
+
     Vec2Int Vec2Int::operator-(const Vec2Int &right)
     {
         return Vec2Int(x - right.x, y - right.y);

@@ -25,14 +25,19 @@ namespace editor
         }
 
         TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
-        int color = context.editorState->color;
+        int color = context.tool.selectedColor;
 
         TileUndo tileUndo = TileUndo::createForActiveTileLayer(*context.doc.document);
+
+        Vec2Int bottomLeft = activeLayer.getTilePos(m_TempRectDrawer.getBounds().getBottomLeft());
+        Vec2Int topRight = activeLayer.getTilePos(m_TempRectDrawer.getBounds().getTopRight());
+        BoundsInt bounds(bottomLeft, topRight);
+
         if (m_IsFilled)
         {
             draw_filled_rect(
                 activeLayer,
-                m_TempRectDrawer.getBounds(),
+                bounds,
                 color,
                 [&](std::shared_ptr<Rect2D> prev, std::shared_ptr<Rect2D> next) { tileUndo.addTile(prev, next); });
         }
@@ -65,14 +70,14 @@ namespace editor
             m_TempRectDrawer.drawFilled(tileLayer,
                                         context.pointer.down,
                                         context.pointer.curr,
-                                        context.editorState->color);
+                                        context.tool.selectedColor);
         }
         else
         {
             m_TempRectDrawer.drawOutlined(tileLayer,
                                           context.pointer.down,
                                           context.pointer.curr,
-                                          context.editorState->color);
+                                          context.tool.selectedColor);
         }
     }
 

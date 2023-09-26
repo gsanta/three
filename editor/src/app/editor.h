@@ -12,7 +12,6 @@
 #include "document/document_store.h"
 #include "document/factory/document_factory.h"
 #include "document/factory/gl_renderer_provider.h"
-#include "editor/editor_state.h"
 #include "editor_config.h"
 #include "event/event_emitter.h"
 #include "feature/frame/frame_player.h"
@@ -24,6 +23,7 @@
 #include "tool/pan_tool.h"
 #include "tool/select_tool/select_tool.h"
 #include "tool/tool_handler.h"
+#include "tool/tools/shear_tool/shear_tool.h"
 #include "tool/zoom_tool.h"
 
 #include <vector>
@@ -65,8 +65,6 @@ namespace editor
 
         FramePlayer &getFramePlayer();
 
-        std::shared_ptr<EditorState> getState();
-
     private:
         Window *m_Window;
 
@@ -91,8 +89,6 @@ namespace editor
         RunLoop m_RunLoop;
 
         FramePlayer m_FramePlayer;
-
-        std::shared_ptr<EditorState> m_EditorState;
     };
 
 } // namespace editor

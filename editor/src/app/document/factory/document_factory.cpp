@@ -60,7 +60,7 @@ namespace editor
                          Group<Rect2D>(),
                          bounds,
                          tileSize,
-                         m_ForegroundZPos,
+                         m_TempLayerZPos,
                          true);
     }
 
@@ -71,7 +71,7 @@ namespace editor
                          Group<Rect2D>(),
                          bounds,
                          tileSize,
-                         m_ForegroundZPos,
+                         m_CursorLayerZPos,
                          true);
     }
 
@@ -97,7 +97,6 @@ namespace editor
         float tileSize = props.tileSize;
         bool hasInitialLayer = props.hasInitialLayer;
         bool hasCheckerBoard = props.hasCheckerBoard;
-        float zPos = props.zPos;
 
         Drawing drawing(bounds,
                         createBackgroundLayer(bounds, backgroundLayerTileSize),
@@ -111,7 +110,7 @@ namespace editor
                                    Group<Rect2D>(),
                                    bounds,
                                    0.5f,
-                                   zPos);
+                                   m_TileLayerZPos);
 
             std::vector<Frame> frames;
 

@@ -20,7 +20,7 @@ namespace editor
 
         foregroundLayer.clear();
 
-        drawLine(context.pointer.down, context.pointer.curr, context.editorState->color, activeLayer, foregroundLayer);
+        drawLine(context.pointer.down, context.pointer.curr, context.tool.selectedColor, activeLayer, foregroundLayer);
     }
 
     void LineTool::pointerUp(const ToolContext &context)
@@ -34,7 +34,7 @@ namespace editor
 
         drawLine(context.pointer.down,
                  context.pointer.curr,
-                 context.editorState->color,
+                 context.tool.selectedColor,
                  activeLayer,
                  activeLayer,
                  &tileUndo);

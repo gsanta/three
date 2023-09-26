@@ -3,12 +3,12 @@
 #include "../../../engine/graphics/renderable/rect2d.h"
 #include "../../../maths/vec2.h"
 #include "../../../maths/vec3.h"
+#include "../../algorithm/draw_rect.h"
 #include "../../core/history/document_history.h"
 #include "../../core/history/tile_undo.h"
 #include "../common/rectangle_cursor/rectangle_cursor.h"
 #include "../tool/tool.h"
 #include "../tool/tool_context.h"
-#include "draw_rect.h"
 #include "temp_rect_drawer.h"
 
 namespace spright

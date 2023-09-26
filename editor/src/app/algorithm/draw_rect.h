@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../../../engine/graphics/layer/tileLayer.h"
-#include "../../../engine/graphics/renderable/bounds.h"
-#include "../../../maths/vec2_int.h"
-#include "../../utils/declarations.h"
+#include "../../engine/graphics/layer/tileLayer.h"
+#include "../../engine/graphics/renderable/bounds.h"
+#include "../../maths/vec2_int.h"
+#include "../utils/declarations.h"
 
 namespace spright
 {
@@ -13,7 +13,7 @@ namespace editor
     using namespace maths;
 
     void draw_filled_rect(TileLayer &tileLayer,
-                          const Bounds &bounds,
+                          const BoundsInt &bounds,
                           int color,
                           const onRect2DCreate &operation = defaultRect2DCreate);
 

@@ -28,6 +28,7 @@ namespace editor
         inline virtual void pointerDown(const ToolContext &toolContext)
         {
         }
+
         inline virtual void pointerUp(const ToolContext &toolContext)
         {
         }
@@ -40,23 +41,32 @@ namespace editor
         {
         }
 
+        inline virtual void execute(ToolContext &toolContext)
+        {
+        }
+
         inline virtual void activate()
         {
         }
+
         inline virtual void deactivate(const ToolContext &toolContext)
         {
         }
+
         inline virtual void setOptions(std::string json)
         {
         }
+
         inline virtual std::string getOptions()
         {
             return "{}";
         }
+
         inline virtual std::string getData()
         {
             return "";
         }
+
         inline string getName() const
         {
             return m_Name;

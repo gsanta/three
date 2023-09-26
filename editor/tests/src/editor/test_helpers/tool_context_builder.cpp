@@ -30,7 +30,7 @@ ToolContextBuilder &ToolContextBuilder::withActiveDrawing(DocumentStore &documen
 
 ToolContext ToolContextBuilder::build()
 {
-    ToolContext toolContext(std::make_shared<EditorState>());
+    ToolContext toolContext;
 
     PointerInfo pointer = m_PointerInfo.build();
 

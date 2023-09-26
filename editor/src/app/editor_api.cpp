@@ -29,7 +29,7 @@ void importDocument(std::string json)
 
 std::string getToolData(std::string tool)
 {
-    return editor->getToolHandler()->getTool(tool)->getData();
+    return editor->getToolHandler()->getToolStore().getTool(tool)->getData();
 }
 
 std::vector<std::string> getFrames()
@@ -97,25 +97,27 @@ void api_flip_horizontal()
 
 void set_circle_tool_filled(bool isFilled)
 {
-    CircleTool *circleTool = static_cast<CircleTool *>(editor->getToolHandler()->getTool("circle"));
+    CircleTool *circleTool = static_cast<CircleTool *>(editor->getToolHandler()->getToolStore().getTool("circle"));
     circleTool->setFilled(isFilled);
 }
 
 bool is_circle_tool_filled()
 {
-    CircleTool *circleTool = static_cast<CircleTool *>(editor->getToolHandler()->getTool("circle"));
+    CircleTool *circleTool = static_cast<CircleTool *>(editor->getToolHandler()->getToolStore().getTool("circle"));
     return circleTool->isFilled();
 }
 
 bool is_rectangle_tool_filled()
 {
-    RectangleTool *rectangleTool = static_cast<RectangleTool *>(editor->getToolHandler()->getTool("rectangle"));
+    RectangleTool *rectangleTool =
+        static_cast<RectangleTool *>(editor->getToolHandler()->getToolStore().getTool("rectangle"));
     return rectangleTool->isFilled();
 }
 
 void set_rectangle_tool_filled(bool isFilled)
 {
-    RectangleTool *rectangleTool = static_cast<RectangleTool *>(editor->getToolHandler()->getTool("rectangle"));
+    RectangleTool *rectangleTool =
+        static_cast<RectangleTool *>(editor->getToolHandler()->getToolStore().getTool("rectangle"));
     rectangleTool->setFilled(isFilled);
 }
 
@@ -145,7 +147,7 @@ void set_canvas_size(int width, int height)
 
 void set_eraser_size(int size)
 {
-    Tool *tool = editor->getToolHandler()->getTool("erase");
+    Tool *tool = editor->getToolHandler()->getToolStore().getTool("erase");
     dynamic_cast<EraserTool *>(tool)->setEraserSize(size);
 }
 

@@ -1,15 +1,17 @@
 #pragma once
 
-#include "../../editor/editor_state.h"
 #include "document_info.h"
 #include "pointer_info.h"
+#include "tool_info.h"
 
 #include <utility>
+
 
 namespace spright
 {
 namespace editor
 {
+    class ToolStore;
 
     struct ToolContext
     {
@@ -17,9 +19,9 @@ namespace editor
 
         DocumentInfo doc;
 
-        std::shared_ptr<EditorState> editorState;
+        ToolInfo tool;
 
-        explicit ToolContext(std::shared_ptr<EditorState>);
+        ToolStore *tools;
     };
 } // namespace editor
 } // namespace spright
