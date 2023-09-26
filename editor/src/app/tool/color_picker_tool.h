@@ -6,7 +6,6 @@
 #include "brush_tool.h"
 #include "tool/tool.h"
 #include "tool/tool_context.h"
-#include "tool_handler.h"
 
 #include <iostream>
 #include <sstream>
@@ -20,21 +19,27 @@ namespace editor
 
     class ColorPickerTool : public Tool
     {
-    private:
-        DocumentStore *m_DocumentStore;
-        ToolHandler *m_ToolHandler;
-        EventEmitter *m_EventEmitter;
-
-        unsigned int m_PickedColor;
 
     public:
-        ColorPickerTool(ToolHandler *toolHandler, EventEmitter *eventEmitter);
+        ColorPickerTool(EventEmitter *eventEmitter);
+
         void pointerDown(const ToolContext &) override;
+
         unsigned int getPickedColor() const;
+
         std::string getData() override;
+
+        unsigned int getColor() const;
 
     private:
         void emitColorChange() const;
+
+    private:
+        DocumentStore *m_DocumentStore;
+
+        EventEmitter *m_EventEmitter;
+
+        unsigned int m_Color = 0xFF000000;
     };
 } // namespace editor
 } // namespace spright

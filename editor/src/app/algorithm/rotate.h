@@ -4,7 +4,6 @@
 #include "../../engine/graphics/renderable/rect2d.h"
 #include "../document/factory/document_factory.h"
 #include "../tool/select_tool/rect_selector.h"
-#include "./shear.h"
 #include "./tile_operations.h"
 
 namespace spright

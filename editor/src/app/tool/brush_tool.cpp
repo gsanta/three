@@ -57,7 +57,7 @@ namespace editor
 
                     brush.paint(layer,
                                 tilePos,
-                                getColor(),
+                                context.tool.selectedColor,
                                 [&](std::shared_ptr<Rect2D> prev, std::shared_ptr<Rect2D> next) {
                                     tileUndo->addTile(prev, next);
                                 });

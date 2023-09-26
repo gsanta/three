@@ -1,13 +1,28 @@
 #pragma once
 
-namespace spright { namespace engine {
+namespace spright
+{
+namespace engine
+{
 
-	class InputListener {
-	public:
-		virtual void onMouseDown(bool buttons[3]) = 0;
-		virtual void onMouseUp(bool buttons[3]) = 0;
-		virtual void onMouseMove(double x, double y) = 0;
-		virtual void onScroll(double x, double y) = 0;
-		virtual void onKeyChange(int key, bool isPressed) = 0;
-	};
-}}
+    class InputListener
+    {
+    public:
+        virtual void onMouseDown(bool buttons[3])
+        {
+        }
+        virtual void onMouseUp(bool buttons[3])
+        {
+        }
+        virtual void onMouseMove(double x, double y)
+        {
+        }
+        virtual void onScroll(double x, double y)
+        {
+        }
+        virtual void onKeyChange(int key, bool isPressed)
+        {
+        }
+    };
+} // namespace engine
+} // namespace spright

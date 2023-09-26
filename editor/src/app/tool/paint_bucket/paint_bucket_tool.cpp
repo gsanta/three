@@ -25,7 +25,7 @@ namespace editor
             tileLayer,
             tilePos.x,
             tilePos.y,
-            context.editorState->color,
+            context.tool.selectedColor,
             [&](std::shared_ptr<Rect2D> prev, std::shared_ptr<Rect2D> next) { tileUndo.addTile(prev, next); });
 
         context.doc.document->getHistory()->add(std::make_shared<TileUndo>(tileUndo));

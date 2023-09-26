@@ -81,42 +81,6 @@ namespace editor
         Vec2 topRight = bounds.getTopRight();
 
         return BoundsInt(layer.getTilePos(vec1), layer.getTilePos(vec2));
-        // int minX = std::numeric_limits<int>::max();
-        // int minY = std::numeric_limits<int>::max();
-        // int maxX = std::numeric_limits<int>::min();
-        // int maxY = std::numeric_limits<int>::min();
-
-        // if (m_TileIndexes.size() == 0)
-        // {
-        //     return BoundsInt()
-        // }
-
-        // for (int tileIndex : m_SelectionBuffer->getTileIndexes())
-        // {
-        //     Vec2Int tilePos = tempLayer.getTilePos(tileIndex);
-
-        //     if (tilePos.x < minX)
-        //     {
-        //         minX = tilePos.x;
-        //     }
-
-        //     if (tilePos.x > maxX)
-        //     {
-        //         maxX = tilePos.x;
-        //     }
-
-        //     if (tilePos.y < minY)
-        //     {
-        //         minY = tilePos.y;
-        //     }
-
-        //     if (tilePos.y > maxY)
-        //     {
-        //         maxY = tilePos.y;
-        //     }
-        // }
-
-        // return BoundsInt(minX, minY, maxX, maxY);
     }
 } // namespace editor
 } // namespace spright

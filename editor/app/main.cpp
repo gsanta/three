@@ -10,6 +10,7 @@
 // #include "utils/timer.h"
 #include "../src/app/core/run_loop/run_loop.h"
 #include "../src/app/core/run_loop/timer.h"
+#include "../src/app/dev_key_listener.h"
 #include "../src/app/editor.h"
 #include "../src/app/editor_api.h"
 #include "../src/app/tool/brush_tool.h"
@@ -118,7 +119,7 @@ void setActiveLayer(size_t index)
 
 void setBrushSize(int size)
 {
-    BrushTool *brushTool = dynamic_cast<BrushTool *>(editor->getToolHandler()->getTool("brush"));
+    BrushTool *brushTool = dynamic_cast<BrushTool *>(editor->getToolHandler()->getToolStore().getTool("brush"));
 
     brushTool->setSize(size);
 }
@@ -166,12 +167,12 @@ void setEngineData(std::string json)
 
 void setColor(unsigned int color)
 {
-    if (editor != nullptr)
-    {
-        editor->getState()->color = color;
-        BrushTool *brushTool = dynamic_cast<BrushTool *>(editor->getToolHandler()->getTool("brush"));
-        brushTool->setColor(color);
-    }
+    // if (editor != nullptr)
+    // {
+    //     editor->getState()->color = color;
+    //     BrushTool *brushTool = dynamic_cast<BrushTool *>(editor->getToolHandler()->getToolStore().getTool("brush"));
+    //     brushTool->setColor(color);
+    // }
 }
 
 EMSCRIPTEN_BINDINGS(editor)
@@ -217,6 +218,9 @@ int main()
     editor = new spright::Editor(RunLoop(timer));
     editor->init();
 
+#ifndef SPARKY_EMSCRIPTEN
+    DevKeyListener devKeyListener(editor);
+#endif
 
     // Group* group = new Group(Mat4::translation(maths::Vec3(-5.0f, 5.0f, 0.0f)));
     // group->add(new Rect2D(0, 0, 6, 3, maths::Vec4(1, 1, 1, 1)));

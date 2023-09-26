@@ -30,7 +30,6 @@ namespace editor
         m_BackgroundLayer = std::make_shared<TileLayer>(backgroundLayer);
         m_TempLayer = std::make_shared<TileLayer>(tempLayer);
         m_CursorLayer = std::make_shared<TileLayer>(cursorLayer);
-        // m_SelectionBuffer = std::make_unique<SelectionBuffer>();
     }
 
     Drawing::Drawing(const std::vector<Frame> &frames,

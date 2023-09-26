@@ -5,7 +5,7 @@ namespace spright
 namespace engine
 {
 
-    BoundsInt::BoundsInt()
+    BoundsInt::BoundsInt() : minX(0), minY(0), maxX(0), maxY(0)
     {
     }
 
@@ -17,7 +17,7 @@ namespace engine
         maxY = y1 < y2 ? y2 : y1;
     }
 
-    BoundsInt::BoundsInt(Vec2Int vec1, Vec2Int vec2) : BoundsInt(vec1.x, vec1.y, vec2.x, vec2.y)
+    BoundsInt::BoundsInt(const Vec2Int &vec1, const Vec2Int &vec2) : BoundsInt(vec1.x, vec1.y, vec2.x, vec2.y)
     {
     }
 
@@ -68,18 +68,18 @@ namespace engine
         {
             minX = vec.x;
         }
-        else if (vec.x > maxX)
+        else if (vec.x + 1 > maxX)
         {
-            maxX = vec.x;
+            maxX = vec.x + 1;
         }
 
         if (vec.y < minY)
         {
             minY = vec.y;
         }
-        else if (vec.y > maxY)
+        else if (vec.y + 1 > maxY)
         {
-            maxY = vec.y;
+            maxY = vec.y + 1;
         }
     }
 

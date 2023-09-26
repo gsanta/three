@@ -8,7 +8,6 @@
 
 SCENARIO("Select tool")
 {
-
     GIVEN("A select tool")
     {
         std::shared_ptr<DocumentStore> documentStore = std::make_shared<DocumentStore>(
@@ -53,12 +52,12 @@ SCENARIO("Select tool")
 
             THEN("it stores the selected tiles in the selection buffer")
             {
-                std::shared_ptr<SelectionBuffer> buffer = selectTool.getSelectionBuffer();
+                SelectionBuffer buffer = selectTool.getSelectionBuffer();
 
-                REQUIRE(selectTool.getSelectionBuffer()->getTileIndexes().size() == 3);
-                REQUIRE(buffer->containsIndex(tempLayer.getTileIndex(1, 1)) == true);
-                REQUIRE(buffer->containsIndex(tempLayer.getTileIndex(2, 1)) == true);
-                REQUIRE(buffer->containsIndex(tempLayer.getTileIndex(2, 2)) == true);
+                REQUIRE(selectTool.getSelectionBuffer().getTileIndexes().size() == 3);
+                REQUIRE(buffer.containsIndex(tempLayer.getTileIndex(1, 1)) == true);
+                REQUIRE(buffer.containsIndex(tempLayer.getTileIndex(2, 1)) == true);
+                REQUIRE(buffer.containsIndex(tempLayer.getTileIndex(2, 2)) == true);
             }
 
             WHEN("clicking outside of the selection")
@@ -72,7 +71,7 @@ SCENARIO("Select tool")
 
                 THEN("it clears the selection")
                 {
-                    REQUIRE(selectTool.getSelectionBuffer()->getTileIndexes().size() == 0);
+                    REQUIRE(selectTool.getSelectionBuffer().getTileIndexes().size() == 0);
                     REQUIRE(tempLayer.getTiles().size() == 0);
                 }
             }
@@ -90,11 +89,11 @@ SCENARIO("Select tool")
 
                 THEN("it clears the previous selection")
                 {
-                    std::shared_ptr<SelectionBuffer> buffer = selectTool.getSelectionBuffer();
+                    SelectionBuffer &buffer = selectTool.getSelectionBuffer();
 
-                    REQUIRE(selectTool.getSelectionBuffer()->getTileIndexes().size() == 2);
-                    REQUIRE(buffer->containsIndex(tempLayer.getTileIndex(3, 3)) == true);
-                    REQUIRE(buffer->containsIndex(tempLayer.getTileIndex(4, 3)) == true);
+                    REQUIRE(selectTool.getSelectionBuffer().getTileIndexes().size() == 2);
+                    REQUIRE(buffer.containsIndex(tempLayer.getTileIndex(3, 3)) == true);
+                    REQUIRE(buffer.containsIndex(tempLayer.getTileIndex(4, 3)) == true);
                 }
             }
 
@@ -114,12 +113,12 @@ SCENARIO("Select tool")
 
                     THEN("it moves the selected tiles")
                     {
-                        std::shared_ptr<SelectionBuffer> buffer = selectTool.getSelectionBuffer();
+                        SelectionBuffer &buffer = selectTool.getSelectionBuffer();
 
-                        REQUIRE(selectTool.getSelectionBuffer()->getTileIndexes().size() == 3);
-                        REQUIRE(buffer->containsIndex(activeLayer.getTileIndex(3, 3)) == true);
-                        REQUIRE(buffer->containsIndex(activeLayer.getTileIndex(4, 3)) == true);
-                        REQUIRE(buffer->containsIndex(activeLayer.getTileIndex(4, 4)) == true);
+                        REQUIRE(selectTool.getSelectionBuffer().getTileIndexes().size() == 3);
+                        REQUIRE(buffer.containsIndex(activeLayer.getTileIndex(3, 3)) == true);
+                        REQUIRE(buffer.containsIndex(activeLayer.getTileIndex(4, 3)) == true);
+                        REQUIRE(buffer.containsIndex(activeLayer.getTileIndex(4, 4)) == true);
                     }
 
                     THEN("it moves the selection on temp layer")
@@ -143,12 +142,12 @@ SCENARIO("Select tool")
 
                         THEN("it moves the selected tiles")
                         {
-                            std::shared_ptr<SelectionBuffer> buffer = selectTool.getSelectionBuffer();
+                            SelectionBuffer &buffer = selectTool.getSelectionBuffer();
 
-                            REQUIRE(selectTool.getSelectionBuffer()->getTileIndexes().size() == 3);
-                            REQUIRE(buffer->containsIndex(activeLayer.getTileIndex(3, 5)) == true);
-                            REQUIRE(buffer->containsIndex(activeLayer.getTileIndex(4, 5)) == true);
-                            REQUIRE(buffer->containsIndex(activeLayer.getTileIndex(4, 6)) == true);
+                            REQUIRE(selectTool.getSelectionBuffer().getTileIndexes().size() == 3);
+                            REQUIRE(buffer.containsIndex(activeLayer.getTileIndex(3, 5)) == true);
+                            REQUIRE(buffer.containsIndex(activeLayer.getTileIndex(4, 5)) == true);
+                            REQUIRE(buffer.containsIndex(activeLayer.getTileIndex(4, 6)) == true);
                         }
 
                         THEN("it moves the selection on temp layer")
@@ -177,12 +176,12 @@ SCENARIO("Select tool")
 
                     THEN("it moves the selected tiles")
                     {
-                        std::shared_ptr<SelectionBuffer> buffer2 = selectTool.getSelectionBuffer();
+                        SelectionBuffer &buffer2 = selectTool.getSelectionBuffer();
 
-                        REQUIRE(selectTool.getSelectionBuffer()->getTileIndexes().size() == 3);
-                        REQUIRE(selectTool.getSelectionBuffer()->containsIndex(activeLayer.getTileIndex(5, 3)) == true);
-                        REQUIRE(selectTool.getSelectionBuffer()->containsIndex(activeLayer.getTileIndex(6, 3)) == true);
-                        REQUIRE(selectTool.getSelectionBuffer()->containsIndex(activeLayer.getTileIndex(6, 4)) == true);
+                        REQUIRE(selectTool.getSelectionBuffer().getTileIndexes().size() == 3);
+                        REQUIRE(selectTool.getSelectionBuffer().containsIndex(activeLayer.getTileIndex(5, 3)) == true);
+                        REQUIRE(selectTool.getSelectionBuffer().containsIndex(activeLayer.getTileIndex(6, 3)) == true);
+                        REQUIRE(selectTool.getSelectionBuffer().containsIndex(activeLayer.getTileIndex(6, 4)) == true);
                     }
                 }
             }

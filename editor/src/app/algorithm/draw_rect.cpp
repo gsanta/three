@@ -6,10 +6,10 @@ namespace spright
 {
 namespace editor
 {
-    void draw_filled_rect(TileLayer &tileLayer, const Bounds &bounds, int color, const onRect2DCreate &operation)
+    void draw_filled_rect(TileLayer &tileLayer, const BoundsInt &bounds, int color, const onRect2DCreate &operation)
     {
-        Vec2Int bottomLeft = tileLayer.getTilePos(bounds.getBottomLeft());
-        Vec2Int topRight = tileLayer.getTilePos(bounds.getTopRight());
+        Vec2Int bottomLeft = bounds.getBottomLeft();
+        Vec2Int topRight = bounds.getTopRight();
 
         float tileSize = tileLayer.getTileSize();
 
@@ -24,8 +24,8 @@ namespace editor
                     prev.reset(new Rect2D(*tile));
                 }
 
-                Rect2D &rect = tileLayer.add(Rect2D(0, 0, tileSize, tileSize, color));
-                tileLayer.setTilePos(&rect, Vec2Int(i, j));
+                Vec2 pos = tileLayer.getBottomLeftPos(Vec2Int(i, j));
+                Rect2D &rect = tileLayer.add(Rect2D(pos.x, pos.y, tileSize, tileSize, color));
 
                 std::shared_ptr<Rect2D> newRect = std::make_shared<Rect2D>(rect);
 

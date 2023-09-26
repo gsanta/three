@@ -21,6 +21,7 @@ SCENARIO("Paint bucket tool")
 
         WHEN("clicking on the drawing with the paint bucket tool")
         {
+            toolContext.tool.selectedColor = COLOR_SPRIGHT_ORANGE;
             paintBucketTool.execPointerUp(toolContext);
 
             THEN("the entire drawing gets filled")
@@ -63,6 +64,8 @@ SCENARIO("Paint bucket tool")
         {
 
             toolContext.pointer.curr = layer.getCenterPos(Vec2Int(1, 1));
+            toolContext.tool.selectedColor = COLOR_SPRIGHT_ORANGE;
+
             paintBucketTool.execPointerUp(toolContext);
 
             THEN("it fills that area")

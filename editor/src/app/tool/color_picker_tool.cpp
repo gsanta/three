@@ -5,8 +5,7 @@ namespace spright
 namespace editor
 {
 
-    ColorPickerTool::ColorPickerTool(ToolHandler *toolHandler, EventEmitter *eventEmitter)
-        : m_ToolHandler(toolHandler), m_EventEmitter(eventEmitter), Tool("color_picker")
+    ColorPickerTool::ColorPickerTool(EventEmitter *eventEmitter) : m_EventEmitter(eventEmitter), Tool("color_picker")
     {
     }
 
@@ -27,14 +26,10 @@ namespace editor
         {
             unsigned int color = tile->getColor();
 
-            if (color != m_PickedColor)
+            if (color != m_Color)
             {
-                m_PickedColor = color;
+                m_Color = color;
 
-                for (Colorable *colorable : m_ToolHandler->getColorableTools())
-                {
-                    colorable->setColor(m_PickedColor);
-                }
                 emitColorChange();
             }
         }
@@ -42,16 +37,21 @@ namespace editor
 
     unsigned int ColorPickerTool::getPickedColor() const
     {
-        return m_PickedColor;
+        return m_Color;
     }
 
     std::string ColorPickerTool::getData()
     {
         nlohmann::json json = {};
 
-        json["color"] = m_PickedColor;
+        json["color"] = m_Color;
 
         return json.dump();
+    }
+
+    unsigned int ColorPickerTool::getColor() const
+    {
+        return m_Color;
     }
 
     void ColorPickerTool::emitColorChange() const
