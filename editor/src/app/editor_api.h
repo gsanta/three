@@ -12,13 +12,12 @@
 
 #include <string>
 
+using namespace spright::editor;
+
 #ifdef SPARKY_EMSCRIPTEN
 #include <emscripten/bind.h>
 #include <emscripten/emscripten.h>
 #include <emscripten/val.h>
-
-
-using namespace spright::editor;
 
 void setLayerIndex(size_t oldIndex, size_t newIndex);
 void removeLayer(size_t layerIndex);

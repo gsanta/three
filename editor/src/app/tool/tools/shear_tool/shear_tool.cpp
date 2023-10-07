@@ -1,5 +1,7 @@
 #include "./shear_tool.h"
 
+#include "../../select_tool/select_tool.h"
+
 namespace spright
 {
 namespace editor
@@ -10,18 +12,38 @@ namespace editor
 
     void ShearTool::execute(ToolContext &toolContext)
     {
-        // SelectTool *selectTool = dynamic_cast<SelectTool *>(getTool("select"));
+        const BoundsInt &selectionBounds = toolContext.tools->getSelectTool().getSelectionBuffer().getTileBounds();
 
-        const BoundsInt &selectionBounds = toolContext.tool.selectionBuffer->getTileBounds();
+        TileLayer &activeLayer = toolContext.doc.activeDrawing->getActiveLayer();
+        BoundsInt bounds = BoundsInt(selectionBounds.getBottomLeft(), selectionBounds.getTopRight());
 
-        std::vector<int> newIndexes =
-            shear_horizontal(toolContext.doc.activeDrawing->getActiveLayer(),
-                             BoundsInt(selectionBounds.getBottomLeft(), selectionBounds.getTopRight()),
-                             0.436332f);
+        std::vector<int> newIndexes;
 
-        toolContext.tool.selectionBuffer->setTileIndexes(newIndexes, toolContext.doc.activeDrawing->getActiveLayer());
+        if (m_IsHorizontal)
+        {
+            newIndexes = shear_horizontal(activeLayer, bounds, m_ShearInRad);
+        }
+        else
+        {
+            newIndexes = shear_vertical(activeLayer, bounds, m_ShearInRad);
+        }
 
         toolContext.tools->getSelectTool().setSelection(newIndexes, *toolContext.doc.activeDrawing);
+    }
+
+    void ShearTool::setShearInRad(float rad)
+    {
+        m_ShearInRad = rad;
+    }
+
+    void ShearTool::setShearDirectionAsVertical()
+    {
+        m_IsHorizontal = false;
+    }
+
+    void ShearTool::setShearDirectionAsHorizontal()
+    {
+        m_IsHorizontal = true;
     }
 } // namespace editor
 } // namespace spright

@@ -13,7 +13,7 @@ SCENARIO("Line tool")
     GIVEN("an empty drawing and a line tool")
     {
         Document document = DocumentBuilder().build();
-        ToolContext toolContext = ToolContextBuilder().withDocument(document).build();
+        ToolContext toolContext = ToolContextBuilder().build(document);
 
         TileLayer &layer = document.getActiveLayer();
 

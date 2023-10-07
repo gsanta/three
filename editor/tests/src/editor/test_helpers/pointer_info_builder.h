@@ -8,8 +8,6 @@ using namespace spright::editor;
 class PointerInfoBuilder
 {
 public:
-    PointerInfoBuilder &withPoinerInfo(const PointerInfo &);
-
     PointerInfoBuilder &withCurr(Vec2);
 
     PointerInfoBuilder &with(const Vec2 &curr, const Vec2 &prev, const Vec2 &down);

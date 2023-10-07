@@ -46,7 +46,7 @@ namespace editor
         m_toolHandler->getToolStore().addTool(new PanTool(getDocumentStore()));
         m_toolHandler->getToolStore().addTool(new ZoomTool(getDocumentStore()));
         m_toolHandler->getToolStore().addTool(new PaintBucketTool());
-        m_toolHandler->getToolStore().addTool(new SelectTool(m_DocumentStore));
+        m_toolHandler->getToolStore().addTool(new SelectTool());
         m_toolHandler->getToolStore().addTool(new ColorPickerTool(m_EventEmitter.get()));
         m_toolHandler->getToolStore().addTool(new LineTool());
         m_toolHandler->getToolStore().addTool(new CircleTool());

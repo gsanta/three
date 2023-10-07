@@ -12,7 +12,8 @@ namespace editor
     {
         window->getInputHandler()->registerListener(this);
         m_ActiveTools = new vector<Tool *>();
-        m_ToolContext.tools = &m_ToolStore;
+        m_ToolStore = std::make_shared<ToolStore>();
+        m_ToolContext.tools = m_ToolStore;
     }
 
     ToolHandler::~ToolHandler()
@@ -101,13 +102,13 @@ namespace editor
 
     ToolStore &ToolHandler::getToolStore()
     {
-        return m_ToolStore;
+        return *m_ToolStore;
     }
 
 
-    void ToolHandler::execute()
+    void ToolHandler::executeTool(const string &toolName)
     {
-        getSelectedTool()->execute(m_ToolContext);
+        getToolStore().getTool(toolName)->execute(m_ToolContext);
     }
 
     Tool *ToolHandler::getSelectedTool()
@@ -131,6 +132,21 @@ namespace editor
 
         m_SelectedTool = getToolStore().getTool(name);
         m_SelectedTool->activate();
+    }
+
+    void ToolHandler::addActiveTool(string name)
+    {
+        m_ActiveTools->push_back(getToolStore().getTool(name));
+    }
+
+    void ToolHandler::removeActiveTool(string name)
+    {
+        auto it = find(m_ActiveTools->begin(), m_ActiveTools->end(), getToolStore().getTool(name));
+
+        if (it != m_ActiveTools->end())
+        {
+            m_ActiveTools->erase(it);
+        }
     }
 
     bool ToolHandler::isActiveTool(string name)

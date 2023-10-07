@@ -25,7 +25,7 @@ namespace editor
     class SelectTool : public Tool
     {
     public:
-        SelectTool(std::shared_ptr<DocumentStore> documentStore);
+        SelectTool();
 
         void pointerDown(const ToolContext &) override;
 
@@ -41,8 +41,6 @@ namespace editor
         void recalcTileIndexesAndBounds(TileLayer &activeLayer, TileLayer &tempLayer);
 
     private:
-        std::shared_ptr<DocumentStore> m_DocumentStore;
-
         std::shared_ptr<SelectionBuffer> m_SelectionBuffer;
 
         std::unique_ptr<BoxSelector> m_BoxSelector;

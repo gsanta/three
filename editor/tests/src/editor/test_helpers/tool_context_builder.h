@@ -1,25 +1,16 @@
 #pragma once
+#include "../src/app/tool/rectangle_tool/rectangle_tool.h"
+#include "../src/app/tool/select_tool/select_tool.h"
 #include "../src/app/tool/tool/tool_context.h"
-#include "document_info_builder.h"
 #include "pointer_info_builder.h"
 
 class ToolContextBuilder
 {
 public:
-    ToolContextBuilder &withDocumentInfo(DocumentInfoBuilder builder);
-
-    ToolContextBuilder &withDocument(Document &document);
-
     ToolContextBuilder &withPointerInfo(PointerInfoBuilder builder);
 
-    ToolContextBuilder &withActiveDrawing(DocumentStore &documentStore);
-
-    ToolContext build();
+    ToolContext build(Document &document);
 
 private:
-    DocumentInfoBuilder m_DocInfo;
-
     PointerInfoBuilder m_PointerInfo;
-
-    Document *m_Document;
 };

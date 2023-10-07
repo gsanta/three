@@ -40,7 +40,7 @@ namespace maths
 
     std::ostream &operator<<(std::ostream &stream, const Vec2Int &vec)
     {
-        stream << "vec2: {" << vec.x << ", " << vec.y << "}";
+        stream << "{" << vec.x << ", " << vec.y << "}";
         return stream;
     }
 } // namespace maths

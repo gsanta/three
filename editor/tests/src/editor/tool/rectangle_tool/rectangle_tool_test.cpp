@@ -14,7 +14,7 @@ SCENARIO("Rectangle tool")
     GIVEN("an empty document and rectangle tool")
     {
         DocumentStore documentStore = DocumentStoreBuilder().build();
-        ToolContext toolContext = ToolContextBuilder().withActiveDrawing(documentStore).build();
+        ToolContext toolContext = ToolContextBuilder().build(documentStore.getActiveDocument());
         RectangleTool rectTool;
 
         WHEN("draw mode is filled")

@@ -1,5 +1,4 @@
 #include "../../test_helpers/document_builder.h"
-#include "../../test_helpers/document_info_builder.h"
 #include "../../test_helpers/document_store_builder.h"
 #include "../../test_helpers/drawing_builder.h"
 #include "../../test_helpers/matchers/equals_bounds_matcher.h"
@@ -44,8 +43,7 @@ SCENARIO("Erase tool")
         ToolContext toolContext =
             ToolContextBuilder()
                 .withPointerInfo(PointerInfoBuilder().withCurr(activeLayer.getCenterPos(Vec2Int(1, 1))))
-                .withDocumentInfo(DocumentInfoBuilder().withActiveDrawing(&document.getActiveDrawing()))
-                .build();
+                .build(document);
         toolContext.doc.document = &document;
 
         EraserTool eraseTool(1);
@@ -136,7 +134,7 @@ SCENARIO("Erase tool")
         Document document = DocumentBuilder().withDrawing(DrawingBuilder().withBounds(Bounds(0, 0, 4, 4))).build();
         TileLayer &cursorLayer = document.getActiveDrawing().getCursorLayer();
 
-        ToolContext toolContext = ToolContextBuilder().withDocument(document).build();
+        ToolContext toolContext = ToolContextBuilder().build(document);
 
         EraserTool eraseTool(1);
 
