@@ -15,7 +15,7 @@ SCENARIO("Paint bucket tool")
     GIVEN("an empty drawing")
     {
         Document document = DocumentBuilder().withDrawing(DrawingBuilder().withBounds(Bounds(0, 0, 2, 2))).build();
-        ToolContext toolContext = ToolContextBuilder().withDocument(document).build();
+        ToolContext toolContext = ToolContextBuilder().build(document);
 
         PaintBucketTool paintBucketTool;
 
@@ -54,7 +54,7 @@ SCENARIO("Paint bucket tool")
                                                                                 .withTile(Vec2Int(1, 0))
                                                                                 .withTile(Vec2Int(0, 0))))
                                 .build();
-        ToolContext toolContext = ToolContextBuilder().withDocument(document).build();
+        ToolContext toolContext = ToolContextBuilder().build(document);
 
         TileLayer &layer = document.getActiveLayer();
 

@@ -4,15 +4,13 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-
 SCENARIO("Brush tool")
 {
-
     GIVEN("an empty canvas")
     {
         Document document = DocumentBuilder().build();
         BrushTool brushTool;
-        ToolContext toolContext = ToolContextBuilder().withDocument(document).build();
+        ToolContext toolContext = ToolContextBuilder().build(document);
 
         WHEN("drawing a sequence of pixels without releasing the mouse")
         {

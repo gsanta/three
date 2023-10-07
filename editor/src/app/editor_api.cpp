@@ -2,7 +2,14 @@
 
 extern class Editor *editor;
 
+void shear_horizontal_api(float shearInRad)
+{
+    editor->getToolHandler()->getToolStore().getShearTool().setShearInRad(shearInRad);
+    editor->getToolHandler()->executeTool("shear");
+}
+
 #ifdef SPARKY_EMSCRIPTEN
+
 
 void setLayerIndex(size_t oldIndex, size_t newIndex)
 {
@@ -181,19 +188,19 @@ void zoom_to_fit()
     editor->getActiveDocument().getCamera().zoomToFit(editor->getActiveDocument().getActiveDrawing().getBounds());
 }
 
-void shear_horizontal_api(float angle)
-{
-    Drawing &drawing = editor->getActiveDocument().getActiveDrawing();
-    Bounds bounds = editor->getActiveDocument().getActiveDrawing().getState().getBounds();
-    TileLayer &currentLayer = editor->getActiveDocument().getActiveDrawing().getActiveLayer();
+// void shear_horizontal_api(float angle)
+// {
+//     Drawing &drawing = editor->getActiveDocument().getActiveDrawing();
+//     Bounds bounds = editor->getActiveDocument().getActiveDrawing().getState().getBounds();
+//     TileLayer &currentLayer = editor->getActiveDocument().getActiveDrawing().getActiveLayer();
 
-    Vec2 bottomLeft = editor->getActiveDocument().getActiveDrawing().getState().getBounds().getBottomLeft();
-    Vec2 topRight = editor->getActiveDocument().getActiveDrawing().getState().getBounds().getTopRight();
-    Vec2Int bottomLeftTile = editor->getActiveDocument().getActiveLayer().getTilePos(bottomLeft);
-    Vec2Int topRightTile = editor->getActiveDocument().getActiveLayer().getTilePos(topRight);
+//     Vec2 bottomLeft = editor->getActiveDocument().getActiveDrawing().getState().getBounds().getBottomLeft();
+//     Vec2 topRight = editor->getActiveDocument().getActiveDrawing().getState().getBounds().getTopRight();
+//     Vec2Int bottomLeftTile = editor->getActiveDocument().getActiveLayer().getTilePos(bottomLeft);
+//     Vec2Int topRightTile = editor->getActiveDocument().getActiveLayer().getTilePos(topRight);
 
-    shear_horizontal(currentLayer, BoundsInt(bottomLeftTile, topRightTile), angle);
-}
+//     shear_horizontal(currentLayer, BoundsInt(bottomLeftTile, topRightTile), angle);
+// }
 
 void shear_vertical_api(float angle)
 {

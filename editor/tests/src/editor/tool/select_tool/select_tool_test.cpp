@@ -1,4 +1,3 @@
-#include "../../test_helpers/document_info_builder.h"
 #include "../../test_helpers/document_store_builder.h"
 #include "../../test_helpers/pointer_info_builder.h"
 #include "../../test_helpers/tool_context_builder.h"
@@ -8,7 +7,7 @@
 
 SCENARIO("Select tool")
 {
-    GIVEN("A select tool")
+    GIVEN("A drawing with tiles")
     {
         std::shared_ptr<DocumentStore> documentStore = std::make_shared<DocumentStore>(
             DocumentStoreBuilder()
@@ -22,10 +21,9 @@ SCENARIO("Select tool")
                 .build());
         Drawing &activeDrawing = documentStore->getActiveDocument().getDrawings()[0];
 
-        ToolContext toolContext =
-            ToolContextBuilder().withDocumentInfo(DocumentInfoBuilder().withActiveDrawing(&activeDrawing)).build();
+        ToolContext toolContext = ToolContextBuilder().build(documentStore->getActiveDocument());
 
-        SelectTool selectTool(documentStore);
+        SelectTool selectTool;
 
         WHEN("making a selection")
         {

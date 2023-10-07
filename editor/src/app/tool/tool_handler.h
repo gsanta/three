@@ -51,7 +51,7 @@ namespace editor
 
         virtual void onScroll(double x, double y) override;
 
-        void execute();
+        void executeTool(const string &toolName);
 
         ToolStore &getToolStore();
 
@@ -64,20 +64,9 @@ namespace editor
 
         void setSelectedTool(string name);
 
-        inline void addActiveTool(string name)
-        {
-            m_ActiveTools->push_back(getToolStore().getTool(name));
-        }
+        void addActiveTool(string name);
 
-        inline void removeActiveTool(string name)
-        {
-            auto it = find(m_ActiveTools->begin(), m_ActiveTools->end(), getToolStore().getTool(name));
-
-            if (it != m_ActiveTools->end())
-            {
-                m_ActiveTools->erase(it);
-            }
-        }
+        inline void removeActiveTool(string name);
 
         bool isActiveTool(string name);
 
@@ -88,7 +77,7 @@ namespace editor
 
         Tool *m_SelectedTool = nullptr;
 
-        ToolStore m_ToolStore;
+        std::shared_ptr<ToolStore> m_ToolStore;
 
         DocumentStore *m_DocumentStore;
 

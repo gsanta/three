@@ -5,9 +5,8 @@ namespace spright
 namespace editor
 {
 
-    SelectTool::SelectTool(std::shared_ptr<DocumentStore> documentStore)
-        : Tool("select", std::make_shared<RectangleCursor>(1)), m_DocumentStore(documentStore),
-          m_SelectionBuffer(std::make_shared<SelectionBuffer>())
+    SelectTool::SelectTool()
+        : Tool("select", std::make_shared<RectangleCursor>(1)), m_SelectionBuffer(std::make_shared<SelectionBuffer>())
     {
         m_BoxSelector = std::make_unique<BoxSelector>(m_SelectionBuffer);
         m_SelectionMover = std::make_unique<SelectionMover>();
@@ -33,12 +32,6 @@ namespace editor
 
         if (m_IsMove)
         {
-            // std::vector<int> tileIndexes;
-
-            // for (Rect2D *tile : tempLayer.getTiles()) {
-            //     tileIndexes.push_back(tempLayer.getTileIndex(tile->getCenterPosition2d()));
-            // }
-
             m_SelectionMover->move(tempLayer, context.pointer.curr, context.pointer.prev, context.pointer.down);
 
             m_SelectionMover->move(activeLayer,
@@ -83,14 +76,14 @@ namespace editor
         TileLayer &activeLayer = drawing.getActiveLayer();
         TileLayer &tempLayer = drawing.getTempLayer();
 
+        m_SelectionBuffer->setTileIndexes(indexes, activeLayer);
+
         const BoundsInt &bounds = m_SelectionBuffer->getTileBounds();
 
         m_BoxSelector->select(activeLayer,
                               tempLayer,
                               tempLayer.getCenterPos(bounds.getBottomLeft()),
                               tempLayer.getCenterPos(bounds.getTopRight() + -1));
-
-        m_SelectionBuffer->setTileIndexes(indexes, activeLayer);
     }
 
     void SelectTool::recalcTileIndexesAndBounds(TileLayer &activeLayer, TileLayer &tempLayer)

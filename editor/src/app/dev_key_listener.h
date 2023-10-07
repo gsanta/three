@@ -22,7 +22,10 @@ namespace editor
 
         inline ~DevKeyListener()
         {
-            m_Editor->getWindow()->getInputHandler()->unRegisterListener(this);
+            if (m_Editor->getWindow() != nullptr)
+            {
+                m_Editor->getWindow()->getInputHandler()->unRegisterListener(this);
+            }
         }
 
         inline void onKeyChange(int key, bool isPressed) override
@@ -114,9 +117,9 @@ namespace editor
             }
             else if (key == GLFW_KEY_H)
             {
-                m_Editor->getToolHandler()->setSelectedTool("shear");
-
-                m_Editor->getToolHandler()->execute();
+                m_Editor->getToolHandler()->getToolStore().getShearTool().setShearInRad(0.3926991f);
+                m_Editor->getToolHandler()->getToolStore().getShearTool().setShearDirectionAsHorizontal();
+                m_Editor->getToolHandler()->executeTool("shear");
             }
         }
 

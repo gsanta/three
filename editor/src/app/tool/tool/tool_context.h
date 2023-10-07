@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../handler/tool_store.h"
 #include "document_info.h"
 #include "pointer_info.h"
 #include "tool_info.h"
@@ -11,8 +12,6 @@ namespace spright
 {
 namespace editor
 {
-    class ToolStore;
-
     struct ToolContext
     {
         PointerInfo pointer;
@@ -21,7 +20,7 @@ namespace editor
 
         ToolInfo tool;
 
-        ToolStore *tools;
+        std::shared_ptr<ToolStore> tools;
     };
 } // namespace editor
 } // namespace spright
