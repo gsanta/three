@@ -14,6 +14,6 @@ namespace editor
 {
     using namespace engine;
 
-    void rotate(TileLayer &source, const BoundsInt &bounds, float angle);
+    std::vector<int> rotate(TileLayer &source, const BoundsInt &bounds, float angle);
 } // namespace editor
 } // namespace spright

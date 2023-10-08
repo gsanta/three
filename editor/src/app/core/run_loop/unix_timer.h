@@ -1,19 +1,29 @@
 #pragma once
 
-#include <ctime>
 #include "timer.h"
 
-namespace spright { namespace editor {
+#include <chrono>
+#include <ctime>
 
-	class UnixTimer : public Timer {
-	private:
-		double m_Previous;
+namespace spright
+{
+namespace editor
+{
 
-	public:
-		void start() override;
-		float elapsed() override;
+    class UnixTimer : public Timer
+    {
+    public:
+        void reset() override;
 
-	private:
-		double getTime();
-	};
-}}
+        long elapsed() override;
+
+    private:
+        double getTime();
+
+    private:
+        // double m_Previous;
+
+        std::chrono::milliseconds m_Previous;
+    };
+} // namespace editor
+} // namespace spright

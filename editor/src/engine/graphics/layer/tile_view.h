@@ -69,6 +69,8 @@ namespace engine
 
         int getTileIndex(Vec2 worldPos) const;
 
+        int getTileIndex(const Rect2D &tile) const;
+
         std::vector<Rect2D *> &getTiles();
 
         const std::vector<Rect2D *> &getTiles() const;

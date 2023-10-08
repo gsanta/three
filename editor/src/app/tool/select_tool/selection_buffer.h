@@ -21,7 +21,7 @@ namespace editor
 
         void clear();
 
-        const std::vector<int> &getTileIndexes();
+        const std::vector<int> &getTileIndexes() const;
 
         void setTileIndexes(const std::vector<int> &indexes, const TileLayer &layer);
 

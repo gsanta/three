@@ -1,21 +1,27 @@
 #include "ems_timer.h"
 
-namespace spright { namespace editor {
-	void EmsTimer::start() {
+namespace spright
+{
+namespace editor
+{
+    void EmsTimer::reset()
+    {
 #ifdef SPARKY_EMSCRIPTEN
-		m_Previous = emscripten_get_now();
+        m_Previous = emscripten_get_now();
 #endif
-	}
+    }
 
-	float EmsTimer::elapsed() {
+    long EmsTimer::elapsed()
+    {
 #ifdef SPARKY_EMSCRIPTEN
-		double current = emscripten_get_now();
-		double elapsed = current - m_Previous;
-		m_Previous = current;
+        double current = emscripten_get_now();
+        double elapsed = current - m_Previous;
+        m_Previous = current;
 
-		return elapsed;
+        return elapsed;
 #else
-		return 0;
+        return 0;
 #endif
-	}
-}}
+    }
+} // namespace editor
+} // namespace spright

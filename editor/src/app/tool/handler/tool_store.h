@@ -11,6 +11,7 @@ namespace editor
     class SelectTool;
     class ShearTool;
     class ColorPickerTool;
+    class RotateTool;
 
     class ToolStore
     {
@@ -24,6 +25,8 @@ namespace editor
         ColorPickerTool &getColorPickerTool();
 
         ShearTool &getShearTool();
+
+        RotateTool &getRotateTool();
 
     private:
         std::vector<Tool *> m_Tools;

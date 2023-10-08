@@ -23,6 +23,7 @@
 #include "tool/pan_tool.h"
 #include "tool/select_tool/select_tool.h"
 #include "tool/tool_handler.h"
+#include "tool/tools/rotate_tool/rotate_tool.h"
 #include "tool/tools/shear_tool/shear_tool.h"
 #include "tool/zoom_tool.h"
 

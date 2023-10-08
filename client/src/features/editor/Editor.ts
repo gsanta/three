@@ -96,6 +96,10 @@ interface Editor {
   shearHorizontal(angle: number): void;
 
   shearVertical(angle: number): void;
+
+  rotate(angle: number): void;
+
+  setSelectionMode(mode: 'move' | 'rotate'): void;
 }
 
 window.Module = new EditorRuntime();

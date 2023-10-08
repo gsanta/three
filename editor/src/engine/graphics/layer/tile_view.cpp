@@ -131,6 +131,12 @@ namespace engine
         return TileView::getTileIndex(tilePos.x, tilePos.y);
     }
 
+    int TileView::getTileIndex(const Rect2D &tile) const
+    {
+        return getTileIndex(tile.getCenterPosition2d());
+    }
+
+
     Vec2Int TileView::getTilePos(int tileIndex) const
     {
         return Vec2Int(getColumn(tileIndex), getRow(tileIndex));
