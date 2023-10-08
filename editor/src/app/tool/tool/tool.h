@@ -41,7 +41,7 @@ namespace editor
         {
         }
 
-        inline virtual void execute(ToolContext &toolContext)
+        inline virtual void execute(const ToolContext &toolContext)
         {
         }
 

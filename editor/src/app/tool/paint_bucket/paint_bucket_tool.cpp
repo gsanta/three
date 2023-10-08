@@ -1,5 +1,7 @@
 #include "paint_bucket_tool.h"
 
+#include "../color_picker_tool.h"
+
 namespace spright
 {
 namespace editor
@@ -25,7 +27,7 @@ namespace editor
             tileLayer,
             tilePos.x,
             tilePos.y,
-            context.tool.selectedColor,
+            context.tools->getColorPickerTool().getColor(),
             [&](std::shared_ptr<Rect2D> prev, std::shared_ptr<Rect2D> next) { tileUndo.addTile(prev, next); });
 
         context.doc.document->getHistory()->add(std::make_shared<TileUndo>(tileUndo));

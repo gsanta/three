@@ -3,7 +3,6 @@
 #include "../handler/tool_store.h"
 #include "document_info.h"
 #include "pointer_info.h"
-#include "tool_info.h"
 
 #include <utility>
 
@@ -17,8 +16,6 @@ namespace editor
         PointerInfo pointer;
 
         DocumentInfo doc;
-
-        ToolInfo tool;
 
         std::shared_ptr<ToolStore> tools;
     };

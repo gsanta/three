@@ -1,5 +1,7 @@
 #include "./circle_tool.h"
 
+#include "../color_picker_tool.h"
+
 namespace spright
 {
 namespace editor
@@ -46,7 +48,7 @@ namespace editor
                 context.doc.activeDrawing->getActiveLayer(),
                 bounds.getCenter().x,
                 bounds.getCenter().y,
-                context.tool.selectedColor,
+                context.tools->getColorPickerTool().getColor(),
                 [&](std::shared_ptr<Rect2D> prev, std::shared_ptr<Rect2D> next) { tileUndo.addTile(prev, next); });
         }
 
@@ -67,7 +69,7 @@ namespace editor
 
     void CircleTool::drawCircle(BoundsInt &bounds, TileLayer &tileLayer, const ToolContext &context, TileUndo *tileUndo)
     {
-        int color = context.tool.selectedColor;
+        int color = context.tools->getColorPickerTool().getColor();
         std::vector<Rect2D> tiles;
 
         int centerX = std::round((bounds.minX + bounds.maxX) / 2);

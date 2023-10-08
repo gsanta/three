@@ -167,12 +167,10 @@ void setEngineData(std::string json)
 
 void setColor(unsigned int color)
 {
-    // if (editor != nullptr)
-    // {
-    //     editor->getState()->color = color;
-    //     BrushTool *brushTool = dynamic_cast<BrushTool *>(editor->getToolHandler()->getToolStore().getTool("brush"));
-    //     brushTool->setColor(color);
-    // }
+    if (editor != nullptr)
+    {
+        editor->getToolHandler()->getToolStore().getColorPickerTool().setColor(color);
+    }
 }
 
 EMSCRIPTEN_BINDINGS(editor)

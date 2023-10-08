@@ -1,4 +1,5 @@
 #pragma once
+#include <cmath>
 #include <iostream>
 
 namespace spright
@@ -17,6 +18,8 @@ namespace maths
         Vec2Int operator+(int val) const;
 
         Vec2Int operator-(const Vec2Int &right);
+
+        double distance(const Vec2Int &other);
 
         friend bool operator==(const Vec2Int &, const Vec2Int &);
 

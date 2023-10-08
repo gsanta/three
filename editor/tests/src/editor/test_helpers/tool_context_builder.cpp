@@ -20,6 +20,8 @@ ToolContext ToolContextBuilder::build(Document &document)
     toolStore->addTool(new SelectTool());
     toolStore->addTool(new RectangleTool());
     toolStore->addTool(new RotateTool());
+    toolStore->addTool(new ShearTool());
+    toolStore->addTool(new ColorPickerTool(nullptr));
 
     toolContext.tools = toolStore;
 

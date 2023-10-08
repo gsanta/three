@@ -3,6 +3,7 @@
 #include "../../../algorithm/rotate.h"
 #include "../../../algorithm/tile_operations.h"
 #include "../../../core/run_loop/timer.h"
+#include "../../common/restorable_area.h"
 #include "../../select_tool/select_tool.h"
 #include "../../tool/tool.h"
 #include "../../tool/tool_context.h"
@@ -25,33 +26,27 @@ namespace editor
 
         void pointerMove(const ToolContext &toolContext) override;
 
-        void pointerUp(const ToolContext &toolContext) override;
-
-        void execute(ToolContext &toolContext) override;
+        void execute(const ToolContext &toolContext) override;
 
     private:
-        void saveImpactedArea(const TileLayer &activeLayer, const SelectionBuffer &selectionBuffer);
-
-        void restoreImpactedArea(const ToolContext &toolContext);
-
         void rotateSelection(const ToolContext &toolContext, double angle);
 
+        /*
+         * Get the maximum area that can be impacted by the rotation, so original state can be restored
+         */
         BoundsInt getBoundsOfImpactedArea(const BoundsInt &selectionBounds, const BoundsInt &maxBounds) const;
 
-        double getRotationAngle(Vec2 cursorPos);
+        double getRotationAngle(const Vec2 &cursorPos, const Vec2 &centerPos) const;
+
+        /* angle between 0 to 2 Pi and zero is the up direction */
+        double getNormalizedAngle(double angle) const;
 
     private:
         float m_RotateInRad = 0;
 
         double m_PrevRotationAngle = 0;
 
-        Timer *m_Timer;
-
-        std::unique_ptr<TileView> m_OrigTiles;
-
-        std::vector<int> m_OrigIndexes;
-
-        Vec2 m_RotationCenter;
+        RestorableArea m_RestorableArea;
 
         std::vector<double> m_RotationPoints = {0,
                                                 M_PI - 3.0 * M_PI_4,

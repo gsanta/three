@@ -31,6 +31,8 @@ namespace editor
 
         unsigned int getColor() const;
 
+        void setColor(unsigned int color);
+
     private:
         void emitColorChange() const;
 
