@@ -6,32 +6,37 @@ namespace editor
 {
     RotateTool::RotateTool() : Tool("rotate")
     {
-        m_Timer = Timer::getTimer();
     }
 
     void RotateTool::pointerDown(const ToolContext &toolContext)
     {
-        m_Timer->reset();
-
         TileLayer &activeLayer = toolContext.doc.activeDrawing->getActiveLayer();
 
-        saveImpactedArea(activeLayer, toolContext.tools->getSelectTool().getSelectionBuffer());
+        const SelectionBuffer &selectionBuffer = toolContext.tools->getSelectTool().getSelectionBuffer();
+
+        m_RestorableArea.saveArea(
+            activeLayer,
+            selectionBuffer.getTileIndexes(),
+            getBoundsOfImpactedArea(selectionBuffer.getTileBounds(), activeLayer.getTileBounds()));
     }
 
     void RotateTool::pointerMove(const ToolContext &toolContext)
     {
-        double angle = getRotationAngle(toolContext.pointer.curr);
+        TileLayer &activeLayer = toolContext.doc.activeDrawing->getActiveLayer();
+        const BoundsInt &selectionBounds = toolContext.tools->getSelectTool().getSelectionBuffer().getTileBounds();
+        Vec2 center = activeLayer.getCenterPos(selectionBounds.getCenter());
+
+        double angle = getRotationAngle(toolContext.pointer.curr, center);
 
         if (angle != m_PrevRotationAngle)
         {
-            restoreImpactedArea(toolContext);
+            m_RestorableArea.restoreArea(activeLayer, toolContext.tools->getSelectTool().getSelectionBuffer());
+            const std::vector<int> &restoredIndexes = m_RestorableArea.getOriginalSelectedIndexes();
+            toolContext.tools->getSelectTool().setSelection(restoredIndexes, *toolContext.doc.activeDrawing);
+
             rotateSelection(toolContext, angle);
             m_PrevRotationAngle = angle;
         }
-    }
-
-    void RotateTool::pointerUp(const ToolContext &toolContext)
-    {
     }
 
     void RotateTool::setRotationInRad(float rad)
@@ -39,7 +44,7 @@ namespace editor
         m_RotateInRad = rad;
     }
 
-    void RotateTool::execute(ToolContext &toolContext)
+    void RotateTool::execute(const ToolContext &toolContext)
     {
         const BoundsInt &selectionBounds = toolContext.tools->getSelectTool().getSelectionBuffer().getTileBounds();
 
@@ -48,42 +53,6 @@ namespace editor
                                              m_RotateInRad);
 
         toolContext.tools->getSelectTool().setSelection(newIndexes, *toolContext.doc.activeDrawing);
-    }
-
-    void RotateTool::saveImpactedArea(const TileLayer &activeLayer, const SelectionBuffer &selectionBuffer)
-    {
-        m_OrigIndexes.clear();
-        m_OrigTiles.reset(new TileView(activeLayer.getBounds(), activeLayer.getTileSize()));
-
-        const BoundsInt &selectionBounds = selectionBuffer.getTileBounds();
-        const BoundsInt impactBounds = getBoundsOfImpactedArea(selectionBounds, activeLayer.getTileBounds());
-
-        Vec2Int center = selectionBounds.getCenter();
-        m_RotationCenter = activeLayer.getCenterPos(center);
-
-        tile_operation_copy_area(activeLayer, *m_OrigTiles, impactBounds, impactBounds.getBottomLeft());
-
-        for (Rect2D *tile : m_OrigTiles->getTiles())
-        {
-            m_OrigIndexes.push_back(m_OrigTiles->getTileIndex(*tile));
-        }
-    }
-
-    void RotateTool::restoreImpactedArea(const ToolContext &toolContext)
-    {
-        SelectTool &selectTool = toolContext.tools->getSelectTool();
-        TileLayer &activeLayer = toolContext.doc.activeDrawing->getActiveLayer();
-
-        const std::vector<int> &oldIndexes = selectTool.getSelectionBuffer().getTileIndexes();
-
-        for (int index : oldIndexes)
-        {
-            activeLayer.removeAt(index);
-        }
-
-        tile_operation_copy_all(*m_OrigTiles, activeLayer);
-
-        selectTool.setSelection(m_OrigIndexes, *toolContext.doc.activeDrawing);
     }
 
     void RotateTool::rotateSelection(const ToolContext &toolContext, double angle)
@@ -97,9 +66,6 @@ namespace editor
         toolContext.tools->getSelectTool().setSelection(newIndexes, *toolContext.doc.activeDrawing);
     }
 
-    /*
-    // Get the maximum area that can be impacted by the rotation, so original state can be restored
-    */
     BoundsInt RotateTool::getBoundsOfImpactedArea(const BoundsInt &selectionBounds, const BoundsInt &maxBounds) const
     {
         Vec2Int center = selectionBounds.getCenter();
@@ -115,28 +81,12 @@ namespace editor
         return BoundsInt(bottomLeftX, bottomLeftY, topRightX, topRightY);
     }
 
-    double RotateTool::getRotationAngle(Vec2 cursorPos)
+    double RotateTool::getRotationAngle(const Vec2 &cursorPos, const Vec2 &centerPos) const
     {
-        Vec2 dir = cursorPos - m_RotationCenter;
+        Vec2 dir = cursorPos - centerPos;
         double angle = std::atan2(dir.y, dir.x);
 
-        double normalizedAngle = 0;
-
-        double approx = 0.01;
-
-        if (angle > 0 && angle <= M_PI_2)
-        {
-            normalizedAngle = M_PI_2 - angle;
-        }
-        else if (angle > M_PI_2 && angle <= M_PI + approx)
-        {
-            normalizedAngle = 3 * M_PI_2 + M_PI - angle;
-        }
-        else
-        {
-            normalizedAngle = M_PI_2 - angle;
-        }
-
+        double normalizedAngle = getNormalizedAngle(angle);
         double finalAngle = 0;
 
         for (int i = 0; i < m_RotationPoints.size() - 1; i++)
@@ -160,6 +110,28 @@ namespace editor
         }
 
         return finalAngle;
+    }
+
+    double RotateTool::getNormalizedAngle(double angle) const
+    {
+        double normalizedAngle = 0;
+
+        double approx = 0.01;
+
+        if (angle > 0 && angle <= M_PI_2)
+        {
+            normalizedAngle = M_PI_2 - angle;
+        }
+        else if (angle > M_PI_2 && angle <= M_PI + approx)
+        {
+            normalizedAngle = 3 * M_PI_2 + M_PI - angle;
+        }
+        else
+        {
+            normalizedAngle = M_PI_2 - angle;
+        }
+
+        return normalizedAngle;
     }
 } // namespace editor
 } // namespace spright

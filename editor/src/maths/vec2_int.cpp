@@ -28,6 +28,14 @@ namespace maths
         return Vec2Int(x - right.x, y - right.y);
     }
 
+    double Vec2Int::distance(const Vec2Int &other)
+    {
+        float xDelta = other.x - x;
+        float yDelta = other.y - y;
+
+        return std::sqrt(xDelta * xDelta + yDelta * yDelta);
+    }
+
     bool operator==(const Vec2Int &left, const Vec2Int &right)
     {
         return left.x == right.x && left.y == right.y;

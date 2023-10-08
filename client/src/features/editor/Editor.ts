@@ -99,7 +99,7 @@ interface Editor {
 
   rotate(angle: number): void;
 
-  setSelectionMode(mode: 'move' | 'rotate'): void;
+  setSelectionMode(mode: 'move' | 'rotate' | 'shear'): void;
 }
 
 window.Module = new EditorRuntime();

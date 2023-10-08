@@ -54,13 +54,22 @@ namespace editor
         return m_Color;
     }
 
+    void ColorPickerTool::setColor(unsigned int color)
+    {
+        m_Color = color;
+    }
+
+
     void ColorPickerTool::emitColorChange() const
     {
         nlohmann::json json = {
             {"tool", getName()},
         };
 
-        m_EventEmitter->emitChange("tool_data_changed", json);
+        if (m_EventEmitter != nullptr)
+        {
+            m_EventEmitter->emitChange("tool_data_changed", json);
+        }
     }
 } // namespace editor
 } // namespace spright

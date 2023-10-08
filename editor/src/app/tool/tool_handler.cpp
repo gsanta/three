@@ -60,9 +60,6 @@ namespace editor
         m_ToolContext.pointer.buttons[1] = buttons[1];
         m_ToolContext.pointer.buttons[2] = buttons[2];
 
-        m_ToolContext.tool.selectionBuffer = &getToolStore().getSelectTool().getSelectionBuffer();
-        m_ToolContext.tool.selectedColor = getToolStore().getColorPickerTool().getColor();
-
         Drawing *activeDrawing = &m_DocumentStore->getActiveDocument().getDrawings()[0];
         for (Tool *tool : *m_ActiveTools)
         {

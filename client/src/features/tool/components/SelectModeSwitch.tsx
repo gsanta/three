@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Box, useRadio, useRadioGroup, HStack, UseRadioProps } from '@chakra-ui/react';
+import Editor from '@/features/editor/Editor';
 
 const SelectModeSwitchButton = (props: { children: ReactNode } & UseRadioProps) => {
   const { getInputProps, getRadioProps } = useRadio(props);
@@ -14,7 +15,7 @@ const SelectModeSwitchButton = (props: { children: ReactNode } & UseRadioProps) 
         {...checkbox}
         cursor="pointer"
         borderWidth="1px"
-        borderRadius="md"
+        borderRadius="sm"
         boxShadow="md"
         _checked={{
           bg: 'orange.500',
@@ -24,8 +25,8 @@ const SelectModeSwitchButton = (props: { children: ReactNode } & UseRadioProps) 
         _focus={{
           boxShadow: 'outline',
         }}
-        px={5}
-        py={3}
+        px={3}
+        py={1}
       >
         {props.children}
       </Box>
@@ -34,7 +35,7 @@ const SelectModeSwitchButton = (props: { children: ReactNode } & UseRadioProps) 
 };
 
 const SelectModeSwitch = ({ onChange }: { onChange: (name: string) => void }) => {
-  const options = ['move', 'rotate'];
+  const options: Parameters<Editor['setSelectionMode']>[0][] = ['move', 'rotate', 'shear'];
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'selection-manipulation-mode',

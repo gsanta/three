@@ -29,6 +29,8 @@ namespace editor
 
         const static int MODE_ROTATE;
 
+        const static int MODE_SHEAR;
+
     public:
         SelectTool();
 
@@ -51,6 +53,8 @@ namespace editor
 
     private:
         void recalcTileIndexesAndBounds(TileLayer &activeLayer, TileLayer &tempLayer);
+
+        BoundsInt getBoundsOfImpactedArea(const BoundsInt &selectionBounds, const BoundsInt &maxBounds) const;
 
     private:
         std::shared_ptr<SelectionBuffer> m_SelectionBuffer;
