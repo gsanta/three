@@ -51,6 +51,7 @@ namespace editor
         m_toolHandler->getToolStore().addTool(new LineTool());
         m_toolHandler->getToolStore().addTool(new CircleTool());
         m_toolHandler->getToolStore().addTool(new ShearTool());
+        m_toolHandler->getToolStore().addTool(new RotateTool());
         m_toolHandler->addActiveTool("zoom");
         m_toolHandler->setSelectedTool("brush");
 

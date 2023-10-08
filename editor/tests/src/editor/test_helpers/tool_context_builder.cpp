@@ -19,6 +19,7 @@ ToolContext ToolContextBuilder::build(Document &document)
 
     toolStore->addTool(new SelectTool());
     toolStore->addTool(new RectangleTool());
+    toolStore->addTool(new RotateTool());
 
     toolContext.tools = toolStore;
 

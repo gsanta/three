@@ -52,3 +52,7 @@ ENDIF()
 add_library(editor STATIC ${SOURCES})
 
 target_link_libraries(editor glfw libglew_static nlohmann_json::nlohmann_json)
+
+add_library(editor_for_tests STATIC ${SOURCES})
+
+target_link_libraries(editor_for_tests glfw libglew_static nlohmann_json::nlohmann_json)

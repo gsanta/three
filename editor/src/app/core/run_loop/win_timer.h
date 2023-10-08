@@ -1,17 +1,25 @@
 #pragma once
 
-#include <Windows.h>
 #include "timer.h"
 
-namespace spright { namespace editor {
+#include <Windows.h>
 
-	class WinTimer : public Timer {
-	private:
-		unsigned __int64 m_Previous;
-		double m_Frequency;
+namespace spright
+{
+namespace editor
+{
 
-	public:
-		void start() override;
-		float elapsed() override;
-	};
-}}
+    class WinTimer : public Timer
+    {
+    public:
+        void reset() override;
+
+        long elapsed() override;
+
+    private:
+        unsigned __int64 m_Previous;
+
+        long m_Frequency;
+    };
+} // namespace editor
+} // namespace spright

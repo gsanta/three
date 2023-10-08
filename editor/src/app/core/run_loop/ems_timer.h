@@ -6,13 +6,19 @@
 #include <emscripten/emscripten.h>
 #endif
 
-namespace spright { namespace editor {
+namespace spright
+{
+namespace editor
+{
+    class EmsTimer : public Timer
+    {
+    public:
+        void reset() override;
 
-	class EmsTimer : public Timer {
-	private:
-		double m_Previous;
-	public:
-		void start() override;
-		float elapsed() override;
-	};
-}}
+        long elapsed() override;
+
+    private:
+        double m_Previous;
+    };
+} // namespace editor
+} // namespace spright

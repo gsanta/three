@@ -2,10 +2,28 @@
 
 extern class Editor *editor;
 
+void set_selection_mode_api(std::string modeStr)
+{
+    int mode = SelectTool::MODE_MOVE;
+
+    if (modeStr == "rotate")
+    {
+        mode = SelectTool::MODE_ROTATE;
+    }
+
+    editor->getToolHandler()->getToolStore().getSelectTool().setMode(mode);
+}
+
 void shear_horizontal_api(float shearInRad)
 {
     editor->getToolHandler()->getToolStore().getShearTool().setShearInRad(shearInRad);
     editor->getToolHandler()->executeTool("shear");
+}
+
+void rotate_api(float rotateInRad)
+{
+    editor->getToolHandler()->getToolStore().getRotateTool().setRotationInRad(rotateInRad);
+    editor->getToolHandler()->executeTool("rotate");
 }
 
 #ifdef SPARKY_EMSCRIPTEN
@@ -246,6 +264,8 @@ EMSCRIPTEN_BINDINGS(spright)
     emscripten::function("zoomToFit", &zoom_to_fit);
     emscripten::function("shearHorizontal", &shear_horizontal_api);
     emscripten::function("shearVertical", &shear_vertical_api);
+    emscripten::function("rotate", &rotate_api);
+    emscripten::function("setSelectionMode", &set_selection_mode_api);
 }
 
 #endif

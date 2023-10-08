@@ -25,6 +25,11 @@ namespace editor
     class SelectTool : public Tool
     {
     public:
+        const static int MODE_MOVE;
+
+        const static int MODE_ROTATE;
+
+    public:
         SelectTool();
 
         void pointerDown(const ToolContext &) override;
@@ -35,7 +40,14 @@ namespace editor
 
         void setSelection(const std::vector<int> &indexes, Drawing &drawing);
 
+        void setMode(int mode);
+
         SelectionBuffer &getSelectionBuffer();
+
+    private:
+        const static int PHASE_SELECTION;
+
+        const static int PHASE_MANIPULATION;
 
     private:
         void recalcTileIndexesAndBounds(TileLayer &activeLayer, TileLayer &tempLayer);
@@ -57,7 +69,9 @@ namespace editor
 
         float m_NoMovementTolerance = 0.1f;
 
-        bool m_IsMove = false;
+        int m_Mode = MODE_MOVE;
+
+        int m_Phase = PHASE_SELECTION;
     };
 } // namespace editor
 } // namespace spright

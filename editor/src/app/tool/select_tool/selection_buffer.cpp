@@ -23,7 +23,7 @@ namespace editor
         m_TileBounds = BoundsInt();
     }
 
-    const std::vector<int> &SelectionBuffer::getTileIndexes()
+    const std::vector<int> &SelectionBuffer::getTileIndexes() const
     {
         return m_TileIndexes;
     }

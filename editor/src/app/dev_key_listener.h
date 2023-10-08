@@ -113,13 +113,23 @@ namespace editor
             }
             else if (key == GLFW_KEY_LEFT)
             {
-                m_Editor->getDocumentStore()->getActiveDocument().getCamera().translate2D(Vec2(2.0f, 0.0f));
+                m_Editor->getToolHandler()->getToolStore().getRotateTool().setRotationInRad(-1.5708f);
+                m_Editor->getToolHandler()->executeTool("rotate");
+            }
+            else if (key == GLFW_KEY_RIGHT)
+            {
+                m_Editor->getToolHandler()->getToolStore().getRotateTool().setRotationInRad(1.5708f);
+                m_Editor->getToolHandler()->executeTool("rotate");
+            }
+            else if (key == GLFW_KEY_UP)
+            {
+                m_Editor->getToolHandler()->getToolStore().getRotateTool().setRotationInRad(M_PI + 0.1f);
+                m_Editor->getToolHandler()->executeTool("rotate");
             }
             else if (key == GLFW_KEY_H)
             {
-                m_Editor->getToolHandler()->getToolStore().getShearTool().setShearInRad(0.3926991f);
-                m_Editor->getToolHandler()->getToolStore().getShearTool().setShearDirectionAsHorizontal();
-                m_Editor->getToolHandler()->executeTool("shear");
+                m_Editor->getToolHandler()->getToolStore().getRotateTool().setRotationInRad(-M_PI - 0.1f);
+                m_Editor->getToolHandler()->executeTool("rotate");
             }
         }
 
