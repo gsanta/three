@@ -337,7 +337,6 @@ assert(!ENVIRONMENT_IS_SHELL, "shell environment detected but not enabled at bui
 
 var wasmBinary;
 if (Module['wasmBinary']) wasmBinary = Module['wasmBinary'];legacyModuleProp('wasmBinary', 'wasmBinary');
-var noExitRuntime = Module['noExitRuntime'] || true;legacyModuleProp('noExitRuntime', 'noExitRuntime');
 
 if (typeof WebAssembly != 'object') {
   abort('no native wasm support detected');
@@ -466,12 +465,6 @@ var __ATEXIT__    = []; // functions called during shutdown
 var __ATPOSTRUN__ = []; // functions called after the main() is called
 
 var runtimeInitialized = false;
-
-var runtimeKeepaliveCounter = 0;
-
-function keepRuntimeAlive() {
-  return noExitRuntime || runtimeKeepaliveCounter > 0;
-}
 
 function preRun() {
   if (Module['preRun']) {
@@ -687,16 +680,17 @@ function abort(what) {
 // Prefix of data URIs emitted by SINGLE_FILE and related options.
 var dataURIPrefix = 'data:application/octet-stream;base64,';
 
-// Indicates whether filename is a base64 data URI.
-function isDataURI(filename) {
-  // Prefix of data URIs emitted by SINGLE_FILE and related options.
-  return filename.startsWith(dataURIPrefix);
-}
+/**
+ * Indicates whether filename is a base64 data URI.
+ * @noinline
+ */
+var isDataURI = (filename) => filename.startsWith(dataURIPrefix);
 
-// Indicates whether filename is delivered via file protocol (as opposed to http/https)
-function isFileURI(filename) {
-  return filename.startsWith('file://');
-}
+/**
+ * Indicates whether filename is delivered via file protocol (as opposed to http/https)
+ * @noinline
+ */
+var isFileURI = (filename) => filename.startsWith('file://');
 // end include: URIUtils.js
 function createExportWrapper(name) {
   return function() {
@@ -1151,6 +1145,8 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       var ptr = getCppExceptionThrownObjectFromWebAssemblyException(ex);
       ___cxa_increment_exception_refcount(ptr);
     };
+
+  var noExitRuntime = Module['noExitRuntime'] || true;
 
   var ptrToString = (ptr) => {
       assert(typeof ptr === 'number');
@@ -5285,6 +5281,17 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
   
   
+  
+  var getFunctionName = (signature) => {
+      signature = signature.trim();
+      const argsIndex = signature.indexOf("(");
+      if (argsIndex !== -1) {
+        assert(signature[signature.length - 1] == ")", "Parentheses for argument names should match.");
+        return signature.substr(0, argsIndex);
+      } else {
+        return signature;
+      }
+    };
   var __embind_register_class_function = (rawClassType,
                                       methodName,
                                       argCount,
@@ -5296,6 +5303,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
                                       isAsync) => {
       var rawArgTypes = heap32VectorToArray(argCount, rawArgTypesAddr);
       methodName = readLatin1String(methodName);
+      methodName = getFunctionName(methodName);
       rawInvoker = embind__requireFunction(invokerSignature, rawInvoker);
   
       whenDependentTypesAreResolved([], [rawClassType], function(classType) {
@@ -5505,9 +5513,11 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
   
   
+  
   var __embind_register_function = (name, argCount, rawArgTypesAddr, signature, rawInvoker, fn, isAsync) => {
       var argTypes = heap32VectorToArray(argCount, rawArgTypesAddr);
       name = readLatin1String(name);
+      name = getFunctionName(name);
   
       rawInvoker = embind__requireFunction(signature, rawInvoker);
   
@@ -5957,12 +5967,6 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       } while (HEAPU32[((ptr)>>2)]);
     };
 
-  var emval_allocateDestructors = (destructorsRef) => {
-      var destructors = [];
-      HEAPU32[((destructorsRef)>>2)] = Emval.toHandle(destructors);
-      return destructors;
-    };
-  
   var emval_symbols = {
   };
   
@@ -5980,7 +5984,13 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       caller = emval_methodCallers[caller];
       handle = Emval.toValue(handle);
       methodName = getStringOrSymbol(methodName);
-      return caller(handle, methodName, emval_allocateDestructors(destructorsRef), args);
+      var destructors = [];
+      var result = caller(handle, methodName, destructors, args);
+      // void and any other types w/o destructors don't need to allocate a handle
+      if (destructors.length) {
+        HEAPU32[((destructorsRef)>>2)] = Emval.toHandle(destructors);
+      }
+      return result;
     };
 
 
@@ -6028,42 +6038,36 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
     };
   
   
-  var emval_registeredMethods = {
-  };
-  
   var __emval_get_method_caller = (argCount, argTypes) => {
       var types = emval_lookupTypes(argCount, argTypes);
-      var retType = types[0];
-      var signatureName = retType.name + "_$" + types.slice(1).map(function (t) { return t.name; }).join("_") + "$";
-      var returnId = emval_registeredMethods[signatureName];
-      if (returnId !== undefined) {
-        return returnId;
-      }
+      var retType = types.shift();
+      argCount--; // remove the shifted off return type
   
       var params = ["retType"];
       var args = [retType];
   
       var argsList = ""; // 'arg0, arg1, arg2, ... , argN'
-      for (var i = 0; i < argCount - 1; ++i) {
+      for (var i = 0; i < argCount; ++i) {
         argsList += (i !== 0 ? ", " : "") + "arg" + i;
         params.push("argType" + i);
-        args.push(types[1 + i]);
+        args.push(types[i]);
       }
   
+      var signatureName = retType.name + "_$" + types.map(t => t.name).join("_") + "$";
       var functionName = makeLegalFunctionName("methodCaller_" + signatureName);
       var functionBody =
           "return function " + functionName + "(handle, name, destructors, args) {\n";
   
       var offset = 0;
-      for (var i = 0; i < argCount - 1; ++i) {
+      for (var i = 0; i < argCount; ++i) {
           functionBody +=
           "    var arg" + i + " = argType" + i + ".readValueFromPointer(args" + (offset ? ("+"+offset) : "") + ");\n";
-          offset += types[i + 1]['argPackAdvance'];
+          offset += types[i]['argPackAdvance'];
       }
       functionBody +=
           "    var rv = handle[name](" + argsList + ");\n";
-      for (var i = 0; i < argCount - 1; ++i) {
-          if (types[i + 1]['deleteObject']) {
+      for (var i = 0; i < argCount; ++i) {
+          if (types[i]['deleteObject']) {
               functionBody +=
               "    argType" + i + ".deleteObject(arg" + i + ");\n";
           }
@@ -6077,9 +6081,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   
       params.push(functionBody);
       var invokerFunction = newFunc(Function, params).apply(null, args);
-      returnId = emval_addMethodCaller(invokerFunction);
-      emval_registeredMethods[signatureName] = returnId;
-      return returnId;
+      return emval_addMethodCaller(invokerFunction);
     };
 
   var __emval_incref = (handle) => {
@@ -6212,6 +6214,9 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
     };
   
   
+  var runtimeKeepaliveCounter = 0;
+  var keepRuntimeAlive = () => noExitRuntime || runtimeKeepaliveCounter > 0;
+  
   var _proc_exit = (code) => {
       EXITSTATUS = code;
       if (!keepRuntimeAlive()) {
@@ -6220,6 +6225,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       }
       quit_(code, new ExitStatus(code));
     };
+  
   /** @suppress {duplicate } */
   /** @param {boolean|number=} implicit */
   var exitJS = (status, implicit) => {
@@ -6236,6 +6242,7 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
       _proc_exit(status);
     };
   var _exit = exitJS;
+  
   
   var maybeExit = () => {
       if (!keepRuntimeAlive()) {
@@ -10163,32 +10170,27 @@ var dynCall_viijii = Module['dynCall_viijii'] = createExportWrapper('dynCall_vii
 var dynCall_iiiiij = Module['dynCall_iiiiij'] = createExportWrapper('dynCall_iiiiij');
 var dynCall_iiiiijj = Module['dynCall_iiiiijj'] = createExportWrapper('dynCall_iiiiijj');
 var dynCall_iiiiiijj = Module['dynCall_iiiiiijj'] = createExportWrapper('dynCall_iiiiiijj');
-var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 93600;
-var ___start_em_js = Module['___start_em_js'] = 125984;
-var ___stop_em_js = Module['___stop_em_js'] = 126048;
+var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 93536;
+var ___start_em_js = Module['___start_em_js'] = 125920;
+var ___stop_em_js = Module['___stop_em_js'] = 125984;
 
 // include: postamble.js
 // === Auto-generated postamble setup entry stuff ===
 
 // include: base64Utils.js
-// Converts a string of base64 into a byte array.
-// Throws error on invalid input.
+// Converts a string of base64 into a byte array (Uint8Array).
 function intArrayFromBase64(s) {
   if (typeof ENVIRONMENT_IS_NODE != 'undefined' && ENVIRONMENT_IS_NODE) {
     var buf = Buffer.from(s, 'base64');
     return new Uint8Array(buf.buffer, buf.byteOffset, buf.length);
   }
 
-  try {
-    var decoded = atob(s);
-    var bytes = new Uint8Array(decoded.length);
-    for (var i = 0 ; i < decoded.length ; ++i) {
-      bytes[i] = decoded.charCodeAt(i);
-    }
-    return bytes;
-  } catch (_) {
-    throw new Error('Converting base64 string to bytes failed.');
+  var decoded = atob(s);
+  var bytes = new Uint8Array(decoded.length);
+  for (var i = 0 ; i < decoded.length ; ++i) {
+    bytes[i] = decoded.charCodeAt(i);
   }
+  return bytes;
 }
 
 // If filename is a base64 data URI, parses and returns data (Buffer on node,
@@ -10339,6 +10341,7 @@ var missingLibrarySymbols = [
   'allocate',
   'writeStringToMemory',
   'writeAsciiToMemory',
+  'getFunctionArgsName',
   'registerInheritedInstance',
   'unregisterInheritedInstance',
   'enumReadValueFromPointer',
@@ -10361,7 +10364,6 @@ var unexportedSymbols = [
   'err',
   'callMain',
   'abort',
-  'keepRuntimeAlive',
   'wasmMemory',
   'wasmExports',
   'stackAlloc',
@@ -10403,15 +10405,16 @@ var unexportedSymbols = [
   'getDynCaller',
   'dynCall',
   'handleException',
+  'keepRuntimeAlive',
   'callUserCallback',
   'maybeExit',
-  'safeSetTimeout',
   'asyncLoad',
   'alignMemory',
   'mmapAlloc',
   'handleAllocatorInit',
   'HandleAllocator',
   'wasmTable',
+  'noExitRuntime',
   'freeTableIndexes',
   'functionsInTableMap',
   'setValue',
@@ -10445,6 +10448,7 @@ var unexportedSymbols = [
   'getEnvStrings',
   'doReadv',
   'doWritev',
+  'safeSetTimeout',
   'promiseMap',
   'getExceptionMessageCommon',
   'getCppExceptionTag',
@@ -10512,6 +10516,7 @@ var unexportedSymbols = [
   'embind_init_charCodes',
   'readLatin1String',
   'getTypeName',
+  'getFunctionName',
   'heap32VectorToArray',
   'requireRegisteredType',
   'UnboundTypeError',
@@ -10576,10 +10581,8 @@ var unexportedSymbols = [
   'emval_newers',
   'emval_get_global',
   'emval_lookupTypes',
-  'emval_allocateDestructors',
   'emval_methodCallers',
   'emval_addMethodCaller',
-  'emval_registeredMethods',
 ];
 unexportedSymbols.forEach(unexportedRuntimeSymbol);
 
