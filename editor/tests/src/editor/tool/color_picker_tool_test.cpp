@@ -1,5 +1,5 @@
-// #include "../src/app/tool/brush_tool.h"
-// #include "../src/app/tool/color_picker_tool.h"
+// #include "../src/app/tool/tools/brush_tool/brush_tool.h"
+// #include "../src/app/tool/tools/color_picker_tool/color_picker_tool.h"
 // #include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
 // #include "../test_helpers/document_info_builder.h"
 // #include "../test_helpers/document_store_builder.h"

@@ -1,6 +1,6 @@
 #include "./shear_tool.h"
 
-#include "../../select_tool/select_tool.h"
+#include "../../tools/select_tool/select_tool.h"
 
 namespace spright
 {

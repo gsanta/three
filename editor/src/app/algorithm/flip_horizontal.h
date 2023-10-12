@@ -2,7 +2,7 @@
 
 #include "../../engine/graphics/layer/tileLayer.h"
 #include "../document/drawing.h"
-#include "../tool/select_tool/rect_selector.h"
+#include "../tool/tools/select_tool/rect_selector.h"
 
 namespace spright
 {

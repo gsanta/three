@@ -1,6 +1,6 @@
 #include "../../test_helpers/test_document_factory.h"
-#include "../src/app/tool/brush.h"
-#include "../src/app/tool/eraser_tool/eraser.h"
+#include "../src/app/tool/tools/brush_tool/brush.h"
+#include "../src/app/tool/tools/eraser_tool/eraser.h"
 
 #include <catch2/catch_test_macros.hpp>
 

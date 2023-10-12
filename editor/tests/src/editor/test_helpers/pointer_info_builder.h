@@ -1,5 +1,5 @@
 #pragma once
-#include "../src/app/tool/tool/pointer_info.h"
+#include "../src/app/tool/context/pointer_info.h"
 #include "../src/maths/vec2.h"
 
 using namespace spright::maths;

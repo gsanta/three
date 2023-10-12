@@ -1,4 +1,4 @@
-#include "../src/app/tool/brush_tool.h"
+#include "../src/app/tool/tools/brush_tool/brush_tool.h"
 #include "../test_helpers/document_builder.h"
 #include "../test_helpers/tool_context_builder.h"
 

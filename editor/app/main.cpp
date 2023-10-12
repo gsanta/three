@@ -13,7 +13,7 @@
 #include "../src/app/dev_key_listener.h"
 #include "../src/app/editor.h"
 #include "../src/app/editor_api.h"
-#include "../src/app/tool/brush_tool.h"
+#include "../src/app/tool/tools/brush_tool/brush_tool.h"
 #include "../src/engine/graphics/buffer/buffer.h"
 #include "../src/engine/graphics/buffer/indexBuffer.h"
 #include "../src/engine/graphics/buffer/vertexArray.h"

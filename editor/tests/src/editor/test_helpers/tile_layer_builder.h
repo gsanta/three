@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../src/app/tool/brush.h"
+#include "../src/app/tool/tools/brush_tool/brush.h"
 #include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
 #include "../src/engine/graphics/layer/tileLayer.h"
 #include "../src/engine/graphics/renderable/bounds.h"

@@ -4,8 +4,8 @@
 #include "../../../test_helpers/matchers/has_tiles_within_area_matcher.h"
 #include "../../../test_helpers/tile_layer_builder.h"
 #include "../../../test_helpers/tool_context_builder.h"
-#include "../src/app/tool/rectangle_tool/rectangle_tool.h"
-#include "../src/app/tool/select_tool/select_tool.h"
+#include "../src/app/tool/tools/rectangle_tool/rectangle_tool.h"
+#include "../src/app/tool/tools/select_tool/select_tool.h"
 #include "../src/app/tool/tools/shear_tool/shear_tool.h"
 
 #include <catch2/catch_test_macros.hpp>

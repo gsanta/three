@@ -1,6 +1,6 @@
 
 #include "../src/app/core/colors.h"
-#include "../src/app/tool/rectangle_tool/rectangle_tool.h"
+#include "../src/app/tool/tools/rectangle_tool/rectangle_tool.h"
 #include "src/editor/test_helpers/document_store_builder.h"
 #include "src/editor/test_helpers/tool_context_builder.h"
 
