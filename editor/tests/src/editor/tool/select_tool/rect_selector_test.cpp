@@ -2,7 +2,7 @@
 #include "../../test_helpers/drawing_builder.h"
 #include "../../test_helpers/tile_layer_builder.h"
 #include "../src/app/document/document_store.h"
-#include "../src/app/tool/select_tool/rect_selector.h"
+#include "../src/app/tool/tools/select_tool/rect_selector.h"
 #include "../src/engine/graphics/layer/tileLayer.h"
 
 #include <catch2/catch_approx.hpp>

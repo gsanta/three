@@ -7,6 +7,7 @@ import Dialog from './dialog/Dialog.theme';
 import IconButton from './themes/IconButton.theme';
 import MenuTheme from './themes/Menu.theme';
 import Alert from './themes/Alert.theme';
+import Switch from './themes/Switch.theme';
 import FrameButtonTheme from './button/FrameButton.theme';
 import { formLabelTheme } from './themes/FormLabel.theme';
 import { inputTheme } from './themes/Input.theme';
@@ -43,6 +44,7 @@ const theme = extendTheme({
   components: {
     Checkbox,
     Select,
+    Switch,
     Button,
     IconButton,
     Tooltip,

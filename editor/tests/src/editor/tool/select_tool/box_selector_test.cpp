@@ -2,8 +2,8 @@
 #include "../../test_helpers/matchers/equals_bounds_matcher.h"
 #include "../../test_helpers/test_document_factory.h"
 #include "../../test_helpers/tile_layer_builder.h"
-#include "../src/app/tool/color_picker_tool.h"
-#include "../src/app/tool/select_tool/box_selector.h"
+#include "../src/app/tool/tools/color_picker_tool/color_picker_tool.h"
+#include "../src/app/tool/tools/select_tool/box_selector.h"
 #include "../src/engine/graphics/layer/tileLayer.h"
 #include "../src/maths/vec2.h"
 

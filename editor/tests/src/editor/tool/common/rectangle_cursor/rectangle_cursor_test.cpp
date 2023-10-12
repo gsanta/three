@@ -1,7 +1,7 @@
 #include "../../../test_helpers/matchers/equals_bounds_matcher.h"
 #include "../../../test_helpers/pointer_info_builder.h"
 #include "../../../test_helpers/test_document_factory.h"
-#include "../src/app/tool/common/rectangle_cursor/rectangle_cursor.h"
+#include "../src/app/tool/cursor/rectangle_cursor/rectangle_cursor.h"
 #include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
 #include "../src/maths/vec2.h"
 

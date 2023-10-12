@@ -2,8 +2,8 @@
 
 #include "../../../algorithm/rotate.h"
 #include "../../common/restorable_area.h"
-#include "../../tool/tool.h"
-#include "../../tool/tool_context.h"
+#include "../../context/tool_context.h"
+#include "../../tool.h"
 
 namespace spright
 {
