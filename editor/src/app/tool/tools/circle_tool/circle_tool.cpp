@@ -38,7 +38,7 @@ namespace editor
         TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
         BoundsInt bounds = getCircleBounds(context, activeLayer);
 
-        TileUndo tileUndo = TileUndo::createForActiveTileLayer(*context.doc.document);
+        TileUndo tileUndo = TileUndo::createForActiveTileLayer(*context.doc.document, context.tools);
 
         drawCircle(bounds, activeLayer, context, &tileUndo);
 

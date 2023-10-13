@@ -29,7 +29,7 @@ namespace editor
         TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
         int color = context.tools->getColorPickerTool().getColor();
 
-        TileUndo tileUndo = TileUndo::createForActiveTileLayer(*context.doc.document);
+        TileUndo tileUndo = TileUndo::createForActiveTileLayer(*context.doc.document, context.tools);
 
         Vec2Int bottomLeft = activeLayer.getTilePos(m_TempRectDrawer.getBounds().getBottomLeft());
         Vec2Int topRight = activeLayer.getTilePos(m_TempRectDrawer.getBounds().getTopRight());
