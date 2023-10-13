@@ -15,10 +15,13 @@ namespace editor
         TileLayer &activeLayer = toolContext.doc.activeDrawing->getActiveLayer();
         const SelectionBuffer &selectionBuffer = toolContext.tools->getSelectTool().getSelectionBuffer();
 
-        m_RestorableArea.saveArea(
-            activeLayer,
-            selectionBuffer.getTileIndexes(),
-            getBoundsOfImpactedArea(selectionBuffer.getTileBounds(), activeLayer.getTileBounds()));
+        m_ImpactedArea = getBoundsOfImpactedArea(selectionBuffer.getTileBounds(), activeLayer.getTileBounds());
+
+        m_Undo.reset(new TileUndo(*toolContext.doc.document, toolContext.tools));
+        m_Undo->setPrevTiles(m_ImpactedArea, activeLayer);
+        m_Undo->setPrevSelection(selectionBuffer.getTileIndexes());
+        m_Undo->setNewTiles(m_ImpactedArea, activeLayer);
+        m_Undo->setNewSelection(selectionBuffer.getTileIndexes());
     }
 
     void ShearTool::pointerMove(const ToolContext &toolContext)
@@ -32,21 +35,36 @@ namespace editor
 
         if (angle != m_PrevShearAngle)
         {
+            m_Undo->undo(*toolContext.doc.document);
+
             const SelectionBuffer &selectionBuffer = toolContext.tools->getSelectTool().getSelectionBuffer();
 
             BoundsInt currentBounds = selectionBuffer.getTileBounds();
 
-            m_RestorableArea.restoreArea(activeLayer, toolContext.tools->getSelectTool().getSelectionBuffer());
-            const std::vector<int> &restoredIndexes = m_RestorableArea.getOriginalSelectedIndexes();
-            toolContext.tools->getSelectTool().setSelection(restoredIndexes, *toolContext.doc.activeDrawing);
-
-            m_RestorableArea.saveArea(activeLayer,
-                                      m_RestorableArea.getOriginalSelectedIndexes(),
-                                      getBoundsOfImpactedArea(currentBounds, activeLayer.getTileBounds()));
 
             shearSelection(toolContext, angle);
+
+            m_Undo->setNewTiles(m_ImpactedArea, activeLayer);
+            m_Undo->setNewSelection(selectionBuffer.getTileIndexes());
             m_PrevShearAngle = angle;
         }
+    }
+
+    void ShearTool::pointerUp(const ToolContext &toolContext)
+    {
+        TileLayer &activeLayer = toolContext.doc.activeDrawing->getActiveLayer();
+
+        TileUndo tileUndo(*toolContext.doc.document, toolContext.tools);
+
+        SelectTool &selectTool = toolContext.tools->getSelectTool();
+        const std::vector<int> prevSelectedIndexes = m_RestorableArea.getOriginalSelectedIndexes();
+
+        tileUndo.setSelection(prevSelectedIndexes, selectTool.getSelectionBuffer().getTileIndexes());
+
+        toolContext.doc.document->getHistory()->add(std::make_shared<TileUndo>(*m_Undo.get()));
+        m_PrevShearAngle = 0;
+
+        m_RestorableArea.clear();
     }
 
     void ShearTool::shearSelection(const ToolContext &toolContext, double angle)
@@ -54,8 +72,6 @@ namespace editor
         TileLayer &activeLayer = toolContext.doc.activeDrawing->getActiveLayer();
 
         const BoundsInt &selectionBounds = toolContext.tools->getSelectTool().getSelectionBuffer().getTileBounds();
-
-        std::cout << angle * 180 / M_PI << std::endl;
 
         if (angle != 0)
         {
@@ -66,6 +82,8 @@ namespace editor
 
     void ShearTool::execute(const ToolContext &toolContext)
     {
+        SelectTool &selectTool = toolContext.tools->getSelectTool();
+
         const BoundsInt &selectionBounds = toolContext.tools->getSelectTool().getSelectionBuffer().getTileBounds();
 
         TileLayer &activeLayer = toolContext.doc.activeDrawing->getActiveLayer();
@@ -82,7 +100,7 @@ namespace editor
             newIndexes = shear_vertical(activeLayer, bounds, m_ShearInRad);
         }
 
-        toolContext.tools->getSelectTool().setSelection(newIndexes, *toolContext.doc.activeDrawing);
+        selectTool.setSelection(newIndexes, *toolContext.doc.activeDrawing);
     }
 
     void ShearTool::setShearInRad(float rad)
@@ -147,9 +165,7 @@ namespace editor
         //10deg
         double shearIncrement = 0.174533;
 
-        int lenIncrement = 2.0f;
-
-        double multiplier = (int)(len / lenIncrement);
+        double multiplier = (int)(len / m_TileLenghtFor10DegShear);
 
         double angle = shearIncrement * multiplier * sign;
 
@@ -178,6 +194,11 @@ namespace editor
         int topRightY = center.y + size < maxBounds.maxY ? center.y + size : maxBounds.maxY;
 
         return BoundsInt(bottomLeftX, bottomLeftY, topRightX, topRightY);
+    }
+
+    int ShearTool::getTileLenghtFor10DegShear() const
+    {
+        return m_TileLenghtFor10DegShear;
     }
 } // namespace editor
 } // namespace spright

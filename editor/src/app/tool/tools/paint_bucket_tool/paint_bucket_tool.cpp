@@ -21,7 +21,7 @@ namespace editor
         TileLayer &tileLayer = context.doc.activeDrawing->getActiveLayer();
         Vec2Int tilePos = tileLayer.getTilePos(context.pointer.curr);
 
-        TileUndo tileUndo = TileUndo::createForActiveTileLayer(*context.doc.document);
+        TileUndo tileUndo = TileUndo::createForActiveTileLayer(*context.doc.document, context.tools);
 
         m_FloodFill.floodFill(
             tileLayer,

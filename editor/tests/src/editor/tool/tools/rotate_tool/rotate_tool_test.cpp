@@ -19,6 +19,7 @@ void rotate_from_center_to_delta(ToolContext &toolContext, ContentBuilder &conte
 
     rotateTool.execPointerDown(toolContext);
     rotateTool.execPointerMove(toolContext);
+    rotateTool.execPointerUp(toolContext);
 
     REQUIRE(activeLayer.getTiles().size() == 7);
 }
@@ -120,6 +121,16 @@ SCENARIO("Rotate tool")
                     REQUIRE(activeLayer.getAtTilePos(5, 3) != nullptr);
                     REQUIRE(activeLayer.getAtTilePos(6, 2) != nullptr);
                     REQUIRE(activeLayer.getAtTilePos(6, 3) != nullptr);
+                }
+
+                WHEN("undo is called")
+                {
+                    document.getHistory()->undo(document);
+
+                    THEN("it restores the state before the rotation")
+                    {
+                        require_not_changed(activeLayer);
+                    }
                 }
             }
 

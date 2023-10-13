@@ -2,6 +2,7 @@
 #include "../../test_helpers/document_builder.h"
 #include "../../test_helpers/drawing_builder.h"
 #include "../../test_helpers/tile_layer_builder.h"
+#include "../../test_helpers/tool_context_builder.h"
 #include "../src/app/core/colors.h"
 #include "../src/app/core/history/tile_undo.h"
 
@@ -17,6 +18,8 @@ SCENARIO("TileUndo")
                                      2)
                           .build();
 
+    ToolContext context = ToolContextBuilder().build(document);
+
     document.addDrawing(drawing);
 
     TileLayer &layer = document.getActiveDrawing().getActiveLayer();
@@ -29,7 +32,7 @@ SCENARIO("TileUndo")
 
     GIVEN("an undoable action for a tile layer")
     {
-        TileUndo tileUndo = TileUndo::createForActiveTileLayer(document);
+        TileUndo tileUndo = TileUndo::createForActiveTileLayer(document, context.tools);
 
         Rect2D *prevRect1 = layer.getAtTilePos(1, 0);
         Rect2D nextRect1 = tileBuilder.withPos(Vec2Int(1, 0)).withColor(COLOR_YELLOW).build();

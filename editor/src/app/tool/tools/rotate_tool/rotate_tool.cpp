@@ -39,6 +39,38 @@ namespace editor
         }
     }
 
+    void RotateTool::pointerUp(const ToolContext &toolContext)
+    {
+        TileLayer &activeLayer = toolContext.doc.activeDrawing->getActiveLayer();
+
+        TileUndo tileUndo = TileUndo::createForActiveTileLayer(*toolContext.doc.document, toolContext.tools);
+
+        const BoundsInt &bounds = m_RestorableArea.getSavedArea();
+        for (int i = bounds.minX; i < bounds.maxX; i++)
+        {
+            for (int j = bounds.minY; j < bounds.maxY; j++)
+            {
+                std::shared_ptr<Rect2D> prevTile;
+
+                if (auto tile = m_RestorableArea.getTileView().getAtTilePos(i, j))
+                {
+                    prevTile.reset(new Rect2D(*tile));
+                }
+
+                std::shared_ptr<Rect2D> newTile;
+
+                if (activeLayer.getAtTilePos(i, j))
+                {
+                    newTile.reset(new Rect2D(*activeLayer.getAtTilePos(i, j)));
+                }
+
+                tileUndo.addTile(prevTile, newTile);
+            }
+        }
+
+        toolContext.doc.document->getHistory()->add(std::make_shared<TileUndo>(tileUndo));
+    }
+
     void RotateTool::setRotationInRad(float rad)
     {
         m_RotateInRad = rad;
@@ -71,12 +103,10 @@ namespace editor
         Vec2Int center = selectionBounds.getCenter();
         int size = selectionBounds.getWidth() > selectionBounds.getHeight() ? selectionBounds.getWidth()
                                                                             : selectionBounds.getHeight();
-        int halfSize = ((int)size / 2.0) + 1;
-
-        int bottomLeftX = center.x - halfSize > maxBounds.minX ? center.x - halfSize : maxBounds.minX;
-        int bottomLeftY = center.y - halfSize > maxBounds.minY ? center.y - halfSize : maxBounds.minY;
-        int topRightX = center.x + halfSize < maxBounds.maxX ? center.x + halfSize : maxBounds.maxX;
-        int topRightY = center.y + halfSize < maxBounds.maxY ? center.y + halfSize : maxBounds.maxY;
+        int bottomLeftX = center.x - size > maxBounds.minX ? center.x - size : maxBounds.minX;
+        int bottomLeftY = center.y - size > maxBounds.minY ? center.y - size : maxBounds.minY;
+        int topRightX = center.x + size < maxBounds.maxX ? center.x + size : maxBounds.maxX;
+        int topRightY = center.y + size < maxBounds.maxY ? center.y + size : maxBounds.maxY;
 
         return BoundsInt(bottomLeftX, bottomLeftY, topRightX, topRightY);
     }

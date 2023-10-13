@@ -27,10 +27,18 @@ namespace editor
 
         void restoreArea(TileLayer &activeLayer, const SelectionBuffer &selectionBuffer);
 
+        void clear();
+
         const std::vector<int> &getOriginalSelectedIndexes() const;
 
+        const BoundsInt &getSavedArea();
+
+        const TileView &getTileView();
+
     private:
-        std::unique_ptr<TileView> m_ImpactedTiles;
+        std::unique_ptr<TileView> m_TileView;
+
+        BoundsInt m_SavedArea;
 
         std::vector<int> m_ImpactedIndexes;
 

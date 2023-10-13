@@ -45,8 +45,8 @@ namespace editor
 
             if (!isPointerMove)
             {
-                context.doc.document->getHistory()->add(
-                    std::make_shared<TileUndo>(TileUndo::createForActiveTileLayer(*context.doc.document)));
+                context.doc.document->getHistory()->add(std::make_shared<TileUndo>(
+                    TileUndo::createForActiveTileLayer(*context.doc.document, context.tools)));
             }
 
             TileUndo *tileUndo = dynamic_cast<TileUndo *>(context.doc.document->getHistory()->peek());

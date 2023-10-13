@@ -36,7 +36,7 @@ namespace editor
 
         foregroundLayer.clear();
 
-        TileUndo tileUndo = TileUndo::createForActiveTileLayer(*context.doc.document);
+        TileUndo tileUndo = TileUndo::createForActiveTileLayer(*context.doc.document, context.tools);
 
         drawLine(context.pointer.down,
                  context.pointer.curr,
