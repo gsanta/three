@@ -8,6 +8,7 @@ import IconButton from './themes/IconButton.theme';
 import MenuTheme from './themes/Menu.theme';
 import Alert from './themes/Alert.theme';
 import Switch from './themes/Switch.theme';
+import Tabs from './themes/Tabs.theme';
 import FrameButtonTheme from './button/FrameButton.theme';
 import { formLabelTheme } from './themes/FormLabel.theme';
 import { inputTheme } from './themes/Input.theme';
@@ -54,6 +55,7 @@ const theme = extendTheme({
     FormLabel: formLabelTheme,
     Input: inputTheme,
     Alert: Alert,
+    Tabs: Tabs,
     // Form: FormControl,
     // FormLabel: formLabelTheme,
   },

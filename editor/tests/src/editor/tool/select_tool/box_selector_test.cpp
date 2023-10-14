@@ -23,7 +23,7 @@ SCENARIO("Box selector")
                     TileLayerBuilder().withBounds(BoundsInt(-5, -5, 5, 5)).withTileFill()))
                 .build());
 
-        std::shared_ptr<SelectionBuffer> selectionBuffer = std::make_shared<SelectionBuffer>();
+        SelectionBuffer selectionBuffer;
 
         BoxSelector boxSelector(selectionBuffer);
 
@@ -36,14 +36,14 @@ SCENARIO("Box selector")
 
             THEN("it fills the selection buffer with the selected tiles")
             {
-                REQUIRE(selectionBuffer->getTileIndexes().size() == 4);
+                REQUIRE(selectionBuffer.getTileIndexes().size() == 4);
 
                 float tileIndex = tempLayer.getTileIndex(1, 1);
 
-                REQUIRE(selectionBuffer->containsIndex(tempLayer.getTileIndex(Vec2(1, 1))));
-                REQUIRE(selectionBuffer->containsIndex(tempLayer.getTileIndex(Vec2(1, 2))));
-                REQUIRE(selectionBuffer->containsIndex(tempLayer.getTileIndex(Vec2(2, 1))));
-                REQUIRE(selectionBuffer->containsIndex(tempLayer.getTileIndex(Vec2(2, 2))));
+                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(1, 1))));
+                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(1, 2))));
+                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(2, 1))));
+                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(2, 2))));
             }
         }
 
@@ -53,12 +53,12 @@ SCENARIO("Box selector")
 
             THEN("it fills the selection buffer with the selected tiles")
             {
-                REQUIRE(selectionBuffer->getTileIndexes().size() == 4);
+                REQUIRE(selectionBuffer.getTileIndexes().size() == 4);
 
-                REQUIRE(selectionBuffer->containsIndex(tempLayer.getTileIndex(Vec2(1, 1))));
-                REQUIRE(selectionBuffer->containsIndex(tempLayer.getTileIndex(Vec2(1, 2))));
-                REQUIRE(selectionBuffer->containsIndex(tempLayer.getTileIndex(Vec2(2, 1))));
-                REQUIRE(selectionBuffer->containsIndex(tempLayer.getTileIndex(Vec2(2, 2))));
+                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(1, 1))));
+                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(1, 2))));
+                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(2, 1))));
+                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(2, 2))));
             }
         }
 
@@ -68,12 +68,12 @@ SCENARIO("Box selector")
 
             THEN("it fills the selection buffer with the selected tiles")
             {
-                REQUIRE(selectionBuffer->getTileIndexes().size() == 4);
+                REQUIRE(selectionBuffer.getTileIndexes().size() == 4);
 
-                REQUIRE(selectionBuffer->containsIndex(tempLayer.getTileIndex(Vec2(1, 1))));
-                REQUIRE(selectionBuffer->containsIndex(tempLayer.getTileIndex(Vec2(1, 2))));
-                REQUIRE(selectionBuffer->containsIndex(tempLayer.getTileIndex(Vec2(2, 1))));
-                REQUIRE(selectionBuffer->containsIndex(tempLayer.getTileIndex(Vec2(2, 2))));
+                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(1, 1))));
+                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(1, 2))));
+                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(2, 1))));
+                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(2, 2))));
             }
         }
 
@@ -83,14 +83,14 @@ SCENARIO("Box selector")
 
             THEN("it fills the selection buffer with the selected tiles")
             {
-                REQUIRE(selectionBuffer->getTileIndexes().size() == 6);
+                REQUIRE(selectionBuffer.getTileIndexes().size() == 6);
 
-                REQUIRE(selectionBuffer->containsIndex(tempLayer.getTileIndex(Vec2(-1, -1))));
-                REQUIRE(selectionBuffer->containsIndex(tempLayer.getTileIndex(Vec2(0, -1))));
-                REQUIRE(selectionBuffer->containsIndex(tempLayer.getTileIndex(Vec2(-1, 0))));
-                REQUIRE(selectionBuffer->containsIndex(tempLayer.getTileIndex(Vec2(0, 0))));
-                REQUIRE(selectionBuffer->containsIndex(tempLayer.getTileIndex(Vec2(-1, 1))));
-                REQUIRE(selectionBuffer->containsIndex(tempLayer.getTileIndex(Vec2(0, 1))));
+                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(-1, -1))));
+                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(0, -1))));
+                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(-1, 0))));
+                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(0, 0))));
+                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(-1, 1))));
+                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(0, 1))));
             }
         }
     }

@@ -1,4 +1,5 @@
-#include "../../test_helpers/document_store_builder.h"
+#include "../../test_helpers/builders/content_builder.h"
+#include "../../test_helpers/document_builder.h"
 #include "../../test_helpers/pointer_info_builder.h"
 #include "../../test_helpers/tool_context_builder.h"
 #include "../src/app/tool/tools/select_tool/select_tool.h"
@@ -7,10 +8,10 @@
 
 SCENARIO("Select tool")
 {
-    GIVEN("A drawing with tiles")
+    GIVEN("a drawing with tiles")
     {
-        std::shared_ptr<DocumentStore> documentStore = std::make_shared<DocumentStore>(
-            DocumentStoreBuilder()
+        Document document =
+            DocumentBuilder()
                 .withDrawing(DrawingBuilder().withTileLayer(TileLayerBuilder()
                                                                 .withTile(Vec2Int(1, 0))   // not selected
                                                                 .withTile(Vec2Int(1, 1))   // first selection
@@ -18,10 +19,10 @@ SCENARIO("Select tool")
                                                                 .withTile(Vec2Int(2, 2))   // first selection
                                                                 .withTile(Vec2Int(3, 3))   // second selection
                                                                 .withTile(Vec2Int(4, 3)))) // second selection
-                .build());
-        Drawing &activeDrawing = documentStore->getActiveDocument().getDrawings()[0];
+                .build();
+        Drawing &activeDrawing = document.getActiveDrawing();
 
-        ToolContext toolContext = ToolContextBuilder().build(documentStore->getActiveDocument());
+        ToolContext toolContext = ToolContextBuilder().build(document);
 
         SelectTool selectTool;
 
@@ -180,6 +181,94 @@ SCENARIO("Select tool")
                         REQUIRE(selectTool.getSelectionBuffer().containsIndex(activeLayer.getTileIndex(5, 3)) == true);
                         REQUIRE(selectTool.getSelectionBuffer().containsIndex(activeLayer.getTileIndex(6, 3)) == true);
                         REQUIRE(selectTool.getSelectionBuffer().containsIndex(activeLayer.getTileIndex(6, 4)) == true);
+                    }
+                }
+            }
+        }
+    }
+
+    GIVEN("a drawing with tiles with different colors")
+    {
+        Document document = DocumentBuilder()
+                                .withDrawing(DrawingBuilder().withTileLayer(TileLayerBuilder()
+                                                                                .withTile(Vec2Int(1, 0), COLOR_RED)
+                                                                                .withTile(Vec2Int(1, 1), COLOR_RED)
+                                                                                .withTile(Vec2Int(2, 1), COLOR_RED)
+                                                                                .withTile(Vec2Int(2, 2), COLOR_RED)
+                                                                                .withTile(Vec2Int(3, 2), COLOR_BLUE)
+                                                                                .withTile(Vec2Int(4, 2), COLOR_RED)))
+                                .build();
+        Drawing &activeDrawing = document.getActiveDrawing();
+        ToolContext toolContext = ToolContextBuilder().build(document);
+
+        ContentBuilder contentBuilder(document, toolContext);
+
+        SelectTool selectTool;
+        TileLayer &activeLayer = activeDrawing.getActiveLayer();
+        TileLayer &tempLayer = activeDrawing.getTempLayer();
+
+        WHEN("selection type is wand")
+        {
+            selectTool.setSelectionType(wand);
+
+            WHEN("clicking with the mouse on a tile")
+            {
+                contentBuilder.setPrevCurrDown(Vec2Int(1, 1));
+                selectTool.pointerDown(toolContext);
+                selectTool.pointerUp(toolContext);
+
+                THEN("it selects all connecting tiles with the same color")
+                {
+                    REQUIRE(selectTool.getSelectionBuffer().getTileIndexes().size() == 4);
+
+                    REQUIRE(selectTool.getSelectionBuffer().containsIndex(activeLayer.getTileIndex(1, 1)) == true);
+                    REQUIRE(selectTool.getSelectionBuffer().containsIndex(activeLayer.getTileIndex(1, 0)) == true);
+                    REQUIRE(selectTool.getSelectionBuffer().containsIndex(activeLayer.getTileIndex(2, 1)) == true);
+                    REQUIRE(selectTool.getSelectionBuffer().containsIndex(activeLayer.getTileIndex(2, 2)) == true);
+                }
+
+                THEN("it draws the selection on the temp layer")
+                {
+                    REQUIRE(tempLayer.getTiles().size() == 4);
+                    REQUIRE(tempLayer.getAtTilePos(1, 1) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(1, 0) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(2, 1) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(2, 2) != nullptr);
+                }
+
+                WHEN("clicking on another color")
+                {
+                    contentBuilder.setPrevCurrDown(Vec2Int(3, 2));
+                    selectTool.pointerDown(toolContext);
+                    selectTool.pointerUp(toolContext);
+
+                    THEN("deselects the previous tiles")
+                    {
+                        REQUIRE(selectTool.getSelectionBuffer().getTileIndexes().size() == 1);
+                        REQUIRE(selectTool.getSelectionBuffer().containsIndex(activeLayer.getTileIndex(3, 2)) == true);
+
+                        REQUIRE(tempLayer.getTiles().size() == 1);
+                        REQUIRE(tempLayer.getAtTilePos(3, 2) != nullptr);
+                    }
+                }
+
+                WHEN("dragging with the mouse over the selection")
+                {
+                    contentBuilder.setPrevCurrDown(Vec2Int(1, 1));
+                    selectTool.pointerDown(toolContext);
+
+                    contentBuilder.setCurr(Vec2Int(1, 3));
+                    selectTool.pointerMove(toolContext);
+
+                    selectTool.pointerUp(toolContext);
+
+                    THEN("it moves the tiles to the given destination")
+                    {
+                        REQUIRE(activeLayer.getTiles().size() == 6);
+                        REQUIRE(activeLayer.getAtTilePos(1, 3)->getColor() == COLOR_RED);
+                        REQUIRE(activeLayer.getAtTilePos(1, 2)->getColor() == COLOR_RED);
+                        REQUIRE(activeLayer.getAtTilePos(2, 3)->getColor() == COLOR_RED);
+                        REQUIRE(activeLayer.getAtTilePos(2, 4)->getColor() == COLOR_RED);
                     }
                 }
             }

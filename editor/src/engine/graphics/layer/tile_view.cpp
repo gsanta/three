@@ -199,5 +199,22 @@ namespace engine
     {
         return tileIndex / m_TileBounds.getWidth();
     }
+
+    const Rect2D *TileView::getNeighbour(int tileIndex, Direction direction) const
+    {
+        switch (direction)
+        {
+        case top:
+            return getAtTileIndex(tileIndex - getTileBounds().getWidth());
+        case right:
+            return getAtTileIndex(tileIndex + 1);
+        case bottom:
+            return getAtTileIndex(tileIndex + getTileBounds().getWidth());
+        case left:
+        default:
+            return getAtTileIndex(tileIndex - 1);
+        }
+    }
+
 } // namespace engine
 } // namespace spright

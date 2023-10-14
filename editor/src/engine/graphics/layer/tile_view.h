@@ -17,6 +17,14 @@ namespace spright
 {
 namespace engine
 {
+    enum Direction
+    {
+        top,
+        bottom,
+        left,
+        right
+    };
+
     class TileView
     {
     public:
@@ -64,6 +72,8 @@ namespace engine
         unsigned int getColumn(int tileIndex) const;
 
         unsigned int getRow(int tileIndex) const;
+
+        const Rect2D *getNeighbour(int tileIndex, Direction direction) const;
 
         int getTileIndex(int tileX, int tileY) const;
 

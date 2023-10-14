@@ -17,9 +17,7 @@ namespace editor
     class BoxSelector
     {
     public:
-        BoxSelector(std::shared_ptr<SelectionBuffer> selectionBuffer);
-
-        ~BoxSelector();
+        BoxSelector(SelectionBuffer &selectionBuffer);
 
         void select(const TileLayer &activeLayer, TileLayer &tempLayer, const Vec2 &curr, const Vec2 &start);
 
@@ -37,7 +35,7 @@ namespace editor
 
         Vec2 m_SelectioinStart;
 
-        std::shared_ptr<SelectionBuffer> m_SelectionBuffer;
+        SelectionBuffer &m_SelectionBuffer;
     };
 } // namespace editor
 } // namespace spright

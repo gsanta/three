@@ -113,25 +113,24 @@ namespace editor
             }
             else if (key == GLFW_KEY_LEFT)
             {
-                m_Editor->getToolHandler()->getToolStore().getSelectTool().setMode(SelectTool::MODE_MOVE);
+                m_Editor->getToolHandler()->getToolStore().getSelectTool().setMode(manip_move);
             }
             else if (key == GLFW_KEY_RIGHT)
             {
-                m_Editor->getToolHandler()->getToolStore().getSelectTool().setMode(SelectTool::MODE_SHEAR);
+                m_Editor->getToolHandler()->getToolStore().getSelectTool().setMode(manip_shear);
                 // m_Editor->getToolHandler()->getToolStore().getRotateTool().setRotationInRad(1.5708f);
                 // m_Editor->getToolHandler()->executeTool("rotate");
             }
             else if (key == GLFW_KEY_UP)
             {
-                m_Editor->getToolHandler()->getToolStore().getSelectTool().setMode(SelectTool::MODE_ROTATE);
+                m_Editor->getToolHandler()->getToolStore().getSelectTool().setMode(manip_rotate);
 
                 // m_Editor->getToolHandler()->getToolStore().getRotateTool().setRotationInRad(M_PI + 0.1f);
                 // m_Editor->getToolHandler()->executeTool("rotate");
             }
             else if (key == GLFW_KEY_H)
             {
-                m_Editor->getToolHandler()->getToolStore().getRotateTool().setRotationInRad(-M_PI - 0.1f);
-                m_Editor->getToolHandler()->executeTool("rotate");
+                m_Editor->getToolHandler()->getToolStore().getSelectTool().setSelectionType(wand);
             }
         }
 
