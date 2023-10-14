@@ -10170,9 +10170,9 @@ var dynCall_viijii = Module['dynCall_viijii'] = createExportWrapper('dynCall_vii
 var dynCall_iiiiij = Module['dynCall_iiiiij'] = createExportWrapper('dynCall_iiiiij');
 var dynCall_iiiiijj = Module['dynCall_iiiiijj'] = createExportWrapper('dynCall_iiiiijj');
 var dynCall_iiiiiijj = Module['dynCall_iiiiiijj'] = createExportWrapper('dynCall_iiiiiijj');
-var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 93536;
-var ___start_em_js = Module['___start_em_js'] = 125920;
-var ___stop_em_js = Module['___stop_em_js'] = 125984;
+var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 93424;
+var ___start_em_js = Module['___start_em_js'] = 125808;
+var ___stop_em_js = Module['___stop_em_js'] = 125872;
 
 // include: postamble.js
 // === Auto-generated postamble setup entry stuff ===
