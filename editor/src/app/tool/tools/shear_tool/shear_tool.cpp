@@ -37,13 +37,9 @@ namespace editor
         {
             m_Undo->undo(*toolContext.doc.document);
 
-            const SelectionBuffer &selectionBuffer = toolContext.tools->getSelectTool().getSelectionBuffer();
-
-            BoundsInt currentBounds = selectionBuffer.getTileBounds();
-
-
             shearSelection(toolContext, angle);
 
+            const SelectionBuffer &selectionBuffer = toolContext.tools->getSelectTool().getSelectionBuffer();
             m_Undo->setNewTiles(m_ImpactedArea, activeLayer);
             m_Undo->setNewSelection(selectionBuffer.getTileIndexes());
             m_PrevShearAngle = angle;
@@ -52,19 +48,8 @@ namespace editor
 
     void ShearTool::pointerUp(const ToolContext &toolContext)
     {
-        TileLayer &activeLayer = toolContext.doc.activeDrawing->getActiveLayer();
-
-        TileUndo tileUndo(*toolContext.doc.document, toolContext.tools);
-
-        SelectTool &selectTool = toolContext.tools->getSelectTool();
-        const std::vector<int> prevSelectedIndexes = m_RestorableArea.getOriginalSelectedIndexes();
-
-        tileUndo.setSelection(prevSelectedIndexes, selectTool.getSelectionBuffer().getTileIndexes());
-
         toolContext.doc.document->getHistory()->add(std::make_shared<TileUndo>(*m_Undo.get()));
         m_PrevShearAngle = 0;
-
-        m_RestorableArea.clear();
     }
 
     void ShearTool::shearSelection(const ToolContext &toolContext, double angle)

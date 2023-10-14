@@ -2,7 +2,6 @@
 
 #include "../../../algorithm/rotate.h"
 #include "../../../core/history/tile_undo.h"
-#include "../../common/restorable_area.h"
 #include "../../context/tool_context.h"
 #include "../../tool.h"
 
@@ -61,8 +60,6 @@ namespace editor
         float m_IsHorizontal = true;
 
         int m_TileLenghtFor10DegShear = 2;
-
-        RestorableArea m_RestorableArea;
 
         std::unique_ptr<TileUndo> m_Undo;
 

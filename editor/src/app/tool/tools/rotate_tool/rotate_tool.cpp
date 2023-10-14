@@ -14,10 +14,13 @@ namespace editor
 
         const SelectionBuffer &selectionBuffer = toolContext.tools->getSelectTool().getSelectionBuffer();
 
-        m_RestorableArea.saveArea(
-            activeLayer,
-            selectionBuffer.getTileIndexes(),
-            getBoundsOfImpactedArea(selectionBuffer.getTileBounds(), activeLayer.getTileBounds()));
+        m_ImpactedArea = getBoundsOfImpactedArea(selectionBuffer.getTileBounds(), activeLayer.getTileBounds());
+
+        m_Undo.reset(new TileUndo(*toolContext.doc.document, toolContext.tools));
+        m_Undo->setPrevTiles(m_ImpactedArea, activeLayer);
+        m_Undo->setPrevSelection(selectionBuffer.getTileIndexes());
+        m_Undo->setNewTiles(m_ImpactedArea, activeLayer);
+        m_Undo->setNewSelection(selectionBuffer.getTileIndexes());
     }
 
     void RotateTool::pointerMove(const ToolContext &toolContext)
@@ -30,45 +33,20 @@ namespace editor
 
         if (angle != m_PrevRotationAngle)
         {
-            m_RestorableArea.restoreArea(activeLayer, toolContext.tools->getSelectTool().getSelectionBuffer());
-            const std::vector<int> &restoredIndexes = m_RestorableArea.getOriginalSelectedIndexes();
-            toolContext.tools->getSelectTool().setSelection(restoredIndexes, *toolContext.doc.activeDrawing);
+            m_Undo->undo(*toolContext.doc.document);
 
             rotateSelection(toolContext, angle);
+
+            const SelectionBuffer &selectionBuffer = toolContext.tools->getSelectTool().getSelectionBuffer();
+            m_Undo->setNewTiles(m_ImpactedArea, activeLayer);
+            m_Undo->setNewSelection(selectionBuffer.getTileIndexes());
             m_PrevRotationAngle = angle;
         }
     }
 
     void RotateTool::pointerUp(const ToolContext &toolContext)
     {
-        TileLayer &activeLayer = toolContext.doc.activeDrawing->getActiveLayer();
-
-        TileUndo tileUndo = TileUndo::createForActiveTileLayer(*toolContext.doc.document, toolContext.tools);
-
-        const BoundsInt &bounds = m_RestorableArea.getSavedArea();
-        for (int i = bounds.minX; i < bounds.maxX; i++)
-        {
-            for (int j = bounds.minY; j < bounds.maxY; j++)
-            {
-                std::shared_ptr<Rect2D> prevTile;
-
-                if (auto tile = m_RestorableArea.getTileView().getAtTilePos(i, j))
-                {
-                    prevTile.reset(new Rect2D(*tile));
-                }
-
-                std::shared_ptr<Rect2D> newTile;
-
-                if (activeLayer.getAtTilePos(i, j))
-                {
-                    newTile.reset(new Rect2D(*activeLayer.getAtTilePos(i, j)));
-                }
-
-                tileUndo.addTile(prevTile, newTile);
-            }
-        }
-
-        toolContext.doc.document->getHistory()->add(std::make_shared<TileUndo>(tileUndo));
+        toolContext.doc.document->getHistory()->add(std::make_shared<TileUndo>(*m_Undo.get()));
     }
 
     void RotateTool::setRotationInRad(float rad)

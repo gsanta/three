@@ -10,7 +10,7 @@ services:
     working_dir: /src
     command: >
       sh -c "cd editor
-            cmake . -DCOMPILE_APP=OFF && cmake --build . && cd tests && ./unit_tests --reporter JUnit::out=unit_test_result.xml"
+            cmake . -DCOMPILE_APP=OFF && cmake --build . && cd tests && ./unit_tests --success --reporter JUnit::out=unit_test_result.xml"
   compile-emscripten:
     build:
       context: .

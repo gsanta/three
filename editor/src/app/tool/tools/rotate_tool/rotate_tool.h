@@ -3,7 +3,6 @@
 #include "../../../algorithm/rotate.h"
 #include "../../../algorithm/tile_operations.h"
 #include "../../../core/run_loop/timer.h"
-#include "../../common/restorable_area.h"
 #include "../../context/tool_context.h"
 #include "../../tool.h"
 #include "../../tool_handler.h"
@@ -48,7 +47,9 @@ namespace editor
 
         double m_PrevRotationAngle = 0;
 
-        RestorableArea m_RestorableArea;
+        std::unique_ptr<TileUndo> m_Undo;
+
+        BoundsInt m_ImpactedArea;
 
         std::vector<double> m_RotationPoints = {0,
                                                 M_PI - 3.0 * M_PI_4,
