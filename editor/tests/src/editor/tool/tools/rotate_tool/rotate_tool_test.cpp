@@ -57,6 +57,19 @@ void require_not_changed(const TileLayer &activeLayer)
     REQUIRE(activeLayer.getAtTilePos(5, 3) != nullptr);
 }
 
+void require_90_deg_rotation(const TileLayer &activeLayer)
+{
+    REQUIRE(activeLayer.getTiles().size() == 7);
+
+    REQUIRE(activeLayer.getAtTilePos(3, 3) != nullptr);
+    REQUIRE(activeLayer.getAtTilePos(4, 2) != nullptr);
+    REQUIRE(activeLayer.getAtTilePos(4, 3) != nullptr);
+    REQUIRE(activeLayer.getAtTilePos(5, 2) != nullptr);
+    REQUIRE(activeLayer.getAtTilePos(5, 3) != nullptr);
+    REQUIRE(activeLayer.getAtTilePos(6, 2) != nullptr);
+    REQUIRE(activeLayer.getAtTilePos(6, 3) != nullptr);
+}
+
 
 SCENARIO("Rotate tool")
 {
@@ -112,15 +125,7 @@ SCENARIO("Rotate tool")
 
                 THEN("it updates the tiles positions according to the rotation")
                 {
-                    REQUIRE(activeLayer.getTiles().size() == 7);
-
-                    REQUIRE(activeLayer.getAtTilePos(3, 3) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(4, 2) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(4, 3) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(5, 2) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(5, 3) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(6, 2) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(6, 3) != nullptr);
+                    require_90_deg_rotation(activeLayer);
                 }
 
                 WHEN("undo is called")
@@ -130,6 +135,16 @@ SCENARIO("Rotate tool")
                     THEN("it restores the state before the rotation")
                     {
                         require_not_changed(activeLayer);
+                    }
+
+                    WHEN("redo is called")
+                    {
+                        document.getHistory()->redo(document);
+
+                        THEN("it reapplies the 90deg rotation")
+                        {
+                            require_90_deg_rotation(activeLayer);
+                        }
                     }
                 }
             }
