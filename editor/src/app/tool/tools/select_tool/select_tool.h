@@ -10,6 +10,7 @@
 #include "./rect_selector.h"
 #include "./selection_buffer.h"
 #include "./selection_mover.h"
+#include "./wand_selector.h"
 
 #include <limits>
 #include <memory>
@@ -22,15 +23,27 @@ namespace editor
     using namespace ::spright::maths;
     using namespace ::spright::engine;
 
+    enum SelectionPhase
+    {
+        selection,
+        manipulation
+    };
+
+    enum SelectionManipulationMode
+    {
+        manip_move,
+        manip_rotate,
+        manip_shear
+    };
+
+    enum SelectionType
+    {
+        rectangle,
+        wand
+    };
+
     class SelectTool : public Tool
     {
-    public:
-        const static int MODE_MOVE;
-
-        const static int MODE_ROTATE;
-
-        const static int MODE_SHEAR;
-
     public:
         SelectTool();
 
@@ -42,24 +55,33 @@ namespace editor
 
         void setSelection(const std::vector<int> &indexes, Drawing &drawing);
 
-        void setMode(int mode);
+        void setMode(SelectionManipulationMode mode);
+
+        void setSelectionType(SelectionType selectionType);
 
         SelectionBuffer &getSelectionBuffer();
 
     private:
-        const static int PHASE_SELECTION;
-
-        const static int PHASE_MANIPULATION;
-
-    private:
         void recalcTileIndexesAndBounds(TileLayer &activeLayer, TileLayer &tempLayer);
 
-        BoundsInt getBoundsOfImpactedArea(const BoundsInt &selectionBounds, const BoundsInt &maxBounds) const;
+        void startManipulation(const ToolContext &context);
+
+        void moveManipulation(const ToolContext &context);
+
+        void endManipulation(const ToolContext &context);
+
+        void startSelection(const ToolContext &context);
+
+        void moveSelection(const ToolContext &context);
+
+        void endSelection(const ToolContext &context);
 
     private:
-        std::shared_ptr<SelectionBuffer> m_SelectionBuffer;
+        SelectionBuffer m_SelectionBuffer;
 
-        std::unique_ptr<BoxSelector> m_BoxSelector;
+        BoxSelector m_BoxSelector;
+
+        WandSelector m_WandSelector;
 
         std::unique_ptr<SelectionMover> m_SelectionMover;
 
@@ -73,9 +95,11 @@ namespace editor
 
         float m_NoMovementTolerance = 0.1f;
 
-        int m_Mode = MODE_MOVE;
+        SelectionType m_SelectionType = rectangle;
 
-        int m_Phase = PHASE_SELECTION;
+        SelectionPhase m_Phase = selection;
+
+        SelectionManipulationMode m_Mode = manip_move;
     };
 } // namespace editor
 } // namespace spright

@@ -31,12 +31,15 @@ namespace editor
 
         for (int tileIndex : tileIndexes)
         {
+            std::cout << tileIndex << std::endl;
             Rect2D *tile = layer.getAtTileIndex(tileIndex);
             if (tile != nullptr)
             {
                 translate(*tile, deltaToStart, deltaToCurr);
             }
         }
+
+        std::cout << "----" << std::endl;
 
         Vec2 diff = deltaToCurr - deltaToStart;
 

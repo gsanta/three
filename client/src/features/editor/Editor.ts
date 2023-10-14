@@ -100,6 +100,8 @@ interface Editor {
   rotate(angle: number): void;
 
   setSelectionMode(mode: 'move' | 'rotate' | 'shear'): void;
+
+  setSelectionType(type: 'rectangle' | 'wand'): void;
 }
 
 window.Module = new EditorRuntime();

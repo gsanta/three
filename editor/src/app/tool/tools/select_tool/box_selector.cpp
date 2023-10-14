@@ -4,11 +4,7 @@ namespace spright
 {
 namespace editor
 {
-    BoxSelector::BoxSelector(std::shared_ptr<SelectionBuffer> selectionBuffer) : m_SelectionBuffer(selectionBuffer)
-    {
-    }
-
-    BoxSelector::~BoxSelector()
+    BoxSelector::BoxSelector(SelectionBuffer &selectionBuffer) : m_SelectionBuffer(selectionBuffer)
     {
     }
 
@@ -20,14 +16,14 @@ namespace editor
 
         BoundsInt tileBounds = calcSelectionBounds(activeLayer, start, curr);
 
-        m_SelectionBuffer->clear();
+        m_SelectionBuffer.clear();
 
         for (float i = tileBounds.minX; i <= tileBounds.maxX; i++)
         {
             for (float j = tileBounds.minY; j <= tileBounds.maxY; j++)
             {
                 int tileIndex = activeLayer.getTileIndex(i, j);
-                m_SelectionBuffer->add(tileIndex, activeLayer);
+                m_SelectionBuffer.add(tileIndex, activeLayer);
             }
         }
 

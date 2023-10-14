@@ -13,6 +13,7 @@ import Header from '../../components/Header';
 import ToolEventListener from '@/features/tool/utils/ToolEventListener';
 import Toolbar from '@/features/tool/components/Toolbar';
 import ToolOptionsPanel from '../tool/components/ToolOptionsPanel';
+import ColorPicker from '@/components/color_picker/ColorPicker';
 
 const App = () => {
   const [canvasNode, setCanvasNode] = useState<HTMLCanvasElement>();
@@ -64,17 +65,23 @@ const App = () => {
       <Box width="50px">
         <Toolbar />
       </Box>
-      <Split className="split" direction="horizontal" sizes={[75, 25]}>
+      <Split className="split" direction="horizontal" sizes={[75, 25]} minSize={250}>
         <Canvas ref={canvasRef} />
         <Split className="split-vertical" direction="vertical" sizes={[50, 50]}>
           <Tabs display="flex" flexDir="column" isLazy>
             <TabList>
-              <Tab>Options</Tab>
+              <Tab>Tool</Tab>
+              <Tab>Color</Tab>
               <Tab>3D Viewer</Tab>
             </TabList>
             <TabPanels alignItems="stretch" display="flex" flex="1" overflow="auto">
               <TabPanel flex="1" paddingInline={0}>
                 <ToolOptionsPanel />
+              </TabPanel>
+              <TabPanel>
+                <Box paddingInline="2" paddingBottom="4">
+                  <ColorPicker />
+                </Box>
               </TabPanel>
               <TabPanel display="flex" flex="1">
                 <SceneViewer />
