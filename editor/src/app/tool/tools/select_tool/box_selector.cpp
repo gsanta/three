@@ -8,7 +8,7 @@ namespace editor
     {
     }
 
-    void BoxSelector::select(const TileLayer &activeLayer, TileLayer &tempLayer, const Vec2 &curr, const Vec2 &start)
+    void BoxSelector::select(const TileLayer &activeLayer, TileLayer &toolLayer, const Vec2 &curr, const Vec2 &start)
     {
         float tileSize = activeLayer.getTileSize();
 
@@ -27,7 +27,7 @@ namespace editor
             }
         }
 
-        fillTempLayer(tempLayer, curr, start);
+        fillTempLayer(toolLayer, curr, start);
     }
 
     void BoxSelector::clear()
@@ -45,14 +45,14 @@ namespace editor
         return currBounds != prevBounds;
     }
 
-    void BoxSelector::fillTempLayer(TileLayer &tempLayer, const Vec2 &vec1, const Vec2 &vec2)
+    void BoxSelector::fillTempLayer(TileLayer &toolLayer, const Vec2 &vec1, const Vec2 &vec2)
     {
-        float tileSize = tempLayer.getTileSize();
+        float tileSize = toolLayer.getTileSize();
         unsigned int color = 0x800099ff;
 
-        const BoundsInt &bounds = calcSelectionBounds(tempLayer, vec1, vec2);
+        const BoundsInt &bounds = calcSelectionBounds(toolLayer, vec1, vec2);
 
-        tempLayer.clear();
+        toolLayer.clear();
 
         Vec2Int bottomLeft = bounds.getBottomLeft();
         Vec2Int topRight = bounds.getTopRight();
@@ -61,10 +61,10 @@ namespace editor
         {
             for (int j = bottomLeft.y; j <= topRight.y; j++)
             {
-                Vec2 bottomLeft = tempLayer.getBottomLeftPos(Vec2Int(i, j));
+                Vec2 bottomLeft = toolLayer.getBottomLeftPos(Vec2Int(i, j));
                 Rect2D rect(bottomLeft.x, bottomLeft.y, tileSize, tileSize, color);
 
-                tempLayer.add(rect);
+                toolLayer.add(rect);
             }
         }
     }

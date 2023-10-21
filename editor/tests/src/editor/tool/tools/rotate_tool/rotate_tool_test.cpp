@@ -20,8 +20,6 @@ void rotate_from_center_to_delta(ToolContext &toolContext, ContentBuilder &conte
     rotateTool.execPointerDown(toolContext);
     rotateTool.execPointerMove(toolContext);
     rotateTool.execPointerUp(toolContext);
-
-    REQUIRE(activeLayer.getTiles().size() == 7);
 }
 
 void rotate_0_deg(ToolContext &toolContext, ContentBuilder &contentBuilder)
@@ -57,17 +55,17 @@ void require_not_changed(const TileLayer &activeLayer)
     REQUIRE(activeLayer.getAtTilePos(5, 3) != nullptr);
 }
 
-void require_90_deg_rotation(const TileLayer &activeLayer)
+void require_90_deg_rotation(const TileLayer &tempLayer)
 {
-    REQUIRE(activeLayer.getTiles().size() == 7);
+    REQUIRE(tempLayer.getTiles().size() == 7);
 
-    REQUIRE(activeLayer.getAtTilePos(3, 3) != nullptr);
-    REQUIRE(activeLayer.getAtTilePos(4, 2) != nullptr);
-    REQUIRE(activeLayer.getAtTilePos(4, 3) != nullptr);
-    REQUIRE(activeLayer.getAtTilePos(5, 2) != nullptr);
-    REQUIRE(activeLayer.getAtTilePos(5, 3) != nullptr);
-    REQUIRE(activeLayer.getAtTilePos(6, 2) != nullptr);
-    REQUIRE(activeLayer.getAtTilePos(6, 3) != nullptr);
+    REQUIRE(tempLayer.getAtTilePos(3, 3) != nullptr);
+    REQUIRE(tempLayer.getAtTilePos(4, 2) != nullptr);
+    REQUIRE(tempLayer.getAtTilePos(4, 3) != nullptr);
+    REQUIRE(tempLayer.getAtTilePos(5, 2) != nullptr);
+    REQUIRE(tempLayer.getAtTilePos(5, 3) != nullptr);
+    REQUIRE(tempLayer.getAtTilePos(6, 2) != nullptr);
+    REQUIRE(tempLayer.getAtTilePos(6, 3) != nullptr);
 }
 
 
@@ -82,6 +80,7 @@ SCENARIO("Rotate tool")
 
         Drawing &drawing = document.getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
+        TileLayer &toolLayer = drawing.getToolLayer();
         TileLayer &tempLayer = drawing.getTempLayer();
 
         WHEN("nothing is selected")
@@ -107,15 +106,15 @@ SCENARIO("Rotate tool")
 
                 THEN("it updates the tiles positions according to the rotation")
                 {
-                    REQUIRE(activeLayer.getTiles().size() == 7);
+                    REQUIRE(tempLayer.getTiles().size() == 7);
 
-                    REQUIRE(activeLayer.getAtTilePos(4, 0) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(4, 1) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(5, 1) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(4, 2) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(5, 2) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(4, 3) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(5, 3) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(4, 0) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(4, 1) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(5, 1) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(4, 2) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(5, 2) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(4, 3) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(5, 3) != nullptr);
                 }
             }
 
@@ -125,7 +124,7 @@ SCENARIO("Rotate tool")
 
                 THEN("it updates the tiles positions according to the rotation")
                 {
-                    require_90_deg_rotation(activeLayer);
+                    require_90_deg_rotation(tempLayer);
                 }
 
                 WHEN("undo is called")
@@ -134,7 +133,7 @@ SCENARIO("Rotate tool")
 
                     THEN("it restores the state before the rotation")
                     {
-                        require_not_changed(activeLayer);
+                        require_not_changed(tempLayer);
                     }
 
                     WHEN("redo is called")
@@ -143,7 +142,7 @@ SCENARIO("Rotate tool")
 
                         THEN("it reapplies the 90deg rotation")
                         {
-                            require_90_deg_rotation(activeLayer);
+                            require_90_deg_rotation(tempLayer);
                         }
                     }
                 }
@@ -155,15 +154,15 @@ SCENARIO("Rotate tool")
 
                 THEN("it updates the tiles positions according to the rotation")
                 {
-                    REQUIRE(activeLayer.getTiles().size() == 7);
+                    REQUIRE(tempLayer.getTiles().size() == 7);
 
-                    REQUIRE(activeLayer.getAtTilePos(6, 4) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(5, 3) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(6, 3) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(5, 2) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(6, 2) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(5, 1) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(6, 1) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(6, 4) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(5, 3) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(6, 3) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(5, 2) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(6, 2) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(5, 1) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(6, 1) != nullptr);
                 }
             }
 
@@ -173,15 +172,15 @@ SCENARIO("Rotate tool")
 
                 THEN("it updates the tiles positions according to the rotation")
                 {
-                    REQUIRE(activeLayer.getTiles().size() == 7);
+                    REQUIRE(tempLayer.getTiles().size() == 7);
 
-                    REQUIRE(activeLayer.getAtTilePos(4, 1) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(4, 2) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(5, 1) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(5, 2) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(6, 1) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(6, 2) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(7, 1) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(4, 1) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(4, 2) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(5, 1) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(5, 2) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(6, 1) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(6, 2) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(7, 1) != nullptr);
                 }
             }
         }

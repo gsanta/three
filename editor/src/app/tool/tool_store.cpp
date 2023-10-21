@@ -2,6 +2,7 @@
 
 #include "tool.h"
 #include "tools/color_picker_tool/color_picker_tool.h"
+#include "tools/move_tool/move_tool.h"
 #include "tools/rotate_tool/rotate_tool.h"
 #include "tools/select_tool/select_tool.h"
 #include "tools/shear_tool/shear_tool.h"
@@ -42,6 +43,11 @@ namespace editor
     RotateTool &ToolStore::getRotateTool()
     {
         return *dynamic_cast<RotateTool *>(getTool("rotate"));
+    }
+
+    MoveTool &ToolStore::getMoveTool()
+    {
+        return *dynamic_cast<MoveTool *>(getTool("move"));
     }
 } // namespace editor
 } // namespace spright

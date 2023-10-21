@@ -34,6 +34,27 @@ namespace editor
         tile_operation_copy_area(source, dest, source.getTileBounds());
     }
 
+    void tile_operation_copy_indexes(const TileView &source, TileView &dest, const std::vector<int> &indexes)
+    {
+        for (int index : indexes)
+        {
+            Rect2D *tile = source.getAtTileIndex(index);
+
+            if (tile != nullptr)
+            {
+                dest.add(*tile, source.getTilePos(index));
+            }
+        }
+    }
+
+    void tile_operation_remove_indexes(TileView &source, const std::vector<int> &indexes)
+    {
+        for (int index : indexes)
+        {
+            source.removeAt(index);
+        }
+    }
+
     void tile_operation_remove_area(TileView &tileView, const BoundsInt &area)
     {
         for (int i = 0; i < area.getWidth(); i++)

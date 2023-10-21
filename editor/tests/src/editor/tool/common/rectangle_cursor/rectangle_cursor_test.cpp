@@ -15,7 +15,7 @@ using namespace spright::maths;
 SCENARIO("Rectangle cursor")
 {
     float tileSize = 1.0f;
-    TileLayer tempLayer =
+    TileLayer toolLayer =
         TestDocumentFactory::createTileLayer(0, tileSize, Bounds::createWithPositions(-5.0f, -5.0f, 5.0f, 5.0f));
 
     GIVEN("a rectangle cursor with even size")
@@ -30,8 +30,8 @@ SCENARIO("Rectangle cursor")
 
             THEN("it sets the cursor to the correct position")
             {
-                rectangleCursor.update(tempLayer, pointer);
-                std::vector<Rect2D *> &rects = tempLayer.getTiles();
+                rectangleCursor.update(toolLayer, pointer);
+                std::vector<Rect2D *> &rects = toolLayer.getTiles();
 
                 REQUIRE_THAT(rects[0]->getBounds(), EqualsBounds(Bounds(-2.0f, -2.0f, 2.0f, 2.0f)));
             }
@@ -43,8 +43,8 @@ SCENARIO("Rectangle cursor")
 
             THEN("it sets the cursor to the correct position")
             {
-                rectangleCursor.update(tempLayer, pointer);
-                std::vector<Rect2D *> &rects = tempLayer.getTiles();
+                rectangleCursor.update(toolLayer, pointer);
+                std::vector<Rect2D *> &rects = toolLayer.getTiles();
 
                 REQUIRE_THAT(rects[0]->getBounds(), EqualsBounds(Bounds(-2.0f, -2.0f, 2.0f, 2.0f)));
             }
@@ -63,9 +63,9 @@ SCENARIO("Rectangle cursor")
             THEN("it sets the cursor to the correct position")
             {
 
-                rectangleCursor.update(tempLayer, pointer);
+                rectangleCursor.update(toolLayer, pointer);
 
-                std::vector<Rect2D *> &rects = tempLayer.getTiles();
+                std::vector<Rect2D *> &rects = toolLayer.getTiles();
 
                 REQUIRE_THAT(rects[0]->getBounds(), EqualsBounds(Bounds(-1.0f, -1.0f, 2.0f, 2.0f)));
             }

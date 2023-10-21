@@ -17,6 +17,10 @@ namespace editor
 
     void tile_operation_copy_all(const TileView &source, TileView &dest);
 
+    void tile_operation_copy_indexes(const TileView &source, TileView &dest, const std::vector<int> &indexes);
+
+    void tile_operation_remove_indexes(TileView &source, const std::vector<int> &indexes);
+
     void tile_operation_remove_area(TileView &tileView, const BoundsInt &area);
 
 } // namespace editor

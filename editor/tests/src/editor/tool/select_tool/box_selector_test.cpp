@@ -27,70 +27,70 @@ SCENARIO("Box selector")
 
         BoxSelector boxSelector(selectionBuffer);
 
-        TileLayer &tempLayer = documentStore->getActiveDocument().getActiveDrawing().getTempLayer();
+        TileLayer &toolLayer = documentStore->getActiveDocument().getActiveDrawing().getToolLayer();
         TileLayer &activeLayer = documentStore->getActiveDocument().getActiveDrawing().getActiveLayer();
 
         WHEN("making a selection")
         {
-            boxSelector.select(activeLayer, tempLayer, Vec2(2, 2), Vec2(1, 1));
+            boxSelector.select(activeLayer, toolLayer, Vec2(2, 2), Vec2(1, 1));
 
             THEN("it fills the selection buffer with the selected tiles")
             {
                 REQUIRE(selectionBuffer.getTileIndexes().size() == 4);
 
-                float tileIndex = tempLayer.getTileIndex(1, 1);
+                float tileIndex = toolLayer.getTileIndex(1, 1);
 
-                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(1, 1))));
-                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(1, 2))));
-                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(2, 1))));
-                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(2, 2))));
+                REQUIRE(selectionBuffer.containsIndex(toolLayer.getTileIndex(Vec2(1, 1))));
+                REQUIRE(selectionBuffer.containsIndex(toolLayer.getTileIndex(Vec2(1, 2))));
+                REQUIRE(selectionBuffer.containsIndex(toolLayer.getTileIndex(Vec2(2, 1))));
+                REQUIRE(selectionBuffer.containsIndex(toolLayer.getTileIndex(Vec2(2, 2))));
             }
         }
 
         WHEN("making a selection from top to bottom")
         {
-            boxSelector.select(activeLayer, tempLayer, Vec2(1, 1), Vec2(2, 2));
+            boxSelector.select(activeLayer, toolLayer, Vec2(1, 1), Vec2(2, 2));
 
             THEN("it fills the selection buffer with the selected tiles")
             {
                 REQUIRE(selectionBuffer.getTileIndexes().size() == 4);
 
-                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(1, 1))));
-                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(1, 2))));
-                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(2, 1))));
-                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(2, 2))));
+                REQUIRE(selectionBuffer.containsIndex(toolLayer.getTileIndex(Vec2(1, 1))));
+                REQUIRE(selectionBuffer.containsIndex(toolLayer.getTileIndex(Vec2(1, 2))));
+                REQUIRE(selectionBuffer.containsIndex(toolLayer.getTileIndex(Vec2(2, 1))));
+                REQUIRE(selectionBuffer.containsIndex(toolLayer.getTileIndex(Vec2(2, 2))));
             }
         }
 
         WHEN("making a selection from right to left")
         {
-            boxSelector.select(activeLayer, tempLayer, Vec2(2, 1), Vec2(1, 2));
+            boxSelector.select(activeLayer, toolLayer, Vec2(2, 1), Vec2(1, 2));
 
             THEN("it fills the selection buffer with the selected tiles")
             {
                 REQUIRE(selectionBuffer.getTileIndexes().size() == 4);
 
-                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(1, 1))));
-                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(1, 2))));
-                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(2, 1))));
-                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(2, 2))));
+                REQUIRE(selectionBuffer.containsIndex(toolLayer.getTileIndex(Vec2(1, 1))));
+                REQUIRE(selectionBuffer.containsIndex(toolLayer.getTileIndex(Vec2(1, 2))));
+                REQUIRE(selectionBuffer.containsIndex(toolLayer.getTileIndex(Vec2(2, 1))));
+                REQUIRE(selectionBuffer.containsIndex(toolLayer.getTileIndex(Vec2(2, 2))));
             }
         }
 
         WHEN("making a selection from negative range to positive")
         {
-            boxSelector.select(activeLayer, tempLayer, Vec2(0.5f, 1.5f), Vec2(-0.9f, -0.9f));
+            boxSelector.select(activeLayer, toolLayer, Vec2(0.5f, 1.5f), Vec2(-0.9f, -0.9f));
 
             THEN("it fills the selection buffer with the selected tiles")
             {
                 REQUIRE(selectionBuffer.getTileIndexes().size() == 6);
 
-                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(-1, -1))));
-                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(0, -1))));
-                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(-1, 0))));
-                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(0, 0))));
-                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(-1, 1))));
-                REQUIRE(selectionBuffer.containsIndex(tempLayer.getTileIndex(Vec2(0, 1))));
+                REQUIRE(selectionBuffer.containsIndex(toolLayer.getTileIndex(Vec2(-1, -1))));
+                REQUIRE(selectionBuffer.containsIndex(toolLayer.getTileIndex(Vec2(0, -1))));
+                REQUIRE(selectionBuffer.containsIndex(toolLayer.getTileIndex(Vec2(-1, 0))));
+                REQUIRE(selectionBuffer.containsIndex(toolLayer.getTileIndex(Vec2(0, 0))));
+                REQUIRE(selectionBuffer.containsIndex(toolLayer.getTileIndex(Vec2(-1, 1))));
+                REQUIRE(selectionBuffer.containsIndex(toolLayer.getTileIndex(Vec2(0, 1))));
             }
         }
     }

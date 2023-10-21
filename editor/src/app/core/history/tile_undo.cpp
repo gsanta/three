@@ -7,13 +7,14 @@ namespace editor
     TileUndo::TileUndo(Document &document, std::shared_ptr<ToolStore> tools) : m_Tools(tools)
     {
         m_DrawingPos = document.getActiveDrawingIndex();
+
         m_FramePos = document.getActiveDrawing().getActiveFrameIndex();
         m_TileLayerPos = document.getActiveDrawing().getActiveLayerIndex();
     }
 
     void TileUndo::undo(Document &document) const
     {
-        TileLayer &tileLayer = document.getDrawings()[m_DrawingPos].getFrames()[m_FramePos].getLayers()[m_TileLayerPos];
+        TileLayer &tileLayer = getUndoLayer(document);
 
         for (std::shared_ptr<Rect2D> rect : m_NewList)
         {
@@ -25,12 +26,12 @@ namespace editor
             tileLayer.add(*rect);
         }
 
-        m_Tools->getSelectTool().setSelection(m_PrevSelectedIndexes, document.getDrawings()[m_DrawingPos]);
+        m_Tools->getSelectTool().syncSelection(document.getDrawings()[m_DrawingPos], m_PrevSelectedIndexes);
     }
 
     void TileUndo::redo(Document &document) const
     {
-        TileLayer &tileLayer = document.getDrawings()[m_DrawingPos].getFrames()[m_FramePos].getLayers()[m_TileLayerPos];
+        TileLayer &tileLayer = getRedoLayer(document);
 
         for (std::shared_ptr<Rect2D> rect : m_PrevList)
         {
@@ -42,7 +43,7 @@ namespace editor
             tileLayer.add(*rect);
         }
 
-        m_Tools->getSelectTool().setSelection(m_NewSelectedIndexes, document.getDrawings()[m_DrawingPos]);
+        m_Tools->getSelectTool().syncSelection(document.getDrawings()[m_DrawingPos], m_NewSelectedIndexes);
     }
 
     void TileUndo::setSelection(const std::vector<int> &prevSelectedIndexes, const std::vector<int> &newSelectedIndexes)
@@ -110,6 +111,30 @@ namespace editor
     void TileUndo::setNewSelection(const std::vector<int> &newSelectedIndexes)
     {
         m_NewSelectedIndexes = newSelectedIndexes;
+    }
+
+    TileLayer &TileUndo::getUndoLayer(Document &document) const
+    {
+        if (m_PrevSelectedIndexes.size() > 0)
+        {
+            return document.getDrawings()[m_DrawingPos].getTempLayer();
+        }
+        else
+        {
+            return document.getDrawings()[m_DrawingPos].getFrames()[m_FramePos].getLayers()[m_TileLayerPos];
+        }
+    }
+
+    TileLayer &TileUndo::getRedoLayer(Document &document) const
+    {
+        if (m_NewSelectedIndexes.size() > 0)
+        {
+            return document.getDrawings()[m_DrawingPos].getTempLayer();
+        }
+        else
+        {
+            return document.getDrawings()[m_DrawingPos].getFrames()[m_FramePos].getLayers()[m_TileLayerPos];
+        }
     }
 
 } // namespace editor

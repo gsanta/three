@@ -17,7 +17,7 @@ namespace editor
             return;
         }
 
-        TileLayer &foregroundLayer = context.doc.activeDrawing->getTempLayer();
+        TileLayer &foregroundLayer = context.doc.activeDrawing->getToolLayer();
         TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
 
         foregroundLayer.clear();
@@ -31,7 +31,7 @@ namespace editor
 
     void LineTool::pointerUp(const ToolContext &context)
     {
-        TileLayer &foregroundLayer = context.doc.activeDrawing->getTempLayer();
+        TileLayer &foregroundLayer = context.doc.activeDrawing->getToolLayer();
         TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
 
         foregroundLayer.clear();

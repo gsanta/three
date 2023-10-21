@@ -12,7 +12,6 @@
 
 #include <math.h>
 
-
 namespace spright
 {
 namespace engine
