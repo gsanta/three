@@ -28,7 +28,7 @@ SCENARIO("Move tool")
 
         TileLayer &toolLayer = activeDrawing.getToolLayer();
         TileLayer &activeLayer = activeDrawing.getActiveLayer();
-        TileLayer &tempLayer = activeDrawing.getTempLayer();
+        TileLayer &tempLayer = activeDrawing.getTempLayerOfActiveLayer();
 
         MoveTool moveTool;
 

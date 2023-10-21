@@ -21,7 +21,12 @@ namespace editor
 
     Drawing resize_drawing(const Drawing &orig, const Bounds &bounds, DocumentFactory *documentFactory)
     {
-        std::vector<Frame> frames;
+        CreateDrawingProps createDrawingProps(bounds);
+        createDrawingProps.hasInitialLayer = false;
+        createDrawingProps.backgroundLayerTileSize = orig.getBackgroundLayer().getTileSize();
+        Drawing newDrawing = documentFactory->createDrawing(createDrawingProps);
+
+        std::vector<TileLayer> layers;
 
         for (const Frame &frame : orig.getFrames())
         {
@@ -29,20 +34,13 @@ namespace editor
             for (const TileLayer &layer : frame.getLayers())
             {
                 TileLayer newLayer = resize_tile_layer(layer, bounds, documentFactory);
-                newFrame.addLayer(newLayer);
+                layers.push_back(newLayer);
+                // newFrame.addLayer(newLayer);
             }
 
-            frames.push_back(std::move(newFrame));
-        }
+            newDrawing.addFrame(layers);
 
-        CreateDrawingProps createDrawingProps(bounds);
-        createDrawingProps.hasInitialLayer = false;
-        createDrawingProps.backgroundLayerTileSize = orig.getBackgroundLayer().getTileSize();
-        Drawing newDrawing = documentFactory->createDrawing(createDrawingProps);
-
-        for (Frame &frame : frames)
-        {
-            newDrawing.addFrame(frame);
+            layers.clear();
         }
 
         return newDrawing;

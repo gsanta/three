@@ -10,7 +10,7 @@ namespace editor
 
     void RotateTool::pointerDown(const ToolContext &toolContext)
     {
-        TileLayer &activeLayer = toolContext.doc.activeDrawing->getTempLayer();
+        TileLayer &activeLayer = toolContext.doc.activeDrawing->getTempLayerOfActiveLayer();
 
         const SelectionBuffer &selectionBuffer = toolContext.tools->getSelectTool().getSelectionBuffer();
 
@@ -25,7 +25,7 @@ namespace editor
 
     void RotateTool::pointerMove(const ToolContext &toolContext)
     {
-        TileLayer &activeLayer = toolContext.doc.activeDrawing->getTempLayer();
+        TileLayer &activeLayer = toolContext.doc.activeDrawing->getTempLayerOfActiveLayer();
         const BoundsInt &selectionBounds = toolContext.tools->getSelectTool().getSelectionBuffer().getTileBounds();
         Vec2 center = activeLayer.getCenterPos(selectionBounds.getCenter());
 
@@ -46,7 +46,7 @@ namespace editor
 
     void RotateTool::pointerUp(const ToolContext &context)
     {
-        TileLayer &tempLayer = context.doc.activeDrawing->getTempLayer();
+        TileLayer &tempLayer = context.doc.activeDrawing->getTempLayerOfActiveLayer();
         TileLayer &toolLayer = context.doc.activeDrawing->getToolLayer();
 
         SelectionBuffer &selectionBuffer = context.tools->getSelectTool().getSelectionBuffer();
@@ -63,7 +63,7 @@ namespace editor
     {
         const BoundsInt &selectionBounds = toolContext.tools->getSelectTool().getSelectionBuffer().getTileBounds();
 
-        std::vector<int> newIndexes = rotate(toolContext.doc.activeDrawing->getTempLayer(),
+        std::vector<int> newIndexes = rotate(toolContext.doc.activeDrawing->getTempLayerOfActiveLayer(),
                                              BoundsInt(selectionBounds.getBottomLeft(), selectionBounds.getTopRight()),
                                              m_RotateInRad);
 
@@ -74,7 +74,7 @@ namespace editor
     {
         const BoundsInt &selectionBounds = toolContext.tools->getSelectTool().getSelectionBuffer().getTileBounds();
 
-        std::vector<int> newIndexes = rotate(toolContext.doc.activeDrawing->getTempLayer(),
+        std::vector<int> newIndexes = rotate(toolContext.doc.activeDrawing->getTempLayerOfActiveLayer(),
                                              BoundsInt(selectionBounds.getBottomLeft(), selectionBounds.getTopRight()),
                                              angle);
 

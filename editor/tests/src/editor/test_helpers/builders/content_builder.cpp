@@ -69,7 +69,7 @@ ContentBuilder &ContentBuilder::selectTiles(const std::vector<Rect2D *> &tiles)
 
     m_Context.tools->getSelectTool().setSelection(tileIndexes,
                                                   *m_Context.doc.activeDrawing,
-                                                  m_Context.doc.activeDrawing->getTempLayer());
+                                                  m_Context.doc.activeDrawing->getTempLayerOfActiveLayer());
 
     return *this;
 }

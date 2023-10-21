@@ -20,7 +20,10 @@ namespace editor
             layer.render(camera);
         }
 
-        drawing.getTempLayer().render(camera);
+        for (size_t i = 0; i < drawing.getTempLayerCount(); i++)
+        {
+            drawing.getTempLayer(i).render(camera);
+        }
 
         drawing.getToolLayer().render(camera);
 

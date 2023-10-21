@@ -102,7 +102,7 @@ SCENARIO("Shear tool")
 
         Drawing &drawing = document.getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
-        TileLayer &tempLayer = drawing.getTempLayer();
+        TileLayer &tempLayer = drawing.getTempLayerOfActiveLayer();
         TileLayer &toolLayer = drawing.getToolLayer();
 
         ShearTool shearTool;
@@ -338,7 +338,7 @@ SCENARIO("Shear tool")
 
         Drawing &drawing = document.getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
-        TileLayer &tempLayer = drawing.getTempLayer();
+        TileLayer &tempLayer = drawing.getTempLayerOfActiveLayer();
         TileLayer &toolLayer = drawing.getToolLayer();
 
         ShearTool shearTool;

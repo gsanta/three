@@ -27,12 +27,6 @@ namespace editor
                 const TileLayer &toolLayer,
                 const TileLayer &cursorLayer);
 
-        Drawing(const std::vector<Frame> &frames,
-                const TileLayer &backgroundLayer,
-                const TileLayer &tempLayer,
-                const TileLayer &toolLayer,
-                const TileLayer &cursorLayer);
-
         std::vector<Frame> &getFrames();
 
         const std::vector<Frame> &getFrames() const;
@@ -43,7 +37,7 @@ namespace editor
 
         void setActiveFrame(size_t index);
 
-        Frame &addFrame(const Frame &frame);
+        Frame &addFrame(const std::vector<TileLayer> &layers);
 
         void removeFrame(size_t index);
 
@@ -55,15 +49,21 @@ namespace editor
 
         void setActiveLayer(size_t index);
 
-        TileLayer &addLayer(const TileLayer &tileLayer);
+        void addLayer(const TileLayer &tileLayer);
+
+        void removeLayer(size_t index);
 
         TileLayer &getBackgroundLayer();
 
         const TileLayer &getBackgroundLayer() const;
 
-        TileLayer &getTempLayer();
+        TileLayer &getTempLayer(size_t index);
 
-        const TileLayer &getTempLayer() const;
+        const TileLayer &getTempLayer(size_t index) const;
+
+        TileLayer &getTempLayerOfActiveLayer();
+
+        size_t getTempLayerCount() const;
 
         TileLayer &getToolLayer();
 
@@ -85,6 +85,8 @@ namespace editor
         std::shared_ptr<TileLayer> m_ToolLayer;
 
         std::shared_ptr<TileLayer> m_CursorLayer;
+
+        std::vector<TileLayer> m_TempLayers;
 
         std::vector<Frame> m_Frames;
 

@@ -30,7 +30,7 @@ SCENARIO("Select tool")
         {
             TileLayer &toolLayer = activeDrawing.getToolLayer();
             TileLayer &activeLayer = activeDrawing.getActiveLayer();
-            TileLayer &tempLayer = activeDrawing.getTempLayer();
+            TileLayer &tempLayer = activeDrawing.getTempLayerOfActiveLayer();
 
             Vec2 pointerPos = toolLayer.getCenterPos(Vec2Int(1, 1));
             toolContext.pointer = PointerInfoBuilder().with(pointerPos, pointerPos, pointerPos).build();
@@ -146,7 +146,7 @@ SCENARIO("Select tool")
         SelectTool selectTool;
         TileLayer &activeLayer = activeDrawing.getActiveLayer();
         TileLayer &toolLayer = activeDrawing.getToolLayer();
-        TileLayer &tempLayer = activeDrawing.getTempLayer();
+        TileLayer &tempLayer = activeDrawing.getTempLayerOfActiveLayer();
 
         WHEN("selection type is wand")
         {

@@ -53,7 +53,7 @@ void setLayerIndex(size_t oldIndex, size_t newIndex)
 
 void removeLayer(size_t layerIndex)
 {
-    editor->getActiveDocument().getActiveDrawing().getActiveFrame().removeLayer(layerIndex);
+    editor->getActiveDocument().getActiveDrawing().removeLayer(layerIndex);
 }
 
 std::string exportDocument()

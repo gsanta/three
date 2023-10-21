@@ -12,7 +12,7 @@ namespace editor
 
     void ShearTool::pointerDown(const ToolContext &toolContext)
     {
-        TileLayer &activeLayer = toolContext.doc.activeDrawing->getTempLayer();
+        TileLayer &activeLayer = toolContext.doc.activeDrawing->getTempLayerOfActiveLayer();
         const SelectionBuffer &selectionBuffer = toolContext.tools->getSelectTool().getSelectionBuffer();
 
         m_ImpactedArea = getBoundsOfImpactedArea(selectionBuffer.getTileBounds(), activeLayer.getTileBounds());
@@ -26,7 +26,7 @@ namespace editor
 
     void ShearTool::pointerMove(const ToolContext &toolContext)
     {
-        TileLayer &activeLayer = toolContext.doc.activeDrawing->getTempLayer();
+        TileLayer &activeLayer = toolContext.doc.activeDrawing->getTempLayerOfActiveLayer();
         const BoundsInt &selectionBounds = toolContext.tools->getSelectTool().getSelectionBuffer().getTileBounds();
         Vec2 center = activeLayer.getCenterPos(selectionBounds.getCenter());
 
@@ -48,7 +48,7 @@ namespace editor
 
     void ShearTool::pointerUp(const ToolContext &context)
     {
-        TileLayer &tempLayer = context.doc.activeDrawing->getTempLayer();
+        TileLayer &tempLayer = context.doc.activeDrawing->getTempLayerOfActiveLayer();
         TileLayer &toolLayer = context.doc.activeDrawing->getToolLayer();
 
         SelectionBuffer &selectionBuffer = context.tools->getSelectTool().getSelectionBuffer();
@@ -59,7 +59,7 @@ namespace editor
 
     void ShearTool::shearSelection(const ToolContext &toolContext, double angle)
     {
-        TileLayer &activeLayer = toolContext.doc.activeDrawing->getTempLayer();
+        TileLayer &activeLayer = toolContext.doc.activeDrawing->getTempLayerOfActiveLayer();
 
         const BoundsInt &selectionBounds = toolContext.tools->getSelectTool().getSelectionBuffer().getTileBounds();
 
@@ -76,7 +76,7 @@ namespace editor
 
         const BoundsInt &selectionBounds = toolContext.tools->getSelectTool().getSelectionBuffer().getTileBounds();
 
-        TileLayer &activeLayer = toolContext.doc.activeDrawing->getTempLayer();
+        TileLayer &activeLayer = toolContext.doc.activeDrawing->getTempLayerOfActiveLayer();
         BoundsInt bounds = BoundsInt(selectionBounds.getBottomLeft(), selectionBounds.getTopRight());
 
         std::vector<int> newIndexes;

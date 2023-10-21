@@ -6,10 +6,10 @@ namespace editor
 {
     TileUndo::TileUndo(Document &document, std::shared_ptr<ToolStore> tools) : m_Tools(tools)
     {
-        m_DrawingPos = document.getActiveDrawingIndex();
+        m_DrawingIndex = document.getActiveDrawingIndex();
 
-        m_FramePos = document.getActiveDrawing().getActiveFrameIndex();
-        m_TileLayerPos = document.getActiveDrawing().getActiveLayerIndex();
+        m_FrameIndex = document.getActiveDrawing().getActiveFrameIndex();
+        m_TileLayerIndex = document.getActiveDrawing().getActiveLayerIndex();
     }
 
     void TileUndo::undo(Document &document) const
@@ -26,7 +26,7 @@ namespace editor
             tileLayer.add(*rect);
         }
 
-        m_Tools->getSelectTool().syncSelection(document.getDrawings()[m_DrawingPos], m_PrevSelectedIndexes);
+        m_Tools->getSelectTool().syncSelection(document.getDrawings()[m_DrawingIndex], m_PrevSelectedIndexes);
     }
 
     void TileUndo::redo(Document &document) const
@@ -43,7 +43,7 @@ namespace editor
             tileLayer.add(*rect);
         }
 
-        m_Tools->getSelectTool().syncSelection(document.getDrawings()[m_DrawingPos], m_NewSelectedIndexes);
+        m_Tools->getSelectTool().syncSelection(document.getDrawings()[m_DrawingIndex], m_NewSelectedIndexes);
     }
 
     void TileUndo::setSelection(const std::vector<int> &prevSelectedIndexes, const std::vector<int> &newSelectedIndexes)
@@ -115,25 +115,29 @@ namespace editor
 
     TileLayer &TileUndo::getUndoLayer(Document &document) const
     {
+        Drawing &drawing = document.getDrawings()[m_DrawingIndex];
+
         if (m_PrevSelectedIndexes.size() > 0)
         {
-            return document.getDrawings()[m_DrawingPos].getTempLayer();
+            return drawing.getTempLayer(m_TileLayerIndex);
         }
         else
         {
-            return document.getDrawings()[m_DrawingPos].getFrames()[m_FramePos].getLayers()[m_TileLayerPos];
+            return drawing.getFrames()[m_FrameIndex].getLayers()[m_TileLayerIndex];
         }
     }
 
     TileLayer &TileUndo::getRedoLayer(Document &document) const
     {
+        Drawing &drawing = document.getDrawings()[m_DrawingIndex];
+
         if (m_NewSelectedIndexes.size() > 0)
         {
-            return document.getDrawings()[m_DrawingPos].getTempLayer();
+            return drawing.getTempLayer(m_TileLayerIndex);
         }
         else
         {
-            return document.getDrawings()[m_DrawingPos].getFrames()[m_FramePos].getLayers()[m_TileLayerPos];
+            return drawing.getFrames()[m_FrameIndex].getLayers()[m_TileLayerIndex];
         }
     }
 

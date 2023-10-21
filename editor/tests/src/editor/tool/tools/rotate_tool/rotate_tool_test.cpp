@@ -81,7 +81,7 @@ SCENARIO("Rotate tool")
         Drawing &drawing = document.getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
         TileLayer &toolLayer = drawing.getToolLayer();
-        TileLayer &tempLayer = drawing.getTempLayer();
+        TileLayer &tempLayer = drawing.getTempLayerOfActiveLayer();
 
         WHEN("nothing is selected")
         {

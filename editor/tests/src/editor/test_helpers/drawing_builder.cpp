@@ -105,6 +105,10 @@ Drawing DrawingBuilder::buildFromFrames()
 {
     TileLayer backgroundLayer = TileLayerBuilder().withTileSize(m_BackgroundLayerTileSize).withBounds(m_Bounds).build();
 
+    const TileLayer tempLayer("", HeadlessRenderer2D(), Group<Rect2D>(), m_Bounds, m_TileSize, 0);
+    const TileLayer toolLayer("", HeadlessRenderer2D(), Group<Rect2D>(), m_Bounds, m_TileSize, 0, true);
+    const TileLayer cursorLayer("", HeadlessRenderer2D(), Group<Rect2D>(), m_Bounds, m_TileSize, 0, true);
+
     std::vector<Frame> frames;
 
     for (FrameBuilder &frameBuilder : m_Frames)
@@ -112,12 +116,19 @@ Drawing DrawingBuilder::buildFromFrames()
         frames.push_back(frameBuilder.build());
     }
 
-    const TileLayer tempLayer(frames[0].getLayers()[0]);
+    Drawing drawing(frames[0].getLayers()[0].getBounds(), backgroundLayer, tempLayer, toolLayer, cursorLayer);
 
-    const TileLayer toolLayer("", HeadlessRenderer2D(), Group<Rect2D>(), m_Bounds, m_TileSize, 0, true);
-    const TileLayer cursorLayer("", HeadlessRenderer2D(), Group<Rect2D>(), m_Bounds, m_TileSize, 0, true);
+    for (Frame &frame : frames)
+    {
+        std::vector<TileLayer> layers;
 
-    Drawing drawing(frames, backgroundLayer, tempLayer, toolLayer, cursorLayer);
+        for (TileLayer &layer : frame.getLayers())
+        {
+            layers.push_back(layer);
+        }
+
+        drawing.addFrame(layers);
+    }
 
     TileLayer foregroundLayer = TileLayerBuilder().withTileSize(m_TileSize).withBounds(m_Bounds).build();
 

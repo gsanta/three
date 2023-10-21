@@ -92,10 +92,7 @@ size_t createLayer(std::string name)
 
     TileLayer tileLayer = editor->getDocumentFactory()->createUserLayer(drawing.getBounds(), name);
 
-    for (Frame &frame : drawing.getFrames())
-    {
-        frame.addLayer(tileLayer);
-    }
+    drawing.addLayer(tileLayer);
 
     return drawing.getActiveFrame().getLayers().back().getIndex();
 }

@@ -92,12 +92,14 @@ namespace editor
 
         Frame &activeFrame = document.getActiveFrame();
 
+        std::vector<TileLayer> layers;
+
         for (TileLayer &layer : activeFrame.getLayers())
         {
-            frame.addLayer(layer);
+            layers.push_back(layer);
         }
 
-        document.getActiveDrawing().addFrame(std::move(frame));
+        document.getActiveDrawing().addFrame(layers);
     }
 
 
@@ -131,7 +133,9 @@ namespace editor
             frame.addLayer(initialLayer);
             frames.push_back(frame);
 
-            drawing.addFrame(frame);
+            const std::vector<TileLayer> layers{initialLayer};
+
+            drawing.addFrame(layers);
         }
 
         if (hasCheckerBoard)

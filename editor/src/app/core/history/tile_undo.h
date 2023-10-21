@@ -68,11 +68,11 @@ namespace editor
 
         std::set<std::shared_ptr<Rect2D>, SharedPtrCompare> m_NewList;
 
-        size_t m_TileLayerPos;
+        size_t m_TileLayerIndex;
 
-        size_t m_FramePos;
+        size_t m_FrameIndex;
 
-        size_t m_DrawingPos;
+        size_t m_DrawingIndex;
 
         std::vector<int> m_PrevSelectedIndexes;
 
