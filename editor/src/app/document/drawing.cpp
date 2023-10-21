@@ -10,17 +10,20 @@ namespace editor
     Drawing::Drawing(const Bounds &bounds,
                      const TileLayer &backgroundLayer,
                      const TileLayer &tempLayer,
+                     const TileLayer &toolLayer,
                      const TileLayer &cursorLayer)
         : Container(bounds)
     {
         m_BackgroundLayer = std::make_shared<TileLayer>(backgroundLayer);
         m_TempLayer = std::make_shared<TileLayer>(tempLayer);
+        m_ToolLayer = std::make_shared<TileLayer>(toolLayer);
         m_CursorLayer = std::make_shared<TileLayer>(cursorLayer);
     }
 
     Drawing::Drawing(const TileLayer &initialLayer,
                      const TileLayer &backgroundLayer,
                      const TileLayer &tempLayer,
+                     const TileLayer &toolLayer,
                      const TileLayer &cursorLayer)
         : Container(initialLayer.getBounds())
     {
@@ -29,12 +32,14 @@ namespace editor
         m_Frames.push_back(frame);
         m_BackgroundLayer = std::make_shared<TileLayer>(backgroundLayer);
         m_TempLayer = std::make_shared<TileLayer>(tempLayer);
+        m_ToolLayer = std::make_shared<TileLayer>(toolLayer);
         m_CursorLayer = std::make_shared<TileLayer>(cursorLayer);
     }
 
     Drawing::Drawing(const std::vector<Frame> &frames,
                      const TileLayer &backgroundLayer,
                      const TileLayer &tempLayer,
+                     const TileLayer &toolLayer,
                      const TileLayer &cursorLayer)
         : Container(backgroundLayer.getBounds())
     {
@@ -45,6 +50,7 @@ namespace editor
         }
         m_BackgroundLayer = std::make_shared<TileLayer>(backgroundLayer);
         m_TempLayer = std::make_shared<TileLayer>(tempLayer);
+        m_ToolLayer = std::make_shared<TileLayer>(toolLayer);
         m_CursorLayer = std::make_shared<TileLayer>(cursorLayer);
     }
 
@@ -154,6 +160,7 @@ namespace editor
         return *m_BackgroundLayer;
     }
 
+
     TileLayer &Drawing::getTempLayer()
     {
         return *m_TempLayer;
@@ -162,6 +169,16 @@ namespace editor
     const TileLayer &Drawing::getTempLayer() const
     {
         return *m_TempLayer;
+    }
+
+    TileLayer &Drawing::getToolLayer()
+    {
+        return *m_ToolLayer;
+    }
+
+    const TileLayer &Drawing::getToolLayer() const
+    {
+        return *m_ToolLayer;
     }
 
     TileLayer &Drawing::getCursorLayer()

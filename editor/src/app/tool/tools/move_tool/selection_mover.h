@@ -3,7 +3,7 @@
 #include "../../../../engine/graphics/layer/tileLayer.h"
 #include "../../../../engine/graphics/renderable/rect2d.h"
 #include "../../../../maths/vec2.h"
-#include "./selection_buffer.h"
+#include "../select_tool/selection_buffer.h"
 
 #include <memory>
 
@@ -16,13 +16,7 @@ namespace editor
     class SelectionMover
     {
     public:
-        Vec2 move(TileLayer &layer, const Vec2 &curr, const Vec2 &prev, const Vec2 &start);
-
-        Vec2 move(TileLayer &layer,
-                  const std::vector<int> &tileIndexes,
-                  const Vec2 &curr,
-                  const Vec2 &prev,
-                  const Vec2 &start);
+        std::vector<int> move(TileLayer &layer, const Vec2 &curr, const Vec2 &prev, const Vec2 &start);
 
     private:
         Vec2 calcMoveToStart(TileLayer &layer, const Vec2 &prev, const Vec2 &start);

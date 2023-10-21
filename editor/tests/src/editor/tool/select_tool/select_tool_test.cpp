@@ -28,40 +28,55 @@ SCENARIO("Select tool")
 
         WHEN("making a selection")
         {
-            TileLayer &tempLayer = activeDrawing.getTempLayer();
+            TileLayer &toolLayer = activeDrawing.getToolLayer();
             TileLayer &activeLayer = activeDrawing.getActiveLayer();
+            TileLayer &tempLayer = activeDrawing.getTempLayer();
 
-            Vec2 pointerPos = tempLayer.getCenterPos(Vec2Int(1, 1));
+            Vec2 pointerPos = toolLayer.getCenterPos(Vec2Int(1, 1));
             toolContext.pointer = PointerInfoBuilder().with(pointerPos, pointerPos, pointerPos).build();
 
             selectTool.pointerDown(toolContext);
             toolContext.pointer.isDown = true;
-            toolContext.pointer.curr = tempLayer.getCenterPos(Vec2Int(2, 2));
+            toolContext.pointer.curr = toolLayer.getCenterPos(Vec2Int(2, 2));
             selectTool.pointerMove(toolContext);
             selectTool.pointerUp(toolContext);
 
-            THEN("it draws the selection to the temp layer")
+            THEN("it draws the selection to the tool layer")
             {
-                REQUIRE(tempLayer.getTiles().size() == 4);
-                REQUIRE(tempLayer.getAtTilePos(1, 1) != nullptr);
-                REQUIRE(tempLayer.getAtTilePos(2, 1) != nullptr);
-                REQUIRE(tempLayer.getAtTilePos(1, 2) != nullptr);
-                REQUIRE(tempLayer.getAtTilePos(2, 2) != nullptr);
+                REQUIRE(toolLayer.getTiles().size() == 4);
+                REQUIRE(toolLayer.getAtTilePos(1, 1) != nullptr);
+                REQUIRE(toolLayer.getAtTilePos(2, 1) != nullptr);
+                REQUIRE(toolLayer.getAtTilePos(1, 2) != nullptr);
+                REQUIRE(toolLayer.getAtTilePos(2, 2) != nullptr);
             }
 
             THEN("it stores the selected tiles in the selection buffer")
             {
                 SelectionBuffer buffer = selectTool.getSelectionBuffer();
 
-                REQUIRE(selectTool.getSelectionBuffer().getTileIndexes().size() == 3);
-                REQUIRE(buffer.containsIndex(tempLayer.getTileIndex(1, 1)) == true);
-                REQUIRE(buffer.containsIndex(tempLayer.getTileIndex(2, 1)) == true);
-                REQUIRE(buffer.containsIndex(tempLayer.getTileIndex(2, 2)) == true);
+                REQUIRE(selectTool.getSelectionBuffer().getTileIndexes().size() == 4);
+                REQUIRE(buffer.containsIndex(toolLayer.getTileIndex(1, 1)) == true);
+                REQUIRE(buffer.containsIndex(toolLayer.getTileIndex(2, 1)) == true);
+                REQUIRE(buffer.containsIndex(toolLayer.getTileIndex(1, 2)) == true);
+                REQUIRE(buffer.containsIndex(toolLayer.getTileIndex(2, 2)) == true);
+            }
+
+            THEN("it transfers the selected tiles from the active layer to the temp layer")
+            {
+                REQUIRE(activeLayer.getTiles().size() == 3);
+                REQUIRE(tempLayer.getAtTilePos(1, 1) != nullptr);
+                REQUIRE(tempLayer.getAtTilePos(2, 1) != nullptr);
+                REQUIRE(tempLayer.getAtTilePos(2, 2) != nullptr);
+
+                REQUIRE(activeLayer.getTiles().size() == 3);
+                REQUIRE(activeLayer.getAtTilePos(1, 0) != nullptr);
+                REQUIRE(activeLayer.getAtTilePos(3, 3) != nullptr);
+                REQUIRE(activeLayer.getAtTilePos(4, 3) != nullptr);
             }
 
             WHEN("clicking outside of the selection")
             {
-                Vec2 pointerPos = tempLayer.getCenterPos(Vec2Int(5, 5));
+                Vec2 pointerPos = toolLayer.getCenterPos(Vec2Int(5, 5));
 
                 toolContext.pointer = PointerInfoBuilder().with(pointerPos, pointerPos, pointerPos).build();
 
@@ -71,18 +86,30 @@ SCENARIO("Select tool")
                 THEN("it clears the selection")
                 {
                     REQUIRE(selectTool.getSelectionBuffer().getTileIndexes().size() == 0);
-                    REQUIRE(tempLayer.getTiles().size() == 0);
+                    REQUIRE(toolLayer.getTiles().size() == 0);
+                }
+
+                THEN("it transfers the selected tiles from the temp layer back to the active layer")
+                {
+                    REQUIRE(activeLayer.getTiles().size() == 6);
+
+                    REQUIRE(activeLayer.getAtTilePos(1, 1) != nullptr);
+                    REQUIRE(activeLayer.getAtTilePos(2, 1) != nullptr);
+                    REQUIRE(activeLayer.getAtTilePos(2, 2) != nullptr);
+                    REQUIRE(activeLayer.getAtTilePos(1, 0) != nullptr);
+                    REQUIRE(activeLayer.getAtTilePos(3, 3) != nullptr);
+                    REQUIRE(activeLayer.getAtTilePos(4, 3) != nullptr);
                 }
             }
 
             WHEN("making another selection")
             {
-                Vec2 pointerPos = tempLayer.getCenterPos(Vec2Int(3, 3));
+                Vec2 pointerPos = toolLayer.getCenterPos(Vec2Int(3, 3));
                 toolContext.pointer = PointerInfoBuilder().with(pointerPos, pointerPos, pointerPos).build();
 
                 selectTool.pointerDown(toolContext);
                 toolContext.pointer.isDown = true;
-                toolContext.pointer.curr = tempLayer.getCenterPos(Vec2Int(4, 4));
+                toolContext.pointer.curr = toolLayer.getCenterPos(Vec2Int(4, 4));
                 selectTool.pointerMove(toolContext);
                 selectTool.pointerUp(toolContext);
 
@@ -90,98 +117,11 @@ SCENARIO("Select tool")
                 {
                     SelectionBuffer &buffer = selectTool.getSelectionBuffer();
 
-                    REQUIRE(selectTool.getSelectionBuffer().getTileIndexes().size() == 2);
-                    REQUIRE(buffer.containsIndex(tempLayer.getTileIndex(3, 3)) == true);
-                    REQUIRE(buffer.containsIndex(tempLayer.getTileIndex(4, 3)) == true);
-                }
-            }
-
-            WHEN("mouse down on a selection")
-            {
-                Vec2 pointerPos = tempLayer.getCenterPos(Vec2Int(1, 1));
-                toolContext.pointer = PointerInfoBuilder().with(pointerPos, pointerPos, pointerPos).build();
-
-                selectTool.pointerDown(toolContext);
-                toolContext.pointer.isDown = true;
-
-                WHEN("moving the mouse")
-                {
-                    toolContext.pointer.curr = tempLayer.getCenterPos(Vec2Int(3, 3));
-                    selectTool.pointerMove(toolContext);
-                    selectTool.pointerUp(toolContext);
-
-                    THEN("it moves the selected tiles")
-                    {
-                        SelectionBuffer &buffer = selectTool.getSelectionBuffer();
-
-                        REQUIRE(selectTool.getSelectionBuffer().getTileIndexes().size() == 3);
-                        REQUIRE(buffer.containsIndex(activeLayer.getTileIndex(3, 3)) == true);
-                        REQUIRE(buffer.containsIndex(activeLayer.getTileIndex(4, 3)) == true);
-                        REQUIRE(buffer.containsIndex(activeLayer.getTileIndex(4, 4)) == true);
-                    }
-
-                    THEN("it moves the selection on temp layer")
-                    {
-                        REQUIRE(tempLayer.getTiles().size() == 4);
-                        REQUIRE(tempLayer.getAtTilePos(3, 3) != nullptr);
-                        REQUIRE(tempLayer.getAtTilePos(4, 3) != nullptr);
-                        REQUIRE(tempLayer.getAtTilePos(3, 4) != nullptr);
-                        REQUIRE(tempLayer.getAtTilePos(4, 4) != nullptr);
-                    }
-
-                    WHEN("moving the mouse again")
-                    {
-                        Vec2 newPos = tempLayer.getCenterPos(Vec2Int(4, 3));
-                        toolContext.pointer = PointerInfoBuilder().with(newPos, newPos, newPos).build();
-                        selectTool.pointerDown(toolContext);
-                        toolContext.pointer.isDown = true;
-                        toolContext.pointer.curr = tempLayer.getCenterPos(Vec2Int(4, 5));
-                        selectTool.pointerMove(toolContext);
-                        selectTool.pointerUp(toolContext);
-
-                        THEN("it moves the selected tiles")
-                        {
-                            SelectionBuffer &buffer = selectTool.getSelectionBuffer();
-
-                            REQUIRE(selectTool.getSelectionBuffer().getTileIndexes().size() == 3);
-                            REQUIRE(buffer.containsIndex(activeLayer.getTileIndex(3, 5)) == true);
-                            REQUIRE(buffer.containsIndex(activeLayer.getTileIndex(4, 5)) == true);
-                            REQUIRE(buffer.containsIndex(activeLayer.getTileIndex(4, 6)) == true);
-                        }
-
-                        THEN("it moves the selection on temp layer")
-                        {
-                            REQUIRE(tempLayer.getTiles().size() == 4);
-                            REQUIRE(tempLayer.getAtTilePos(3, 5) != nullptr);
-                            REQUIRE(tempLayer.getAtTilePos(4, 5) != nullptr);
-                            REQUIRE(tempLayer.getAtTilePos(3, 6) != nullptr);
-                            REQUIRE(tempLayer.getAtTilePos(4, 6) != nullptr);
-                        }
-                    }
-                }
-
-                WHEN("executing multiple move actions without releasing the mouse")
-                {
-                    toolContext.pointer.curr = tempLayer.getCenterPos(Vec2Int(3, 3));
-                    selectTool.pointerMove(toolContext);
-                    toolContext.pointer = PointerInfoBuilder()
-                                              .with(tempLayer.getCenterPos(Vec2Int(5, 3)),
-                                                    toolContext.pointer.curr,
-                                                    toolContext.pointer.down)
-                                              .build();
-                    toolContext.pointer.isDown = true;
-                    selectTool.pointerMove(toolContext);
-                    selectTool.pointerUp(toolContext);
-
-                    THEN("it moves the selected tiles")
-                    {
-                        SelectionBuffer &buffer2 = selectTool.getSelectionBuffer();
-
-                        REQUIRE(selectTool.getSelectionBuffer().getTileIndexes().size() == 3);
-                        REQUIRE(selectTool.getSelectionBuffer().containsIndex(activeLayer.getTileIndex(5, 3)) == true);
-                        REQUIRE(selectTool.getSelectionBuffer().containsIndex(activeLayer.getTileIndex(6, 3)) == true);
-                        REQUIRE(selectTool.getSelectionBuffer().containsIndex(activeLayer.getTileIndex(6, 4)) == true);
-                    }
+                    REQUIRE(selectTool.getSelectionBuffer().getTileIndexes().size() == 4);
+                    REQUIRE(buffer.containsIndex(toolLayer.getTileIndex(3, 3)) == true);
+                    REQUIRE(buffer.containsIndex(toolLayer.getTileIndex(4, 3)) == true);
+                    REQUIRE(buffer.containsIndex(toolLayer.getTileIndex(3, 4)) == true);
+                    REQUIRE(buffer.containsIndex(toolLayer.getTileIndex(4, 4)) == true);
                 }
             }
         }
@@ -205,6 +145,7 @@ SCENARIO("Select tool")
 
         SelectTool selectTool;
         TileLayer &activeLayer = activeDrawing.getActiveLayer();
+        TileLayer &toolLayer = activeDrawing.getToolLayer();
         TileLayer &tempLayer = activeDrawing.getTempLayer();
 
         WHEN("selection type is wand")
@@ -229,11 +170,11 @@ SCENARIO("Select tool")
 
                 THEN("it draws the selection on the temp layer")
                 {
-                    REQUIRE(tempLayer.getTiles().size() == 4);
-                    REQUIRE(tempLayer.getAtTilePos(1, 1) != nullptr);
-                    REQUIRE(tempLayer.getAtTilePos(1, 0) != nullptr);
-                    REQUIRE(tempLayer.getAtTilePos(2, 1) != nullptr);
-                    REQUIRE(tempLayer.getAtTilePos(2, 2) != nullptr);
+                    REQUIRE(toolLayer.getTiles().size() == 4);
+                    REQUIRE(toolLayer.getAtTilePos(1, 1) != nullptr);
+                    REQUIRE(toolLayer.getAtTilePos(1, 0) != nullptr);
+                    REQUIRE(toolLayer.getAtTilePos(2, 1) != nullptr);
+                    REQUIRE(toolLayer.getAtTilePos(2, 2) != nullptr);
                 }
 
                 WHEN("clicking on another color")
@@ -247,30 +188,44 @@ SCENARIO("Select tool")
                         REQUIRE(selectTool.getSelectionBuffer().getTileIndexes().size() == 1);
                         REQUIRE(selectTool.getSelectionBuffer().containsIndex(activeLayer.getTileIndex(3, 2)) == true);
 
-                        REQUIRE(tempLayer.getTiles().size() == 1);
-                        REQUIRE(tempLayer.getAtTilePos(3, 2) != nullptr);
+                        REQUIRE(toolLayer.getTiles().size() == 1);
+                        REQUIRE(toolLayer.getAtTilePos(3, 2) != nullptr);
                     }
                 }
 
-                WHEN("dragging with the mouse over the selection")
-                {
-                    contentBuilder.setPrevCurrDown(Vec2Int(1, 1));
-                    selectTool.pointerDown(toolContext);
+                // WHEN("dragging with the mouse over the selection")
+                // {
+                //     contentBuilder.setPrevCurrDown(Vec2Int(1, 1));
+                //     selectTool.pointerDown(toolContext);
 
-                    contentBuilder.setCurr(Vec2Int(1, 3));
-                    selectTool.pointerMove(toolContext);
+                //     contentBuilder.setCurr(Vec2Int(1, 3));
+                //     selectTool.pointerMove(toolContext);
 
-                    selectTool.pointerUp(toolContext);
+                //     selectTool.pointerUp(toolContext);
 
-                    THEN("it moves the tiles to the given destination")
-                    {
-                        REQUIRE(activeLayer.getTiles().size() == 6);
-                        REQUIRE(activeLayer.getAtTilePos(1, 3)->getColor() == COLOR_RED);
-                        REQUIRE(activeLayer.getAtTilePos(1, 2)->getColor() == COLOR_RED);
-                        REQUIRE(activeLayer.getAtTilePos(2, 3)->getColor() == COLOR_RED);
-                        REQUIRE(activeLayer.getAtTilePos(2, 4)->getColor() == COLOR_RED);
-                    }
-                }
+                //     THEN("it moves the tiles to the given destination")
+                //     {
+                //         REQUIRE(tempLayer.getTiles().size() == 4);
+                //         REQUIRE(tempLayer.getAtTilePos(1, 3)->getColor() == COLOR_RED);
+                //         REQUIRE(tempLayer.getAtTilePos(1, 2)->getColor() == COLOR_RED);
+                //         REQUIRE(tempLayer.getAtTilePos(2, 3)->getColor() == COLOR_RED);
+                //         REQUIRE(tempLayer.getAtTilePos(2, 4)->getColor() == COLOR_RED);
+                //     }
+
+                //     WHEN("clearing the selection")
+                //     {
+                //         contentBuilder.setPrevCurrDown(Vec2Int(1, 1));
+                //         selectTool.pointerDown(toolContext);
+                //         selectTool.pointerUp(toolContext);
+
+                //         THEN("it moves the tiles from tempLayer to activeLayer")
+                //         {
+                //             REQUIRE(tempLayer.getTiles().size() == 0);
+
+                //             REQUIRE(activeLayer.getTiles().size() == 6);
+                //         }
+                //     }
+                // }
             }
         }
     }

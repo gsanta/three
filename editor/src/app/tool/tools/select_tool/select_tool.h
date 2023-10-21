@@ -9,7 +9,6 @@
 #include "./box_selector.h"
 #include "./rect_selector.h"
 #include "./selection_buffer.h"
-#include "./selection_mover.h"
 #include "./wand_selector.h"
 
 #include <limits>
@@ -53,7 +52,9 @@ namespace editor
 
         void pointerMove(const ToolContext &) override;
 
-        void setSelection(const std::vector<int> &indexes, Drawing &drawing);
+        void syncSelection(Drawing &drawing, const std::vector<int> &tileIndexes);
+
+        void setSelection(const std::vector<int> &indexes, Drawing &drawing, TileLayer &layer);
 
         void setMode(SelectionManipulationMode mode);
 
@@ -62,8 +63,6 @@ namespace editor
         SelectionBuffer &getSelectionBuffer();
 
     private:
-        void recalcTileIndexesAndBounds(TileLayer &activeLayer, TileLayer &tempLayer);
-
         void startManipulation(const ToolContext &context);
 
         void moveManipulation(const ToolContext &context);
@@ -83,23 +82,13 @@ namespace editor
 
         WandSelector m_WandSelector;
 
-        std::unique_ptr<SelectionMover> m_SelectionMover;
-
-        RectSelector m_RectSelector;
-
-        vector<Vec2> m_OrigPositions;
-
-        Bounds m_SelectionBounds;
-
-        BoundsInt m_SelectionTileBounds;
-
         float m_NoMovementTolerance = 0.1f;
 
         SelectionType m_SelectionType = rectangle;
 
-        SelectionPhase m_Phase = selection;
-
         SelectionManipulationMode m_Mode = manip_move;
+
+        SelectionPhase m_Phase = selection;
     };
 } // namespace editor
 } // namespace spright

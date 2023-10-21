@@ -18,16 +18,19 @@ namespace editor
         Drawing(const Bounds &bounds,
                 const TileLayer &backgroundLayer,
                 const TileLayer &tempLayer,
+                const TileLayer &toolLayer,
                 const TileLayer &cursorLayer);
 
         Drawing(const TileLayer &initialLayer,
                 const TileLayer &backgroundLayer,
                 const TileLayer &tempLayer,
+                const TileLayer &toolLayer,
                 const TileLayer &cursorLayer);
 
         Drawing(const std::vector<Frame> &frames,
                 const TileLayer &backgroundLayer,
                 const TileLayer &tempLayer,
+                const TileLayer &toolLayer,
                 const TileLayer &cursorLayer);
 
         std::vector<Frame> &getFrames();
@@ -62,6 +65,10 @@ namespace editor
 
         const TileLayer &getTempLayer() const;
 
+        TileLayer &getToolLayer();
+
+        const TileLayer &getToolLayer() const;
+
         TileLayer &getCursorLayer();
 
         void addBackgroundLayer(const TileLayer &tileLayer);
@@ -74,6 +81,8 @@ namespace editor
         std::shared_ptr<TileLayer> m_BackgroundLayer;
 
         std::shared_ptr<TileLayer> m_TempLayer;
+
+        std::shared_ptr<TileLayer> m_ToolLayer;
 
         std::shared_ptr<TileLayer> m_CursorLayer;
 

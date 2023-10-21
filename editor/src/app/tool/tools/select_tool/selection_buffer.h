@@ -29,6 +29,8 @@ namespace editor
 
         const BoundsInt &getTileBounds() const;
 
+        void recalcTileIndexesAndBounds(TileLayer &activeOrTempLayer, TileLayer &toolLayer);
+
     private:
         void updateBounds(const Vec2Int &vec2);
 

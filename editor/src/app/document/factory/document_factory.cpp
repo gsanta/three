@@ -60,7 +60,18 @@ namespace editor
                          Group<Rect2D>(),
                          bounds,
                          tileSize,
-                         m_TempLayerZPos,
+                         m_TileLayerZPos,
+                         true);
+    }
+
+    TileLayer DocumentFactory::createToolLayer(const Bounds &bounds, float tileSize) const
+    {
+        return TileLayer("",
+                         *m_RendererProvider->createRenderer2D(),
+                         Group<Rect2D>(),
+                         bounds,
+                         tileSize,
+                         m_ToolLayerZPos,
                          true);
     }
 
@@ -101,6 +112,7 @@ namespace editor
         Drawing drawing(bounds,
                         createBackgroundLayer(bounds, backgroundLayerTileSize),
                         createTempLayer(bounds, tileSize),
+                        createToolLayer(bounds, tileSize),
                         createCursorLayer(bounds, tileSize));
 
         if (hasInitialLayer)

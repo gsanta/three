@@ -12,12 +12,12 @@ namespace editor
     public:
         RectangleCursor(int rectangleSize, bool shouldDisableOnDrag = false);
 
-        void update(TileLayer &tempLayer, const PointerInfo &pointerInfo);
+        void update(TileLayer &toolLayer, const PointerInfo &pointerInfo);
 
-        virtual void destroy(TileLayer &tempLayer);
+        virtual void destroy(TileLayer &toolLayer);
 
     private:
-        void setPosition(TileLayer &tempLayer, const Vec2 &pos);
+        void setPosition(TileLayer &toolLayer, const Vec2 &pos);
 
     private:
         int m_Size;

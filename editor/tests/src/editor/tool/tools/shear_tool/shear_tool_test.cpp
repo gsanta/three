@@ -10,20 +10,20 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-void expect_1_tile_horizontal_displacement(const TileLayer &activeLayer)
+void expect_1_tile_horizontal_displacement(const TileLayer &tempLayer)
 {
-    REQUIRE(activeLayer.getTiles().size() == 16);
+    REQUIRE(tempLayer.getTiles().size() == 16);
 
     // changed bottom row
     for (int i = 3; i <= 6; i++)
     {
-        REQUIRE(activeLayer.getAtTilePos(i, 1) != nullptr);
+        REQUIRE(tempLayer.getAtTilePos(i, 1) != nullptr);
     }
 
     // changed top row
     for (int i = 1; i <= 4; i++)
     {
-        REQUIRE(activeLayer.getAtTilePos(i, 4) != nullptr);
+        REQUIRE(tempLayer.getAtTilePos(i, 4) != nullptr);
     }
 
     // did not change
@@ -31,25 +31,25 @@ void expect_1_tile_horizontal_displacement(const TileLayer &activeLayer)
     {
         for (int j = 2; j <= 3; j++)
         {
-            REQUIRE(activeLayer.getAtTilePos(i, j) != nullptr);
+            REQUIRE(tempLayer.getAtTilePos(i, j) != nullptr);
         }
     }
 }
 
-void expect_2_tiles_horizontal_displacement(const TileLayer &activeLayer)
+void expect_2_tiles_horizontal_displacement(const TileLayer &tempLayer)
 {
-    REQUIRE(activeLayer.getTiles().size() == 16);
+    REQUIRE(tempLayer.getTiles().size() == 16);
 
     // changed bottom rows
     for (int i = 4; i <= 7; i++)
     {
-        REQUIRE(activeLayer.getAtTilePos(i, 1) != nullptr);
+        REQUIRE(tempLayer.getAtTilePos(i, 1) != nullptr);
     }
 
     // changed top row
     for (int i = 0; i <= 3; i++)
     {
-        REQUIRE(activeLayer.getAtTilePos(i, 4) != nullptr);
+        REQUIRE(tempLayer.getAtTilePos(i, 4) != nullptr);
     }
 
     // did not change
@@ -57,20 +57,20 @@ void expect_2_tiles_horizontal_displacement(const TileLayer &activeLayer)
     {
         for (int j = 2; j <= 3; j++)
         {
-            REQUIRE(activeLayer.getAtTilePos(i, j) != nullptr);
+            REQUIRE(tempLayer.getAtTilePos(i, j) != nullptr);
         }
     }
 }
 
-void expect_nothing_changed(const TileLayer &activeLayer)
+void expect_nothing_changed(const TileLayer &tempLayer)
 {
-    REQUIRE(activeLayer.getTiles().size() == 16);
+    REQUIRE(tempLayer.getTiles().size() == 16);
 
     for (int i = 2; i <= 5; i++)
     {
         for (int j = 1; j <= 4; j++)
         {
-            REQUIRE(activeLayer.getAtTilePos(i, j) != nullptr);
+            REQUIRE(tempLayer.getAtTilePos(i, j) != nullptr);
         }
     }
 }
@@ -103,6 +103,7 @@ SCENARIO("Shear tool")
         Drawing &drawing = document.getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
         TileLayer &tempLayer = drawing.getTempLayer();
+        TileLayer &toolLayer = drawing.getToolLayer();
 
         ShearTool shearTool;
 
@@ -116,13 +117,13 @@ SCENARIO("Shear tool")
 
                 THEN("displaces the top row to left direction and bottom row to right direction by one tile")
                 {
-                    expect_1_tile_horizontal_displacement(activeLayer);
+                    expect_1_tile_horizontal_displacement(tempLayer);
                 }
 
                 THEN("it updates the selection to cover the sheared area")
                 {
-                    REQUIRE(tempLayer.getTiles().size() == 24);
-                    REQUIRE_THAT(tempLayer, HasTilesWithinArea(BoundsInt(1, 1, 6, 4)));
+                    REQUIRE(toolLayer.getTiles().size() == 24);
+                    REQUIRE_THAT(toolLayer, HasTilesWithinArea(BoundsInt(1, 1, 6, 4)));
                 }
 
                 WHEN("moving the mouse in the same direction again")
@@ -131,7 +132,7 @@ SCENARIO("Shear tool")
 
                     THEN("the tiles get displaced one more tile to the left and right")
                     {
-                        expect_2_tiles_horizontal_displacement(activeLayer);
+                        expect_2_tiles_horizontal_displacement(tempLayer);
                     }
 
                     WHEN("undo is called")
@@ -140,13 +141,13 @@ SCENARIO("Shear tool")
 
                         THEN("it restores the previous tiles")
                         {
-                            expect_1_tile_horizontal_displacement(activeLayer);
+                            expect_1_tile_horizontal_displacement(tempLayer);
                         }
 
                         THEN("it restores the previous selection")
                         {
-                            REQUIRE(tempLayer.getTiles().size() == 24);
-                            REQUIRE_THAT(tempLayer, HasTilesWithinArea(BoundsInt(1, 1, 6, 4)));
+                            REQUIRE(toolLayer.getTiles().size() == 24);
+                            REQUIRE_THAT(toolLayer, HasTilesWithinArea(BoundsInt(1, 1, 6, 4)));
                         }
 
                         WHEN("undo is called second time")
@@ -155,13 +156,13 @@ SCENARIO("Shear tool")
 
                             THEN("it restores the original tiles")
                             {
-                                expect_nothing_changed(activeLayer);
+                                expect_nothing_changed(tempLayer);
                             }
 
                             THEN("it restores the original selection")
                             {
-                                REQUIRE(tempLayer.getTiles().size() == 16);
-                                REQUIRE_THAT(tempLayer, HasTilesWithinArea(BoundsInt(2, 1, 5, 4)));
+                                REQUIRE(toolLayer.getTiles().size() == 16);
+                                REQUIRE_THAT(toolLayer, HasTilesWithinArea(BoundsInt(2, 1, 5, 4)));
                             }
 
                             WHEN("redo is called")
@@ -170,13 +171,13 @@ SCENARIO("Shear tool")
 
                                 THEN("it applies the first changes again")
                                 {
-                                    expect_1_tile_horizontal_displacement(activeLayer);
+                                    expect_1_tile_horizontal_displacement(tempLayer);
                                 }
 
                                 THEN("it selects the tiles resulted from the first changes")
                                 {
-                                    REQUIRE(tempLayer.getTiles().size() == 24);
-                                    REQUIRE_THAT(tempLayer, HasTilesWithinArea(BoundsInt(1, 1, 6, 4)));
+                                    REQUIRE(toolLayer.getTiles().size() == 24);
+                                    REQUIRE_THAT(toolLayer, HasTilesWithinArea(BoundsInt(1, 1, 6, 4)));
                                 }
                             }
                         }
@@ -192,31 +193,31 @@ SCENARIO("Shear tool")
 
                 THEN("displaces the top row to right direction and bottom row to left direction by one tile")
                 {
-                    REQUIRE(activeLayer.getTiles().size() == 16);
+                    REQUIRE(tempLayer.getTiles().size() == 16);
 
                     // changed tiles
-                    REQUIRE(activeLayer.getAtTilePos(6, 4) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(1, 1) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(5, 1) == nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(2, 4) == nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(6, 4) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(1, 1) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(5, 1) == nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(2, 4) == nullptr);
 
                     // did not change
                     for (int i = 1; i <= 3; i++)
                     {
-                        REQUIRE(activeLayer.getAtTilePos(i, 1) != nullptr);
+                        REQUIRE(tempLayer.getAtTilePos(i, 1) != nullptr);
                     }
 
                     for (int i = 2; i <= 5; i++)
                     {
                         for (int j = 2; j <= 3; j++)
                         {
-                            REQUIRE(activeLayer.getAtTilePos(i, j) != nullptr);
+                            REQUIRE(tempLayer.getAtTilePos(i, j) != nullptr);
                         }
                     }
 
                     for (int i = 3; i <= 5; i++)
                     {
-                        REQUIRE(activeLayer.getAtTilePos(i, 4) != nullptr);
+                        REQUIRE(tempLayer.getAtTilePos(i, 4) != nullptr);
                     }
                 }
             }
@@ -229,38 +230,38 @@ SCENARIO("Shear tool")
 
                 THEN("displaces the top row to left direction and bottom row to right direction by one tile")
                 {
-                    REQUIRE(activeLayer.getTiles().size() == 16);
+                    REQUIRE(tempLayer.getTiles().size() == 16);
 
                     // changed tiles
-                    REQUIRE(activeLayer.getAtTilePos(2, 0) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(5, 5) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(5, 1) == nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(2, 4) == nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(2, 0) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(5, 5) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(5, 1) == nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(2, 4) == nullptr);
 
                     // did not change
                     for (int i = 0; i <= 3; i++)
                     {
-                        REQUIRE(activeLayer.getAtTilePos(2, i) != nullptr);
+                        REQUIRE(tempLayer.getAtTilePos(2, i) != nullptr);
                     }
 
                     for (int i = 3; i <= 4; i++)
                     {
                         for (int j = 1; j <= 4; j++)
                         {
-                            REQUIRE(activeLayer.getAtTilePos(i, j) != nullptr);
+                            REQUIRE(tempLayer.getAtTilePos(i, j) != nullptr);
                         }
                     }
 
                     for (int i = 2; i <= 5; i++)
                     {
-                        REQUIRE(activeLayer.getAtTilePos(5, i) != nullptr);
+                        REQUIRE(tempLayer.getAtTilePos(5, i) != nullptr);
                     }
                 }
 
                 THEN("it updates the selection to cover the sheared area")
                 {
-                    REQUIRE(tempLayer.getTiles().size() == 24);
-                    REQUIRE_THAT(tempLayer, HasTilesWithinArea(BoundsInt(2, 0, 5, 5)));
+                    REQUIRE(toolLayer.getTiles().size() == 24);
+                    REQUIRE_THAT(toolLayer, HasTilesWithinArea(BoundsInt(2, 0, 5, 5)));
                 }
             }
 
@@ -278,7 +279,7 @@ SCENARIO("Shear tool")
 
                 THEN("shear happens")
                 {
-                    expect_1_tile_horizontal_displacement(activeLayer);
+                    expect_1_tile_horizontal_displacement(tempLayer);
                 }
 
                 WHEN("moving the mouse further in the same direction")
@@ -290,23 +291,23 @@ SCENARIO("Shear tool")
                     THEN("it shears the original shape with a bigger angle")
                     {
                         // expect_2_tiles_horizontal_displacement(activeLayer);
-                        REQUIRE(activeLayer.getTiles().size() == 16);
+                        REQUIRE(tempLayer.getTiles().size() == 16);
 
                         for (int i = 4; i <= 7; i++)
                         {
-                            REQUIRE(activeLayer.getAtTilePos(i, 1) != nullptr);
+                            REQUIRE(tempLayer.getAtTilePos(i, 1) != nullptr);
                         }
 
                         for (int i = 3; i <= 6; i++)
                         {
-                            REQUIRE(activeLayer.getAtTilePos(i, 2) != nullptr);
+                            REQUIRE(tempLayer.getAtTilePos(i, 2) != nullptr);
                         }
 
                         for (int i = 1; i <= 4; i++)
                         {
                             for (int j = 3; j <= 4; j++)
                             {
-                                REQUIRE(activeLayer.getAtTilePos(i, j) != nullptr);
+                                REQUIRE(tempLayer.getAtTilePos(i, j) != nullptr);
                             }
                         }
                     }
@@ -319,7 +320,7 @@ SCENARIO("Shear tool")
 
                         THEN("the shear is undone")
                         {
-                            expect_nothing_changed(activeLayer);
+                            expect_nothing_changed(tempLayer);
                         }
                     }
                 }
@@ -338,6 +339,7 @@ SCENARIO("Shear tool")
         Drawing &drawing = document.getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
         TileLayer &tempLayer = drawing.getTempLayer();
+        TileLayer &toolLayer = drawing.getToolLayer();
 
         ShearTool shearTool;
 
@@ -353,37 +355,37 @@ SCENARIO("Shear tool")
 
                 THEN("the out of bounds tile gets removed")
                 {
-                    REQUIRE(activeLayer.getTiles().size() == 15);
+                    REQUIRE(tempLayer.getTiles().size() == 15);
 
                     // changed tiles
-                    REQUIRE(activeLayer.getAtTilePos(4, 0) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(0, 0) == nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(3, 3) == nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(4, 0) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(0, 0) == nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(3, 3) == nullptr);
 
                     // did not change
                     for (int i = 1; i <= 4; i++)
                     {
-                        REQUIRE(activeLayer.getAtTilePos(i, 0) != nullptr);
+                        REQUIRE(tempLayer.getAtTilePos(i, 0) != nullptr);
                     }
 
                     for (int i = 0; i <= 3; i++)
                     {
                         for (int j = 1; j <= 2; j++)
                         {
-                            REQUIRE(activeLayer.getAtTilePos(i, j) != nullptr);
+                            REQUIRE(tempLayer.getAtTilePos(i, j) != nullptr);
                         }
                     }
 
                     for (int i = 0; i <= 2; i++)
                     {
-                        REQUIRE(activeLayer.getAtTilePos(i, 3) != nullptr);
+                        REQUIRE(tempLayer.getAtTilePos(i, 3) != nullptr);
                     }
                 }
 
                 THEN("it updates the selection to cover the sheared area")
                 {
-                    REQUIRE(tempLayer.getTiles().size() == 20);
-                    REQUIRE_THAT(tempLayer, HasTilesWithinArea(BoundsInt(0, 0, 4, 3)));
+                    REQUIRE(toolLayer.getTiles().size() == 20);
+                    REQUIRE_THAT(toolLayer, HasTilesWithinArea(BoundsInt(0, 0, 4, 3)));
                 }
             }
 
@@ -395,30 +397,30 @@ SCENARIO("Shear tool")
 
                 THEN("the out of bounds tile gets removed")
                 {
-                    REQUIRE(activeLayer.getTiles().size() == 15);
+                    REQUIRE(tempLayer.getTiles().size() == 15);
 
                     // changed tiles
-                    REQUIRE(activeLayer.getAtTilePos(3, 4) != nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(0, 3) == nullptr);
-                    REQUIRE(activeLayer.getAtTilePos(3, 0) == nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(3, 4) != nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(0, 3) == nullptr);
+                    REQUIRE(tempLayer.getAtTilePos(3, 0) == nullptr);
 
                     // did not change
                     for (int i = 0; i <= 2; i++)
                     {
-                        REQUIRE(activeLayer.getAtTilePos(0, i) != nullptr);
+                        REQUIRE(tempLayer.getAtTilePos(0, i) != nullptr);
                     }
 
                     for (int i = 1; i <= 2; i++)
                     {
                         for (int j = 0; j <= 3; j++)
                         {
-                            REQUIRE(activeLayer.getAtTilePos(i, j) != nullptr);
+                            REQUIRE(tempLayer.getAtTilePos(i, j) != nullptr);
                         }
                     }
 
                     for (int i = 1; i <= 4; i++)
                     {
-                        REQUIRE(activeLayer.getAtTilePos(3, i) != nullptr);
+                        REQUIRE(tempLayer.getAtTilePos(3, i) != nullptr);
                     }
                 }
             }

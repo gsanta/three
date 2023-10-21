@@ -5,45 +5,26 @@ namespace spright
 {
 namespace editor
 {
-    Vec2 SelectionMover::move(TileLayer &layer, const Vec2 &curr, const Vec2 &prev, const Vec2 &start)
+    std::vector<int> SelectionMover::move(TileLayer &layer, const Vec2 &curr, const Vec2 &prev, const Vec2 &start)
     {
         Vec2 deltaToStart = calcMoveToStart(layer, prev, start);
         Vec2 deltaToCurr = calcMoveToCurr(layer, curr, start);
-
-        for (Rect2D *tile : layer.getTiles())
-        {
-            translate(*tile, deltaToStart, deltaToCurr);
-        }
 
         Vec2 diff = deltaToCurr - deltaToStart;
 
-        return diff;
-    }
+        std::vector<int> tileIndexes;
 
-    Vec2 SelectionMover::move(TileLayer &layer,
-                              const std::vector<int> &tileIndexes,
-                              const Vec2 &curr,
-                              const Vec2 &prev,
-                              const Vec2 &start)
-    {
-        Vec2 deltaToStart = calcMoveToStart(layer, prev, start);
-        Vec2 deltaToCurr = calcMoveToCurr(layer, curr, start);
-
-        for (int tileIndex : tileIndexes)
+        if (diff.length() != 0)
         {
-            std::cout << tileIndex << std::endl;
-            Rect2D *tile = layer.getAtTileIndex(tileIndex);
-            if (tile != nullptr)
+            for (Rect2D *tile : layer.getTiles())
             {
                 translate(*tile, deltaToStart, deltaToCurr);
+
+                tileIndexes.push_back(layer.getTileIndex(*tile));
             }
         }
 
-        std::cout << "----" << std::endl;
-
-        Vec2 diff = deltaToCurr - deltaToStart;
-
-        return diff;
+        return tileIndexes;
     }
 
     Vec2 SelectionMover::calcMoveToStart(TileLayer &layer, const Vec2 &prev, const Vec2 &start)

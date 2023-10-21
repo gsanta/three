@@ -13,8 +13,6 @@ namespace editor
         m_TileIndexes.push_back(tileIndex);
 
         updateBounds(layer.getTilePos(tileIndex));
-
-        layer.getTilePos(tileIndex);
     }
 
     void SelectionBuffer::clear()
@@ -53,6 +51,27 @@ namespace editor
     const BoundsInt &SelectionBuffer::getTileBounds() const
     {
         return m_TileBounds;
+    }
+
+    void SelectionBuffer::recalcTileIndexesAndBounds(TileLayer &layer, TileLayer &toolLayer)
+    {
+        std::vector<int> newTileIndexes;
+
+        for (int tileIndex : m_TileIndexes)
+        {
+            Rect2D *tile = layer.getAtTileIndex(tileIndex);
+            if (tile != nullptr)
+            {
+                layer.updateTileIndex(tile);
+            }
+        }
+
+        for (Rect2D *tile : toolLayer.getTiles())
+        {
+            newTileIndexes.push_back(toolLayer.updateTileIndex(tile));
+        }
+
+        setTileIndexes(newTileIndexes, layer);
     }
 
     void SelectionBuffer::updateBounds(const Vec2Int &vec2)

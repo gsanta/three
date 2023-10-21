@@ -62,12 +62,14 @@ ContentBuilder &ContentBuilder::selectTiles(const std::vector<Rect2D *> &tiles)
     TileLayer &activeLayer = m_Context.doc.activeDrawing->getActiveLayer();
 
     vector<int> tileIndexes;
-    for (Rect2D *rect : activeLayer.getTiles())
+    for (Rect2D *rect : tiles)
     {
         tileIndexes.push_back(activeLayer.getTileIndex(rect->getCenterPosition2d()));
     }
 
-    m_Context.tools->getSelectTool().setSelection(tileIndexes, *m_Context.doc.activeDrawing);
+    m_Context.tools->getSelectTool().setSelection(tileIndexes,
+                                                  *m_Context.doc.activeDrawing,
+                                                  m_Context.doc.activeDrawing->getTempLayer());
 
     return *this;
 }

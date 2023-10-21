@@ -10,7 +10,7 @@ namespace editor
 
     void RotateTool::pointerDown(const ToolContext &toolContext)
     {
-        TileLayer &activeLayer = toolContext.doc.activeDrawing->getActiveLayer();
+        TileLayer &activeLayer = toolContext.doc.activeDrawing->getTempLayer();
 
         const SelectionBuffer &selectionBuffer = toolContext.tools->getSelectTool().getSelectionBuffer();
 
@@ -25,7 +25,7 @@ namespace editor
 
     void RotateTool::pointerMove(const ToolContext &toolContext)
     {
-        TileLayer &activeLayer = toolContext.doc.activeDrawing->getActiveLayer();
+        TileLayer &activeLayer = toolContext.doc.activeDrawing->getTempLayer();
         const BoundsInt &selectionBounds = toolContext.tools->getSelectTool().getSelectionBuffer().getTileBounds();
         Vec2 center = activeLayer.getCenterPos(selectionBounds.getCenter());
 
@@ -44,9 +44,14 @@ namespace editor
         }
     }
 
-    void RotateTool::pointerUp(const ToolContext &toolContext)
+    void RotateTool::pointerUp(const ToolContext &context)
     {
-        toolContext.doc.document->getHistory()->add(std::make_shared<TileUndo>(*m_Undo.get()));
+        TileLayer &tempLayer = context.doc.activeDrawing->getTempLayer();
+        TileLayer &toolLayer = context.doc.activeDrawing->getToolLayer();
+
+        SelectionBuffer &selectionBuffer = context.tools->getSelectTool().getSelectionBuffer();
+
+        context.doc.document->getHistory()->add(std::make_shared<TileUndo>(*m_Undo.get()));
     }
 
     void RotateTool::setRotationInRad(float rad)
@@ -58,22 +63,22 @@ namespace editor
     {
         const BoundsInt &selectionBounds = toolContext.tools->getSelectTool().getSelectionBuffer().getTileBounds();
 
-        std::vector<int> newIndexes = rotate(toolContext.doc.activeDrawing->getActiveLayer(),
+        std::vector<int> newIndexes = rotate(toolContext.doc.activeDrawing->getTempLayer(),
                                              BoundsInt(selectionBounds.getBottomLeft(), selectionBounds.getTopRight()),
                                              m_RotateInRad);
 
-        toolContext.tools->getSelectTool().setSelection(newIndexes, *toolContext.doc.activeDrawing);
+        toolContext.tools->getSelectTool().syncSelection(*toolContext.doc.activeDrawing, newIndexes);
     }
 
     void RotateTool::rotateSelection(const ToolContext &toolContext, double angle)
     {
         const BoundsInt &selectionBounds = toolContext.tools->getSelectTool().getSelectionBuffer().getTileBounds();
 
-        std::vector<int> newIndexes = rotate(toolContext.doc.activeDrawing->getActiveLayer(),
+        std::vector<int> newIndexes = rotate(toolContext.doc.activeDrawing->getTempLayer(),
                                              BoundsInt(selectionBounds.getBottomLeft(), selectionBounds.getTopRight()),
                                              angle);
 
-        toolContext.tools->getSelectTool().setSelection(newIndexes, *toolContext.doc.activeDrawing);
+        toolContext.tools->getSelectTool().syncSelection(*toolContext.doc.activeDrawing, newIndexes);
     }
 
     BoundsInt RotateTool::getBoundsOfImpactedArea(const BoundsInt &selectionBounds, const BoundsInt &maxBounds) const

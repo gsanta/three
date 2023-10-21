@@ -1,5 +1,6 @@
 #include "select_tool.h"
 
+#include "../move_tool/move_tool.h"
 #include "../rotate_tool/rotate_tool.h"
 #include "../shear_tool/shear_tool.h"
 
@@ -11,16 +12,15 @@ namespace editor
         : Tool("select", std::make_shared<RectangleCursor>(1)), m_BoxSelector(m_SelectionBuffer),
           m_WandSelector(m_SelectionBuffer)
     {
-        m_SelectionMover = std::make_unique<SelectionMover>();
     }
 
     void SelectTool::pointerDown(const ToolContext &context)
     {
-        TileLayer &tempLayer = context.doc.activeDrawing->getTempLayer();
+        TileLayer &toolLayer = context.doc.activeDrawing->getToolLayer();
 
-        int tileIndex = tempLayer.getTileIndex(context.pointer.curr);
+        int tileIndex = toolLayer.getTileIndex(context.pointer.curr);
 
-        m_Phase = tempLayer.getAtTileIndex(tileIndex) == nullptr ? selection : manipulation;
+        m_Phase = toolLayer.getAtTileIndex(tileIndex) == nullptr ? selection : manipulation;
 
         if (m_Phase == selection)
         {
@@ -39,7 +39,7 @@ namespace editor
             return;
         }
 
-        TileLayer &tempLayer = context.doc.activeDrawing->getTempLayer();
+        TileLayer &toolLayer = context.doc.activeDrawing->getToolLayer();
         TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
 
         if (m_Phase == selection)
@@ -54,11 +54,6 @@ namespace editor
 
     void SelectTool::pointerUp(const ToolContext &context)
     {
-        TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
-        TileLayer &tempLayer = context.doc.activeDrawing->getTempLayer();
-
-        recalcTileIndexesAndBounds(activeLayer, tempLayer);
-
         if (m_Phase == selection)
         {
             endSelection(context);
@@ -73,21 +68,23 @@ namespace editor
 
     void SelectTool::startManipulation(const ToolContext &context)
     {
-        if (m_Mode == manip_rotate)
+        switch (m_Mode)
         {
+        case manip_rotate:
             context.tools->getRotateTool().pointerDown(context);
-        }
-        else if (m_Mode == manip_shear)
-        {
+            break;
+        case manip_shear:
             context.tools->getShearTool().pointerDown(context);
+            break;
+        case manip_move:
+        default:
+            context.tools->getMoveTool().pointerDown(context);
+            break;
         }
     }
 
     void SelectTool::moveManipulation(const ToolContext &context)
     {
-        TileLayer &tempLayer = context.doc.activeDrawing->getTempLayer();
-        TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
-
         switch (m_Mode)
         {
         case manip_rotate:
@@ -98,45 +95,49 @@ namespace editor
             break;
         case manip_move:
         default:
-            m_SelectionMover->move(tempLayer, context.pointer.curr, context.pointer.prev, context.pointer.down);
-
-            m_SelectionMover->move(activeLayer,
-                                   m_SelectionBuffer.getTileIndexes(),
-                                   context.pointer.curr,
-                                   context.pointer.prev,
-                                   context.pointer.down);
+            context.tools->getMoveTool().pointerMove(context);
             break;
         }
     }
 
     void SelectTool::endManipulation(const ToolContext &context)
     {
-        if (m_Mode == manip_rotate)
+        switch (m_Mode)
         {
+        case manip_rotate:
             context.tools->getRotateTool().pointerUp(context);
-        }
-        else if (m_Mode == manip_shear)
-        {
+            break;
+        case manip_shear:
             context.tools->getShearTool().pointerUp(context);
+            break;
+        case manip_move:
+        default:
+            context.tools->getMoveTool().pointerUp(context);
+            break;
         }
     }
 
     void SelectTool::startSelection(const ToolContext &context)
     {
+        TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
+        TileLayer &toolLayer = context.doc.activeDrawing->getToolLayer();
         TileLayer &tempLayer = context.doc.activeDrawing->getTempLayer();
 
+        tile_operation_copy_all(tempLayer, activeLayer);
+
         m_SelectionBuffer.clear();
+        toolLayer.clear();
         tempLayer.clear();
     }
 
     void SelectTool::moveSelection(const ToolContext &context)
     {
-        TileLayer &tempLayer = context.doc.activeDrawing->getTempLayer();
+        TileLayer &toolLayer = context.doc.activeDrawing->getToolLayer();
         TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
 
         if (m_SelectionType == rectangle)
         {
-            if (!m_BoxSelector.isSelectionChanged(tempLayer,
+            if (!m_BoxSelector.isSelectionChanged(toolLayer,
                                                   context.pointer.curr,
                                                   context.pointer.prev,
                                                   context.pointer.down))
@@ -144,8 +145,8 @@ namespace editor
                 return;
             }
 
-            tempLayer.clear();
-            m_BoxSelector.select(activeLayer, tempLayer, context.pointer.curr, context.pointer.down);
+            toolLayer.clear();
+            m_BoxSelector.select(activeLayer, toolLayer, context.pointer.curr, context.pointer.down);
         }
         else if (m_SelectionType == wand)
         {
@@ -156,19 +157,18 @@ namespace editor
     void SelectTool::endSelection(const ToolContext &context)
     {
         TileLayer &tempLayer = context.doc.activeDrawing->getTempLayer();
+        TileLayer &toolLayer = context.doc.activeDrawing->getToolLayer();
         TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
 
         if (m_SelectionType == wand)
         {
-            m_WandSelector.select(activeLayer, tempLayer, context.pointer.curr, context.pointer.down);
+            m_WandSelector.select(activeLayer, toolLayer, context.pointer.curr, context.pointer.down);
         }
-        else if (context.pointer.downDelta().length() < m_NoMovementTolerance)
-        {
-            TileLayer &tempLayer = context.doc.activeDrawing->getTempLayer();
 
-            tempLayer.clear();
-            m_SelectionBuffer.clear();
-        }
+        m_SelectionBuffer.recalcTileIndexesAndBounds(activeLayer, toolLayer);
+
+        tile_operation_copy_indexes(activeLayer, tempLayer, m_SelectionBuffer.getTileIndexes());
+        tile_operation_remove_indexes(activeLayer, m_SelectionBuffer.getTileIndexes());
     }
 
     void SelectTool::setMode(SelectionManipulationMode mode)
@@ -181,41 +181,38 @@ namespace editor
         m_SelectionType = selectionType;
     }
 
-    void SelectTool::setSelection(const std::vector<int> &indexes, Drawing &drawing)
+    void SelectTool::syncSelection(Drawing &drawing, const std::vector<int> &tileIndexes)
     {
-        TileLayer &activeLayer = drawing.getActiveLayer();
+        TileLayer &toolLayer = drawing.getToolLayer();
         TileLayer &tempLayer = drawing.getTempLayer();
 
-        m_SelectionBuffer.setTileIndexes(indexes, activeLayer);
+        m_SelectionBuffer.setTileIndexes(tileIndexes, tempLayer);
 
         const BoundsInt &bounds = m_SelectionBuffer.getTileBounds();
 
-        m_BoxSelector.select(activeLayer,
-                             tempLayer,
-                             tempLayer.getCenterPos(bounds.getBottomLeft()),
-                             tempLayer.getCenterPos(bounds.getTopRight() + -1));
+        m_BoxSelector.select(tempLayer,
+                             toolLayer,
+                             toolLayer.getCenterPos(bounds.getBottomLeft()),
+                             toolLayer.getCenterPos(bounds.getTopRight() + -1));
     }
 
-    void SelectTool::recalcTileIndexesAndBounds(TileLayer &activeLayer, TileLayer &tempLayer)
+    void SelectTool::setSelection(const std::vector<int> &indexes, Drawing &drawing, TileLayer &layer)
     {
-        std::vector<int> currentTileIndexes = m_SelectionBuffer.getTileIndexes();
-        std::vector<int> newTileIndexes;
+        TileLayer &toolLayer = drawing.getToolLayer();
+        TileLayer &activeLayer = drawing.getActiveLayer();
+        TileLayer &tempLayer = drawing.getTempLayer();
 
-        for (int tileIndex : m_SelectionBuffer.getTileIndexes())
-        {
-            Rect2D *tile = activeLayer.getAtTileIndex(tileIndex);
-            if (tile != nullptr)
-            {
-                newTileIndexes.push_back(activeLayer.updateTileIndex(tile));
-            }
-        }
+        m_SelectionBuffer.setTileIndexes(indexes, layer);
 
-        m_SelectionBuffer.setTileIndexes(newTileIndexes, activeLayer);
+        const BoundsInt &bounds = m_SelectionBuffer.getTileBounds();
 
-        for (Rect2D *tile : tempLayer.getTiles())
-        {
-            tempLayer.updateTileIndex(tile);
-        }
+        m_BoxSelector.select(layer,
+                             toolLayer,
+                             toolLayer.getCenterPos(bounds.getBottomLeft()),
+                             toolLayer.getCenterPos(bounds.getTopRight() + -1));
+
+        tile_operation_copy_indexes(activeLayer, tempLayer, m_SelectionBuffer.getTileIndexes());
+        tile_operation_remove_indexes(activeLayer, m_SelectionBuffer.getTileIndexes());
     }
 
     SelectionBuffer &SelectTool::getSelectionBuffer()

@@ -8,7 +8,7 @@ namespace editor
     {
     }
 
-    void WandSelector::select(const TileLayer &activeLayer, TileLayer &tempLayer, const Vec2 &curr, const Vec2 &start)
+    void WandSelector::select(const TileLayer &activeLayer, TileLayer &toolLayer, const Vec2 &curr, const Vec2 &start)
     {
         Rect2D *tile = activeLayer.getAtWorldPos(curr);
 
@@ -17,7 +17,7 @@ namespace editor
             visit(*tile, activeLayer);
         }
 
-        drawSelection(tempLayer);
+        drawSelection(toolLayer);
     }
 
     void WandSelector::visit(Rect2D &tile, const TileLayer &layer)
@@ -70,17 +70,17 @@ namespace editor
         }
     }
 
-    void WandSelector::drawSelection(TileLayer &tempLayer)
+    void WandSelector::drawSelection(TileLayer &toolLayer)
     {
-        float tileSize = tempLayer.getTileSize();
+        float tileSize = toolLayer.getTileSize();
         unsigned int color = 0x800099ff;
 
         for (int index : m_SelectionBuffer.getTileIndexes())
         {
-            Vec2 bottomLeft = tempLayer.getBottomLeftPos(index);
+            Vec2 bottomLeft = toolLayer.getBottomLeftPos(index);
             Rect2D rect(bottomLeft.x, bottomLeft.y, tileSize, tileSize, color);
 
-            tempLayer.add(rect);
+            toolLayer.add(rect);
         }
     }
 } // namespace editor

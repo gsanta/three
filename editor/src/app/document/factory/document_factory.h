@@ -47,6 +47,8 @@ namespace editor
 
         TileLayer createTempLayer(const Bounds &bounds, float tileSize) const;
 
+        TileLayer createToolLayer(const Bounds &bounds, float tileSize) const;
+
         TileLayer createCursorLayer(const Bounds &bounds, float tileSize) const;
 
         void createFrame(Document &document);
@@ -66,7 +68,7 @@ namespace editor
 
         float m_CursorLayerZPos = 0.1f;
 
-        float m_TempLayerZPos = 0.05f;
+        float m_ToolLayerZPos = 0.05f;
     };
 } // namespace editor
 } // namespace spright

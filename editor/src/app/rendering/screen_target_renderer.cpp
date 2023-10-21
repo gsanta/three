@@ -22,6 +22,8 @@ namespace editor
 
         drawing.getTempLayer().render(camera);
 
+        drawing.getToolLayer().render(camera);
+
         drawing.getCursorLayer().render(camera);
     }
 } // namespace editor

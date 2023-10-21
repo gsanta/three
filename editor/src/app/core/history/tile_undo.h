@@ -59,6 +59,10 @@ namespace editor
                       const TileLayer &activeLayer,
                       std::set<std::shared_ptr<Rect2D>, SharedPtrCompare> &set);
 
+        TileLayer &getUndoLayer(Document &document) const;
+
+        TileLayer &getRedoLayer(Document &document) const;
+
     private:
         std::set<std::shared_ptr<Rect2D>, SharedPtrCompare> m_PrevList;
 

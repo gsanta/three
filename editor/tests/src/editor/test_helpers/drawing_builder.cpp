@@ -86,10 +86,11 @@ Drawing DrawingBuilder::buildFromLayers()
                                  : m_TileLayers[0].withBounds(m_Bounds).withTileSize(m_TileSize).build();
 
     TileLayer backgroundLayer = TileLayerBuilder().withTileSize(m_BackgroundLayerTileSize).withBounds(m_Bounds).build();
-    const TileLayer tempLayer("", HeadlessRenderer2D(), Group<Rect2D>(), m_Bounds, m_TileSize, 0, true);
+    const TileLayer tempLayer("", HeadlessRenderer2D(), Group<Rect2D>(), m_Bounds, m_TileSize, initialLayer.getZPos());
+    const TileLayer toolLayer("", HeadlessRenderer2D(), Group<Rect2D>(), m_Bounds, m_TileSize, 0, true);
     const TileLayer cursorLayer("", HeadlessRenderer2D(), Group<Rect2D>(), m_Bounds, m_TileSize, 0, true);
 
-    Drawing drawing(initialLayer, backgroundLayer, tempLayer, cursorLayer);
+    Drawing drawing(initialLayer, backgroundLayer, tempLayer, toolLayer, cursorLayer);
 
     for (size_t i = 1; i < m_TileLayers.size(); i++)
     {
@@ -111,10 +112,12 @@ Drawing DrawingBuilder::buildFromFrames()
         frames.push_back(frameBuilder.build());
     }
 
-    const TileLayer tempLayer("", HeadlessRenderer2D(), Group<Rect2D>(), m_Bounds, m_TileSize, 0, true);
+    const TileLayer tempLayer(frames[0].getLayers()[0]);
+
+    const TileLayer toolLayer("", HeadlessRenderer2D(), Group<Rect2D>(), m_Bounds, m_TileSize, 0, true);
     const TileLayer cursorLayer("", HeadlessRenderer2D(), Group<Rect2D>(), m_Bounds, m_TileSize, 0, true);
 
-    Drawing drawing(frames, backgroundLayer, tempLayer, cursorLayer);
+    Drawing drawing(frames, backgroundLayer, tempLayer, toolLayer, cursorLayer);
 
     TileLayer foregroundLayer = TileLayerBuilder().withTileSize(m_TileSize).withBounds(m_Bounds).build();
 

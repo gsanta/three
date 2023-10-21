@@ -19,16 +19,16 @@ namespace editor
     public:
         BoxSelector(SelectionBuffer &selectionBuffer);
 
-        void select(const TileLayer &activeLayer, TileLayer &tempLayer, const Vec2 &curr, const Vec2 &start);
+        void select(const TileLayer &activeLayer, TileLayer &toolLayer, const Vec2 &curr, const Vec2 &start);
 
         void clear();
 
         bool isSelectionChanged(const TileLayer &layer, const Vec2 &curr, const Vec2 &prev, const Vec2 &start) const;
 
     private:
-        void fillTempLayer(TileLayer &tempLayer, const Vec2 &curr, const Vec2 &start);
+        void fillTempLayer(TileLayer &toolLayer, const Vec2 &curr, const Vec2 &start);
 
-        BoundsInt calcSelectionBounds(const TileLayer &tempLayer, const Vec2 &vec1, const Vec2 &vec2) const;
+        BoundsInt calcSelectionBounds(const TileLayer &toolLayer, const Vec2 &vec1, const Vec2 &vec2) const;
 
     private:
         float m_DashSize = 0.2f;

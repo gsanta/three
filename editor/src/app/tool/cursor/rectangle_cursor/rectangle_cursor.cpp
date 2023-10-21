@@ -8,15 +8,15 @@ namespace editor
     {
     }
 
-    void RectangleCursor::update(TileLayer &tempLayer, const PointerInfo &pointerInfo)
+    void RectangleCursor::update(TileLayer &toolLayer, const PointerInfo &pointerInfo)
     {
-        setPosition(tempLayer, pointerInfo.curr);
+        setPosition(toolLayer, pointerInfo.curr);
     }
 
-    void RectangleCursor::destroy(TileLayer &tempLayer)
+    void RectangleCursor::destroy(TileLayer &toolLayer)
     {
         m_Rect = nullptr;
-        tempLayer.clear();
+        toolLayer.clear();
     }
 
     void RectangleCursor::setPosition(TileLayer &drawLayer, const Vec2 &pos)
