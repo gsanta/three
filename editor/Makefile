@@ -3,10 +3,21 @@ help: ## Displays the available commands (this help)
 
 .DEFAULT_GOAL := help
 
-configure-target-emscripten: ## configures the cmake emscripten target
-	cd emscripten/build && \
-	emcmake cmake ..
+configure-emscripten: ## configures the cmake emscripten target
+	mkdir -p build/emscripten && \
+	cd build/emscripten && \
+	emcmake cmake ../../emscripten
 
-build-target-emscripten: ## builds the cmake emscripten target
-	cd emscripten/build && \
+compile-emscripten: ## builds the cmake emscripten target
+	mkdir -p build/emscripten && \
+	cd build/emscripten && \
 	cmake --build .
+
+unit-test-docker: ## runs unit tests in a docker container (mainly used by ci)
+	docker-compose run --rm unit-test; echo $?
+
+compile-emscripten-docker: ## compiles the editor for the web with emscripten in a docker container (mainly used by ci)
+	docker-compose run --rm compile-emscripten; echo $?
+
+lint-docker: ## lints the  cpp files of the editor in a docker container that are changed compared to the master branch (mainly used by ci)
+	docker-compose run --rm clang-format; echo $?
