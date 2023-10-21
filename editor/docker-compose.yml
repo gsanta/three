@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  unit-test:
+    build:
+      context: .
+      dockerfile: ./docker/desktop.Dockerfile
+    volumes:
+      - .:/src
+    working_dir: /src
+    command: >
+      sh -c "mkdir -p build/unit-test-ci &&
+            cd build/unit-test-ci &&
+            cmake ../.. -DCOMPILE_APP=OFF && cmake --build . && cd tests && ./unit_tests --success --reporter JUnit::out=unit_test_result.xml"
+  compile-emscripten:
+    build:
+      context: .
+      dockerfile: ./docker/web.Dockerfile
+    volumes:
+      - .:/src
+    command: >
+      sh -c   "mkdir -p build/emscripten-ci &&
+              cd build/emscripten-ci &&
+              emcmake cmake ../../emscripten &&
+              cmake --build ."
+  clang-format:
+    build:
+      context: .
+      dockerfile: ./docker/desktop.Dockerfile
+    volumes:
+    # need to mount the parent directory because that is the root of the git project, otherwise `git diff` command won't work
+      - ..:/src
+    working_dir: /src
+    command: >
+      sh -c   "git config --global --add safe.directory /src &&
+              ./editor/run-clang-format.py editor/app/main.cpp $(git diff --diff-filter=ACMR --name-only origin/master | grep -E '\\.(h|cpp)$' | xargs)"
+volumes:
+  myapp:

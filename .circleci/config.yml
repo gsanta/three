@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  cpp_build_for_web:
+  editor_web_build:
     working_directory: ~/editor
     machine:
       image: ubuntu-2004:current
@@ -9,17 +9,17 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Compile cpp with emscripten
+          name: Compile the editor for web with emscripten
           command: |
             set -x
             cd editor
-            docker-compose run --rm compile-emscripten; echo $?
+            make compile-emscripten-docker
       - persist_to_workspace:
-          root: editor/emscripten/build
+          root: editor/build/emscripten-ci
           paths:
             - spright.js
             - spright.wasm
-  cpp_unit_test:
+  editor_unit_test:
     working_directory: ~/editor
     machine:
       image: ubuntu-2004:current
@@ -27,26 +27,27 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Cpp unit test
+          name: Unit tests for the editor
           command: |
             set -x
             cd editor
-            docker-compose run --rm unit-test; echo $?
+            make unit-test-docker
           environment:
             UNIT_TEST: 'true'
       - store_test_results:
-          path: editor/tests/unit_test_result.xml
-  cpp_lint:
+          path: editor/build/unit-test-ci/tests/unit_test_result.xml
+  editor_lint:
     machine:
       image: ubuntu-2004:current
     resource_class: large
     steps:
       - checkout
       - run:
-          name: Cpp code format check
+          name: Lints the cpp files for the editor
           command: |
             set -x
-            docker-compose run --rm clang-format; echo $?
+            cd editor
+            make lint-docker
   client_lint:
     docker:
       - image: cimg/node:18.16.0
@@ -56,7 +57,7 @@ jobs:
           name: Install Dependencies
           command: cd client && yarn
       - run:
-          name: Lint
+          name: Lints the ts files for the client
           command: ./client/node_modules/.bin/eslint $(git diff --diff-filter=ACMR --name-only origin/master...HEAD | grep -E '\.(ts|tsx)$' | xargs)
   client_build:
     working_directory: ~/client
@@ -68,7 +69,7 @@ jobs:
           name: Install Dependencies
           command: cd client && yarn
       - run:
-          name: Build
+          name: Builds the client
           command: cd client && yarn build
   assemble_frontend:
     docker:
@@ -102,17 +103,17 @@ jobs:
 workflows:
   build-test-and-deploy:
     jobs:
-      - cpp_build_for_web
-      - cpp_lint
-      - cpp_unit_test
+      - editor_web_build
+      - editor_lint
+      - editor_unit_test
       - client_build
       - client_lint
       - assemble_frontend:
           requires:
-            - cpp_build_for_web
+            - editor_web_build
+            - editor_unit_test
+            - editor_lint
             - client_build
-            - cpp_unit_test
-            - cpp_lint
             - client_lint
       - deploy:
           requires:

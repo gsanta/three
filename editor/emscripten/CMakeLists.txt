@@ -27,6 +27,6 @@ add_executable(spright ${SOURCES} ${APP_SOURCES})
 target_link_libraries(spright nlohmann_json::nlohmann_json)
 
 set_target_properties(spright PROPERTIES COMPILE_FLAGS "-fwasm-exceptions")
-set_target_properties(spright PROPERTIES LINK_FLAGS  "-lembind -s ASSERTIONS -s ALLOW_MEMORY_GROWTH -s USE_GLFW=3 -s FULL_ES3=1 -DSPARKY_EMSCRIPTEN=1 -fwasm-exceptions --memory-init-file 0 --embed-file ../resources -gsource-map -g3 -O0")
+set_target_properties(spright PROPERTIES LINK_FLAGS  "-lembind -s ASSERTIONS -s ALLOW_MEMORY_GROWTH -s USE_GLFW=3 -s FULL_ES3=1 -DSPARKY_EMSCRIPTEN=1 -fwasm-exceptions --memory-init-file 0 --embed-file ../../emscripten/resources -gsource-map -g3 -O0")
 
 add_definitions(-DSPARKY_EMSCRIPTEN=1)
