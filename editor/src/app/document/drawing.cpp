@@ -30,24 +30,10 @@ namespace editor
         Frame frame(0);
         frame.addLayer(initialLayer);
         m_Frames.push_back(frame);
-        m_BackgroundLayer = std::make_shared<TileLayer>(backgroundLayer);
-        m_TempLayer = std::make_shared<TileLayer>(tempLayer);
-        m_ToolLayer = std::make_shared<TileLayer>(toolLayer);
-        m_CursorLayer = std::make_shared<TileLayer>(cursorLayer);
-    }
 
-    Drawing::Drawing(const std::vector<Frame> &frames,
-                     const TileLayer &backgroundLayer,
-                     const TileLayer &tempLayer,
-                     const TileLayer &toolLayer,
-                     const TileLayer &cursorLayer)
-        : Container(backgroundLayer.getBounds())
-    {
-        m_Frames = frames;
-        for (size_t i = 0; i < m_Frames.size(); i++)
-        {
-            m_Frames[i].setIndex(i);
-        }
+        m_TempLayers.push_back(initialLayer);
+        m_TempLayers[0].clear();
+
         m_BackgroundLayer = std::make_shared<TileLayer>(backgroundLayer);
         m_TempLayer = std::make_shared<TileLayer>(tempLayer);
         m_ToolLayer = std::make_shared<TileLayer>(toolLayer);
@@ -84,11 +70,28 @@ namespace editor
         m_ActiveFrameIndex = index;
     }
 
-    Frame &Drawing::addFrame(const Frame &frame)
+    Frame &Drawing::addFrame(const std::vector<TileLayer> &layers)
     {
+        if (m_Frames.size() > 0 && m_Frames[0].getLayers().size() != layers.size())
+        {
+            throw std::invalid_argument(
+                "Drawing contains frames with different layer count, layer count for all frames must be equal");
+        }
+
         int index = m_Frames.size();
-        m_Frames.push_back(frame);
+        m_Frames.push_back(Frame());
         m_Frames.back().setIndex(index);
+
+        for (const TileLayer &layer : layers)
+        {
+            m_Frames.back().addLayer(layer);
+
+            if (m_Frames.size() == 1)
+            {
+                m_TempLayers.push_back(layer);
+                m_TempLayers.back().clear();
+            }
+        }
 
         return m_Frames.back();
     }
@@ -123,17 +126,32 @@ namespace editor
         throw std::invalid_argument("Frame with index " + std::to_string(frameIndex) + " not found");
     }
 
-    TileLayer &Drawing::addLayer(const TileLayer &tileLayer)
+    void Drawing::addLayer(const TileLayer &tileLayer)
     {
         if (getBounds() != tileLayer.getBounds())
         {
             throw std::invalid_argument("Can not add a TileLayer to a Drawing with different bounds");
         }
 
-        Frame &frame = getActiveFrame();
-        // check bounds
-        return frame.addLayer(tileLayer);
+        for (Frame &frame : m_Frames)
+        {
+            frame.addLayer(tileLayer);
+        }
+
+        m_TempLayers.push_back(tileLayer);
+        m_TempLayers.back().clear();
     }
+
+    void Drawing::removeLayer(size_t index)
+    {
+        for (Frame &frame : m_Frames)
+        {
+            frame.removeLayer(index);
+        }
+
+        m_TempLayers.erase(m_TempLayers.begin() + index);
+    }
+
 
     TileLayer &Drawing::getActiveLayer()
     {
@@ -161,14 +179,24 @@ namespace editor
     }
 
 
-    TileLayer &Drawing::getTempLayer()
+    TileLayer &Drawing::getTempLayer(size_t index)
     {
-        return *m_TempLayer;
+        return m_TempLayers[index];
     }
 
-    const TileLayer &Drawing::getTempLayer() const
+    const TileLayer &Drawing::getTempLayer(size_t index) const
     {
-        return *m_TempLayer;
+        return m_TempLayers[index];
+    }
+
+    TileLayer &Drawing::getTempLayerOfActiveLayer()
+    {
+        return m_TempLayers[getActiveLayerIndex()];
+    }
+
+    size_t Drawing::getTempLayerCount() const
+    {
+        return m_TempLayers.size();
     }
 
     TileLayer &Drawing::getToolLayer()

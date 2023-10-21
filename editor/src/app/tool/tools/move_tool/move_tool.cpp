@@ -10,7 +10,7 @@ namespace editor
 
     void MoveTool::pointerDown(const ToolContext &context)
     {
-        const TileLayer &tempLayer = context.doc.activeDrawing->getTempLayer();
+        const TileLayer &tempLayer = context.doc.activeDrawing->getTempLayerOfActiveLayer();
 
         m_Undo.reset(new TileUndo(*context.doc.document, context.tools));
 
@@ -32,7 +32,7 @@ namespace editor
     void MoveTool::pointerMove(const ToolContext &context)
     {
         TileLayer &toolLayer = context.doc.activeDrawing->getToolLayer();
-        TileLayer &tempLayer = context.doc.activeDrawing->getTempLayer();
+        TileLayer &tempLayer = context.doc.activeDrawing->getTempLayerOfActiveLayer();
 
         m_SelectionMover.move(toolLayer, context.pointer.curr, context.pointer.prev, context.pointer.down);
         m_SelectionMover.move(tempLayer, context.pointer.curr, context.pointer.prev, context.pointer.down);
@@ -40,7 +40,7 @@ namespace editor
 
     void MoveTool::pointerUp(const ToolContext &context)
     {
-        TileLayer &tempLayer = context.doc.activeDrawing->getTempLayer();
+        TileLayer &tempLayer = context.doc.activeDrawing->getTempLayerOfActiveLayer();
         TileLayer &toolLayer = context.doc.activeDrawing->getToolLayer();
 
         SelectionBuffer &selectionBuffer = context.tools->getSelectTool().getSelectionBuffer();

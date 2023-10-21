@@ -45,11 +45,11 @@ namespace editor
         int frameCount = json["frames"].size();
 
         Document document = m_DocumentFactory->createEmptyDocument();
-        std::vector<Frame> frames;
+        std::vector<std::vector<TileLayer>> frames;
 
         for (int i = 0; i < frameCount; i++)
         {
-            Frame frame;
+            frames.push_back(std::vector<TileLayer>());
             nlohmann::json frameJson = json["frames"][i];
 
             size_t layerCount = frameJson["layers"].size();
@@ -57,19 +57,18 @@ namespace editor
             for (int j = 0; j < layerCount; j++)
             {
                 TileLayer tileLayer = m_TileLayerExport->importLayer(frameJson["layers"][j]);
-                frame.addLayer(tileLayer);
+                frames.back().push_back(tileLayer);
             }
-            frames.push_back(frame);
         }
 
-        CreateDrawingProps createDrawingProps(frames[0].getLayers()[0].getBounds());
+        CreateDrawingProps createDrawingProps(frames[0][0].getBounds());
         createDrawingProps.hasInitialLayer = false;
 
         Drawing drawing = m_DocumentFactory->createDrawing(createDrawingProps);
 
-        for (Frame &frame : frames)
+        for (std::vector<TileLayer> &layers : frames)
         {
-            drawing.addFrame(frame);
+            drawing.addFrame(layers);
         }
 
         document.addDrawing(drawing);

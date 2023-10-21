@@ -121,7 +121,7 @@ namespace editor
     {
         TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
         TileLayer &toolLayer = context.doc.activeDrawing->getToolLayer();
-        TileLayer &tempLayer = context.doc.activeDrawing->getTempLayer();
+        TileLayer &tempLayer = context.doc.activeDrawing->getTempLayerOfActiveLayer();
 
         tile_operation_copy_all(tempLayer, activeLayer);
 
@@ -156,7 +156,7 @@ namespace editor
 
     void SelectTool::endSelection(const ToolContext &context)
     {
-        TileLayer &tempLayer = context.doc.activeDrawing->getTempLayer();
+        TileLayer &tempLayer = context.doc.activeDrawing->getTempLayerOfActiveLayer();
         TileLayer &toolLayer = context.doc.activeDrawing->getToolLayer();
         TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
 
@@ -184,7 +184,7 @@ namespace editor
     void SelectTool::syncSelection(Drawing &drawing, const std::vector<int> &tileIndexes)
     {
         TileLayer &toolLayer = drawing.getToolLayer();
-        TileLayer &tempLayer = drawing.getTempLayer();
+        TileLayer &tempLayer = drawing.getTempLayerOfActiveLayer();
 
         m_SelectionBuffer.setTileIndexes(tileIndexes, tempLayer);
 
@@ -200,7 +200,7 @@ namespace editor
     {
         TileLayer &toolLayer = drawing.getToolLayer();
         TileLayer &activeLayer = drawing.getActiveLayer();
-        TileLayer &tempLayer = drawing.getTempLayer();
+        TileLayer &tempLayer = drawing.getTempLayerOfActiveLayer();
 
         m_SelectionBuffer.setTileIndexes(indexes, layer);
 
