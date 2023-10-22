@@ -8,29 +8,30 @@ namespace editor
     {
     }
 
-    void Cursor::update(TileLayer &foregroundLayer, const PointerInfo &pointerInfo)
+    void Cursor::update(ToolContext &toolContext)
     {
     }
 
-    void Cursor::destroy(TileLayer &foregroundLayer)
+    void Cursor::destroy(ToolContext &toolContext)
     {
     }
 
-    void Cursor::setDisabled(bool isDisabled, TileLayer &foregroundLayer)
+    void Cursor::setDisabled(ToolContext &context)
     {
-        if (m_IsDisabled != isDisabled)
+        if (m_IsEnabled)
         {
-            m_IsDisabled = isDisabled;
-            if (m_IsDisabled)
-            {
-                destroy(foregroundLayer);
-            }
+            m_IsEnabled = false;
+            destroy(context);
         }
     }
 
-    bool Cursor::isDisabled() const
+    void Cursor::setEnabled(ToolContext &toolContext) {
+        m_IsEnabled = true;
+    }
+
+    bool Cursor::isEnabled() const
     {
-        return m_IsDisabled;
+        return m_IsEnabled;
     }
 
     bool Cursor::shouldDisableOnDrag() const

@@ -1,12 +1,12 @@
-#include "../../../test_helpers/builders/content_builder.h"
-#include "../../../test_helpers/document_builder.h"
-#include "../../../test_helpers/drawing_builder.h"
-#include "../../../test_helpers/tool_context_builder.h"
+#include "../../../test_helpers/common_tool_funcs.h"
+#include "../../../test_helpers/builders/document_builder.h"
+#include "../../../test_helpers/builders/drawing_builder.h"
+#include "../../../test_helpers/builders/tool_context_builder.h"
 #include "../src/app/tool/tools/rotate_tool/rotate_tool.h"
 
 #include <catch2/catch_test_macros.hpp>
 
-void rotate_from_center_to_delta(ToolContext &toolContext, ContentBuilder &contentBuilder, const Vec2Int &delta)
+void rotate_from_center_to_delta(ToolContext &toolContext, CommonToolFuncs &commonToolFuncs, const Vec2Int &delta)
 {
     TileLayer &activeLayer = toolContext.doc.activeDrawing->getActiveLayer();
     RotateTool &rotateTool = toolContext.tools->getRotateTool();
@@ -15,31 +15,31 @@ void rotate_from_center_to_delta(ToolContext &toolContext, ContentBuilder &conte
 
     Vec2Int rotationCenter = selectionBounds.getCenter();
 
-    contentBuilder.setPrevCurrDown(rotationCenter + delta);
+    commonToolFuncs.setPrevCurrDown(rotationCenter + delta);
 
     rotateTool.execPointerDown(toolContext);
     rotateTool.execPointerMove(toolContext);
     rotateTool.execPointerUp(toolContext);
 }
 
-void rotate_0_deg(ToolContext &toolContext, ContentBuilder &contentBuilder)
+void rotate_0_deg(ToolContext &toolContext, CommonToolFuncs &commonToolFuncs)
 {
-    rotate_from_center_to_delta(toolContext, contentBuilder, Vec2Int(0, 1));
+    rotate_from_center_to_delta(toolContext, commonToolFuncs, Vec2Int(0, 1));
 }
 
-void rotate_90_deg(ToolContext &toolContext, ContentBuilder &contentBuilder)
+void rotate_90_deg(ToolContext &toolContext, CommonToolFuncs &commonToolFuncs)
 {
-    rotate_from_center_to_delta(toolContext, contentBuilder, Vec2Int(1, 0));
+    rotate_from_center_to_delta(toolContext, commonToolFuncs, Vec2Int(1, 0));
 }
 
-void rotate_180_deg(ToolContext &toolContext, ContentBuilder &contentBuilder)
+void rotate_180_deg(ToolContext &toolContext, CommonToolFuncs &commonToolFuncs)
 {
-    rotate_from_center_to_delta(toolContext, contentBuilder, Vec2Int(0, -1));
+    rotate_from_center_to_delta(toolContext, commonToolFuncs, Vec2Int(0, -1));
 }
 
-void rotate_270_deg(ToolContext &toolContext, ContentBuilder &contentBuilder)
+void rotate_270_deg(ToolContext &toolContext, CommonToolFuncs &commonToolFuncs)
 {
-    rotate_from_center_to_delta(toolContext, contentBuilder, Vec2Int(-1, 0));
+    rotate_from_center_to_delta(toolContext, commonToolFuncs, Vec2Int(-1, 0));
 }
 
 void require_not_changed(const TileLayer &activeLayer)
@@ -75,8 +75,9 @@ SCENARIO("Rotate tool")
     {
         Document document = DocumentBuilder().withDrawing(DrawingBuilder().withBounds(Bounds(0, 0, 12, 12))).build();
         ToolContext toolContext = ToolContextBuilder().build(document);
-        ContentBuilder contentBuilder(document, toolContext);
-        contentBuilder.buildRect(BoundsInt(4, 1, 5, 3)).buildTile(Vec2Int(4, 0));
+        CommonToolFuncs commonToolFuncs(document, toolContext);
+        commonToolFuncs.buildRect(BoundsInt(4, 1, 5, 3));
+        commonToolFuncs.buildTile(Vec2Int(4, 0));
 
         Drawing &drawing = document.getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
@@ -87,7 +88,7 @@ SCENARIO("Rotate tool")
         {
             WHEN("executing a 90deg rotation")
             {
-                rotate_90_deg(toolContext, contentBuilder);
+                rotate_90_deg(toolContext, commonToolFuncs);
 
                 THEN("shape is not rotated")
                 {
@@ -98,11 +99,11 @@ SCENARIO("Rotate tool")
 
         WHEN("selecting the shape")
         {
-            contentBuilder.selectRect(BoundsInt(4, 0, 5, 3));
+            commonToolFuncs.selectRect(BoundsInt(4, 0, 5, 3));
 
             WHEN("executing a 0deg rotation")
             {
-                rotate_0_deg(toolContext, contentBuilder);
+                rotate_0_deg(toolContext, commonToolFuncs);
 
                 THEN("it updates the tiles positions according to the rotation")
                 {
@@ -120,7 +121,7 @@ SCENARIO("Rotate tool")
 
             WHEN("executing a 90deg rotation")
             {
-                rotate_90_deg(toolContext, contentBuilder);
+                rotate_90_deg(toolContext, commonToolFuncs);
 
                 THEN("it updates the tiles positions according to the rotation")
                 {
@@ -150,7 +151,7 @@ SCENARIO("Rotate tool")
 
             WHEN("executing a 180deg rotation")
             {
-                rotate_180_deg(toolContext, contentBuilder);
+                rotate_180_deg(toolContext, commonToolFuncs);
 
                 THEN("it updates the tiles positions according to the rotation")
                 {
@@ -168,7 +169,7 @@ SCENARIO("Rotate tool")
 
             WHEN("executing a 270deg rotation")
             {
-                rotate_270_deg(toolContext, contentBuilder);
+                rotate_270_deg(toolContext, commonToolFuncs);
 
                 THEN("it updates the tiles positions according to the rotation")
                 {

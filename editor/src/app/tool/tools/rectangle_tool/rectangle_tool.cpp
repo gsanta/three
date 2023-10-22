@@ -19,7 +19,7 @@ namespace editor
         }
     }
 
-    void RectangleTool::pointerUp(const ToolContext &context)
+    void RectangleTool::pointerUp(ToolContext &context)
     {
         if (!context.doc.hasActiveDrawing())
         {
@@ -53,7 +53,7 @@ namespace editor
         }
 
         context.doc.document->getHistory()->add(std::make_shared<TileUndo>(tileUndo));
-        getCursor()->destroy(context.doc.activeDrawing->getToolLayer());
+        getCursor()->destroy(context);
         context.doc.activeDrawing->getToolLayer().clear();
         m_TempRectDrawer.reset();
     }

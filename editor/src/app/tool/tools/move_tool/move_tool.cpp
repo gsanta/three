@@ -38,7 +38,7 @@ namespace editor
         m_SelectionMover.move(tempLayer, context.pointer.curr, context.pointer.prev, context.pointer.down);
     }
 
-    void MoveTool::pointerUp(const ToolContext &context)
+    void MoveTool::pointerUp(ToolContext &context)
     {
         TileLayer &tempLayer = context.doc.activeDrawing->getTempLayerOfActiveLayer();
         TileLayer &toolLayer = context.doc.activeDrawing->getToolLayer();

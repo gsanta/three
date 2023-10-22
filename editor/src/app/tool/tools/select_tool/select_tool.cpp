@@ -52,7 +52,7 @@ namespace editor
         }
     }
 
-    void SelectTool::pointerUp(const ToolContext &context)
+    void SelectTool::pointerUp( ToolContext &context)
     {
         if (m_Phase == selection)
         {
@@ -100,7 +100,7 @@ namespace editor
         }
     }
 
-    void SelectTool::endManipulation(const ToolContext &context)
+    void SelectTool::endManipulation(ToolContext &context)
     {
         switch (m_Mode)
         {

@@ -1,6 +1,6 @@
-#include "../../../test_helpers/builders/content_builder.h"
-#include "../../../test_helpers/document_builder.h"
-#include "../../../test_helpers/tool_context_builder.h"
+#include "../../../test_helpers/common_tool_funcs.h"
+#include "../../../test_helpers/builders/document_builder.h"
+#include "../../../test_helpers/builders/tool_context_builder.h"
 #include "../src/app/tool/tools/move_tool/move_tool.h"
 
 #include <catch2/catch_test_macros.hpp>
@@ -24,7 +24,7 @@ SCENARIO("Move tool")
 
         ToolContext toolContext = ToolContextBuilder().build(document);
 
-        ContentBuilder contentBuilder(document, toolContext);
+        CommonToolFuncs commonToolFuncs(document, toolContext);
 
         TileLayer &toolLayer = activeDrawing.getToolLayer();
         TileLayer &activeLayer = activeDrawing.getActiveLayer();
@@ -32,11 +32,11 @@ SCENARIO("Move tool")
 
         MoveTool moveTool;
 
-        contentBuilder.selectRect(BoundsInt(1, 1, 2, 2));
+        commonToolFuncs.selectRect(BoundsInt(1, 1, 2, 2));
 
         WHEN("mouse down on the selection")
         {
-            contentBuilder.setPrevCurrDown(Vec2Int(1, 1));
+            commonToolFuncs.setPrevCurrDown(Vec2Int(1, 1));
 
             moveTool.pointerDown(toolContext);
 

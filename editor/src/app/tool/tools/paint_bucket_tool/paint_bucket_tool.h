@@ -21,7 +21,7 @@ namespace editor
     public:
         PaintBucketTool();
 
-        void pointerUp(const ToolContext &) override;
+        void pointerUp( ToolContext &) override;
 
     private:
         QueueLinearFloodFill m_FloodFill;

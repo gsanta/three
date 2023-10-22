@@ -33,7 +33,7 @@ namespace editor
         drawCircle(bounds, foregroundLayer, context);
     }
 
-    void CircleTool::pointerUp(const ToolContext &context)
+    void CircleTool::pointerUp( ToolContext &context)
     {
         TileLayer &activeLayer = context.doc.activeDrawing->getActiveLayer();
         BoundsInt bounds = getCircleBounds(context, activeLayer);

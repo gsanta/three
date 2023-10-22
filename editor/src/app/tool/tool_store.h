@@ -13,6 +13,7 @@ namespace editor
     class ColorPickerTool;
     class RotateTool;
     class MoveTool;
+    class BrushTool;
 
     class ToolStore
     {
@@ -30,6 +31,8 @@ namespace editor
         RotateTool &getRotateTool();
 
         MoveTool &getMoveTool();
+
+        BrushTool &getBrushTool();
 
     private:
         std::vector<Tool *> m_Tools;

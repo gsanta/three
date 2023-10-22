@@ -1,5 +1,5 @@
 #include "../src/app/algorithm/flip_vertical.h"
-#include "../test_helpers/document_store_builder.h"
+#include "../test_helpers/builders/document_store_builder.h"
 
 #include <catch2/catch_test_macros.hpp>
 

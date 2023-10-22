@@ -13,6 +13,7 @@ namespace editor
 
     void BrushTool::setSize(int size)
     {
+        dynamic_cast<RectangleCursor*>(getCursor().get())->setSize(size);
         m_Size = size;
     }
 
@@ -37,34 +38,38 @@ namespace editor
 
         float zoom = camera.getZoom();
 
-        Drawing *drawing = context.doc.document->getDrawingAt(context.pointer.curr);
+        Drawing &drawing = context.doc.document->getActiveDrawing();
 
-        if (drawing != nullptr)
+        TileLayer &layer = drawing.getActiveLayer();
+
+        if (!isPointerMove)
         {
-            TileLayer &layer = drawing->getActiveLayer();
+            context.doc.document->getHistory()->add(
+                std::make_shared<TileUndo>(TileUndo::createForActiveTileLayer(*context.doc.document, context.tools)));
+        }
 
-            if (!isPointerMove)
+        TileUndo *tileUndo = dynamic_cast<TileUndo *>(context.doc.document->getHistory()->peek());
+
+        int half = m_Size / 2;
+        int end = (m_Size - half);
+
+        for (int i = -half; i < end; i++)
+        {
+            for (int j = -half; j < end; j++)
             {
-                context.doc.document->getHistory()->add(std::make_shared<TileUndo>(
-                    TileUndo::createForActiveTileLayer(*context.doc.document, context.tools)));
+                Vec2Int tilePos = layer.getTilePos(context.pointer.curr) + Vec2Int(i, j);
+
+                brush.paint(
+                    layer,
+                    tilePos,
+                    context.tools->getColorPickerTool().getColor(),
+                    [&](std::shared_ptr<Rect2D> prev, std::shared_ptr<Rect2D> next) { tileUndo->addTile(prev, next); });
             }
+        }
 
-            TileUndo *tileUndo = dynamic_cast<TileUndo *>(context.doc.document->getHistory()->peek());
-
-            for (int i = 0; i < m_Size; i++)
-            {
-                for (int j = 0; j < m_Size; j++)
-                {
-                    Vec2Int tilePos = layer.getTilePos(context.pointer.curr);
-
-                    brush.paint(layer,
-                                tilePos,
-                                context.tools->getColorPickerTool().getColor(),
-                                [&](std::shared_ptr<Rect2D> prev, std::shared_ptr<Rect2D> next) {
-                                    tileUndo->addTile(prev, next);
-                                });
-                }
-            }
+        if (tileUndo->isEmpty())
+        {
+            context.doc.document->getHistory()->pop();
         }
     }
 } // namespace editor

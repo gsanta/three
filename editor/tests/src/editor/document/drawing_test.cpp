@@ -1,6 +1,6 @@
 #include "../src/app/document/drawing.h"
 #include "../src/app/document/factory/document_factory.h"
-#include "../test_helpers/drawing_builder.h"
+#include "../test_helpers/builders/drawing_builder.h"
 
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers.hpp>

@@ -2,11 +2,11 @@
 // #include "../src/app/tool/tools/color_picker_tool/color_picker_tool.h"
 // #include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
 // #include "../test_helpers/document_info_builder.h"
-// #include "../test_helpers/document_store_builder.h"
-// #include "../test_helpers/pointer_info_builder.h"
+// #include "../test_helpers/builders/document_store_builder.h"
+// #include "../test_helpers/builders/pointer_info_builder.h"
 // #include "../test_helpers/test_document_factory.h"
 // #include "../test_helpers/test_event_emitter.h"
-// #include "../test_helpers/tool_context_builder.h"
+// #include "../test_helpers/builders/tool_context_builder.h"
 
 // #include <catch2/catch_test_macros.hpp>
 

@@ -1,4 +1,4 @@
-#include "../../test_helpers/document_builder.h"
+#include "../../test_helpers/builders/document_builder.h"
 #include "../src/app/core/history/document_history.h"
 #include "../src/app/core/history/undoable.h"
 

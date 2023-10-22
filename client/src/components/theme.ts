@@ -9,6 +9,7 @@ import MenuTheme from './themes/Menu.theme';
 import Alert from './themes/Alert.theme';
 import Switch from './themes/Switch.theme';
 import Tabs from './themes/Tabs.theme';
+import Slider from './themes/Slider.theme';
 import FrameButtonTheme from './button/FrameButton.theme';
 import { formLabelTheme } from './themes/FormLabel.theme';
 import { inputTheme } from './themes/Input.theme';
@@ -56,6 +57,7 @@ const theme = extendTheme({
     Input: inputTheme,
     Alert: Alert,
     Tabs: Tabs,
+    Slider: Slider,
     // Form: FormControl,
     // FormLabel: formLabelTheme,
   },

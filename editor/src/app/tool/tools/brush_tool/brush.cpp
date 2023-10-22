@@ -8,6 +8,11 @@ namespace editor
     void Brush::paint(TileLayer &tileLayer, const Vec2Int &tilePos, unsigned int color, const onRect2DCreate &operation)
     {
         int tileIndex = tileLayer.getTileIndex(tilePos.x, tilePos.y);
+
+        if (tileIndex == -1) {
+            return;
+        }
+
         Renderable2D *renderable = tileLayer.getAtTileIndex(tileIndex);
         Vec2 worldPos = tileLayer.getBottomLeftPos(tileIndex);
 

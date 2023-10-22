@@ -1,6 +1,6 @@
 
 #include "../../../test_helpers/test_document_factory.h"
-#include "../../../test_helpers/tile_layer_builder.h"
+#include "../../../test_helpers/builders/tile_layer_builder.h"
 #include "../src/app/core/colors.h"
 #include "../src/app/service/io/json/tile_layer_export.h"
 #include "../src/engine/system/window/impl/headless/headless_window.h"

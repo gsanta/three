@@ -1,7 +1,7 @@
 #include "../src/app/algorithm/flip_horizontal.h"
 #include "../src/app/core/colors.h"
-#include "../test_helpers/document_builder.h"
-#include "../test_helpers/document_store_builder.h"
+#include "../test_helpers/builders/document_builder.h"
+#include "../test_helpers/builders/document_store_builder.h"
 
 #include <catch2/catch_test_macros.hpp>
 

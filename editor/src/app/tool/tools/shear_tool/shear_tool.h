@@ -18,7 +18,7 @@ namespace editor
 
         void pointerMove(const ToolContext &toolContext) override;
 
-        void pointerUp(const ToolContext &toolContext) override;
+        void pointerUp(ToolContext &toolContext) override;
 
         void execute(const ToolContext &toolContext) override;
 
