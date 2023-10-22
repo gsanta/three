@@ -11,6 +11,7 @@ interface ToolState {
   isCircleFilled: boolean;
   isRectangleFilled: boolean;
   eraserSize: number;
+  brushSize: number;
 }
 
 const initialState: ToolState = {
@@ -29,6 +30,7 @@ const initialState: ToolState = {
   isCircleFilled: false,
   isRectangleFilled: false,
   eraserSize: 3,
+  brushSize: 1,
 };
 
 export const toolSlice = createSlice({
@@ -83,6 +85,10 @@ export const toolSlice = createSlice({
       state.eraserSize = action.payload;
     },
 
+    setBrushSize: (state, action: PayloadAction<number>) => {
+      state.brushSize = action.payload;
+    },
+
     setRectangleFilled: (state, action: PayloadAction<boolean>) => {
       state.editor?.setRectangleToolFilled(action.payload);
       state.isRectangleFilled = action.payload;
@@ -96,6 +102,7 @@ export const {
   deActivateTool,
   initTools,
   setCircleFilled,
+  setBrushSize,
   setEraserSize,
   setRectangleFilled,
   setSelectedTool,

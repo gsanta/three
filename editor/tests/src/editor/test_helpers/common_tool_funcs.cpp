@@ -1,11 +1,11 @@
-#include "content_builder.h"
+#include "./common_tool_funcs.h"
 
 
-ContentBuilder::ContentBuilder(Document &document, ToolContext &context) : m_Document(document), m_Context(context)
+CommonToolFuncs::CommonToolFuncs(Document &document, ToolContext &context) : m_Document(document), m_Context(context)
 {
 }
 
-ContentBuilder &ContentBuilder::buildRect(const BoundsInt &bounds)
+void CommonToolFuncs::buildRect(const BoundsInt &bounds)
 {
     TileLayer &activeLayer = m_Context.doc.activeDrawing->getActiveLayer();
     Vec2 start = activeLayer.getCenterPos(bounds.getBottomLeft());
@@ -22,11 +22,9 @@ ContentBuilder &ContentBuilder::buildRect(const BoundsInt &bounds)
 
     rectTool.execPointerMove(m_Context);
     rectTool.execPointerUp(m_Context);
-
-    return *this;
 }
 
-ContentBuilder &ContentBuilder::buildTile(const Vec2Int &pos)
+void CommonToolFuncs::buildTile(const Vec2Int &pos)
 {
     TileLayer &activeLayer = m_Context.doc.activeDrawing->getActiveLayer();
 
@@ -36,28 +34,29 @@ ContentBuilder &ContentBuilder::buildTile(const Vec2Int &pos)
 
     brushTool.execPointerDown(m_Context);
     brushTool.execPointerUp(m_Context);
-
-    return *this;
 }
 
-ContentBuilder &ContentBuilder::setPrevCurrDown(const Vec2Int &pos)
+void CommonToolFuncs::setPrevCurrDown(const Vec2Int &pos)
 {
     m_Context.pointer.curr = m_Context.pointer.prev = m_Context.pointer.down =
         m_Context.doc.activeDrawing->getActiveLayer().getCenterPos(pos);
 
     m_Context.pointer.isDown = true;
-
-    return *this;
 }
 
-ContentBuilder &ContentBuilder::setCurr(const Vec2Int &pos)
+void CommonToolFuncs::setPrevCurrDown(const Vec2 &pos)
+{
+    m_Context.pointer.curr = m_Context.pointer.prev = m_Context.pointer.down = pos;
+
+    m_Context.pointer.isDown = true;
+}
+
+void CommonToolFuncs::setCurr(const Vec2Int &pos)
 {
     m_Context.pointer.curr = m_Context.doc.activeDrawing->getActiveLayer().getCenterPos(pos);
-
-    return *this;
 }
 
-ContentBuilder &ContentBuilder::selectTiles(const std::vector<Rect2D *> &tiles)
+void CommonToolFuncs::selectTiles(const std::vector<Rect2D *> &tiles)
 {
     TileLayer &activeLayer = m_Context.doc.activeDrawing->getActiveLayer();
 
@@ -70,11 +69,9 @@ ContentBuilder &ContentBuilder::selectTiles(const std::vector<Rect2D *> &tiles)
     m_Context.tools->getSelectTool().setSelection(tileIndexes,
                                                   *m_Context.doc.activeDrawing,
                                                   m_Context.doc.activeDrawing->getTempLayerOfActiveLayer());
-
-    return *this;
 }
 
-ContentBuilder &ContentBuilder::selectRect(const BoundsInt &bounds)
+void CommonToolFuncs::selectRect(const BoundsInt &bounds)
 {
     TileLayer &activeLayer = m_Context.doc.activeDrawing->getActiveLayer();
     Vec2 start = activeLayer.getCenterPos(bounds.getBottomLeft());
@@ -90,6 +87,18 @@ ContentBuilder &ContentBuilder::selectRect(const BoundsInt &bounds)
 
     selectTool.execPointerMove(m_Context);
     selectTool.execPointerUp(m_Context);
+}
 
-    return *this;
+void CommonToolFuncs::clickAtTilePos(const Vec2Int &pos, Tool &tool)
+{
+    setPrevCurrDown(pos);
+    tool.execPointerDown(m_Context);
+    tool.execPointerUp(m_Context);
+}
+
+void CommonToolFuncs::clickAtPos(const Vec2 &pos, Tool &tool)
+{
+    setPrevCurrDown(pos);
+    tool.execPointerDown(m_Context);
+    tool.execPointerUp(m_Context);
 }

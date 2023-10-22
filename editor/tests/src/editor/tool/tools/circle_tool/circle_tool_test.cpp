@@ -1,8 +1,8 @@
 
 #include "../src/app/tool/tools/circle_tool/circle_tool.h"
-#include "src/editor/test_helpers/document_builder.h"
-#include "src/editor/test_helpers/document_store_builder.h"
-#include "src/editor/test_helpers/tool_context_builder.h"
+#include "src/editor/test_helpers/builders/document_builder.h"
+#include "src/editor/test_helpers/builders/document_store_builder.h"
+#include "src/editor/test_helpers/builders/tool_context_builder.h"
 
 #include <catch2/catch_test_macros.hpp>
 

@@ -17,19 +17,19 @@ namespace editor
     public:
         Tool(string name, std::shared_ptr<Cursor> cursor = std::make_shared<Cursor>());
 
-        void execPointerDown(const ToolContext &toolContext);
+        void execPointerDown(ToolContext &toolContext);
 
-        void execPointerMove(const ToolContext &toolContext);
+        void execPointerMove(ToolContext &toolContext);
 
-        void execPointerUp(const ToolContext &toolContext);
+        void execPointerUp(ToolContext &toolContext);
 
-        void execDeactivate(const ToolContext &toolContext);
+        void execDeactivate(ToolContext &toolContext);
 
         inline virtual void pointerDown(const ToolContext &toolContext)
         {
         }
 
-        inline virtual void pointerUp(const ToolContext &toolContext)
+        inline virtual void pointerUp(ToolContext &toolContext)
         {
         }
 

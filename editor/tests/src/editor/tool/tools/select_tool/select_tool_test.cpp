@@ -1,7 +1,7 @@
-#include "../../test_helpers/builders/content_builder.h"
-#include "../../test_helpers/document_builder.h"
-#include "../../test_helpers/pointer_info_builder.h"
-#include "../../test_helpers/tool_context_builder.h"
+#include "../../../test_helpers/common_tool_funcs.h"
+#include "../../../test_helpers/builders/document_builder.h"
+#include "../../../test_helpers/builders/pointer_info_builder.h"
+#include "../../../test_helpers/builders/tool_context_builder.h"
 #include "../src/app/tool/tools/select_tool/select_tool.h"
 
 #include <catch2/catch_test_macros.hpp>
@@ -141,7 +141,7 @@ SCENARIO("Select tool")
         Drawing &activeDrawing = document.getActiveDrawing();
         ToolContext toolContext = ToolContextBuilder().build(document);
 
-        ContentBuilder contentBuilder(document, toolContext);
+        CommonToolFuncs commonToolFuncs(document, toolContext);
 
         SelectTool selectTool;
         TileLayer &activeLayer = activeDrawing.getActiveLayer();
@@ -154,7 +154,7 @@ SCENARIO("Select tool")
 
             WHEN("clicking with the mouse on a tile")
             {
-                contentBuilder.setPrevCurrDown(Vec2Int(1, 1));
+                commonToolFuncs.setPrevCurrDown(Vec2Int(1, 1));
                 selectTool.pointerDown(toolContext);
                 selectTool.pointerUp(toolContext);
 
@@ -179,7 +179,7 @@ SCENARIO("Select tool")
 
                 WHEN("clicking on another color")
                 {
-                    contentBuilder.setPrevCurrDown(Vec2Int(3, 2));
+                    commonToolFuncs.setPrevCurrDown(Vec2Int(3, 2));
                     selectTool.pointerDown(toolContext);
                     selectTool.pointerUp(toolContext);
 
@@ -192,40 +192,6 @@ SCENARIO("Select tool")
                         REQUIRE(toolLayer.getAtTilePos(3, 2) != nullptr);
                     }
                 }
-
-                // WHEN("dragging with the mouse over the selection")
-                // {
-                //     contentBuilder.setPrevCurrDown(Vec2Int(1, 1));
-                //     selectTool.pointerDown(toolContext);
-
-                //     contentBuilder.setCurr(Vec2Int(1, 3));
-                //     selectTool.pointerMove(toolContext);
-
-                //     selectTool.pointerUp(toolContext);
-
-                //     THEN("it moves the tiles to the given destination")
-                //     {
-                //         REQUIRE(tempLayer.getTiles().size() == 4);
-                //         REQUIRE(tempLayer.getAtTilePos(1, 3)->getColor() == COLOR_RED);
-                //         REQUIRE(tempLayer.getAtTilePos(1, 2)->getColor() == COLOR_RED);
-                //         REQUIRE(tempLayer.getAtTilePos(2, 3)->getColor() == COLOR_RED);
-                //         REQUIRE(tempLayer.getAtTilePos(2, 4)->getColor() == COLOR_RED);
-                //     }
-
-                //     WHEN("clearing the selection")
-                //     {
-                //         contentBuilder.setPrevCurrDown(Vec2Int(1, 1));
-                //         selectTool.pointerDown(toolContext);
-                //         selectTool.pointerUp(toolContext);
-
-                //         THEN("it moves the tiles from tempLayer to activeLayer")
-                //         {
-                //             REQUIRE(tempLayer.getTiles().size() == 0);
-
-                //             REQUIRE(activeLayer.getTiles().size() == 6);
-                //         }
-                //     }
-                // }
             }
         }
     }

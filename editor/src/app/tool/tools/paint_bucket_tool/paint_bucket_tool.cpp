@@ -11,7 +11,7 @@ namespace editor
     {
     }
 
-    void PaintBucketTool::pointerUp(const ToolContext &context)
+    void PaintBucketTool::pointerUp( ToolContext &context)
     {
         if (!context.doc.hasActiveDrawing())
         {

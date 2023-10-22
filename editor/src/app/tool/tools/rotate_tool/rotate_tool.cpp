@@ -44,7 +44,7 @@ namespace editor
         }
     }
 
-    void RotateTool::pointerUp(const ToolContext &context)
+    void RotateTool::pointerUp( ToolContext &context)
     {
         TileLayer &tempLayer = context.doc.activeDrawing->getTempLayerOfActiveLayer();
         TileLayer &toolLayer = context.doc.activeDrawing->getToolLayer();

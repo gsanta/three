@@ -113,6 +113,11 @@ namespace editor
         m_NewSelectedIndexes = newSelectedIndexes;
     }
 
+    bool TileUndo::isEmpty() const
+    {
+        return m_PrevList.size() == 0 && m_NewList.size() == 0;
+    }
+
     TileLayer &TileUndo::getUndoLayer(Document &document) const
     {
         Drawing &drawing = document.getDrawings()[m_DrawingIndex];

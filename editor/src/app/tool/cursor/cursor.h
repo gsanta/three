@@ -12,18 +12,20 @@ namespace editor
     public:
         Cursor(bool shouldDisableOnDrag = false);
 
-        virtual void update(TileLayer &foregroundLayer, const PointerInfo &pointerInfo);
+        virtual void update(ToolContext &context);
 
-        virtual void destroy(TileLayer &foregroundLayer);
+        virtual void destroy(ToolContext &context);
 
-        void setDisabled(bool isDisabled, TileLayer &foregroundLayer);
+        void setDisabled(ToolContext &context);
 
-        bool isDisabled() const;
+        void setEnabled(ToolContext &context);
+
+        bool isEnabled() const;
 
         bool shouldDisableOnDrag() const;
 
     private:
-        bool m_IsDisabled = false;
+        bool m_IsEnabled = true;
 
         bool m_DisableOnDrag = false;
     };

@@ -1,6 +1,6 @@
 
-#include "../../test_helpers/drawing_builder.h"
-#include "../../test_helpers/frame_builder.h"
+#include "../../test_helpers/builders/drawing_builder.h"
+#include "../../test_helpers/builders/frame_builder.h"
 #include "../src/app/feature/frame/frame_player.cpp"
 
 #include <catch2/catch_test_macros.hpp>

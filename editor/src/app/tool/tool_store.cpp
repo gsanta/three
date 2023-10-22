@@ -6,6 +6,7 @@
 #include "tools/rotate_tool/rotate_tool.h"
 #include "tools/select_tool/select_tool.h"
 #include "tools/shear_tool/shear_tool.h"
+#include "tools/brush_tool/brush_tool.h"
 
 namespace spright
 {
@@ -48,6 +49,11 @@ namespace editor
     MoveTool &ToolStore::getMoveTool()
     {
         return *dynamic_cast<MoveTool *>(getTool("move"));
+    }
+
+    BrushTool &ToolStore::getBrushTool()
+    {
+        return *dynamic_cast<BrushTool *>(getTool("brush"));
     }
 } // namespace editor
 } // namespace spright

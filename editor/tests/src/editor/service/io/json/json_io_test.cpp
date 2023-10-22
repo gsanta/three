@@ -1,5 +1,5 @@
-#include "../../../test_helpers/document_builder.h"
-#include "../../../test_helpers/drawing_builder.h"
+#include "../../../test_helpers/builders/document_builder.h"
+#include "../../../test_helpers/builders/drawing_builder.h"
 #include "../src/app/core/colors.h"
 #include "../src/app/document/drawing.h"
 #include "../src/app/service/io/json/json_io.h"

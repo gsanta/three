@@ -22,6 +22,8 @@ namespace editor
 
         Undoable *peek();
 
+        void pop();
+
         size_t undoSize();
 
         size_t redoSize();

@@ -36,6 +36,11 @@ namespace editor
         return m_UndoList.back().get();
     }
 
+    void DocumentHistory::pop()
+    {
+        m_UndoList.pop_back();
+    }
+
     size_t DocumentHistory::undoSize()
     {
         return m_UndoList.size();

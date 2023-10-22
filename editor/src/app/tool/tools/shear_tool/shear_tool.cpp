@@ -46,7 +46,7 @@ namespace editor
         }
     }
 
-    void ShearTool::pointerUp(const ToolContext &context)
+    void ShearTool::pointerUp( ToolContext &context)
     {
         TileLayer &tempLayer = context.doc.activeDrawing->getTempLayerOfActiveLayer();
         TileLayer &toolLayer = context.doc.activeDrawing->getToolLayer();

@@ -1,7 +1,7 @@
 #pragma once
 #include "../src/engine/graphics/renderable/bounds.h"
 #include "frame_builder.h"
-#include "test_document_factory.h"
+#include "../test_document_factory.h"
 #include "tile_layer_builder.h"
 
 #include <vector>

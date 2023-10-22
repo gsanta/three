@@ -1,8 +1,8 @@
 #include "../../test_helpers/builders/tile_builder.h"
-#include "../../test_helpers/document_builder.h"
-#include "../../test_helpers/drawing_builder.h"
-#include "../../test_helpers/tile_layer_builder.h"
-#include "../../test_helpers/tool_context_builder.h"
+#include "../../test_helpers/builders/document_builder.h"
+#include "../../test_helpers/builders/drawing_builder.h"
+#include "../../test_helpers/builders/tile_layer_builder.h"
+#include "../../test_helpers/builders/tool_context_builder.h"
 #include "../src/app/core/colors.h"
 #include "../src/app/core/history/tile_undo.h"
 
@@ -14,7 +14,7 @@ SCENARIO("TileUndo")
 
     Drawing drawing = DrawingBuilder()
                           .withFrame(FrameBuilder().withTileLayer(TileLayerBuilder().withTileSize(1).withBounds(
-                                         Bounds::createWithPositions(-2.0f, -2.0f, 2.0f, 2.0f))),
+                                         Bounds::createWithPositions(-3.0f, -3.0f, 4.0f, 4.0f))),
                                      2)
                           .build();
 

@@ -54,6 +54,8 @@ namespace editor
 
         void setNewSelection(const std::vector<int> &newSelectedIndexes);
 
+        bool isEmpty() const;
+
     private:
         void setTiles(const BoundsInt &area,
                       const TileLayer &activeLayer,

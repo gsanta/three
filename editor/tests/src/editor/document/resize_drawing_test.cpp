@@ -3,7 +3,7 @@
 #include "../src/app/document/factory/document_factory.h"
 #include "../src/app/document/resize_drawing.h"
 #include "../src/engine/system/window/impl/headless/headless_window.h"
-#include "../test_helpers/drawing_builder.h"
+#include "../test_helpers/builders/drawing_builder.h"
 
 #include <catch2/catch_test_macros.hpp>
 using namespace spright::editor;

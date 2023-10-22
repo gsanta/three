@@ -1,9 +1,9 @@
-#include "../../../test_helpers/builders/content_builder.h"
-#include "../../../test_helpers/document_builder.h"
-#include "../../../test_helpers/drawing_builder.h"
+#include "../../../test_helpers/common_tool_funcs.h"
+#include "../../../test_helpers/builders/document_builder.h"
+#include "../../../test_helpers/builders/drawing_builder.h"
 #include "../../../test_helpers/matchers/has_tiles_within_area_matcher.h"
-#include "../../../test_helpers/tile_layer_builder.h"
-#include "../../../test_helpers/tool_context_builder.h"
+#include "../../../test_helpers/builders/tile_layer_builder.h"
+#include "../../../test_helpers/builders/tool_context_builder.h"
 #include "../src/app/tool/tools/rectangle_tool/rectangle_tool.h"
 #include "../src/app/tool/tools/select_tool/select_tool.h"
 #include "../src/app/tool/tools/shear_tool/shear_tool.h"
@@ -75,7 +75,7 @@ void expect_nothing_changed(const TileLayer &tempLayer)
     }
 }
 
-void execute_shear(ToolContext &toolContext, ContentBuilder &contentBuilder, const Vec2Int &delta)
+void execute_shear(ToolContext &toolContext, CommonToolFuncs &commonToolFuncs, const Vec2Int &delta)
 {
     const BoundsInt &selectionBounds = toolContext.tools->getSelectTool().getSelectionBuffer().getTileBounds();
     Vec2Int shearCenter = selectionBounds.getCenter();
@@ -83,7 +83,7 @@ void execute_shear(ToolContext &toolContext, ContentBuilder &contentBuilder, con
     ShearTool &shearTool = toolContext.tools->getShearTool();
 
     shearTool.execPointerDown(toolContext);
-    contentBuilder.setPrevCurrDown(shearCenter + delta);
+    commonToolFuncs.setPrevCurrDown(shearCenter + delta);
 
     shearTool.execPointerMove(toolContext);
     shearTool.execPointerUp(toolContext);
@@ -97,8 +97,8 @@ SCENARIO("Shear tool")
     {
         Document document = DocumentBuilder().withDrawing(DrawingBuilder().withBounds(Bounds(0, 0, 14, 14))).build();
         ToolContext toolContext = ToolContextBuilder().build(document);
-        ContentBuilder contentBuilder(document, toolContext);
-        contentBuilder.buildRect(BoundsInt(2, 1, 5, 4));
+        CommonToolFuncs commonToolFuncs(document, toolContext);
+        commonToolFuncs.buildRect(BoundsInt(2, 1, 5, 4));
 
         Drawing &drawing = document.getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
@@ -109,11 +109,11 @@ SCENARIO("Shear tool")
 
         WHEN("selecting the rectangle")
         {
-            contentBuilder.selectTiles(activeLayer.getTiles());
+            commonToolFuncs.selectTiles(activeLayer.getTiles());
 
             WHEN("moving the mouse in positive horizontal direction and releasing it (positive angle)")
             {
-                execute_shear(toolContext, contentBuilder, Vec2Int(shearTool.getTileLenghtFor10DegShear() * 2, 0));
+                execute_shear(toolContext, commonToolFuncs, Vec2Int(shearTool.getTileLenghtFor10DegShear() * 2, 0));
 
                 THEN("displaces the top row to left direction and bottom row to right direction by one tile")
                 {
@@ -128,7 +128,7 @@ SCENARIO("Shear tool")
 
                 WHEN("moving the mouse in the same direction again")
                 {
-                    execute_shear(toolContext, contentBuilder, Vec2Int(shearTool.getTileLenghtFor10DegShear() * 2, 0));
+                    execute_shear(toolContext, commonToolFuncs, Vec2Int(shearTool.getTileLenghtFor10DegShear() * 2, 0));
 
                     THEN("the tiles get displaced one more tile to the left and right")
                     {
@@ -274,7 +274,7 @@ SCENARIO("Shear tool")
                 ShearTool &shearTool = toolContext.tools->getShearTool();
 
                 shearTool.execPointerDown(toolContext);
-                contentBuilder.setCurr(shearCenter + Vec2Int(shearTool.getTileLenghtFor10DegShear() * 2, 0));
+                commonToolFuncs.setCurr(shearCenter + Vec2Int(shearTool.getTileLenghtFor10DegShear() * 2, 0));
                 shearTool.execPointerMove(toolContext);
 
                 THEN("shear happens")
@@ -284,7 +284,7 @@ SCENARIO("Shear tool")
 
                 WHEN("moving the mouse further in the same direction")
                 {
-                    contentBuilder.setCurr(shearCenter + Vec2Int(shearTool.getTileLenghtFor10DegShear() * 4, 0));
+                    commonToolFuncs.setCurr(shearCenter + Vec2Int(shearTool.getTileLenghtFor10DegShear() * 4, 0));
 
                     shearTool.execPointerMove(toolContext);
 
@@ -314,7 +314,7 @@ SCENARIO("Shear tool")
 
                     WHEN("moving back the mouse to start position and releasing it")
                     {
-                        contentBuilder.setPrevCurrDown(shearCenter);
+                        commonToolFuncs.setPrevCurrDown(shearCenter);
                         shearTool.execPointerMove(toolContext);
                         shearTool.execPointerUp(toolContext);
 
@@ -332,9 +332,9 @@ SCENARIO("Shear tool")
     {
         Document document = DocumentBuilder().withDrawing(DrawingBuilder().withBounds(Bounds(0, 0, 12, 12))).build();
         ToolContext toolContext = ToolContextBuilder().build(document);
-        ContentBuilder contentBuilder(document, toolContext);
+        CommonToolFuncs commonToolFuncs(document, toolContext);
 
-        contentBuilder.buildRect(BoundsInt(0, 0, 3, 3));
+        commonToolFuncs.buildRect(BoundsInt(0, 0, 3, 3));
 
         Drawing &drawing = document.getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
@@ -345,7 +345,7 @@ SCENARIO("Shear tool")
 
         WHEN("selecting the rectangle")
         {
-            contentBuilder.selectTiles(activeLayer.getTiles());
+            commonToolFuncs.selectTiles(activeLayer.getTiles());
 
             WHEN("moving the mouse in positive horizontal direction and releasing it (positive angle)")
             {
