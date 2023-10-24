@@ -5,7 +5,6 @@
 #include "./rendering/rendering.h"
 #include "./service/io/image_export.h"
 #include "./service/io/json/json_io.h"
-#include "./service/services.h"
 #include "api/emscripten_event_emitter.h"
 #include "core/canvas/canvas_listener_handler.h"
 #include "core/run_loop/run_loop.h"
@@ -15,6 +14,7 @@
 #include "editor_config.h"
 #include "event/event_emitter.h"
 #include "feature/frame/frame_player.h"
+#include "feature/sprite_sheet/sprite_sheet.h"
 #include "tool/tool_handler.h"
 #include "tool/tools/circle_tool/circle_tool.h"
 #include "tool/tools/color_picker_tool/color_picker_tool.h"
@@ -49,7 +49,9 @@ namespace editor
 
         DocumentStore *getDocumentStore();
 
-        DocumentFactory *getDocumentFactory();
+        SpriteSheet &getSpriteSheet();
+
+        std::shared_ptr<DocumentFactory> getDocumentFactory();
 
         Document &getActiveDocument();
 
@@ -74,13 +76,13 @@ namespace editor
 
         CanvasListenerHandler *m_CanvasListenerHandler;
 
-        DocumentFactory *m_DocumentFactory;
+        std::shared_ptr<DocumentFactory> m_DocumentFactory;
 
         std::shared_ptr<DocumentStore> m_DocumentStore;
 
-        Rendering *m_Rendering;
+        std::unique_ptr<SpriteSheet> m_SpriteSheet;
 
-        spright::Services *m_Services;
+        Rendering *m_Rendering;
 
         ImageExport *m_ImageExport;
 

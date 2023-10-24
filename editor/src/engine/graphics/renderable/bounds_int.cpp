@@ -57,7 +57,7 @@ namespace engine
         return Vec2Int(minX + (maxX - minX) / 2.0, minY + (maxY - minY) / 2.0);
     }
 
-    bool BoundsInt::isDefault()
+    bool BoundsInt::isDefault() const
     {
         return minX == 0 && maxX == 0 && minY == 0 && maxY == 0;
     }

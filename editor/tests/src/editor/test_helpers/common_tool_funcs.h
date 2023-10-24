@@ -16,7 +16,7 @@ public:
 
     void buildRect(const BoundsInt &bounds);
 
-    void buildTile(const Vec2Int &pos);
+    void createTile(const Vec2Int &pos, size_t layerIndex = 0, size_t frameIndex = 0);
 
     void setPrevCurrDown(const Vec2Int &pos);
 

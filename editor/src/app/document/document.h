@@ -38,13 +38,13 @@ namespace editor
 
         size_t getActiveDrawingIndex() const;
 
-        Drawing *getDrawingAt(const Vec2 &pos);
-
-        void addDrawing(const Drawing &drawing);
+        void addDrawing(std::shared_ptr<Drawing> drawing);
 
         void removeActiveDrawing();
 
-        std::vector<Drawing> &getDrawings();
+        Drawing &getDrawing(int id);
+
+        std::vector<std::shared_ptr<Drawing>> &getDrawings();
 
         std::shared_ptr<DocumentHistory> getHistory();
 
@@ -59,7 +59,7 @@ namespace editor
         std::string getJson();
 
     private:
-        std::vector<Drawing> m_Drawings;
+        std::vector<std::shared_ptr<Drawing>> m_Drawings;
 
         Drawing m_Canvas;
 

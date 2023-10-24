@@ -25,7 +25,7 @@ namespace editor
         return TileLayer(name, *m_RendererProvider->createRenderer2D(), Group<Rect2D>(), bounds, tileSize);
     }
 
-    TileLayer DocumentFactory::createTileLayer(std::string name, const Bounds &bounds, float tileSize)
+    TileLayer DocumentFactory::createTileLayer(std::string name, const Bounds &bounds, float tileSize) const
     {
         TileLayer tileLayer("",
                             *m_RendererProvider->createRenderer2D(),
@@ -108,7 +108,7 @@ namespace editor
         const Bounds &bounds = props.bounds;
         float backgroundLayerTileSize = props.backgroundLayerTileSize;
         float tileSize = props.tileSize;
-        bool hasInitialLayer = props.hasInitialLayer;
+        size_t layerCount = props.layerCount;
         bool hasCheckerBoard = props.hasCheckerBoard;
 
         Drawing drawing(bounds,
@@ -117,23 +117,21 @@ namespace editor
                         createToolLayer(bounds, tileSize),
                         createCursorLayer(bounds, tileSize));
 
-        if (hasInitialLayer)
+        if (layerCount > 0)
         {
-            TileLayer initialLayer("layer1",
-                                   *m_RendererProvider->createRenderer2D(),
-                                   Group<Rect2D>(),
-                                   bounds,
-                                   0.5f,
-                                   m_TileLayerZPos);
+            std::vector<TileLayer> layers;
 
-            std::vector<Frame> frames;
+            for (size_t i = 0; i < layerCount; i++)
+            {
+                TileLayer layer("layer" + std::to_string(i + 1),
+                                *m_RendererProvider->createRenderer2D(),
+                                Group<Rect2D>(),
+                                bounds,
+                                tileSize,
+                                m_TileLayerZPos);
 
-            Frame frame(0);
-
-            frame.addLayer(initialLayer);
-            frames.push_back(frame);
-
-            const std::vector<TileLayer> layers{initialLayer};
+                layers.push_back(layer);
+            }
 
             drawing.addFrame(layers);
         }
@@ -149,14 +147,13 @@ namespace editor
     Document DocumentFactory::createEmptyDocument() const
     {
         float pixelCount = 32.0f;
-        Bounds drawingBounds =
-            Bounds::createWithPositions(-pixelCount / 2.0f, -pixelCount / 2.0f, pixelCount / 2.0f, pixelCount / 2.0f);
+        Bounds drawingBounds(-pixelCount / 2.0f, -pixelCount / 2.0f, pixelCount / 2.0f, pixelCount / 2.0f);
 
         Camera camera(m_Window, -1.0f, 1.0f);
 
         CreateDrawingProps createDrawingProps(drawingBounds);
         createDrawingProps.hasCheckerBoard = false;
-        createDrawingProps.hasInitialLayer = false;
+        createDrawingProps.layerCount = 0;
 
         Document document(drawingBounds,
                           camera,
@@ -172,8 +169,10 @@ namespace editor
 
         Document document = createEmptyDocument();
 
-        document.addDrawing(createDrawing(
-            CreateDrawingProps(Bounds::createWithPositions(-16.0f, -pixelCount / 2.0f, 16.0f, pixelCount / 2.0f))));
+        Drawing drawing = createDrawing(
+            CreateDrawingProps(Bounds::createWithPositions(-16.0f, -pixelCount / 2.0f, 16.0f, pixelCount / 2.0f)));
+
+        document.addDrawing(std::make_shared<Drawing>(drawing));
 
         return document;
     }

@@ -4,7 +4,8 @@ namespace spright
 {
 namespace editor
 {
-    TileLayerExport::TileLayerExport(DocumentFactory *documentFactory) : m_DocumentFactory(documentFactory)
+    TileLayerExport::TileLayerExport(std::shared_ptr<DocumentFactory> documentFactory)
+        : m_DocumentFactory(documentFactory)
     {
     }
 

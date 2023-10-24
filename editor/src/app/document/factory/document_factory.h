@@ -41,7 +41,7 @@ namespace editor
 
         Drawing createDrawing(const CreateDrawingProps &props) const;
 
-        TileLayer createTileLayer(std::string name, const Bounds &bounds, float tileSize);
+        TileLayer createTileLayer(std::string name, const Bounds &bounds, float tileSize) const;
 
         TileLayer createBackgroundLayer(const Bounds &bounds, float tileSize) const;
 

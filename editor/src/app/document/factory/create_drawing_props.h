@@ -24,8 +24,7 @@ namespace editor
 
         bool hasCheckerBoard = true;
 
-        // true if a layer should be created, set false when you want to set the layers after the drawing is created
-        bool hasInitialLayer = true;
+        size_t layerCount = 1;
     };
 } // namespace editor
 } // namespace spright

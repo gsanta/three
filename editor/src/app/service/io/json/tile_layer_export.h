@@ -14,12 +14,15 @@ namespace editor
 
     class TileLayerExport
     {
-        DocumentFactory *m_DocumentFactory;
-
     public:
-        TileLayerExport(DocumentFactory *documentHandler);
+        TileLayerExport(std::shared_ptr<DocumentFactory> documentFactory);
+
         nlohmann::json exportLayer(const TileLayer &layer) const;
+
         TileLayer importLayer(nlohmann::json json) const;
+
+    private:
+        std::shared_ptr<DocumentFactory> m_DocumentFactory;
     };
 } // namespace editor
 } // namespace spright

@@ -181,10 +181,10 @@ void set_canvas_size(int width, int height)
     Drawing newDrawing =
         resize_drawing(drawing,
                        Bounds::createWithPositions(-width / 2.0f, -height / 2.0f, width / 2.0f, height / 2.0f),
-                       editor->getDocumentFactory());
+                       *editor->getDocumentFactory());
 
     editor->getActiveDocument().removeActiveDrawing();
-    editor->getActiveDocument().addDrawing(newDrawing);
+    editor->getActiveDocument().addDrawing(std::make_shared<Drawing>(newDrawing));
 }
 
 void set_eraser_size(int size)
@@ -251,6 +251,11 @@ void shear_vertical_api(float angle)
     shear_vertical(currentLayer, BoundsInt(bottomLeftTile, topRightTile), angle);
 }
 
+void generate_spritesheet()
+{
+    editor->getSpriteSheet().generateSpriteSheet(editor->getActiveDocument().getActiveDrawing());
+}
+
 EMSCRIPTEN_BINDINGS(spright)
 {
     emscripten::function("getFrames", &getFrames);
@@ -284,6 +289,7 @@ EMSCRIPTEN_BINDINGS(spright)
     emscripten::function("rotate", &rotate_api);
     emscripten::function("setSelectionMode", &set_selection_mode_api);
     emscripten::function("setSelectionType", &set_selection_type_api);
+    emscripten::function("generateSpriteSheet", &generate_spritesheet);
 }
 
 #endif

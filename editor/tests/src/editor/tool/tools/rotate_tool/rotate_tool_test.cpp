@@ -1,7 +1,7 @@
-#include "../../../test_helpers/common_tool_funcs.h"
 #include "../../../test_helpers/builders/document_builder.h"
 #include "../../../test_helpers/builders/drawing_builder.h"
 #include "../../../test_helpers/builders/tool_context_builder.h"
+#include "../../../test_helpers/common_tool_funcs.h"
 #include "../src/app/tool/tools/rotate_tool/rotate_tool.h"
 
 #include <catch2/catch_test_macros.hpp>
@@ -77,7 +77,7 @@ SCENARIO("Rotate tool")
         ToolContext toolContext = ToolContextBuilder().build(document);
         CommonToolFuncs commonToolFuncs(document, toolContext);
         commonToolFuncs.buildRect(BoundsInt(4, 1, 5, 3));
-        commonToolFuncs.buildTile(Vec2Int(4, 0));
+        commonToolFuncs.createTile(Vec2Int(4, 0));
 
         Drawing &drawing = document.getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();

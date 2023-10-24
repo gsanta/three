@@ -1,6 +1,6 @@
-#include "../../test_helpers/builders/tile_builder.h"
 #include "../../test_helpers/builders/document_builder.h"
 #include "../../test_helpers/builders/drawing_builder.h"
+#include "../../test_helpers/builders/tile_builder.h"
 #include "../../test_helpers/builders/tile_layer_builder.h"
 #include "../../test_helpers/builders/tool_context_builder.h"
 #include "../src/app/core/colors.h"
@@ -20,7 +20,7 @@ SCENARIO("TileUndo")
 
     ToolContext context = ToolContextBuilder().build(document);
 
-    document.addDrawing(drawing);
+    document.addDrawing(std::make_shared<Drawing>(drawing));
 
     TileLayer &layer = document.getActiveDrawing().getActiveLayer();
 
@@ -45,29 +45,29 @@ SCENARIO("TileUndo")
 
         WHEN("undo is called")
         {
+            tileUndo.undo(document);
+
             THEN("it undoes the changes on the tile layer")
             {
-                tileUndo.undo(document);
 
                 REQUIRE(layer.getTiles().size() == 3);
                 REQUIRE(layer.getTiles()[0]->getColor() == COLOR_RED);
                 REQUIRE(layer.getTiles()[1]->getColor() == COLOR_RED);
                 REQUIRE(layer.getTiles()[2]->getColor() == COLOR_RED);
             }
-        }
 
-        WHEN("redo is called")
-        {
-            THEN("it redoes the changes on the tile layer")
+            WHEN("redo is called")
             {
-                tileUndo.undo(document);
-                tileUndo.redo(document);
+                THEN("it redoes the changes on the tile layer")
+                {
+                    tileUndo.redo(document);
 
-                REQUIRE(layer.getTiles().size() == 4);
-                REQUIRE(layer.getAtTilePos(0, 0)->getColor() == COLOR_RED);
-                REQUIRE(layer.getAtTilePos(0, 1)->getColor() == COLOR_RED);
-                REQUIRE(layer.getAtTilePos(1, 0)->getColor() == COLOR_YELLOW);
-                REQUIRE(layer.getAtTilePos(1, 1)->getColor() == COLOR_YELLOW);
+                    REQUIRE(layer.getTiles().size() == 4);
+                    REQUIRE(layer.getAtTilePos(0, 0)->getColor() == COLOR_RED);
+                    REQUIRE(layer.getAtTilePos(0, 1)->getColor() == COLOR_RED);
+                    REQUIRE(layer.getAtTilePos(1, 0)->getColor() == COLOR_YELLOW);
+                    REQUIRE(layer.getAtTilePos(1, 1)->getColor() == COLOR_YELLOW);
+                }
             }
         }
     }
