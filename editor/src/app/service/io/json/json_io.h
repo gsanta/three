@@ -15,7 +15,7 @@ namespace editor
     {
 
     public:
-        JsonIO(DocumentFactory *documentHandler);
+        JsonIO(std::shared_ptr<DocumentFactory> documentHandler);
 
         ~JsonIO();
 
@@ -24,7 +24,7 @@ namespace editor
         Document importDocument(std::string string) const;
 
     private:
-        DocumentFactory *m_DocumentFactory;
+        std::shared_ptr<DocumentFactory> m_DocumentFactory;
 
         TileLayerExport *m_TileLayerExport;
 

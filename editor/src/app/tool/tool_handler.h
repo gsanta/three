@@ -10,7 +10,6 @@
 #include "../document/resize_drawing.h"
 #include "../editor_config.h"
 #include "../service/io/image_export.h"
-#include "../service/services.h"
 #include "context/document_info.h"
 #include "context/pointer_info.h"
 #include "context/tool_context.h"

@@ -30,12 +30,12 @@ Document DocumentBuilder::build()
     {
         for (DrawingBuilder builder : m_Drawings)
         {
-            document.addDrawing(builder.build());
+            document.addDrawing(std::make_shared<Drawing>(builder.build()));
         }
     }
     else if (!m_IsEmptyDocument)
     {
-        document.addDrawing(DrawingBuilder().build());
+        document.addDrawing(std::make_shared<Drawing>(DrawingBuilder().build()));
     }
 
     return document;

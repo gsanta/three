@@ -5,7 +5,7 @@ namespace spright
 namespace editor
 {
 
-    JsonIO::JsonIO(DocumentFactory *documentFactory) : m_DocumentFactory(documentFactory)
+    JsonIO::JsonIO(std::shared_ptr<DocumentFactory> documentFactory) : m_DocumentFactory(documentFactory)
     {
         m_TileLayerExport = new TileLayerExport(documentFactory);
     }
@@ -62,7 +62,7 @@ namespace editor
         }
 
         CreateDrawingProps createDrawingProps(frames[0][0].getBounds());
-        createDrawingProps.hasInitialLayer = false;
+        createDrawingProps.layerCount = 0;
 
         Drawing drawing = m_DocumentFactory->createDrawing(createDrawingProps);
 
@@ -71,7 +71,7 @@ namespace editor
             drawing.addFrame(layers);
         }
 
-        document.addDrawing(drawing);
+        document.addDrawing(std::make_shared<Drawing>(drawing));
 
         return document;
     }

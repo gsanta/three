@@ -14,8 +14,6 @@ namespace editor
 
         delete m_Rendering;
         delete m_Window;
-        delete m_DocumentFactory;
-        delete m_Services;
     }
 
     void Editor::init()
@@ -23,17 +21,15 @@ namespace editor
         m_EventEmitter = std::make_unique<EmscriptenEventEmitter>();
 
         m_Window = new GLWindow("Editor", 1200, 800);
-        m_DocumentFactory = new DocumentFactory(m_Window, new GLRendererProvider());
+        m_DocumentFactory = std::make_shared<DocumentFactory>(m_Window, new GLRendererProvider());
 
         m_DocumentStore = std::make_shared<DocumentStore>();
 
         m_DocumentStore->addDocument(m_DocumentFactory->createDocument());
 
-        std::vector<Drawing> &drawings = m_DocumentStore->getActiveDocument().getDrawings();
+        m_SpriteSheet = std::make_unique<SpriteSheet>(m_DocumentFactory, &m_DocumentStore->getActiveDocument());
 
         m_Rendering = new Rendering(m_Window, getDocumentStore());
-
-        m_Services = new spright::Services();
 
         m_ImageExport = new ImageExport(m_Window, m_Rendering);
 
@@ -75,7 +71,7 @@ namespace editor
         return m_Window;
     }
 
-    DocumentFactory *Editor::getDocumentFactory()
+    std::shared_ptr<DocumentFactory> Editor::getDocumentFactory()
     {
         return m_DocumentFactory;
     }
@@ -83,6 +79,11 @@ namespace editor
     DocumentStore *Editor::getDocumentStore()
     {
         return m_DocumentStore.get();
+    }
+
+    SpriteSheet &Editor::getSpriteSheet()
+    {
+        return *m_SpriteSheet;
     }
 
     ToolHandler *Editor::getToolHandler()

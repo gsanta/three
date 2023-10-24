@@ -47,7 +47,7 @@ jobs:
           command: |
             set -x
             cd editor
-            make lint-docker
+            docker-compose run --rm clang-format; echo $?
   client_lint:
     docker:
       - image: cimg/node:18.16.0

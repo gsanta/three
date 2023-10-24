@@ -6,18 +6,25 @@ namespace editor
 {
     void tile_operation_copy_area(const TileView &source, TileView &dest, const BoundsInt &area, const Vec2Int &destPos)
     {
+        const BoundsInt &destBounds = dest.getTileBounds();
+
         for (int i = 0; i < area.getWidth(); i++)
         {
             for (int j = 0; j < area.getHeight(); j++)
             {
                 Rect2D *tile = source.getAtTilePos(area.minX + i, area.minY + j);
 
-                Vec2Int newDestPos = Vec2Int(destPos.x + i, destPos.y + j);
-
-                if (tile != nullptr && dest.getTileBounds().contains(newDestPos.x, newDestPos.y))
+                if (tile == nullptr)
                 {
-                    Rect2D newTile(*tile);
-                    newTile.setCenterPosition(source.getCenterPos(newDestPos));
+                    continue;
+                }
+
+                Vec2Int newDestPos = Vec2Int(destBounds.minX + destPos.x + i, destBounds.minY + destPos.y + j);
+
+                if (dest.getTileBounds().contains(newDestPos.x, newDestPos.y))
+                {
+                    Rect2D newTile(0, 0, dest.getTileSize(), dest.getTileSize(), tile->getColor());
+                    newTile.setCenterPosition(dest.getCenterPos(newDestPos));
                     dest.add(newTile, newDestPos);
                 }
             }

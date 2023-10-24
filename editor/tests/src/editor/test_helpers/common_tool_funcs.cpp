@@ -24,8 +24,13 @@ void CommonToolFuncs::buildRect(const BoundsInt &bounds)
     rectTool.execPointerUp(m_Context);
 }
 
-void CommonToolFuncs::buildTile(const Vec2Int &pos)
+void CommonToolFuncs::createTile(const Vec2Int &pos, size_t layerIndex, size_t frameIndex)
 {
+    Drawing &drawing = m_Document.getActiveDrawing();
+
+    drawing.setActiveFrame(frameIndex);
+    drawing.setActiveLayer(layerIndex);
+
     TileLayer &activeLayer = m_Context.doc.activeDrawing->getActiveLayer();
 
     BrushTool brushTool;

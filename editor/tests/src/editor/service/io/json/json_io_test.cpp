@@ -38,9 +38,9 @@ SCENARIO("JsonIO")
 
             Document document = DocumentBuilder().withEmptyDocument().build();
 
-            document.addDrawing(drawing);
+            document.addDrawing(std::make_shared<Drawing>(drawing));
 
-            JsonIO jsonIO(&documentFactory);
+            JsonIO jsonIO(std::make_shared<DocumentFactory>(documentFactory));
 
             nlohmann::json json = jsonIO.exportDocument(document);
 
@@ -114,7 +114,7 @@ SCENARIO("JsonIO")
             HeadlessWindow window(bounds.getWidth(), bounds.getHeight());
             DocumentFactory documentFactory = TestDocumentFactory::createDocumentFactory(window);
 
-            JsonIO jsonIO(&documentFactory);
+            JsonIO jsonIO(std::make_shared<DocumentFactory>(documentFactory));
 
             Document document = jsonIO.importDocument(jsonStr);
 

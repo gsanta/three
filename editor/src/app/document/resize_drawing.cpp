@@ -4,9 +4,9 @@ namespace spright
 {
 namespace editor
 {
-    TileLayer resize_tile_layer(const TileLayer &orig, const Bounds &bounds, DocumentFactory *documentFactory)
+    TileLayer resize_tile_layer(const TileLayer &orig, const Bounds &bounds, const DocumentFactory &documentFactory)
     {
-        TileLayer newTileLayer = documentFactory->createTileLayer(orig.getName(), bounds, orig.getTileSize());
+        TileLayer newTileLayer = documentFactory.createTileLayer(orig.getName(), bounds, orig.getTileSize());
         for (Rect2D *rect : orig.getTiles())
         {
             Vec2 rectCenter = rect->getCenterPosition2d();
@@ -19,12 +19,12 @@ namespace editor
         return newTileLayer;
     }
 
-    Drawing resize_drawing(const Drawing &orig, const Bounds &bounds, DocumentFactory *documentFactory)
+    Drawing resize_drawing(const Drawing &orig, const Bounds &bounds, const DocumentFactory &documentFactory)
     {
         CreateDrawingProps createDrawingProps(bounds);
-        createDrawingProps.hasInitialLayer = false;
+        createDrawingProps.layerCount = 0;
         createDrawingProps.backgroundLayerTileSize = orig.getBackgroundLayer().getTileSize();
-        Drawing newDrawing = documentFactory->createDrawing(createDrawingProps);
+        Drawing newDrawing = documentFactory.createDrawing(createDrawingProps);
 
         std::vector<TileLayer> layers;
 
@@ -35,7 +35,6 @@ namespace editor
             {
                 TileLayer newLayer = resize_tile_layer(layer, bounds, documentFactory);
                 layers.push_back(newLayer);
-                // newFrame.addLayer(newLayer);
             }
 
             newDrawing.addFrame(layers);

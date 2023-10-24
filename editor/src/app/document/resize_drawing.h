@@ -11,7 +11,7 @@ namespace editor
 {
     using namespace ::spright::engine;
 
-    Drawing resize_drawing(const Drawing &orig, const Bounds &bounds, DocumentFactory *documentFactory);
+    Drawing resize_drawing(const Drawing &orig, const Bounds &bounds, const DocumentFactory &documentFactory);
 
 } // namespace editor
 } // namespace spright

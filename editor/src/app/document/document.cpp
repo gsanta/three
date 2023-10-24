@@ -12,18 +12,18 @@ namespace editor
 
     Frame &Document::getActiveFrame()
     {
-        return m_Drawings[m_ActiveDrawing].getActiveFrame();
+        return m_Drawings[m_ActiveDrawing]->getActiveFrame();
     }
 
 
     TileLayer &Document::getActiveLayer()
     {
-        return m_Drawings[m_ActiveDrawing].getActiveLayer();
+        return m_Drawings[m_ActiveDrawing]->getActiveLayer();
     }
 
     Drawing &Document::getActiveDrawing()
     {
-        return m_Drawings[m_ActiveDrawing];
+        return *m_Drawings[m_ActiveDrawing];
     }
 
     size_t Document::getActiveDrawingIndex() const
@@ -33,25 +33,17 @@ namespace editor
 
     Drawing &Document::getDrawing(size_t index)
     {
-        return m_Drawings[index];
+        return *m_Drawings[index];
     }
 
-    Drawing *Document::getDrawingAt(const Vec2 &pos)
-    {
-        for (Drawing &drawing : m_Drawings)
-        {
-            if (drawing.getBounds().contains(pos.x, pos.y))
-            {
-                return &drawing;
-            }
-        }
-
-        return nullptr;
-    }
-
-    void Document::addDrawing(const Drawing &drawing)
+    void Document::addDrawing(std::shared_ptr<Drawing> drawing)
     {
         m_Drawings.push_back(drawing);
+    }
+
+    Drawing &Document::getDrawing(int id)
+    {
+        return *m_Drawings[id];
     }
 
     void Document::removeActiveDrawing()
@@ -59,8 +51,7 @@ namespace editor
         m_Drawings.erase(m_Drawings.begin() + m_ActiveDrawing);
     }
 
-
-    std::vector<Drawing> &Document::getDrawings()
+    std::vector<std::shared_ptr<Drawing>> &Document::getDrawings()
     {
         return m_Drawings;
     }

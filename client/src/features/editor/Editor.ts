@@ -102,6 +102,8 @@ interface Editor {
   setSelectionMode(mode: 'move' | 'rotate' | 'shear'): void;
 
   setSelectionType(type: 'rectangle' | 'wand'): void;
+
+  generateSpriteSheet(): void;
 }
 
 window.Module = new EditorRuntime();

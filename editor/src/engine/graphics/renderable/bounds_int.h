@@ -46,7 +46,7 @@ namespace engine
 
         Vec2Int getCenter() const;
 
-        bool isDefault();
+        bool isDefault() const;
 
         void expand(const Vec2Int &vec);
 

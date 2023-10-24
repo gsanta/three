@@ -2,7 +2,6 @@
 #include "../../../document/document_store.h"
 #include "../../../document/drawing.h"
 #include "../../../event/event_emitter.h"
-#include "../../../service/services.h"
 #include "../../context/tool_context.h"
 #include "../../tool.h"
 #include "../../tools/brush_tool/brush_tool.h"

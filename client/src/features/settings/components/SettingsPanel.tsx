@@ -27,6 +27,10 @@ const SettingsPanel = () => {
 
   const { editor } = useAppSelector((state) => state.editor);
 
+  const handleGenerateSpriteSheet = () => {
+    editor.generateSpriteSheet();
+  };
+
   const {
     value: isResizeCanvasDialogOpen,
     setFalse: closeResizeCanvasDialog,
@@ -56,6 +60,7 @@ const SettingsPanel = () => {
         <MenuList>
           <MenuItem onClick={handleFlipHorizontal}>Flip horizontal</MenuItem>
           <MenuItem onClick={openResizeCanvasDialog}>Resize canvas</MenuItem>
+          <MenuItem onClick={handleGenerateSpriteSheet}>Generate spritesheet</MenuItem>
         </MenuList>
       </Menu>
       <ButtonGroup>
