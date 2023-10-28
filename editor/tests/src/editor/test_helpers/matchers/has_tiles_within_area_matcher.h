@@ -1,4 +1,4 @@
-#include "../src/engine/graphics/layer/tileLayer.h"
+#include "../src/engine/graphics/layer/tile_layer.h"
 #include "../src/engine/graphics/renderable/bounds_int.h"
 
 #include <catch2/catch_approx.hpp>

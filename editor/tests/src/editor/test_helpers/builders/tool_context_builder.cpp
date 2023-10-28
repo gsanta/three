@@ -27,7 +27,7 @@ ToolContext ToolContextBuilder::build(Document &document)
     toolContext.tools = toolStore;
 
     doc.document = &document;
-    doc.activeDrawing = &document.getActiveDrawing();
+    doc.activeDrawing = document.getActiveDrawing();
 
     toolContext.pointer = pointer;
     toolContext.doc = doc;

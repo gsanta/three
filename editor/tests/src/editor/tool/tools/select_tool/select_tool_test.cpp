@@ -21,7 +21,7 @@ SCENARIO("Select tool")
                                                                 .withTile(Vec2Int(3, 3))   // second selection
                                                                 .withTile(Vec2Int(4, 3)))) // second selection
                 .build();
-        Drawing &activeDrawing = document.getActiveDrawing();
+        Drawing &activeDrawing = *document.getActiveDrawing();
 
         ToolContext toolContext = ToolContextBuilder().build(document);
 
@@ -139,7 +139,7 @@ SCENARIO("Select tool")
                                                                                 .withTile(Vec2Int(3, 2), COLOR_BLUE)
                                                                                 .withTile(Vec2Int(4, 2), COLOR_RED)))
                                 .build();
-        Drawing &activeDrawing = document.getActiveDrawing();
+        Drawing &activeDrawing = *document.getActiveDrawing();
         ToolContext toolContext = ToolContextBuilder().build(document);
 
         CommonToolFuncs commonToolFuncs(document, toolContext);

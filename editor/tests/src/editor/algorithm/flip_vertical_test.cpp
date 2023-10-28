@@ -22,10 +22,10 @@ TEST_CASE("flip_vertical", "[flip-vertical]")
                                                                               .withTile(Vec2Int(0, 4))))
                                           .build();
 
-        TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing().getActiveLayer();
+        TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing()->getActiveLayer();
 
-        Drawing &drawing = documentStore.getActiveDocument().getActiveDrawing();
-        flip_vertical(drawing.getActiveLayer());
+        Drawing *drawing = documentStore.getActiveDocument().getActiveDrawing();
+        flip_vertical(drawing->getActiveLayer());
 
         REQUIRE(layer.getAtTilePos(0, 5) == nullptr);
         REQUIRE(layer.getAtTilePos(1, 5) == nullptr);

@@ -46,7 +46,7 @@ namespace editor
             }
             else if (key == GLFW_KEY_P)
             {
-                m_Editor->getSpriteSheet().generateSpriteSheet(m_Editor->getActiveDocument().getActiveDrawing());
+                m_Editor->getSpriteSheet().generateSpriteSheet(*m_Editor->getActiveDocument().getActiveDrawing());
             }
             else if (key == GLFW_KEY_S)
             {
@@ -54,17 +54,17 @@ namespace editor
             }
             else if (key == GLFW_KEY_C)
             {
-                m_Editor->getToolHandler()->setSelectedTool("circle");
+                m_Editor->getToolHandler()->setSelectedTool("canvas_selection");
 
                 // m_DocumentFactory->createFrame(m_DocumentStore->getActiveDocument());
-                // m_DocumentStore->getActiveDocument().getActiveDrawing().setActiveFrame(
-                //     m_DocumentStore->getActiveDocument().getActiveDrawing().getFrames().size() - 1);
+                // m_DocumentStore->getActiveDocument().getActiveDrawing()->setActiveFrame(
+                //     m_DocumentStore->getActiveDocument().getActiveDrawing()->getFrames().size() - 1);
                 //setSelectedTool("color_picker");
             }
             else if (key == GLFW_KEY_I)
             {
                 // m_DocumentStore->getActiveDocument().getCamera().zoomToFit(
-                //     m_DocumentStore->getActiveDocument().getActiveDrawing().getBounds());
+                //     m_DocumentStore->getActiveDocument().getActiveDrawing()->getBounds());
                 m_Editor->getImageExport()->exportImage(m_Editor->getDocumentStore()->getActiveDocument());
 
                 // m_DocumentStore->getActiveDocument().getCamera().updateWindowSize(m_Window->getWidth(),
@@ -77,12 +77,12 @@ namespace editor
             else if (key == GLFW_KEY_L)
             {
                 // m_Editor->getDocumentStore()->getActiveDocument().getCamera().zoomToFit(
-                //     m_Editor->getDocumentStore()->getActiveDocument().getActiveDrawing().getBounds());
+                //     m_Editor->getDocumentStore()->getActiveDocument().getActiveDrawing()->getBounds());
                 m_Editor->getToolHandler()->setSelectedTool("line");
             }
             else if (key == GLFW_KEY_F)
             {
-                Drawing &drawing = m_Editor->getDocumentStore()->getActiveDocument().getActiveDrawing();
+                Drawing &drawing = *m_Editor->getDocumentStore()->getActiveDocument().getActiveDrawing();
                 if (drawing.getState().getBounds().isNull())
                 {
                     flip_horizontal(drawing.getActiveFrame().getLayers());

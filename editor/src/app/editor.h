@@ -16,6 +16,7 @@
 #include "feature/frame/frame_player.h"
 #include "feature/sprite_sheet/sprite_sheet.h"
 #include "tool/tool_handler.h"
+#include "tool/tools/canvas_selection_tool/canvas_selection_tool.h"
 #include "tool/tools/circle_tool/circle_tool.h"
 #include "tool/tools/color_picker_tool/color_picker_tool.h"
 #include "tool/tools/eraser_tool/eraser_tool.h"
@@ -54,8 +55,6 @@ namespace editor
         std::shared_ptr<DocumentFactory> getDocumentFactory();
 
         Document &getActiveDocument();
-
-        void setDocument(const Document &document);
 
         ToolHandler *getToolHandler();
 

@@ -3,7 +3,7 @@
 #include "../../../test_helpers/builders/tile_layer_builder.h"
 #include "../src/app/document/document_store.h"
 #include "../src/app/tool/tools/select_tool/rect_selector.h"
-#include "../src/engine/graphics/layer/tileLayer.h"
+#include "../src/engine/graphics/layer/tile_layer.h"
 
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
@@ -27,7 +27,7 @@ TEST_CASE("RectSelector", "[rect-selector]")
                                                                                .withTile(Vec2Int(4, 1))))
             .build();
 
-    TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing().getActiveLayer();
+    TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing()->getActiveLayer();
 
     RectSelector rectSelector(&layer);
 

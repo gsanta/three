@@ -1,8 +1,8 @@
 #include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
 #include "../src/engine/graphics/layer/group.h"
-#include "../src/engine/graphics/layer/tileLayer.h"
+#include "../src/engine/graphics/layer/tile_layer.h"
 #include "../src/engine/graphics/renderable/rect2d.h"
-#include "../src/engine/layout/container.h"
+#include "../src/engine/structure/canvas/canvas.h"
 
 #include <catch2/catch_test_macros.hpp>
 

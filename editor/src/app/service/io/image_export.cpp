@@ -18,10 +18,10 @@ namespace editor
 
     void ImageExport::exportImage(Document &document)
     {
-        const Bounds bounds = document.getActiveDrawing().getBounds();
+        const Bounds bounds = document.getActiveDrawing()->getBounds();
 
         Camera &camera = document.getCamera();
-        camera.zoomToFit(document.getActiveDrawing().getBounds());
+        camera.zoomToFit(document.getActiveDrawing()->getBounds());
 
         Vec2Int bottomLeft = camera.worldToScreenPos(bounds.minX, bounds.minY);
         Vec2Int topRight = camera.worldToScreenPos(bounds.maxX, bounds.maxY);

@@ -48,12 +48,12 @@ void rotate_api(float rotateInRad)
 
 void setLayerIndex(size_t oldIndex, size_t newIndex)
 {
-    editor->getActiveDocument().getActiveDrawing().getActiveFrame().changeLayerOrder(oldIndex, newIndex);
+    editor->getActiveDocument().getActiveDrawing()->getActiveFrame().changeLayerOrder(oldIndex, newIndex);
 }
 
 void removeLayer(size_t layerIndex)
 {
-    editor->getActiveDocument().getActiveDrawing().removeLayer(layerIndex);
+    editor->getActiveDocument().getActiveDrawing()->removeLayer(layerIndex);
 }
 
 std::string exportDocument()
@@ -76,7 +76,7 @@ std::string getToolData(std::string tool)
 
 std::vector<std::string> getFrames()
 {
-    const std::vector<Frame> &frames = editor->getActiveDocument().getActiveDrawing().getFrames();
+    const std::vector<Frame> &frames = editor->getActiveDocument().getActiveDrawing()->getFrames();
 
     std::vector<std::string> target;
 
@@ -95,27 +95,33 @@ void addFrame()
 
 void removeFrame(size_t index)
 {
-    Drawing &drawing = editor->getActiveDocument().getActiveDrawing();
-    if (drawing.getFrames().size() > 1)
+    Drawing *drawing = editor->getActiveDocument().getActiveDrawing();
+
+    if (drawing && drawing->getFrames().size() > 1)
     {
-        drawing.removeFrame(index);
+        drawing->removeFrame(index);
     }
 }
 
 void setActiveFrame(size_t index)
 {
-    editor->getActiveDocument().getActiveDrawing().setActiveFrame(index);
+    editor->getActiveDocument().getActiveDrawing()->setActiveFrame(index);
 }
 
 std::string getActiveFrame()
 {
-    return editor->getActiveDocument().getActiveDrawing().getActiveFrame().getJson().dump();
+    return editor->getActiveDocument().getActiveDrawing()->getActiveFrame().getJson().dump();
 }
 
 void activateFramePlayer()
 {
     editor->getFramePlayer().setIsActive(true);
-    editor->getFramePlayer().setDrawing(&editor->getActiveDocument().getActiveDrawing());
+
+    Drawing *activeDrawing = editor->getActiveDocument().getActiveDrawing();
+    if (activeDrawing)
+    {
+        editor->getFramePlayer().setDrawing(activeDrawing);
+    }
 }
 
 void deActivateFramePlayer()
@@ -126,14 +132,20 @@ void deActivateFramePlayer()
 
 void api_flip_horizontal()
 {
-    Drawing &drawing = editor->getActiveDocument().getActiveDrawing();
-    if (drawing.getState().getBounds().isNull())
+    Drawing *drawing = editor->getActiveDocument().getActiveDrawing();
+
+    if (!drawing)
     {
-        flip_horizontal(editor->getActiveDocument().getActiveFrame().getLayers());
+        return;
+    }
+
+    if (drawing->getState().getBounds().isNull())
+    {
+        flip_horizontal(drawing->getActiveFrame().getLayers());
     }
     else
     {
-        flip_horizontal(editor->getActiveDocument().getActiveFrame().getLayers(), drawing.getState().getBounds());
+        flip_horizontal(drawing->getActiveFrame().getLayers(), drawing->getState().getBounds());
     }
 }
 
@@ -165,7 +177,7 @@ void set_rectangle_tool_filled(bool isFilled)
 
 std::string get_canvas_size()
 {
-    const Bounds &bounds = editor->getActiveDocument().getActiveDrawing().getBounds();
+    const Bounds &bounds = editor->getActiveDocument().getActiveDrawing()->getBounds();
 
     nlohmann::json json = {
         {"width", bounds.getWidth()},
@@ -177,14 +189,20 @@ std::string get_canvas_size()
 
 void set_canvas_size(int width, int height)
 {
-    Drawing &drawing = editor->getActiveDocument().getActiveDrawing();
+    Drawing *drawing = editor->getActiveDocument().getActiveDrawing();
+
+    if (!drawing)
+    {
+        return;
+    }
+
     Drawing newDrawing =
-        resize_drawing(drawing,
+        resize_drawing(*drawing,
                        Bounds::createWithPositions(-width / 2.0f, -height / 2.0f, width / 2.0f, height / 2.0f),
                        *editor->getDocumentFactory());
 
     editor->getActiveDocument().removeActiveDrawing();
-    editor->getActiveDocument().addDrawing(std::make_shared<Drawing>(newDrawing));
+    editor->getActiveDocument().addDrawing(newDrawing);
 }
 
 void set_eraser_size(int size)
@@ -220,17 +238,17 @@ void reset_zoom()
 
 void zoom_to_fit()
 {
-    editor->getActiveDocument().getCamera().zoomToFit(editor->getActiveDocument().getActiveDrawing().getBounds());
+    editor->getActiveDocument().getCamera().zoomToFit(editor->getActiveDocument().getActiveDrawing()->getBounds());
 }
 
 // void shear_horizontal_api(float angle)
 // {
 //     Drawing &drawing = editor->getActiveDocument().getActiveDrawing();
-//     Bounds bounds = editor->getActiveDocument().getActiveDrawing().getState().getBounds();
-//     TileLayer &currentLayer = editor->getActiveDocument().getActiveDrawing().getActiveLayer();
+//     Bounds bounds = editor->getActiveDocument().getActiveDrawing()->getState().getBounds();
+//     TileLayer &currentLayer = editor->getActiveDocument().getActiveDrawing()->getActiveLayer();
 
-//     Vec2 bottomLeft = editor->getActiveDocument().getActiveDrawing().getState().getBounds().getBottomLeft();
-//     Vec2 topRight = editor->getActiveDocument().getActiveDrawing().getState().getBounds().getTopRight();
+//     Vec2 bottomLeft = editor->getActiveDocument().getActiveDrawing()->getState().getBounds().getBottomLeft();
+//     Vec2 topRight = editor->getActiveDocument().getActiveDrawing()->getState().getBounds().getTopRight();
 //     Vec2Int bottomLeftTile = editor->getActiveDocument().getActiveLayer().getTilePos(bottomLeft);
 //     Vec2Int topRightTile = editor->getActiveDocument().getActiveLayer().getTilePos(topRight);
 
@@ -239,21 +257,34 @@ void zoom_to_fit()
 
 void shear_vertical_api(float angle)
 {
-    Drawing &drawing = editor->getActiveDocument().getActiveDrawing();
-    Bounds bounds = editor->getActiveDocument().getActiveDrawing().getState().getBounds();
-    TileLayer &currentLayer = editor->getActiveDocument().getActiveDrawing().getActiveLayer();
+    Drawing *drawing = editor->getActiveDocument().getActiveDrawing();
 
-    Vec2 bottomLeft = editor->getActiveDocument().getActiveDrawing().getState().getBounds().getBottomLeft();
-    Vec2 topRight = editor->getActiveDocument().getActiveDrawing().getState().getBounds().getTopRight();
-    Vec2Int bottomLeftTile = editor->getActiveDocument().getActiveLayer().getTilePos(bottomLeft);
-    Vec2Int topRightTile = editor->getActiveDocument().getActiveLayer().getTilePos(topRight);
+    if (!drawing)
+    {
+        return;
+    }
+
+    Bounds bounds = drawing->getState().getBounds();
+    TileLayer &currentLayer = drawing->getActiveLayer();
+
+    Vec2 bottomLeft = drawing->getState().getBounds().getBottomLeft();
+    Vec2 topRight = drawing->getState().getBounds().getTopRight();
+    Vec2Int bottomLeftTile = drawing->getActiveLayer().getTilePos(bottomLeft);
+    Vec2Int topRightTile = drawing->getActiveLayer().getTilePos(topRight);
 
     shear_vertical(currentLayer, BoundsInt(bottomLeftTile, topRightTile), angle);
 }
 
 void generate_spritesheet()
 {
-    editor->getSpriteSheet().generateSpriteSheet(editor->getActiveDocument().getActiveDrawing());
+    Drawing *drawing = editor->getActiveDocument().getActiveDrawing();
+
+    if (!drawing)
+    {
+        return;
+    }
+
+    editor->getSpriteSheet().generateSpriteSheet(*drawing);
 }
 
 EMSCRIPTEN_BINDINGS(spright)

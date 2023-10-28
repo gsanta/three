@@ -20,7 +20,7 @@ namespace editor
 
         nlohmann::json framesJson = {{"frames", {}}};
 
-        for (Frame &frame : document.getActiveDrawing().getFrames())
+        for (Frame &frame : document.getActiveDrawing()->getFrames())
         {
 
             nlohmann::json layersJson = {{"layers", {}}};
@@ -71,7 +71,7 @@ namespace editor
             drawing.addFrame(layers);
         }
 
-        document.addDrawing(std::make_shared<Drawing>(drawing));
+        document.addDrawing(drawing);
 
         return document;
     }

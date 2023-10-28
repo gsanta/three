@@ -17,7 +17,7 @@
 #include "../src/engine/graphics/buffer/buffer.h"
 #include "../src/engine/graphics/buffer/indexBuffer.h"
 #include "../src/engine/graphics/buffer/vertexArray.h"
-#include "../src/engine/graphics/layer/tileLayer.h"
+#include "../src/engine/graphics/layer/tile_layer.h"
 #include "../src/engine/graphics/renderable/rect2d.h"
 #include "../src/engine/graphics/renderable/renderable2d.h"
 #include "../src/engine/graphics/renderer/renderer2d.h"
@@ -74,7 +74,7 @@ void removeActiveTool(std::string toolName)
 
 std::vector<std::string> getLayers()
 {
-    const std::vector<TileLayer> &layers = editor->getActiveDocument().getActiveDrawing().getActiveFrame().getLayers();
+    const std::vector<TileLayer> &layers = editor->getActiveDocument().getActiveDrawing()->getActiveFrame().getLayers();
 
     std::vector<std::string> target;
 
@@ -88,30 +88,35 @@ std::vector<std::string> getLayers()
 
 size_t createLayer(std::string name)
 {
-    Drawing &drawing = editor->getDocumentStore()->getActiveDocument().getActiveDrawing();
+    Drawing *drawing = editor->getDocumentStore()->getActiveDocument().getActiveDrawing();
 
-    TileLayer tileLayer = editor->getDocumentFactory()->createUserLayer(drawing.getBounds(), name);
+    if (!drawing)
+    {
+        throw std::logic_error("No active drawing available");
+    }
 
-    drawing.addLayer(tileLayer);
+    TileLayer tileLayer = editor->getDocumentFactory()->createUserLayer(drawing->getBounds(), name);
 
-    return drawing.getActiveFrame().getLayers().back().getIndex();
+    drawing->addLayer(tileLayer);
+
+    return drawing->getActiveFrame().getLayers().back().getIndex();
 }
 
 void enableLayer(size_t index)
 {
-    TileLayer &layer = editor->getActiveDocument().getActiveDrawing().getActiveFrame().getLayer(index);
+    TileLayer &layer = editor->getActiveDocument().getActiveDrawing()->getActiveFrame().getLayer(index);
     layer.setEnabled(true);
 }
 
 void disableLayer(size_t index)
 {
-    TileLayer &layer = editor->getActiveDocument().getActiveDrawing().getActiveFrame().getLayer(index);
+    TileLayer &layer = editor->getActiveDocument().getActiveDrawing()->getActiveFrame().getLayer(index);
     layer.setEnabled(false);
 }
 
 void setActiveLayer(size_t index)
 {
-    editor->getActiveDocument().getActiveDrawing().setActiveLayer(index);
+    editor->getActiveDocument().getActiveDrawing()->setActiveLayer(index);
 }
 
 void setBrushSize(int size)
@@ -158,7 +163,7 @@ void setEngineData(std::string json)
 {
     if (editor != nullptr)
     {
-        editor->getActiveDocument().getActiveDrawing().getActiveLayer().setJson(json);
+        editor->getActiveDocument().getActiveDrawing()->getActiveLayer().setJson(json);
     }
 }
 

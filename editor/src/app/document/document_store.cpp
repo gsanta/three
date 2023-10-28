@@ -16,11 +16,7 @@ namespace editor
 
     void DocumentStore::setDocument(const Document &document)
     {
-        m_Documents[0] = document;
-    }
-
-    void DocumentStore::addDocument(const Document &document)
-    {
+        m_Documents.clear();
         m_Documents.push_back(document);
     }
 

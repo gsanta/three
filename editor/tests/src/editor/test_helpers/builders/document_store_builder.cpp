@@ -38,9 +38,11 @@ DocumentStore DocumentStoreBuilder::build()
 {
     Camera camera(&m_Window);
 
+    std::shared_ptr<Renderer2D> renderer = std::make_shared<HeadlessRenderer2D>();
+
     Document document(m_DocumentBounds,
+                      Canvas(m_DocumentBounds, renderer),
                       camera,
-                      DrawingBuilder().withBounds(m_DocumentBounds).build(),
                       std::make_shared<DocumentHistory>());
 
     if (m_Drawings.size() == 0)
@@ -50,11 +52,11 @@ DocumentStore DocumentStoreBuilder::build()
 
     for (DrawingBuilder builder : m_Drawings)
     {
-        document.addDrawing(std::make_shared<Drawing>(builder.build()));
+        document.addDrawing(builder.build());
     }
 
     DocumentStore documentStore;
-    documentStore.addDocument(document);
+    documentStore.setDocument(document);
 
     return documentStore;
 }

@@ -16,14 +16,18 @@ void Rendering::render()
 
     if (m_RenderingTarget == Rendering::Target::SCREEN)
     {
-        for (std::shared_ptr<Drawing> drawing : m_DocumentStore->getActiveDocument().getDrawings())
+        for (Drawing &drawing : m_DocumentStore->getActiveDocument().getDrawings())
         {
-            m_ScreenTargetRenderer.render(*drawing);
+            m_ScreenTargetRenderer.render(drawing);
         }
     }
     else
     {
-        m_ImageTargetRenderer.render(m_DocumentStore->getActiveDocument().getActiveDrawing());
+        Drawing *activeDrawing = m_DocumentStore->getActiveDocument().getActiveDrawing();
+        if (activeDrawing != nullptr)
+        {
+            m_ImageTargetRenderer.render(*activeDrawing);
+        }
     }
 
     m_Window->afterRender();

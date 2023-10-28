@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../engine/graphics/camera/camera.h"
+#include "../../engine/graphics/layer/layer.h"
 #include "drawing_state.h"
 #include "frame.h"
 
@@ -12,20 +13,22 @@ namespace editor
 {
     using namespace ::spright::engine;
 
-    class Drawing : public Container
+    class Drawing : public Canvas
     {
     public:
         Drawing(const Bounds &bounds,
                 const TileLayer &backgroundLayer,
                 const TileLayer &tempLayer,
                 const TileLayer &toolLayer,
-                const TileLayer &cursorLayer);
+                const TileLayer &cursorLayer,
+                const Layer &decorationLayer);
 
         Drawing(const TileLayer &initialLayer,
                 const TileLayer &backgroundLayer,
                 const TileLayer &tempLayer,
                 const TileLayer &toolLayer,
-                const TileLayer &cursorLayer);
+                const TileLayer &cursorLayer,
+                const Layer &decorationLayer);
 
         std::vector<Frame> &getFrames();
 

@@ -20,6 +20,8 @@ namespace engine
     public:
         Rect2D(float x, float y, float width, float height, unsigned int color);
 
+        ~Rect2D() override = default;
+
         Rect2D(const Rect2D &);
 
         bool isEqual(const Renderable2D &obj) const override;
@@ -49,6 +51,8 @@ namespace engine
         nlohmann::json getJson() override;
 
         virtual void submit(Renderer2D &renderer) const override;
+
+        virtual Rect2D *clone() const override;
 
     private:
         void updateBounds();

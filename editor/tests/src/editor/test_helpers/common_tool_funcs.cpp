@@ -26,7 +26,7 @@ void CommonToolFuncs::buildRect(const BoundsInt &bounds)
 
 void CommonToolFuncs::createTile(const Vec2Int &pos, size_t layerIndex, size_t frameIndex)
 {
-    Drawing &drawing = m_Document.getActiveDrawing();
+    Drawing &drawing = *m_Document.getActiveDrawing();
 
     drawing.setActiveFrame(frameIndex);
     drawing.setActiveLayer(layerIndex);

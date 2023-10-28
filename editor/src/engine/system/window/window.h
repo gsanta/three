@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../../layout/container.h"
 #include "input_handler.h"
 
 #include <GL/glew.h>
@@ -12,12 +11,10 @@ namespace spright
 {
 namespace engine
 {
-    class InputHandler;
-
-    class Window : public Container
+    class Window
     {
     public:
-        inline Window(int width, int height) : Container(Bounds(0, 0, width, height))
+        inline Window(int width, int height) : m_Width(width), m_Height(height)
         {
         }
 
@@ -33,11 +30,11 @@ namespace engine
 
         virtual bool closed() const = 0;
 
-        virtual int getWidth() const = 0;
+        int getWidth() const;
 
-        virtual int getHeight() const = 0;
+        int getHeight() const;
 
-        virtual void setSize(int width, int height) = 0;
+        virtual void setSize(int width, int height);
 
         virtual bool isKeyPressed(unsigned int keycode) const = 0;
 
@@ -48,6 +45,11 @@ namespace engine
         virtual float getRatio() = 0;
 
         virtual InputHandler *getInputHandler() const = 0;
+
+    protected:
+        int m_Width;
+
+        int m_Height;
     };
 } // namespace engine
 } // namespace spright

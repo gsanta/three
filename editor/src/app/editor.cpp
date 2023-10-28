@@ -25,7 +25,7 @@ namespace editor
 
         m_DocumentStore = std::make_shared<DocumentStore>();
 
-        m_DocumentStore->addDocument(m_DocumentFactory->createDocument());
+        m_DocumentStore->setDocument(m_DocumentFactory->createDocument());
 
         m_SpriteSheet = std::make_unique<SpriteSheet>(m_DocumentFactory, &m_DocumentStore->getActiveDocument());
 
@@ -35,7 +35,10 @@ namespace editor
 
         m_JsonExport = std::make_unique<JsonIO>(m_DocumentFactory);
 
-        m_toolHandler = new ToolHandler(m_Window, getDocumentStore());
+        m_toolHandler = new ToolHandler(getDocumentStore());
+
+        m_Window->getInputHandler()->registerListener(m_toolHandler);
+
         m_toolHandler->getToolStore().addTool(new BrushTool());
         m_toolHandler->getToolStore().addTool(new RectangleTool());
         m_toolHandler->getToolStore().addTool(new EraserTool(3));
@@ -49,6 +52,7 @@ namespace editor
         m_toolHandler->getToolStore().addTool(new ShearTool());
         m_toolHandler->getToolStore().addTool(new RotateTool());
         m_toolHandler->getToolStore().addTool(new MoveTool());
+        m_toolHandler->getToolStore().addTool(new CanvasSelectionTool());
         m_toolHandler->addActiveTool("zoom");
         m_toolHandler->setSelectedTool("brush");
 
@@ -58,12 +62,6 @@ namespace editor
     Document &Editor::getActiveDocument()
     {
         return m_DocumentStore->getActiveDocument();
-    }
-
-    void Editor::setDocument(const Document &document)
-    {
-        m_DocumentStore->setDocument(document);
-        m_DocumentStore->setActiveDocument(0);
     }
 
     Window *Editor::getWindow() const

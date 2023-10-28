@@ -3,10 +3,10 @@
 #include "../src/engine/graphics/camera/camera.h"
 #include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
 #include "../src/engine/graphics/layer/group.h"
-#include "../src/engine/graphics/layer/tileLayer.h"
+#include "../src/engine/graphics/layer/tile_layer.h"
 #include "../src/engine/graphics/renderable/bounds.h"
 #include "../src/engine/graphics/renderable/rect2d.h"
-#include "../src/engine/layout/container.h"
+#include "../src/engine/structure/canvas/canvas.h"
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -16,18 +16,20 @@ SCENARIO("TileLayer")
 {
     GIVEN("a tile layer")
     {
+
+        std::shared_ptr<Renderer2D> renderer = std::make_shared<HeadlessRenderer2D>();
         WHEN("copying it")
         {
             THEN("the copy equals to the original")
             {
                 Rect2D rect(2.0f, 3.0f, 3.0f, 5.0f, 0xFF0000FF);
                 Bounds bounds = Bounds::createWithPositions(-16.0f, -16.0f, 16.0f, 16.0f);
-                TileLayer layer1("layer", HeadlessRenderer2D(), Group<Rect2D>(), bounds);
+                TileLayer layer1("layer", renderer, Group<Rect2D>(), bounds);
 
                 layer1.add(rect);
 
                 TileLayer layer2("layer2",
-                                 HeadlessRenderer2D(),
+                                 renderer,
                                  Group<Rect2D>(),
                                  Bounds::createWithPositions(-5.0f, -5.0f, 5.0f, 5.0f));
 
@@ -43,11 +45,11 @@ SCENARIO("TileLayer")
             THEN("the two equals")
             {
                 TileLayer layer1("layer",
-                                 HeadlessRenderer2D(),
+                                 renderer,
                                  Group<Rect2D>(),
                                  Bounds::createWithPositions(-16.0f, -16.0f, 16.0f, 16.0f));
                 TileLayer layer2("layer",
-                                 HeadlessRenderer2D(),
+                                 renderer,
                                  Group<Rect2D>(),
                                  Bounds::createWithPositions(-16.0f, -16.0f, 16.0f, 16.0f));
 
@@ -68,23 +70,23 @@ SCENARIO("TileLayer")
             THEN("the two do not equal")
             {
                 TileLayer layer1("layer",
-                                 HeadlessRenderer2D(),
+                                 renderer,
                                  Group<Rect2D>(),
                                  Bounds::createWithPositions(-16.0f, -16.0f, 16.0f, 16.0f));
                 TileLayer layer2("layer_2",
-                                 HeadlessRenderer2D(),
+                                 renderer,
                                  Group<Rect2D>(),
                                  Bounds::createWithPositions(-16.0f, -16.0f, 16.0f, 16.0f));
                 TileLayer layer3("layer_3",
-                                 HeadlessRenderer2D(),
+                                 renderer,
                                  Group<Rect2D>(),
                                  Bounds::createWithPositions(-16.0f, -16.0f, 16.0f, 16.0f));
                 TileLayer layer4("layer_4",
-                                 HeadlessRenderer2D(),
+                                 renderer,
                                  Group<Rect2D>(),
                                  Bounds::createWithPositions(-5.0f, -5.0f, 5.0f, 5.0f));
                 TileLayer layer5("layer_5",
-                                 HeadlessRenderer2D(),
+                                 renderer,
                                  Group<Rect2D>(),
                                  Bounds::createWithPositions(-16.0f, -16.0f, 16.0f, 16.0f));
                 layer5.add(Rect2D(2.0f, 3.0f, 3.0f, 5.0f, 0xFF0000FF));
@@ -101,7 +103,7 @@ SCENARIO("TileLayer")
             THEN("it will contain the new tile")
             {
                 TileLayer layer("layer",
-                                HeadlessRenderer2D(),
+                                renderer,
                                 Group<Rect2D>(),
                                 Bounds::createWithPositions(-16.0f, -16.0f, 16.0f, 16.0f));
 
@@ -123,8 +125,9 @@ SCENARIO("TileLayer")
         {
             THEN("it indexes the tiles from the bottom left to top right direction")
             {
+
                 TileLayer layer("layer",
-                                HeadlessRenderer2D(),
+                                renderer,
                                 Group<Rect2D>(),
                                 Bounds::createWithPositions(-16.0f, -16.0f, 16.0f, 16.0f));
 

@@ -7,8 +7,8 @@ namespace editor
     EraseUndo::EraseUndo(Document &document)
     {
         m_DrawingPos = document.getActiveDrawingIndex();
-        m_FramePos = document.getActiveDrawing().getActiveFrameIndex();
-        m_TileLayerPos = document.getActiveDrawing().getActiveLayerIndex();
+        m_FramePos = document.getActiveDrawing()->getActiveFrameIndex();
+        m_TileLayerPos = document.getActiveDrawing()->getActiveLayerIndex();
     }
 
     void EraseUndo::undo(Document &document) const

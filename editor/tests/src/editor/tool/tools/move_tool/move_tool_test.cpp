@@ -1,6 +1,6 @@
-#include "../../../test_helpers/common_tool_funcs.h"
 #include "../../../test_helpers/builders/document_builder.h"
 #include "../../../test_helpers/builders/tool_context_builder.h"
+#include "../../../test_helpers/common_tool_funcs.h"
 #include "../src/app/tool/tools/move_tool/move_tool.h"
 
 #include <catch2/catch_test_macros.hpp>
@@ -20,7 +20,7 @@ SCENARIO("Move tool")
                                                                                 .withTile(Vec2Int(3, 3))
                                                                                 .withTile(Vec2Int(4, 3))))
                                 .build();
-        Drawing &activeDrawing = document.getActiveDrawing();
+        Drawing &activeDrawing = *document.getActiveDrawing();
 
         ToolContext toolContext = ToolContextBuilder().build(document);
 

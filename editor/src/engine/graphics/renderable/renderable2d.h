@@ -23,6 +23,8 @@ namespace engine
     public:
         Renderable2D(const Bounds &bounds, unsigned int color);
 
+        virtual ~Renderable2D() = default;
+
         friend bool operator==(const Renderable2D &, const Renderable2D &);
 
         friend bool operator!=(const Renderable2D &, const Renderable2D &);
@@ -72,6 +74,8 @@ namespace engine
         }
 
         static std::shared_ptr<Renderable2D> create(double width, double height);
+
+        virtual Renderable2D *clone() const = 0;
 
     protected:
         Renderable2D()

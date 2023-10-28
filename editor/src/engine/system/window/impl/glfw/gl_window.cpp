@@ -17,7 +17,7 @@ namespace engine
             glfwTerminate();
         }
 
-        m_InputHandler = new InputHandler(this);
+        m_InputHandler = new InputHandler();
 
         for (int i = 0; i < MAX_KEYS; i++)
         {
@@ -81,6 +81,7 @@ namespace engine
     void GLWindow::setSize(int width, int height)
     {
         glfwSetWindowSize(m_Window, width, height);
+        Window::setSize(width, height);
     }
 
     bool GLWindow::isKeyPressed(unsigned int keycode) const
