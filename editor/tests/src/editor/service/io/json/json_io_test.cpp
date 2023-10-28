@@ -38,7 +38,7 @@ SCENARIO("JsonIO")
 
             Document document = DocumentBuilder().withEmptyDocument().build();
 
-            document.addDrawing(std::make_shared<Drawing>(drawing));
+            document.addDrawing(drawing);
 
             JsonIO jsonIO(std::make_shared<DocumentFactory>(documentFactory));
 
@@ -118,7 +118,7 @@ SCENARIO("JsonIO")
 
             Document document = jsonIO.importDocument(jsonStr);
 
-            Drawing &drawing = document.getActiveDrawing();
+            Drawing &drawing = *document.getActiveDrawing();
 
             REQUIRE(drawing.getFrames().size() == 2);
 

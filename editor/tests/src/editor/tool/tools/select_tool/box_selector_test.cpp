@@ -1,10 +1,10 @@
 #include "../../../test_helpers/builders/document_store_builder.h"
+#include "../../../test_helpers/builders/tile_layer_builder.h"
 #include "../../../test_helpers/matchers/equals_bounds_matcher.h"
 #include "../../../test_helpers/test_document_factory.h"
-#include "../../../test_helpers/builders/tile_layer_builder.h"
 #include "../src/app/tool/tools/color_picker_tool/color_picker_tool.h"
 #include "../src/app/tool/tools/select_tool/box_selector.h"
-#include "../src/engine/graphics/layer/tileLayer.h"
+#include "../src/engine/graphics/layer/tile_layer.h"
 #include "../src/maths/vec2.h"
 
 #include <catch2/catch_test_macros.hpp>
@@ -27,8 +27,8 @@ SCENARIO("Box selector")
 
         BoxSelector boxSelector(selectionBuffer);
 
-        TileLayer &toolLayer = documentStore->getActiveDocument().getActiveDrawing().getToolLayer();
-        TileLayer &activeLayer = documentStore->getActiveDocument().getActiveDrawing().getActiveLayer();
+        TileLayer &toolLayer = documentStore->getActiveDocument().getActiveDrawing()->getToolLayer();
+        TileLayer &activeLayer = documentStore->getActiveDocument().getActiveDrawing()->getActiveLayer();
 
         WHEN("making a selection")
         {

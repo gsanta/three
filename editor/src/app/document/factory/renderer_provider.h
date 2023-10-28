@@ -1,14 +1,21 @@
 #pragma once
 #include "../../../engine/graphics/renderer/renderer2d.h"
 
-namespace spright { namespace editor {
+#include <memory>
 
-	using namespace engine;
+namespace spright
+{
+namespace editor
+{
 
-	class RendererProvider {
+    using namespace engine;
 
-	public:
-		virtual Renderer2D* createRenderer2D() const = 0;
-		virtual RendererProvider* clone() const = 0;
-	};
-}}
+    class RendererProvider
+    {
+    public:
+        virtual std::shared_ptr<Renderer2D> createRenderer2D() const = 0;
+
+        virtual RendererProvider *clone() const = 0;
+    };
+} // namespace editor
+} // namespace spright

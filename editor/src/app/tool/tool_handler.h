@@ -34,7 +34,7 @@ namespace editor
     class ToolHandler : public InputListener
     {
     public:
-        ToolHandler(Window *window, DocumentStore *documentStore);
+        ToolHandler(DocumentStore *documentStore);
 
         ~ToolHandler();
 
@@ -69,8 +69,6 @@ namespace editor
         bool isActiveTool(string name);
 
     private:
-        Window *m_Window;
-
         vector<Tool *> *m_ActiveTools;
 
         Tool *m_SelectedTool = nullptr;

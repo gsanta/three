@@ -1,5 +1,5 @@
 #include "../src/app/document/checkerboard.h"
-#include "../src/engine/graphics/layer/tileLayer.h"
+#include "../src/engine/graphics/layer/tile_layer.h"
 #include "../src/engine/graphics/renderable/bounds.h"
 #include "../test_helpers/test_document_factory.h"
 

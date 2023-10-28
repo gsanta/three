@@ -1,4 +1,4 @@
-#include "tileLayer.h"
+#include "tile_layer.h"
 
 namespace spright
 {
@@ -8,13 +8,13 @@ namespace engine
     const float TileLayer::defaultTileSize = 0.5f;
 
     TileLayer::TileLayer(std::string name,
-                         const Renderer2D &renderer,
+                         std::shared_ptr<Renderer2D> renderer,
                          Group<Rect2D> group,
                          Bounds bounds,
                          float tileSize,
                          float zPos,
                          bool allowDuplicatedPixels)
-        : TileView(bounds, tileSize), m_Name(name), m_Renderer(renderer.clone()), m_ZPos(zPos),
+        : TileView(bounds, tileSize), m_Name(name), m_Renderer(renderer), m_ZPos(zPos),
           m_AllowDuplicatedPixels(allowDuplicatedPixels)
     {
         init();

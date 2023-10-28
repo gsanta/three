@@ -23,7 +23,7 @@ SCENARIO("Rectangle tool")
 
             THEN("it draws a filled rect")
             {
-                TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing().getActiveLayer();
+                TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing()->getActiveLayer();
 
                 toolContext.pointer.curr = layer.getCenterPos(Vec2Int(1, 1));
                 toolContext.pointer.prev = toolContext.pointer.curr;
@@ -62,7 +62,7 @@ SCENARIO("Rectangle tool")
             THEN("it draws a filled rect")
             {
 
-                TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing().getActiveLayer();
+                TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing()->getActiveLayer();
 
                 toolContext.pointer.curr = layer.getCenterPos(Vec2Int(1, 1));
                 toolContext.pointer.prev = toolContext.pointer.curr;

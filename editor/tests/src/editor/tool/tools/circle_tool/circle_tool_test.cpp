@@ -48,13 +48,12 @@ void REQUIRE_CIRCLE(TileLayer &layer)
 
 SCENARIO("Circle tool")
 {
-
     GIVEN("a document and circle tool")
     {
         Document document = DocumentBuilder().withDrawing(DrawingBuilder().withBounds(Bounds(0, 0, 7.0, 7.0))).build();
         ToolContext toolContext = ToolContextBuilder().build(document);
 
-        TileLayer &layer = document.getActiveLayer();
+        TileLayer &layer = document.getActiveDrawing()->getActiveLayer();
         CircleTool circleTool;
 
         WHEN("dragging the mouse")
@@ -68,7 +67,7 @@ SCENARIO("Circle tool")
 
             THEN("it updates the preview on the foreground layer for each move event")
             {
-                REQUIRE_ELLIPSE(document.getActiveDrawing().getToolLayer());
+                REQUIRE_ELLIPSE(document.getActiveDrawing()->getToolLayer());
             }
 
             WHEN("releasing the mouse at an equal horizontal and vertical distance from mouse down")

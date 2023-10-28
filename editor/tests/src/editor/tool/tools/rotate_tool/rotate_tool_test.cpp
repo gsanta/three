@@ -79,7 +79,7 @@ SCENARIO("Rotate tool")
         commonToolFuncs.buildRect(BoundsInt(4, 1, 5, 3));
         commonToolFuncs.createTile(Vec2Int(4, 0));
 
-        Drawing &drawing = document.getActiveDrawing();
+        Drawing &drawing = *document.getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
         TileLayer &toolLayer = drawing.getToolLayer();
         TileLayer &tempLayer = drawing.getTempLayerOfActiveLayer();

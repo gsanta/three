@@ -26,7 +26,7 @@ SCENARIO("Paint bucket tool")
 
             THEN("the entire drawing gets filled")
             {
-                TileLayer &layer = document.getActiveLayer();
+                TileLayer &layer = document.getActiveDrawing()->getActiveLayer();
 
                 REQUIRE(layer.getTiles().size() == 4);
                 REQUIRE(layer.getTiles()[0]->getColor() == COLOR_SPRIGHT_ORANGE);
@@ -56,7 +56,7 @@ SCENARIO("Paint bucket tool")
                                 .build();
         ToolContext toolContext = ToolContextBuilder().build(document);
 
-        TileLayer &layer = document.getActiveLayer();
+        TileLayer &layer = document.getActiveDrawing()->getActiveLayer();
 
         PaintBucketTool paintBucketTool;
 

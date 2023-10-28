@@ -1,9 +1,9 @@
-#include "../../../test_helpers/common_tool_funcs.h"
 #include "../../../test_helpers/builders/document_builder.h"
 #include "../../../test_helpers/builders/drawing_builder.h"
-#include "../../../test_helpers/matchers/has_tiles_within_area_matcher.h"
 #include "../../../test_helpers/builders/tile_layer_builder.h"
 #include "../../../test_helpers/builders/tool_context_builder.h"
+#include "../../../test_helpers/common_tool_funcs.h"
+#include "../../../test_helpers/matchers/has_tiles_within_area_matcher.h"
 #include "../src/app/tool/tools/rectangle_tool/rectangle_tool.h"
 #include "../src/app/tool/tools/select_tool/select_tool.h"
 #include "../src/app/tool/tools/shear_tool/shear_tool.h"
@@ -100,7 +100,7 @@ SCENARIO("Shear tool")
         CommonToolFuncs commonToolFuncs(document, toolContext);
         commonToolFuncs.buildRect(BoundsInt(2, 1, 5, 4));
 
-        Drawing &drawing = document.getActiveDrawing();
+        Drawing &drawing = *document.getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
         TileLayer &tempLayer = drawing.getTempLayerOfActiveLayer();
         TileLayer &toolLayer = drawing.getToolLayer();
@@ -336,7 +336,7 @@ SCENARIO("Shear tool")
 
         commonToolFuncs.buildRect(BoundsInt(0, 0, 3, 3));
 
-        Drawing &drawing = document.getActiveDrawing();
+        Drawing &drawing = *document.getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
         TileLayer &tempLayer = drawing.getTempLayerOfActiveLayer();
         TileLayer &toolLayer = drawing.getToolLayer();

@@ -15,8 +15,6 @@ namespace editor
 
         Document &getActiveDocument();
 
-        void addDocument(const Document &document);
-
         void setDocument(const Document &document);
 
         void setActiveDocument(size_t index);

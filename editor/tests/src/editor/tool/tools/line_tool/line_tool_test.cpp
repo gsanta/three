@@ -15,7 +15,7 @@ SCENARIO("Line tool")
         Document document = DocumentBuilder().build();
         ToolContext toolContext = ToolContextBuilder().build(document);
 
-        TileLayer &layer = document.getActiveLayer();
+        TileLayer &layer = document.getActiveDrawing()->getActiveLayer();
 
         LineTool lineTool;
 
@@ -185,7 +185,7 @@ SCENARIO("Line tool")
 
         WHEN("drag is in progress")
         {
-            TileLayer &foregroundLayer = document.getActiveDrawing().getToolLayer();
+            TileLayer &foregroundLayer = document.getActiveDrawing()->getToolLayer();
 
             toolContext.pointer.curr = layer.getCenterPos(Vec2Int(0, 0));
             toolContext.pointer.down = toolContext.pointer.curr;

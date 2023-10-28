@@ -25,16 +25,17 @@ SCENARIO("Sprite sheet")
         HeadlessWindow window(4, 4);
         DocumentFactory documentFactory = TestDocumentFactory::createDocumentFactory(window);
 
-        TileLayer &origLayer = document.getActiveDrawing().getActiveLayer();
-
         SpriteSheet spriteSheet(std::make_shared<DocumentFactory>(documentFactory), &document);
 
         WHEN("generating a sprite sheet")
         {
-            spriteSheet.generateSpriteSheet(document.getActiveDrawing());
+            Drawing &drawing = *document.getActiveDrawing();
+            spriteSheet.generateSpriteSheet(drawing);
 
             Drawing &spriteSheetDrawing = document.getDrawing(1);
             TileLayer &spriteSheetLayer = spriteSheetDrawing.getFrames()[0].getLayer(0);
+
+            TileLayer &origLayer = document.getDrawings()[0].getActiveLayer();
 
             THEN("it creates a new drawing on the right side of the original drawing with half the size")
             {
@@ -71,7 +72,7 @@ SCENARIO("Sprite sheet")
         HeadlessWindow window(4, 4);
         DocumentFactory documentFactory = TestDocumentFactory::createDocumentFactory(window);
 
-        Drawing &drawing = document.getActiveDrawing();
+        Drawing &drawing = *document.getActiveDrawing();
 
         TileLayer &tile1OnFrame1 = drawing.getFrame(0).getLayer(0);
         TileLayer &tile2OnFrame1 = drawing.getFrame(0).getLayer(1);
@@ -87,7 +88,7 @@ SCENARIO("Sprite sheet")
 
         WHEN("generating a sprite sheet")
         {
-            spriteSheet.generateSpriteSheet(document.getActiveDrawing());
+            spriteSheet.generateSpriteSheet(*document.getActiveDrawing());
             Drawing &spriteSheetDrawing = document.getDrawing(1);
 
             THEN(

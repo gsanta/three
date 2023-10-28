@@ -8,8 +8,8 @@ namespace editor
     {
         m_DrawingIndex = document.getActiveDrawingIndex();
 
-        m_FrameIndex = document.getActiveDrawing().getActiveFrameIndex();
-        m_TileLayerIndex = document.getActiveDrawing().getActiveLayerIndex();
+        m_FrameIndex = document.getActiveDrawing()->getActiveFrameIndex();
+        m_TileLayerIndex = document.getActiveDrawing()->getActiveLayerIndex();
     }
 
     void TileUndo::undo(Document &document) const

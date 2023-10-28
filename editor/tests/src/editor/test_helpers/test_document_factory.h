@@ -4,7 +4,7 @@
 #include "../src/app/document/factory/document_factory.h"
 #include "../src/app/document/factory/headless_renderer_provider.h"
 #include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
-#include "../src/engine/graphics/layer/tileLayer.h"
+#include "../src/engine/graphics/layer/tile_layer.h"
 #include "../src/engine/graphics/renderable/bounds.h"
 #include "test_event_emitter.h"
 

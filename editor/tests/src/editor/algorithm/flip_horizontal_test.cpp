@@ -25,12 +25,12 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
                                                                     .withTile(Vec2Int(11, 2), COLOR_BLUE)))
                                 .build();
 
-        TileLayer &layer = document.getActiveDrawing().getActiveLayer();
+        TileLayer &layer = document.getActiveDrawing()->getActiveLayer();
 
         int tileWidth = layer.getTileBounds().getWidth();
         int tileHeight = layer.getTileBounds().getHeight();
 
-        Drawing &drawing = document.getActiveDrawing();
+        Drawing &drawing = *document.getActiveDrawing();
         flip_horizontal(drawing.getActiveLayer());
 
         REQUIRE(layer.getAtTilePos(tileWidth - 1, 1)->getColor() == COLOR_RED);
@@ -57,11 +57,11 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
                                  .withTileLayer(TileLayerBuilder().withTile(Vec2Int(1, 1), COLOR_YELLOW)))
                 .build();
 
-        TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing().getActiveLayer();
+        TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing()->getActiveLayer();
 
         int tileWidth = layer.getTileBounds().getWidth();
 
-        Drawing &drawing = documentStore.getActiveDocument().getActiveDrawing();
+        Drawing &drawing = *documentStore.getActiveDocument().getActiveDrawing();
         Frame &frame = drawing.getActiveFrame();
 
         flip_horizontal(drawing.getActiveFrame().getLayers());
@@ -85,7 +85,7 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
                                                                                 .withTile(Vec2Int(1, 1))))
                 .build();
 
-        Drawing &drawing = documentStore.getActiveDocument().getActiveDrawing();
+        Drawing &drawing = *documentStore.getActiveDocument().getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
 
         const Vec2 bottomLeft = activeLayer.getCenterPos(Vec2Int(1, 0));
@@ -117,7 +117,7 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
                                                                                 .withTile(Vec2Int(5, 1))))
                 .build();
 
-        Drawing &drawing = documentStore.getActiveDocument().getActiveDrawing();
+        Drawing &drawing = *documentStore.getActiveDocument().getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
 
         float tileSize = activeLayer.getTileSize();
@@ -150,7 +150,7 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
                                                                                 .withTile(Vec2Int(3, 1))))
                 .build();
 
-        Drawing &drawing = documentStore.getActiveDocument().getActiveDrawing();
+        Drawing &drawing = *documentStore.getActiveDocument().getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
 
         const Vec2 bottomLeft = activeLayer.getCenterPos(Vec2Int(1, 0));

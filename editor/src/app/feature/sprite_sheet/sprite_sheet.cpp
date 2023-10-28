@@ -41,7 +41,7 @@ namespace editor
             }
         }
 
-        m_Document->addDrawing(std::make_shared<Drawing>(spriteSheet));
+        m_Document->addDrawing(spriteSheet);
     }
 } // namespace editor
 } // namespace spright

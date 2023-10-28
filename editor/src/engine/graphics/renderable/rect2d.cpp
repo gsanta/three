@@ -134,6 +134,11 @@ namespace engine
         renderer.setIndexCount(renderer.getIndexCount() + 6);
     }
 
+    Rect2D *Rect2D::clone() const
+    {
+        return new Rect2D(*this);
+    }
+
     void Rect2D::updateBounds()
     {
         float width = m_Size.x;

@@ -13,7 +13,7 @@ namespace editor
 
     void BrushTool::setSize(int size)
     {
-        dynamic_cast<RectangleCursor*>(getCursor().get())->setSize(size);
+        dynamic_cast<RectangleCursor *>(getCursor().get())->setSize(size);
         m_Size = size;
     }
 
@@ -38,9 +38,7 @@ namespace editor
 
         float zoom = camera.getZoom();
 
-        Drawing &drawing = context.doc.document->getActiveDrawing();
-
-        TileLayer &layer = drawing.getActiveLayer();
+        TileLayer &layer = context.doc.document->getActiveDrawing()->getActiveLayer();
 
         if (!isPointerMove)
         {

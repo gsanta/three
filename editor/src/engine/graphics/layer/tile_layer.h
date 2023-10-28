@@ -3,7 +3,7 @@
 #include "../../../maths/mat4.h"
 #include "../../../maths/vec2.h"
 #include "../../../maths/vec2_int.h"
-#include "../../layout/container.h"
+#include "../../structure/canvas/canvas.h"
 #include "../camera/camera.h"
 #include "../renderable/bounds.h"
 #include "../renderable/bounds_int.h"
@@ -28,7 +28,7 @@ namespace engine
         using TileView::getBottomLeftPos;
 
         TileLayer(std::string name,
-                  const Renderer2D &renderer,
+                  std::shared_ptr<Renderer2D> renderer,
                   Group<Rect2D> group,
                   Bounds bounds,
                   float tileSize = TileLayer::defaultTileSize,

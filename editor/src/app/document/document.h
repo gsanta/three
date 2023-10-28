@@ -3,9 +3,9 @@
 #include "../../engine/graphics/camera/camera.h"
 #include "../../engine/graphics/camera/ortho_projection_info.h"
 #include "../../engine/graphics/layer/group.h"
-#include "../../engine/graphics/layer/tileLayer.h"
+#include "../../engine/graphics/layer/tile_layer.h"
 #include "../../engine/graphics/renderable/bounds.h"
-#include "../../engine/layout/container.h"
+#include "../../engine/structure/canvas/canvas.h"
 #include "../event/event_emitter.h"
 #include "../feature/frame/frame_player.h"
 #include "drawing.h"
@@ -23,47 +23,51 @@ namespace editor
 
     using namespace ::spright::engine;
 
-    class Document : public Container
+    class Document
     {
     public:
-        Document(Bounds bounds, Camera m_Camera, Drawing canvas, std::shared_ptr<DocumentHistory> history);
+        Document(const Bounds &bounds,
+                 const Canvas &canvas,
+                 const Camera &camera,
+                 std::shared_ptr<DocumentHistory> history);
 
-        Frame &getActiveFrame();
+        Document(const Document &other);
 
-        TileLayer &getActiveLayer();
+        //! Represents the Drawing() over which the pointer resides or over which a drag action started
+        //! @return The active Drawing() or nullptr
+        Drawing *getActiveDrawing();
 
-        Drawing &getActiveDrawing();
+        //! Sets the nth drawing as active, -1 sets it to nullptr
+        void setActiveDrawing(int index);
 
         Drawing &getDrawing(size_t index);
 
         size_t getActiveDrawingIndex() const;
 
-        void addDrawing(std::shared_ptr<Drawing> drawing);
+        void addDrawing(const Drawing &drawing);
 
         void removeActiveDrawing();
 
         Drawing &getDrawing(int id);
 
-        std::vector<std::shared_ptr<Drawing>> &getDrawings();
+        std::vector<Drawing> &getDrawings();
 
         std::shared_ptr<DocumentHistory> getHistory();
 
         void empty();
 
-        Drawing &getCanvas();
+        Canvas &getCanvas();
 
         Camera &getCamera();
 
         void setCamera(const Camera &camera);
 
-        std::string getJson();
-
     private:
-        std::vector<std::shared_ptr<Drawing>> m_Drawings;
+        std::vector<Drawing> m_Drawings;
 
-        Drawing m_Canvas;
+        Canvas m_Canvas;
 
-        size_t m_ActiveDrawing;
+        int m_ActiveDrawingIndex;
 
         Camera m_Camera;
 

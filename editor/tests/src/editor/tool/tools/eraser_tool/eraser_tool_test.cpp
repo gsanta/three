@@ -1,11 +1,11 @@
 #include "../../../test_helpers/builders/document_builder.h"
 #include "../../../test_helpers/builders/document_store_builder.h"
 #include "../../../test_helpers/builders/drawing_builder.h"
-#include "../../../test_helpers/matchers/equals_bounds_matcher.h"
 #include "../../../test_helpers/builders/pointer_info_builder.h"
-#include "../../../test_helpers/test_document_factory.h"
 #include "../../../test_helpers/builders/tile_layer_builder.h"
 #include "../../../test_helpers/builders/tool_context_builder.h"
+#include "../../../test_helpers/matchers/equals_bounds_matcher.h"
+#include "../../../test_helpers/test_document_factory.h"
 #include "../src/app/document/document_store.h"
 #include "../src/app/document/factory/document_factory.h"
 #include "../src/app/tool/context/tool_context.h"
@@ -38,7 +38,7 @@ SCENARIO("Erase tool")
                                                                                 .withTile(Vec2Int(1, 2))
                                                                                 .withTile(Vec2Int(2, 2))))
                                 .build();
-        TileLayer &activeLayer = document.getActiveDrawing().getActiveLayer();
+        TileLayer &activeLayer = document.getActiveDrawing()->getActiveLayer();
 
         ToolContext toolContext =
             ToolContextBuilder()
@@ -132,7 +132,7 @@ SCENARIO("Erase tool")
     GIVEN("an empty document")
     {
         Document document = DocumentBuilder().withDrawing(DrawingBuilder().withBounds(Bounds(0, 0, 4, 4))).build();
-        TileLayer &cursorLayer = document.getActiveDrawing().getCursorLayer();
+        TileLayer &cursorLayer = document.getActiveDrawing()->getCursorLayer();
 
         ToolContext toolContext = ToolContextBuilder().build(document);
 
