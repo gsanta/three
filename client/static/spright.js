@@ -7219,6 +7219,11 @@ function on_active_frame_changed_callback(index) { editorCallbacks.onActiveFrame
   }
   }
 
+  var _getentropy = (buffer, size) => {
+      randomFill(HEAPU8.subarray(buffer, buffer + size));
+      return 0;
+    };
+
   var webgl_enable_ANGLE_instanced_arrays = (ctx) => {
       // Extension available in WebGL 1 from Firefox 26 and Google Chrome 30 onwards. Core feature in WebGL 2.
       var ext = ctx.getExtension('ANGLE_instanced_arrays');
@@ -10003,6 +10008,8 @@ var wasmImports = {
   /** @export */
   fd_write: _fd_write,
   /** @export */
+  getentropy: _getentropy,
+  /** @export */
   glAttachShader: _glAttachShader,
   /** @export */
   glBindBuffer: _glBindBuffer,
@@ -10170,9 +10177,9 @@ var dynCall_viijii = Module['dynCall_viijii'] = createExportWrapper('dynCall_vii
 var dynCall_iiiiij = Module['dynCall_iiiiij'] = createExportWrapper('dynCall_iiiiij');
 var dynCall_iiiiijj = Module['dynCall_iiiiijj'] = createExportWrapper('dynCall_iiiiijj');
 var dynCall_iiiiiijj = Module['dynCall_iiiiiijj'] = createExportWrapper('dynCall_iiiiiijj');
-var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 94128;
-var ___start_em_js = Module['___start_em_js'] = 126512;
-var ___stop_em_js = Module['___stop_em_js'] = 126576;
+var ___emscripten_embedded_file_data = Module['___emscripten_embedded_file_data'] = 94768;
+var ___start_em_js = Module['___start_em_js'] = 127336;
+var ___stop_em_js = Module['___stop_em_js'] = 127400;
 
 // include: postamble.js
 // === Auto-generated postamble setup entry stuff ===
