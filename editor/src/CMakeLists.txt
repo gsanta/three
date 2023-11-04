@@ -39,6 +39,15 @@ if(NOT glew_POPULATED)
   add_subdirectory(${glew_SOURCE_DIR} ${glew_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif()
 
+FetchContent_Declare(
+    stduuid
+    GIT_REPOSITORY https://github.com/mariusbancila/stduuid.git
+    GIT_TAG        master
+)
+
+FetchContent_MakeAvailable(stduuid)
+
+
 file(GLOB_RECURSE SOURCES "*.cpp" "*.h")
 
 IF (NOT WIN32)
@@ -51,8 +60,8 @@ ENDIF()
 
 add_library(editor STATIC ${SOURCES})
 
-target_link_libraries(editor glfw libglew_static nlohmann_json::nlohmann_json)
+target_link_libraries(editor glfw libglew_static nlohmann_json::nlohmann_json stduuid)
 
 add_library(editor_for_tests STATIC ${SOURCES})
 
-target_link_libraries(editor_for_tests glfw libglew_static nlohmann_json::nlohmann_json)
+target_link_libraries(editor_for_tests glfw libglew_static nlohmann_json::nlohmann_json stduuid)

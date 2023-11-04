@@ -28,7 +28,7 @@ namespace editor
 
     void ToolHandler::onMouseUp(bool buttons[3])
     {
-        Drawing *activeDrawing = &m_DocumentStore->getActiveDocument().getDrawing(0);
+        Drawing *activeDrawing = m_DocumentStore->getActiveDocument().getActiveDrawing();
 
         m_ToolContext.doc.document = &m_DocumentStore->getActiveDocument();
 
@@ -55,7 +55,7 @@ namespace editor
         m_ToolContext.pointer.buttons[1] = buttons[1];
         m_ToolContext.pointer.buttons[2] = buttons[2];
 
-        Drawing *activeDrawing = &m_DocumentStore->getActiveDocument().getDrawing(0);
+        Drawing *activeDrawing = m_DocumentStore->getActiveDocument().getActiveDrawing();
         for (Tool *tool : *m_ActiveTools)
         {
             tool->execPointerDown(m_ToolContext);

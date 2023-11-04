@@ -17,7 +17,6 @@ namespace spright
 {
 namespace engine
 {
-
     class Renderable2D
     {
     public:

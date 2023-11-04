@@ -17,11 +17,11 @@ namespace editor
             document->getActiveDrawing()->getDecorationLayer().clear();
         }
 
-        for (size_t i = 0; i < document->getDrawings().size(); i++)
+        for (size_t i = 0; i < document->getCanvases().size(); i++)
         {
-            if (document->getDrawings()[i].getBounds().contains(context.pointer.curr.x, context.pointer.curr.y))
+            if (document->getCanvases()[i]->getBounds().contains(context.pointer.curr.x, context.pointer.curr.y))
             {
-                document->setActiveDrawing(i);
+                document->setActiveCanvas(document->getCanvases()[i]->getUuid());
                 break;
             }
         }

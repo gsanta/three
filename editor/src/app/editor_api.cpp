@@ -201,7 +201,7 @@ void set_canvas_size(int width, int height)
                        Bounds::createWithPositions(-width / 2.0f, -height / 2.0f, width / 2.0f, height / 2.0f),
                        *editor->getDocumentFactory());
 
-    editor->getActiveDocument().removeActiveDrawing();
+    editor->getActiveDocument().removeCanvas(drawing->getUuid());
     editor->getActiveDocument().addDrawing(newDrawing);
 }
 

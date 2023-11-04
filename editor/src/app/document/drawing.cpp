@@ -7,13 +7,14 @@ namespace editor
 
     Drawing resize_drawing(Drawing &orig, Bounds bounds);
 
-    Drawing::Drawing(const Bounds &bounds,
+    Drawing::Drawing(const std::string &uuid,
+                     const Bounds &bounds,
                      const TileLayer &backgroundLayer,
                      const TileLayer &tempLayer,
                      const TileLayer &toolLayer,
                      const TileLayer &cursorLayer,
                      const Layer &decorationLayer)
-        : Canvas(bounds, decorationLayer)
+        : Canvas(uuid, bounds, decorationLayer)
     {
         m_BackgroundLayer = std::make_shared<TileLayer>(backgroundLayer);
         m_TempLayer = std::make_shared<TileLayer>(tempLayer);
@@ -21,13 +22,14 @@ namespace editor
         m_CursorLayer = std::make_shared<TileLayer>(cursorLayer);
     }
 
-    Drawing::Drawing(const TileLayer &initialLayer,
+    Drawing::Drawing(const std::string &uuid,
+                     const TileLayer &initialLayer,
                      const TileLayer &backgroundLayer,
                      const TileLayer &tempLayer,
                      const TileLayer &toolLayer,
                      const TileLayer &cursorLayer,
                      const Layer &decorationLayer)
-        : Canvas(initialLayer.getBounds(), decorationLayer)
+        : Canvas(uuid, initialLayer.getBounds(), decorationLayer)
     {
         Frame frame(0);
         frame.addLayer(initialLayer);
@@ -219,6 +221,35 @@ namespace editor
     void Drawing::addBackgroundLayer(const TileLayer &tileLayer)
     {
         m_BackgroundLayer = std::make_shared<TileLayer>(tileLayer);
+    }
+
+    Drawing *Drawing::clone() const
+    {
+        return new Drawing(*this);
+    }
+
+    void Drawing::render(const Camera &camera, Canvas::RenderTarget target)
+    {
+        for (TileLayer &layer : getActiveFrame().getLayers())
+        {
+            layer.render(camera);
+        }
+
+        if (target == Screen)
+        {
+            for (size_t i = 0; i < getTempLayerCount(); i++)
+            {
+                getTempLayer(i).render(camera);
+            }
+
+            getBackgroundLayer().render(camera);
+
+            getDecorationLayer().render(camera);
+
+            getToolLayer().render(camera);
+
+            getCursorLayer().render(camera);
+        }
     }
 
     std::string Drawing::getJson()

@@ -160,7 +160,7 @@ namespace engine
         renderer.getShader().setUniformMat4("pr_matrix", camera.getProjectionMatrix());
 
         renderer.push(camera.getViewMatrix());
-        for (const Renderable2D *renderable : m_Renderables)
+        for (const T *renderable : m_Renderables)
         {
             renderable->submit(renderer);
         }

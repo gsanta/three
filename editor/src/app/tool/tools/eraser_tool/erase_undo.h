@@ -28,7 +28,7 @@ namespace editor
 
         size_t m_FramePos;
 
-        size_t m_DrawingPos;
+        std::string m_DrawingId;
     };
 
 } // namespace editor
