@@ -92,7 +92,13 @@ Drawing DrawingBuilder::buildFromLayers()
     const TileLayer toolLayer("", renderer, Group<Rect2D>(), m_Bounds, m_TileSize, 0, true);
     const TileLayer cursorLayer("", renderer, Group<Rect2D>(), m_Bounds, m_TileSize, 0, true);
 
-    Drawing drawing(initialLayer, backgroundLayer, tempLayer, toolLayer, cursorLayer, Layer(renderer));
+    Drawing drawing(UuidGenerator::getInstance().generate(),
+                    initialLayer,
+                    backgroundLayer,
+                    tempLayer,
+                    toolLayer,
+                    cursorLayer,
+                    Layer(renderer));
 
     for (size_t i = 1; i < m_TileLayers.size(); i++)
     {
@@ -120,7 +126,8 @@ Drawing DrawingBuilder::buildFromFrames()
         frames.push_back(frameBuilder.build());
     }
 
-    Drawing drawing(frames[0].getLayers()[0].getBounds(),
+    Drawing drawing(UuidGenerator::getInstance().generate(),
+                    frames[0].getLayers()[0].getBounds(),
                     backgroundLayer,
                     tempLayer,
                     toolLayer,

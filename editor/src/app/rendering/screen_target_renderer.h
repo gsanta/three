@@ -17,6 +17,8 @@ namespace editor
         ScreenTargetRenderer(DocumentStore *documentStore);
 
         void render(Drawing &draing) override;
+
+        void render3d(Drawing3d &drawing);
     };
 } // namespace editor
 } // namespace spright

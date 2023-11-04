@@ -5,7 +5,8 @@
 #include "../../engine/graphics/layer/group.h"
 #include "../../engine/graphics/layer/tile_layer.h"
 #include "../../engine/graphics/renderable/bounds.h"
-#include "../../engine/structure/canvas/canvas.h"
+#include "../../engine/structure/canvas.h"
+#include "../../engine/structure/drawing3d.h"
 #include "../event/event_emitter.h"
 #include "../feature/frame/frame_player.h"
 #include "drawing.h"
@@ -37,20 +38,23 @@ namespace editor
         //! @return The active Drawing() or nullptr
         Drawing *getActiveDrawing();
 
-        //! Sets the nth drawing as active, -1 sets it to nullptr
-        void setActiveDrawing(int index);
+        int getActiveCanvasIndex() const;
 
-        Drawing &getDrawing(size_t index);
+        Drawing &addDrawing(const Drawing &drawing);
 
-        size_t getActiveDrawingIndex() const;
+        Drawing &getDrawing(std::string uuid);
 
-        void addDrawing(const Drawing &drawing);
+        void removeCanvas(const std::string &uuid);
 
-        void removeActiveDrawing();
+        void addDrawing3d(const Drawing3d &drawing);
 
-        Drawing &getDrawing(int id);
+        std::vector<Drawing3d> &getDrawing3ds();
 
-        std::vector<Drawing> &getDrawings();
+        void setActiveCanvas(const std::string &uuid);
+
+        std::vector<std::unique_ptr<Canvas>> &getCanvases();
+
+        Canvas &getCanvas(std::string uuid);
 
         std::shared_ptr<DocumentHistory> getHistory();
 
@@ -63,11 +67,11 @@ namespace editor
         void setCamera(const Camera &camera);
 
     private:
-        std::vector<Drawing> m_Drawings;
+        std::vector<std::unique_ptr<Canvas>> m_AllCanvases;
+
+        int m_ActiveCanvasIndex = -1;
 
         Canvas m_Canvas;
-
-        int m_ActiveDrawingIndex;
 
         Camera m_Camera;
 

@@ -59,7 +59,9 @@ namespace engine
 
     private:
         Vec3 m_Position;
+
         Vec2 m_Size;
+
         int m_TileIndex = -1;
     };
 } // namespace engine

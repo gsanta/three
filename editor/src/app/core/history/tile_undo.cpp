@@ -6,7 +6,7 @@ namespace editor
 {
     TileUndo::TileUndo(Document &document, std::shared_ptr<ToolStore> tools) : m_Tools(tools)
     {
-        m_DrawingIndex = document.getActiveDrawingIndex();
+        m_DrawingUuid = document.getActiveDrawing()->getUuid();
 
         m_FrameIndex = document.getActiveDrawing()->getActiveFrameIndex();
         m_TileLayerIndex = document.getActiveDrawing()->getActiveLayerIndex();
@@ -26,7 +26,7 @@ namespace editor
             tileLayer.add(*rect);
         }
 
-        m_Tools->getSelectTool().syncSelection(document.getDrawing(m_DrawingIndex), m_PrevSelectedIndexes);
+        m_Tools->getSelectTool().syncSelection(document.getDrawing(m_DrawingUuid), m_PrevSelectedIndexes);
     }
 
     void TileUndo::redo(Document &document) const
@@ -43,7 +43,7 @@ namespace editor
             tileLayer.add(*rect);
         }
 
-        m_Tools->getSelectTool().syncSelection(document.getDrawing(m_DrawingIndex), m_NewSelectedIndexes);
+        m_Tools->getSelectTool().syncSelection(document.getDrawing(m_DrawingUuid), m_NewSelectedIndexes);
     }
 
     void TileUndo::setSelection(const std::vector<int> &prevSelectedIndexes, const std::vector<int> &newSelectedIndexes)
@@ -120,7 +120,7 @@ namespace editor
 
     TileLayer &TileUndo::getUndoLayer(Document &document) const
     {
-        Drawing &drawing = document.getDrawing(m_DrawingIndex);
+        Drawing &drawing = document.getDrawing(m_DrawingUuid);
 
         if (m_PrevSelectedIndexes.size() > 0)
         {
@@ -134,7 +134,7 @@ namespace editor
 
     TileLayer &TileUndo::getRedoLayer(Document &document) const
     {
-        Drawing &drawing = document.getDrawing(m_DrawingIndex);
+        Drawing &drawing = document.getDrawing(m_DrawingUuid);
 
         if (m_NewSelectedIndexes.size() > 0)
         {

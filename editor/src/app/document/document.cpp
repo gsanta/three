@@ -8,60 +8,118 @@ namespace editor
                        const Canvas &canvas,
                        const Camera &camera,
                        std::shared_ptr<DocumentHistory> history)
-        : m_Canvas(canvas), m_Camera(camera), m_History(history), m_ActiveDrawingIndex(0)
+        : m_Canvas(canvas), m_Camera(camera), m_History(history)
     {
     }
 
     Document::Document(const Document &other) : m_Camera(other.m_Camera), m_Canvas(other.m_Canvas)
     {
-        m_Drawings = other.m_Drawings;
-        m_ActiveDrawingIndex = other.m_ActiveDrawingIndex;
         m_History = other.m_History;
+
+        m_ActiveCanvasIndex = other.m_ActiveCanvasIndex;
+
+        for (const auto &canvas : other.m_AllCanvases)
+        {
+            m_AllCanvases.push_back(std::unique_ptr<Canvas>(canvas->clone()));
+        }
     }
 
     Drawing *Document::getActiveDrawing()
     {
-        return m_ActiveDrawingIndex == -1 ? nullptr : &m_Drawings[m_ActiveDrawingIndex];
-    }
-
-    void Document::setActiveDrawing(int index)
-    {
-        if (index < -1 || index >= (int)m_Drawings.size())
+        if (m_ActiveCanvasIndex == -1)
         {
-            throw std::invalid_argument("Index out of range");
+            return nullptr;
         }
 
-        m_ActiveDrawingIndex = index;
+        return dynamic_cast<Drawing *>(m_AllCanvases[m_ActiveCanvasIndex].get());
     }
 
-    size_t Document::getActiveDrawingIndex() const
+    int Document::getActiveCanvasIndex() const
     {
-        return m_ActiveDrawingIndex;
+        return m_ActiveCanvasIndex;
     }
 
-    Drawing &Document::getDrawing(size_t index)
+    Drawing &Document::addDrawing(const Drawing &drawing)
     {
-        return m_Drawings[index];
+        m_AllCanvases.push_back(std::unique_ptr<Drawing>(new Drawing(drawing)));
+
+        if (m_ActiveCanvasIndex == -1)
+        {
+            m_ActiveCanvasIndex = 0;
+        }
+
+        return *dynamic_cast<Drawing *>(m_AllCanvases.back().get());
     }
 
-    void Document::addDrawing(const Drawing &drawing)
+    Drawing &Document::getDrawing(std::string uuid)
     {
-        m_Drawings.push_back(drawing);
+        auto it = std::find_if(m_AllCanvases.begin(),
+                               m_AllCanvases.end(),
+                               [&uuid](const std::unique_ptr<Canvas> &element) { return element->getUuid() == uuid; });
+
+        if (it == m_AllCanvases.end())
+        {
+            throw std::invalid_argument("Drawing with uuid: " + uuid + " not found.");
+        }
+
+        return dynamic_cast<Drawing &>(*(*it));
     }
 
-    Drawing &Document::getDrawing(int id)
+    void Document::removeCanvas(const std::string &uuid)
     {
-        return m_Drawings[id];
+        auto it = std::find_if(m_AllCanvases.begin(),
+                               m_AllCanvases.end(),
+                               [&uuid](const std::unique_ptr<Canvas> &element) { return element->getUuid() == uuid; });
+
+        if (it != m_AllCanvases.end())
+        {
+            m_AllCanvases.erase(it);
+        }
     }
 
-    void Document::removeActiveDrawing()
+    void Document::addDrawing3d(const Drawing3d &drawing)
     {
-        m_Drawings.erase(m_Drawings.begin() + m_ActiveDrawingIndex);
+        m_AllCanvases.push_back(std::unique_ptr<Drawing3d>(new Drawing3d(drawing)));
+
+        if (m_ActiveCanvasIndex == -1)
+        {
+            m_ActiveCanvasIndex = 0;
+        }
     }
 
-    std::vector<Drawing> &Document::getDrawings()
+    void Document::setActiveCanvas(const std::string &uuid)
     {
-        return m_Drawings;
+        auto it = std::find_if(m_AllCanvases.begin(),
+                               m_AllCanvases.end(),
+                               [&uuid](const std::unique_ptr<Canvas> &element) { return element->getUuid() == uuid; });
+
+        if (it != m_AllCanvases.end())
+        {
+            m_ActiveCanvasIndex = it - m_AllCanvases.begin();
+        }
+        else
+        {
+            m_ActiveCanvasIndex = -1;
+        }
+    }
+
+    std::vector<std::unique_ptr<Canvas>> &Document::getCanvases()
+    {
+        return m_AllCanvases;
+    }
+
+    Canvas &Document::getCanvas(std::string uuid)
+    {
+        std::vector<std::unique_ptr<Canvas>>::iterator it =
+            std::find_if(m_AllCanvases.begin(), m_AllCanvases.end(), [&uuid](const std::unique_ptr<Canvas> &element) {
+                return element->getUuid() == uuid;
+            });
+
+        if (it == m_AllCanvases.end())
+        {
+            throw std::invalid_argument("Drawing with uuid: " + uuid + " not found.");
+        }
+        return *(*it);
     }
 
     std::shared_ptr<DocumentHistory> Document::getHistory()
@@ -71,7 +129,7 @@ namespace editor
 
     void Document::empty()
     {
-        m_Drawings.clear();
+        m_AllCanvases.clear();
     }
 
     Canvas &Document::getCanvas()

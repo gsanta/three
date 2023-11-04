@@ -6,7 +6,7 @@
 #include "../src/engine/graphics/layer/tile_layer.h"
 #include "../src/engine/graphics/renderable/bounds.h"
 #include "../src/engine/graphics/renderable/rect2d.h"
-#include "../src/engine/structure/canvas/canvas.h"
+#include "../src/engine/structure/canvas.h"
 
 #include <catch2/catch_test_macros.hpp>
 

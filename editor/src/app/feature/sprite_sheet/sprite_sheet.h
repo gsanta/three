@@ -20,7 +20,7 @@ namespace editor
     public:
         SpriteSheet(std::shared_ptr<DocumentFactory> documentFactory, Document *document);
 
-        void generateSpriteSheet(Drawing &drawing);
+        Drawing &generateSpriteSheet(Drawing &drawing);
 
     private:
         std::shared_ptr<DocumentFactory> m_DocumentFactory;

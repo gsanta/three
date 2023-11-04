@@ -8,7 +8,8 @@
 #include "../../../engine/graphics/renderable/line_shape.h"
 #include "../../../engine/graphics/renderable/rect2d.h"
 #include "../../../engine/graphics/shader/shader.h"
-#include "../../../engine/structure/canvas/canvas.h"
+#include "../../../engine/structure/canvas.h"
+#include "../../../engine/system/utils/uuid_generator.h"
 #include "../../../engine/system/window/window.h"
 #include "../../core/history/document_history.h"
 #include "../checkerboard.h"
@@ -17,6 +18,7 @@
 #include "./../frame.h"
 #include "create_drawing_props.h"
 #include "renderer_provider.h"
+#include "uuid.h"
 
 #include <vector>
 
@@ -39,6 +41,8 @@ namespace editor
         Document createDocument();
 
         Document createEmptyDocument() const;
+
+        Drawing3d createDrawing3d(const Bounds &bounds) const;
 
         Drawing createDrawing(const CreateDrawingProps &props) const;
 

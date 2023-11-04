@@ -31,5 +31,15 @@ namespace editor
 
         drawing.getCursorLayer().render(camera);
     }
+
+    void ScreenTargetRenderer::render3d(Drawing3d &drawing)
+    {
+        Camera &camera = m_DocumentStore->getActiveDocument().getCamera();
+
+        drawing.getDecorationLayer().render(camera);
+
+        // drawing.render(camera);
+    }
+
 } // namespace editor
 } // namespace spright

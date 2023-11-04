@@ -30,16 +30,15 @@ SCENARIO("Sprite sheet")
         WHEN("generating a sprite sheet")
         {
             Drawing &drawing = *document.getActiveDrawing();
-            spriteSheet.generateSpriteSheet(drawing);
+            Drawing &spriteSheetDrawing = spriteSheet.generateSpriteSheet(drawing);
 
-            Drawing &spriteSheetDrawing = document.getDrawing(1);
             TileLayer &spriteSheetLayer = spriteSheetDrawing.getFrames()[0].getLayer(0);
 
-            TileLayer &origLayer = document.getDrawings()[0].getActiveLayer();
+            TileLayer &origLayer = document.getActiveDrawing()->getActiveLayer();
 
             THEN("it creates a new drawing on the right side of the original drawing with half the size")
             {
-                REQUIRE(document.getDrawings().size() == 2);
+                REQUIRE(document.getCanvases().size() == 2);
 
                 REQUIRE_THAT(spriteSheetDrawing.getBounds(), EqualsBounds(Bounds(14, 6, 20, 12)));
             }
@@ -88,8 +87,7 @@ SCENARIO("Sprite sheet")
 
         WHEN("generating a sprite sheet")
         {
-            spriteSheet.generateSpriteSheet(*document.getActiveDrawing());
-            Drawing &spriteSheetDrawing = document.getDrawing(1);
+            Drawing &spriteSheetDrawing = spriteSheet.generateSpriteSheet(*document.getActiveDrawing());
 
             THEN(
                 "it creates a new drawing on the right side of the original drawing and places all frames horizontally")

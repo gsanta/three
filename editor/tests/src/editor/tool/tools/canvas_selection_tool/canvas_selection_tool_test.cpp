@@ -40,7 +40,7 @@ SCENARIO("Tool handler")
             THEN("it sets it as the active drawing")
             {
                 REQUIRE(document.getActiveDrawing() != nullptr);
-                REQUIRE(document.getActiveDrawing() == &document.getDrawings()[0]);
+                REQUIRE(document.getActiveDrawing() == &document.getDrawing(document.getCanvases()[0]->getUuid()));
             }
 
             WHEN("pointer down on the second drawing")
@@ -51,12 +51,13 @@ SCENARIO("Tool handler")
                 THEN("it sets it as the active drawing")
                 {
                     REQUIRE(document.getActiveDrawing() != nullptr);
-                    REQUIRE(document.getActiveDrawing() == &document.getDrawings()[1]);
+                    REQUIRE(document.getActiveDrawing() == &document.getDrawing(document.getCanvases()[1]->getUuid()));
                 }
 
                 THEN("highlights the active drawing")
                 {
-                    Layer &decorationLayer = document.getDrawings()[1].getDecorationLayer();
+                    Layer &decorationLayer =
+                        document.getDrawing(document.getCanvases()[1]->getUuid()).getDecorationLayer();
 
                     REQUIRE(decorationLayer.getRenderables().size() == 4);
                     REQUIRE_THAT(decorationLayer.getRenderables()[0]->getBounds(),
@@ -71,7 +72,8 @@ SCENARIO("Tool handler")
 
                 THEN("removes the highlight from the prev active layer")
                 {
-                    Layer &decorationLayer = document.getDrawings()[0].getDecorationLayer();
+                    Layer &decorationLayer =
+                        document.getDrawing(document.getCanvases()[0]->getUuid()).getDecorationLayer();
                     REQUIRE(decorationLayer.getRenderables().size() == 0);
                 }
             }

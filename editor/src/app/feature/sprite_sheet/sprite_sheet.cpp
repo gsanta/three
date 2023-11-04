@@ -10,7 +10,7 @@ namespace editor
     {
     }
 
-    void SpriteSheet::generateSpriteSheet(Drawing &drawing)
+    Drawing &SpriteSheet::generateSpriteSheet(Drawing &drawing)
     {
         int frameCount = drawing.getFrames().size();
 
@@ -41,7 +41,7 @@ namespace editor
             }
         }
 
-        m_Document->addDrawing(spriteSheet);
+        return m_Document->addDrawing(spriteSheet);
     }
 } // namespace editor
 } // namespace spright

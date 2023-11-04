@@ -74,7 +74,7 @@ namespace editor
 
         size_t m_FrameIndex;
 
-        size_t m_DrawingIndex;
+        std::string m_DrawingUuid;
 
         std::vector<int> m_PrevSelectedIndexes;
 

@@ -3,7 +3,7 @@
 #include "../../../maths/mat4.h"
 #include "../../../maths/vec2.h"
 #include "../../../maths/vec2_int.h"
-#include "../../structure/canvas/canvas.h"
+#include "../../structure/canvas.h"
 #include "../camera/camera.h"
 #include "../renderable/bounds.h"
 #include "../renderable/bounds_int.h"

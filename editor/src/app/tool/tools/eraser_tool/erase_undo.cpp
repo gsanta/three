@@ -6,14 +6,14 @@ namespace editor
 {
     EraseUndo::EraseUndo(Document &document)
     {
-        m_DrawingPos = document.getActiveDrawingIndex();
+        m_DrawingId = document.getActiveDrawing()->getUuid();
         m_FramePos = document.getActiveDrawing()->getActiveFrameIndex();
         m_TileLayerPos = document.getActiveDrawing()->getActiveLayerIndex();
     }
 
     void EraseUndo::undo(Document &document) const
     {
-        TileLayer &tileLayer = document.getDrawing(m_DrawingPos).getFrames()[m_FramePos].getLayers()[m_TileLayerPos];
+        TileLayer &tileLayer = document.getDrawing(m_DrawingId).getFrames()[m_FramePos].getLayers()[m_TileLayerPos];
 
         for (std::shared_ptr<Rect2D> rect : m_Rects)
         {
@@ -23,7 +23,7 @@ namespace editor
 
     void EraseUndo::redo(Document &document) const
     {
-        TileLayer &tileLayer = document.getDrawing(m_DrawingPos).getFrames()[m_FramePos].getLayers()[m_TileLayerPos];
+        TileLayer &tileLayer = document.getDrawing(m_DrawingId).getFrames()[m_FramePos].getLayers()[m_TileLayerPos];
 
         for (std::shared_ptr<Rect2D> rect : m_Rects)
         {

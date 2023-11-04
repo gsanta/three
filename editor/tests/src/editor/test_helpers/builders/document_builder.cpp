@@ -24,7 +24,7 @@ Document DocumentBuilder::build()
     std::shared_ptr<Renderer2D> renderer = std::make_shared<HeadlessRenderer2D>();
 
     Document document(m_DocumentBounds,
-                      Canvas(m_DocumentBounds, renderer),
+                      Canvas(UuidGenerator::getInstance().generate(), m_DocumentBounds, renderer),
                       camera,
                       std::make_shared<DocumentHistory>());
 

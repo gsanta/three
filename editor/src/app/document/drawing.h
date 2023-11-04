@@ -16,14 +16,16 @@ namespace editor
     class Drawing : public Canvas
     {
     public:
-        Drawing(const Bounds &bounds,
+        Drawing(const std::string &uuid,
+                const Bounds &bounds,
                 const TileLayer &backgroundLayer,
                 const TileLayer &tempLayer,
                 const TileLayer &toolLayer,
                 const TileLayer &cursorLayer,
                 const Layer &decorationLayer);
 
-        Drawing(const TileLayer &initialLayer,
+        Drawing(const std::string &uuid,
+                const TileLayer &initialLayer,
                 const TileLayer &backgroundLayer,
                 const TileLayer &tempLayer,
                 const TileLayer &toolLayer,
@@ -75,6 +77,10 @@ namespace editor
         TileLayer &getCursorLayer();
 
         void addBackgroundLayer(const TileLayer &tileLayer);
+
+        Drawing *clone() const override;
+
+        void render(const Camera &camera, Canvas::RenderTarget target) override;
 
         std::string getJson();
 
