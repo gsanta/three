@@ -30,7 +30,7 @@ namespace maths
 
         void setElements(float *elements);
 
-        static Mat4 otrthographic(float left, float right, float bottom, float top, float near, float far);
+        static Mat4 orthographic(float left, float right, float bottom, float top, float near, float far);
 
         static Mat4 perspective(float fov, float m_AspectRatio, float near, float far);
 

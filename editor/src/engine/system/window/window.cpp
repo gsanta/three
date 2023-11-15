@@ -20,5 +20,23 @@ namespace engine
         m_Width = width;
         m_Height = height;
     }
+
+    void Window::addWindowResizedListener(WindowResizedListener *listener)
+    {
+        if (std::find(m_Listeners.begin(), m_Listeners.end(), listener) == m_Listeners.end())
+        {
+            m_Listeners.push_back(listener);
+        }
+    }
+
+    void Window::removeWindowResizedListener(WindowResizedListener *listener)
+    {
+        std::vector<WindowResizedListener *>::iterator it = std::find(m_Listeners.begin(), m_Listeners.end(), listener);
+
+        if (it != m_Listeners.end())
+        {
+            m_Listeners.erase(it);
+        }
+    }
 } // namespace engine
 } // namespace spright

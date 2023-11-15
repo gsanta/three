@@ -3,8 +3,8 @@
 #include "../../test_helpers/builders/tile_builder.h"
 #include "../../test_helpers/builders/tile_layer_builder.h"
 #include "../../test_helpers/builders/tool_context_builder.h"
-#include "../src/app/core/colors.h"
 #include "../src/app/core/history/tile_undo.h"
+#include "../src/engine/graphics/colors.h"
 
 #include <catch2/catch_test_macros.hpp>
 

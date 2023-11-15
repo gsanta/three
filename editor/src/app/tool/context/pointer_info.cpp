@@ -28,6 +28,5 @@ namespace editor
     {
         return curr - down;
     }
-
 } // namespace editor
 } // namespace spright

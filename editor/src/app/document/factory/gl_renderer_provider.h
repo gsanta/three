@@ -12,7 +12,7 @@ namespace editor
     class GLRendererProvider : public RendererProvider
     {
     public:
-        std::shared_ptr<Renderer2D> createRenderer2D() const override;
+        std::unique_ptr<Renderer2D> createRenderer2D() const override;
 
         GLRendererProvider *clone() const override;
     };

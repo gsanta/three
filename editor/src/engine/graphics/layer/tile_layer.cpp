@@ -8,25 +8,20 @@ namespace engine
     const float TileLayer::defaultTileSize = 0.5f;
 
     TileLayer::TileLayer(std::string name,
-                         std::shared_ptr<Renderer2D> renderer,
                          Group<Rect2D> group,
                          Bounds bounds,
                          float tileSize,
                          float zPos,
                          bool allowDuplicatedPixels)
-        : TileView(bounds, tileSize), m_Name(name), m_Renderer(renderer), m_ZPos(zPos),
-          m_AllowDuplicatedPixels(allowDuplicatedPixels)
+        : TileView(bounds, tileSize), m_Name(name), m_ZPos(zPos), m_AllowDuplicatedPixels(allowDuplicatedPixels)
     {
-        init();
     }
 
     TileLayer::TileLayer(const TileLayer &tileLayer)
-        : TileView(tileLayer), m_Index(tileLayer.m_Index), m_Name(tileLayer.m_Name),
-          m_Renderer(tileLayer.m_Renderer->clone()), m_ZPos(tileLayer.m_ZPos),
+        : TileView(tileLayer), m_Index(tileLayer.m_Index), m_Name(tileLayer.m_Name), m_ZPos(tileLayer.m_ZPos),
           m_AllowDuplicatedPixels(tileLayer.m_AllowDuplicatedPixels)
     {
 
-        init();
         copyGroup(tileLayer.m_Group);
     }
 
@@ -43,7 +38,6 @@ namespace engine
             m_ZPos = that.m_ZPos;
             m_AllowDuplicatedPixels = that.m_AllowDuplicatedPixels;
 
-            init();
             copyGroup(that.m_Group);
         }
 
@@ -98,6 +92,7 @@ namespace engine
         }
 
         Rect2D &newRect = m_Group.add(rect);
+        newRect.setZ(-m_ZPos);
 
         m_TileIndexes[tileIndex] = &newRect;
         newRect.setTileIndex(tileIndex);
@@ -131,11 +126,11 @@ namespace engine
         m_TileIndexes = new Renderable2D *[m_IndexSize]();
     }
 
-    void TileLayer::render(const Camera &camera)
+    void TileLayer::render(const Mat4 &proj, const Mat4 &view, Renderer2D &renderer)
     {
         if (m_IsEnabled)
         {
-            m_Group.render(camera, *m_Renderer.get());
+            m_Group.render(proj, view, renderer);
         }
     }
 
@@ -212,12 +207,6 @@ namespace engine
 
             add(Rect2D(posX, posY, sizeX, sizeY, 0xff0000ff));
         }
-    }
-
-    void TileLayer::init()
-    {
-        Mat4 transformation = Mat4::translation(Vec3(0, 0, m_ZPos));
-        m_Renderer->push(transformation);
     }
 
     void TileLayer::copyGroup(const Group<Rect2D> &group)

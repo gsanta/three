@@ -39,11 +39,6 @@ namespace maths
         columns[3].y = col4.y;
         columns[3].z = col4.z;
         columns[3].w = col4.w;
-
-        //memcpy(columns, &col1, 4 * sizeof(float));
-        //memcpy(columns + 4 * sizeof(float), &col2, 4 * sizeof(float));
-        //memcpy(columns + 8 * sizeof(float), &col3, 4 * sizeof(float));
-        //memcpy(columns + 12 * sizeof(float), &col4, 4 * sizeof(float));
     }
 
     Mat4::Mat4(float diagonal)
@@ -156,7 +151,7 @@ namespace maths
         return multiply(other);
     }
 
-    Mat4 Mat4::otrthographic(float left, float right, float bottom, float top, float near, float far)
+    Mat4 Mat4::orthographic(float left, float right, float bottom, float top, float near, float far)
     {
         Mat4 result(1.0f);
         result.elements[0 + 0 * 4] = 2.0f / (right - left);

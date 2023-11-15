@@ -14,9 +14,7 @@ namespace engine
     class Layer
     {
     public:
-        Layer(std::shared_ptr<Renderer2D> renderer);
-
-        void render(const Camera &camera);
+        void render(const Mat4 &proj, const Mat4 &view, Renderer2D &renderer);
 
         Renderable2D &add(const Renderable2D &rect);
 
@@ -25,8 +23,6 @@ namespace engine
         void clear();
 
     private:
-        std::shared_ptr<Renderer2D> m_Renderer;
-
         Group<Renderable2D> m_Group;
     };
 } // namespace engine

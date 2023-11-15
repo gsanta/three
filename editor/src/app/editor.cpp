@@ -4,13 +4,15 @@ namespace spright
 {
 namespace editor
 {
-    Editor::Editor(RunLoop runLoop) : m_RunLoop(runLoop)
+    Editor::Editor(RunLoop runLoop)
+        : m_RunLoop(runLoop), m_DocumentStore(std::make_shared<DocumentStore>()), m_UpdateScreenBounds(m_DocumentStore)
     {
     }
 
     Editor::~Editor()
     {
         m_Window->getInputHandler()->unRegisterListener(m_toolHandler);
+        m_Window->removeWindowResizedListener(&m_UpdateScreenBounds);
 
         delete m_Rendering;
         delete m_Window;
@@ -21,9 +23,8 @@ namespace editor
         m_EventEmitter = std::make_unique<EmscriptenEventEmitter>();
 
         m_Window = new GLWindow("Editor", 1200, 800);
+        m_Window->addWindowResizedListener(&m_UpdateScreenBounds);
         m_DocumentFactory = std::make_shared<DocumentFactory>(m_Window, new GLRendererProvider());
-
-        m_DocumentStore = std::make_shared<DocumentStore>();
 
         m_DocumentStore->setDocument(m_DocumentFactory->createDocument());
 
@@ -42,7 +43,7 @@ namespace editor
         m_toolHandler->getToolStore().addTool(new BrushTool());
         m_toolHandler->getToolStore().addTool(new RectangleTool());
         m_toolHandler->getToolStore().addTool(new EraserTool(3));
-        m_toolHandler->getToolStore().addTool(new PanTool(getDocumentStore()));
+        m_toolHandler->getToolStore().addTool(new PanTool);
         m_toolHandler->getToolStore().addTool(new ZoomTool(getDocumentStore()));
         m_toolHandler->getToolStore().addTool(new PaintBucketTool());
         m_toolHandler->getToolStore().addTool(new SelectTool());
@@ -53,6 +54,7 @@ namespace editor
         m_toolHandler->getToolStore().addTool(new RotateTool());
         m_toolHandler->getToolStore().addTool(new MoveTool());
         m_toolHandler->getToolStore().addTool(new CanvasSelectionTool());
+        m_toolHandler->getToolStore().addTool(new CameraRotationTool());
         m_toolHandler->addActiveTool("zoom");
         m_toolHandler->setSelectedTool("brush");
 

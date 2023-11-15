@@ -241,6 +241,13 @@ int main()
     while (!editor || !editor->getWindow()->closed())
     {
 #endif
+        const float radius = 10.0f;
+        float camX = sin(glfwGetTime()) * radius;
+        float camZ = cos(glfwGetTime()) * radius;
+
+        // editor->getDocumentStore()->getActiveDocument().getBackgroundCanvas().getCamera()->bottom();
+        // editor->getDocumentStore()->getActiveDocument().getBackgroundCanvas().getCamera()->lookAt(Vec3(camX, camZ, 0));
+
         editor->getWindow()->clear();
         double x, y;
         editor->getWindow()->getMousePosition(x, y);

@@ -28,7 +28,6 @@ namespace engine
         using TileView::getBottomLeftPos;
 
         TileLayer(std::string name,
-                  std::shared_ptr<Renderer2D> renderer,
                   Group<Rect2D> group,
                   Bounds bounds,
                   float tileSize = TileLayer::defaultTileSize,
@@ -61,7 +60,7 @@ namespace engine
 
         void clear();
 
-        void render(const Camera &camera);
+        void render(const Mat4 &proj, const Mat4 &view, Renderer2D &renderer);
 
         void translateTile(Rect2D *tile, const Vec2 &delta);
 
@@ -84,16 +83,12 @@ namespace engine
         int updateTileIndex(Rect2D *rect);
 
     private:
-        void init();
-
         void copyGroup(const Group<Rect2D> &group);
 
     private:
         size_t m_Index = 0;
 
         std::string m_Name;
-
-        std::shared_ptr<Renderer2D> m_Renderer;
 
         bool m_IsEnabled = true;
 

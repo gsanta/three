@@ -10,7 +10,7 @@ namespace editor
     {
     }
 
-    DocumentFactory::DocumentFactory(const DocumentFactory &other)
+    DocumentFactory::DocumentFactory(const DocumentFactory &other) : m_Window(other.m_Window)
     {
         m_RendererProvider = other.m_RendererProvider->clone();
     }
@@ -22,17 +22,12 @@ namespace editor
 
     TileLayer DocumentFactory::createUserLayer(const Bounds &bounds, std::string name, float tileSize) const
     {
-        return TileLayer(name, m_RendererProvider->createRenderer2D(), Group<Rect2D>(), bounds, tileSize);
+        return TileLayer(name, Group<Rect2D>(), bounds, tileSize);
     }
 
     TileLayer DocumentFactory::createTileLayer(std::string name, const Bounds &bounds, float tileSize) const
     {
-        TileLayer tileLayer("",
-                            m_RendererProvider->createRenderer2D(),
-                            Group<Rect2D>(),
-                            bounds,
-                            tileSize,
-                            m_TileLayerZPos);
+        TileLayer tileLayer("", Group<Rect2D>(), bounds, tileSize, m_TileLayerZPos);
 
         return tileLayer;
     }
@@ -40,12 +35,7 @@ namespace editor
 
     TileLayer DocumentFactory::createBackgroundLayer(const Bounds &bounds, float tileSize) const
     {
-        TileLayer backgroundLayer("",
-                                  m_RendererProvider->createRenderer2D(),
-                                  Group<Rect2D>(),
-                                  bounds,
-                                  tileSize,
-                                  m_BackgroundZPos);
+        TileLayer backgroundLayer("", Group<Rect2D>(), bounds, tileSize, m_BackgroundZPos);
 
         Checkerboard checkerboard;
         checkerboard.create(backgroundLayer);
@@ -55,35 +45,17 @@ namespace editor
 
     TileLayer DocumentFactory::createTempLayer(const Bounds &bounds, float tileSize) const
     {
-        return TileLayer("",
-                         m_RendererProvider->createRenderer2D(),
-                         Group<Rect2D>(),
-                         bounds,
-                         tileSize,
-                         m_TileLayerZPos,
-                         true);
+        return TileLayer("", Group<Rect2D>(), bounds, tileSize, m_TileLayerZPos, true);
     }
 
     TileLayer DocumentFactory::createToolLayer(const Bounds &bounds, float tileSize) const
     {
-        return TileLayer("",
-                         m_RendererProvider->createRenderer2D(),
-                         Group<Rect2D>(),
-                         bounds,
-                         tileSize,
-                         m_ToolLayerZPos,
-                         true);
+        return TileLayer("", Group<Rect2D>(), bounds, tileSize, m_ToolLayerZPos, true);
     }
 
     TileLayer DocumentFactory::createCursorLayer(const Bounds &bounds, float tileSize) const
     {
-        return TileLayer("",
-                         m_RendererProvider->createRenderer2D(),
-                         Group<Rect2D>(),
-                         bounds,
-                         tileSize,
-                         m_CursorLayerZPos,
-                         true);
+        return TileLayer("", Group<Rect2D>(), bounds, tileSize, m_CursorLayerZPos, true);
     }
 
     void DocumentFactory::createFrame(Document &document)
@@ -104,10 +76,18 @@ namespace editor
 
     Drawing3d DocumentFactory::createDrawing3d(const Bounds &bounds) const
     {
-        return Drawing3d(UuidGenerator::getInstance().generate(),
-                         bounds,
-                         Layer(m_RendererProvider->createRenderer2D()),
-                         m_RendererProvider->createRenderer2D());
+        Drawing3d drawing =
+            Drawing3d(UuidGenerator::getInstance().generate(), bounds, *m_RendererProvider->createRenderer2D());
+
+        drawing.add(Rect2D(bounds.getBottomLeft().x,
+                           bounds.getBottomLeft().y,
+                           bounds.getWidth(),
+                           bounds.getHeight(),
+                           COLOR_WHITE));
+
+        drawing.add(Box(Vec3(0, 0, 0.2), 2, 2, 2, COLOR_RED));
+
+        return drawing;
     }
 
 
@@ -121,11 +101,11 @@ namespace editor
 
         Drawing drawing(UuidGenerator::getInstance().generate(),
                         bounds,
+                        *m_RendererProvider->createRenderer2D(),
                         createBackgroundLayer(bounds, backgroundLayerTileSize),
                         createTempLayer(bounds, tileSize),
                         createToolLayer(bounds, tileSize),
-                        createCursorLayer(bounds, tileSize),
-                        Layer(m_RendererProvider->createRenderer2D()));
+                        createCursorLayer(bounds, tileSize));
 
         if (layerCount > 0)
         {
@@ -133,12 +113,7 @@ namespace editor
 
             for (size_t i = 0; i < layerCount; i++)
             {
-                TileLayer layer("layer" + std::to_string(i + 1),
-                                m_RendererProvider->createRenderer2D(),
-                                Group<Rect2D>(),
-                                bounds,
-                                tileSize,
-                                m_TileLayerZPos);
+                TileLayer layer("layer" + std::to_string(i + 1), Group<Rect2D>(), bounds, tileSize, m_TileLayerZPos);
 
                 layers.push_back(layer);
             }
@@ -159,14 +134,15 @@ namespace editor
         float pixelCount = 32.0f;
         Bounds drawingBounds(-pixelCount / 2.0f, -pixelCount / 2.0f, pixelCount / 2.0f, pixelCount / 2.0f);
 
-        Camera camera(m_Window, -1.0f, 1.0f);
+        Camera2d camera(BoundsInt(0, 0, m_Window->getWidth(), m_Window->getHeight()));
 
-        Document document(drawingBounds,
-                          Canvas(UuidGenerator::getInstance().generate(),
-                                 drawingBounds,
-                                 Layer(m_RendererProvider->createRenderer2D())),
-                          camera,
-                          std::make_shared<DocumentHistory>());
+        Canvas documentCanvas(UuidGenerator::getInstance().generate(),
+                              drawingBounds,
+                              *m_RendererProvider->createRenderer2D());
+
+        documentCanvas.setCamera(camera);
+
+        Document document(drawingBounds, documentCanvas, std::make_shared<DocumentHistory>());
 
         return document;
     }
@@ -180,11 +156,16 @@ namespace editor
         Drawing drawing = createDrawing(
             CreateDrawingProps(Bounds::createWithPositions(-16.0f, -pixelCount / 2.0f, 16.0f, pixelCount / 2.0f)));
 
+        Vec2Int minWindow = document.getBackgroundCanvas().getCamera()->worldToScreenPos(drawing.getBounds().minX,
+                                                                                         drawing.getBounds().minY);
+        Vec2Int maxWindow = document.getBackgroundCanvas().getCamera()->worldToScreenPos(drawing.getBounds().maxX,
+                                                                                         drawing.getBounds().maxY);
+
         document.addDrawing(drawing);
 
-        Drawing3d drawing3d = createDrawing3d(Bounds(18.0, -5.0, 28.0, 5.0));
+        // Drawing3d drawing3d = createDrawing3d(Bounds(18.0, -5.0, 28.0, 5.0));
 
-        document.addDrawing3d(drawing3d);
+        // document.addDrawing3d(drawing3d);
 
         return document;
     }

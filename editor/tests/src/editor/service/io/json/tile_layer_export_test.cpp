@@ -1,8 +1,8 @@
 
 #include "../../../test_helpers/builders/tile_layer_builder.h"
 #include "../../../test_helpers/test_document_factory.h"
-#include "../src/app/core/colors.h"
 #include "../src/app/service/io/json/tile_layer_export.h"
+#include "../src/engine/graphics/colors.h"
 #include "../src/engine/system/window/impl/headless/headless_window.h"
 
 #include <catch2/catch_test_macros.hpp>

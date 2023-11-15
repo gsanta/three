@@ -2,8 +2,8 @@
 #include "../../../test_helpers/builders/pointer_info_builder.h"
 #include "../../../test_helpers/builders/tool_context_builder.h"
 #include "../../../test_helpers/common_tool_funcs.h"
-#include "../src/app/core/colors.h"
 #include "../src/app/tool/tools/select_tool/select_tool.h"
+#include "../src/engine/graphics/colors.h"
 
 #include <catch2/catch_test_macros.hpp>
 

@@ -65,7 +65,6 @@ void importDocument(std::string json)
 {
     Document document = editor->getJsonIO()->importDocument(json);
     Document &activeDocument = editor->getDocumentStore()->getActiveDocument();
-    document.setCamera(activeDocument.getCamera());
     editor->getDocumentStore()->setDocument(document);
 }
 
@@ -223,22 +222,23 @@ void redo()
 
 void zoom_in()
 {
-    editor->getActiveDocument().getCamera().zoomIn();
+    editor->getActiveDocument().getBackgroundCanvas().getCamera()->zoomIn();
 }
 
 void zoom_out()
 {
-    editor->getActiveDocument().getCamera().zoomOut();
+    editor->getActiveDocument().getBackgroundCanvas().getCamera()->zoomOut();
 }
 
 void reset_zoom()
 {
-    editor->getActiveDocument().getCamera().setZoom(1.0f);
+    editor->getActiveDocument().getBackgroundCanvas().getCamera()->setZoom(1.0f);
 }
 
 void zoom_to_fit()
 {
-    editor->getActiveDocument().getCamera().zoomToFit(editor->getActiveDocument().getActiveDrawing()->getBounds());
+    Camera2d *camera = dynamic_cast<Camera2d *>(editor->getActiveDocument().getBackgroundCanvas().getCamera());
+    camera->zoomToFit(editor->getActiveDocument().getActiveDrawing()->getBounds());
 }
 
 // void shear_horizontal_api(float angle)

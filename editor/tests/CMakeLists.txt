@@ -1,6 +1,6 @@
 set(TEST_MAIN "unit_tests")
 file(GLOB_RECURSE SOURCES "*.cpp")
-set(TEST_SOURCES ${SOURCES} src/engine/graphics/camera/camera_test.cpp)
+set(TEST_SOURCES ${SOURCES})
 set(TEST_INCLUDES "./")
 
 add_executable(${TEST_MAIN} ${TEST_SOURCES})

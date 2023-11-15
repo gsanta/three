@@ -4,15 +4,12 @@ namespace spright
 {
 namespace editor
 {
-    Document::Document(const Bounds &bounds,
-                       const Canvas &canvas,
-                       const Camera &camera,
-                       std::shared_ptr<DocumentHistory> history)
-        : m_Canvas(canvas), m_Camera(camera), m_History(history)
+    Document::Document(const Bounds &bounds, const Canvas &canvas, std::shared_ptr<DocumentHistory> history)
+        : m_Canvas(canvas), m_History(history)
     {
     }
 
-    Document::Document(const Document &other) : m_Camera(other.m_Camera), m_Canvas(other.m_Canvas)
+    Document::Document(const Document &other) : m_Canvas(other.m_Canvas)
     {
         m_History = other.m_History;
 
@@ -32,6 +29,11 @@ namespace editor
         }
 
         return dynamic_cast<Drawing *>(m_AllCanvases[m_ActiveCanvasIndex].get());
+    }
+
+    Canvas *Document::getActiveCanvas()
+    {
+        return m_AllCanvases[m_ActiveCanvasIndex].get();
     }
 
     int Document::getActiveCanvasIndex() const
@@ -77,7 +79,7 @@ namespace editor
         }
     }
 
-    void Document::addDrawing3d(const Drawing3d &drawing)
+    Drawing3d &Document::addDrawing3d(const Drawing3d &drawing)
     {
         m_AllCanvases.push_back(std::unique_ptr<Drawing3d>(new Drawing3d(drawing)));
 
@@ -85,6 +87,8 @@ namespace editor
         {
             m_ActiveCanvasIndex = 0;
         }
+
+        return *dynamic_cast<Drawing3d *>(m_AllCanvases.back().get());
     }
 
     void Document::setActiveCanvas(const std::string &uuid)
@@ -137,14 +141,9 @@ namespace editor
         return m_Canvas;
     }
 
-    Camera &Document::getCamera()
+    Canvas &Document::getBackgroundCanvas()
     {
-        return m_Camera;
-    }
-
-    void Document::setCamera(const Camera &camera)
-    {
-        m_Camera = camera;
+        return m_Canvas;
     }
 } // namespace editor
 } // namespace spright

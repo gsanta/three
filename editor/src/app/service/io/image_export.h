@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../../../engine/graphics/camera/camera2d.h"
 #include "../../../engine/graphics/renderable/bounds.h"
 #include "../../../engine/graphics/renderable/bounds_int.h"
 #include "../../../engine/system/window/window.h"

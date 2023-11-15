@@ -90,6 +90,11 @@ namespace engine
         updateBounds();
     }
 
+    void Rect2D::setZ(float z)
+    {
+        m_Position.z = z;
+    }
+
     nlohmann::json Rect2D::getJson()
     {
         nlohmann::json json = {

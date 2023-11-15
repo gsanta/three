@@ -48,6 +48,8 @@ namespace engine
 
         void translate(Vec2 vec);
 
+        void setZ(float z);
+
         nlohmann::json getJson() override;
 
         virtual void submit(Renderer2D &renderer) const override;

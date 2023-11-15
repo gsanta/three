@@ -2,31 +2,32 @@
 
 namespace spright
 {
-Rendering::Rendering(Window *window, DocumentStore *documentStore) : m_Window(window), m_DocumentStore(documentStore)
+Rendering::Rendering(Window *window, DocumentStore *documentStore)
+    : m_Window(window), m_DocumentStore(documentStore), m_ScreenRenderTarget(std::make_unique<DefaultRenderTarget>()),
+      m_ImageRenderTarget(std::make_unique<ImageRenderTarget>(window))
 {
-    m_ScreenTargetRenderer = ScreenTargetRenderer(documentStore);
-    m_ImageTargetRenderer = ImageTargetRenderer(documentStore, window);
-
-    m_ScreenTargetRenderer.enable();
+    m_ScreenRenderTarget->enable();
 }
 
 void Rendering::render()
 {
     m_Window->beforeRender();
 
+    Document &document = m_DocumentStore->getActiveDocument();
+
     if (m_RenderingTarget == Rendering::Target::SCREEN)
     {
-        for (std::unique_ptr<Canvas> &canvas : m_DocumentStore->getActiveDocument().getCanvases())
+        for (std::unique_ptr<Canvas> &canvas : document.getCanvases())
         {
-            canvas->render(m_DocumentStore->getActiveDocument().getCamera(), Canvas::Screen);
+            canvas->render(*document.getBackgroundCanvas().getCamera(), Canvas::Screen);
         }
     }
     else
     {
-        Drawing *activeDrawing = m_DocumentStore->getActiveDocument().getActiveDrawing();
+        Drawing *activeDrawing = document.getActiveDrawing();
         if (activeDrawing != nullptr)
         {
-            activeDrawing->render(m_DocumentStore->getActiveDocument().getCamera(), Canvas::Image);
+            activeDrawing->render(*document.getBackgroundCanvas().getCamera(), Canvas::Image);
         }
     }
 
@@ -37,8 +38,8 @@ void Rendering::enableImageTarget()
 {
     if (m_RenderingTarget != Rendering::Target::IMAGE)
     {
-        m_ScreenTargetRenderer.disable();
-        m_ImageTargetRenderer.enable();
+        m_ScreenRenderTarget->disable();
+        m_ImageRenderTarget->enable();
         m_RenderingTarget = Rendering::Target::IMAGE;
     }
 }
@@ -47,8 +48,8 @@ void Rendering::enableScreenTarget()
 {
     if (m_RenderingTarget != Rendering::Target::SCREEN)
     {
-        m_ImageTargetRenderer.disable();
-        m_ScreenTargetRenderer.enable();
+        m_ImageRenderTarget->disable();
+        m_ScreenRenderTarget->enable();
         m_RenderingTarget = Rendering::Target::SCREEN;
     }
 }

@@ -13,7 +13,7 @@ namespace editor
     class RendererProvider
     {
     public:
-        virtual std::shared_ptr<Renderer2D> createRenderer2D() const = 0;
+        virtual std::unique_ptr<Renderer2D> createRenderer2D() const = 0;
 
         virtual RendererProvider *clone() const = 0;
     };

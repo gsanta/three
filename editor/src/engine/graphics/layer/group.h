@@ -29,7 +29,7 @@ namespace engine
 
         T &add(const T &renderable);
 
-        void render(const Camera &camera, Renderer2D &renderer);
+        void render(const Mat4 &proj, const Mat4 &view, Renderer2D &renderer);
 
         void clear();
 
@@ -153,13 +153,13 @@ namespace engine
     }
 
     template <typename T>
-    void Group<T>::render(const Camera &camera, Renderer2D &renderer)
+    void Group<T>::render(const Mat4 &proj, const Mat4 &view, Renderer2D &renderer)
     {
         renderer.begin();
 
-        renderer.getShader().setUniformMat4("pr_matrix", camera.getProjectionMatrix());
+        renderer.getShader().setUniformMat4("pr_matrix", proj);
 
-        renderer.push(camera.getViewMatrix());
+        renderer.push(view);
         for (const T *renderable : m_Renderables)
         {
             renderable->submit(renderer);
@@ -169,6 +169,5 @@ namespace engine
 
         renderer.flush();
     }
-
 } // namespace engine
 } // namespace spright

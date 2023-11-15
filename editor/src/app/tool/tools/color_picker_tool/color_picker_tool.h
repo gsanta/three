@@ -40,7 +40,7 @@ namespace editor
 
         EventEmitter *m_EventEmitter;
 
-        unsigned int m_Color = 0xFF000000;
+        unsigned int m_Color = COLOR_BLACK;
     };
 } // namespace editor
 } // namespace spright

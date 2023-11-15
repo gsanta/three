@@ -7,6 +7,7 @@
 #include "../../../maths/vec3.h"
 #include "../../system/window/window.h"
 #include "../renderable/bounds.h"
+#include "../renderable/bounds_int.h"
 #include "./ortho_projection_info.h"
 
 namespace spright
@@ -18,39 +19,40 @@ namespace engine
     class Camera
     {
     public:
-        Camera(const Window *window, float near = -1.0f, float far = 1.0f, int zoomFactor = 17);
+        Camera(const BoundsInt &screenBounds, float near, float far, int zoomFactor = 17);
 
-        void translate2D(Vec2 delta);
+        virtual ~Camera() = default;
 
-        void setTranslate(Vec2 translate);
+        virtual void setZoom(float zoom);
 
-        void setZoom(float zoom);
+        virtual void zoomIn();
 
-        void zoomIn();
-
-        void zoomOut();
-
-        void zoomToFit(const Bounds &bounds);
+        virtual void zoomOut();
 
         float getZoom();
 
-        const Mat4 getProjectionMatrix() const;
+        const Mat4 &getProjectionMatrix() const;
 
         const Mat4 &getViewMatrix() const;
 
-        Vec2 getCenter2D();
+        virtual Vec2 screenToWorldPos(float x, float y) const;
 
-        Vec2 screenToWorldPos(float x, float y) const;
+        virtual Vec2Int worldToScreenPos(float x, float y) const;
 
-        Vec2Int worldToScreenPos(float x, float y) const;
+        void setScreenBounds(const BoundsInt &screenBounds);
 
-    private:
+        virtual Camera *clone() const = 0;
+
+    protected:
         float getScaleFactor() const;
 
     private:
-        Mat4 m_ProjectionMatrix;
+        virtual void updateProjectionMatrix() const = 0;
 
+    protected:
         Mat4 m_View;
+
+        mutable Mat4 m_Proj;
 
         Vec2 m_Translate;
 
@@ -64,7 +66,7 @@ namespace engine
 
         int m_ZoomFactor = 1;
 
-        const Window *m_Window;
+        BoundsInt m_ScreenBounds;
     };
 } // namespace engine
 } // namespace spright
