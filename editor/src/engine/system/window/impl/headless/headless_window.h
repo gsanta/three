@@ -15,7 +15,7 @@ namespace engine
     class HeadlessWindow : public Window
     {
     public:
-        inline HeadlessWindow(int width, int height) : Window(width, height)
+        inline HeadlessWindow(int width = 500, int height = 500) : Window(width, height)
         {
         }
 

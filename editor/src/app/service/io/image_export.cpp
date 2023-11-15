@@ -20,11 +20,13 @@ namespace editor
     {
         const Bounds bounds = document.getActiveDrawing()->getBounds();
 
-        Camera &camera = document.getCamera();
-        camera.zoomToFit(document.getActiveDrawing()->getBounds());
+        Camera *camera = document.getBackgroundCanvas().getCamera();
+        Camera2d *camera2d = dynamic_cast<Camera2d *>(camera);
 
-        Vec2Int bottomLeft = camera.worldToScreenPos(bounds.minX, bounds.minY);
-        Vec2Int topRight = camera.worldToScreenPos(bounds.maxX, bounds.maxY);
+        camera2d->zoomToFit(document.getActiveDrawing()->getBounds());
+
+        Vec2Int bottomLeft = camera->worldToScreenPos(bounds.minX, bounds.minY);
+        Vec2Int topRight = camera->worldToScreenPos(bounds.maxX, bounds.maxY);
 
         const BoundsInt intBounds(bottomLeft.x, topRight.x, topRight.y, bottomLeft.y);
 

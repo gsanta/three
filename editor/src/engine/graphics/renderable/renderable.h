@@ -9,18 +9,20 @@ namespace engine
 {
     using namespace maths;
 
-    class Renderable3d
+    class Renderable
     {
     public:
-        Renderable3d(const Vec3 &pos, unsigned int color);
+        Renderable(const Vec3 &pos, unsigned int color);
 
-        virtual ~Renderable3d() = default;
+        virtual ~Renderable() = default;
 
         const Vec3 &getPosition() const;
 
+        virtual void setPosition(const Vec3 &pos);
+
         virtual void submit(Renderer2D &renderer) const = 0;
 
-        virtual Renderable3d *clone() const = 0;
+        virtual Renderable *clone() const = 0;
 
     protected:
         Vec3 m_Position;

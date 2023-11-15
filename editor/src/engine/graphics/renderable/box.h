@@ -1,19 +1,24 @@
 #pragma once
 
-#include "renderable3d.h"
+#include "renderable.h"
 
 namespace spright
 {
 namespace engine
 {
-    class Box : public Renderable3d
+    class Box : public Renderable
     {
     public:
         Box(const Vec3 &pos, float width, float height, float depth, unsigned int color);
 
-        virtual void submit(Renderer2D &renderer) const override;
+        void submit(Renderer2D &renderer) const override;
 
-        virtual Box *clone() const override;
+        Box *clone() const override;
+
+        void setPosition(const Vec3 &pos) override;
+
+    private:
+        void updatePosition();
 
     private:
         float m_Width;
@@ -23,6 +28,8 @@ namespace engine
         float m_Depth;
 
         Vec3 m_Corners[8];
+
+        int m_Indexes[24];
 
         Vec3 m_FrontTopRight;
 

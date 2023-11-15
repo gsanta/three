@@ -1,5 +1,5 @@
 
-#include "../src/engine/graphics/camera/camera.cpp"
+#include "../src/engine/graphics/camera/camera2d.h"
 #include "../src/engine/system/window/impl/headless/headless_window.h"
 
 #include <catch2/catch_test_macros.hpp>
@@ -10,11 +10,9 @@ SCENARIO("Camera")
 {
     GIVEN("a window")
     {
-        int windowWidth = 10;
-        int windowHeight = 8;
-        HeadlessWindow window(10, 8);
+        BoundsInt windowBounds(0, 0, 10, 8);
 
-        Camera camera(&window, -1.0f, 1.0f, 1);
+        Camera2d camera(windowBounds, -1.0f, 1.0f, 1);
 
         THEN("it can convert from screen to world pos")
         {
@@ -33,7 +31,7 @@ SCENARIO("Camera")
         WHEN("the camera has a zoom factor of 2")
         {
             int zoomFactor = 2;
-            Camera cameraWithZoomFactor(&window, -1.0f, 1.0f, zoomFactor);
+            Camera2d cameraWithZoomFactor(windowBounds, -1.0f, 1.0f, zoomFactor);
 
             THEN("world pos is half of the screen pos")
             {

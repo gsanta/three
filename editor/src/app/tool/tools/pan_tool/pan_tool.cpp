@@ -4,7 +4,7 @@ namespace spright
 {
 namespace editor
 {
-    PanTool::PanTool(DocumentStore *documentStore) : m_DocumentStore(documentStore), Tool("pan")
+    PanTool::PanTool() : Tool("pan")
     {
     }
 
@@ -12,7 +12,10 @@ namespace editor
     {
         if (context.pointer.isDown)
         {
-            m_DocumentStore->getActiveDocument().getCamera().translate2D(context.pointer.prev - context.pointer.curr);
+            Camera *camera = context.doc.document->getBackgroundCanvas().getCamera();
+            Camera2d *camera2d = dynamic_cast<Camera2d *>(camera);
+
+            camera2d->translate2D(context.pointer.prev - context.pointer.curr);
         }
     }
 } // namespace editor

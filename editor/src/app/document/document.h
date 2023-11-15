@@ -27,16 +27,15 @@ namespace editor
     class Document
     {
     public:
-        Document(const Bounds &bounds,
-                 const Canvas &canvas,
-                 const Camera &camera,
-                 std::shared_ptr<DocumentHistory> history);
+        Document(const Bounds &bounds, const Canvas &canvas, std::shared_ptr<DocumentHistory> history);
 
         Document(const Document &other);
 
         //! Represents the Drawing() over which the pointer resides or over which a drag action started
         //! @return The active Drawing() or nullptr
         Drawing *getActiveDrawing();
+
+        Canvas *getActiveCanvas();
 
         int getActiveCanvasIndex() const;
 
@@ -46,7 +45,7 @@ namespace editor
 
         void removeCanvas(const std::string &uuid);
 
-        void addDrawing3d(const Drawing3d &drawing);
+        Drawing3d &addDrawing3d(const Drawing3d &drawing);
 
         std::vector<Drawing3d> &getDrawing3ds();
 
@@ -62,9 +61,9 @@ namespace editor
 
         Canvas &getCanvas();
 
-        Camera &getCamera();
-
         void setCamera(const Camera &camera);
+
+        Canvas &getBackgroundCanvas();
 
     private:
         std::vector<std::unique_ptr<Canvas>> m_AllCanvases;
@@ -72,8 +71,6 @@ namespace editor
         int m_ActiveCanvasIndex = -1;
 
         Canvas m_Canvas;
-
-        Camera m_Camera;
 
         std::shared_ptr<DocumentHistory> m_History;
     };

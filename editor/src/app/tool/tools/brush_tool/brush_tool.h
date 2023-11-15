@@ -1,4 +1,5 @@
 #pragma once
+#include "../../../../engine/graphics/camera/camera2d.h"
 #include "../../../../engine/graphics/renderable/rect2d.h"
 #include "../../../../engine/graphics/renderable/renderable2d.h"
 #include "../../../core/history/document_history.h"

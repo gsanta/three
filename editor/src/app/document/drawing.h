@@ -18,19 +18,23 @@ namespace editor
     public:
         Drawing(const std::string &uuid,
                 const Bounds &bounds,
+                const Renderer2D &renderer,
                 const TileLayer &backgroundLayer,
                 const TileLayer &tempLayer,
                 const TileLayer &toolLayer,
-                const TileLayer &cursorLayer,
-                const Layer &decorationLayer);
+                const TileLayer &cursorLayer);
 
         Drawing(const std::string &uuid,
+                const Renderer2D &renderer,
                 const TileLayer &initialLayer,
                 const TileLayer &backgroundLayer,
                 const TileLayer &tempLayer,
                 const TileLayer &toolLayer,
-                const TileLayer &cursorLayer,
-                const Layer &decorationLayer);
+                const TileLayer &cursorLayer);
+
+        Drawing(const Drawing &other);
+
+        Drawing &operator=(const Drawing &other);
 
         std::vector<Frame> &getFrames();
 

@@ -4,7 +4,7 @@ namespace spright
 {
 namespace editor
 {
-    std::shared_ptr<Renderer2D> GLRendererProvider::createRenderer2D() const
+    std::unique_ptr<Renderer2D> GLRendererProvider::createRenderer2D() const
     {
 #ifdef SPARKY_EMSCRIPTEN
         GLShader shaderUnlit("emscripten/resources/shaders/basic.es3.vert",
@@ -12,7 +12,7 @@ namespace editor
 #else
         GLShader shaderUnlit("shaders/basic.vert", "shaders/unlit.frag");
 #endif
-        return std::make_shared<GLRenderer2D>(shaderUnlit);
+        return std::make_unique<GLRenderer2D>(shaderUnlit);
     }
 
     GLRendererProvider *GLRendererProvider::clone() const

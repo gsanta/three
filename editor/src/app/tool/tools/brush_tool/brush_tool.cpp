@@ -32,11 +32,13 @@ namespace editor
 
     void BrushTool::paint(const ToolContext &context, bool isPointerMove)
     {
-        Camera &camera = context.doc.document->getCamera();
+        Camera *camera = context.doc.document->getBackgroundCanvas().getCamera();
 
-        Vec2 center2D = camera.getCenter2D();
+        Camera2d *camera2d = dynamic_cast<Camera2d *>(camera);
 
-        float zoom = camera.getZoom();
+        Vec2 center2D = camera2d->getCenter2D();
+
+        float zoom = camera->getZoom();
 
         TileLayer &layer = context.doc.document->getActiveDrawing()->getActiveLayer();
 

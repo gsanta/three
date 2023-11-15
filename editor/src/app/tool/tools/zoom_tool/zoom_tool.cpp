@@ -12,11 +12,11 @@ namespace editor
     {
         if (context.pointer.scroll.y > 0)
         {
-            m_DocumentStore->getActiveDocument().getCamera().zoomIn();
+            m_DocumentStore->getActiveDocument().getBackgroundCanvas().getCamera()->zoomIn();
         }
         else
         {
-            m_DocumentStore->getActiveDocument().getCamera().zoomOut();
+            m_DocumentStore->getActiveDocument().getBackgroundCanvas().getCamera()->zoomOut();
         }
     }
 } // namespace editor

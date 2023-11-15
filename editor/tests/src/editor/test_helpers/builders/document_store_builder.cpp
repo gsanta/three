@@ -36,14 +36,14 @@ DocumentStoreBuilder &DocumentStoreBuilder::withDrawing()
 
 DocumentStore DocumentStoreBuilder::build()
 {
-    Camera camera(&m_Window);
+    Camera2d camera(BoundsInt(0, 0, m_Window.getWidth(), m_Window.getHeight()));
 
-    std::shared_ptr<Renderer2D> renderer = std::make_shared<HeadlessRenderer2D>();
+    Canvas documentCanvas(UuidGenerator::getInstance().generate(),
+                          m_DocumentBounds,
+                          *std::make_unique<HeadlessRenderer2D>());
+    documentCanvas.setCamera(camera);
 
-    Document document(m_DocumentBounds,
-                      Canvas(UuidGenerator::getInstance().generate(), m_DocumentBounds, renderer),
-                      camera,
-                      std::make_shared<DocumentHistory>());
+    Document document(m_DocumentBounds, documentCanvas, std::make_shared<DocumentHistory>());
 
     if (m_Drawings.size() == 0)
     {

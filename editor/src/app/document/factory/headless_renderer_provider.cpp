@@ -4,9 +4,9 @@ namespace spright
 {
 namespace editor
 {
-    std::shared_ptr<Renderer2D> HeadlessRendererProvider::createRenderer2D() const
+    std::unique_ptr<Renderer2D> HeadlessRendererProvider::createRenderer2D() const
     {
-        return std::make_shared<HeadlessRenderer2D>();
+        return std::make_unique<HeadlessRenderer2D>();
     }
 
     HeadlessRendererProvider *HeadlessRendererProvider::clone() const

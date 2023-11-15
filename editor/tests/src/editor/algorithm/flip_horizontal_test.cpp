@@ -1,5 +1,5 @@
 #include "../src/app/algorithm/flip_horizontal.h"
-#include "../src/app/core/colors.h"
+#include "../src/engine/graphics/colors.h"
 #include "../test_helpers/builders/document_builder.h"
 #include "../test_helpers/builders/document_store_builder.h"
 

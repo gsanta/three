@@ -1,5 +1,6 @@
 #pragma once
 #include "../src/app/core/history/document_history.h"
+#include "../src/engine/graphics/camera/camera2d.h"
 #include "../src/engine/graphics/renderable/bounds.h"
 #include "../src/engine/system/utils/uuid_generator.h"
 #include "../src/engine/system/window/impl/headless/headless_window.h"

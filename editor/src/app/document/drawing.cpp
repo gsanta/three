@@ -9,12 +9,12 @@ namespace editor
 
     Drawing::Drawing(const std::string &uuid,
                      const Bounds &bounds,
+                     const Renderer2D &renderer,
                      const TileLayer &backgroundLayer,
                      const TileLayer &tempLayer,
                      const TileLayer &toolLayer,
-                     const TileLayer &cursorLayer,
-                     const Layer &decorationLayer)
-        : Canvas(uuid, bounds, decorationLayer)
+                     const TileLayer &cursorLayer)
+        : Canvas(uuid, bounds, renderer)
     {
         m_BackgroundLayer = std::make_shared<TileLayer>(backgroundLayer);
         m_TempLayer = std::make_shared<TileLayer>(tempLayer);
@@ -23,13 +23,13 @@ namespace editor
     }
 
     Drawing::Drawing(const std::string &uuid,
+                     const Renderer2D &renderer,
                      const TileLayer &initialLayer,
                      const TileLayer &backgroundLayer,
                      const TileLayer &tempLayer,
                      const TileLayer &toolLayer,
-                     const TileLayer &cursorLayer,
-                     const Layer &decorationLayer)
-        : Canvas(uuid, initialLayer.getBounds(), decorationLayer)
+                     const TileLayer &cursorLayer)
+        : Canvas(uuid, initialLayer.getBounds(), renderer)
     {
         Frame frame(0);
         frame.addLayer(initialLayer);
@@ -42,6 +42,33 @@ namespace editor
         m_TempLayer = std::make_shared<TileLayer>(tempLayer);
         m_ToolLayer = std::make_shared<TileLayer>(toolLayer);
         m_CursorLayer = std::make_shared<TileLayer>(cursorLayer);
+    }
+
+    Drawing::Drawing(const Drawing &other)
+        : Canvas(other), m_BackgroundLayer(std::shared_ptr<TileLayer>(new TileLayer(*other.m_BackgroundLayer))),
+          m_TempLayer(std::shared_ptr<TileLayer>(new TileLayer(*other.m_TempLayer))),
+          m_ToolLayer(std::shared_ptr<TileLayer>(new TileLayer(*other.m_ToolLayer))),
+          m_CursorLayer(std::shared_ptr<TileLayer>(new TileLayer(*other.m_CursorLayer))),
+          m_TempLayers(other.m_TempLayers), m_Frames(other.m_Frames), m_ActiveFrameIndex(other.m_ActiveFrameIndex),
+          m_ActiveLayerIndex(other.m_ActiveLayerIndex), m_DrawingState(other.m_DrawingState)
+    {
+    }
+
+    Drawing &Drawing::operator=(const Drawing &other)
+    {
+        Canvas::operator=(other);
+        m_BackgroundLayer.reset(new TileLayer(*other.m_BackgroundLayer));
+
+        m_TempLayer.reset(new TileLayer(*other.m_TempLayer));
+        m_ToolLayer.reset(new TileLayer(*other.m_ToolLayer));
+        m_CursorLayer.reset(new TileLayer(*other.m_CursorLayer));
+        m_TempLayers = other.m_TempLayers;
+        m_Frames = other.m_Frames;
+        m_ActiveFrameIndex = other.m_ActiveFrameIndex;
+        m_ActiveLayerIndex = other.m_ActiveLayerIndex;
+        m_DrawingState = other.m_DrawingState;
+
+        return *this;
     }
 
     std::vector<Frame> &Drawing::getFrames()
@@ -230,25 +257,29 @@ namespace editor
 
     void Drawing::render(const Camera &camera, Canvas::RenderTarget target)
     {
+        const Camera *actualCamera = getCamera() != nullptr ? getCamera() : &camera;
+        const Mat4 &proj = actualCamera->getProjectionMatrix();
+        const Mat4 &view = actualCamera->getViewMatrix();
+
         for (TileLayer &layer : getActiveFrame().getLayers())
         {
-            layer.render(camera);
+            layer.render(proj, view, getRenderer());
         }
 
         if (target == Screen)
         {
             for (size_t i = 0; i < getTempLayerCount(); i++)
             {
-                getTempLayer(i).render(camera);
+                getTempLayer(i).render(proj, view, getRenderer());
             }
 
-            getBackgroundLayer().render(camera);
+            getBackgroundLayer().render(proj, view, getRenderer());
 
-            getDecorationLayer().render(camera);
+            getDecorationLayer().render(proj, view, getRenderer());
 
-            getToolLayer().render(camera);
+            getToolLayer().render(proj, view, getRenderer());
 
-            getCursorLayer().render(camera);
+            getCursorLayer().render(proj, view, getRenderer());
         }
     }
 

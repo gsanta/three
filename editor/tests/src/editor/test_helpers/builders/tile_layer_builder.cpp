@@ -55,11 +55,7 @@ TileLayer TileLayerBuilder::build()
                           m_BoundsInt.maxY * m_TileSize);
     }
 
-    TileLayer layer("layer_" + std::to_string(m_Index),
-                    std::make_shared<HeadlessRenderer2D>(),
-                    Group<Rect2D>(),
-                    m_Bounds,
-                    m_TileSize);
+    TileLayer layer("layer_" + std::to_string(m_Index), Group<Rect2D>(), m_Bounds, m_TileSize);
 
     Brush brush;
 
