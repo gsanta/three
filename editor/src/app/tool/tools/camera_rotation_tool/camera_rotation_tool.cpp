@@ -27,10 +27,14 @@ namespace editor
 
             Vec2 offset = context.pointer.downDelta() * m_Sensitivity;
 
-            std::cout << offset << std::endl;
-
             camera3d->setYaw(m_StartYaw + offset.x);
             camera3d->setPitch(m_StartPitch + offset.y);
+        }
+        else
+        {
+            Camera *camera = context.doc.document->getBackgroundCanvas().getCamera();
+            ArcRotateCamera *camera3d = dynamic_cast<ArcRotateCamera *>(camera);
+            camera3d->screenToWorldPos3d(context.pointer.curr.x, context.pointer.curr.y, 0);
         }
     }
 } // namespace editor

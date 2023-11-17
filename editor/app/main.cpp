@@ -35,8 +35,6 @@
 #endif
 #include "../src/app/feature/frame/frame_player.h"
 
-// #define SPARKY_EMSCRIPTEN 0
-
 using namespace ::spright::engine;
 using namespace ::spright::maths;
 using namespace ::spright::editor;

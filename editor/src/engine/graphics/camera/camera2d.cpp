@@ -71,37 +71,6 @@ namespace engine
         return m_Translate;
     }
 
-    void Camera2d::front()
-    {
-
-        lookAt(Vec3(0, 0, m_Radius));
-    }
-
-    void Camera2d::back()
-    {
-        lookAt(Vec3(0, 0, -m_Radius));
-    }
-
-    void Camera2d::left()
-    {
-        lookAt(Vec3(-m_Radius, 0, 0));
-    }
-
-    void Camera2d::right()
-    {
-        lookAt(Vec3(m_Radius, 0, 0));
-    }
-
-    void Camera2d::top()
-    {
-        lookAt(Vec3(0, m_Radius, 0));
-    }
-
-    void Camera2d::bottom()
-    {
-        lookAt(Vec3(0, -m_Radius, 0));
-    }
-
     Camera *Camera2d::clone() const
     {
         return new Camera2d(*this);
