@@ -31,6 +31,16 @@ namespace editor
         return dynamic_cast<Drawing *>(m_AllCanvases[m_ActiveCanvasIndex].get());
     }
 
+    Drawing3d *Document::getActiveDrawing3d()
+    {
+        if (m_ActiveCanvasIndex == -1)
+        {
+            return nullptr;
+        }
+
+        return dynamic_cast<Drawing3d *>(m_AllCanvases[m_ActiveCanvasIndex].get());
+    }
+
     Canvas *Document::getActiveCanvas()
     {
         return m_AllCanvases[m_ActiveCanvasIndex].get();
@@ -90,6 +100,11 @@ namespace editor
 
         return *dynamic_cast<Drawing3d *>(m_AllCanvases.back().get());
     }
+
+    // std::vector<Drawing3d> &Document::getDrawing3ds()
+    // {
+    //     return m_Draw
+    // }
 
     void Document::setActiveCanvas(const std::string &uuid)
     {
