@@ -11,7 +11,7 @@ using namespace ::spright::editor;
 
 TEST_CASE("Frame", "[frame]")
 {
-    SECTION("equals with an other Frame with the same data")
+    SECTION("can be copied")
     {
         std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(2);
 
@@ -22,27 +22,42 @@ TEST_CASE("Frame", "[frame]")
         layers[1].add(rect2);
 
         Frame frame1;
-        Frame frame2;
 
         frame1.addLayer(layers[0]);
         frame1.addLayer(layers[1]);
-        frame2.addLayer(layers[0]);
-        frame2.addLayer(layers[1]);
 
-        REQUIRE(frame1 == frame2);
+        Frame frame2;
+        frame2 = frame1;
+
+        REQUIRE(frame1.getLayers().size() == frame2.getLayers().size());
+        for (int i = 0; i < frame1.getLayers().size(); i++)
+        {
+            REQUIRE(frame1.getLayers()[i] == frame2.getLayers()[i]);
+        }
     }
 
-    SECTION("does not equal with another Frame with the different data")
+    SECTION("can be copy constructed")
     {
         std::vector<TileLayer> layers = TestDocumentFactory::createTileLayers(2);
 
+        Rect2D rect1(-2.0f, -3.0f, 3.0f, 5.0f, 0xFF0000FF);
+        Rect2D rect2(2.0f, 2.0f, 1.0f, 1.0f, 0xFF0000FF);
+
+        layers[0].add(rect1);
+        layers[1].add(rect2);
+
         Frame frame1;
-        Frame frame2;
 
         frame1.addLayer(layers[0]);
-        frame2.addLayer(layers[1]);
+        frame1.addLayer(layers[1]);
 
-        REQUIRE(frame1 != frame2);
+        Frame frame2(frame1);
+
+        REQUIRE(frame1.getLayers().size() == frame2.getLayers().size());
+        for (int i = 0; i < frame1.getLayers().size(); i++)
+        {
+            REQUIRE(frame1.getLayers()[i] == frame2.getLayers()[i]);
+        }
     }
 
     SECTION("can add a layer")

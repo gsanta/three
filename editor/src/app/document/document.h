@@ -35,6 +35,8 @@ namespace editor
         //! @return The active Drawing() or nullptr
         Drawing *getActiveDrawing();
 
+        Drawing3d *getActiveDrawing3d();
+
         Canvas *getActiveCanvas();
 
         int getActiveCanvasIndex() const;

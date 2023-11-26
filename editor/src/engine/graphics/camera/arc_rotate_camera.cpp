@@ -51,6 +51,53 @@ namespace engine
         return m_Pitch;
     }
 
+    Vec3 ArcRotateCamera::screenToWorldPos3d(float x, float y, float z) const
+    {
+        Mat4 model(1);
+        model.columns[3].x = x;
+        model.columns[3].y = y;
+        model.columns[3].z = z;
+
+        Mat4 inverseView(m_View);
+        inverseView.transpose();
+
+        Vec4 origin(0, 0, 0, 1);
+
+        Vec4 res = inverseView * model * origin;
+
+        return Vec3(res.x, res.y, res.z);
+    }
+
+    void ArcRotateCamera::front()
+    {
+        m_View = Mat4::lookAt(Vec3(0, 0, m_Radius), Vec3(0, 0, 0), Vec3(0, 1, 0));
+    }
+
+    void ArcRotateCamera::back()
+    {
+        m_View = Mat4::lookAt(Vec3(0, 0, -m_Radius), Vec3(0, 0, 0), Vec3(0, 1, 0));
+    }
+
+    void ArcRotateCamera::left()
+    {
+        m_View = Mat4::lookAt(Vec3(-m_Radius, 0, 0), Vec3(0, 0, 0), Vec3(0, 1, 0));
+    }
+
+    void ArcRotateCamera::right()
+    {
+        m_View = Mat4::lookAt(Vec3(m_Radius, 0, 0), Vec3(0, 0, 0), Vec3(0, 1, 0));
+    }
+
+    void ArcRotateCamera::top()
+    {
+        m_View = Mat4::lookAt(Vec3(0, m_Radius, 0), Vec3(0, 0, 0), Vec3(0, 1, 0));
+    }
+
+    void ArcRotateCamera::bottom()
+    {
+        m_View = Mat4::lookAt(Vec3(0, -m_Radius, 0), Vec3(0, 0, 0), Vec3(0, 1, 0));
+    }
+
     Camera *ArcRotateCamera::clone() const
     {
         return new ArcRotateCamera(*this);

@@ -43,6 +43,10 @@ namespace engine
 
         virtual Camera *clone() const = 0;
 
+        virtual bool operator==(const Camera &rhs) const;
+
+        virtual bool operator!=(const Camera &rhs) const;
+
     protected:
         float getScaleFactor() const;
 

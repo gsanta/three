@@ -82,5 +82,16 @@ namespace engine
 
         return {(int)result.x, (int)-result.y};
     }
+
+    bool Camera::operator==(const Camera &rhs) const
+    {
+        return m_Near == rhs.m_Near && m_Far == rhs.m_Far && m_ZoomFactor == rhs.m_ZoomFactor &&
+               m_ScreenBounds == rhs.m_ScreenBounds;
+    }
+
+    bool Camera::operator!=(const Camera &rhs) const
+    {
+        return !(*this == rhs);
+    }
 } // namespace engine
 } // namespace spright

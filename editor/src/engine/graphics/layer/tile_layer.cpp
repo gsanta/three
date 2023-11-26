@@ -114,9 +114,8 @@ namespace engine
 
         int index = m_TileBounds.getWidth() * tilePos.y + tilePos.x;
 
+        m_Group.remove(*getAtTileIndex(index));
         m_TileIndexes[index] = nullptr;
-
-        m_Group.remove(rect);
     }
 
     void TileLayer::clear()

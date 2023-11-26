@@ -79,13 +79,28 @@ namespace editor
         Drawing3d drawing =
             Drawing3d(UuidGenerator::getInstance().generate(), bounds, *m_RendererProvider->createRenderer2D());
 
-        drawing.add(Rect2D(bounds.getBottomLeft().x,
-                           bounds.getBottomLeft().y,
-                           bounds.getWidth(),
-                           bounds.getHeight(),
-                           COLOR_WHITE));
+        drawing.getGroup().add(Rect2D(bounds.getBottomLeft().x,
+                                      bounds.getBottomLeft().y,
+                                      bounds.getWidth(),
+                                      bounds.getHeight(),
+                                      COLOR_RED));
 
-        drawing.add(Box(Vec3(0, 0, 0.2), 2, 2, 2, COLOR_RED));
+        drawing.getGroup().add(CylinderBuilder()
+                                   .setHeight(10)
+                                   .setDiameterTop(4)
+                                   .setDiameterBottom(8)
+                                   .setTessellation(9)
+                                   .setColor(COLOR_RED)
+                                   .build());
+
+        drawing.getGroup().add(BoxBuilder()
+                                   .setWidth(10)
+                                   .setHeight(5)
+                                   .setDepth(5)
+                                   .setColor(COLOR_BLUE)
+                                   .setFaceColor(Box::Face::top, COLOR_GREEN)
+                                   .setFaceColor(Box::Face::left, COLOR_RED)
+                                   .build());
 
         return drawing;
     }
@@ -134,8 +149,11 @@ namespace editor
         float pixelCount = 32.0f;
         Bounds drawingBounds(-pixelCount / 2.0f, -pixelCount / 2.0f, pixelCount / 2.0f, pixelCount / 2.0f);
 
+#ifdef INIT_WITH_3D_CANVAS
+        ArcRotateCamera camera(BoundsInt(0, 0, m_Window->getWidth(), m_Window->getHeight()));
+#else
         Camera2d camera(BoundsInt(0, 0, m_Window->getWidth(), m_Window->getHeight()));
-
+#endif
         Canvas documentCanvas(UuidGenerator::getInstance().generate(),
                               drawingBounds,
                               *m_RendererProvider->createRenderer2D());
@@ -160,12 +178,13 @@ namespace editor
                                                                                          drawing.getBounds().minY);
         Vec2Int maxWindow = document.getBackgroundCanvas().getCamera()->worldToScreenPos(drawing.getBounds().maxX,
                                                                                          drawing.getBounds().maxY);
-
+#ifdef INIT_WITH_3D_CANVAS
+        Drawing3d drawing3d = createDrawing3d(Bounds(18.0, -5.0, 28.0, 5.0));
+        document.addDrawing3d(drawing3d);
+#else
         document.addDrawing(drawing);
+#endif
 
-        // Drawing3d drawing3d = createDrawing3d(Bounds(18.0, -5.0, 28.0, 5.0));
-
-        // document.addDrawing3d(drawing3d);
 
         return document;
     }

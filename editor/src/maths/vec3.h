@@ -53,6 +53,8 @@ namespace maths
 
         friend std::ostream &operator<<(std::ostream &stream, const Vec3 vec);
 
+        Vec3 operator*(const float right);
+
         bool operator==(const Vec3 &other) const;
 
         bool operator!=(const Vec3 &other) const;
@@ -64,6 +66,8 @@ namespace maths
         Vec3 &operator*=(const Vec3 &other);
 
         Vec3 &operator/=(const Vec3 &other);
+
+        float &operator[](int index);
     };
 } // namespace maths
 } // namespace spright
