@@ -59,33 +59,6 @@ namespace maths
         return Mat4(1.0f);
     }
 
-    Mat4 Mat4::rows(const Vec4 &row1, const Vec4 &row2, const Vec4 &row3, const Vec4 &row4)
-    {
-        Mat4 mat;
-
-        mat.columns[0].x = row1.x;
-        mat.columns[0].y = row2.x;
-        mat.columns[0].z = row3.x;
-        mat.columns[0].w = row4.x;
-
-        mat.columns[1].x = row1.y;
-        mat.columns[1].y = row2.y;
-        mat.columns[1].z = row3.y;
-        mat.columns[1].w = row4.y;
-
-        mat.columns[2].x = row1.z;
-        mat.columns[2].y = row2.z;
-        mat.columns[2].z = row3.z;
-        mat.columns[2].w = row4.z;
-
-        mat.columns[3].x = row1.w;
-        mat.columns[3].y = row2.w;
-        mat.columns[3].z = row3.w;
-        mat.columns[3].w = row4.w;
-
-        return mat;
-    }
-
     Mat4 &Mat4::multiply(const Mat4 &other)
     {
         float data[16];
@@ -120,26 +93,6 @@ namespace maths
         return Vec3(columns[0].x * other.x + columns[1].x * other.y + columns[2].x * other.z + columns[3].x,
                     columns[0].y * other.x + columns[1].y * other.y + columns[2].y * other.z + columns[3].y,
                     columns[0].z * other.x + columns[1].z * other.y + columns[2].z * other.z + columns[3].z);
-    }
-
-    Mat4 &Mat4::transpose()
-    {
-        float newElements[16];
-
-        for (int i = 0; i < 4; i++)
-        {
-            for (int j = 0; j < 4; j++)
-            {
-                newElements[i + j * 4] = columns[i][j];
-            }
-        }
-
-        for (int i = 0; i < 16; i++)
-        {
-            elements[i] = newElements[i];
-        }
-
-        return *this;
     }
 
     void Mat4::setElements(float *newElements)

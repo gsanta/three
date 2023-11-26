@@ -27,16 +27,6 @@ namespace engine
         return newRenderable;
     }
 
-    void Drawing3d::remove(const Renderable &renderable)
-    {
-        m_Group.remove(renderable);
-    }
-
-    std::vector<Renderable *> &Drawing3d::getRenderables()
-    {
-        return m_Group.getRenderables();
-    }
-
     Drawing3d *Drawing3d::clone() const
     {
         return new Drawing3d(*this);

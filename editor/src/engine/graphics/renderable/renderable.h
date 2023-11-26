@@ -22,8 +22,6 @@ namespace engine
 
         virtual void submit(Renderer2D &renderer) const = 0;
 
-        virtual inline bool isEqual(const Renderable &obj) const {};
-
         virtual Renderable *clone() const = 0;
 
     protected:

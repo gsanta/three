@@ -68,21 +68,36 @@ namespace engine
         m_Indexes[9] = 2;
         m_Indexes[10] = 6;
         m_Indexes[11] = 7;
+        // m_Indexes[16] = 3;
+        // m_Indexes[17] = 7;
 
         m_Indexes[12] = 4; // left
         m_Indexes[13] = 5;
         m_Indexes[14] = 1;
         m_Indexes[15] = 0;
+        // m_Indexes[16] = 1;
+        // m_Indexes[17] = 1;
 
         m_Indexes[16] = 1; // top
         m_Indexes[17] = 5;
         m_Indexes[18] = 6;
         m_Indexes[19] = 2;
+        // m_Indexes[22] = 5;
+        // m_Indexes[23] = 4;
 
         m_Indexes[20] = 7; // bottom
         m_Indexes[21] = 4;
         m_Indexes[22] = 0;
         m_Indexes[23] = 3;
+        // m_Indexes[28] = 5;
+        // m_Indexes[29] = 1;
+
+        // m_Indexes[30] = 3; // bottom
+        // m_Indexes[31] = 4;
+        // m_Indexes[32] = 7;
+        // m_Indexes[33] = 3;
+        // m_Indexes[34] = 0;
+        // m_Indexes[35] = 4;
     }
 } // namespace engine
 } // namespace spright

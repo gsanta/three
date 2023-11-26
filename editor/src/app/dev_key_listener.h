@@ -92,80 +92,42 @@ namespace editor
                     flip_horizontal(drawing.getActiveFrame().getLayers(), drawing.getState().getBounds());
                 }
             }
-            // else if (key == GLFW_KEY_R)
-            // {
-            //     // float pixelCount = 16.0f;
-            //     // Bounds drawingBounds = Bounds::createWithPositions(-pixelCount / 2.0f,
-            //     //                                                    -pixelCount / 2.0f,
-            //     //                                                    pixelCount / 2.0f,
-            //     //                                                    pixelCount / 2.0f);
-            //     // Drawing &drawing = m_DocumentStore->getActiveDocument().getActiveDrawing();
-            //     // Drawing newDrawing = resize_drawing(drawing, drawingBounds, m_DocumentFactory);
-            //     // m_DocumentStore->getActiveDocument().removeActiveDrawing();
-            //     // m_DocumentStore->getActiveDocument().addDrawing(newDrawing);
-            //     m_Editor->getToolHandler()->setSelectedTool("rectangle");
-            //     dynamic_cast<RectangleTool *>(m_Editor->getToolHandler()->getToolStore().getTool("rectangle"))
-            //         ->setFilled(true);
-            // }
+            else if (key == GLFW_KEY_R)
+            {
+                // float pixelCount = 16.0f;
+                // Bounds drawingBounds = Bounds::createWithPositions(-pixelCount / 2.0f,
+                //                                                    -pixelCount / 2.0f,
+                //                                                    pixelCount / 2.0f,
+                //                                                    pixelCount / 2.0f);
+                // Drawing &drawing = m_DocumentStore->getActiveDocument().getActiveDrawing();
+                // Drawing newDrawing = resize_drawing(drawing, drawingBounds, m_DocumentFactory);
+                // m_DocumentStore->getActiveDocument().removeActiveDrawing();
+                // m_DocumentStore->getActiveDocument().addDrawing(newDrawing);
+                m_Editor->getToolHandler()->setSelectedTool("rectangle");
+                dynamic_cast<RectangleTool *>(m_Editor->getToolHandler()->getToolStore().getTool("rectangle"))
+                    ->setFilled(true);
+            }
             else if (key == GLFW_KEY_U)
             {
-                // m_Editor->getDocumentStore()->getActiveDocument().getHistory()->undo(
-                //     m_Editor->getDocumentStore()->getActiveDocument());
-
-                if (m_Editor->getToolHandler()->getSelectedTool()->getName() != "camera_rotation")
-                {
-                    m_Editor->getToolHandler()->setSelectedTool("camera_rotation");
-                }
-                else
-                {
-                    m_Editor->getToolHandler()->setSelectedTool("mesh_creation");
-                }
+                m_Editor->getDocumentStore()->getActiveDocument().getHistory()->undo(
+                    m_Editor->getDocumentStore()->getActiveDocument());
             }
             else if (key == GLFW_KEY_LEFT)
             {
-                Camera *camera = m_Editor->getActiveDocument().getBackgroundCanvas().getCamera();
-                ArcRotateCamera *camera3d = dynamic_cast<ArcRotateCamera *>(camera);
-                camera3d->left();
-
-                // m_Editor->getToolHandler()->getToolStore().getSelectTool().setMode(manip_move);
-            }
-            else if (key == GLFW_KEY_R)
-            {
-                if (m_Editor->getToolHandler()->isActiveTool("ray_casting_debug"))
-                {
-                    m_Editor->getToolHandler()->removeActiveTool("ray_casting_debug");
-                }
-                else
-                {
-                    m_Editor->getToolHandler()->addActiveTool("ray_casting_debug");
-                }
+                m_Editor->getToolHandler()->getToolStore().getSelectTool().setMode(manip_move);
             }
             else if (key == GLFW_KEY_RIGHT)
             {
                 Camera *camera = m_Editor->getActiveDocument().getBackgroundCanvas().getCamera();
-                ArcRotateCamera *camera3d = dynamic_cast<ArcRotateCamera *>(camera);
-                camera3d->right();
-
-                // Camera *camera = m_Editor->getActiveDocument().getBackgroundCanvas().getCamera();
-                // Camera2d *camera2d = dynamic_cast<Camera2d *>(camera);
-                // camera2d->translate2D(Vec2(-1.0, 0));
+                Camera2d *camera2d = dynamic_cast<Camera2d *>(camera);
+                camera2d->translate2D(Vec2(-1.0, 0));
 
                 // m_Editor->getToolHandler()->getToolStore().getSelectTool().setMode(manip_shear);
                 // m_Editor->getToolHandler()->getToolStore().getRotateTool().setRotationInRad(1.5708f);
                 // m_Editor->getToolHandler()->executeTool("rotate");
             }
-            else if (key == GLFW_KEY_DOWN)
-            {
-                Camera *camera = m_Editor->getActiveDocument().getBackgroundCanvas().getCamera();
-                ArcRotateCamera *camera3d = dynamic_cast<ArcRotateCamera *>(camera);
-                camera3d->back();
-            }
             else if (key == GLFW_KEY_UP)
             {
-                Camera *camera = m_Editor->getActiveDocument().getBackgroundCanvas().getCamera();
-                ArcRotateCamera *camera3d = dynamic_cast<ArcRotateCamera *>(camera);
-                camera3d->front();
-
                 m_Editor->getToolHandler()->getToolStore().getSelectTool().setMode(manip_rotate);
 
                 // m_Editor->getToolHandler()->getToolStore().getRotateTool().setRotationInRad(M_PI + 0.1f);
