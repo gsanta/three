@@ -25,18 +25,6 @@ namespace engine
 
         Vec2 getCenter2D();
 
-        void front();
-
-        void back();
-
-        void left();
-
-        void right();
-
-        void top();
-
-        void bottom();
-
         Camera *clone() const override;
 
     private:
@@ -44,10 +32,6 @@ namespace engine
 
     private:
         Vec3 m_Direction;
-
-        // arc rotate camera
-
-        float m_Radius = 5.0;
     };
 } // namespace engine
 } // namespace spright

@@ -58,6 +58,8 @@ IF (WIN32)
 list(FILTER SOURCES EXCLUDE REGEX ".*unix_timer\\.cpp$")
 ENDIF()
 
+add_definitions(-DINIT_WITH_3D_CANVAS=1)
+
 add_library(editor STATIC ${SOURCES})
 
 target_link_libraries(editor glfw libglew_static nlohmann_json::nlohmann_json stduuid)

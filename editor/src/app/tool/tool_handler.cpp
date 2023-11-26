@@ -141,6 +141,7 @@ namespace editor
 
         if (it != m_ActiveTools->end())
         {
+            (*it)->execDeactivate(m_ToolContext);
             m_ActiveTools->erase(it);
         }
     }

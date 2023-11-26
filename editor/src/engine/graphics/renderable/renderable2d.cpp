@@ -5,13 +5,13 @@ namespace spright
 namespace engine
 {
 
-    Renderable2D::Renderable2D() : Renderable(Vec3(), COLOR_WHITE)
+    Renderable2D::Renderable2D() : Mesh(Vec3(), COLOR_WHITE)
     {
         setUVDefaults();
     }
 
     Renderable2D::Renderable2D(const Bounds &bounds, unsigned int color)
-        : Renderable(Vec3(bounds.getCenter(), 0), COLOR_WHITE), m_bounds(bounds), m_Color(color)
+        : Mesh(Vec3(bounds.getCenter(), 0), COLOR_WHITE), m_bounds(bounds), m_Color(color)
     {
         setUVDefaults();
     }

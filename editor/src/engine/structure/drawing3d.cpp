@@ -9,22 +9,24 @@ namespace engine
     {
     }
 
-    Drawing3d &Drawing3d::operator=(const Drawing3d &other)
+    Mesh &Drawing3d::add(const Mesh &renderable)
     {
-        Canvas::operator=(other);
-
-        m_Group = other.m_Group;
-        return *this;
-    }
-
-    Renderable &Drawing3d::add(const Renderable &renderable)
-    {
-        Renderable &newRenderable = m_Group.add(renderable);
+        Mesh &newRenderable = m_Group.add(renderable);
 
         Vec3 center = getBounds().getCenter();
         // newRenderable.setPosition(newRenderable.getPosition() + Vec3(center.x, center.y, 0));
 
         return newRenderable;
+    }
+
+    Group<Mesh> &Drawing3d::getGroup()
+    {
+        return m_Group;
+    }
+
+    Group<Mesh> &Drawing3d::getGizmoGroup()
+    {
+        return m_GizmoGroup;
     }
 
     Drawing3d *Drawing3d::clone() const

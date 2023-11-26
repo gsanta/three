@@ -130,6 +130,18 @@ namespace engine
         buffer->color = m_Color;
         buffer++;
 
+        buffer->vertex = *transformation * m_Position;
+        buffer->uv = m_UV[0];
+        buffer->tid = 0.0f;
+        buffer->color = m_Color;
+        buffer++;
+
+        buffer->vertex = *transformation * Vec3(m_Position.x + m_Size.x, m_Position.y + m_Size.y, m_Position.z);
+        buffer->uv = m_UV[2];
+        buffer->tid = 0.0f;
+        buffer->color = m_Color;
+        buffer++;
+
         buffer->vertex = *transformation * Vec3(m_Position.x + m_Size.x, m_Position.y, m_Position.z);
         buffer->uv = m_UV[3];
         buffer->tid = 0.0f;

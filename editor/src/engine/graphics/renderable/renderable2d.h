@@ -9,10 +9,10 @@
 #include "../buffer/indexBuffer.h"
 #include "../buffer/vertexArray.h"
 #include "../colors.h"
+#include "../mesh/meshes/mesh.h"
 #include "../renderer/renderer2d.h"
 #include "../renderer/vertex_data.h"
 #include "bounds.h"
-#include "renderable.h"
 
 #include <nlohmann/json.hpp>
 #include <string.h>
@@ -20,7 +20,7 @@ namespace spright
 {
 namespace engine
 {
-    class Renderable2D : public Renderable
+    class Renderable2D : public Mesh
     {
     public:
         Renderable2D(const Bounds &bounds, unsigned int color);

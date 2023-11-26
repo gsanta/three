@@ -13,7 +13,6 @@ namespace engine
         m_Dir = (m_End - m_Start) / m_Length;
         m_Normal = Vec2(-m_Dir.y, m_Dir.x);
 
-
         Vec2 coord0 = m_Start + m_Normal * m_Thickness;
         Vec2 coord1 = m_Start - m_Normal * m_Thickness;
         Vec2 coord2 = m_End - m_Normal * m_Thickness;
