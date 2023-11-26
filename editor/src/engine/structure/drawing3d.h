@@ -15,11 +15,7 @@ namespace engine
 
         Drawing3d &operator=(const Drawing3d &other);
 
-        Renderable &add(const Renderable &renderable);
-
-        void remove(const Renderable &renderable);
-
-        std::vector<Renderable *> &getRenderables();
+        Renderable &add(const Renderable &rect);
 
         Drawing3d *clone() const override;
 

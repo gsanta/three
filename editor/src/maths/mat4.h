@@ -22,15 +22,11 @@ namespace maths
 
         static Mat4 identity();
 
-        static Mat4 rows(const Vec4 &row1, const Vec4 &row2, const Vec4 &row3, const Vec4 &row4);
-
         Mat4 &multiply(const Mat4 &other);
 
         Vec3 multiply(const Vec3 &other) const;
 
         Vec4 multiply(const Vec4 &other) const;
-
-        Mat4 &transpose();
 
         void setElements(float *elements);
 

@@ -13,8 +13,6 @@ namespace maths
 
         Vec4(const float &x, const float &y, const float &z, const float &w);
 
-        Vec4(float n);
-
         Vec4 &add(const Vec4 &other);
 
         Vec4 &subtract(const Vec4 &other);

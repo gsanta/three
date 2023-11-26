@@ -25,6 +25,8 @@ namespace editor
 
         Frame(const Frame &);
 
+        bool isEqual(const Frame &) const;
+
         TileLayer &addLayer(const TileLayer &tileLayer);
 
         void insertLayer(const TileLayer &tileLayer, size_t index);
@@ -44,6 +46,10 @@ namespace editor
         void setIndex(size_t index);
 
         nlohmann::json getJson() const;
+
+        friend bool operator==(const Frame &, const Frame &);
+
+        friend bool operator!=(const Frame &, const Frame &);
 
     private:
         void resetLayerIndexes();

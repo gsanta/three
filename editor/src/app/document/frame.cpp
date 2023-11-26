@@ -16,6 +16,26 @@ namespace editor
     {
     }
 
+    bool Frame::isEqual(const Frame &rhs) const
+    {
+        const Frame &frame = dynamic_cast<const Frame &>(rhs);
+
+        if (m_Layers.size() != frame.m_Layers.size())
+        {
+            return false;
+        }
+
+        for (int i = 0; i < m_Layers.size(); i++)
+        {
+            if (frame.m_Layers[i] != m_Layers[i])
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     TileLayer &Frame::addLayer(const TileLayer &layer)
     {
         size_t index = m_Layers.size();
@@ -101,6 +121,17 @@ namespace editor
         };
 
         return json;
+    }
+
+
+    bool operator==(const Frame &lhs, const Frame &rhs)
+    {
+        return lhs.isEqual(rhs);
+    }
+
+    bool operator!=(const Frame &lhs, const Frame &rhs)
+    {
+        return !lhs.isEqual(rhs);
     }
 } // namespace editor
 } // namespace spright

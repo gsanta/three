@@ -32,13 +32,4 @@ TEST_CASE("Mat4 orthographic", "[mat4]")
         REQUIRE(result.x == 0);
         REQUIRE(result.y == 0);
     }
-
-    SECTION("transpose")
-    {
-        Mat4 mat4(Vec4(1), Vec4(2), Vec4(3), Vec4(4));
-
-        Mat4 transposed = mat4.transpose();
-
-        REQUIRE(transposed == Mat4::rows(Vec4(1), Vec4(2), Vec4(3), Vec4(4)));
-    }
 }
