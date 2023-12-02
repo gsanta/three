@@ -1,9 +1,9 @@
-#include "../src/app/algorithm/flip_vertical.h"
+#include "../src/editing/algorithms/flip_vertical.h"
 #include "../test_helpers/builders/document_store_builder.h"
 
 #include <catch2/catch_test_macros.hpp>
 
-using namespace spright::editor;
+using namespace spright::editing;
 using namespace spright::engine;
 
 TEST_CASE("flip_vertical", "[flip-vertical]")

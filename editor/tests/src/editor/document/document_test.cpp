@@ -1,9 +1,9 @@
-#include "../src/app/document/document.h"
+#include "../src/editing/document/document.h"
 #include "../test_helpers/builders/document_builder.h"
 
 #include <catch2/catch_test_macros.hpp>
 
-using namespace ::spright::editor;
+using namespace spright::editing;
 
 SCENARIO("Document")
 {

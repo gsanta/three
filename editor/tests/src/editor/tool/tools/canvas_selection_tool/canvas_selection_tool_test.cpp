@@ -4,12 +4,12 @@
 #include "../../../test_helpers/builders/tool_context_builder.h"
 #include "../../../test_helpers/common_tool_funcs.h"
 #include "../../../test_helpers/matchers/equals_bounds_matcher.h"
-#include "../src/app/tool/tools/canvas_selection_tool/canvas_selection_tool.h"
+#include "../src/editing/tool/tools/canvas_selection_tool/canvas_selection_tool.h"
 #include "../src/engine/system/window/impl/headless/headless_window.h"
 
 #include <catch2/catch_test_macros.hpp>
 
-using namespace ::spright::editor;
+using namespace spright::editing;
 using namespace ::spright::engine;
 
 SCENARIO("Tool handler")

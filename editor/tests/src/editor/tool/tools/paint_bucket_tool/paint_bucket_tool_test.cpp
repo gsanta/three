@@ -1,5 +1,5 @@
 
-#include "../src/app/tool/tools/paint_bucket_tool/paint_bucket_tool.h"
+#include "../src/editing/tool/tools/paint_bucket_tool/paint_bucket_tool.h"
 #include "../src/engine/graphics/colors.h"
 #include "src/editor/test_helpers/builders/document_builder.h"
 #include "src/editor/test_helpers/builders/document_store_builder.h"

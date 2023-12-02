@@ -1,4 +1,4 @@
-#include "../src/engine/graphics/renderable/bounds.h"
+#include "../src/maths/data/bounds.h"
 
 #include <catch2/catch_approx.hpp>
 #include <catch2/matchers/catch_matchers_templated.hpp>

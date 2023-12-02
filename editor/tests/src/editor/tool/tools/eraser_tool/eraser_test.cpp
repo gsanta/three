@@ -1,10 +1,10 @@
 #include "../../../test_helpers/test_document_factory.h"
-#include "../src/app/tool/tools/brush_tool/brush.h"
-#include "../src/app/tool/tools/eraser_tool/eraser.h"
+#include "../src/editing/tool/tools/brush_tool/brush.h"
+#include "../src/editing/tool/tools/eraser_tool/eraser.h"
 
 #include <catch2/catch_test_macros.hpp>
 
-using namespace ::spright::editor;
+using namespace spright::editing;
 
 TEST_CASE("Eraser erase", "[eraser]")
 {

@@ -1,5 +1,5 @@
 
-#include "../src/engine/graphics/camera/camera2d.h"
+#include "../src/engine/scene/cameras/camera2d.h"
 #include "../src/engine/system/window/impl/headless/headless_window.h"
 
 #include <catch2/catch_test_macros.hpp>

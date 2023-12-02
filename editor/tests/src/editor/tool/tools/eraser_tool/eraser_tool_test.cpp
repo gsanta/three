@@ -6,21 +6,20 @@
 #include "../../../test_helpers/builders/tool_context_builder.h"
 #include "../../../test_helpers/matchers/equals_bounds_matcher.h"
 #include "../../../test_helpers/test_document_factory.h"
-#include "../src/app/document/document_store.h"
-#include "../src/app/document/factory/document_factory.h"
-#include "../src/app/tool/context/tool_context.h"
-#include "../src/app/tool/tools/brush_tool/brush.h"
-#include "../src/app/tool/tools/eraser_tool/eraser_tool.h"
-#include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
-#include "../src/engine/graphics/impl/headless/headless_shader.h"
-#include "../src/engine/graphics/layer/group.h"
-#include "../src/engine/graphics/renderable/rect2d.h"
+#include "../src/editing/document/document_store.h"
+#include "../src/editing/document/factory/document_factory.h"
+#include "../src/editing/tool/context/tool_context.h"
+#include "../src/editing/tool/tools/brush_tool/brush.h"
+#include "../src/editing/tool/tools/eraser_tool/eraser_tool.h"
+#include "../src/engine/graphics/mesh/meshes/rect2d.h"
+#include "../src/engine/graphics/renderer/headless/headless_renderer2d.h"
+#include "../src/engine/scene/containers/group.h"
 #include "../src/engine/system/window/impl/headless/headless_window.h"
 
 #include <catch2/catch_test_macros.hpp>
 
 using namespace ::spright::engine;
-using namespace ::spright::editor;
+using namespace spright::editing;
 
 SCENARIO("Erase tool")
 {

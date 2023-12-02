@@ -1,15 +1,15 @@
 #pragma once
 
-#include "../src/app/tool/tools/brush_tool/brush.h"
-#include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
-#include "../src/engine/graphics/layer/tile_layer.h"
-#include "../src/engine/graphics/renderable/bounds.h"
-#include "../src/engine/graphics/renderable/rect2d.h"
+#include "../src/editing/tool/tools/brush_tool/brush.h"
+#include "../src/engine/graphics/mesh/meshes/rect2d.h"
+#include "../src/engine/graphics/renderer/headless/headless_renderer2d.h"
+#include "../src/engine/scene/containers/tile_layer.h"
+#include "../src/maths/data/bounds.h"
 
 #include <vector>
 
 using namespace ::spright::engine;
-using namespace ::spright::editor;
+using namespace spright::editing;
 
 class TileLayerBuilder
 {

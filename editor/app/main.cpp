@@ -8,36 +8,36 @@
 #include <cstdint>
 #include <stddef.h>
 // #include "utils/timer.h"
-#include "../src/app/core/run_loop/run_loop.h"
-#include "../src/app/core/run_loop/timer.h"
-#include "../src/app/dev_key_listener.h"
-#include "../src/app/editor.h"
-#include "../src/app/editor_api.h"
-#include "../src/app/tool/tools/brush_tool/brush_tool.h"
+#include "../src/editing/editor/dev_key_listener.h"
+#include "../src/editing/editor/editor.h"
+#include "../src/editing/editor/editor_api.h"
+#include "../src/editing/tool/tools/brush_tool/brush_tool.h"
+#include "../src/editing/utils/run_loop/run_loop.h"
+#include "../src/editing/utils/run_loop/timer.h"
 #include "../src/engine/graphics/buffer/buffer.h"
 #include "../src/engine/graphics/buffer/indexBuffer.h"
 #include "../src/engine/graphics/buffer/vertexArray.h"
-#include "../src/engine/graphics/layer/tile_layer.h"
-#include "../src/engine/graphics/renderable/rect2d.h"
-#include "../src/engine/graphics/renderable/renderable2d.h"
+#include "../src/engine/graphics/mesh/meshes/rect2d.h"
+#include "../src/engine/graphics/mesh/meshes/renderable2d.h"
 #include "../src/engine/graphics/renderer/renderer2d.h"
 #include "../src/engine/graphics/shader/shader.h"
+#include "../src/engine/scene/containers/tile_layer.h"
 #include "../src/engine/system/utils/fileUtils.h"
 
 #include <time.h>
 #include <vector>
 #ifdef SPARKY_EMSCRIPTEN
-#include "../src/app/core/run_loop/ems_timer.h"
+#include "../src/editing/utils/run_loop/ems_timer.h"
 #elif _WIN32
-#include "../src/app/core/run_loop/win_timer.h"
+#include "../src/editing/utils/run_loop/win_timer.h"
 #else
-#include "../src/app/core/run_loop/unix_timer.h"
+#include "../src/editing/utils/run_loop/unix_timer.h"
 #endif
-#include "../src/app/feature/frame/frame_player.h"
+#include "../src/features/frame/frame_player.h"
 
 using namespace ::spright::engine;
 using namespace ::spright::maths;
-using namespace ::spright::editor;
+using namespace spright::editing;
 
 Window *window = nullptr;
 Editor *editor = nullptr;
