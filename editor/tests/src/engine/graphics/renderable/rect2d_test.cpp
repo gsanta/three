@@ -1,4 +1,4 @@
-#include "../src/engine/graphics/renderable/rect2d.h"
+#include "../src/engine/graphics/mesh/meshes/rect2d.h"
 #include "../src/maths/vec2.h"
 
 #include <catch2/catch_approx.hpp>

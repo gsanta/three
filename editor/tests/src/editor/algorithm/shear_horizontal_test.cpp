@@ -1,11 +1,11 @@
-#include "../src/app/algorithm/draw_rect.h"
-#include "../src/app/algorithm/shear_horizontal.h"
+#include "../src/editing/algorithms/draw_rect.h"
+#include "../src/editing/algorithms/shear_horizontal.h"
 #include "../src/engine/graphics/colors.h"
 #include "../test_helpers/builders/tile_layer_builder.h"
 
 #include <catch2/catch_test_macros.hpp>
 
-using namespace spright::editor;
+using namespace spright::editing;
 using namespace spright::engine;
 
 SCENARIO("Vertical shear")

@@ -1,12 +1,12 @@
 #pragma once
-#include "../src/app/document/frame.h"
-#include "../src/engine/graphics/renderable/bounds.h"
+#include "../src/engine/scene/containers/frame.h"
+#include "../src/maths/data/bounds.h"
 #include "../test_document_factory.h"
 #include "tile_layer_builder.h"
 
 #include <vector>
 
-using namespace spright::editor;
+using namespace spright::editing;
 
 class FrameBuilder
 {

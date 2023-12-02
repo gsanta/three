@@ -38,9 +38,9 @@ DocumentStore DocumentStoreBuilder::build()
 {
     Camera2d camera(BoundsInt(0, 0, m_Window.getWidth(), m_Window.getHeight()));
 
-    Canvas documentCanvas(UuidGenerator::getInstance().generate(),
-                          m_DocumentBounds,
-                          *std::make_unique<HeadlessRenderer2D>());
+    Canvas2d documentCanvas(UuidGenerator::getInstance().generate(),
+                            m_DocumentBounds,
+                            *std::make_unique<HeadlessRenderer2D>());
     documentCanvas.setCamera(camera);
 
     Document document(m_DocumentBounds, documentCanvas, std::make_shared<DocumentHistory>());

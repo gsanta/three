@@ -1,12 +1,31 @@
-#include "../src/app/algorithm/flip_horizontal.h"
+#include "../src/editing/algorithms/flip_horizontal.h"
+#include "../src/editing/tool/tools/select_tool/selection_buffer.h"
 #include "../src/engine/graphics/colors.h"
 #include "../test_helpers/builders/document_builder.h"
 #include "../test_helpers/builders/document_store_builder.h"
 
 #include <catch2/catch_test_macros.hpp>
 
-using namespace spright::editor;
+using namespace spright::editing;
 using namespace spright::engine;
+
+SelectionBuffer create_selection_buffer(const Vec2Int &bottomLeft, const Vec2Int &topRight, const TileLayer &layer)
+{
+    SelectionBuffer buffer;
+    std::vector<int> indexes;
+
+    for (int x = bottomLeft.x; x < topRight.x; x++)
+    {
+        for (int y = bottomLeft.y; y < topRight.y; y++)
+        {
+            indexes.push_back(layer.getTileIndex(x, y));
+        }
+    }
+
+    buffer.setTileIndexes(indexes, layer);
+
+    return buffer;
+}
 
 TEST_CASE("flip_horizontal", "[flip-horizontal]")
 {
@@ -88,15 +107,10 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
         Drawing &drawing = *documentStore.getActiveDocument().getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
 
-        const Vec2 bottomLeft = activeLayer.getCenterPos(Vec2Int(1, 0));
-        const Vec2 topRight = activeLayer.getCenterPos(Vec2Int(3, 2));
-        const Bounds bounds(bottomLeft, topRight);
-
-        drawing.getState().setBounds(bounds);
-
         Frame &frame = drawing.getActiveFrame();
 
-        flip_horizontal(frame.getLayers(), bounds);
+        SelectionBuffer buffer = create_selection_buffer(Vec2Int(1, 0), Vec2Int(3, 2), activeLayer);
+        flip_horizontal(frame.getLayers(), buffer);
 
         REQUIRE(frame.getLayer(0).getAtTilePos(2, 0) != nullptr);
         REQUIRE(frame.getLayer(0).getAtTilePos(2, 1) != nullptr);
@@ -120,16 +134,11 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
         Drawing &drawing = *documentStore.getActiveDocument().getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
 
-        float tileSize = activeLayer.getTileSize();
-        const Vec2 bottomLeft = activeLayer.getBottomLeftPos(Vec2Int(1, 0));
-        const Vec2 topRight = bottomLeft + Vec2(4, 2);
-        const Bounds bounds(bottomLeft, topRight);
-
-        drawing.getState().setBounds(bounds);
-
         Frame &frame = drawing.getActiveFrame();
 
-        flip_horizontal(frame.getLayers(), bounds);
+        SelectionBuffer buffer = create_selection_buffer(Vec2Int(1, 0), Vec2Int(5, 3), activeLayer);
+
+        flip_horizontal(frame.getLayers(), buffer);
 
         REQUIRE(frame.getLayer(0).getAtTilePos(2, 0) != nullptr);
         REQUIRE(frame.getLayer(0).getAtTilePos(2, 1) != nullptr);
@@ -153,15 +162,11 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
         Drawing &drawing = *documentStore.getActiveDocument().getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
 
-        const Vec2 bottomLeft = activeLayer.getCenterPos(Vec2Int(1, 0));
-        const Vec2 topRight = activeLayer.getCenterPos(Vec2Int(4, 2));
-        const Bounds bounds(bottomLeft, topRight);
-
-        drawing.getState().setBounds(bounds);
+        SelectionBuffer buffer = create_selection_buffer(Vec2Int(1, 0), Vec2Int(4, 2), activeLayer);
 
         Frame &frame = drawing.getActiveFrame();
 
-        flip_horizontal(frame.getLayers(), bounds);
+        flip_horizontal(frame.getLayers(), buffer);
 
         REQUIRE(frame.getLayer(0).getAtTilePos(1, 0) != nullptr);
         REQUIRE(frame.getLayer(0).getAtTilePos(1, 1) != nullptr);

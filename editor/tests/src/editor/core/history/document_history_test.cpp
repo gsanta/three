@@ -1,11 +1,11 @@
 #include "../../test_helpers/builders/document_builder.h"
-#include "../src/app/core/history/document_history.h"
-#include "../src/app/core/history/undoable.h"
+#include "../src/editing/history/document_history.h"
+#include "../src/editing/history/undoable.h"
 
 #include <catch2/catch_test_macros.hpp>
 #include <set>
 
-using namespace spright::editor;
+using namespace spright::editing;
 
 class TestUndoable : public Undoable
 {

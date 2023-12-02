@@ -1,12 +1,12 @@
 #include "../../../editor/test_helpers/builders/tile_layer_builder.h"
-#include "../src/engine/graphics/camera/camera.h"
 #include "../src/engine/graphics/colors.h"
-#include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
-#include "../src/engine/graphics/layer/group.h"
-#include "../src/engine/graphics/layer/tile_layer.h"
-#include "../src/engine/graphics/renderable/bounds.h"
-#include "../src/engine/graphics/renderable/rect2d.h"
-#include "../src/engine/structure/canvas.h"
+#include "../src/engine/graphics/mesh/meshes/rect2d.h"
+#include "../src/engine/graphics/renderer/headless/headless_renderer2d.h"
+#include "../src/engine/scene/cameras/camera.h"
+#include "../src/engine/scene/canvas/canvas.h"
+#include "../src/engine/scene/containers/group.h"
+#include "../src/engine/scene/containers/tile_layer.h"
+#include "../src/maths/data/bounds.h"
 
 #include <catch2/catch_test_macros.hpp>
 

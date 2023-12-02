@@ -1,4 +1,4 @@
-#include "../src/engine/graphics/renderable/bounds.h"
+#include "../src/maths/data/bounds.h"
 
 #include <catch2/catch_test_macros.hpp>
 

@@ -1,13 +1,13 @@
-#include "../src/app/document/checkerboard.h"
-#include "../src/engine/graphics/layer/tile_layer.h"
-#include "../src/engine/graphics/renderable/bounds.h"
+#include "../src/editing/document/checkerboard.h"
+#include "../src/engine/scene/containers/tile_layer.h"
+#include "../src/maths/data/bounds.h"
 #include "../test_helpers/test_document_factory.h"
 
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
 
 using namespace ::spright::engine;
-using namespace ::spright::editor;
+using namespace spright::editing;
 
 TEST_CASE("Checkerboard", "[checkerboard]")
 {

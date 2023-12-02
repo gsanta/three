@@ -1,6 +1,6 @@
-// #include "../src/app/tool/tools/brush_tool/brush_tool.h"
-// #include "../src/app/tool/tools/color_picker_tool/color_picker_tool.h"
-// #include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
+// #include "../src/editing/tool/tools/brush_tool/brush_tool.h"
+// #include "../src/editing/tool/tools/color_picker_tool/color_picker_tool.h"
+// #include "../src/engine/graphics/renderer/headless/headless_renderer2d.h"
 // #include "../test_helpers/document_info_builder.h"
 // #include "../test_helpers/builders/document_store_builder.h"
 // #include "../test_helpers/builders/pointer_info_builder.h"
@@ -10,7 +10,7 @@
 
 // #include <catch2/catch_test_macros.hpp>
 
-// using namespace ::spright::editor;
+// using namespace spright::editing;
 
 // TEST_CASE("ColorPickerTool pointerDown", "[color-picker-tool]")
 // {

@@ -1,4 +1,4 @@
-#include "../src/app/document/frame.h"
+#include "../src/engine/scene/containers/frame.h"
 #include "../test_helpers/test_document_factory.h"
 
 #include <catch2/catch_test_macros.hpp>
@@ -7,7 +7,7 @@
 #include <vector>
 
 using namespace ::spright::engine;
-using namespace ::spright::editor;
+using namespace spright::editing;
 
 TEST_CASE("Frame", "[frame]")
 {

@@ -1,17 +1,17 @@
 #pragma once
-#include "../src/app/document/document.h"
-#include "../src/app/document/document_store.h"
-#include "../src/app/document/factory/document_factory.h"
-#include "../src/app/document/factory/headless_renderer_provider.h"
-#include "../src/engine/graphics/impl/headless/headless_renderer2d.h"
-#include "../src/engine/graphics/layer/tile_layer.h"
-#include "../src/engine/graphics/renderable/bounds.h"
+#include "../src/editing/document/document.h"
+#include "../src/editing/document/document_store.h"
+#include "../src/editing/document/factory/document_factory.h"
+#include "../src/editing/document/factory/headless_renderer_provider.h"
+#include "../src/engine/graphics/renderer/headless/headless_renderer2d.h"
+#include "../src/engine/scene/containers/tile_layer.h"
+#include "../src/maths/data/bounds.h"
 #include "test_event_emitter.h"
 
 #include <vector>
 
 using namespace ::spright::engine;
-using namespace ::spright::editor;
+using namespace spright::editing;
 
 class TestDocumentFactory
 {

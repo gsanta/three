@@ -4,9 +4,9 @@
 #include "../../../test_helpers/builders/tool_context_builder.h"
 #include "../../../test_helpers/common_tool_funcs.h"
 #include "../../../test_helpers/matchers/has_tiles_within_area_matcher.h"
-#include "../src/app/tool/tools/rectangle_tool/rectangle_tool.h"
-#include "../src/app/tool/tools/select_tool/select_tool.h"
-#include "../src/app/tool/tools/shear_tool/shear_tool.h"
+#include "../src/editing/tool/tools/rectangle_tool/rectangle_tool.h"
+#include "../src/editing/tool/tools/select_tool/select_tool.h"
+#include "../src/editing/tool/tools/shear_tool/shear_tool.h"
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -91,7 +91,7 @@ void execute_shear(ToolContext &toolContext, CommonToolFuncs &commonToolFuncs, c
 
 SCENARIO("Shear tool")
 {
-    using namespace spright::editor;
+    using namespace spright::editing;
 
     GIVEN("A drawing with a 4x4 rectangle")
     {

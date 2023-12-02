@@ -1,13 +1,13 @@
 #pragma once
 
-#include "../src/app/document/document.h"
-#include "../src/app/tool/context/tool_context.h"
-#include "../src/app/tool/tools/brush_tool/brush_tool.h"
-#include "../src/app/tool/tools/rectangle_tool/rectangle_tool.h"
-#include "../src/app/tool/tools/select_tool/select_tool.h"
-#include "../src/engine/graphics/renderable/bounds_int.h"
+#include "../src/editing/document/document.h"
+#include "../src/editing/tool/context/tool_context.h"
+#include "../src/editing/tool/tools/brush_tool/brush_tool.h"
+#include "../src/editing/tool/tools/rectangle_tool/rectangle_tool.h"
+#include "../src/editing/tool/tools/select_tool/select_tool.h"
+#include "../src/maths/data/bounds_int.h"
 
-using namespace ::spright::editor;
+using namespace spright::editing;
 
 class CommonToolFuncs
 {

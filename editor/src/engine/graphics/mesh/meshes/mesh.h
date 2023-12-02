@@ -1,8 +1,8 @@
 #pragma once
 
+#include "../../../../maths/data/bounds.h"
 #include "../../../../maths/vec3.h"
 #include "../../colors.h"
-#include "../../renderable/bounds.h"
 #include "../../renderer/renderer2d.h"
 
 #include <algorithm>

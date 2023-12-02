@@ -47,7 +47,7 @@ TileLayerBuilder &TileLayerBuilder::withTileFill(unsigned int color)
 
 TileLayer TileLayerBuilder::build()
 {
-    if (!m_BoundsInt.isDefault())
+    if (!m_BoundsInt.isNull())
     {
         m_Bounds = Bounds(m_BoundsInt.minX * m_TileSize,
                           m_BoundsInt.minY * m_TileSize,
