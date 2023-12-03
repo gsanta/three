@@ -1,7 +1,7 @@
+#include "../../../../test_helpers/common_tool_funcs.h"
 #include "../../../test_helpers/builders/document_builder.h"
 #include "../../../test_helpers/builders/pointer_info_builder.h"
 #include "../../../test_helpers/builders/tool_context_builder.h"
-#include "../../../test_helpers/common_tool_funcs.h"
 #include "../src/editing/tool/tools/select_tool/select_tool.h"
 #include "../src/engine/graphics/colors.h"
 
@@ -21,7 +21,7 @@ SCENARIO("Select tool")
                                                                 .withTile(Vec2Int(3, 3))   // second selection
                                                                 .withTile(Vec2Int(4, 3)))) // second selection
                 .build();
-        Drawing &activeDrawing = *document.getActiveDrawing();
+        TileCanvas &activeDrawing = *document.getActiveDrawing();
 
         ToolContext toolContext = ToolContextBuilder().build(document);
 
@@ -139,7 +139,7 @@ SCENARIO("Select tool")
                                                                                 .withTile(Vec2Int(3, 2), COLOR_BLUE)
                                                                                 .withTile(Vec2Int(4, 2), COLOR_RED)))
                                 .build();
-        Drawing &activeDrawing = *document.getActiveDrawing();
+        TileCanvas &activeDrawing = *document.getActiveDrawing();
         ToolContext toolContext = ToolContextBuilder().build(document);
 
         CommonToolFuncs commonToolFuncs(document, toolContext);

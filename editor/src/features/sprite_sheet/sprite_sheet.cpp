@@ -10,7 +10,7 @@ namespace features
     {
     }
 
-    Drawing &SpriteSheet::generateSpriteSheet(Drawing &drawing)
+    TileCanvas &SpriteSheet::generateSpriteSheet(TileCanvas &drawing)
     {
         int frameCount = drawing.getFrames().size();
 
@@ -26,7 +26,7 @@ namespace features
         spriteSheetProps.tileSize = drawing.getActiveLayer().getTileSize() / 2.0f;
         spriteSheetProps.backgroundLayerTileSize = drawing.getBackgroundLayer().getTileSize() / 2.0f;
 
-        Drawing spriteSheet = m_DocumentFactory->createDrawing(spriteSheetProps);
+        TileCanvas spriteSheet = m_DocumentFactory->createDrawing(spriteSheetProps);
 
         float layerWidth = drawing.getActiveLayer().getTileBounds().getWidth();
 

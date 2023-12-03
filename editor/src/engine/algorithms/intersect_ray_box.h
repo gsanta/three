@@ -1,12 +1,15 @@
 #pragma once
 
+#include "../../maths/data/bounds3.h"
 #include "../../maths/data/ray3.h"
-#include "../graphics/mesh/meshes/box.h"
+#include "../../maths/vec3.h"
 
 namespace spright
 {
 namespace engine
 {
-    bool intersect_ray_box(const Box &box, const Ray3 &ray);
-}
+    using namespace maths;
+
+    bool intersect_ray_box(const Bounds3 &bounds, const Ray3 &ray, Vec3 &hitPoint);
+} // namespace engine
 } // namespace spright

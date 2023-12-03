@@ -24,7 +24,7 @@ namespace editing
         m_IsActiveDrawingChanging = isChanging;
     }
 
-    void DocumentInfo::setActiveDrawing(Drawing *newActiveDrawing)
+    void DocumentInfo::setActiveDrawing(TileCanvas *newActiveDrawing)
     {
         prevDrawing = activeDrawing;
         activeDrawing = newActiveDrawing;

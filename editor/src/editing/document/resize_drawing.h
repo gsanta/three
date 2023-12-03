@@ -11,7 +11,7 @@ namespace editing
 {
     using namespace ::spright::engine;
 
-    Drawing resize_drawing(const Drawing &orig, const Bounds &bounds, const DocumentFactory &documentFactory);
+    TileCanvas resize_drawing(const TileCanvas &orig, const Bounds &bounds, const DocumentFactory &documentFactory);
 
 } // namespace editing
 } // namespace spright

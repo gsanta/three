@@ -7,14 +7,14 @@
 
 using namespace spright::editing;
 
-SCENARIO("Drawing")
+SCENARIO("TileCanvas")
 {
     GIVEN("a drawing with frames")
     {
-        Drawing drawing = DrawingBuilder()
-                              .withFrame(FrameBuilder().withTileLayer(TileLayerBuilder()))
-                              .withFrame(FrameBuilder().withTileLayer(TileLayerBuilder()))
-                              .build();
+        TileCanvas drawing = DrawingBuilder()
+                                 .withFrame(FrameBuilder().withTileLayer(TileLayerBuilder()))
+                                 .withFrame(FrameBuilder().withTileLayer(TileLayerBuilder()))
+                                 .build();
 
         WHEN("getting a frame by index")
         {
@@ -62,7 +62,7 @@ SCENARIO("Drawing")
 
     GIVEN("a drawing with layers")
     {
-        Drawing drawing =
+        TileCanvas drawing =
             DrawingBuilder()
                 .withFrame(FrameBuilder().withTileLayer(TileLayerBuilder()).withTileLayer(TileLayerBuilder()))
                 .build();

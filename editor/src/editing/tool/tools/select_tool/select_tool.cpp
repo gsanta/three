@@ -181,7 +181,7 @@ namespace editing
         m_SelectionType = selectionType;
     }
 
-    void SelectTool::syncSelection(Drawing &drawing, const std::vector<int> &tileIndexes)
+    void SelectTool::syncSelection(TileCanvas &drawing, const std::vector<int> &tileIndexes)
     {
         TileLayer &toolLayer = drawing.getToolLayer();
         TileLayer &tempLayer = drawing.getTempLayerOfActiveLayer();
@@ -199,7 +199,7 @@ namespace editing
         }
     }
 
-    void SelectTool::setSelection(const std::vector<int> &indexes, Drawing &drawing, TileLayer &layer)
+    void SelectTool::setSelection(const std::vector<int> &indexes, TileCanvas &drawing, TileLayer &layer)
     {
         TileLayer &toolLayer = drawing.getToolLayer();
         TileLayer &activeLayer = drawing.getActiveLayer();

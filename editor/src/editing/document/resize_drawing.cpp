@@ -19,12 +19,12 @@ namespace editing
         return newTileLayer;
     }
 
-    Drawing resize_drawing(const Drawing &orig, const Bounds &bounds, const DocumentFactory &documentFactory)
+    TileCanvas resize_drawing(const TileCanvas &orig, const Bounds &bounds, const DocumentFactory &documentFactory)
     {
         CreateDrawingProps createDrawingProps(bounds);
         createDrawingProps.layerCount = 0;
         createDrawingProps.backgroundLayerTileSize = orig.getBackgroundLayer().getTileSize();
-        Drawing newDrawing = documentFactory.createDrawing(createDrawingProps);
+        TileCanvas newDrawing = documentFactory.createDrawing(createDrawingProps);
 
         std::vector<TileLayer> layers;
 

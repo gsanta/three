@@ -86,7 +86,7 @@ std::vector<std::string> getLayers()
 
 size_t createLayer(std::string name)
 {
-    Drawing *drawing = editor->getDocumentStore()->getActiveDocument().getActiveDrawing();
+    TileCanvas *drawing = editor->getDocumentStore()->getActiveDocument().getActiveDrawing();
 
     if (!drawing)
     {

@@ -51,9 +51,9 @@ namespace editing
 
         void pointerMove(const ToolContext &) override;
 
-        void syncSelection(Drawing &drawing, const std::vector<int> &tileIndexes);
+        void syncSelection(TileCanvas &drawing, const std::vector<int> &tileIndexes);
 
-        void setSelection(const std::vector<int> &indexes, Drawing &drawing, TileLayer &layer);
+        void setSelection(const std::vector<int> &indexes, TileCanvas &drawing, TileLayer &layer);
 
         void setMode(SelectionManipulationMode mode);
 

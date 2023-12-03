@@ -17,7 +17,7 @@ SCENARIO("JsonIO")
         {
             Bounds bounds = Bounds::createWithPositions(-1.0f, -1.0f, 1.0f, 1.0f);
 
-            Drawing drawing =
+            TileCanvas drawing =
                 DrawingBuilder()
                     .withFrame(
                         FrameBuilder()
@@ -118,7 +118,7 @@ SCENARIO("JsonIO")
 
             Document document = jsonIO.importDocument(jsonStr);
 
-            Drawing &drawing = *document.getActiveDrawing();
+            TileCanvas &drawing = *document.getActiveDrawing();
 
             REQUIRE(drawing.getFrames().size() == 2);
 

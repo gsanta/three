@@ -17,17 +17,18 @@ SCENARIO("Resize drawing")
 
         WHEN("new size is smaller than the previous")
         {
-            Drawing drawing = DrawingBuilder()
-                                  .withFrame(FrameBuilder().withTileLayer(
-                                                 TileLayerBuilder()
-                                                     .withTileSize(1)
-                                                     .withBounds(Bounds::createWithPositions(-2.0f, -2.0f, 2.0f, 2.0f))
-                                                     //   .withTile(Vec2Int(-5, 0), COLOR_RED)
-                                                     .withTile(Vec2Int(0, 0), COLOR_RED)
-                                                     .withTile(Vec2Int(1, 0), COLOR_RED)
-                                                     .withTile(Vec2Int(1, 1), COLOR_RED)),
-                                             2)
-                                  .build();
+            TileCanvas drawing =
+                DrawingBuilder()
+                    .withFrame(FrameBuilder().withTileLayer(
+                                   TileLayerBuilder()
+                                       .withTileSize(1)
+                                       .withBounds(Bounds::createWithPositions(-2.0f, -2.0f, 2.0f, 2.0f))
+                                       //   .withTile(Vec2Int(-5, 0), COLOR_RED)
+                                       .withTile(Vec2Int(0, 0), COLOR_RED)
+                                       .withTile(Vec2Int(1, 0), COLOR_RED)
+                                       .withTile(Vec2Int(1, 1), COLOR_RED)),
+                               2)
+                    .build();
 
             WHEN("new size is smaller in x direction")
             {
@@ -59,10 +60,10 @@ SCENARIO("Resize drawing")
         {
             THEN("checkerboard fills the new canvas size")
             {
-                Drawing drawing = DrawingBuilder()
-                                      .withBounds(Bounds::createWithPositions(-1.0f, -1.0f, 1.0f, 1.0f))
-                                      .withBackgroundLayerTileSize(1.0f)
-                                      .build();
+                TileCanvas drawing = DrawingBuilder()
+                                         .withBounds(Bounds::createWithPositions(-1.0f, -1.0f, 1.0f, 1.0f))
+                                         .withBackgroundLayerTileSize(1.0f)
+                                         .build();
 
                 drawing =
                     resize_drawing(drawing, Bounds::createWithPositions(-2.0f, -2.0f, 1.0f, 1.0f), documentFactory);

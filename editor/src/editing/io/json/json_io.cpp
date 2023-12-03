@@ -64,7 +64,7 @@ namespace editing
         CreateDrawingProps createDrawingProps(frames[0][0].getBounds());
         createDrawingProps.layerCount = 0;
 
-        Drawing drawing = m_DocumentFactory->createDrawing(createDrawingProps);
+        TileCanvas drawing = m_DocumentFactory->createDrawing(createDrawingProps);
 
         for (std::vector<TileLayer> &layers : frames)
         {

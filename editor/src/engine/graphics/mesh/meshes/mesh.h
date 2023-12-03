@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../../../maths/data/bounds.h"
+#include "../../../../maths/data/bounds3.h"
 #include "../../../../maths/vec3.h"
 #include "../../colors.h"
 #include "../../renderer/renderer2d.h"
@@ -36,7 +36,7 @@ namespace engine
 
         virtual void setPosition(const Vec3 &pos);
 
-        const Bounds &getBounds();
+        const Bounds3 &getBounds() const;
 
         virtual void submit(Renderer2D &renderer) const;
 
@@ -71,7 +71,7 @@ namespace engine
 
         unsigned int m_Color;
 
-        Bounds m_Bounds;
+        Bounds3 m_Bounds;
     };
 } // namespace engine
 } // namespace spright

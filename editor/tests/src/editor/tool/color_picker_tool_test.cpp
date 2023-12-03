@@ -21,7 +21,7 @@
 //         ToolHandler toolHandler;
 
 //         DocumentStore documentStore = DocumentStoreBuilder().withDrawing().build();
-//         Drawing &activeDrawing = documentStore.getActiveDocument().getActiveDrawing();
+//         TileCanvas &activeDrawing = documentStore.getActiveDocument().getActiveDrawing();
 //         TileLayer &tileLayer = activeDrawing.getActiveLayer();
 
 //         ToolContext toolContext =
@@ -58,7 +58,7 @@
 
 //         ColorPickerTool colorPickerTool(&toolHandler, &eventEmitter);
 
-//         Drawing &activeDrawing = documentStore.getActiveDocument().getActiveDrawing();
+//         TileCanvas &activeDrawing = documentStore.getActiveDocument().getActiveDrawing();
 //         TileLayer &tileLayer = activeDrawing.getActiveLayer();
 
 //         ToolContext toolContext =

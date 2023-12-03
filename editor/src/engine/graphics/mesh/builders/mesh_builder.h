@@ -16,7 +16,7 @@ namespace engine
     public:
         MeshBuilder &setColor(int color);
 
-        MeshBuilder &setPos(const Vec3 &pos);
+        virtual MeshBuilder &setPos(const Vec3 &pos);
 
     protected:
         int m_Color = COLOR_WHITE;

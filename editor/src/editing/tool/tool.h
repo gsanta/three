@@ -12,6 +12,7 @@ namespace editing
 {
     using namespace std;
 
+    // template <typename C>
     class Tool
     {
     public:

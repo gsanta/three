@@ -27,6 +27,8 @@ namespace engine
 
         BoxBuilder &setFaceColor(Box::Face face, unsigned int color);
 
+        BoxBuilder &setPos(const Vec3 &pos) override;
+
     private:
         void calcPositions(const Vec3 &pos, float width, float height, float depth, Vec3 *positions) const;
 

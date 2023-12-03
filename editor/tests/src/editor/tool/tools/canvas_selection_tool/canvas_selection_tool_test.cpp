@@ -1,9 +1,9 @@
 
+#include "../../../../test_helpers/common_tool_funcs.h"
+#include "../../../../test_helpers/matchers/equals_bounds_matcher.h"
 #include "../../../test_helpers/builders/document_store_builder.h"
 #include "../../../test_helpers/builders/drawing_builder.h"
 #include "../../../test_helpers/builders/tool_context_builder.h"
-#include "../../../test_helpers/common_tool_funcs.h"
-#include "../../../test_helpers/matchers/equals_bounds_matcher.h"
 #include "../src/editing/tool/tools/canvas_selection_tool/canvas_selection_tool.h"
 #include "../src/engine/system/window/impl/headless/headless_window.h"
 

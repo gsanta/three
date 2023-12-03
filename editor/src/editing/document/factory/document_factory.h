@@ -51,7 +51,7 @@ namespace editing
 
         Canvas3d createDrawing3d(const Bounds &bounds) const;
 
-        Drawing createDrawing(const CreateDrawingProps &props) const;
+        TileCanvas createDrawing(const CreateDrawingProps &props) const;
 
         TileLayer createTileLayer(std::string name, const Bounds &bounds, float tileSize) const;
 
