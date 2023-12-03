@@ -24,7 +24,7 @@ TEST_CASE("flip_vertical", "[flip-vertical]")
 
         TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing()->getActiveLayer();
 
-        Drawing *drawing = documentStore.getActiveDocument().getActiveDrawing();
+        TileCanvas *drawing = documentStore.getActiveDocument().getActiveDrawing();
         flip_vertical(drawing->getActiveLayer());
 
         REQUIRE(layer.getAtTilePos(0, 5) == nullptr);

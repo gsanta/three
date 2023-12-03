@@ -26,12 +26,12 @@ public:
 
     DrawingBuilder &withFrame(FrameBuilder, size_t repeat);
 
-    Drawing build();
+    TileCanvas build();
 
 private:
-    Drawing buildFromFrames();
+    TileCanvas buildFromFrames();
 
-    Drawing buildFromLayers();
+    TileCanvas buildFromLayers();
 
 private:
     Bounds m_Bounds = Bounds::createWithPositions(-5.0f, -5.0f, 5.0f, 5.0f);

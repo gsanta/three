@@ -1,7 +1,7 @@
+#include "../../../../test_helpers/common_tool_funcs.h"
 #include "../../../test_helpers/builders/document_builder.h"
 #include "../../../test_helpers/builders/drawing_builder.h"
 #include "../../../test_helpers/builders/tool_context_builder.h"
-#include "../../../test_helpers/common_tool_funcs.h"
 #include "../src/editing/tool/tools/brush_tool/brush_tool.h"
 
 #include <catch2/catch_test_macros.hpp>

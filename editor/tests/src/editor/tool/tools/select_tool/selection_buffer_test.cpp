@@ -1,5 +1,5 @@
+#include "../../../../test_helpers/matchers/equals_tile_bounds_matcher.h"
 #include "../../../test_helpers/builders/tile_layer_builder.h"
-#include "../../../test_helpers/matchers/equals_tile_bounds_matcher.h"
 #include "../src/editing/tool/tools/select_tool/selection_buffer.h"
 
 #include <catch2/catch_test_macros.hpp>

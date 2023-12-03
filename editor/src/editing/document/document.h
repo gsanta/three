@@ -31,9 +31,9 @@ namespace editing
 
         Document(const Document &other);
 
-        //! Represents the Drawing() over which the pointer resides or over which a drag action started
-        //! @return The active Drawing() or nullptr
-        Drawing *getActiveDrawing();
+        //! Represents the TileCanvas() over which the pointer resides or over which a drag action started
+        //! @return The active TileCanvas() or nullptr
+        TileCanvas *getActiveDrawing();
 
         Canvas3d *getActiveDrawing3d();
 
@@ -41,9 +41,9 @@ namespace editing
 
         int getActiveCanvasIndex() const;
 
-        Drawing &addDrawing(const Drawing &drawing);
+        TileCanvas &addDrawing(const TileCanvas &drawing);
 
-        Drawing &getDrawing(std::string uuid);
+        TileCanvas &getDrawing(std::string uuid);
 
         void removeCanvas(const std::string &uuid);
 

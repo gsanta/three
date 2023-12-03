@@ -94,7 +94,7 @@ void addFrame()
 
 void removeFrame(size_t index)
 {
-    Drawing *drawing = editor->getActiveDocument().getActiveDrawing();
+    TileCanvas *drawing = editor->getActiveDocument().getActiveDrawing();
 
     if (drawing && drawing->getFrames().size() > 1)
     {
@@ -116,7 +116,7 @@ void activateFramePlayer()
 {
     editor->getFramePlayer().setIsActive(true);
 
-    Drawing *activeDrawing = editor->getActiveDocument().getActiveDrawing();
+    TileCanvas *activeDrawing = editor->getActiveDocument().getActiveDrawing();
     if (activeDrawing)
     {
         editor->getFramePlayer().setDrawing(activeDrawing);
@@ -131,7 +131,7 @@ void deActivateFramePlayer()
 
 void api_flip_horizontal()
 {
-    Drawing *drawing = editor->getActiveDocument().getActiveDrawing();
+    TileCanvas *drawing = editor->getActiveDocument().getActiveDrawing();
     SelectTool &selectTool = editor->getToolHandler()->getToolStore().getSelectTool();
 
     if (!drawing)
@@ -189,14 +189,14 @@ std::string get_canvas_size()
 
 void set_canvas_size(int width, int height)
 {
-    Drawing *drawing = editor->getActiveDocument().getActiveDrawing();
+    TileCanvas *drawing = editor->getActiveDocument().getActiveDrawing();
 
     if (!drawing)
     {
         return;
     }
 
-    Drawing newDrawing =
+    TileCanvas newDrawing =
         resize_drawing(*drawing,
                        Bounds::createWithPositions(-width / 2.0f, -height / 2.0f, width / 2.0f, height / 2.0f),
                        *editor->getDocumentFactory());
@@ -244,7 +244,7 @@ void zoom_to_fit()
 
 // void shear_horizontal_api(float angle)
 // {
-//     Drawing &drawing = editor->getActiveDocument().getActiveDrawing();
+//     TileCanvas &drawing = editor->getActiveDocument().getActiveDrawing();
 //     Bounds bounds = editor->getActiveDocument().getActiveDrawing()->getState().getBounds();
 //     TileLayer &currentLayer = editor->getActiveDocument().getActiveDrawing()->getActiveLayer();
 
@@ -258,7 +258,7 @@ void zoom_to_fit()
 
 void shear_vertical_api(float angle)
 {
-    Drawing *drawing = editor->getActiveDocument().getActiveDrawing();
+    TileCanvas *drawing = editor->getActiveDocument().getActiveDrawing();
 
     if (!drawing)
     {
@@ -278,7 +278,7 @@ void shear_vertical_api(float angle)
 
 void generate_spritesheet()
 {
-    Drawing *drawing = editor->getActiveDocument().getActiveDrawing();
+    TileCanvas *drawing = editor->getActiveDocument().getActiveDrawing();
 
     if (!drawing)
     {

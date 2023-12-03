@@ -22,7 +22,7 @@ namespace features
     public:
         SpriteSheet(std::shared_ptr<DocumentFactory> documentFactory, Document *document);
 
-        Drawing &generateSpriteSheet(Drawing &drawing);
+        TileCanvas &generateSpriteSheet(TileCanvas &drawing);
 
     private:
         std::shared_ptr<DocumentFactory> m_DocumentFactory;

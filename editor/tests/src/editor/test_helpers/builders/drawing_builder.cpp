@@ -56,14 +56,14 @@ DrawingBuilder &DrawingBuilder::withFrame(FrameBuilder frameBuilder, size_t repe
 }
 
 
-Drawing DrawingBuilder::build()
+TileCanvas DrawingBuilder::build()
 {
     if (m_TileLayers.size() > 0 && m_Frames.size() > 0)
     {
         throw "Either configure DrawingBuilder with LayerBuilders or FrameBuilders, but both are not allowed";
     }
 
-    Drawing drawing = m_Frames.size() > 0 ? buildFromFrames() : buildFromLayers();
+    TileCanvas drawing = m_Frames.size() > 0 ? buildFromFrames() : buildFromLayers();
 
     // if (m_Frames.size() > 0)
     // {
@@ -78,7 +78,7 @@ Drawing DrawingBuilder::build()
     return drawing;
 }
 
-Drawing DrawingBuilder::buildFromLayers()
+TileCanvas DrawingBuilder::buildFromLayers()
 {
 
     TileLayer initialLayer = m_TileLayers.empty()
@@ -90,13 +90,13 @@ Drawing DrawingBuilder::buildFromLayers()
     const TileLayer toolLayer("", Group<Rect2D>(), m_Bounds, m_TileSize, 0, true);
     const TileLayer cursorLayer("", Group<Rect2D>(), m_Bounds, m_TileSize, 0, true);
 
-    Drawing drawing(UuidGenerator::getInstance().generate(),
-                    *std::make_unique<HeadlessRenderer2D>(),
-                    initialLayer,
-                    backgroundLayer,
-                    tempLayer,
-                    toolLayer,
-                    cursorLayer);
+    TileCanvas drawing(UuidGenerator::getInstance().generate(),
+                       *std::make_unique<HeadlessRenderer2D>(),
+                       initialLayer,
+                       backgroundLayer,
+                       tempLayer,
+                       toolLayer,
+                       cursorLayer);
 
     for (size_t i = 1; i < m_TileLayers.size(); i++)
     {
@@ -107,7 +107,7 @@ Drawing DrawingBuilder::buildFromLayers()
     return drawing;
 }
 
-Drawing DrawingBuilder::buildFromFrames()
+TileCanvas DrawingBuilder::buildFromFrames()
 {
     TileLayer backgroundLayer = TileLayerBuilder().withTileSize(m_BackgroundLayerTileSize).withBounds(m_Bounds).build();
 
@@ -124,13 +124,13 @@ Drawing DrawingBuilder::buildFromFrames()
         frames.push_back(frameBuilder.build());
     }
 
-    Drawing drawing(UuidGenerator::getInstance().generate(),
-                    frames[0].getLayers()[0].getBounds(),
-                    *std::make_unique<HeadlessRenderer2D>(),
-                    backgroundLayer,
-                    tempLayer,
-                    toolLayer,
-                    cursorLayer);
+    TileCanvas drawing(UuidGenerator::getInstance().generate(),
+                       frames[0].getLayers()[0].getBounds(),
+                       *std::make_unique<HeadlessRenderer2D>(),
+                       backgroundLayer,
+                       tempLayer,
+                       toolLayer,
+                       cursorLayer);
 
     for (Frame &frame : frames)
     {

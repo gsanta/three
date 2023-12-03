@@ -81,6 +81,8 @@ namespace engine
         vertices[33] = corners[7];
         vertices[34] = corners[0];
         vertices[35] = corners[3];
+
+        m_Bounds = Bounds3(corners[0].x, corners[0].y, corners[0].z, corners[6].x, corners[6].y, corners[6].z);
     }
 } // namespace engine
 } // namespace spright

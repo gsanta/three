@@ -1,4 +1,4 @@
-#include "../../../../editor/test_helpers/matchers/equals_vec3_approx_matcher.h"
+#include "../../../../test_helpers/matchers/equals_vec3_approx_matcher.h"
 #include "../src/engine/graphics/colors.h"
 #include "../src/engine/graphics/mesh/builders/cylinder_builder.h"
 

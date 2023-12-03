@@ -24,7 +24,7 @@ namespace features
 
         void setDuration(int duration);
 
-        void setDrawing(Drawing *drawing);
+        void setDrawing(TileCanvas *drawing);
 
         void clearDrawing();
 
@@ -38,7 +38,7 @@ namespace features
 
         int m_Elapsed;
 
-        Drawing *m_Drawing;
+        TileCanvas *m_Drawing;
     };
 } // namespace features
 } // namespace spright

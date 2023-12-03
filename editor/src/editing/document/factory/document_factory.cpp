@@ -106,7 +106,7 @@ namespace editing
     }
 
 
-    Drawing DocumentFactory::createDrawing(const CreateDrawingProps &props) const
+    TileCanvas DocumentFactory::createDrawing(const CreateDrawingProps &props) const
     {
         const Bounds &bounds = props.bounds;
         float backgroundLayerTileSize = props.backgroundLayerTileSize;
@@ -114,13 +114,13 @@ namespace editing
         size_t layerCount = props.layerCount;
         bool hasCheckerBoard = props.hasCheckerBoard;
 
-        Drawing drawing(UuidGenerator::getInstance().generate(),
-                        bounds,
-                        *m_RendererProvider->createRenderer2D(),
-                        createBackgroundLayer(bounds, backgroundLayerTileSize),
-                        createTempLayer(bounds, tileSize),
-                        createToolLayer(bounds, tileSize),
-                        createCursorLayer(bounds, tileSize));
+        TileCanvas drawing(UuidGenerator::getInstance().generate(),
+                           bounds,
+                           *m_RendererProvider->createRenderer2D(),
+                           createBackgroundLayer(bounds, backgroundLayerTileSize),
+                           createTempLayer(bounds, tileSize),
+                           createToolLayer(bounds, tileSize),
+                           createCursorLayer(bounds, tileSize));
 
         if (layerCount > 0)
         {
@@ -171,7 +171,7 @@ namespace editing
 
         Document document = createEmptyDocument();
 
-        Drawing drawing = createDrawing(
+        TileCanvas drawing = createDrawing(
             CreateDrawingProps(Bounds::createWithPositions(-16.0f, -pixelCount / 2.0f, 16.0f, pixelCount / 2.0f)));
 
         Vec2Int minWindow = document.getBackgroundCanvas().getCamera()->worldToScreenPos(drawing.getBounds().minX,

@@ -1,10 +1,10 @@
 
+#include "../../../test_helpers/common_tool_funcs.h"
+#include "../../../test_helpers/matchers/equals_bounds_matcher.h"
 #include "../../test_helpers/builders/document_builder.h"
 #include "../../test_helpers/builders/drawing_builder.h"
 #include "../../test_helpers/builders/frame_builder.h"
 #include "../../test_helpers/builders/tool_context_builder.h"
-#include "../../test_helpers/common_tool_funcs.h"
-#include "../../test_helpers/matchers/equals_bounds_matcher.h"
 #include "../../test_helpers/test_document_factory.h"
 #include "../src/features/sprite_sheet/sprite_sheet.h"
 
@@ -30,8 +30,8 @@ SCENARIO("Sprite sheet")
 
         WHEN("generating a sprite sheet")
         {
-            Drawing &drawing = *document.getActiveDrawing();
-            Drawing &spriteSheetDrawing = spriteSheet.generateSpriteSheet(drawing);
+            TileCanvas &drawing = *document.getActiveDrawing();
+            TileCanvas &spriteSheetDrawing = spriteSheet.generateSpriteSheet(drawing);
 
             TileLayer &spriteSheetLayer = spriteSheetDrawing.getFrames()[0].getLayer(0);
 
@@ -72,7 +72,7 @@ SCENARIO("Sprite sheet")
         HeadlessWindow window(4, 4);
         DocumentFactory documentFactory = TestDocumentFactory::createDocumentFactory(window);
 
-        Drawing &drawing = *document.getActiveDrawing();
+        TileCanvas &drawing = *document.getActiveDrawing();
 
         TileLayer &tile1OnFrame1 = drawing.getFrame(0).getLayer(0);
         TileLayer &tile2OnFrame1 = drawing.getFrame(0).getLayer(1);
@@ -88,7 +88,7 @@ SCENARIO("Sprite sheet")
 
         WHEN("generating a sprite sheet")
         {
-            Drawing &spriteSheetDrawing = spriteSheet.generateSpriteSheet(*document.getActiveDrawing());
+            TileCanvas &spriteSheetDrawing = spriteSheet.generateSpriteSheet(*document.getActiveDrawing());
 
             THEN(
                 "it creates a new drawing on the right side of the original drawing and places all frames horizontally")

@@ -24,7 +24,7 @@ void Rendering::render()
     }
     else
     {
-        Drawing *activeDrawing = document.getActiveDrawing();
+        TileCanvas *activeDrawing = document.getActiveDrawing();
         if (activeDrawing != nullptr)
         {
             activeDrawing->render(*document.getBackgroundCanvas().getCamera(), Canvas::Image);

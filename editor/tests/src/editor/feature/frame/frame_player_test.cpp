@@ -16,7 +16,7 @@ SCENARIO("Frame player")
 
     GIVEN("a drawing with two frames")
     {
-        Drawing drawing = DrawingBuilder().withFrame(FrameBuilder(), 2).build();
+        TileCanvas drawing = DrawingBuilder().withFrame(FrameBuilder(), 2).build();
         framePlayer.setDrawing(&drawing);
 
         WHEN("update does not exceed frame duration")
@@ -52,7 +52,7 @@ SCENARIO("Frame player")
 
     GIVEN("a drawing with three frames")
     {
-        Drawing drawing = DrawingBuilder().withFrame(FrameBuilder(), 3).build();
+        TileCanvas drawing = DrawingBuilder().withFrame(FrameBuilder(), 3).build();
         framePlayer.setDrawing(&drawing);
 
         WHEN("update exceeds multiple durations")

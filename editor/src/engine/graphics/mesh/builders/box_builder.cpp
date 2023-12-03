@@ -43,6 +43,13 @@ namespace engine
         return *this;
     }
 
+    BoxBuilder &BoxBuilder::setPos(const Vec3 &pos)
+    {
+        MeshBuilder::setPos(pos);
+
+        return *this;
+    }
+
     BoxBuilder &BoxBuilder::setColor(int color)
     {
         m_Color = color;

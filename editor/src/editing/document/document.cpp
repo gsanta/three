@@ -21,14 +21,14 @@ namespace editing
         }
     }
 
-    Drawing *Document::getActiveDrawing()
+    TileCanvas *Document::getActiveDrawing()
     {
         if (m_ActiveCanvasIndex == -1)
         {
             return nullptr;
         }
 
-        return dynamic_cast<Drawing *>(m_AllCanvases[m_ActiveCanvasIndex].get());
+        return dynamic_cast<TileCanvas *>(m_AllCanvases[m_ActiveCanvasIndex].get());
     }
 
     Canvas3d *Document::getActiveDrawing3d()
@@ -51,19 +51,19 @@ namespace editing
         return m_ActiveCanvasIndex;
     }
 
-    Drawing &Document::addDrawing(const Drawing &drawing)
+    TileCanvas &Document::addDrawing(const TileCanvas &drawing)
     {
-        m_AllCanvases.push_back(std::unique_ptr<Drawing>(new Drawing(drawing)));
+        m_AllCanvases.push_back(std::unique_ptr<TileCanvas>(new TileCanvas(drawing)));
 
         if (m_ActiveCanvasIndex == -1)
         {
             m_ActiveCanvasIndex = 0;
         }
 
-        return *dynamic_cast<Drawing *>(m_AllCanvases.back().get());
+        return *dynamic_cast<TileCanvas *>(m_AllCanvases.back().get());
     }
 
-    Drawing &Document::getDrawing(std::string uuid)
+    TileCanvas &Document::getDrawing(std::string uuid)
     {
         auto it = std::find_if(m_AllCanvases.begin(),
                                m_AllCanvases.end(),
@@ -71,10 +71,10 @@ namespace editing
 
         if (it == m_AllCanvases.end())
         {
-            throw std::invalid_argument("Drawing with uuid: " + uuid + " not found.");
+            throw std::invalid_argument("TileCanvas with uuid: " + uuid + " not found.");
         }
 
-        return dynamic_cast<Drawing &>(*(*it));
+        return dynamic_cast<TileCanvas &>(*(*it));
     }
 
     void Document::removeCanvas(const std::string &uuid)
@@ -136,7 +136,7 @@ namespace editing
 
         if (it == m_AllCanvases.end())
         {
-            throw std::invalid_argument("Drawing with uuid: " + uuid + " not found.");
+            throw std::invalid_argument("TileCanvas with uuid: " + uuid + " not found.");
         }
         return *(*it);
     }

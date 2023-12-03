@@ -84,7 +84,7 @@ namespace engine
         m_Position = pos;
     }
 
-    const Bounds &Mesh::getBounds()
+    const Bounds3 &Mesh::getBounds() const
     {
         return m_Bounds;
     }
@@ -153,6 +153,8 @@ namespace engine
                 }
             }
         }
+
+        m_Bounds = Bounds3(min, max);
     }
 
     void Mesh::createArrays(int positionsCount)

@@ -49,7 +49,7 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
         int tileWidth = layer.getTileBounds().getWidth();
         int tileHeight = layer.getTileBounds().getHeight();
 
-        Drawing &drawing = *document.getActiveDrawing();
+        TileCanvas &drawing = *document.getActiveDrawing();
         flip_horizontal(drawing.getActiveLayer());
 
         REQUIRE(layer.getAtTilePos(tileWidth - 1, 1)->getColor() == COLOR_RED);
@@ -80,7 +80,7 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
 
         int tileWidth = layer.getTileBounds().getWidth();
 
-        Drawing &drawing = *documentStore.getActiveDocument().getActiveDrawing();
+        TileCanvas &drawing = *documentStore.getActiveDocument().getActiveDrawing();
         Frame &frame = drawing.getActiveFrame();
 
         flip_horizontal(drawing.getActiveFrame().getLayers());
@@ -104,7 +104,7 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
                                                                                 .withTile(Vec2Int(1, 1))))
                 .build();
 
-        Drawing &drawing = *documentStore.getActiveDocument().getActiveDrawing();
+        TileCanvas &drawing = *documentStore.getActiveDocument().getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
 
         Frame &frame = drawing.getActiveFrame();
@@ -131,7 +131,7 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
                                                                                 .withTile(Vec2Int(5, 1))))
                 .build();
 
-        Drawing &drawing = *documentStore.getActiveDocument().getActiveDrawing();
+        TileCanvas &drawing = *documentStore.getActiveDocument().getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
 
         Frame &frame = drawing.getActiveFrame();
@@ -159,7 +159,7 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
                                                                                 .withTile(Vec2Int(3, 1))))
                 .build();
 
-        Drawing &drawing = *documentStore.getActiveDocument().getActiveDrawing();
+        TileCanvas &drawing = *documentStore.getActiveDocument().getActiveDrawing();
         TileLayer &activeLayer = drawing.getActiveLayer();
 
         SelectionBuffer buffer = create_selection_buffer(Vec2Int(1, 0), Vec2Int(4, 2), activeLayer);

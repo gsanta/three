@@ -120,7 +120,7 @@ namespace editing
 
     TileLayer &TileUndo::getUndoLayer(Document &document) const
     {
-        Drawing &drawing = document.getDrawing(m_DrawingUuid);
+        TileCanvas &drawing = document.getDrawing(m_DrawingUuid);
 
         if (m_PrevSelectedIndexes.size() > 0)
         {
@@ -134,7 +134,7 @@ namespace editing
 
     TileLayer &TileUndo::getRedoLayer(Document &document) const
     {
-        Drawing &drawing = document.getDrawing(m_DrawingUuid);
+        TileCanvas &drawing = document.getDrawing(m_DrawingUuid);
 
         if (m_NewSelectedIndexes.size() > 0)
         {

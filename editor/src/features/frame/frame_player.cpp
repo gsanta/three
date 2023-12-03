@@ -54,7 +54,7 @@ namespace features
         m_Duration = duration;
     }
 
-    void FramePlayer::setDrawing(Drawing *drawing)
+    void FramePlayer::setDrawing(TileCanvas *drawing)
     {
         m_Drawing = drawing;
     }

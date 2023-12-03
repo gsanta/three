@@ -83,7 +83,7 @@ namespace editing
             }
             else if (key == GLFW_KEY_F)
             {
-                Drawing &drawing = *m_Editor->getDocumentStore()->getActiveDocument().getActiveDrawing();
+                TileCanvas &drawing = *m_Editor->getDocumentStore()->getActiveDocument().getActiveDrawing();
                 SelectTool &selectTool = m_Editor->getToolHandler()->getToolStore().getSelectTool();
                 if (selectTool.getSelectionBuffer().getTileBounds().isNull())
                 {
@@ -101,8 +101,8 @@ namespace editing
             //     //                                                    -pixelCount / 2.0f,
             //     //                                                    pixelCount / 2.0f,
             //     //                                                    pixelCount / 2.0f);
-            //     // Drawing &drawing = m_DocumentStore->getActiveDocument().getActiveDrawing();
-            //     // Drawing newDrawing = resize_drawing(drawing, drawingBounds, m_DocumentFactory);
+            //     // TileCanvas &drawing = m_DocumentStore->getActiveDocument().getActiveDrawing();
+            //     // TileCanvas newDrawing = resize_drawing(drawing, drawingBounds, m_DocumentFactory);
             //     // m_DocumentStore->getActiveDocument().removeActiveDrawing();
             //     // m_DocumentStore->getActiveDocument().addDrawing(newDrawing);
             //     m_Editor->getToolHandler()->setSelectedTool("rectangle");

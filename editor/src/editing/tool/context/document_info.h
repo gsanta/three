@@ -8,9 +8,9 @@ namespace editing
 {
     struct DocumentInfo
     {
-        Drawing *prevDrawing = nullptr;
+        TileCanvas *prevDrawing = nullptr;
 
-        Drawing *activeDrawing = nullptr;
+        TileCanvas *activeDrawing = nullptr;
 
         Document *document = nullptr;
 
@@ -22,7 +22,7 @@ namespace editing
 
         void setActiveDocumentChanging(bool isChanging);
 
-        void setActiveDrawing(Drawing *activeDrawing);
+        void setActiveDrawing(TileCanvas *activeDrawing);
 
     private:
         bool m_IsActiveDrawingChanging;
