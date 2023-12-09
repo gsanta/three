@@ -44,13 +44,16 @@ namespace editing
 
     void Document::removeCanvas(const Canvas &canvas)
     {
-        auto it = std::find_if(m_AllCanvases.begin(),
-                               m_AllCanvases.end(),
-                               [&canvas](const std::unique_ptr<Canvas> &element) { return element.get() == &canvas; });
+        std::vector<std::unique_ptr<Canvas>>::const_iterator it =
+            std::find_if(m_AllCanvases.begin(), m_AllCanvases.end(), [&canvas](const std::unique_ptr<Canvas> &element) {
+                return element.get() == &canvas;
+            });
 
-        if (it == m_AllCanvases.end())
+        check_canvas_present(it);
+
+        if (m_ActiveCanvas == &canvas)
         {
-            std::invalid_argument("Trying to remove a canvas that is not present in the document.");
+            m_ActiveCanvas = nullptr;
         }
 
         m_AllCanvases.erase(it);
@@ -58,14 +61,12 @@ namespace editing
 
     void Document::setActiveCanvas(const Canvas &canvas)
     {
-        auto it = std::find_if(m_AllCanvases.begin(),
-                               m_AllCanvases.end(),
-                               [&canvas](const std::unique_ptr<Canvas> &element) { return element.get() == &canvas; });
+        std::vector<std::unique_ptr<Canvas>>::const_iterator it =
+            std::find_if(m_AllCanvases.begin(), m_AllCanvases.end(), [&canvas](const std::unique_ptr<Canvas> &element) {
+                return element.get() == &canvas;
+            });
 
-        if (it != m_AllCanvases.end())
-        {
-            std::invalid_argument("Canvas was not found in the document.");
-        }
+        check_canvas_present(it);
 
         m_ActiveCanvas = (*it).get();
     }
@@ -89,7 +90,7 @@ namespace editing
     {
         if (index < 0 || m_AllCanvases.size() <= index)
         {
-            std::invalid_argument("Canvas not found at index: " + index);
+            throw std::invalid_argument("Canvas not found at index: " + std::to_string(index));
         }
 
         return m_AllCanvases[index].get();
@@ -113,6 +114,14 @@ namespace editing
     Canvas &Document::getBackgroundCanvas()
     {
         return m_Canvas;
+    }
+
+    void Document::check_canvas_present(std::vector<std::unique_ptr<Canvas>>::const_iterator &it) const
+    {
+        if (it == m_AllCanvases.end())
+        {
+            throw std::invalid_argument("Canvas was not found in the document.");
+        }
     }
 } // namespace editing
 } // namespace spright

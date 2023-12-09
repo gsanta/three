@@ -54,6 +54,9 @@ namespace editing
         void setCamera(const Camera &camera);
 
     private:
+        void check_canvas_present(std::vector<std::unique_ptr<Canvas>>::const_iterator &it) const;
+
+    private:
         std::vector<std::unique_ptr<Canvas>> m_AllCanvases;
 
         Canvas *m_ActiveCanvas = nullptr;

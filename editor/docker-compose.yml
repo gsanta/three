@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  unit-test:
+  tests:
     build:
       context: .
       dockerfile: ./docker/desktop.Dockerfile
@@ -9,9 +9,28 @@ services:
       - .:/src
     working_dir: /src
     command: >
-      sh -c "mkdir -p build/unit-test-ci &&
-            cd build/unit-test-ci &&
-            cmake ../.. -DCOMPILE_APP=OFF && cmake --build . && cd tests && ./unit_tests --success --reporter JUnit::out=unit_test_result.xml"
+      sh -c "mkdir -p build/tests &&
+            cd build/tests &&
+            cmake ../.. -DCOMPILE_APP=OFF &&
+            cmake --build . &&
+            mkdir -p results &&
+            ./tests/unit_tests --success --reporter JUnit::out=results/unit_test_result.xml"
+  tests-coverage:
+    build:
+      context: .
+      dockerfile: ./docker/desktop.Dockerfile
+    volumes:
+      - .:/src
+    working_dir: /src
+    command: >
+      sh -c "mkdir -p build/tests-coverage &&
+            cd build/tests-coverage &&
+            mkdir -p results/test &&
+            mkdir -p results/coverage &&
+            cmake ../.. -DCOMPILE_APP=OFF -DCODE_COVERAGE=ON -DINCLUDE_TESTS=ON &&
+            cmake --build . &&
+            ./tests/unit_tests --success --reporter JUnit::out=results/test/unit_test_result.xml &&
+            cmake --build . --target coverage"
   compile-emscripten:
     build:
       context: .

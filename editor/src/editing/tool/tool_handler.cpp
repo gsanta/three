@@ -76,10 +76,13 @@ namespace editing
             return;
         }
 
-        TileCanvas &activeDrawing = get_active_tile_canvas(m_DocumentStore->getActiveDocument());
 
-        m_ToolContext.doc.prevDrawing = &activeDrawing;
-        m_ToolContext.doc.activeDrawing = &activeDrawing;
+        if (activeCanvas->getType() == CANVAS_TYPE_TILE)
+        {
+            TileCanvas &tileCanvas = get_active_tile_canvas(m_DocumentStore->getActiveDocument());
+            m_ToolContext.doc.prevDrawing = &tileCanvas;
+            m_ToolContext.doc.activeDrawing = &tileCanvas;
+        }
 
         x_tmp = x;
         y_tmp = y;

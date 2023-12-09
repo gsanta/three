@@ -58,7 +58,7 @@ IF (WIN32)
 list(FILTER SOURCES EXCLUDE REGEX ".*unix_timer\\.cpp$")
 ENDIF()
 
-add_definitions(-DINIT_WITH_3D_CANVAS=1)
+#add_definitions(-DINIT_WITH_3D_CANVAS=0)
 
 add_library(editor STATIC ${SOURCES})
 
