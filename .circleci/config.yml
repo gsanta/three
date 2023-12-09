@@ -28,16 +28,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Tests for the editor
+          name: Tests and coverage for the editor
           command: |
             set -x
             cd editor
-            make tests-with-coverage-docker
-          environment:
-            UNIT_TEST: 'true'
-      # - store_artifacts:
-      #     path: editor/build/tests-coverage/results/coverage
-      #     destination: artifact-file
+            make test-with-coverage-xml
       - store_test_results:
           path: editor/build/tests-coverage/results/test/unit_test_result.xml
       - codecov/upload:
