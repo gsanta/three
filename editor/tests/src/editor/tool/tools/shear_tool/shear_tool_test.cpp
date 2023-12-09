@@ -7,6 +7,7 @@
 #include "../src/editing/tool/tools/rectangle_tool/rectangle_tool.h"
 #include "../src/editing/tool/tools/select_tool/select_tool.h"
 #include "../src/editing/tool/tools/shear_tool/shear_tool.h"
+#include "../src/editing/utils/conversions.h"
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -100,7 +101,7 @@ SCENARIO("Shear tool")
         CommonToolFuncs commonToolFuncs(document, toolContext);
         commonToolFuncs.buildRect(BoundsInt(2, 1, 5, 4));
 
-        TileCanvas &drawing = *document.getActiveDrawing();
+        TileCanvas &drawing = get_active_tile_canvas(document);
         TileLayer &activeLayer = drawing.getActiveLayer();
         TileLayer &tempLayer = drawing.getTempLayerOfActiveLayer();
         TileLayer &toolLayer = drawing.getToolLayer();
@@ -336,7 +337,7 @@ SCENARIO("Shear tool")
 
         commonToolFuncs.buildRect(BoundsInt(0, 0, 3, 3));
 
-        TileCanvas &drawing = *document.getActiveDrawing();
+        TileCanvas &drawing = get_active_tile_canvas(document);
         TileLayer &activeLayer = drawing.getActiveLayer();
         TileLayer &tempLayer = drawing.getTempLayerOfActiveLayer();
         TileLayer &toolLayer = drawing.getToolLayer();

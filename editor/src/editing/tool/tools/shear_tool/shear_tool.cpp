@@ -6,7 +6,7 @@ namespace spright
 {
 namespace editing
 {
-    ShearTool::ShearTool() : Tool("shear")
+    ShearTool::ShearTool() : PixelTool("shear")
     {
     }
 

@@ -12,6 +12,7 @@
 #include "../src/editing/editor/editor.h"
 #include "../src/editing/editor/editor_api.h"
 #include "../src/editing/tool/tools/brush_tool/brush_tool.h"
+#include "../src/editing/utils/conversions.h"
 #include "../src/editing/utils/run_loop/run_loop.h"
 #include "../src/editing/utils/run_loop/timer.h"
 #include "../src/engine/graphics/buffer/buffer.h"
@@ -72,7 +73,8 @@ void removeActiveTool(std::string toolName)
 
 std::vector<std::string> getLayers()
 {
-    const std::vector<TileLayer> &layers = editor->getActiveDocument().getActiveDrawing()->getActiveFrame().getLayers();
+    const std::vector<TileLayer> &layers =
+        get_active_tile_canvas(editor->getActiveDocument()).getActiveFrame().getLayers();
 
     std::vector<std::string> target;
 
@@ -82,39 +84,6 @@ std::vector<std::string> getLayers()
     }
 
     return target;
-}
-
-size_t createLayer(std::string name)
-{
-    TileCanvas *drawing = editor->getDocumentStore()->getActiveDocument().getActiveDrawing();
-
-    if (!drawing)
-    {
-        throw std::logic_error("No active drawing available");
-    }
-
-    TileLayer tileLayer = editor->getDocumentFactory()->createUserLayer(drawing->getBounds(), name);
-
-    drawing->addLayer(tileLayer);
-
-    return drawing->getActiveFrame().getLayers().back().getIndex();
-}
-
-void enableLayer(size_t index)
-{
-    TileLayer &layer = editor->getActiveDocument().getActiveDrawing()->getActiveFrame().getLayer(index);
-    layer.setEnabled(true);
-}
-
-void disableLayer(size_t index)
-{
-    TileLayer &layer = editor->getActiveDocument().getActiveDrawing()->getActiveFrame().getLayer(index);
-    layer.setEnabled(false);
-}
-
-void setActiveLayer(size_t index)
-{
-    editor->getActiveDocument().getActiveDrawing()->setActiveLayer(index);
 }
 
 void setBrushSize(int size)
@@ -147,22 +116,10 @@ EMSCRIPTEN_BINDINGS(engine2)
     emscripten::function("addActiveTool", &addActiveTool);
     emscripten::function("removeActiveTool", &removeActiveTool);
     emscripten::function("getLayers", &getLayers);
-    emscripten::function("createLayer", &createLayer);
-    emscripten::function("enableLayer", &enableLayer);
-    emscripten::function("disableLayer", &disableLayer);
-    emscripten::function("setActiveLayer", &setActiveLayer);
     emscripten::function("setBrushSize", &setBrushSize);
     emscripten::function("exportImage", &exportImage);
     emscripten::function("getImageData", &getImageData);
     emscripten::function("getImageSize", &getImageSize);
-}
-
-void setEngineData(std::string json)
-{
-    if (editor != nullptr)
-    {
-        editor->getActiveDocument().getActiveDrawing()->getActiveLayer().setJson(json);
-    }
 }
 
 void setColor(unsigned int color)
@@ -175,7 +132,6 @@ void setColor(unsigned int color)
 
 EMSCRIPTEN_BINDINGS(editor)
 {
-    emscripten::function("setEngineData", &setEngineData);
     emscripten::function("setColor", &setColor);
 }
 

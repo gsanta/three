@@ -4,7 +4,7 @@ namespace spright
 {
 namespace editing
 {
-    PanTool::PanTool() : Tool("pan")
+    PanTool::PanTool() : PixelTool("pan")
     {
     }
 

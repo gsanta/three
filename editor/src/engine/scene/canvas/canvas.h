@@ -7,6 +7,10 @@ namespace spright
 {
 namespace engine
 {
+#define CANVAS_TYPE_TILE "tile-canvas"
+#define CANVAS_TYPE_2D "2d-canvas"
+#define CANVAS_TYPE_3D "3d-canvas"
+
     class Canvas
     {
     public:
@@ -14,6 +18,13 @@ namespace engine
         {
             Screen,
             Image
+        };
+
+        enum Type
+        {
+            CANVAS_2D,
+            CANVAS_3D,
+            TILE_CANVAS
         };
 
         virtual ~Canvas() = default;
@@ -37,6 +48,8 @@ namespace engine
         virtual Canvas *clone() const = 0;
 
         virtual Camera *getCamera() = 0;
+
+        virtual const std::string &getType() const = 0;
 
     protected:
         Bounds m_Bounds;

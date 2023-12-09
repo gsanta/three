@@ -1,4 +1,5 @@
 #include "../src/editing/algorithms/flip_vertical.h"
+#include "../src/editing/utils/conversions.h"
 #include "../test_helpers/builders/document_store_builder.h"
 
 #include <catch2/catch_test_macros.hpp>
@@ -22,10 +23,10 @@ TEST_CASE("flip_vertical", "[flip-vertical]")
                                                                               .withTile(Vec2Int(0, 4))))
                                           .build();
 
-        TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing()->getActiveLayer();
+        TileLayer &layer = get_active_tile_canvas(documentStore.getActiveDocument()).getActiveLayer();
 
-        TileCanvas *drawing = documentStore.getActiveDocument().getActiveDrawing();
-        flip_vertical(drawing->getActiveLayer());
+        TileCanvas &canvas = get_active_tile_canvas(documentStore.getActiveDocument());
+        flip_vertical(canvas.getActiveLayer());
 
         REQUIRE(layer.getAtTilePos(0, 5) == nullptr);
         REQUIRE(layer.getAtTilePos(1, 5) == nullptr);

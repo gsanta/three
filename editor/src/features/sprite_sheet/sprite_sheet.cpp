@@ -41,7 +41,7 @@ namespace features
             }
         }
 
-        return m_Document->addDrawing(spriteSheet);
+        return dynamic_cast<TileCanvas &>(m_Document->addCanvas(spriteSheet));
     }
 } // namespace features
 } // namespace spright

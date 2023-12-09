@@ -7,7 +7,7 @@
 #include "../../../history/document_history.h"
 #include "../../context/tool_context.h"
 #include "../../cursor/rectangle_cursor/rectangle_cursor.h"
-#include "../../tool.h"
+#include "../../pixel_tool.h"
 #include "erase_undo.h"
 #include "eraser.h"
 
@@ -21,7 +21,7 @@ namespace editing
     using namespace spright::maths;
     using namespace spright::engine;
 
-    class EraserTool : public Tool
+    class EraserTool : public PixelTool
     {
     public:
         EraserTool(int eraserSize);

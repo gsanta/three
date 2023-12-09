@@ -3,7 +3,7 @@
 #include "../../../document/document_store.h"
 #include "../../../event/event_emitter.h"
 #include "../../context/tool_context.h"
-#include "../../tool.h"
+#include "../../pixel_tool.h"
 #include "../../tools/brush_tool/brush_tool.h"
 
 #include <iostream>
@@ -16,7 +16,7 @@ namespace editing
     using namespace ::spright::engine;
     using namespace ::spright::maths;
 
-    class ColorPickerTool : public Tool
+    class ColorPickerTool : public PixelTool
     {
 
     public:

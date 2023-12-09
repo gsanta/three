@@ -4,6 +4,7 @@
 #include "../../../test_helpers/builders/pointer_info_builder.h"
 #include "../../../test_helpers/builders/tool_context_builder.h"
 #include "../src/editing/tool/cursor/rectangle_cursor/rectangle_cursor.h"
+#include "../src/editing/utils/conversions.h"
 #include "../src/engine/graphics/renderer/headless/headless_renderer2d.h"
 #include "../src/maths/vec2.h"
 
@@ -20,7 +21,7 @@ SCENARIO("Rectangle cursor")
         DocumentBuilder()
             .withDrawing(DrawingBuilder().withBounds(Bounds::createWithPositions(-5.0f, -5.0f, 5.0f, 5.0f)))
             .build();
-    TileCanvas &activeDrawing = *document.getActiveDrawing();
+    TileCanvas &activeDrawing = get_active_tile_canvas(document);
 
     ToolContext toolContext = ToolContextBuilder().build(document);
 

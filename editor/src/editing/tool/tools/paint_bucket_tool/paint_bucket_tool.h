@@ -5,7 +5,7 @@
 #include "../../../history/document_history.h"
 #include "../../../history/tile_undo.h"
 #include "../../context/tool_context.h"
-#include "../../tool.h"
+#include "../../pixel_tool.h"
 #include "queue_linear_flood_fill.h"
 
 namespace spright
@@ -15,7 +15,7 @@ namespace editing
     using namespace ::spright::engine;
     using namespace ::spright::maths;
 
-    class PaintBucketTool : public Tool
+    class PaintBucketTool : public PixelTool
     {
     public:
         PaintBucketTool();

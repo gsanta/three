@@ -12,7 +12,7 @@ namespace spright
 {
 namespace editing
 {
-    class LineTool : public Tool
+    class LineTool : public PixelTool
     {
     public:
         LineTool();

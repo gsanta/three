@@ -6,10 +6,9 @@ namespace editing
 {
     TileUndo::TileUndo(Document &document, std::shared_ptr<ToolStore> tools) : m_Tools(tools)
     {
-        m_DrawingUuid = document.getActiveDrawing()->getUuid();
-
-        m_FrameIndex = document.getActiveDrawing()->getActiveFrameIndex();
-        m_TileLayerIndex = document.getActiveDrawing()->getActiveLayerIndex();
+        m_CanvasIndex = document.getCanvasIndex(*document.getActiveCanvas());
+        m_FrameIndex = get_active_tile_canvas(document).getActiveFrameIndex();
+        m_TileLayerIndex = get_active_tile_canvas(document).getActiveLayerIndex();
     }
 
     void TileUndo::undo(Document &document) const
@@ -26,7 +25,7 @@ namespace editing
             tileLayer.add(*rect);
         }
 
-        m_Tools->getSelectTool().syncSelection(document.getDrawing(m_DrawingUuid), m_PrevSelectedIndexes);
+        m_Tools->getSelectTool().syncSelection(get_tile_canvas_at(document, m_CanvasIndex), m_PrevSelectedIndexes);
     }
 
     void TileUndo::redo(Document &document) const
@@ -43,7 +42,7 @@ namespace editing
             tileLayer.add(*rect);
         }
 
-        m_Tools->getSelectTool().syncSelection(document.getDrawing(m_DrawingUuid), m_NewSelectedIndexes);
+        m_Tools->getSelectTool().syncSelection(get_tile_canvas_at(document, m_CanvasIndex), m_NewSelectedIndexes);
     }
 
     void TileUndo::setSelection(const std::vector<int> &prevSelectedIndexes, const std::vector<int> &newSelectedIndexes)
@@ -120,29 +119,29 @@ namespace editing
 
     TileLayer &TileUndo::getUndoLayer(Document &document) const
     {
-        TileCanvas &drawing = document.getDrawing(m_DrawingUuid);
+        TileCanvas &canvas = get_tile_canvas_at(document, m_CanvasIndex);
 
         if (m_PrevSelectedIndexes.size() > 0)
         {
-            return drawing.getTempLayer(m_TileLayerIndex);
+            return canvas.getTempLayer(m_TileLayerIndex);
         }
         else
         {
-            return drawing.getFrames()[m_FrameIndex].getLayers()[m_TileLayerIndex];
+            return canvas.getFrames()[m_FrameIndex].getLayers()[m_TileLayerIndex];
         }
     }
 
     TileLayer &TileUndo::getRedoLayer(Document &document) const
     {
-        TileCanvas &drawing = document.getDrawing(m_DrawingUuid);
+        TileCanvas &canvas = get_tile_canvas_at(document, m_CanvasIndex);
 
         if (m_NewSelectedIndexes.size() > 0)
         {
-            return drawing.getTempLayer(m_TileLayerIndex);
+            return canvas.getTempLayer(m_TileLayerIndex);
         }
         else
         {
-            return drawing.getFrames()[m_FrameIndex].getLayers()[m_TileLayerIndex];
+            return canvas.getFrames()[m_FrameIndex].getLayers()[m_TileLayerIndex];
         }
     }
 

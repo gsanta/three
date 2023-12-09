@@ -26,6 +26,8 @@ namespace editing
 
         void execDeactivate(ToolContext &toolContext);
 
+        virtual void execActivate(Canvas *canvas) = 0;
+
         inline virtual void pointerDown(const ToolContext &toolContext)
         {
         }

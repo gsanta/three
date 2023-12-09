@@ -5,6 +5,7 @@
 #include "../../../../engine/scene/containers/tile_layer.h"
 #include "../../../document/document.h"
 #include "../../../history/undoable.h"
+#include "../../../utils/conversions.h"
 
 namespace spright
 {
@@ -28,7 +29,7 @@ namespace editing
 
         size_t m_FramePos;
 
-        std::string m_DrawingId;
+        int m_CanvasIndex;
     };
 
 } // namespace editing

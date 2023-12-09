@@ -6,6 +6,7 @@
 #include "../../test_helpers/builders/frame_builder.h"
 #include "../../test_helpers/builders/tool_context_builder.h"
 #include "../../test_helpers/test_document_factory.h"
+#include "../src/editing/utils/conversions.h"
 #include "../src/features/sprite_sheet/sprite_sheet.h"
 
 #include <catch2/catch_test_macros.hpp>
@@ -30,16 +31,16 @@ SCENARIO("Sprite sheet")
 
         WHEN("generating a sprite sheet")
         {
-            TileCanvas &drawing = *document.getActiveDrawing();
+            TileCanvas &drawing = get_active_tile_canvas(document);
             TileCanvas &spriteSheetDrawing = spriteSheet.generateSpriteSheet(drawing);
 
             TileLayer &spriteSheetLayer = spriteSheetDrawing.getFrames()[0].getLayer(0);
 
-            TileLayer &origLayer = document.getActiveDrawing()->getActiveLayer();
+            TileLayer &origLayer = get_active_tile_canvas(document).getActiveLayer();
 
             THEN("it creates a new drawing on the right side of the original drawing with half the size")
             {
-                REQUIRE(document.getCanvases().size() == 2);
+                REQUIRE(document.getCanvasCount() == 2);
 
                 REQUIRE_THAT(spriteSheetDrawing.getBounds(), EqualsBounds(Bounds(14, 6, 20, 12)));
             }
@@ -72,7 +73,7 @@ SCENARIO("Sprite sheet")
         HeadlessWindow window(4, 4);
         DocumentFactory documentFactory = TestDocumentFactory::createDocumentFactory(window);
 
-        TileCanvas &drawing = *document.getActiveDrawing();
+        TileCanvas &drawing = get_active_tile_canvas(document);
 
         TileLayer &tile1OnFrame1 = drawing.getFrame(0).getLayer(0);
         TileLayer &tile2OnFrame1 = drawing.getFrame(0).getLayer(1);
@@ -88,7 +89,7 @@ SCENARIO("Sprite sheet")
 
         WHEN("generating a sprite sheet")
         {
-            TileCanvas &spriteSheetDrawing = spriteSheet.generateSpriteSheet(*document.getActiveDrawing());
+            TileCanvas &spriteSheetDrawing = spriteSheet.generateSpriteSheet(get_active_tile_canvas(document));
 
             THEN(
                 "it creates a new drawing on the right side of the original drawing and places all frames horizontally")

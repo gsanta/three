@@ -7,7 +7,7 @@ namespace spright
 namespace editing
 {
 
-    PaintBucketTool::PaintBucketTool() : Tool("paint_bucket")
+    PaintBucketTool::PaintBucketTool() : PixelTool("paint_bucket")
     {
     }
 

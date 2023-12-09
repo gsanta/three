@@ -3,13 +3,13 @@
 #include "../../../algorithms/rotate.h"
 #include "../../../history/tile_undo.h"
 #include "../../context/tool_context.h"
-#include "../../tool.h"
+#include "../../pixel_tool.h"
 
 namespace spright
 {
 namespace editing
 {
-    class ShearTool : public Tool
+    class ShearTool : public PixelTool
     {
     public:
         ShearTool();

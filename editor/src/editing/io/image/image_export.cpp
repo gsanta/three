@@ -18,12 +18,14 @@ namespace editing
 
     void ImageExport::exportImage(Document &document)
     {
-        const Bounds bounds = document.getActiveDrawing()->getBounds();
+        TileCanvas &canvas = get_active_tile_canvas(document);
 
-        Camera *camera = document.getBackgroundCanvas().getCamera();
+        const Bounds bounds = canvas.getBounds();
+
+        Camera *camera = canvas.getCamera();
         Camera2d *camera2d = dynamic_cast<Camera2d *>(camera);
 
-        camera2d->zoomToFit(document.getActiveDrawing()->getBounds());
+        camera2d->zoomToFit(canvas.getBounds());
 
         Vec2Int bottomLeft = camera->worldToScreenPos(bounds.minX, bounds.minY);
         Vec2Int topRight = camera->worldToScreenPos(bounds.maxX, bounds.maxY);

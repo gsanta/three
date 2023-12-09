@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../engine/system/window/input_listener.h"
+#include "../utils/conversions.h"
 #include "editor.h"
 
 namespace spright
@@ -47,7 +48,7 @@ namespace editing
             }
             else if (key == GLFW_KEY_P)
             {
-                m_Editor->getSpriteSheet().generateSpriteSheet(*m_Editor->getActiveDocument().getActiveDrawing());
+                m_Editor->getSpriteSheet().generateSpriteSheet(get_active_tile_canvas(m_Editor->getActiveDocument()));
             }
             else if (key == GLFW_KEY_S)
             {
@@ -83,7 +84,7 @@ namespace editing
             }
             else if (key == GLFW_KEY_F)
             {
-                TileCanvas &drawing = *m_Editor->getDocumentStore()->getActiveDocument().getActiveDrawing();
+                TileCanvas &drawing = get_active_tile_canvas(m_Editor->getDocumentStore()->getActiveDocument());
                 SelectTool &selectTool = m_Editor->getToolHandler()->getToolStore().getSelectTool();
                 if (selectTool.getSelectionBuffer().getTileBounds().isNull())
                 {

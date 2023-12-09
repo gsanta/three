@@ -6,6 +6,7 @@
 #include "../src/editing/tool/tools/rotate_tool/rotate_tool.h"
 #include "../src/editing/tool/tools/select_tool/select_tool.h"
 #include "../src/editing/tool/tools/shear_tool/shear_tool.h"
+#include "../src/editing/utils/conversions.h"
 #include "pointer_info_builder.h"
 
 class ToolContextBuilder

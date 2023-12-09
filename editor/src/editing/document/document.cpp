@@ -13,132 +13,86 @@ namespace editing
     {
         m_History = other.m_History;
 
-        m_ActiveCanvasIndex = other.m_ActiveCanvasIndex;
-
         for (const auto &canvas : other.m_AllCanvases)
         {
             m_AllCanvases.push_back(std::unique_ptr<Canvas>(canvas->clone()));
         }
-    }
 
-    TileCanvas *Document::getActiveDrawing()
-    {
-        if (m_ActiveCanvasIndex == -1)
+        if (other.m_ActiveCanvas)
         {
-            return nullptr;
+            int activeCanvasIndex = other.getCanvasIndex(*other.m_ActiveCanvas);
+            m_ActiveCanvas = m_AllCanvases[activeCanvasIndex].get();
         }
-
-        return dynamic_cast<TileCanvas *>(m_AllCanvases[m_ActiveCanvasIndex].get());
-    }
-
-    Canvas3d *Document::getActiveDrawing3d()
-    {
-        if (m_ActiveCanvasIndex == -1)
-        {
-            return nullptr;
-        }
-
-        return dynamic_cast<Canvas3d *>(m_AllCanvases[m_ActiveCanvasIndex].get());
     }
 
     Canvas *Document::getActiveCanvas()
     {
-        return m_AllCanvases[m_ActiveCanvasIndex].get();
+        return m_ActiveCanvas;
     }
 
-    int Document::getActiveCanvasIndex() const
+    Canvas &Document::addCanvas(const Canvas &canvas)
     {
-        return m_ActiveCanvasIndex;
-    }
+        m_AllCanvases.push_back(std::unique_ptr<Canvas>(canvas.clone()));
 
-    TileCanvas &Document::addDrawing(const TileCanvas &drawing)
-    {
-        m_AllCanvases.push_back(std::unique_ptr<TileCanvas>(new TileCanvas(drawing)));
-
-        if (m_ActiveCanvasIndex == -1)
+        if (!m_ActiveCanvas)
         {
-            m_ActiveCanvasIndex = 0;
+            m_ActiveCanvas = m_AllCanvases.back().get();
         }
 
-        return *dynamic_cast<TileCanvas *>(m_AllCanvases.back().get());
+        return *m_AllCanvases.back();
     }
 
-    TileCanvas &Document::getDrawing(std::string uuid)
+    void Document::removeCanvas(const Canvas &canvas)
     {
         auto it = std::find_if(m_AllCanvases.begin(),
                                m_AllCanvases.end(),
-                               [&uuid](const std::unique_ptr<Canvas> &element) { return element->getUuid() == uuid; });
+                               [&canvas](const std::unique_ptr<Canvas> &element) { return element.get() == &canvas; });
 
         if (it == m_AllCanvases.end())
         {
-            throw std::invalid_argument("TileCanvas with uuid: " + uuid + " not found.");
+            std::invalid_argument("Trying to remove a canvas that is not present in the document.");
         }
 
-        return dynamic_cast<TileCanvas &>(*(*it));
+        m_AllCanvases.erase(it);
     }
 
-    void Document::removeCanvas(const std::string &uuid)
+    void Document::setActiveCanvas(const Canvas &canvas)
     {
         auto it = std::find_if(m_AllCanvases.begin(),
                                m_AllCanvases.end(),
-                               [&uuid](const std::unique_ptr<Canvas> &element) { return element->getUuid() == uuid; });
+                               [&canvas](const std::unique_ptr<Canvas> &element) { return element.get() == &canvas; });
 
         if (it != m_AllCanvases.end())
         {
-            m_AllCanvases.erase(it);
-        }
-    }
-
-    Canvas3d &Document::addDrawing3d(const Canvas3d &drawing)
-    {
-        m_AllCanvases.push_back(std::unique_ptr<Canvas3d>(new Canvas3d(drawing)));
-
-        if (m_ActiveCanvasIndex == -1)
-        {
-            m_ActiveCanvasIndex = 0;
+            std::invalid_argument("Canvas was not found in the document.");
         }
 
-        return *dynamic_cast<Canvas3d *>(m_AllCanvases.back().get());
+        m_ActiveCanvas = (*it).get();
     }
 
-    // std::vector<Canvas3d> &Document::getDrawing3ds()
-    // {
-    //     return m_Draw
-    // }
-
-    void Document::setActiveCanvas(const std::string &uuid)
+    int Document::getCanvasIndex(const Canvas &canvas) const
     {
-        auto it = std::find_if(m_AllCanvases.begin(),
-                               m_AllCanvases.end(),
-                               [&uuid](const std::unique_ptr<Canvas> &element) { return element->getUuid() == uuid; });
-
-        if (it != m_AllCanvases.end())
-        {
-            m_ActiveCanvasIndex = it - m_AllCanvases.begin();
-        }
-        else
-        {
-            m_ActiveCanvasIndex = -1;
-        }
-    }
-
-    std::vector<std::unique_ptr<Canvas>> &Document::getCanvases()
-    {
-        return m_AllCanvases;
-    }
-
-    Canvas &Document::getCanvas(std::string uuid)
-    {
-        std::vector<std::unique_ptr<Canvas>>::iterator it =
-            std::find_if(m_AllCanvases.begin(), m_AllCanvases.end(), [&uuid](const std::unique_ptr<Canvas> &element) {
-                return element->getUuid() == uuid;
+        std::vector<std::unique_ptr<Canvas>>::const_iterator it =
+            std::find_if(m_AllCanvases.begin(), m_AllCanvases.end(), [&canvas](const std::unique_ptr<Canvas> &element) {
+                return element.get() == &canvas;
             });
 
-        if (it == m_AllCanvases.end())
+        if (it != m_AllCanvases.end())
         {
-            throw std::invalid_argument("TileCanvas with uuid: " + uuid + " not found.");
+            return it - m_AllCanvases.begin();
         }
-        return *(*it);
+
+        return -1;
+    }
+
+    Canvas *Document::getCanvas(int index)
+    {
+        if (index < 0 || m_AllCanvases.size() <= index)
+        {
+            std::invalid_argument("Canvas not found at index: " + index);
+        }
+
+        return m_AllCanvases[index].get();
     }
 
     std::shared_ptr<DocumentHistory> Document::getHistory()
@@ -146,14 +100,14 @@ namespace editing
         return m_History;
     }
 
+    int Document::getCanvasCount() const
+    {
+        return m_AllCanvases.size();
+    }
+
     void Document::empty()
     {
         m_AllCanvases.clear();
-    }
-
-    Canvas &Document::getCanvas()
-    {
-        return m_Canvas;
     }
 
     Canvas &Document::getBackgroundCanvas()

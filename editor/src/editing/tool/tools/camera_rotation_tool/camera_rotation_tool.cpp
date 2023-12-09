@@ -4,7 +4,7 @@ namespace spright
 {
 namespace editing
 {
-    CameraRotationTool::CameraRotationTool() : Tool("camera_rotation")
+    CameraRotationTool::CameraRotationTool() : PixelTool("camera_rotation")
     {
     }
 

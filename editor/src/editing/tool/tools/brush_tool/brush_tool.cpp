@@ -7,7 +7,7 @@ namespace spright
 namespace editing
 {
 
-    BrushTool::BrushTool() : Tool("brush", std::make_shared<RectangleCursor>(1))
+    BrushTool::BrushTool() : PixelTool("brush", std::make_shared<RectangleCursor>(1))
     {
     }
 
@@ -40,7 +40,7 @@ namespace editing
 
         float zoom = camera->getZoom();
 
-        TileLayer &layer = context.doc.document->getActiveDrawing()->getActiveLayer();
+        TileLayer &layer = get_active_tile_canvas(*context.doc.document).getActiveLayer();
 
         if (!isPointerMove)
         {

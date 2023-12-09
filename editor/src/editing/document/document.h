@@ -31,46 +31,32 @@ namespace editing
 
         Document(const Document &other);
 
-        //! Represents the TileCanvas() over which the pointer resides or over which a drag action started
-        //! @return The active TileCanvas() or nullptr
-        TileCanvas *getActiveDrawing();
-
-        Canvas3d *getActiveDrawing3d();
-
         Canvas *getActiveCanvas();
 
-        int getActiveCanvasIndex() const;
+        Canvas *getCanvas(int index);
 
-        TileCanvas &addDrawing(const TileCanvas &drawing);
+        Canvas &addCanvas(const Canvas &canvas);
 
-        TileCanvas &getDrawing(std::string uuid);
+        void removeCanvas(const Canvas &canvas);
 
-        void removeCanvas(const std::string &uuid);
+        void setActiveCanvas(const Canvas &canvas);
 
-        Canvas3d &addDrawing3d(const Canvas3d &drawing);
+        int getCanvasIndex(const Canvas &canvas) const;
 
-        std::vector<Canvas3d> &getDrawing3ds();
-
-        void setActiveCanvas(const std::string &uuid);
-
-        std::vector<std::unique_ptr<Canvas>> &getCanvases();
-
-        Canvas &getCanvas(std::string uuid);
+        Canvas &getBackgroundCanvas();
 
         std::shared_ptr<DocumentHistory> getHistory();
 
+        int getCanvasCount() const;
+
         void empty();
 
-        Canvas &getCanvas();
-
         void setCamera(const Camera &camera);
-
-        Canvas &getBackgroundCanvas();
 
     private:
         std::vector<std::unique_ptr<Canvas>> m_AllCanvases;
 
-        int m_ActiveCanvasIndex = -1;
+        Canvas *m_ActiveCanvas = nullptr;
 
         Canvas2d m_Canvas;
 

@@ -32,12 +32,12 @@ Document DocumentBuilder::build()
     {
         for (DrawingBuilder builder : m_Drawings)
         {
-            document.addDrawing(builder.build());
+            document.addCanvas(builder.build());
         }
     }
     else if (!m_IsEmptyDocument)
     {
-        document.addDrawing(DrawingBuilder().build());
+        document.addCanvas(DrawingBuilder().build());
     }
 
     return document;

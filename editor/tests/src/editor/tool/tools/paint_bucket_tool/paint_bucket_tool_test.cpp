@@ -1,5 +1,6 @@
 
 #include "../src/editing/tool/tools/paint_bucket_tool/paint_bucket_tool.h"
+#include "../src/editing/utils/conversions.h"
 #include "../src/engine/graphics/colors.h"
 #include "src/editor/test_helpers/builders/document_builder.h"
 #include "src/editor/test_helpers/builders/document_store_builder.h"
@@ -26,7 +27,7 @@ SCENARIO("Paint bucket tool")
 
             THEN("the entire drawing gets filled")
             {
-                TileLayer &layer = document.getActiveDrawing()->getActiveLayer();
+                TileLayer &layer = get_active_tile_canvas(document).getActiveLayer();
 
                 REQUIRE(layer.getTiles().size() == 4);
                 REQUIRE(layer.getTiles()[0]->getColor() == COLOR_SPRIGHT_ORANGE);
@@ -56,7 +57,7 @@ SCENARIO("Paint bucket tool")
                                 .build();
         ToolContext toolContext = ToolContextBuilder().build(document);
 
-        TileLayer &layer = document.getActiveDrawing()->getActiveLayer();
+        TileLayer &layer = get_active_tile_canvas(document).getActiveLayer();
 
         PaintBucketTool paintBucketTool;
 

@@ -1,5 +1,6 @@
 
 #include "../src/editing/tool/tools/rectangle_tool/rectangle_tool.h"
+#include "../src/editing/utils/conversions.h"
 #include "../src/engine/graphics/colors.h"
 #include "src/editor/test_helpers/builders/document_store_builder.h"
 #include "src/editor/test_helpers/builders/tool_context_builder.h"
@@ -23,7 +24,7 @@ SCENARIO("Rectangle tool")
 
             THEN("it draws a filled rect")
             {
-                TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing()->getActiveLayer();
+                TileLayer &layer = get_active_tile_canvas(documentStore.getActiveDocument()).getActiveLayer();
 
                 toolContext.pointer.curr = layer.getCenterPos(Vec2Int(1, 1));
                 toolContext.pointer.prev = toolContext.pointer.curr;
@@ -62,7 +63,7 @@ SCENARIO("Rectangle tool")
             THEN("it draws a filled rect")
             {
 
-                TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing()->getActiveLayer();
+                TileLayer &layer = get_active_tile_canvas(documentStore.getActiveDocument()).getActiveLayer();
 
                 toolContext.pointer.curr = layer.getCenterPos(Vec2Int(1, 1));
                 toolContext.pointer.prev = toolContext.pointer.curr;

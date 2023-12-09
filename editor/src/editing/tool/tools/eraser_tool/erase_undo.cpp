@@ -6,14 +6,17 @@ namespace editing
 {
     EraseUndo::EraseUndo(Document &document)
     {
-        m_DrawingId = document.getActiveDrawing()->getUuid();
-        m_FramePos = document.getActiveDrawing()->getActiveFrameIndex();
-        m_TileLayerPos = document.getActiveDrawing()->getActiveLayerIndex();
+        TileCanvas &canvas = get_active_tile_canvas(document);
+        m_CanvasIndex = document.getCanvasIndex(canvas);
+        ;
+        m_FramePos = canvas.getActiveFrameIndex();
+        m_TileLayerPos = canvas.getActiveLayerIndex();
     }
 
     void EraseUndo::undo(Document &document) const
     {
-        TileLayer &tileLayer = document.getDrawing(m_DrawingId).getFrames()[m_FramePos].getLayers()[m_TileLayerPos];
+        TileCanvas &canvas = get_tile_canvas_at(document, m_CanvasIndex);
+        TileLayer &tileLayer = canvas.getFrames()[m_FramePos].getLayers()[m_TileLayerPos];
 
         for (std::shared_ptr<Rect2D> rect : m_Rects)
         {
@@ -23,7 +26,8 @@ namespace editing
 
     void EraseUndo::redo(Document &document) const
     {
-        TileLayer &tileLayer = document.getDrawing(m_DrawingId).getFrames()[m_FramePos].getLayers()[m_TileLayerPos];
+        TileCanvas &canvas = get_tile_canvas_at(document, m_CanvasIndex);
+        TileLayer &tileLayer = canvas.getFrames()[m_FramePos].getLayers()[m_TileLayerPos];
 
         for (std::shared_ptr<Rect2D> rect : m_Rects)
         {

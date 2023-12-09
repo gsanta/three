@@ -5,7 +5,8 @@ namespace spright
 namespace editing
 {
 
-    ColorPickerTool::ColorPickerTool(EventEmitter *eventEmitter) : m_EventEmitter(eventEmitter), Tool("color_picker")
+    ColorPickerTool::ColorPickerTool(EventEmitter *eventEmitter)
+        : m_EventEmitter(eventEmitter), PixelTool("color_picker")
     {
     }
 

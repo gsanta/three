@@ -6,9 +6,10 @@
 #include "../../../document/document_store.h"
 #include "../../../history/document_history.h"
 #include "../../../history/tile_undo.h"
+#include "../../../utils/conversions.h"
 #include "../../context/tool_context.h"
 #include "../../cursor/rectangle_cursor/rectangle_cursor.h"
-#include "../../tool.h"
+#include "../../pixel_tool.h"
 #include "brush.h"
 
 #include <vector>
@@ -20,7 +21,7 @@ namespace editing
     using namespace ::spright::engine;
     using namespace spright::maths;
 
-    class BrushTool : public Tool
+    class BrushTool : public PixelTool
     {
     private:
         int m_Size = 1;

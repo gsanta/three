@@ -20,7 +20,7 @@ namespace editing
 
         nlohmann::json framesJson = {{"frames", {}}};
 
-        for (Frame &frame : document.getActiveDrawing()->getFrames())
+        for (Frame &frame : get_active_tile_canvas(document).getFrames())
         {
 
             nlohmann::json layersJson = {{"layers", {}}};
@@ -64,14 +64,14 @@ namespace editing
         CreateDrawingProps createDrawingProps(frames[0][0].getBounds());
         createDrawingProps.layerCount = 0;
 
-        TileCanvas drawing = m_DocumentFactory->createDrawing(createDrawingProps);
+        TileCanvas canvas = m_DocumentFactory->createDrawing(createDrawingProps);
 
         for (std::vector<TileLayer> &layers : frames)
         {
-            drawing.addFrame(layers);
+            canvas.addFrame(layers);
         }
 
-        document.addDrawing(drawing);
+        document.addCanvas(canvas);
 
         return document;
     }

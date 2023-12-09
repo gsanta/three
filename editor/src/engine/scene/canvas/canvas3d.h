@@ -34,6 +34,8 @@ namespace engine
 
         ArcRotateCamera *getCamera() override;
 
+        const std::string &getType() const override;
+
     private:
         std::unique_ptr<ArcRotateCamera> m_Camera;
 

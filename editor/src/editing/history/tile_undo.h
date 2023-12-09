@@ -4,6 +4,7 @@
 #include "../../engine/scene/containers/tile_layer.h"
 #include "../document/document.h"
 #include "../tool/tool_handler.h"
+#include "../utils/conversions.h"
 #include "./undoable.h"
 
 #include <set>
@@ -74,7 +75,7 @@ namespace editing
 
         size_t m_FrameIndex;
 
-        std::string m_DrawingUuid;
+        int m_CanvasIndex;
 
         std::vector<int> m_PrevSelectedIndexes;
 

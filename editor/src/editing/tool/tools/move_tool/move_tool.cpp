@@ -4,7 +4,7 @@ namespace spright
 {
 namespace editing
 {
-    MoveTool::MoveTool() : Tool("move")
+    MoveTool::MoveTool() : PixelTool("move")
     {
     }
 
