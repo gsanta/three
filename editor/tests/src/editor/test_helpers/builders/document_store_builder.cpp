@@ -52,7 +52,7 @@ DocumentStore DocumentStoreBuilder::build()
 
     for (DrawingBuilder builder : m_Drawings)
     {
-        document.addDrawing(builder.build());
+        document.addCanvas(builder.build());
     }
 
     DocumentStore documentStore;

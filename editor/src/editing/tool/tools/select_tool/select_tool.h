@@ -5,7 +5,7 @@
 #include "../../../document/document_store.h"
 #include "../../context/tool_context.h"
 #include "../../cursor/rectangle_cursor/rectangle_cursor.h"
-#include "../../tool.h"
+#include "../../pixel_tool.h"
 #include "./box_selector.h"
 #include "./selection_buffer.h"
 #include "./wand_selector.h"
@@ -40,7 +40,7 @@ namespace editing
         wand
     };
 
-    class SelectTool : public Tool
+    class SelectTool : public PixelTool
     {
     public:
         SelectTool();

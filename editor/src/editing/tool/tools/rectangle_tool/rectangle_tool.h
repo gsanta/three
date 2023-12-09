@@ -8,7 +8,7 @@
 #include "../../../history/tile_undo.h"
 #include "../../context/tool_context.h"
 #include "../../cursor/rectangle_cursor/rectangle_cursor.h"
-#include "../../tool.h"
+#include "../../pixel_tool.h"
 #include "temp_rect_drawer.h"
 
 namespace spright
@@ -17,7 +17,7 @@ namespace editing
 {
     using namespace ::spright::engine;
 
-    class RectangleTool : public Tool
+    class RectangleTool : public PixelTool
     {
     public:
         RectangleTool();

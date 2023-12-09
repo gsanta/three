@@ -1,5 +1,6 @@
 
 #include "../src/editing/tool/tools/line_tool/line_tool.h"
+#include "../src/editing/utils/conversions.h"
 #include "../src/engine/graphics/colors.h"
 #include "catch2/catch_test_macros.hpp"
 #include "src/editor/test_helpers/builders/document_builder.h"
@@ -15,7 +16,7 @@ SCENARIO("Line tool")
         Document document = DocumentBuilder().build();
         ToolContext toolContext = ToolContextBuilder().build(document);
 
-        TileLayer &layer = document.getActiveDrawing()->getActiveLayer();
+        TileLayer &layer = get_active_tile_canvas(document).getActiveLayer();
 
         LineTool lineTool;
 
@@ -185,7 +186,7 @@ SCENARIO("Line tool")
 
         WHEN("drag is in progress")
         {
-            TileLayer &foregroundLayer = document.getActiveDrawing()->getToolLayer();
+            TileLayer &foregroundLayer = get_active_tile_canvas(document).getToolLayer();
 
             toolContext.pointer.curr = layer.getCenterPos(Vec2Int(0, 0));
             toolContext.pointer.down = toolContext.pointer.curr;

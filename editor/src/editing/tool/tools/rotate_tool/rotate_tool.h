@@ -4,7 +4,7 @@
 #include "../../../algorithms/tile_operations.h"
 #include "../../../utils/run_loop/timer.h"
 #include "../../context/tool_context.h"
-#include "../../tool.h"
+#include "../../pixel_tool.h"
 #include "../../tool_handler.h"
 #include "../../tools/select_tool/select_tool.h"
 
@@ -14,7 +14,7 @@ namespace spright
 {
 namespace editing
 {
-    class RotateTool : public Tool
+    class RotateTool : public PixelTool
     {
     public:
         RotateTool();

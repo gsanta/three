@@ -81,5 +81,10 @@ namespace engine
     {
         return m_Camera.get();
     }
+
+    const std::string &Canvas3d::getType() const
+    {
+        return CANVAS_TYPE_3D;
+    }
 } // namespace engine
 } // namespace spright

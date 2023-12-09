@@ -6,7 +6,7 @@ namespace spright
 {
 namespace editing
 {
-    LineTool::LineTool() : Tool("line", std::make_shared<RectangleCursor>(1, true))
+    LineTool::LineTool() : PixelTool("line", std::make_shared<RectangleCursor>(1, true))
     {
     }
 

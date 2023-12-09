@@ -3,6 +3,7 @@
 #include "../../../test_helpers/builders/drawing_builder.h"
 #include "../../../test_helpers/builders/tool_context_builder.h"
 #include "../src/editing/tool/tools/rotate_tool/rotate_tool.h"
+#include "../src/editing/utils/conversions.h"
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -79,7 +80,7 @@ SCENARIO("Rotate tool")
         commonToolFuncs.buildRect(BoundsInt(4, 1, 5, 3));
         commonToolFuncs.createTile(Vec2Int(4, 0));
 
-        TileCanvas &drawing = *document.getActiveDrawing();
+        TileCanvas &drawing = get_active_tile_canvas(document);
         TileLayer &activeLayer = drawing.getActiveLayer();
         TileLayer &toolLayer = drawing.getToolLayer();
         TileLayer &tempLayer = drawing.getTempLayerOfActiveLayer();

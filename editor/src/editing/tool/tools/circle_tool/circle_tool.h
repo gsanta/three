@@ -11,7 +11,7 @@ namespace spright
 {
 namespace editing
 {
-    class CircleTool : public Tool
+    class CircleTool : public PixelTool
     {
     public:
         CircleTool();

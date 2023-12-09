@@ -4,6 +4,7 @@
 #include "../../../test_helpers/test_document_factory.h"
 #include "../src/editing/tool/tools/color_picker_tool/color_picker_tool.h"
 #include "../src/editing/tool/tools/select_tool/box_selector.h"
+#include "../src/editing/utils/conversions.h"
 #include "../src/engine/scene/containers/tile_layer.h"
 #include "../src/maths/vec2.h"
 
@@ -27,8 +28,8 @@ SCENARIO("Box selector")
 
         BoxSelector boxSelector(selectionBuffer);
 
-        TileLayer &toolLayer = documentStore->getActiveDocument().getActiveDrawing()->getToolLayer();
-        TileLayer &activeLayer = documentStore->getActiveDocument().getActiveDrawing()->getActiveLayer();
+        TileLayer &toolLayer = get_active_tile_canvas(documentStore->getActiveDocument()).getToolLayer();
+        TileLayer &activeLayer = get_active_tile_canvas(documentStore->getActiveDocument()).getActiveLayer();
 
         WHEN("making a selection")
         {

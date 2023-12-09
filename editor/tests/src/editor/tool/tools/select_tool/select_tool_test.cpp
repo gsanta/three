@@ -3,6 +3,7 @@
 #include "../../../test_helpers/builders/pointer_info_builder.h"
 #include "../../../test_helpers/builders/tool_context_builder.h"
 #include "../src/editing/tool/tools/select_tool/select_tool.h"
+#include "../src/editing/utils/conversions.h"
 #include "../src/engine/graphics/colors.h"
 
 #include <catch2/catch_test_macros.hpp>
@@ -21,7 +22,7 @@ SCENARIO("Select tool")
                                                                 .withTile(Vec2Int(3, 3))   // second selection
                                                                 .withTile(Vec2Int(4, 3)))) // second selection
                 .build();
-        TileCanvas &activeDrawing = *document.getActiveDrawing();
+        TileCanvas &activeDrawing = get_active_tile_canvas(document);
 
         ToolContext toolContext = ToolContextBuilder().build(document);
 
@@ -139,7 +140,7 @@ SCENARIO("Select tool")
                                                                                 .withTile(Vec2Int(3, 2), COLOR_BLUE)
                                                                                 .withTile(Vec2Int(4, 2), COLOR_RED)))
                                 .build();
-        TileCanvas &activeDrawing = *document.getActiveDrawing();
+        TileCanvas &activeDrawing = get_active_tile_canvas(document);
         ToolContext toolContext = ToolContextBuilder().build(document);
 
         CommonToolFuncs commonToolFuncs(document, toolContext);

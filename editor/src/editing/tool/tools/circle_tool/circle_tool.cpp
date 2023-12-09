@@ -6,7 +6,7 @@ namespace spright
 {
 namespace editing
 {
-    CircleTool::CircleTool() : Tool("circle", std::make_shared<RectangleCursor>(1, true))
+    CircleTool::CircleTool() : PixelTool("circle", std::make_shared<RectangleCursor>(1, true))
     {
     }
 

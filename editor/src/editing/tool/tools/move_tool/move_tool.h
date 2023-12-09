@@ -2,7 +2,7 @@
 
 #include "../../../history/tile_undo.h"
 #include "../../context/tool_context.h"
-#include "../../tool.h"
+#include "../../pixel_tool.h"
 #include "./selection_mover.h"
 
 #include <memory>
@@ -11,7 +11,7 @@ namespace spright
 {
 namespace editing
 {
-    class MoveTool : public Tool
+    class MoveTool : public PixelTool
     {
     public:
         MoveTool();

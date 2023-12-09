@@ -4,7 +4,7 @@ namespace spright
 {
 namespace editing
 {
-    ZoomTool::ZoomTool(DocumentStore *documentStore) : m_DocumentStore(documentStore), Tool("zoom")
+    ZoomTool::ZoomTool(DocumentStore *documentStore) : m_DocumentStore(documentStore), PixelTool("zoom")
     {
     }
 

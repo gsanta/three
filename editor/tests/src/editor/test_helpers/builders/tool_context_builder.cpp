@@ -27,7 +27,7 @@ ToolContext ToolContextBuilder::build(Document &document)
     toolContext.tools = toolStore;
 
     doc.document = &document;
-    doc.activeDrawing = document.getActiveDrawing();
+    doc.activeDrawing = &get_active_tile_canvas(document);
 
     toolContext.pointer = pointer;
     toolContext.doc = doc;

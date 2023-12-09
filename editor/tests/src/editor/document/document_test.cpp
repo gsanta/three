@@ -17,8 +17,8 @@ SCENARIO("Document")
 
             THEN("the members are copied")
             {
-                REQUIRE(clone.getCanvases().size() == 1);
-                REQUIRE(&document.getCanvases()[0] != &clone.getCanvases()[0]);
+                REQUIRE(clone.getCanvasCount() == 1);
+                REQUIRE(document.getCanvas(0) != clone.getCanvas(0));
             }
         }
     }

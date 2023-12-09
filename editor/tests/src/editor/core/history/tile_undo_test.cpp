@@ -4,6 +4,7 @@
 #include "../../test_helpers/builders/tile_layer_builder.h"
 #include "../../test_helpers/builders/tool_context_builder.h"
 #include "../src/editing/history/tile_undo.h"
+#include "../src/editing/utils/conversions.h"
 #include "../src/engine/graphics/colors.h"
 
 #include <catch2/catch_test_macros.hpp>
@@ -12,17 +13,17 @@ SCENARIO("TileUndo")
 {
     Document document = DocumentBuilder().build();
 
-    TileCanvas drawing = DrawingBuilder()
-                             .withFrame(FrameBuilder().withTileLayer(TileLayerBuilder().withTileSize(1).withBounds(
-                                            Bounds::createWithPositions(-3.0f, -3.0f, 4.0f, 4.0f))),
-                                        2)
-                             .build();
+    TileCanvas canvas = DrawingBuilder()
+                            .withFrame(FrameBuilder().withTileLayer(TileLayerBuilder().withTileSize(1).withBounds(
+                                           Bounds::createWithPositions(-3.0f, -3.0f, 4.0f, 4.0f))),
+                                       2)
+                            .build();
 
     ToolContext context = ToolContextBuilder().build(document);
 
-    document.addDrawing(drawing);
+    document.addCanvas(canvas);
 
-    TileLayer &layer = document.getActiveDrawing()->getActiveLayer();
+    TileLayer &layer = get_active_tile_canvas(document).getActiveLayer();
 
     TileBuilder tileBuilder(layer);
 

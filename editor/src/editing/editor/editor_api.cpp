@@ -42,18 +42,14 @@ void rotate_api(float rotateInRad)
     editor->getToolHandler()->executeTool("rotate");
 }
 
-
-#ifdef SPARKY_EMSCRIPTEN
-
-
 void setLayerIndex(size_t oldIndex, size_t newIndex)
 {
-    editor->getActiveDocument().getActiveDrawing()->getActiveFrame().changeLayerOrder(oldIndex, newIndex);
+    get_active_tile_canvas(editor->getActiveDocument()).getActiveFrame().changeLayerOrder(oldIndex, newIndex);
 }
 
 void removeLayer(size_t layerIndex)
 {
-    editor->getActiveDocument().getActiveDrawing()->removeLayer(layerIndex);
+    get_active_tile_canvas(editor->getActiveDocument()).removeLayer(layerIndex);
 }
 
 std::string exportDocument()
@@ -75,7 +71,7 @@ std::string getToolData(std::string tool)
 
 std::vector<std::string> getFrames()
 {
-    const std::vector<Frame> &frames = editor->getActiveDocument().getActiveDrawing()->getFrames();
+    const std::vector<Frame> &frames = get_active_tile_canvas(editor->getActiveDocument()).getFrames();
 
     std::vector<std::string> target;
 
@@ -94,33 +90,30 @@ void addFrame()
 
 void removeFrame(size_t index)
 {
-    TileCanvas *drawing = editor->getActiveDocument().getActiveDrawing();
+    TileCanvas &drawing = get_active_tile_canvas(editor->getActiveDocument());
 
-    if (drawing && drawing->getFrames().size() > 1)
+    if (drawing.getFrames().size() > 1)
     {
-        drawing->removeFrame(index);
+        drawing.removeFrame(index);
     }
 }
 
 void setActiveFrame(size_t index)
 {
-    editor->getActiveDocument().getActiveDrawing()->setActiveFrame(index);
+    get_active_tile_canvas(editor->getActiveDocument()).setActiveFrame(index);
 }
 
 std::string getActiveFrame()
 {
-    return editor->getActiveDocument().getActiveDrawing()->getActiveFrame().getJson().dump();
+    return get_active_tile_canvas(editor->getActiveDocument()).getActiveFrame().getJson().dump();
 }
 
 void activateFramePlayer()
 {
     editor->getFramePlayer().setIsActive(true);
 
-    TileCanvas *activeDrawing = editor->getActiveDocument().getActiveDrawing();
-    if (activeDrawing)
-    {
-        editor->getFramePlayer().setDrawing(activeDrawing);
-    }
+    TileCanvas &activeDrawing = get_active_tile_canvas(editor->getActiveDocument());
+    editor->getFramePlayer().setDrawing(&activeDrawing);
 }
 
 void deActivateFramePlayer()
@@ -131,21 +124,16 @@ void deActivateFramePlayer()
 
 void api_flip_horizontal()
 {
-    TileCanvas *drawing = editor->getActiveDocument().getActiveDrawing();
+    TileCanvas &drawing = get_active_tile_canvas(editor->getActiveDocument());
     SelectTool &selectTool = editor->getToolHandler()->getToolStore().getSelectTool();
-
-    if (!drawing)
-    {
-        return;
-    }
 
     if (selectTool.getSelectionBuffer().getTileBounds().isNull())
     {
-        flip_horizontal(drawing->getActiveFrame().getLayers());
+        flip_horizontal(drawing.getActiveFrame().getLayers());
     }
     else
     {
-        flip_horizontal(drawing->getActiveFrame().getLayers(), selectTool.getSelectionBuffer());
+        flip_horizontal(drawing.getActiveFrame().getLayers(), selectTool.getSelectionBuffer());
     }
 }
 
@@ -177,7 +165,7 @@ void set_rectangle_tool_filled(bool isFilled)
 
 std::string get_canvas_size()
 {
-    const Bounds &bounds = editor->getActiveDocument().getActiveDrawing()->getBounds();
+    const Bounds &bounds = get_active_tile_canvas(editor->getActiveDocument()).getBounds();
 
     nlohmann::json json = {
         {"width", bounds.getWidth()},
@@ -189,20 +177,15 @@ std::string get_canvas_size()
 
 void set_canvas_size(int width, int height)
 {
-    TileCanvas *drawing = editor->getActiveDocument().getActiveDrawing();
+    TileCanvas &canvas = get_active_tile_canvas(editor->getActiveDocument());
 
-    if (!drawing)
-    {
-        return;
-    }
-
-    TileCanvas newDrawing =
-        resize_drawing(*drawing,
+    TileCanvas newCanvas =
+        resize_drawing(canvas,
                        Bounds::createWithPositions(-width / 2.0f, -height / 2.0f, width / 2.0f, height / 2.0f),
                        *editor->getDocumentFactory());
 
-    editor->getActiveDocument().removeCanvas(drawing->getUuid());
-    editor->getActiveDocument().addDrawing(newDrawing);
+    editor->getActiveDocument().removeCanvas(canvas);
+    editor->getActiveDocument().addCanvas(newCanvas);
 }
 
 void set_eraser_size(int size)
@@ -239,17 +222,17 @@ void reset_zoom()
 void zoom_to_fit()
 {
     Camera2d *camera = dynamic_cast<Camera2d *>(editor->getActiveDocument().getBackgroundCanvas().getCamera());
-    camera->zoomToFit(editor->getActiveDocument().getActiveDrawing()->getBounds());
+    camera->zoomToFit(get_active_tile_canvas(editor->getActiveDocument()).getBounds());
 }
 
 // void shear_horizontal_api(float angle)
 // {
-//     TileCanvas &drawing = editor->getActiveDocument().getActiveDrawing();
-//     Bounds bounds = editor->getActiveDocument().getActiveDrawing()->getState().getBounds();
-//     TileLayer &currentLayer = editor->getActiveDocument().getActiveDrawing()->getActiveLayer();
+//     TileCanvas &drawing = get_active_tile_canvas(editor->getActiveDocument()).getBounds();
+//     Bounds bounds = get_active_tile_canvas(editor->getActiveDocument()).getState().getBounds();
+//     TileLayer &currentLayer = get_active_tile_canvas(editor->getActiveDocument()).getActiveLayer();
 
-//     Vec2 bottomLeft = editor->getActiveDocument().getActiveDrawing()->getState().getBounds().getBottomLeft();
-//     Vec2 topRight = editor->getActiveDocument().getActiveDrawing()->getState().getBounds().getTopRight();
+//     Vec2 bottomLeft = get_active_tile_canvas(editor->getActiveDocument()).getState().getBounds().getBottomLeft();
+//     Vec2 topRight = get_active_tile_canvas(editor->getActiveDocument()).getState().getBounds().getTopRight();
 //     Vec2Int bottomLeftTile = editor->getActiveDocument().getActiveLayer().getTilePos(bottomLeft);
 //     Vec2Int topRightTile = editor->getActiveDocument().getActiveLayer().getTilePos(topRight);
 
@@ -258,35 +241,63 @@ void zoom_to_fit()
 
 void shear_vertical_api(float angle)
 {
-    TileCanvas *drawing = editor->getActiveDocument().getActiveDrawing();
+    TileCanvas &drawing = get_active_tile_canvas(editor->getActiveDocument());
 
-    if (!drawing)
-    {
-        return;
-    }
+    Bounds bounds = drawing.getBounds();
+    TileLayer &currentLayer = drawing.getActiveLayer();
 
-    Bounds bounds = drawing->getBounds();
-    TileLayer &currentLayer = drawing->getActiveLayer();
-
-    Vec2 bottomLeft = drawing->getBounds().getBottomLeft();
-    Vec2 topRight = drawing->getBounds().getTopRight();
-    Vec2Int bottomLeftTile = drawing->getActiveLayer().getTilePos(bottomLeft);
-    Vec2Int topRightTile = drawing->getActiveLayer().getTilePos(topRight);
+    Vec2 bottomLeft = drawing.getBounds().getBottomLeft();
+    Vec2 topRight = drawing.getBounds().getTopRight();
+    Vec2Int bottomLeftTile = drawing.getActiveLayer().getTilePos(bottomLeft);
+    Vec2Int topRightTile = drawing.getActiveLayer().getTilePos(topRight);
 
     shear_vertical(currentLayer, BoundsInt(bottomLeftTile, topRightTile), angle);
 }
 
 void generate_spritesheet()
 {
-    TileCanvas *drawing = editor->getActiveDocument().getActiveDrawing();
+    TileCanvas &drawing = get_active_tile_canvas(editor->getActiveDocument());
 
-    if (!drawing)
-    {
-        return;
-    }
-
-    editor->getSpriteSheet().generateSpriteSheet(*drawing);
+    editor->getSpriteSheet().generateSpriteSheet(drawing);
 }
+
+size_t createLayer(std::string name)
+{
+    TileCanvas &drawing = get_active_tile_canvas(editor->getDocumentStore()->getActiveDocument());
+
+    TileLayer tileLayer = editor->getDocumentFactory()->createUserLayer(drawing.getBounds(), name);
+
+    drawing.addLayer(tileLayer);
+
+    return drawing.getActiveFrame().getLayers().back().getIndex();
+}
+
+void enableLayer(size_t index)
+{
+    TileLayer &layer = get_active_tile_canvas(editor->getActiveDocument()).getActiveFrame().getLayer(index);
+    layer.setEnabled(true);
+}
+
+void disableLayer(size_t index)
+{
+    TileLayer &layer = get_active_tile_canvas(editor->getActiveDocument()).getActiveFrame().getLayer(index);
+    layer.setEnabled(false);
+}
+
+void setActiveLayer(size_t index)
+{
+    get_active_tile_canvas(editor->getActiveDocument()).setActiveLayer(index);
+}
+
+void setEngineData(std::string json)
+{
+    if (editor != nullptr)
+    {
+        get_active_tile_canvas(editor->getActiveDocument()).getActiveLayer().setJson(json);
+    }
+}
+
+#ifdef SPARKY_EMSCRIPTEN
 
 EMSCRIPTEN_BINDINGS(spright)
 {
@@ -322,6 +333,11 @@ EMSCRIPTEN_BINDINGS(spright)
     emscripten::function("setSelectionMode", &set_selection_mode_api);
     emscripten::function("setSelectionType", &set_selection_type_api);
     emscripten::function("generateSpriteSheet", &generate_spritesheet);
+    emscripten::function("createLayer", &createLayer);
+    emscripten::function("enableLayer", &enableLayer);
+    emscripten::function("disableLayer", &disableLayer);
+    emscripten::function("setActiveLayer", &setActiveLayer);
+    emscripten::function("setEngineData", &setEngineData);
 }
 
 #endif

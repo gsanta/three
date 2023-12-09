@@ -62,7 +62,7 @@ namespace editing
     {
         Frame frame(0);
 
-        Frame &activeFrame = document.getActiveDrawing()->getFrame(0);
+        Frame &activeFrame = get_active_tile_canvas(document).getFrame(0);
 
         std::vector<TileLayer> layers;
 
@@ -71,7 +71,7 @@ namespace editing
             layers.push_back(layer);
         }
 
-        document.getActiveDrawing()->addFrame(layers);
+        get_active_tile_canvas(document).addFrame(layers);
     }
 
     Canvas3d DocumentFactory::createDrawing3d(const Bounds &bounds) const
@@ -171,18 +171,18 @@ namespace editing
 
         Document document = createEmptyDocument();
 
-        TileCanvas drawing = createDrawing(
+        TileCanvas canvas = createDrawing(
             CreateDrawingProps(Bounds::createWithPositions(-16.0f, -pixelCount / 2.0f, 16.0f, pixelCount / 2.0f)));
 
-        Vec2Int minWindow = document.getBackgroundCanvas().getCamera()->worldToScreenPos(drawing.getBounds().minX,
-                                                                                         drawing.getBounds().minY);
-        Vec2Int maxWindow = document.getBackgroundCanvas().getCamera()->worldToScreenPos(drawing.getBounds().maxX,
-                                                                                         drawing.getBounds().maxY);
+        Vec2Int minWindow = document.getBackgroundCanvas().getCamera()->worldToScreenPos(canvas.getBounds().minX,
+                                                                                         canvas.getBounds().minY);
+        Vec2Int maxWindow = document.getBackgroundCanvas().getCamera()->worldToScreenPos(canvas.getBounds().maxX,
+                                                                                         canvas.getBounds().maxY);
 #ifdef INIT_WITH_3D_CANVAS
-        Canvas3d drawing3d = createDrawing3d(Bounds(18.0, -5.0, 28.0, 5.0));
-        document.addDrawing3d(drawing3d);
+        Canvas3d canvas3d = createDrawing3d(Bounds(18.0, -5.0, 28.0, 5.0));
+        document.addCanvas(canvas3d);
 #else
-        document.addDrawing(drawing);
+        document.addCanvas(canvas);
 #endif
 
 

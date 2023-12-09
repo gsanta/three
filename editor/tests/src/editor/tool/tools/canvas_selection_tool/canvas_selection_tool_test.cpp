@@ -5,6 +5,7 @@
 #include "../../../test_helpers/builders/drawing_builder.h"
 #include "../../../test_helpers/builders/tool_context_builder.h"
 #include "../src/editing/tool/tools/canvas_selection_tool/canvas_selection_tool.h"
+#include "../src/editing/utils/conversions.h"
 #include "../src/engine/system/window/impl/headless/headless_window.h"
 
 #include <catch2/catch_test_macros.hpp>
@@ -39,8 +40,8 @@ SCENARIO("Tool handler")
 
             THEN("it sets it as the active drawing")
             {
-                REQUIRE(document.getActiveDrawing() != nullptr);
-                REQUIRE(document.getActiveDrawing() == &document.getDrawing(document.getCanvases()[0]->getUuid()));
+                REQUIRE(document.getActiveCanvas() != nullptr);
+                REQUIRE(document.getActiveCanvas() == document.getCanvas(0));
             }
 
             WHEN("pointer down on the second drawing")
@@ -50,14 +51,13 @@ SCENARIO("Tool handler")
 
                 THEN("it sets it as the active drawing")
                 {
-                    REQUIRE(document.getActiveDrawing() != nullptr);
-                    REQUIRE(document.getActiveDrawing() == &document.getDrawing(document.getCanvases()[1]->getUuid()));
+                    REQUIRE(document.getActiveCanvas() != nullptr);
+                    REQUIRE(document.getActiveCanvas() == document.getCanvas(1));
                 }
 
                 THEN("highlights the active drawing")
                 {
-                    Layer &decorationLayer =
-                        document.getDrawing(document.getCanvases()[1]->getUuid()).getDecorationLayer();
+                    Layer &decorationLayer = document.getCanvas(1)->getDecorationLayer();
 
                     REQUIRE(decorationLayer.getRenderables().size() == 4);
                     REQUIRE_THAT(decorationLayer.getRenderables()[0]->getBounds(),
@@ -72,8 +72,7 @@ SCENARIO("Tool handler")
 
                 THEN("removes the highlight from the prev active layer")
                 {
-                    Layer &decorationLayer =
-                        document.getDrawing(document.getCanvases()[0]->getUuid()).getDecorationLayer();
+                    Layer &decorationLayer = document.getCanvas(0)->getDecorationLayer();
                     REQUIRE(decorationLayer.getRenderables().size() == 0);
                 }
             }

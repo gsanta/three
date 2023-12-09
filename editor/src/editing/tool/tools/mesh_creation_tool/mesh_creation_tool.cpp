@@ -5,7 +5,7 @@ namespace spright
 namespace editing
 {
 
-    MeshCreationTool::MeshCreationTool() : Tool("mesh_creation")
+    MeshCreationTool::MeshCreationTool() : PixelTool("mesh_creation")
     {
         // m_MeshBuilders.push_back(&m_BoxBuilder);
     }
@@ -17,9 +17,9 @@ namespace editing
 
         Vec3 pos = camera3d->screenToWorldPos3d(context.pointer.curr.x, context.pointer.curr.y, 0);
 
-        Canvas3d *drawing = context.doc.document->getActiveDrawing3d();
+        Canvas3d &drawing = get_active_3d_canvas(*context.doc.document);
 
-        drawing->getGroup().add(m_BoxBuilder.build(pos));
+        drawing.getGroup().add(m_BoxBuilder.build(pos));
     }
 } // namespace editing
 } // namespace spright

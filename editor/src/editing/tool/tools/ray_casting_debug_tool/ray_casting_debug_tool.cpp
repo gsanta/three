@@ -4,7 +4,7 @@ namespace spright
 {
 namespace editing
 {
-    RayCastingDebugTool::RayCastingDebugTool() : Tool("ray_casting_debug")
+    RayCastingDebugTool::RayCastingDebugTool() : PixelTool("ray_casting_debug")
     {
     }
 
@@ -16,8 +16,8 @@ namespace editing
         Vec3 pos = camera3d->screenToWorldPos3d(context.pointer.curr.x, context.pointer.curr.y, 0);
         Vec3 pos2 = camera3d->screenToWorldPos3d(context.pointer.curr.x, context.pointer.curr.y, -100);
 
-        std::vector<std::unique_ptr<Canvas>> &canvases = context.doc.document->getCanvases();
-        Canvas3d *drawing = dynamic_cast<Canvas3d *>(canvases[0].get());
+        Canvas *canvas = context.doc.document->getCanvas(0);
+        Canvas3d *drawing = dynamic_cast<Canvas3d *>(canvas);
 
         Mesh &line = drawing->getGroup().add(Line3d(pos, pos2, m_LineThickness, COLOR_GREEN));
 
@@ -26,8 +26,8 @@ namespace editing
 
     void RayCastingDebugTool::deactivate(const ToolContext &context)
     {
-        std::vector<std::unique_ptr<Canvas>> &canvases = context.doc.document->getCanvases();
-        Canvas3d *drawing = dynamic_cast<Canvas3d *>(canvases[0].get());
+        Canvas *canvas = context.doc.document->getCanvas(0);
+        Canvas3d *drawing = dynamic_cast<Canvas3d *>(canvas);
 
         for (Mesh *line : m_Lines)
         {

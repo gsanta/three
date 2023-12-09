@@ -1,6 +1,7 @@
 #include "../../../test_helpers/builders/document_builder.h"
 #include "../../../test_helpers/builders/drawing_builder.h"
 #include "../src/editing/io/json/json_io.h"
+#include "../src/editing/utils/conversions.h"
 #include "../src/engine/graphics/colors.h"
 #include "../src/engine/scene/canvas/tile_canvas.h"
 #include "../src/engine/system/window/impl/headless/headless_window.h"
@@ -17,7 +18,7 @@ SCENARIO("JsonIO")
         {
             Bounds bounds = Bounds::createWithPositions(-1.0f, -1.0f, 1.0f, 1.0f);
 
-            TileCanvas drawing =
+            TileCanvas canvas =
                 DrawingBuilder()
                     .withFrame(
                         FrameBuilder()
@@ -38,7 +39,7 @@ SCENARIO("JsonIO")
 
             Document document = DocumentBuilder().withEmptyDocument().build();
 
-            document.addDrawing(drawing);
+            document.addCanvas(canvas);
 
             JsonIO jsonIO(std::make_shared<DocumentFactory>(documentFactory));
 
@@ -118,29 +119,29 @@ SCENARIO("JsonIO")
 
             Document document = jsonIO.importDocument(jsonStr);
 
-            TileCanvas &drawing = *document.getActiveDrawing();
+            TileCanvas &canvas = get_active_tile_canvas(document);
 
-            REQUIRE(drawing.getFrames().size() == 2);
+            REQUIRE(canvas.getFrames().size() == 2);
 
-            REQUIRE(drawing.getFrames()[0].getLayers().size() == 2);
+            REQUIRE(canvas.getFrames()[0].getLayers().size() == 2);
 
-            REQUIRE(drawing.getFrames()[0].getLayer(0).getName() == "layer_1");
-            REQUIRE(drawing.getFrames()[0].getLayer(0).getTiles().size() == 1);
-            REQUIRE(drawing.getFrames()[0].getLayer(0).getAtTileIndex(0)->getColor() == COLOR_RED);
+            REQUIRE(canvas.getFrames()[0].getLayer(0).getName() == "layer_1");
+            REQUIRE(canvas.getFrames()[0].getLayer(0).getTiles().size() == 1);
+            REQUIRE(canvas.getFrames()[0].getLayer(0).getAtTileIndex(0)->getColor() == COLOR_RED);
 
-            REQUIRE(drawing.getFrames()[0].getLayer(1).getName() == "layer_2");
-            REQUIRE(drawing.getFrames()[0].getLayer(1).getTiles().size() == 1);
-            REQUIRE(drawing.getFrames()[0].getLayer(1).getAtTileIndex(1)->getColor() == COLOR_BLUE);
+            REQUIRE(canvas.getFrames()[0].getLayer(1).getName() == "layer_2");
+            REQUIRE(canvas.getFrames()[0].getLayer(1).getTiles().size() == 1);
+            REQUIRE(canvas.getFrames()[0].getLayer(1).getAtTileIndex(1)->getColor() == COLOR_BLUE);
 
-            REQUIRE(drawing.getFrames()[0].getLayers().size() == 2);
+            REQUIRE(canvas.getFrames()[0].getLayers().size() == 2);
 
-            REQUIRE(drawing.getFrames()[1].getLayer(0).getName() == "layer_1");
-            REQUIRE(drawing.getFrames()[1].getLayer(0).getTiles().size() == 1);
-            REQUIRE(drawing.getFrames()[1].getLayer(0).getAtTileIndex(2)->getColor() == COLOR_RED);
+            REQUIRE(canvas.getFrames()[1].getLayer(0).getName() == "layer_1");
+            REQUIRE(canvas.getFrames()[1].getLayer(0).getTiles().size() == 1);
+            REQUIRE(canvas.getFrames()[1].getLayer(0).getAtTileIndex(2)->getColor() == COLOR_RED);
 
-            REQUIRE(drawing.getFrames()[1].getLayer(1).getName() == "layer_2");
-            REQUIRE(drawing.getFrames()[1].getLayer(1).getTiles().size() == 1);
-            REQUIRE(drawing.getFrames()[1].getLayer(1).getAtTileIndex(3)->getColor() == COLOR_BLUE);
+            REQUIRE(canvas.getFrames()[1].getLayer(1).getName() == "layer_2");
+            REQUIRE(canvas.getFrames()[1].getLayer(1).getTiles().size() == 1);
+            REQUIRE(canvas.getFrames()[1].getLayer(1).getAtTileIndex(3)->getColor() == COLOR_BLUE);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace spright
 namespace editing
 {
     SelectTool::SelectTool()
-        : Tool("select", std::make_shared<RectangleCursor>(1)), m_BoxSelector(m_SelectionBuffer),
+        : PixelTool("select", std::make_shared<RectangleCursor>(1)), m_BoxSelector(m_SelectionBuffer),
           m_WandSelector(m_SelectionBuffer)
     {
     }

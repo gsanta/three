@@ -1,5 +1,6 @@
 
 #include "../src/editing/tool/tools/circle_tool/circle_tool.h"
+#include "../src/editing/utils/conversions.h"
 #include "src/editor/test_helpers/builders/document_builder.h"
 #include "src/editor/test_helpers/builders/document_store_builder.h"
 #include "src/editor/test_helpers/builders/tool_context_builder.h"
@@ -53,7 +54,7 @@ SCENARIO("Circle tool")
         Document document = DocumentBuilder().withDrawing(DrawingBuilder().withBounds(Bounds(0, 0, 7.0, 7.0))).build();
         ToolContext toolContext = ToolContextBuilder().build(document);
 
-        TileLayer &layer = document.getActiveDrawing()->getActiveLayer();
+        TileLayer &layer = get_active_tile_canvas(document).getActiveLayer();
         CircleTool circleTool;
 
         WHEN("dragging the mouse")
@@ -67,7 +68,7 @@ SCENARIO("Circle tool")
 
             THEN("it updates the preview on the foreground layer for each move event")
             {
-                REQUIRE_ELLIPSE(document.getActiveDrawing()->getToolLayer());
+                REQUIRE_ELLIPSE(get_active_tile_canvas(document).getToolLayer());
             }
 
             WHEN("releasing the mouse at an equal horizontal and vertical distance from mouse down")

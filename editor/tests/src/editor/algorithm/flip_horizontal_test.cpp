@@ -1,5 +1,6 @@
 #include "../src/editing/algorithms/flip_horizontal.h"
 #include "../src/editing/tool/tools/select_tool/selection_buffer.h"
+#include "../src/editing/utils/conversions.h"
 #include "../src/engine/graphics/colors.h"
 #include "../test_helpers/builders/document_builder.h"
 #include "../test_helpers/builders/document_store_builder.h"
@@ -44,12 +45,12 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
                                                                     .withTile(Vec2Int(11, 2), COLOR_BLUE)))
                                 .build();
 
-        TileLayer &layer = document.getActiveDrawing()->getActiveLayer();
+        TileLayer &layer = get_active_tile_canvas(document).getActiveLayer();
 
         int tileWidth = layer.getTileBounds().getWidth();
         int tileHeight = layer.getTileBounds().getHeight();
 
-        TileCanvas &drawing = *document.getActiveDrawing();
+        TileCanvas &drawing = get_active_tile_canvas(document);
         flip_horizontal(drawing.getActiveLayer());
 
         REQUIRE(layer.getAtTilePos(tileWidth - 1, 1)->getColor() == COLOR_RED);
@@ -76,11 +77,11 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
                                  .withTileLayer(TileLayerBuilder().withTile(Vec2Int(1, 1), COLOR_YELLOW)))
                 .build();
 
-        TileLayer &layer = documentStore.getActiveDocument().getActiveDrawing()->getActiveLayer();
+        TileLayer &layer = get_active_tile_canvas(documentStore.getActiveDocument()).getActiveLayer();
 
         int tileWidth = layer.getTileBounds().getWidth();
 
-        TileCanvas &drawing = *documentStore.getActiveDocument().getActiveDrawing();
+        TileCanvas &drawing = get_active_tile_canvas(documentStore.getActiveDocument());
         Frame &frame = drawing.getActiveFrame();
 
         flip_horizontal(drawing.getActiveFrame().getLayers());
@@ -104,7 +105,7 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
                                                                                 .withTile(Vec2Int(1, 1))))
                 .build();
 
-        TileCanvas &drawing = *documentStore.getActiveDocument().getActiveDrawing();
+        TileCanvas &drawing = get_active_tile_canvas(documentStore.getActiveDocument());
         TileLayer &activeLayer = drawing.getActiveLayer();
 
         Frame &frame = drawing.getActiveFrame();
@@ -131,7 +132,7 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
                                                                                 .withTile(Vec2Int(5, 1))))
                 .build();
 
-        TileCanvas &drawing = *documentStore.getActiveDocument().getActiveDrawing();
+        TileCanvas &drawing = get_active_tile_canvas(documentStore.getActiveDocument());
         TileLayer &activeLayer = drawing.getActiveLayer();
 
         Frame &frame = drawing.getActiveFrame();
@@ -159,7 +160,7 @@ TEST_CASE("flip_horizontal", "[flip-horizontal]")
                                                                                 .withTile(Vec2Int(3, 1))))
                 .build();
 
-        TileCanvas &drawing = *documentStore.getActiveDocument().getActiveDrawing();
+        TileCanvas &drawing = get_active_tile_canvas(documentStore.getActiveDocument());
         TileLayer &activeLayer = drawing.getActiveLayer();
 
         SelectionBuffer buffer = create_selection_buffer(Vec2Int(1, 0), Vec2Int(4, 2), activeLayer);

@@ -2,6 +2,7 @@
 #include "../../../test_helpers/builders/document_builder.h"
 #include "../../../test_helpers/builders/tool_context_builder.h"
 #include "../src/editing/tool/tools/move_tool/move_tool.h"
+#include "../src/editing/utils/conversions.h"
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -20,7 +21,7 @@ SCENARIO("Move tool")
                                                                                 .withTile(Vec2Int(3, 3))
                                                                                 .withTile(Vec2Int(4, 3))))
                                 .build();
-        TileCanvas &activeDrawing = *document.getActiveDrawing();
+        TileCanvas &activeDrawing = get_active_tile_canvas(document);
 
         ToolContext toolContext = ToolContextBuilder().build(document);
 

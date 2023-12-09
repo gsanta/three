@@ -5,6 +5,7 @@
 #include "../../engine/graphics/renderer/render_target.h"
 #include "../../engine/system/window/window.h"
 #include "../document/document_store.h"
+#include "../utils/conversions.h"
 
 namespace spright
 {

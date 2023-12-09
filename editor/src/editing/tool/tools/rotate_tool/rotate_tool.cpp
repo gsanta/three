@@ -4,7 +4,7 @@ namespace spright
 {
 namespace editing
 {
-    RotateTool::RotateTool() : Tool("rotate")
+    RotateTool::RotateTool() : PixelTool("rotate")
     {
     }
 
