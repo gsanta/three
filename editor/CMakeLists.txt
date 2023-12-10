@@ -26,7 +26,7 @@ if(CODE_COVERAGE)
 
     set(COVERAGE_TARGET_NAME "coverage")
     set(EXECUTABLE_NAME "unit_tests")
-    set(EXCLUDE_PATH "/src/CMakeCCompilerId.c;tests/*;/usr/*;*/catch2/*;.*tests-coverage.*;*/stb_image_write.h;/src/build/tests-coverage/*")
+    set(EXCLUDE_PATH "/src/CMakeCCompilerId.c;tests/*;/usr/*;*/catch2/*;.*tests-coverage.*;/src/src/stb_image_write.h;/src/build/tests-coverage/*")
     set(BASE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
 
     message("BASE_DIRECTORY: ${BASE_DIRECTORY}")

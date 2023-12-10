@@ -1,4 +1,4 @@
-#include "../../../editor/test_helpers/builders/tile_layer_builder.h"
+#include "../../../test_helpers/builders/tile_layer_builder.h"
 #include "../src/engine/graphics/colors.h"
 #include "../src/engine/graphics/mesh/meshes/rect2d.h"
 #include "../src/engine/graphics/renderer/headless/headless_renderer2d.h"
