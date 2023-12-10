@@ -1,4 +1,4 @@
-import { useAppSelector } from '@/hooks';
+import { useAppSelector } from '@/common/hooks/hooks';
 import { Box, forwardRef } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDebounce } from 'usehooks-ts';

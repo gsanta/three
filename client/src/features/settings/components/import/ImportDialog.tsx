@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import Dialog, { DialogProps, DialogBody, DialogFooter } from '@/components/dialog/Dialog';
+import Dialog, { DialogProps, DialogBody, DialogFooter } from '@/common/components/Dialog';
 import { Button } from '@chakra-ui/react';
 import DropZone from './DropZone';
-import { useAppDispatch, useAppSelector } from '@/hooks';
+import { useAppDispatch, useAppSelector } from '@/common/hooks/hooks';
 import { importDocument } from '../../state/settingsSlice';
 
 const ImportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children'>) => {

@@ -1,10 +1,10 @@
-import { ServerError } from '@/components/ErrorMessage';
-import api from '@/utils/api';
+import { ServerError } from '@/common/components/ErrorMessage';
+import api from '@/common/utils/api';
 import { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { setUser } from '../userSlice';
-import { useAppDispatch } from '@/hooks';
+import { useAppDispatch } from '@/common/hooks/hooks';
 import { useCallback } from 'react';
 
 type LoginRequestData = {

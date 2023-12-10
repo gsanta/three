@@ -1,18 +1,18 @@
 import { extendTheme } from '@chakra-ui/react';
-import Checkbox from './themes/Checkbox.theme';
-import Select from './select/Select.theme';
-import Button from './button/Button.theme';
-import Tooltip from './Tooltip.theme';
-import Dialog from './dialog/Dialog.theme';
-import IconButton from './themes/IconButton.theme';
-import MenuTheme from './themes/Menu.theme';
-import Alert from './themes/Alert.theme';
-import Switch from './themes/Switch.theme';
-import Tabs from './themes/Tabs.theme';
-import Slider from './themes/Slider.theme';
-import FrameButtonTheme from './button/FrameButton.theme';
-import { formLabelTheme } from './themes/FormLabel.theme';
-import { inputTheme } from './themes/Input.theme';
+import Checkbox from './Checkbox.theme';
+import Select from './Select.theme';
+import Button from './Button.theme';
+import Tooltip from '../components/Tooltip.theme';
+import Dialog from './Dialog.theme';
+import IconButton from './IconButton.theme';
+import MenuTheme from './Menu.theme';
+import Alert from './Alert.theme';
+import Switch from './Switch.theme';
+import Tabs from './Tabs.theme';
+import Slider from './Slider.theme';
+import FrameButtonTheme from './FrameButton.theme';
+import { formLabelTheme } from './FormLabel.theme';
+import { inputTheme } from './Input.theme';
 
 const theme = extendTheme({
   config: {

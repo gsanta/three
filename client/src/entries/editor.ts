@@ -1,5 +1,5 @@
-import { renderPageComponent } from '@/components/ReactPage';
-import AppProvider from '@/features/app/AppProvider';
+import { renderPageComponent } from '@/common/components/ReactPage';
+import AppProvider from '@/app/AppProvider';
 import EditorEvents from '@/features/editor/EditorEvents';
 
 window.EditorEvents = new EditorEvents();

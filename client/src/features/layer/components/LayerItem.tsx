@@ -1,6 +1,6 @@
-import { useAppDispatch, useAppSelector } from '@/hooks';
-import ToggleButton from '@/components/button/ToggleButton';
-import Icon from '@/components/icon/Icon';
+import { useAppDispatch, useAppSelector } from '@/common/hooks/hooks';
+import ToggleButton from '@/common/components/ToggleButton';
+import Icon from '@/common/components/icon/Icon';
 import { Button, ListItem, Tooltip } from '@chakra-ui/react';
 import React from 'react';
 import Layer from '../state/Layer';

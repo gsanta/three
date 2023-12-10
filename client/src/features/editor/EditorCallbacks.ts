@@ -1,4 +1,4 @@
-import { store } from '@/utils/store';
+import { store } from '@/common/utils/store';
 import { setActiveFrame } from '../frame/state/frameSlice';
 
 export class EditorCallbacks {

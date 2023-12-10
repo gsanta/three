@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from '@/hooks';
+import { useAppDispatch, useAppSelector } from '@/common/hooks/hooks';
 import {
   Slider,
   SliderTrack,

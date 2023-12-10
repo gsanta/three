@@ -10,7 +10,7 @@ const Dotenv = require('dotenv-webpack');
 const path = require('path');
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-const pagesPath = path.resolve(__dirname, 'src/pages');
+const pagesPath = path.resolve(__dirname, 'src/entries');
 
 const entryPoints = glob.sync(path.join(pagesPath, '*.ts')).reduce((entries, file) => {
   const { name, dir } = path.parse(file);
@@ -21,7 +21,6 @@ const entryPoints = glob.sync(path.join(pagesPath, '*.ts')).reduce((entries, fil
 }, {});
 
 module.exports = (env, argv) => {
-
   return {
     entry: entryPoints,
     module: {
@@ -81,9 +80,9 @@ module.exports = (env, argv) => {
         output: 'manifest.json',
         entrypointsUseAssets: true,
       }),
-      process.env.NODE_ENV === 'production' ?
-        new webpack.EnvironmentPlugin(['RENDER_EXTERNAL_URL', 'GOOGLE_OAUTH_CLIENT_ID']) :
-        new Dotenv({ path: '../backend/.env'})
+      process.env.NODE_ENV === 'production'
+        ? new webpack.EnvironmentPlugin(['RENDER_EXTERNAL_URL', 'GOOGLE_OAUTH_CLIENT_ID'])
+        : new Dotenv({ path: '../backend/.env' }),
     ],
     resolve: {
       extensions: ['.tsx', '.ts', '.js', 'scss', '.css'],

@@ -2,7 +2,7 @@ import { receiveColor } from '@/features/settings/state/settingsSlice';
 import Editor from '@/features/editor/Editor';
 import EditorEvents from '@/features/editor/EditorEvents';
 import ToolName from '../state/ToolName';
-import { store } from '@/utils/store';
+import { store } from '@/common/utils/store';
 
 class ToolEventListener {
   private editorApi: Editor;

@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from '@/hooks';
+import { useAppDispatch, useAppSelector } from '@/common/hooks/hooks';
 import { FormControl, FormLabel, Switch } from '@chakra-ui/react';
 import React from 'react';
 import { setCircleFilled } from '../state/toolSlice';

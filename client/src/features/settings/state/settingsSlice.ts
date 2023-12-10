@@ -1,7 +1,7 @@
 import Editor from '@/features/editor/Editor';
 import { initLayers } from '@/features/layer/state/layerSlice';
-import { toRGBAColor } from '@/utils/colorUtils';
-import type { RootState } from '@/utils/store';
+import { toRGBAColor } from '@/common/utils/colorUtils';
+import type { RootState } from '@/common/utils/store';
 // import type { RootState } from '@/utils/store';
 import { Action, createSlice, Dispatch, PayloadAction, ThunkDispatch } from '@reduxjs/toolkit';
 

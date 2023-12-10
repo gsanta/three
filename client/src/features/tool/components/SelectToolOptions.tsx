@@ -1,10 +1,10 @@
-import { useAppSelector } from '@/hooks';
+import { useAppSelector } from '@/common/hooks/hooks';
 import { Box, FormControl, FormLabel, Tooltip } from '@chakra-ui/react';
 import { QuestionOutlineIcon } from '@chakra-ui/icons';
 import React from 'react';
 import Editor from '@/features/editor/Editor';
-import RadioSwitchGroup from '@/components/RadioSwitchGroup';
-import RadioSwitchButton from '@/components/RadioSwitchButton';
+import RadioSwitchGroup from '@/common/components/RadioSwitchGroup';
+import RadioSwitchButton from '@/common/components/RadioSwitchButton';
 
 const SelectToolOptions = () => {
   const editor = useAppSelector((state) => state.editor.editor);

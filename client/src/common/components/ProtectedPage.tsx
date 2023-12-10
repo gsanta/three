@@ -1,6 +1,6 @@
 import { setUser } from '@/features/user/userSlice';
-import { useAppDispatch } from '@/hooks';
-import { store } from '@/utils/store';
+import { useAppDispatch } from '@/common/hooks/hooks';
+import { store } from '@/common/utils/store';
 import React, { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';

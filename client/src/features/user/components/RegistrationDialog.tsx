@@ -1,11 +1,11 @@
-import Dialog, { DialogBody, DialogButtons, DialogFooter } from '@/components/dialog/Dialog';
+import Dialog, { DialogBody, DialogButtons, DialogFooter } from '@/common/components/Dialog';
 import { FormControl, FormLabel, Input, FormErrorMessage, Button, Box } from '@chakra-ui/react';
 import React from 'react';
 import { emailRegex } from '../utils/userUtils';
 import useEmailRegistration from '../hooks/useEmailRegistration';
 import GoogleLogin from './GoogleLogin';
 import useGoogleLogin from '../hooks/useGoogleLogin';
-import ErrorMessage from '@/components/ErrorMessage';
+import ErrorMessage from '@/common/components/ErrorMessage';
 
 type RegistrationDialogProps = {
   isOpen: boolean;

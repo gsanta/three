@@ -1,8 +1,8 @@
 import ToolName from '@/features/tool/state/ToolName';
 import BrushToolOptions from './BrushToolOptions';
-import Panel from '@/components/Panel';
+import Panel from '@/common/components/Panel';
 import React from 'react';
-import { useAppSelector } from '@/hooks';
+import { useAppSelector } from '@/common/hooks/hooks';
 import CircleToolOptions from './CircleToolOptions';
 import RectangleToolOptions from './RectangleToolOptions';
 import EraseToolOptions from './EraseToolOptions';

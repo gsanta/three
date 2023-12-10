@@ -1,9 +1,9 @@
-import Icon from '@/components/icon/Icon';
+import Icon from '@/common/components/icon/Icon';
 import { Box, Button, ButtonGroup, IconButton, Menu, MenuButton, MenuItem, MenuList, Tooltip } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import ExportDialog from './ExportDialog';
 import ImportDialog from './import/ImportDialog';
-import { useAppDispatch, useAppSelector } from '@/hooks';
+import { useAppDispatch, useAppSelector } from '@/common/hooks/hooks';
 import { flipHorizontal } from '@/features/settings/state/settingsSlice';
 import { useBoolean } from 'usehooks-ts';
 import ResizeCanvasDialog from './ResizeCanvasDialog';
