@@ -1,12 +1,12 @@
 import { signOut } from '@/features/user/userSlice';
-import { useAppDispatch, useAppSelector } from '@/hooks';
+import { useAppDispatch, useAppSelector } from '@/common/hooks/hooks';
 import { Avatar, Button, ButtonGroup, useDisclosure, useToast } from '@chakra-ui/react';
 import React from 'react';
 import RegistrationDialog from './RegistrationDialog';
 import LoginDialog from './LoginDialog';
 import UserDialog from './UserDialog';
 import { useMutation } from 'react-query';
-import api from '@/utils/api';
+import api from '@/common/utils/api';
 
 const UserSettings = () => {
   const toast = useToast();

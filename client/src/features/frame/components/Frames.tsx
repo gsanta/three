@@ -1,9 +1,9 @@
-import FrameButton from '@/components/button/FrameButton';
+import FrameButton from '@/common/components/FrameButton';
 import { Box, Divider } from '@chakra-ui/react';
-import Icon from '@/components/icon/Icon';
+import Icon from '@/common/components/icon/Icon';
 import React from 'react';
 import { Tooltip, Button } from '@chakra-ui/react';
-import { useAppSelector, useAppDispatch } from '@/hooks';
+import { useAppSelector, useAppDispatch } from '@/common/hooks/hooks';
 import { activateFramePlayer, addFrame, deActivateFramePlayer, removeFrame, setActiveFrame } from '../state/frameSlice';
 
 const Frames = () => {

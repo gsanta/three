@@ -1,5 +1,5 @@
-import { useAppSelector } from '@/hooks';
-import api from '@/utils/api';
+import { useAppSelector } from '@/common/hooks/hooks';
+import api from '@/common/utils/api';
 import { AxiosError } from 'axios';
 import { useMutation } from 'react-query';
 

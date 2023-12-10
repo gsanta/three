@@ -32,7 +32,7 @@ class ReactRenderer
   end
 
   def pack_name
-    "pages/#{controller_path}/#{action_name}"
+    "entries/#{controller_path}/#{action_name}"
   end
 
   delegate :controller_path, :action_name, to: :@controller, private: true

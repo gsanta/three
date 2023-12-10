@@ -1,19 +1,18 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import './app.scss';
-import Layout from '../../components/Layout';
+import Layout from '../common/components/Layout';
 import Split from 'react-split';
-import Canvas from '../editor/components/Canvas';
-import useInitApp from '../editor/hooks/useInitApp';
-import LayerPanel from '../layer/components/LayerPanel';
-import SceneViewer from '@/features/scene_viewer/SceneViewer';
-import KeyboardHandler from '@/features/keyboard/KeyboardHandler';
+import Canvas from '../features/editor/components/Canvas';
+import useInitApp from '../features/editor/hooks/useInitApp';
+import LayerPanel from '../features/layer/components/LayerPanel';
+import KeyboardHandler from '@/app/keyboard/KeyboardHandler';
 import { editor } from '@/features/editor/Editor';
-import Header from '../../components/Header';
+import Header from '../common/components/Header';
 import ToolEventListener from '@/features/tool/utils/ToolEventListener';
 import Toolbar from '@/features/tool/components/Toolbar';
-import ToolOptionsPanel from '../tool/components/ToolOptionsPanel';
-import ColorPicker from '@/components/color_picker/ColorPicker';
+import ToolOptionsPanel from '../features/tool/components/ToolOptionsPanel';
+import ColorPicker from '@/common/components/ColorPicker';
 
 const App = () => {
   const [canvasNode, setCanvasNode] = useState<HTMLCanvasElement>();
@@ -72,7 +71,6 @@ const App = () => {
             <TabList>
               <Tab>Tool</Tab>
               <Tab>Color</Tab>
-              <Tab>3D Viewer</Tab>
             </TabList>
             <TabPanels alignItems="stretch" display="flex" flex="1" overflow="auto">
               <TabPanel flex="1" paddingInline={0}>
@@ -82,9 +80,6 @@ const App = () => {
                 <Box paddingInline="2" paddingBottom="4">
                   <ColorPicker />
                 </Box>
-              </TabPanel>
-              <TabPanel display="flex" flex="1">
-                <SceneViewer />
               </TabPanel>
             </TabPanels>
           </Tabs>

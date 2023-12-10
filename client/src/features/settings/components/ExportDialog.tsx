@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import Dialog, { DialogProps, DialogBody, DialogFooter } from '@/components/dialog/Dialog';
+import Dialog, { DialogProps, DialogBody, DialogFooter } from '@/common/components/Dialog';
 import { Button, FormControl, FormLabel, Select } from '@chakra-ui/react';
 import { downloadBlob, downloadString } from '../utils/fileUtils';
 import FileType, { getFileTypes } from '../types/FileType';
-import { useAppSelector } from '@/hooks';
+import { useAppSelector } from '@/common/hooks/hooks';
 
 const ExportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children'>) => {
   const editor = useAppSelector((state) => state.tool.editor);

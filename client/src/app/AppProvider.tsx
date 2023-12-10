@@ -1,8 +1,8 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import React from 'react';
 import App from './App';
-import theme from '@/components/theme';
-import ProtectedPage from '@/components/ProtectedPage';
+import theme from '@/common/themes/theme';
+import ProtectedPage from '@/common/components/ProtectedPage';
 
 const AppProvider = () => {
   return (

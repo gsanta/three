@@ -1,4 +1,4 @@
-import { useAppDispatch } from '@/hooks';
+import { useAppDispatch } from '@/common/hooks/hooks';
 import layerDragType from '@/features/layer/types/layerDragType';
 import { useDrop } from 'react-dnd';
 import LayerItemDragType from '../types/LayerItemDragType';
