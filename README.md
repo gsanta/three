@@ -1,6 +1,7 @@
 :warning: This project is under heavy development and not ready for professional use
 
 [![build](https://circleci.com/gh/gsanta/spright.svg?style=shield)](https://app.circleci.com/pipelines/github/gsanta/spright?branch=master)
+[![codecov](https://codecov.io/gh/gsanta/spright/graph/badge.svg?token=5E8YSMF3K1)](https://codecov.io/gh/gsanta/spright)
 
 Try out the editor [here](https://spright-editor.com/)
 

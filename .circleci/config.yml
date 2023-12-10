@@ -28,13 +28,28 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Tests and coverage for the editor
+          name: Test
+          command: |
+            set -x
+            cd editor
+            make test
+      - store_test_results:
+          path: editor/build/tests-coverage/test_result.xml
+  editor_test_and_coverage:
+    working_directory: ~/editor
+    machine:
+      image: ubuntu-2004:current
+    resource_class: large
+    steps:
+      - checkout
+      - run:
+          name: Test and coverage
           command: |
             set -x
             cd editor
             make test-with-coverage-xml
       - store_test_results:
-          path: editor/build/tests-coverage/results/test/unit_test_result.xml
+          path: editor/build/tests-coverage/test_result.xml
       - codecov/upload:
           file: editor/build/tests-coverage/coverage.xml
   editor_lint:
@@ -102,23 +117,27 @@ jobs:
           command: |
             curl $RENDER_DEPLOY_HOOK_FRONTEND
 workflows:
-  build-test-and-deploy:
+  build-and-test:
+    when:
+      and:
+        - not:
+            equal: [ master, << pipeline.git.branch >> ]
     jobs:
       - editor_web_build
       - editor_lint
       - editor_test
       - client_build
       - client_lint
+  deploy:
+    when:
+      and:
+        - equal: [ master, << pipeline.git.branch >> ]
+    jobs:
+      - editor_web_build
+      - editor_test_and_coverage
       - assemble_frontend:
           requires:
             - editor_web_build
-            - editor_test
-            - editor_lint
-            - client_build
-            - client_lint
       - deploy:
           requires:
-            - "assemble_frontend"
-          filters:
-            branches:
-              only: /^master/
+            - assemble_frontend

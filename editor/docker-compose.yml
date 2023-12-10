@@ -14,7 +14,7 @@ services:
             cmake ../.. -DCOMPILE_APP=OFF &&
             cmake --build . &&
             mkdir -p results &&
-            ./tests/unit_tests --success --reporter JUnit::out=results/test/unit_test_result.xml"
+            ./tests/unit_tests --success --reporter JUnit::out=test_result.xml"
   tests-coverage:
     build:
       context: .
@@ -30,22 +30,9 @@ services:
         mkdir -p results/coverage
         cmake ../.. -DCOMPILE_APP=OFF -DCODE_COVERAGE=ON -DCOVERAGE_REPORTER="$COVERAGE_REPORTER" -DINCLUDE_TESTS=ON
         cmake --build .
-        ./tests/unit_tests --success --reporter JUnit::out=results/test/unit_test_result.xml
+        ./tests/unit_tests --success --reporter JUnit::out=test_result.xml
         cmake --build . --target coverage
-        # if [ "$COVERAGE_REPORTER" = "html" ]; then
-        #   echo "html report"
-        # else
-        #   echo "xml report"
-        # fi
       '
-      # sh -c "mkdir -p build/tests-coverage &&
-      #       cd build/tests-coverage &&
-      #       mkdir -p results/test &&
-      #       mkdir -p results/coverage &&
-      #       cmake ../.. -DCOMPILE_APP=OFF -DCODE_COVERAGE=ON -DINCLUDE_TESTS=ON &&
-      #       cmake --build . &&
-      #       ./tests/unit_tests --success --reporter JUnit::out=results/test/unit_test_result.xml &&
-      #       cmake --build . --target coverage"
   compile-emscripten:
     build:
       context: .
