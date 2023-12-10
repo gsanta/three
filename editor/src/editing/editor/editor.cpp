@@ -44,7 +44,7 @@ namespace editing
         m_toolHandler->getToolStore().addTool(new RectangleTool());
         m_toolHandler->getToolStore().addTool(new EraserTool(3));
         m_toolHandler->getToolStore().addTool(new PanTool);
-        m_toolHandler->getToolStore().addTool(new ZoomTool(getDocumentStore()));
+        m_toolHandler->getToolStore().addTool(new ZoomTool());
         m_toolHandler->getToolStore().addTool(new PaintBucketTool());
         m_toolHandler->getToolStore().addTool(new SelectTool());
         m_toolHandler->getToolStore().addTool(new ColorPickerTool(m_EventEmitter.get()));

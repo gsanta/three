@@ -4,7 +4,7 @@ namespace spright
 {
 namespace editing
 {
-    ZoomTool::ZoomTool(DocumentStore *documentStore) : m_DocumentStore(documentStore), PixelTool("zoom")
+    ZoomTool::ZoomTool() : PixelTool("zoom")
     {
     }
 
@@ -12,11 +12,11 @@ namespace editing
     {
         if (context.pointer.scroll.y > 0)
         {
-            m_DocumentStore->getActiveDocument().getBackgroundCanvas().getCamera()->zoomIn();
+            context.doc.document->getBackgroundCanvas().getCamera()->zoomIn();
         }
         else
         {
-            m_DocumentStore->getActiveDocument().getBackgroundCanvas().getCamera()->zoomOut();
+            context.doc.document->getBackgroundCanvas().getCamera()->zoomOut();
         }
     }
 } // namespace editing

@@ -24,6 +24,8 @@ public:
 
     void setCurr(const Vec2Int &pos);
 
+    void setScroll(const Vec2 &scroll);
+
     void selectTiles(const std::vector<Rect2D *> &tiles);
 
     void selectRect(const BoundsInt &bounds);

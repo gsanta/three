@@ -30,7 +30,7 @@ test-with-coverage-html: ## runs tests with coverage in a docker container using
 	COVERAGE_REPORTER=HTML docker-compose run --rm --build tests-coverage
 
 test-with-coverage-xml: ## runs tests with coverage in a docker container using xml reporter
-	COVERAGE_REPORTER=HTML docker-compose run --rm --build tests-coverage
+	COVERAGE_REPORTER=XML docker-compose run --rm --build tests-coverage
 
 compile-emscripten-docker: ## compiles the editor for the web with emscripten in a docker container
 	docker-compose run --rm compile-emscripten

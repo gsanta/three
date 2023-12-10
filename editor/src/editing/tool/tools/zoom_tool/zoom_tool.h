@@ -14,15 +14,13 @@ namespace editing
 
     class ZoomTool : public PixelTool
     {
-    private:
-        DocumentStore *m_DocumentStore;
-        float m_ZoomFactor = 0.01f;
-
     public:
-        ZoomTool(DocumentStore *documentStore);
+        ZoomTool();
+
+        void scroll(const ToolContext &toolContext) override;
 
     private:
-        void scroll(const ToolContext &toolContext) override;
+        float m_ZoomFactor = 0.01f;
     };
 } // namespace editing
 } // namespace spright
