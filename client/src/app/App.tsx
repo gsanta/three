@@ -17,7 +17,7 @@ import ColorPicker from '@/common/components/ColorPicker';
 const App = () => {
   const [canvasNode, setCanvasNode] = useState<HTMLCanvasElement>();
 
-  const canvasRef = useCallback((node: HTMLCanvasElement) => {
+  useCallback((node: HTMLCanvasElement) => {
     if (node) {
       Module.canvas = node;
       setCanvasNode(node);
@@ -65,7 +65,7 @@ const App = () => {
         <Toolbar />
       </Box>
       <Split className="split" direction="horizontal" sizes={[75, 25]} minSize={250}>
-        <Canvas ref={canvasRef} />
+        <Canvas />
         <Split className="split-vertical" direction="vertical" sizes={[50, 50]}>
           <Tabs display="flex" flexDir="column" isLazy>
             <TabList>

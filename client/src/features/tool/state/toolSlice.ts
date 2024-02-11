@@ -16,6 +16,7 @@ interface ToolState {
 
 const initialState: ToolState = {
   tools: [
+    { name: ToolName.Add, iconName: 'BiPlus' },
     { name: ToolName.Brush, iconName: 'BiPencil' },
     { name: ToolName.SelectionRectangle, iconName: 'BiBorderRadius' },
     { name: ToolName.Erase, iconName: 'BiEraser' },

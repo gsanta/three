@@ -7,12 +7,15 @@ import CircleToolOptions from './CircleToolOptions';
 import RectangleToolOptions from './RectangleToolOptions';
 import EraseToolOptions from './EraseToolOptions';
 import SelectToolOptions from './SelectToolOptions';
+import BuilderOptions from './BuilderOptions';
 
 const ToolOptionsPanel = () => {
   const selectedTool = useAppSelector((state) => state.tool.selectedTool);
 
   const getOptions = () => {
     switch (selectedTool) {
+      case ToolName.Add:
+        return <BuilderOptions />;
       case ToolName.Brush:
         return <BrushToolOptions />;
       case ToolName.Circle:
