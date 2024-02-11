@@ -1,4 +1,5 @@
 enum ToolName {
+  Add = 'add',
   Brush = 'brush',
   Rectangle = 'rectangle',
   SelectionRectangle = 'select',

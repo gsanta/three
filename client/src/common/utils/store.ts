@@ -1,6 +1,8 @@
+import builderSlice from '@/features/builder/builderSlice';
 import editorSlice from '@/features/editor/editorSlice';
 import frameSlice from '@/features/frame/state/frameSlice';
 import layerSlice from '@/features/layer/state/layerSlice';
+import sceneSlice from '@/features/scene/sceneSlice';
 import settingsSlice from '@/features/settings/state/settingsSlice';
 import toolSlice from '@/features/tool/state/toolSlice';
 import userSlice from '@/features/user/userSlice';
@@ -14,6 +16,8 @@ export const store = configureStore({
     settings: settingsSlice,
     tool: toolSlice,
     user: userSlice,
+    builder: builderSlice,
+    scene: sceneSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
