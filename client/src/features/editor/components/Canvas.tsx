@@ -5,6 +5,10 @@ import { Line, OrbitControls, PivotControls, Plane, TransformControls } from '@r
 import { Geometry, Base, Subtraction, Addition, CSGGeometryRef } from '@react-three/csg';
 import { Environment } from './Environment';
 import React from 'react';
+import { useAppDispatch, useAppSelector } from '@/common/hooks/hooks';
+import { onClick, onMouseMove } from '@/features/tool/state/toolSlice';
+import { Camera, Vector3 } from 'three';
+import { setCamera } from '@/features/scene/sceneSlice';
 
 const box = new THREE.BoxGeometry();
 const cyl = new THREE.CylinderGeometry(1, 1, 2, 20);
@@ -13,13 +17,37 @@ const tri = new THREE.CylinderGeometry(1, 1, 2, 3);
 const App = () => {
   const [points, setPoints] = useState<THREE.Vector3[]>([]);
 
+  const { meshes } = useAppSelector((selector) => selector.scene);
+
+  const dispatch = useAppDispatch();
+
   const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
 
   return (
-    <Canvas style={{ backgroundColor: 'goldenrod' }} shadows camera={{ position: [0, 10, 15], fov: 25 }}>
+    <Canvas
+      style={{ backgroundColor: 'goldenrod' }}
+      shadows
+      camera={{ position: [0, 10, 15], fov: 25 }}
+      onClick={() => dispatch(onClick())}
+      onCreated={(state) => dispatch(setCamera(state.camera))}
+    >
       {/* <color attach="background" args={['skyblue']} /> */}
       {/* <House /> */}
-      <TransformControls mode="translate" position={[0, 0, 0]}>
+
+      {meshes.map((m) => (
+        <mesh
+          onClick={(a) => {
+            setPoints((value) => [...value, a.point]);
+          }}
+          castShadow
+          position={m.position}
+        >
+          <boxGeometry />
+          <meshStandardMaterial color="lightblue" />
+        </mesh>
+      ))}
+
+      {/* <TransformControls mode="translate" position={[0, 0, 0]}>
         <group>
           <mesh
             onClick={(a) => {
@@ -36,13 +64,18 @@ const App = () => {
             <meshStandardMaterial color="indianred" />
           </mesh>
         </group>
-      </TransformControls>
+      </TransformControls> */}
 
       <mesh position={[5, 1, 0]} castShadow>
         <cylinderGeometry args={[0.02, 0.02, 2, 8]} />
         <meshStandardMaterial color="brown" />
       </mesh>
-      <Plane args={[2, 2]} rotation={[-Math.PI / 2, 0, 0]} position={[2, -0.1, 0]} onClick={}>
+      <Plane
+        args={[5, 5]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[2, -0.1, 0]}
+        onPointerMove={(e) => dispatch(onMouseMove(e))}
+      >
         <meshStandardMaterial color="goldenrod" />
       </Plane>
 

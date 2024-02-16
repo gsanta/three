@@ -7,7 +7,7 @@ const Select = forwardRef<SelectProps, 'select'>((props, ref) => {
   const { placeholder, children, ...rest } = props;
 
   return (
-    <_Select ref={ref} {...rest}>
+    <_Select ref={ref} {...(rest as any)}>
       {placeholder && (
         <option hidden disabled value="">
           {placeholder}
