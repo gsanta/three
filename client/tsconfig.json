@@ -1,7 +1,7 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "baseUrl": "./app",
+    "baseUrl": "src",
     "paths": {
       "@/*": [
         "./*"
@@ -58,7 +58,7 @@
     "src/pages/_app.js",
     "engine/**/*.ts",
     "engine/**/*.js",
-    "app/**/*.tsx",
+    "src/**/*.tsx",
     ".next/types/**/*.ts"
   ],
   "exclude": [
