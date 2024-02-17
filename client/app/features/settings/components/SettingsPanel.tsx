@@ -3,39 +3,11 @@ import { Box, Button, ButtonGroup, IconButton, Menu, MenuButton, MenuItem, MenuL
 import React, { useState } from 'react';
 import ExportDialog from './ExportDialog';
 import ImportDialog from './import/ImportDialog';
-import { useAppDispatch, useAppSelector } from '@/common/hooks/hooks';
-import { flipHorizontal } from '../state/settingsSlice';
 import { useBoolean } from 'usehooks-ts';
-import ResizeCanvasDialog from './ResizeCanvasDialog';
-import useSaveDrawing from '../hooks/useSaveDrawing';
-import LoadDrawingDialog from './LoadDrawingDialog';
 
 const SettingsPanel = () => {
   const [isExportDialogOpen, setExportDialogOpen] = useState(false);
   const { value: isImportDialogOpen, setTrue: openImportDialog, setFalse: closeImportDialog } = useBoolean(false);
-  const {
-    value: isLoadDrawingDialogOpen,
-    setTrue: openLoadDrawingDialog,
-    setFalse: cloaseLoadDrawingDialog,
-  } = useBoolean(false);
-
-  const dispatch = useAppDispatch();
-
-  const handleFlipHorizontal = () => dispatch(flipHorizontal());
-
-  const { save, isLoading: isSaveLoading } = useSaveDrawing();
-
-  const { editor } = useAppSelector((state) => state.editor);
-
-  const handleGenerateSpriteSheet = () => {
-    editor.generateSpriteSheet();
-  };
-
-  const {
-    value: isResizeCanvasDialogOpen,
-    setFalse: closeResizeCanvasDialog,
-    setTrue: openResizeCanvasDialog,
-  } = useBoolean();
 
   return (
     <Box display="flex" gap="4">
@@ -53,66 +25,54 @@ const SettingsPanel = () => {
           <MenuItem onClick={() => setExportDialogOpen(true)}>Export</MenuItem>
         </MenuList>
       </Menu>
-      <Menu>
-        <MenuButton as={Button} size="sm" variant="ghost">
-          Edit
-        </MenuButton>
-        <MenuList>
-          <MenuItem onClick={handleFlipHorizontal}>Flip horizontal</MenuItem>
-          <MenuItem onClick={openResizeCanvasDialog}>Resize canvas</MenuItem>
-          <MenuItem onClick={handleGenerateSpriteSheet}>Generate spritesheet</MenuItem>
-        </MenuList>
-      </Menu>
       <ButtonGroup>
         <Tooltip label="Save to server">
-          <Button variant="outline" size="sm" isLoading={isSaveLoading} onClick={save}>
+          <Button variant="outline" size="sm" onClick={() => {}}>
             <Icon name="BiCloudUpload" />
           </Button>
         </Tooltip>
         <Tooltip label="Download from server">
-          <Button variant="outline" size="sm" isLoading={isSaveLoading} onClick={openLoadDrawingDialog}>
+          <Button variant="outline" size="sm" onClick={() => {}}>
             <Icon name="BiCloudDownload" />
           </Button>
         </Tooltip>
       </ButtonGroup>
       <ButtonGroup>
         <Tooltip label="Undo">
-          <Button variant="outline" size="sm" onClick={() => editor.undo()}>
+          <Button variant="outline" size="sm" onClick={() => {}}>
             <Icon name="BiUndo" />
           </Button>
         </Tooltip>
         <Tooltip label="Redo">
-          <Button variant="outline" size="sm" onClick={() => editor.redo()}>
+          <Button variant="outline" size="sm" onClick={() => {}}>
             <Icon name="BiRedo" />
           </Button>
         </Tooltip>
       </ButtonGroup>
       <ButtonGroup>
         <Tooltip label="Zoom in">
-          <Button variant="outline" size="sm" onClick={() => editor.zoomIn()}>
+          <Button variant="outline" size="sm" onClick={() => {}}>
             <Icon name="BiZoomIn" />
           </Button>
         </Tooltip>
         <Tooltip label="Reset zoom to 1">
-          <Button variant="outline" size="sm" onClick={() => editor.resetZoom()}>
+          <Button variant="outline" size="sm" onClick={() => {}}>
             Reset
           </Button>
         </Tooltip>
         <Tooltip label="Fit drawing to viewport">
-          <Button variant="outline" size="sm" onClick={() => editor.zoomToFit()}>
+          <Button variant="outline" size="sm" onClick={() => {}}>
             Fit
           </Button>
         </Tooltip>
         <Tooltip label="Zoom out">
-          <Button variant="outline" size="sm" onClick={() => editor.zoomOut()}>
+          <Button variant="outline" size="sm" onClick={() => {}}>
             <Icon name="BiZoomOut" />
           </Button>
         </Tooltip>
       </ButtonGroup>
       <ImportDialog isOpen={isImportDialogOpen} onClose={closeImportDialog} />
       <ExportDialog isOpen={isExportDialogOpen} onClose={() => setExportDialogOpen(false)} />
-      <LoadDrawingDialog isOpen={isLoadDrawingDialogOpen} onClose={cloaseLoadDrawingDialog} />
-      <ResizeCanvasDialog isOpen={isResizeCanvasDialogOpen} onClose={closeResizeCanvasDialog} />
     </Box>
   );
 };
