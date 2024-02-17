@@ -5,7 +5,6 @@ import './app.scss';
 import Layout from './common/components/Layout';
 import Split from 'react-split';
 import Canvas from './features/editor/components/Canvas';
-import LayerPanel from './features/layer/components/LayerPanel';
 import Header from './common/components/Header';
 import Toolbar from './features/tool/components/Toolbar';
 import ToolOptionsPanel from './features/tool/components/ToolOptionsPanel';
@@ -39,9 +38,7 @@ const Page = () => {
                   </TabPanel>
                 </TabPanels>
               </Tabs>
-              <Box overflowY="auto">
-                <LayerPanel />
-              </Box>
+              <Box overflowY="auto"></Box>
             </Split>
           </Split>
         </Layout>

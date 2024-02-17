@@ -1,8 +1,5 @@
 import AddTool from '@/features/builder/AddTool';
 import builderSlice from '@/features/builder/builderSlice';
-import editorSlice from '@/features/editor/editorSlice';
-import frameSlice from '@/features/frame/state/frameSlice';
-import layerSlice from '@/features/layer/state/layerSlice';
 import sceneSlice from '@/features/scene/sceneSlice';
 import settingsSlice from '@/features/settings/state/settingsSlice';
 import toolSlice, { setTools } from '@/features/tool/state/toolSlice';
@@ -11,9 +8,6 @@ import { configureStore } from '@reduxjs/toolkit';
 
 export const store = configureStore({
   reducer: {
-    editor: editorSlice,
-    frame: frameSlice,
-    layer: layerSlice,
     settings: settingsSlice,
     tool: toolSlice,
     user: userSlice,
