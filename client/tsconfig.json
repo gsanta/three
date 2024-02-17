@@ -1,7 +1,7 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "baseUrl": "./src",
+    "baseUrl": "./app",
     "paths": {
       "@/*": [
         "./*"
@@ -9,10 +9,10 @@
     },
     "outDir": "./build",
     "typeRoots": [
-      "./node_modules/@types",
+      "./node_modules/@types"
     ],
     "types": [
-      "node",
+      "node"
     ],
     "target": "es6",
     "lib": [
@@ -23,7 +23,7 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "allowJs": true,
-    "jsx": "react",
+    "jsx": "preserve",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     /* Turning this on is equivalent to enabling all of the strict mode family options */
@@ -41,6 +41,11 @@
     "incremental": true,
     "isolatedModules": true,
     "experimentalDecorators": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
     ".eslintrc.js",
@@ -52,7 +57,9 @@
     "src/pages/app.tsx",
     "src/pages/_app.js",
     "engine/**/*.ts",
-    "engine/**/*.js"
+    "engine/**/*.js",
+    "app/**/*.tsx",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
