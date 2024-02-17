@@ -1,4 +1,4 @@
-import { Store } from '@/common/utils/store';
+import { Store } from '../../common/utils/store';
 import Tool, { PointerInfo } from '../tool/state/Tool';
 import { addMesh } from '../scene/sceneSlice';
 import ToolName from '../tool/state/ToolName';

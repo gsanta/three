@@ -5,10 +5,10 @@ import { Line, OrbitControls, PivotControls, Plane, TransformControls } from '@r
 import { Geometry, Base, Subtraction, Addition, CSGGeometryRef } from '@react-three/csg';
 import { Environment } from './Environment';
 import React from 'react';
-import { useAppDispatch, useAppSelector } from '@/common/hooks/hooks';
-import { onClick, onMouseMove } from '@/features/tool/state/toolSlice';
+import { useAppDispatch, useAppSelector } from '../../../common/hooks/hooks';
+import { onClick, onMouseMove } from '../../tool/state/toolSlice';
 import { Camera, Vector3 } from 'three';
-import { setCamera } from '@/features/scene/sceneSlice';
+import { setCamera } from '../../scene/sceneSlice';
 
 const box = new THREE.BoxGeometry();
 const cyl = new THREE.CylinderGeometry(1, 1, 2, 20);

@@ -1,7 +1,7 @@
-import Dialog, { DialogBody } from '@/common/components/Dialog';
-import { useAppDispatch, useAppSelector } from '@/common/hooks/hooks';
-import api from '@/common/utils/api';
-import { usersPath } from '@/common/utils/routes';
+import Dialog, { DialogBody } from '../../../common/components/Dialog';
+import { useAppDispatch, useAppSelector } from '../../../common/hooks/hooks';
+import api from '../../../common/utils/api';
+import { usersPath } from '../../../common/utils/routes';
 import { Avatar, Box, Button, ButtonGroup, FormControl, FormErrorMessage, Text } from '@chakra-ui/react';
 import { AxiosError } from 'axios';
 import React from 'react';

@@ -191,3 +191,7 @@ cmake-build-debug
 /backend/config/master.key
 
 /backend/.env
+
+client/public
+client/deploy
+client/.next

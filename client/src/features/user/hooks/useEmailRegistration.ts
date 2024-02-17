@@ -1,12 +1,12 @@
-import { useAppDispatch } from '@/common/hooks/hooks';
-import api from '@/common/utils/api';
-import { usersPath } from '@/common/utils/routes';
+import { useAppDispatch } from '../../../common/hooks/hooks';
+import api from '../../../common/utils/api';
+import { usersPath } from '../../../common/utils/routes';
 import { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { setUser } from '../userSlice';
 import { useCallback } from 'react';
-import { ServerError } from '@/common/components/ErrorMessage';
+import { ServerError } from '../../../common/components/ErrorMessage';
 
 type RegistrationRequestData = {
   email: string;

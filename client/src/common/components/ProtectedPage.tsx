@@ -1,7 +1,7 @@
-import { setUser } from '@/features/user/userSlice';
-import { useAppDispatch } from '@/common/hooks/hooks';
-import { store } from '@/common/utils/store';
-import React, { ReactNode } from 'react';
+import { setUser } from '../../features/user/userSlice';
+import { useAppDispatch } from '../hooks/hooks';
+import { store } from '../utils/store';
+import React, { ReactNode, useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 
@@ -10,11 +10,13 @@ type ProtectedPageProps = {
 };
 
 const StoreSetup = ({ children }: { children: ReactNode }): JSX.Element => {
-  const globalProps = window.globalProps;
-
   const dispatch = useAppDispatch();
 
-  dispatch(setUser(globalProps.user));
+  useEffect(() => {
+    const globalProps = window.globalProps || { user: { isLoggedIn: false } };
+
+    dispatch(setUser(globalProps.user));
+  }, [dispatch]);
 
   return <>{children}</>;
 };

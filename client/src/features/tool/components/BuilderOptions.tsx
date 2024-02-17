@@ -1,9 +1,9 @@
-import { useAppDispatch, useAppSelector } from '@/common/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '../../../common/hooks/hooks';
 import { Box, FormControl, FormLabel } from '@chakra-ui/react';
 import React from 'react';
-import RadioSwitchButton from '@/common/components/RadioSwitchButton';
-import RadioSwitchGroup from '@/common/components/RadioSwitchGroup';
-import { BasicGeometryName, setSelectedGeometry } from '@/features/builder/builderSlice';
+import RadioSwitchButton from '../../../common/components/RadioSwitchButton';
+import RadioSwitchGroup from '../../../common/components/RadioSwitchGroup';
+import { BasicGeometryName, setSelectedGeometry } from '../../builder/builderSlice';
 
 const BuilderOptions = () => {
   const geometries = useAppSelector((state) => state.builder.geometries);

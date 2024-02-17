@@ -1,6 +1,6 @@
-import { ServerError } from '@/common/components/ErrorMessage';
-import { useAppDispatch } from '@/common/hooks/hooks';
-import api from '@/common/utils/api';
+import { ServerError } from '../../../common/components/ErrorMessage';
+import { useAppDispatch } from '../../../common/hooks/hooks';
+import api from '../../../common/utils/api';
 import { AxiosError } from 'axios';
 import { useMutation } from 'react-query';
 import { setUser } from '../userSlice';

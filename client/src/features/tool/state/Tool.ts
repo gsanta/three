@@ -1,6 +1,6 @@
-import ToolName from '@/features/tool/state/ToolName';
-import { IconName } from '@/common/components/icon/Icon';
-import type { Store } from '@/common/utils/store';
+import ToolName from './ToolName';
+import { IconName } from '../../../common/components/icon/Icon';
+import type { Store } from '../../../common/utils/store';
 
 export interface PointerInfo {
   x: number;
