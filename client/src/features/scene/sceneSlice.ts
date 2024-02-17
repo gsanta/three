@@ -11,6 +11,7 @@ type MeshInfo = {
 interface SceneState {
   meshes: MeshInfo[];
   camera: Camera | undefined;
+  // selectedMesh
 }
 
 const initialState: SceneState = {
