@@ -2,18 +2,19 @@
   "name": "spright-editor-client",
   "version": "0.0.1",
   "engines": {
-    "node": "18.16.0"
+    "node": "20.11.0"
   },
   "description": "",
   "main": "dist/src/index.js",
   "types": "dist/src/window.d.ts",
   "scripts": {
-    "build": "NODE_ENV=development webpack",
     "build:production": "NODE_ENV=production webpack",
     "deploy": "yarn && yarn build:production  && ./scripts/build.sh",
-    "start": "NODE_ENV=development webpack-dev-server",
-    "lint": "eslint -c .eslintrc.js src --quiet",
-    "lint:fix": "eslint -c .eslintrc.js src --quiet --fix"
+    "lint:fix": "eslint -c .eslintrc.js src --quiet --fix",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "author": "Gergely Santa",
   "license": "MIT",
@@ -42,6 +43,7 @@
     "eventemitter3": "^5.0.0",
     "framer-motion": "^11.0.5",
     "js-cookie": "^3.0.5",
+    "next": "^14.1.0",
     "react": "^18.2.0",
     "react-color": "^2.19.3",
     "react-dnd": "^16.0.1",
