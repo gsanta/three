@@ -28,7 +28,6 @@ const App = () => {
       style={{ backgroundColor: 'goldenrod' }}
       shadows
       camera={{ position: [0, 10, 15], fov: 25 }}
-      onClick={() => dispatch(onClick())}
       onCreated={(state) => dispatch(setCamera(state.camera))}
     >
       {/* <color attach="background" args={['skyblue']} /> */}
@@ -71,9 +70,10 @@ const App = () => {
         <meshStandardMaterial color="brown" />
       </mesh>
       <Plane
-        args={[5, 5]}
+        args={[10, 10]}
         rotation={[-Math.PI / 2, 0, 0]}
         position={[2, -0.1, 0]}
+        onPointerDown={() => dispatch(onClick())}
         onPointerMove={(e) => dispatch(onMouseMove(e))}
       >
         <meshStandardMaterial color="goldenrod" />
