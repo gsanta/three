@@ -1,11 +1,6 @@
 import { ComponentStyleConfig, defineStyle, theme } from '@chakra-ui/react';
 import { mode } from '@chakra-ui/theme-tools';
 
-// const disabled = {
-//   bgColor: 'gray.600',
-//   cursor: 'not-allowed',
-// };
-
 const variantOutline = defineStyle((props) => {
   const { colorScheme } = props;
 

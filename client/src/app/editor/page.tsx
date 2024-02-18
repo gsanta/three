@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, ChakraProvider, Tab, TabList, TabPanel, TabPanels, Tabs, theme } from '@chakra-ui/react';
+import { Box, ChakraProvider, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import './app.scss';
 import Layout from '../../common/components/Layout';
 import Split from 'react-split';
@@ -10,6 +10,7 @@ import Toolbar from '../../features/tool/components/Toolbar';
 import ToolOptionsPanel from '../../features/tool/components/ToolOptionsPanel';
 import ColorPicker from '../../common/components/ColorPicker';
 import ProtectedPage from '../../common/components/ProtectedPage';
+import theme from '@/common/themes/theme';
 
 const Page = () => {
   return (

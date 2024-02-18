@@ -1,22 +1,20 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { Camera } from 'three';
-import { BasicGeometryName } from '../builder/builderSlice';
+import { GeometryType } from '../builder/builderSlice';
 
 type MeshInfo = {
-  name: BasicGeometryName;
+  id: string;
+  type: GeometryType;
   position: [number, number, number];
   rotation?: [number, number, number];
 };
 
 interface SceneState {
   meshes: MeshInfo[];
-  camera: Camera | undefined;
-  // selectedMesh
+  selectedMesh?: string;
 }
 
 const initialState: SceneState = {
   meshes: [],
-  camera: undefined,
 };
 
 export const sceneSlice = createSlice({
@@ -27,12 +25,12 @@ export const sceneSlice = createSlice({
       state.meshes.push(action.payload);
     },
 
-    setCamera: (state, action: PayloadAction<Camera | undefined>) => {
-      state.camera = action.payload;
+    setSelectedMesh: (state, action: PayloadAction<MeshInfo | undefined>) => {
+      state.selectedMesh = action.payload?.id;
     },
   },
 });
 
-export const { addMesh, setCamera } = sceneSlice.actions;
+export const { addMesh, setSelectedMesh } = sceneSlice.actions;
 
 export default sceneSlice.reducer;

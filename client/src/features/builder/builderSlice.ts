@@ -1,13 +1,13 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-export type BasicGeometryName = 'box' | 'sphere' | 'cylinder';
+export type GeometryType = 'box' | 'sphere' | 'cylinder';
 
 type BasicGeometry = {
-  name: BasicGeometryName;
+  name: GeometryType;
 };
 
 interface BuilderState {
-  selectedGeometry: BasicGeometryName;
+  selectedGeometry: GeometryType;
   geometries: BasicGeometry[];
 }
 
@@ -30,7 +30,7 @@ export const builderSlice = createSlice({
   name: 'frame',
   initialState,
   reducers: {
-    setSelectedGeometry: (state, action: PayloadAction<BasicGeometryName>) => {
+    setSelectedGeometry: (state, action: PayloadAction<GeometryType>) => {
       state.selectedGeometry = action.payload;
     },
   },
