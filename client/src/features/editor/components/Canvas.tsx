@@ -8,7 +8,7 @@ import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../common/hooks/hooks';
 import { onClick, onMouseMove } from '../../tool/state/toolSlice';
 import { Camera, Vector3 } from 'three';
-import { setCamera } from '../../scene/sceneSlice';
+import useEditorContext from '@/app/editor/EditorContext';
 
 const box = new THREE.BoxGeometry();
 const cyl = new THREE.CylinderGeometry(1, 1, 2, 20);
@@ -17,34 +17,46 @@ const tri = new THREE.CylinderGeometry(1, 1, 2, 3);
 const App = () => {
   const [points, setPoints] = useState<THREE.Vector3[]>([]);
 
-  const { meshes } = useAppSelector((selector) => selector.scene);
+  const { meshes, selectedMesh } = useAppSelector((selector) => selector.scene);
+  const { tool } = useEditorContext();
 
   const dispatch = useAppDispatch();
 
   const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
 
   return (
-    <Canvas
-      style={{ backgroundColor: 'goldenrod' }}
-      shadows
-      camera={{ position: [0, 10, 15], fov: 25 }}
-      onCreated={(state) => dispatch(setCamera(state.camera))}
-    >
+    <Canvas style={{ backgroundColor: 'goldenrod' }} shadows camera={{ position: [0, 10, 15], fov: 25 }}>
       {/* <color attach="background" args={['skyblue']} /> */}
       {/* <House /> */}
 
-      {meshes.map((m) => (
-        <mesh
-          onClick={(a) => {
-            setPoints((value) => [...value, a.point]);
-          }}
-          castShadow
-          position={m.position}
-        >
-          <boxGeometry />
-          <meshStandardMaterial color="lightblue" />
-        </mesh>
-      ))}
+      {meshes.map((m) => {
+        const mesh = (
+          <mesh
+            key={m.id}
+            name={m.id}
+            // onPointerDown={(a) => {
+            //   setPoints((value) => [...value, a.point]);
+            // }}
+            onPointerDown={(e) => {
+              tool.onPointerDown(e);
+              e.stopPropagation();
+            }}
+            castShadow
+            position={m.position}
+          >
+            <boxGeometry />
+            <meshStandardMaterial color="lightblue" />
+          </mesh>
+        );
+
+        return m.id === selectedMesh ? (
+          <PivotControls activeAxes={[false, true, true]} rotation={[0, Math.PI / 2, 0]} scale={1} anchor={[0, 0, 0.4]}>
+            {mesh}
+          </PivotControls>
+        ) : (
+          mesh
+        );
+      })}
 
       {/* <TransformControls mode="translate" position={[0, 0, 0]}>
         <group>
@@ -73,8 +85,8 @@ const App = () => {
         args={[10, 10]}
         rotation={[-Math.PI / 2, 0, 0]}
         position={[2, -0.1, 0]}
-        onPointerDown={() => dispatch(onClick())}
-        onPointerMove={(e) => dispatch(onMouseMove(e))}
+        onPointerDown={(e) => tool.onPointerDown(e)}
+        onPointerMove={(e) => tool.onPointerMove(e)}
       >
         <meshStandardMaterial color="goldenrod" />
       </Plane>

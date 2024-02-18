@@ -3,7 +3,7 @@ import { Box, FormControl, FormLabel } from '@chakra-ui/react';
 import React from 'react';
 import RadioSwitchButton from '../../../common/components/RadioSwitchButton';
 import RadioSwitchGroup from '../../../common/components/RadioSwitchGroup';
-import { BasicGeometryName, setSelectedGeometry } from '../../builder/builderSlice';
+import { GeometryType, setSelectedGeometry } from '../../builder/builderSlice';
 
 const BuilderOptions = () => {
   const geometries = useAppSelector((state) => state.builder.geometries);
@@ -13,7 +13,7 @@ const BuilderOptions = () => {
   const dispatch = useAppDispatch();
 
   const handleGeometryChange = (val: string) => {
-    dispatch(setSelectedGeometry(val as BasicGeometryName));
+    dispatch(setSelectedGeometry(val as GeometryType));
   };
 
   return (
@@ -24,7 +24,9 @@ const BuilderOptions = () => {
         </FormLabel>
         <RadioSwitchGroup defaultValue={selectedGeometry} name="geometry-selector" onChange={handleGeometryChange}>
           {geometries.map((geometry) => (
-            <RadioSwitchButton value={geometry.name}>{geometry.name}</RadioSwitchButton>
+            <RadioSwitchButton key={geometry.name} value={geometry.name}>
+              {geometry.name}
+            </RadioSwitchButton>
           ))}
         </RadioSwitchGroup>
       </FormControl>

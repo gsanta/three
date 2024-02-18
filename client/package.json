@@ -38,6 +38,7 @@
     "@types/react-dnd": "^3.0.2",
     "@types/react-dom": "^18.2.19",
     "@types/three": "^0.161.2",
+    "@types/uuid": "^9.0.8",
     "@typescript-eslint/parser": "^7.0.1",
     "axios": "^1.6.7",
     "eventemitter3": "^5.0.0",
@@ -57,7 +58,8 @@
     "split.js": "^1.6.5",
     "three": "^0.161.0",
     "typescript": "^5.3.3",
-    "usehooks-ts": "^2.14.0"
+    "usehooks-ts": "^2.14.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.23.9",

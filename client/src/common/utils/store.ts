@@ -1,8 +1,7 @@
-import AddTool from '../../features/builder/AddTool';
 import builderSlice from '../../features/builder/builderSlice';
 import sceneSlice from '../../features/scene/sceneSlice';
 import settingsSlice from '../../features/settings/state/settingsSlice';
-import toolSlice, { setTools } from '../../features/tool/state/toolSlice';
+import toolSlice from '../../features/tool/state/toolSlice';
 import userSlice from '../../features/user/userSlice';
 import { configureStore } from '@reduxjs/toolkit';
 
@@ -28,8 +27,6 @@ export const store = configureStore({
       },
     }),
 });
-
-store.dispatch(setTools([new AddTool(store)]));
 
 export type Store = typeof store;
 

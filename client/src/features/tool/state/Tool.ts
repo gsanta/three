@@ -6,6 +6,7 @@ export interface PointerInfo {
   x: number;
   y: number;
   z: number;
+  eventObjectName: string;
 }
 
 abstract class Tool {
@@ -22,10 +23,10 @@ abstract class Tool {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onClick(_info: PointerInfo) {}
+  onPointerDown(_info: PointerInfo) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onMouseMove(_info: PointerInfo) {}
+  onPointerMove(_info: PointerInfo) {}
 }
 
 export default Tool;

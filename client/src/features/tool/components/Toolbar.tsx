@@ -2,16 +2,19 @@ import React from 'react';
 import { Box, Tooltip } from '@chakra-ui/react';
 import ToggleButton from '../../../common/components/ToggleButton';
 import Icon from '../../../common/components/icon/Icon';
-import { useAppSelector } from '../../../common/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '../../../common/hooks/hooks';
+import useEditorContext from '@/app/editor/EditorContext';
+import ToolName from '../state/ToolName';
+import { setSelectedTool } from '../state/toolSlice';
 
 const Toolbar = () => {
-  const tools = useAppSelector((state) => state.tool.tools);
-  const selectedTool = useAppSelector((state) => state.tool.selectedTool);
-  // const dispatch = useAppDispatch();
+  const { tool } = useEditorContext();
+  const { selectedTool } = useAppSelector((state) => state.tool);
+  const dispatch = useAppDispatch();
 
-  // const handleSelectTool = (name: string) => {
-  //   // dispatch(setSelectedTool(name as ToolName));
-  // };
+  const handleSelectTool = (name: ToolName) => {
+    dispatch(setSelectedTool(name as ToolName));
+  };
 
   return (
     <Box
@@ -23,11 +26,16 @@ const Toolbar = () => {
       gap="1"
       alignItems="center"
     >
-      {tools.map(({ iconName, name }) => {
+      {tool.getTools().map(({ iconName, name }) => {
         const toggle = name === selectedTool;
         return (
           <Tooltip key={name} label={name} placement="right">
-            <ToggleButton className="iconOnly" toggle={toggle} onToggle={() => {}} variant="outline">
+            <ToggleButton
+              className="iconOnly"
+              toggle={toggle}
+              onToggle={() => handleSelectTool(name)}
+              variant="outline"
+            >
               <Icon name={iconName} />
             </ToggleButton>
           </Tooltip>
