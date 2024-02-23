@@ -3,6 +3,7 @@ import Panel from '../../../common/components/Panel';
 import React from 'react';
 import { useAppSelector } from '../../../common/hooks/hooks';
 import BuilderOptions from './BuilderOptions';
+import SelectOptions from './SelectOptions';
 
 const ToolOptionsPanel = () => {
   const selectedTool = useAppSelector((state) => state.tool.selectedTool);
@@ -11,6 +12,8 @@ const ToolOptionsPanel = () => {
     switch (selectedTool) {
       case ToolName.Add:
         return <BuilderOptions />;
+      case ToolName.Select:
+        return <SelectOptions />;
       default:
         return null;
     }

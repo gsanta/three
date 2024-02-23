@@ -1,33 +1,16 @@
 import React, { useState } from 'react';
 import Dialog, { DialogProps, DialogBody, DialogFooter } from '../../../common/components/Dialog';
 import { Button, FormControl, FormLabel, Select } from '@chakra-ui/react';
-import { downloadBlob, downloadString } from '../utils/fileUtils';
 import FileType, { getFileTypes } from '../types/FileType';
-import { useAppSelector } from '../../../common/hooks/hooks';
 
 const ExportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children'>) => {
-  const editor = useAppSelector((state) => state.tool.editor);
-
   const [selectedFileType, setSelectedFileType] = useState<FileType>(FileType.json);
 
   const exportImage = () => {
-    if (editor) {
-      // TODO: create action instead of direct call
-      editor.exportImage();
-      const data = editor.getImageData();
-      const size = editor.getImageSize();
-      const buffer = new Uint8Array(Module.HEAPU8.buffer, data, size);
-      downloadBlob(buffer);
-    }
     onClose();
   };
 
   const exportDocument = () => {
-    if (editor) {
-      // TODO: create action instead of direct call
-      const doc = editor.exportDocument();
-      downloadString(doc, 'spright.json');
-    }
     onClose();
   };
 

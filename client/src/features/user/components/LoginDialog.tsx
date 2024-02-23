@@ -2,7 +2,6 @@ import Dialog, { DialogBody, DialogButtons, DialogFooter } from '../../../common
 import { FormControl, FormLabel, Input, FormErrorMessage, Button, Box } from '@chakra-ui/react';
 import React from 'react';
 import { emailRegex } from '../utils/userUtils';
-import GoogleLogin from './GoogleLogin';
 import ErrorMessage from '../../../common/components/ErrorMessage';
 import useEmailLogin from '../hooks/useEmailLogin';
 import useGoogleLogin from '../hooks/useGoogleLogin';
@@ -13,7 +12,7 @@ type LoginDialogProps = {
 };
 
 const LoginDialog = ({ isOpen, onClose }: LoginDialogProps) => {
-  const { loginGoogle, loginGooglError, isLoginGoogleLoading, loginGoogleReset } = useGoogleLogin({
+  const { loginGooglError, isLoginGoogleLoading, loginGoogleReset } = useGoogleLogin({
     onClose,
   });
 
@@ -56,7 +55,7 @@ const LoginDialog = ({ isOpen, onClose }: LoginDialogProps) => {
             <Input type="password" {...register('password')} />
           </FormControl>
           <Box display="flex" marginTop="4" justifyContent="space-around">
-            <GoogleLogin onLogin={loginGoogle} />
+            {/* <GoogleLogin onLogin={loginGoogle} /> */}
           </Box>
           {loginEmailError && (
             <ErrorMessage

@@ -1,29 +1,37 @@
 import { ThreeEvent } from '@react-three/fiber';
-import Tool from './Tool';
+import Tool, { PointerInfo } from './Tool';
 import ToolName from './ToolName';
 import { Store } from '@/common/utils/store';
-import { setPointer } from './toolSlice';
+import { Vector3 } from 'three';
+import SelectTool from '@/features/builder/SelectTool';
 
 class ToolService {
   constructor(tools: Tool[], store: Store) {
     this.tools = tools;
     this.store = store;
+    this.pointer = {
+      pos: new Vector3(),
+      dragPos: new Vector3(),
+      eventObjectName: '',
+    };
   }
 
   onPointerDown(event: ThreeEvent<PointerEvent>) {
-    this.store.dispatch(
-      setPointer({ eventObjectName: event.eventObject.name, x: event.point.x, y: event.point.y, z: event.point.z }),
-    );
+    this.pointer.eventObjectName = event.eventObject.name;
 
-    const { selectedTool, pointer } = this.store.getState().tool;
-    this.getTool(selectedTool)?.onPointerDown(pointer);
+    const { selectedTool } = this.store.getState().tool;
+    this.getTool(selectedTool)?.onPointerDown(this.pointer);
   }
 
   onPointerMove(event: ThreeEvent<PointerEvent>) {
-    this.store.dispatch(setPointer({ x: event.point.x, y: event.point.y, z: event.point.z }));
+    this.pointer.pos = event.point;
 
-    const { selectedTool, pointer } = this.store.getState().tool;
-    this.getTool(selectedTool)?.onPointerMove(pointer);
+    const { selectedTool } = this.store.getState().tool;
+    this.getTool(selectedTool)?.onPointerMove(this.pointer);
+  }
+
+  onDrag(position: Vector3) {
+    this.pointer.dragPos = position;
   }
 
   getTools(): Tool[] {
@@ -33,6 +41,12 @@ class ToolService {
   getTool(name: ToolName) {
     return this.tools.find((tool) => tool.name === name);
   }
+
+  getSelectTool() {
+    return this.tools.find((tool) => tool.name === ToolName.Select) as SelectTool;
+  }
+
+  private pointer: PointerInfo;
 
   private tools: Tool[];
 

@@ -1,16 +1,16 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { GeometryType } from '../builder/builderSlice';
 
-type MeshInfo = {
+export type MeshInfo = {
   id: string;
   type: GeometryType;
   position: [number, number, number];
   rotation?: [number, number, number];
+  scale: [number, number, number];
 };
 
 interface SceneState {
   meshes: MeshInfo[];
-  selectedMesh?: string;
 }
 
 const initialState: SceneState = {
@@ -25,12 +25,37 @@ export const sceneSlice = createSlice({
       state.meshes.push(action.payload);
     },
 
-    setSelectedMesh: (state, action: PayloadAction<MeshInfo | undefined>) => {
-      state.selectedMesh = action.payload?.id;
+    setMeshPosition(state, action: PayloadAction<{ meshId: string; position: [number, number, number] }>) {
+      const { meshId, position } = action.payload;
+      const mesh = state.meshes.find((currentMesh) => currentMesh.id === meshId);
+
+      if (mesh) {
+        mesh.position = position;
+      }
+    },
+
+    addMeshPosition(state, action: PayloadAction<{ meshId: string; position: [number, number, number] }>) {
+      const { meshId, position } = action.payload;
+      const mesh = state.meshes.find((currentMesh) => currentMesh.id === meshId);
+
+      if (mesh) {
+        mesh.position[0] += position[0];
+        mesh.position[1] += position[1];
+        mesh.position[2] += position[2];
+      }
+    },
+
+    updateMesh(state, action: PayloadAction<MeshInfo>) {
+      const newMesh = action.payload;
+      const mesh = state.meshes.find((currentMesh) => currentMesh.id === newMesh.id);
+
+      if (mesh) {
+        Object.assign(mesh, newMesh);
+      }
     },
   },
 });
 
-export const { addMesh, setSelectedMesh } = sceneSlice.actions;
+export const { addMesh, addMeshPosition, setMeshPosition, updateMesh } = sceneSlice.actions;
 
 export default sceneSlice.reducer;

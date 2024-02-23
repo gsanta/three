@@ -9,9 +9,11 @@ class AddTool extends Tool {
     super(store, ToolName.Add, 'BiPlus');
   }
 
-  onPointerDown(info: PointerInfo) {
+  onPointerDown({ pos }: PointerInfo) {
     const { selectedGeometry } = this.store.getState().builder;
-    this.store.dispatch(addMesh({ id: uuidv4(), type: selectedGeometry, position: [info.x, info.y, info.z] }));
+    this.store.dispatch(
+      addMesh({ id: uuidv4(), type: selectedGeometry, position: [pos.x, pos.y, pos.z], scale: [1, 1, 1] }),
+    );
   }
 }
 

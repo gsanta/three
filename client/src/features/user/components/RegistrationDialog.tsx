@@ -3,7 +3,6 @@ import { FormControl, FormLabel, Input, FormErrorMessage, Button, Box } from '@c
 import React from 'react';
 import { emailRegex } from '../utils/userUtils';
 import useEmailRegistration from '../hooks/useEmailRegistration';
-import GoogleLogin from './GoogleLogin';
 import useGoogleLogin from '../hooks/useGoogleLogin';
 import ErrorMessage from '../../../common/components/ErrorMessage';
 
@@ -13,7 +12,7 @@ type RegistrationDialogProps = {
 };
 
 const RegistrationDialog = ({ isOpen, onClose }: RegistrationDialogProps) => {
-  const { loginGoogle, loginGooglError, isLoginGoogleLoading, loginGoogleReset } = useGoogleLogin({
+  const { loginGooglError, isLoginGoogleLoading, loginGoogleReset } = useGoogleLogin({
     onClose,
   });
 
@@ -80,7 +79,7 @@ const RegistrationDialog = ({ isOpen, onClose }: RegistrationDialogProps) => {
             <FormErrorMessage>{formErrors.password_confirmation?.message}</FormErrorMessage>
           </FormControl>
           <Box display="flex" marginTop="4" justifyContent="space-around">
-            <GoogleLogin onLogin={loginGoogle} />
+            {/* <GoogleLogin onLogin={loginGoogle} /> */}
           </Box>
           {registerEmailError && (
             <ErrorMessage
