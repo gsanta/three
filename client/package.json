@@ -11,9 +11,9 @@
     "build:production": "NODE_ENV=production webpack",
     "deploy": "yarn && yarn build:production  && ./scripts/build.sh",
     "lint:fix": "eslint -c .eslintrc.js src --quiet --fix",
-    "dev": "next dev",
+    "dev": "next dev --port 3012",
     "build": "next build",
-    "start": "next start",
+    "start": "next start --port 3012",
     "lint": "next lint"
   },
   "author": "Gergely Santa",
