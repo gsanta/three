@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button as _Button, ButtonProps as _ButtonProps, forwardRef } from '@chakra-ui/react';
+import { Button as _Button, ButtonProps as _ButtonProps, forwardRef, useStyleConfig } from '@chakra-ui/react';
 
 export type ButtonProps = _ButtonProps & {
   toggle: boolean;
