@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../hooks/hooks';
-import { colorToHexString } from '../../features/tool/utils/colorUtils';
+import { colorToHexString } from '../../editor/features/tool/utils/colorUtils';
 import React, { useState } from 'react';
 import { ChromePicker, ColorResult } from 'react-color';
 
