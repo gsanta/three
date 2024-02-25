@@ -1,8 +1,8 @@
-import builderSlice from '../../features/builder/builderSlice';
-import sceneSlice from '../../features/scene/sceneSlice';
-import settingsSlice from '../../features/settings/state/settingsSlice';
-import toolSlice from '../../features/tool/state/toolSlice';
-import userSlice from '../../features/user/userSlice';
+import builderSlice from '../../editor/features/builder/builderSlice';
+import sceneSlice from '../../editor/features/scene/sceneSlice';
+import settingsSlice from '../../editor/features/settings/state/settingsSlice';
+import toolSlice from '../../editor/features/tool/state/toolSlice';
+import userSlice from '../../editor/features/user/userSlice';
 import { configureStore } from '@reduxjs/toolkit';
 
 export const store = configureStore({

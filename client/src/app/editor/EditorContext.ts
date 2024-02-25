@@ -1,4 +1,4 @@
-import ToolService from '@/features/tool/state/ToolService';
+import ToolService from '@/editor/features/tool/state/ToolService';
 import { createContext, useContext } from 'react';
 
 export type EditorContextType = {

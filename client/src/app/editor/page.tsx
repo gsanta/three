@@ -4,10 +4,10 @@ import { Box, ChakraProvider, Tab, TabList, TabPanel, TabPanels, Tabs } from '@c
 import './app.scss';
 import Layout from '../../common/components/Layout';
 import Split from 'react-split';
-import Canvas from '../../features/editor/components/Canvas';
+import Canvas from '../../editor/features/scene/components/Canvas';
 import Header from '../../common/components/Header';
-import Toolbar from '../../features/tool/components/Toolbar';
-import ToolOptionsPanel from '../../features/tool/components/ToolOptionsPanel';
+import Toolbar from '../../editor/features/tool/components/Toolbar';
+import ToolOptionsPanel from '../../editor/features/tool/components/ToolOptionsPanel';
 import ColorPicker from '../../common/components/ColorPicker';
 import ProtectedPage from '../../common/components/ProtectedPage';
 import theme from '@/common/themes/theme';
