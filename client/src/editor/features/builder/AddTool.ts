@@ -10,9 +10,16 @@ class AddTool extends Tool {
   }
 
   onPointerDown({ pos }: PointerInfo) {
-    const { selectedGeometry } = this.store.getState().builder;
+    const { selectedBlockName: selectedBlockType, blocks } = this.store.getState().builder;
+    const selectedBlock = blocks.find((block) => block.name === selectedBlockType);
     this.store.dispatch(
-      addMesh({ id: uuidv4(), type: selectedGeometry, position: [pos.x, pos.y, pos.z], scale: [1, 1, 1] }),
+      addMesh({
+        id: uuidv4(),
+        type: selectedBlockType,
+        position: [pos.x, pos.y, pos.z],
+        rotation: [0, 0, 0],
+        scale: selectedBlock?.scale as [number, number, number],
+      }),
     );
   }
 }

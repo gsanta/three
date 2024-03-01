@@ -1,11 +1,11 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { GeometryType } from '../builder/builderSlice';
+import { BlockType } from '../builder/types/Block';
 
 export type MeshInfo = {
   id: string;
-  type: GeometryType;
+  type: BlockType;
   position: [number, number, number];
-  rotation?: [number, number, number];
+  rotation: [number, number, number];
   scale: [number, number, number];
 };
 

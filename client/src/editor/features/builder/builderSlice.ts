@@ -1,35 +1,22 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { MeshInfo } from '../scene/sceneSlice';
-
-export type GeometryType = 'box' | 'sphere' | 'cylinder';
+import * as blocks from './utils/blocks.json';
+import Block, { BlockType } from './types/Block';
+import parseBlocks from './utils/parseBlocks';
 
 export type TransformType = 'move' | 'scale';
 
-type BasicGeometry = {
-  name: GeometryType;
-};
-
 interface BuilderState {
-  selectedGeometry: GeometryType;
-  geometries: BasicGeometry[];
+  selectedBlockName: BlockType;
+  blocks: Block[];
   selectedTransformType: TransformType;
 
   selectedMeshId?: string;
 }
 
 const initialState: BuilderState = {
-  selectedGeometry: 'box',
-  geometries: [
-    {
-      name: 'box',
-    },
-    {
-      name: 'sphere',
-    },
-    {
-      name: 'cylinder',
-    },
-  ],
+  selectedBlockName: 'box',
+  blocks: parseBlocks(blocks as unknown as Parameters<typeof parseBlocks>[0]),
   selectedTransformType: 'move',
 };
 
@@ -37,8 +24,8 @@ export const builderSlice = createSlice({
   name: 'frame',
   initialState,
   reducers: {
-    setSelectedGeometry: (state, action: PayloadAction<GeometryType>) => {
-      state.selectedGeometry = action.payload;
+    setSelectedGeometry: (state, action: PayloadAction<BlockType>) => {
+      state.selectedBlockName = action.payload;
     },
     setSelectedTransformType: (state, action: PayloadAction<TransformType>) => {
       state.selectedTransformType = action.payload;

@@ -31,6 +31,7 @@ const App = () => {
             }}
             castShadow
             position={meshInfo.position}
+            rotation={meshInfo.rotation}
             scale={meshInfo.scale}
           >
             <boxGeometry />
