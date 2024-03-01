@@ -42,6 +42,26 @@ class SelectTool extends Tool {
 
     this.store.dispatch(updateMesh(newMesh));
   }
+
+  rotateMesh(direction: 'x' | 'y' | 'z', rotation: number, mesh: MeshInfo) {
+    const newRotation = [...mesh.rotation] as [number, number, number];
+
+    let index = 0;
+    if (direction === 'y') {
+      index = 1;
+    } else if (direction === 'z') {
+      index = 2;
+    }
+
+    newRotation[index] = rotation;
+
+    const newMesh = {
+      ...mesh,
+      rotation: newRotation,
+    };
+
+    this.store.dispatch(updateMesh(newMesh));
+  }
 }
 
 export default SelectTool;

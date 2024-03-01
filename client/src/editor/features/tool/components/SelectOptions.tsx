@@ -1,16 +1,25 @@
 import { useAppDispatch, useAppSelector } from '../../../../common/hooks/hooks';
-import { Box, FormControl, FormLabel, Input } from '@chakra-ui/react';
+import { Box, FormControl, FormLabel } from '@chakra-ui/react';
 import RadioSwitchButton from '../../../../common/components/RadioSwitchButton';
 import RadioSwitchGroup from '../../../../common/components/RadioSwitchGroup';
 import { TransformType, setSelectedTransformType } from '../../builder/builderSlice';
 import useEditorContext from '@/app/editor/EditorContext';
 import useSelectedMesh from '@/editor/features/builder/useSelectedMesh';
 import NumberInput from '@/common/components/NumberInput';
+import useBlock from '../../builder/hooks/useSelectedBlock';
 
 const SelectOptions = () => {
   const { selectedTransformType } = useAppSelector((state) => state.builder);
   const selectedMesh = useSelectedMesh();
   const { tool } = useEditorContext();
+
+  const selectedBlock = useBlock(selectedMesh?.type);
+
+  const handleRotationChange = (direction: 'x' | 'y' | 'z', val: string) => {
+    if (selectedMesh) {
+      tool.getSelectTool().rotateMesh(direction, Number(val), selectedMesh);
+    }
+  };
 
   const dispatch = useAppDispatch();
 
@@ -70,6 +79,24 @@ const SelectOptions = () => {
           ))}
         </Box>
       </FormControl>
+      {selectedBlock?.options?.rotation?.y && (
+        <FormControl>
+          <FormLabel display="flex" alignItems="center" gap="2" marginBottom="1">
+            Rotation (y)
+          </FormLabel>
+          <RadioSwitchGroup
+            defaultValue={String(selectedBlock.options.rotation.y[0])}
+            name="rotation-y-selector"
+            onChange={(val) => handleRotationChange('y', val)}
+          >
+            {selectedBlock.options.rotation.y.map((rotation) => (
+              <RadioSwitchButton key={rotation} value={String(rotation)}>
+                {String(rotation)}
+              </RadioSwitchButton>
+            ))}
+          </RadioSwitchGroup>
+        </FormControl>
+      )}
     </Box>
   );
 };

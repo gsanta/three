@@ -2,7 +2,7 @@ import ToolName from '../state/ToolName';
 import Panel from '../../../../common/components/Panel';
 import React from 'react';
 import { useAppSelector } from '../../../../common/hooks/hooks';
-import BuilderOptions from './BuilderOptions';
+import BuilderOptions from '../../builder/components/BuilderOptions';
 import SelectOptions from './SelectOptions';
 
 const ToolOptionsPanel = () => {
