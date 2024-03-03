@@ -1,9 +1,13 @@
-import { Vector3 } from 'three';
 import { Store } from '../../../common/utils/store';
 import { MeshInfo, addMeshPosition, updateMesh } from '../scene/sceneSlice';
 import Tool, { PointerInfo } from '../tool/state/Tool';
 import ToolName from '../tool/state/ToolName';
 import { setSelectedMesh } from './builderSlice';
+import { getSelectedMesh } from '@/editor/utils/storeUtils';
+import { getAxisIndex } from '@/editor/utils/vectorUtils';
+import { toRadian } from '@/editor/utils/mathUtils';
+import { getBlock } from './utils/blockUtils';
+import Num3 from '@/editor/types/Num3';
 
 class SelectTool extends Tool {
   constructor(store: Store) {
@@ -12,32 +16,36 @@ class SelectTool extends Tool {
 
   onPointerDown(info: PointerInfo) {
     const { meshes } = this.store.getState().scene;
-    const { selectedMeshId } = this.store.getState().builder;
-
     const mesh = meshes.find((currentMesh) => currentMesh.id === info.eventObjectName);
-    const prevSelectedMesh = meshes.find((currentMesh) => currentMesh.id === selectedMeshId);
-
-    if (prevSelectedMesh) {
-      this.store.dispatch(
-        addMeshPosition({
-          meshId: prevSelectedMesh.id,
-          position: [info.dragPos.x, info.dragPos.y, info.dragPos.z],
-        }),
-      );
-      info.dragPos = new Vector3();
-    }
 
     this.store.dispatch(setSelectedMesh(mesh));
   }
 
-  scaleMesh(scale: [number, number, number], mesh?: MeshInfo) {
-    if (!mesh) {
+  onDragEnd(info: PointerInfo) {
+    const selectedMesh = getSelectedMesh(this.store);
+
+    if (!selectedMesh) {
       return;
     }
 
+    this.store.dispatch(
+      addMeshPosition({
+        meshId: selectedMesh.id,
+        position: info.drag,
+      }),
+    );
+  }
+
+  scaleMesh(scale: number, mesh: MeshInfo) {
+    const block = getBlock(this.store.getState().builder.blocks, mesh.type);
+
+    const index = getAxisIndex(block.options.size.direction);
+    const newScale = [...mesh.scale] as Num3;
+    newScale[index] = scale;
+
     const newMesh = {
       ...mesh,
-      scale,
+      scale: newScale,
     };
 
     this.store.dispatch(updateMesh(newMesh));
@@ -53,7 +61,7 @@ class SelectTool extends Tool {
       index = 2;
     }
 
-    newRotation[index] = rotation;
+    newRotation[index] = toRadian(rotation);
 
     const newMesh = {
       ...mesh,
