@@ -4,15 +4,17 @@ import React, { ReactNode } from 'react';
 type RadiowSwitchGroupProps = {
   onChange(name: string): void;
   name: string;
-  defaultValue: string;
+  defaultValue?: string;
   children: ReactNode[];
+  value?: string;
 };
 
-const RadioSwitchGroup = ({ children, defaultValue, onChange, name }: RadiowSwitchGroupProps) => {
+const RadioSwitchGroup = ({ children, defaultValue, onChange, name, value }: RadiowSwitchGroupProps) => {
   const { getRootProps, getRadioProps } = useRadioGroup({
     name,
     defaultValue,
     onChange,
+    value,
   });
 
   const group = getRootProps();

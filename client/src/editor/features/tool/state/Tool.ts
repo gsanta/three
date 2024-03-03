@@ -2,10 +2,11 @@ import ToolName from './ToolName';
 import { IconName } from '../../../../common/components/icon/Icon';
 import type { Store } from '../../../../common/utils/store';
 import { Vector3 } from 'three';
+import Num3 from '@/editor/types/Num3';
 
 export interface PointerInfo {
   pos: Vector3;
-  dragPos: Vector3;
+  drag: Num3;
   eventObjectName: string;
 }
 
@@ -30,6 +31,9 @@ abstract class Tool {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onDrag(_info: PointerInfo) {}
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onDragEnd(_info: PointerInfo) {}
 }
 
 export default Tool;

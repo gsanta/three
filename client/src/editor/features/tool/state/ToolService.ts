@@ -4,6 +4,7 @@ import ToolName from './ToolName';
 import { Store } from '@/common/utils/store';
 import { Vector3 } from 'three';
 import SelectTool from '@/editor/features/builder/SelectTool';
+import AddTool from '../../builder/AddTool';
 
 class ToolService {
   constructor(tools: Tool[], store: Store) {
@@ -11,7 +12,7 @@ class ToolService {
     this.store = store;
     this.pointer = {
       pos: new Vector3(),
-      dragPos: new Vector3(),
+      drag: new Vector3(),
       eventObjectName: '',
     };
   }
@@ -31,7 +32,18 @@ class ToolService {
   }
 
   onDrag(position: Vector3) {
-    this.pointer.dragPos = position;
+    this.pointer.drag = position.toArray();
+
+    const { selectedTool } = this.store.getState().tool;
+    this.getTool(selectedTool)?.onDrag(this.pointer);
+  }
+
+  onDragEnd(delta: Vector3) {
+    this.pointer.drag = delta.toArray();
+
+    const { selectedTool } = this.store.getState().tool;
+    this.getTool(selectedTool)?.onDragEnd(this.pointer);
+    this.pointer.drag = [0, 0, 0];
   }
 
   getTools(): Tool[] {
@@ -44,6 +56,10 @@ class ToolService {
 
   getSelectTool() {
     return this.tools.find((tool) => tool.name === ToolName.Select) as SelectTool;
+  }
+
+  getAddTool() {
+    return this.tools.find((tool) => tool.name === ToolName.Add) as AddTool;
   }
 
   private pointer: PointerInfo;

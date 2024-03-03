@@ -19,12 +19,20 @@
         "geometry": "box",
         "scale": [
             5,
-            5,
-            0.2
+            2,
+            0.25
         ],
         "options": {
             "rotation": {
-                "y": [0, 90]
+                "x": [0],
+                "y": [0, 90],
+                "z": [0],
+                "selected": [0, 0, 0]
+            },
+            "size": {
+                "scales": [0.5, 1, 2, 3],
+                "selected": 1,
+                "direction": "x"
             }
         }
     }
