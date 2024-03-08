@@ -3,17 +3,16 @@ import { Box, FormControl, FormLabel } from '@chakra-ui/react';
 import RadioSwitchButton from '../../../../common/components/RadioSwitchButton';
 import RadioSwitchGroup from '../../../../common/components/RadioSwitchGroup';
 import { setBlockRotation, setBlockSize, setSelectedGeometry } from '../builderSlice';
-import { BlockType } from '../types/Block';
+import { BlockType } from '../../../types/Block';
 import useBlock from '../hooks/useBlock';
 import RotationControl from './RotationControl';
-import useEditorContext from '@/app/editor/EditorContext';
 import SizeControl from './SizeControl';
+import { getAxisIndex } from '@/editor/utils/vectorUtils';
 
 const AddToolOptions = () => {
-  const { blocks } = useAppSelector((state) => state.builder);
-  const selectedBlockName = useAppSelector((state) => state.builder.selectedBlockName);
+  const { blocks, selectedBlockName } = useAppSelector((state) => state.builder.present);
   const selectedBlock = useBlock(selectedBlockName);
-  const { tool } = useEditorContext();
+  const options = selectedBlock.options;
 
   const dispatch = useAppDispatch();
 
@@ -22,11 +21,11 @@ const AddToolOptions = () => {
   };
 
   const handleSizeChange = (size: number) => {
-    dispatch(setBlockSize({ size, blockName: selectedBlock.name }));
+    dispatch(setBlockSize({ size, blockName: selectedBlock.data.name }));
   };
 
   const handleRotationChange = (axis: 'x' | 'y' | 'z', rotation: number) => {
-    dispatch(setBlockRotation({ axis, blockName: selectedBlock.name, rotation }));
+    dispatch(setBlockRotation({ axis, blockName: selectedBlock.data.name, rotation }));
   };
 
   return (
@@ -37,14 +36,19 @@ const AddToolOptions = () => {
         </FormLabel>
         <RadioSwitchGroup defaultValue={selectedBlockName} name="geometry-selector" onChange={handleGeometryChange}>
           {blocks.map((block) => (
-            <RadioSwitchButton key={block.name} value={block.name}>
-              {block.name}
+            <RadioSwitchButton key={block.data.name} value={block.data.name}>
+              {block.data.name}
             </RadioSwitchButton>
           ))}
         </RadioSwitchGroup>
       </FormControl>
-      <SizeControl block={selectedBlock} onChange={handleSizeChange} />
-      {selectedBlock && <RotationControl block={selectedBlock} onChange={handleRotationChange} />}
+      <SizeControl block={selectedBlock} onChange={handleSizeChange} value={options.size.selected} />
+      <RotationControl
+        axis="y"
+        block={selectedBlock}
+        onChange={(val) => handleRotationChange('y', val)}
+        value={selectedBlock.options.rotation.selected[getAxisIndex('y')]}
+      />
     </Box>
   );
 };

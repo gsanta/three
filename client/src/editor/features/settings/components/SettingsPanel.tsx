@@ -4,10 +4,22 @@ import React, { useState } from 'react';
 import ExportDialog from './ExportDialog';
 import ImportDialog from './import/ImportDialog';
 import { useBoolean } from 'usehooks-ts';
+import { useAppDispatch } from '@/common/hooks/hooks';
+import { ActionCreators } from 'redux-undo';
 
 const SettingsPanel = () => {
   const [isExportDialogOpen, setExportDialogOpen] = useState(false);
   const { value: isImportDialogOpen, setTrue: openImportDialog, setFalse: closeImportDialog } = useBoolean(false);
+
+  const dispatch = useAppDispatch();
+
+  const handleUndo = () => {
+    dispatch(ActionCreators.undo());
+  };
+
+  const handleRedo = () => {
+    dispatch(ActionCreators.redo());
+  };
 
   return (
     <Box display="flex" gap="4">
@@ -39,12 +51,12 @@ const SettingsPanel = () => {
       </ButtonGroup>
       <ButtonGroup>
         <Tooltip label="Undo">
-          <Button variant="outline" size="sm" onClick={() => {}}>
+          <Button variant="outline" size="sm" onClick={handleUndo}>
             <Icon name="BiUndo" />
           </Button>
         </Tooltip>
         <Tooltip label="Redo">
-          <Button variant="outline" size="sm" onClick={() => {}}>
+          <Button variant="outline" size="sm" onClick={handleRedo}>
             <Icon name="BiRedo" />
           </Button>
         </Tooltip>

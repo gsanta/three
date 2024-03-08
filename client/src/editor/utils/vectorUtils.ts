@@ -1,5 +1,6 @@
 import Axis from '../types/Axis';
 import Num3 from '../types/Num3';
+import { defaultSnap } from './sceneUtils';
 
 export const getAxisIndex = (axis: Axis) => {
   if (axis === 'x') {
@@ -36,7 +37,7 @@ export const addVector = (
   return vector1.map((val, index) => (val += vector2[index])) as Num3;
 };
 
-export const snapTo = (num: number, snapVal = 0.25) => {
+export const snapTo = (num: number, snapVal = defaultSnap) => {
   const base = num < 0 ? Math.ceil(num / snapVal) : Math.floor(num / snapVal);
   return base * snapVal;
 };

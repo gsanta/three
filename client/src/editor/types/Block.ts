@@ -3,8 +3,16 @@ import * as blocks from '../utils/blocks.json';
 export type BlockType = keyof typeof blocks;
 
 type Block = {
-  geometry: string;
-  scale: [number, number, number];
+  data: {
+    name: BlockType;
+    geometry: string;
+    scale: [number, number, number];
+  };
+  snap?: {
+    x: number;
+    y: number;
+    z: number;
+  };
   options: {
     rotation: {
       x: number[];
@@ -18,6 +26,13 @@ type Block = {
       selected: number;
     };
   };
-} & { name: BlockType };
+} & {
+  data: {
+    geometry: 'cone';
+    radialSegments: number;
+    radius: number;
+    height: number;
+  };
+};
 
 export default Block;

@@ -1,11 +1,11 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { MeshInfo } from '../scene/sceneSlice';
-import * as blocks from './utils/blocks.json';
-import Block, { BlockType } from './types/Block';
+import Block, { BlockType } from '../../types/Block';
 import parseBlocks from './utils/parseBlocks';
 import Axis from '@/editor/types/Axis';
 import { getBlock } from './utils/blockUtils';
 import { getAxisIndex } from '@/editor/utils/vectorUtils';
+import MeshInfo from '@/editor/types/MeshInfo';
+import blocks from '@/editor/utils/blocks.json';
 
 export type TransformType = 'move' | 'scale';
 

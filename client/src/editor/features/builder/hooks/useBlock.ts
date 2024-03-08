@@ -1,10 +1,10 @@
 import { useAppSelector } from '@/common/hooks/hooks';
-import Block from '../types/Block';
+import Block from '../../../types/Block';
 
 const useBlock = (blockName?: string): Block => {
-  const { blocks } = useAppSelector((state) => state.builder);
+  const { blocks } = useAppSelector((state) => state.builder.present);
 
-  const block = blocks.find((b) => b.name === blockName);
+  const block = blocks.find((b) => b.data.name === blockName);
 
   if (!block) {
     throw new Error('Block not found: ' + blockName);
