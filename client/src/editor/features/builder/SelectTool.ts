@@ -1,5 +1,5 @@
 import { Store } from '../../../common/utils/store';
-import { MeshInfo, addMeshPosition, updateMesh } from '../scene/sceneSlice';
+import { addMeshPosition, updateMesh } from '../scene/sceneSlice';
 import Tool, { PointerInfo } from '../tool/state/Tool';
 import ToolName from '../tool/state/ToolName';
 import { setSelectedMesh } from './builderSlice';
@@ -8,6 +8,7 @@ import { getAxisIndex } from '@/editor/utils/vectorUtils';
 import { toRadian } from '@/editor/utils/mathUtils';
 import { getBlock } from './utils/blockUtils';
 import Num3 from '@/editor/types/Num3';
+import MeshInfo from '@/editor/types/MeshInfo';
 
 class SelectTool extends Tool {
   constructor(store: Store) {
@@ -15,7 +16,7 @@ class SelectTool extends Tool {
   }
 
   onPointerDown(info: PointerInfo) {
-    const { meshes } = this.store.getState().scene;
+    const { meshes } = this.store.getState().scene.present;
     const mesh = meshes.find((currentMesh) => currentMesh.id === info.eventObjectName);
 
     this.store.dispatch(setSelectedMesh(mesh));
@@ -37,11 +38,11 @@ class SelectTool extends Tool {
   }
 
   scaleMesh(scale: number, mesh: MeshInfo) {
-    const block = getBlock(this.store.getState().builder.blocks, mesh.type);
+    const block = getBlock(this.store.getState().builder.present.blocks, mesh.name);
 
     const index = getAxisIndex(block.options.size.direction);
     const newScale = [...mesh.scale] as Num3;
-    newScale[index] = scale;
+    newScale[index] = block.data.scale[index] * scale;
 
     const newMesh = {
       ...mesh,

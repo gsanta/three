@@ -12,7 +12,7 @@ class ToolService {
     this.store = store;
     this.pointer = {
       pos: new Vector3(),
-      drag: new Vector3(),
+      drag: [0, 0, 0],
       eventObjectName: '',
     };
   }

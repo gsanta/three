@@ -1,14 +1,15 @@
 import RadioSwitchButton from '@/common/components/RadioSwitchButton';
 import RadioSwitchGroup from '@/common/components/RadioSwitchGroup';
 import { FormControl, FormLabel } from '@chakra-ui/react';
-import Block from '../types/Block';
+import Block from '../../../types/Block';
 
 type SizeControlProps = {
   block: Block;
   onChange(size: number): void;
+  value: number;
 };
 
-const SizeControl = ({ block, onChange }: SizeControlProps) => {
+const SizeControl = ({ block, onChange, value }: SizeControlProps) => {
   const sizeOption = block.options.size;
 
   if (sizeOption.scales.length === 1) {
@@ -20,11 +21,7 @@ const SizeControl = ({ block, onChange }: SizeControlProps) => {
       <FormLabel display="flex" alignItems="center" gap="2" marginBottom="1">
         Size
       </FormLabel>
-      <RadioSwitchGroup
-        name="size-selector"
-        onChange={(val: string) => onChange(Number(val))}
-        value={String(sizeOption.selected)}
-      >
+      <RadioSwitchGroup name="size-selector" onChange={(val: string) => onChange(Number(val))} value={String(value)}>
         {sizeOption.scales.map((scale) => (
           <RadioSwitchButton key={scale} value={String(scale)}>
             {String(scale)}

@@ -1,13 +1,5 @@
+import MeshInfo from '@/editor/types/MeshInfo';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { BlockType } from '../builder/types/Block';
-
-export type MeshInfo = {
-  id: string;
-  type: BlockType;
-  position: [number, number, number];
-  rotation: [number, number, number];
-  scale: [number, number, number];
-};
 
 interface SceneState {
   meshes: MeshInfo[];
