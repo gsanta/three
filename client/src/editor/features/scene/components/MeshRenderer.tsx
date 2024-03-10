@@ -13,7 +13,18 @@ const MeshRenderer = ({ meshInfo, meshProps = {} }: MeshRendererProps) => {
 
   if (meshInfo.name === 'roof') {
     return (
-      <Cone args={[meshInfo.radius, meshInfo.height, meshInfo.radialSegments]}>
+      <Cone
+        onPointerDown={(e) => {
+          tool.onPointerDown(e);
+          e.stopPropagation();
+        }}
+        position={meshInfo.position}
+        rotation={meshInfo.rotation}
+        {...meshProps}
+        args={[meshInfo.radius, meshInfo.height, meshInfo.radialSegments]}
+        key={meshInfo.id}
+        name={meshInfo.id}
+      >
         <meshStandardMaterial color="lightblue" />
       </Cone>
     );

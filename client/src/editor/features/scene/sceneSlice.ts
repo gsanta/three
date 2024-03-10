@@ -17,6 +17,10 @@ export const sceneSlice = createSlice({
       state.meshes.push(action.payload);
     },
 
+    setMeshes(state, action: PayloadAction<MeshInfo[]>) {
+      state.meshes = action.payload;
+    },
+
     setMeshPosition(state, action: PayloadAction<{ meshId: string; position: [number, number, number] }>) {
       const { meshId, position } = action.payload;
       const mesh = state.meshes.find((currentMesh) => currentMesh.id === meshId);
@@ -48,6 +52,6 @@ export const sceneSlice = createSlice({
   },
 });
 
-export const { addMesh, addMeshPosition, setMeshPosition, updateMesh } = sceneSlice.actions;
+export const { addMesh, addMeshPosition, setMeshes, setMeshPosition, updateMesh } = sceneSlice.actions;
 
 export default sceneSlice.reducer;

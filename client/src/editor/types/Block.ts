@@ -6,7 +6,9 @@ type Block = {
   data: {
     name: BlockType;
     geometry: string;
+    position: [number, number, number];
     scale: [number, number, number];
+    rotation: [number, number, number];
   };
   snap?: {
     x: number;
@@ -18,13 +20,15 @@ type Block = {
       x: number[];
       y: number[];
       z: number[];
-      selected: [number, number, number];
     };
     size: {
       scales: number[];
       direction: 'x' | 'y' | 'z';
       selected: number;
     };
+  };
+  selected: {
+    rotation: [number, number, number];
   };
 } & {
   data: {

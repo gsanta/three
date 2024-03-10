@@ -3,12 +3,17 @@ import Block, { BlockType } from '../../../types/Block';
 
 const defaultSnaps = { x: defaultSnap, y: defaultSnap, z: defaultSnap };
 
+const defaultBlockData: Partial<Block['data']> = {
+  position: [0, 0, 0],
+  rotation: [0, 0, 0],
+  scale: [0, 0, 0],
+};
+
 const defaultBlockOptions: Partial<Block['options']> = {
   rotation: {
     x: [0],
     y: [0],
     z: [0],
-    selected: [0, 0, 0],
   },
   size: {
     scales: [1],
@@ -17,11 +22,16 @@ const defaultBlockOptions: Partial<Block['options']> = {
   },
 };
 
+const defaultBlockSelected: Partial<Block['selected']> = {
+  rotation: [0, 0, 0],
+};
+
 const parseBlocks = (blocks: Record<string, Block>): Block[] =>
   Object.keys(blocks).map((key) => {
     const block = blocks[key as BlockType];
     return {
       data: {
+        ...defaultBlockData,
         ...block.data,
         name: key as BlockType,
       },
@@ -29,6 +39,10 @@ const parseBlocks = (blocks: Record<string, Block>): Block[] =>
       options: {
         ...defaultBlockOptions,
         ...block.options,
+      },
+      selected: {
+        ...defaultBlockSelected,
+        ...block.selected,
       },
     };
   });

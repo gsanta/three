@@ -3,7 +3,7 @@ import { snapTo, addVector } from '@/editor/utils/vectorUtils';
 import { PivotControls } from '@react-three/drei';
 import { Mesh, Quaternion, Vector3 } from 'three';
 import useBlock from '../../builder/hooks/useBlock';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useEditorContext from '@/app/editor/EditorContext';
 import MeshRenderer from './MeshRenderer';
 
@@ -17,6 +17,10 @@ const SelectedMesh = ({ selectedMesh }: SelectedMeshProps) => {
   const selectedMeshRef = useRef<Mesh>(null);
   const { tool } = useEditorContext();
 
+  useEffect(() => {
+    tool.setSelectedMesh(selectedMeshRef.current || undefined);
+  }, [tool]);
+
   return (
     <PivotControls
       depthTest={false}
@@ -27,6 +31,7 @@ const SelectedMesh = ({ selectedMesh }: SelectedMeshProps) => {
       anchor={[0, 0, 0.4]}
       autoTransform={false}
       onDrag={(_l, d) => {
+        console.log('drag');
         const position = new Vector3();
         d.decompose(position, new Quaternion(), new Vector3());
         position.x = snapTo(position.x);

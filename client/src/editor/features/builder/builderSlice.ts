@@ -35,7 +35,7 @@ export const builderSlice = createSlice({
     setBlockRotation(state, action: PayloadAction<{ axis: Axis; blockName: BlockType; rotation: number }>) {
       const { axis, blockName, rotation } = action.payload;
       const block = getBlock(state.blocks, blockName);
-      block.options.rotation.selected[getAxisIndex(axis)] = rotation;
+      block.selected.rotation[getAxisIndex(axis)] = rotation;
     },
     setSelectedGeometry: (state, action: PayloadAction<BlockType>) => {
       state.selectedBlockName = action.payload;

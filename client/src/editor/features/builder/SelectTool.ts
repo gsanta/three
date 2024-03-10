@@ -1,33 +1,30 @@
 import { Store } from '../../../common/utils/store';
 import { addMeshPosition, updateMesh } from '../scene/sceneSlice';
-import Tool, { PointerInfo } from '../tool/state/Tool';
+import Tool, { ToolInfo } from '../tool/state/Tool';
 import ToolName from '../tool/state/ToolName';
 import { setSelectedMesh } from './builderSlice';
 import { getSelectedMesh } from '@/editor/utils/storeUtils';
-import { getAxisIndex } from '@/editor/utils/vectorUtils';
+import { getAxisIndex, snapTo } from '@/editor/utils/vectorUtils';
 import { toRadian } from '@/editor/utils/mathUtils';
 import { getBlock } from './utils/blockUtils';
 import Num3 from '@/editor/types/Num3';
 import MeshInfo from '@/editor/types/MeshInfo';
+import MatrixUtils from '@/editor/utils/MatrixUtils';
 
 class SelectTool extends Tool {
   constructor(store: Store) {
     super(store, ToolName.Select, 'BiRectangle');
   }
 
-  onPointerDown(info: PointerInfo) {
+  onPointerDown(info: ToolInfo) {
     const { meshes } = this.store.getState().scene.present;
     const mesh = meshes.find((currentMesh) => currentMesh.id === info.eventObjectName);
 
     this.store.dispatch(setSelectedMesh(mesh));
   }
 
-  onDragEnd(info: PointerInfo) {
+  onDragEnd(info: ToolInfo) {
     const selectedMesh = getSelectedMesh(this.store);
-
-    if (!selectedMesh) {
-      return;
-    }
 
     this.store.dispatch(
       addMeshPosition({
@@ -52,20 +49,33 @@ class SelectTool extends Tool {
     this.store.dispatch(updateMesh(newMesh));
   }
 
-  rotateMesh(direction: 'x' | 'y' | 'z', rotation: number, mesh: MeshInfo) {
-    const newRotation = [...mesh.rotation] as [number, number, number];
+  rotateMesh(axis: 'x' | 'y' | 'z', rotation: number, info: ToolInfo) {
+    const { selectedMesh } = info;
 
-    let index = 0;
-    if (direction === 'y') {
-      index = 1;
-    } else if (direction === 'z') {
-      index = 2;
+    if (!selectedMesh) {
+      return;
     }
 
+    const meshInfo = getSelectedMesh(this.store);
+
+    const index = getAxisIndex(axis);
+    const newRotation = [...meshInfo.rotation] as [number, number, number];
     newRotation[index] = toRadian(rotation);
 
+    const rotatedMatrix = MatrixUtils.setRotation(selectedMesh.matrixWorld, newRotation[index]);
+    const vertices = MatrixUtils.getBoxWorldPositions(rotatedMatrix);
+    const bottomLeft = vertices[0];
+
+    const snappedX = snapTo(bottomLeft.x);
+    const snappedZ = snapTo(bottomLeft.z);
+    const deltaX = bottomLeft.x - snappedX;
+    const deltaZ = bottomLeft.z - snappedZ;
+
+    const position = meshInfo.position;
+
     const newMesh = {
-      ...mesh,
+      ...meshInfo,
+      position: [position[0] + deltaX, position[1], position[2] + deltaZ] as Num3,
       rotation: newRotation,
     };
 

@@ -1,15 +1,20 @@
 import { useState } from 'react';
 import Dialog, { DialogProps, DialogBody, DialogFooter } from '../../../../../common/components/Dialog';
 import { Button } from '@chakra-ui/react';
+import DropZone from './DropZone';
+import { useAppDispatch } from '@/common/hooks/hooks';
+import { setMeshes } from '@/editor/features/scene/sceneSlice';
 
 const ImportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children'>) => {
-  const [isImporting, setImporting] = useState(false);
+  const [fileName, setFileName] = useState<string>();
+  const [fileContent, setFileContent] = useState<string>('[]');
 
-  // const [fileName, setFileName] = useState<string>();
+  const dispatch = useAppDispatch();
 
-  // const handleSetFile = (name: string, content: string) => {
-  //   setFileName(name);
-  // };
+  const handleSetFile = (name: string, content: string) => {
+    setFileName(name);
+    setFileContent(content);
+  };
 
   // useEffect(() => {
   //     dispatch(importDocument(fileContent, editor));
@@ -19,12 +24,16 @@ const ImportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children
   // }, [isImporting, setImporting, dispatch, fileContent, onClose]);
 
   const handleImport = () => {
-    setImporting(true);
+    const meshes = JSON.parse(fileContent);
+    dispatch(setMeshes(meshes));
+    onClose();
   };
 
   return (
     <Dialog isOpen={isOpen} onClose={onClose} title="Import">
-      <DialogBody>{/* <DropZone fileName={fileName} setFile={handleSetFile} /> */}</DialogBody>
+      <DialogBody>
+        <DropZone fileName={fileName} setFile={handleSetFile} />
+      </DialogBody>
       <DialogFooter>
         <Button size="sm" onClick={onClose}>
           Close
@@ -32,7 +41,6 @@ const ImportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children
         <Button
           size="sm"
           colorScheme="orange"
-          isLoading={isImporting}
           // disabled={fileName === undefined}
           onClick={handleImport}
         >
