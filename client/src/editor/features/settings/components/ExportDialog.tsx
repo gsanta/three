@@ -2,23 +2,22 @@ import React, { useState } from 'react';
 import Dialog, { DialogProps, DialogBody, DialogFooter } from '../../../../common/components/Dialog';
 import { Button, FormControl, FormLabel, Select } from '@chakra-ui/react';
 import FileType, { getFileTypes } from '../types/FileType';
+import { downloadString } from '../utils/fileUtils';
+import { useAppSelector } from '@/common/hooks/hooks';
 
 const ExportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children'>) => {
   const [selectedFileType, setSelectedFileType] = useState<FileType>(FileType.json);
 
-  const exportImage = () => {
-    onClose();
-  };
+  const { meshes } = useAppSelector((state) => state.scene.present);
 
   const exportDocument = () => {
+    downloadString(JSON.stringify(meshes), 'spright.json');
+
     onClose();
   };
 
   const handleExport = () => {
     switch (selectedFileType) {
-      case FileType.png:
-        exportImage();
-        break;
       case FileType.json:
       default:
         exportDocument();

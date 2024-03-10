@@ -1,13 +1,14 @@
 import ToolName from './ToolName';
 import { IconName } from '../../../../common/components/icon/Icon';
 import type { Store } from '../../../../common/utils/store';
-import { Vector3 } from 'three';
+import { Mesh, Vector3 } from 'three';
 import Num3 from '@/editor/types/Num3';
 
-export interface PointerInfo {
+export interface ToolInfo {
   pos: Vector3;
   drag: Num3;
   eventObjectName: string;
+  selectedMesh?: Mesh;
 }
 
 abstract class Tool {
@@ -24,16 +25,16 @@ abstract class Tool {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onPointerDown(_info: PointerInfo) {}
+  onPointerDown(_info: ToolInfo) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onPointerMove(_info: PointerInfo) {}
+  onPointerMove(_info: ToolInfo) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onDrag(_info: PointerInfo) {}
+  onDrag(_info: ToolInfo) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onDragEnd(_info: PointerInfo) {}
+  onDragEnd(_info: ToolInfo) {}
 }
 
 export default Tool;

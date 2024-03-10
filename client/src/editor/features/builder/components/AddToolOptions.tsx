@@ -7,7 +7,6 @@ import { BlockType } from '../../../types/Block';
 import useBlock from '../hooks/useBlock';
 import RotationControl from './RotationControl';
 import SizeControl from './SizeControl';
-import { getAxisIndex } from '@/editor/utils/vectorUtils';
 
 const AddToolOptions = () => {
   const { blocks, selectedBlockName } = useAppSelector((state) => state.builder.present);
@@ -47,7 +46,7 @@ const AddToolOptions = () => {
         axis="y"
         block={selectedBlock}
         onChange={(val) => handleRotationChange('y', val)}
-        value={selectedBlock.options.rotation.selected[getAxisIndex('y')]}
+        value={selectedBlock.selected.rotation[1]}
       />
     </Box>
   );

@@ -17,7 +17,7 @@ const SelectToolOptionsContent = ({ selectedMesh }: SelectToolOptionsContentProp
 
   const handleRotationChange = (direction: 'x' | 'y' | 'z', val: number) => {
     if (selectedMesh) {
-      tool.getSelectTool().rotateMesh(direction, val, selectedMesh);
+      tool.getSelectTool().rotateMesh(direction, val, tool.getToolInfo());
     }
   };
 
