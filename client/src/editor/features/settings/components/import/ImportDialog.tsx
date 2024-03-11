@@ -16,13 +16,6 @@ const ImportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children
     setFileContent(content);
   };
 
-  // useEffect(() => {
-  //     dispatch(importDocument(fileContent, editor));
-  //     setImporting(false);
-  //     onClose();
-  //   }
-  // }, [isImporting, setImporting, dispatch, fileContent, onClose]);
-
   const handleImport = () => {
     const meshes = JSON.parse(fileContent);
     dispatch(setMeshes(meshes));

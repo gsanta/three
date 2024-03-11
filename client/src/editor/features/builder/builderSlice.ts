@@ -14,7 +14,7 @@ interface BuilderState {
   blocks: Block[];
   selectedTransformType: TransformType;
 
-  selectedMeshId?: string;
+  selectedMeshIds?: string[];
 }
 
 const initialState: BuilderState = {
@@ -43,13 +43,13 @@ export const builderSlice = createSlice({
     setSelectedTransformType: (state, action: PayloadAction<TransformType>) => {
       state.selectedTransformType = action.payload;
     },
-    setSelectedMesh: (state, action: PayloadAction<MeshInfo | undefined>) => {
-      state.selectedMeshId = action.payload?.id;
+    setSelectedMeshes: (state, action: PayloadAction<MeshInfo[]>) => {
+      state.selectedMeshIds = action.payload.map((info) => info.id);
     },
   },
 });
 
-export const { setBlockSize, setBlockRotation, setSelectedGeometry, setSelectedMesh, setSelectedTransformType } =
+export const { setBlockSize, setBlockRotation, setSelectedGeometry, setSelectedMeshes, setSelectedTransformType } =
   builderSlice.actions;
 
 export default builderSlice.reducer;
