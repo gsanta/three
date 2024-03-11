@@ -1,4 +1,4 @@
-import MeshInfo from '@/editor/types/MeshInfo';
+import MeshInfo, { PartialMeshInfo } from '@/editor/types/MeshInfo';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 interface SceneState {
@@ -49,9 +49,21 @@ export const sceneSlice = createSlice({
         Object.assign(mesh, newMesh);
       }
     },
+
+    updateMeshes(state, action: PayloadAction<PartialMeshInfo[]>) {
+      const newMeshes = action.payload;
+
+      newMeshes.forEach((newMesh) => {
+        const mesh = state.meshes.find((currentMesh) => currentMesh.id === newMesh.id);
+
+        if (mesh) {
+          Object.assign(mesh, newMesh);
+        }
+      });
+    },
   },
 });
 
-export const { addMesh, addMeshPosition, setMeshes, setMeshPosition, updateMesh } = sceneSlice.actions;
+export const { addMesh, addMeshPosition, setMeshes, setMeshPosition, updateMesh, updateMeshes } = sceneSlice.actions;
 
 export default sceneSlice.reducer;

@@ -1,14 +1,14 @@
-import useSelectedMesh from '../useSelectedMesh';
+import useSelectedMeshes from '../useSelectedMeshes';
 import SelectToolOptionsContent from './SelectToolOptionsContent';
 
 const SelectToolOptions = () => {
-  const selectedMesh = useSelectedMesh();
+  const selectedMeshes = useSelectedMeshes();
 
-  if (!selectedMesh) {
+  if (!selectedMeshes.length) {
     return null;
   }
 
-  return <SelectToolOptionsContent selectedMesh={selectedMesh} />;
+  return <SelectToolOptionsContent selectedMesh={selectedMeshes[0]} />;
 };
 
 export default SelectToolOptions;

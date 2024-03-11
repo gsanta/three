@@ -1,15 +1,15 @@
 import { Store } from '../../../common/utils/store';
-import { addMeshPosition, updateMesh } from '../scene/sceneSlice';
+import { updateMesh, updateMeshes } from '../scene/sceneSlice';
 import Tool, { ToolInfo } from '../tool/state/Tool';
 import ToolName from '../tool/state/ToolName';
-import { setSelectedMesh } from './builderSlice';
-import { getSelectedMesh } from '@/editor/utils/storeUtils';
-import { getAxisIndex, snapTo } from '@/editor/utils/vectorUtils';
+import { getSelectedMeshes } from '@/editor/utils/storeUtils';
+import { addVector, getAxisIndex, snapTo } from '@/editor/utils/vectorUtils';
 import { toRadian } from '@/editor/utils/mathUtils';
 import { getBlock } from './utils/blockUtils';
 import Num3 from '@/editor/types/Num3';
 import MeshInfo from '@/editor/types/MeshInfo';
 import MatrixUtils from '@/editor/utils/MatrixUtils';
+import { setSelectedMeshes } from './builderSlice';
 
 class SelectTool extends Tool {
   constructor(store: Store) {
@@ -18,19 +18,27 @@ class SelectTool extends Tool {
 
   onPointerDown(info: ToolInfo) {
     const { meshes } = this.store.getState().scene.present;
+    const { selectedMeshIds } = this.store.getState().builder.present;
     const mesh = meshes.find((currentMesh) => currentMesh.id === info.eventObjectName);
+    const prevSelectedMeshes = meshes.filter((currentMesh) => selectedMeshIds?.includes(currentMesh.id));
 
-    this.store.dispatch(setSelectedMesh(mesh));
+    if (mesh) {
+      this.store.dispatch(setSelectedMeshes([...prevSelectedMeshes, mesh]));
+    } else {
+      this.store.dispatch(setSelectedMeshes([]));
+    }
   }
 
   onDragEnd(info: ToolInfo) {
-    const selectedMesh = getSelectedMesh(this.store);
+    const selectedMeshes = getSelectedMeshes(this.store);
 
     this.store.dispatch(
-      addMeshPosition({
-        meshId: selectedMesh.id,
-        position: info.drag,
-      }),
+      updateMeshes(
+        selectedMeshes.map((mesh) => ({
+          id: mesh.id,
+          position: addVector(mesh.position, info.drag),
+        })),
+      ),
     );
   }
 
@@ -56,7 +64,7 @@ class SelectTool extends Tool {
       return;
     }
 
-    const meshInfo = getSelectedMesh(this.store);
+    const meshInfo = getSelectedMeshes(this.store)[0];
 
     const index = getAxisIndex(axis);
     const newRotation = [...meshInfo.rotation] as [number, number, number];

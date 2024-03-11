@@ -3,20 +3,21 @@ import { Grid, OrbitControls, Plane } from '@react-three/drei';
 import { Environment } from './Environment';
 import { useAppSelector } from '../../../../common/hooks/hooks';
 import useEditorContext from '@/app/editor/EditorContext';
-import useSelectedMesh from '../../builder/useSelectedMesh';
+import useSelectedMeshes from '../../builder/useSelectedMeshes';
 import SelectedMesh from './SelectedMesh';
 import MeshRenderer from './MeshRenderer';
 
 const App = () => {
   const { meshes } = useAppSelector((selector) => selector.scene.present);
-  const selectedMesh = useSelectedMesh();
+  const { selectedMeshIds } = useAppSelector((selector) => selector.builder.present);
+  const selectedMeshes = useSelectedMeshes();
   const { tool } = useEditorContext();
 
   return (
     <Canvas style={{ backgroundColor: 'goldenrod' }} shadows camera={{ position: [0, 10, 15], fov: 25 }}>
-      {selectedMesh && <SelectedMesh selectedMesh={selectedMesh} />}
+      {selectedMeshes.length && <SelectedMesh selectedMeshes={selectedMeshes} />}
       {meshes.map((meshInfo) => {
-        const isSelectedMesh = meshInfo.id === selectedMesh?.id;
+        const isSelectedMesh = selectedMeshIds?.includes(meshInfo.id);
         if (isSelectedMesh) {
           return undefined;
         }

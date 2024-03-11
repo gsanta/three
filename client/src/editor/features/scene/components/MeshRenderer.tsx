@@ -1,14 +1,15 @@
 import useEditorContext from '@/app/editor/EditorContext';
 import MeshInfo from '@/editor/types/MeshInfo';
 import { Cone } from '@react-three/drei';
-import { MeshProps } from '@react-three/fiber';
+import { MeshProps, MeshStandardMaterialProps } from '@react-three/fiber';
 
 type MeshRendererProps = {
   meshInfo: MeshInfo;
   meshProps?: MeshProps;
+  materialProps?: MeshStandardMaterialProps;
 };
 
-const MeshRenderer = ({ meshInfo, meshProps = {} }: MeshRendererProps) => {
+const MeshRenderer = ({ meshInfo, meshProps = {}, materialProps = {} }: MeshRendererProps) => {
   const { tool } = useEditorContext();
 
   if (meshInfo.name === 'roof') {
@@ -25,7 +26,7 @@ const MeshRenderer = ({ meshInfo, meshProps = {} }: MeshRendererProps) => {
         key={meshInfo.id}
         name={meshInfo.id}
       >
-        <meshStandardMaterial color="lightblue" />
+        <meshStandardMaterial color="lightblue" {...materialProps} />
       </Cone>
     );
   }
@@ -45,7 +46,7 @@ const MeshRenderer = ({ meshInfo, meshProps = {} }: MeshRendererProps) => {
       name={meshInfo.id}
     >
       <boxGeometry />
-      <meshStandardMaterial color="lightblue" />
+      <meshStandardMaterial color="lightblue" {...materialProps} />
     </mesh>
   );
 };
