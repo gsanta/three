@@ -13,8 +13,8 @@ class AddTool extends Tool {
   }
 
   onPointerDown({ pos }: ToolInfo) {
-    const { selectedBlockName: selectedBlockType, blocks } = this.store.getState().builder.present;
-    const selectedBlock = blocks.find((block) => block.data.name === selectedBlockType);
+    const { selectedBlockName, blocks } = this.store.getState().builder.present;
+    const selectedBlock = blocks.find((block) => block.data.name === selectedBlockName);
 
     if (!selectedBlock) {
       return;
@@ -34,10 +34,11 @@ class AddTool extends Tool {
       addMesh({
         ...selectedBlock.data,
         id: uuidv4(),
-        name: selectedBlockType,
+        name: selectedBlockName,
         position: [x, y, z],
         rotation: rotation as Num3,
         scale: scale,
+        children: [],
       }),
     );
   }

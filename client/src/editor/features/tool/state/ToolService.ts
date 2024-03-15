@@ -5,6 +5,7 @@ import { Store } from '@/common/utils/store';
 import { Mesh, Vector3 } from 'three';
 import SelectTool from '@/editor/features/builder/SelectTool';
 import AddTool from '../../builder/AddTool';
+import GroupTool from '../../builder/GroupTool';
 
 class ToolService {
   constructor(tools: Tool[], store: Store) {
@@ -60,6 +61,10 @@ class ToolService {
 
   getAddTool() {
     return this.tools.find((tool) => tool.name === ToolName.Add) as AddTool;
+  }
+
+  getJoinTool() {
+    return this.tools.find((tool) => tool.name === ToolName.Join) as GroupTool;
   }
 
   getToolInfo(): ToolInfo {

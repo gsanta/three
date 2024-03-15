@@ -27,6 +27,10 @@ const Toolbar = () => {
       alignItems="center"
     >
       {tool.getTools().map(({ iconName, name }) => {
+        if (!iconName) {
+          return;
+        }
+
         const toggle = name === selectedTool;
         return (
           <Tooltip key={name} label={name} placement="right">

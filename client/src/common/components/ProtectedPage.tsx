@@ -8,6 +8,8 @@ import { Provider } from 'react-redux';
 import AddTool from '@/editor/features/builder/AddTool';
 import ToolService from '@/editor/features/tool/state/ToolService';
 import SelectTool from '@/editor/features/builder/SelectTool';
+import KeyboardService from '@/editor/features/tool/state/KeyboardService';
+import GroupTool from '@/editor/features/builder/GroupTool';
 
 type ProtectedPageProps = {
   children: ReactNode;
@@ -34,7 +36,8 @@ const queryClient = new QueryClient({
 const ProtectedPage = ({ children }: ProtectedPageProps) => {
   const editorContext = useMemo<EditorContextType>(
     () => ({
-      tool: new ToolService([new AddTool(store), new SelectTool(store)], store),
+      tool: new ToolService([new AddTool(store), new SelectTool(store), new GroupTool(store)], store),
+      keyboard: new KeyboardService(store),
     }),
     [],
   );

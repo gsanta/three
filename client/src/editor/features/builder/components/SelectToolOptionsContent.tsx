@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Button } from '@chakra-ui/react';
 import useEditorContext from '@/app/editor/EditorContext';
 import useBlock from '../hooks/useBlock';
 import RotationControl from './RotationControl';
@@ -41,6 +41,7 @@ const SelectToolOptionsContent = ({ selectedMesh }: SelectToolOptionsContentProp
           value={toDegree(selectedMesh.rotation[1])}
         />
       )}
+      <Button onClick={() => tool.getJoinTool().execute()}>join</Button>
     </Box>
   );
 };

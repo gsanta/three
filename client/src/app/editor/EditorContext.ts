@@ -1,8 +1,10 @@
+import KeyboardService from '@/editor/features/tool/state/KeyboardService';
 import ToolService from '@/editor/features/tool/state/ToolService';
 import { createContext, useContext } from 'react';
 
 export type EditorContextType = {
   tool: ToolService;
+  keyboard: KeyboardService;
 };
 
 export const EditorContext = createContext<EditorContextType | undefined>(undefined);
