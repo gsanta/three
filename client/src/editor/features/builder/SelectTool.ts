@@ -19,11 +19,10 @@ class SelectTool extends Tool {
   onPointerDown(info: ToolInfo) {
     const { meshes } = this.store.getState().scene.present;
     const { selectedMeshIds } = this.store.getState().builder.present;
-    const mesh = meshes.find((currentMesh) => currentMesh.id === info.eventObjectName);
-    const prevSelectedMeshes = meshes.filter((currentMesh) => selectedMeshIds?.includes(currentMesh.id));
+    const mesh = meshes[info.eventObjectName];
 
     if (mesh) {
-      this.store.dispatch(setSelectedMeshes([...prevSelectedMeshes, mesh]));
+      this.store.dispatch(setSelectedMeshes([...(selectedMeshIds || []), mesh.id]));
     } else {
       this.store.dispatch(setSelectedMeshes([]));
     }
@@ -31,13 +30,31 @@ class SelectTool extends Tool {
 
   onDragEnd(info: ToolInfo) {
     const selectedMeshes = getSelectedMeshes(this.store);
+    const { selectedMeshIds } = this.store.getState().builder.present;
+    const { meshes } = this.store.getState().scene.present;
+
+    const finalMeshIds: string[] = [];
+
+    selectedMeshIds.forEach((meshId) => {
+      const mesh = meshes[meshId];
+
+      if (mesh.children.length) {
+        finalMeshIds.push(...mesh.children);
+      } else {
+        finalMeshIds.push(mesh.id);
+      }
+    });
 
     this.store.dispatch(
       updateMeshes(
-        selectedMeshes.map((mesh) => ({
-          id: mesh.id,
-          position: addVector(mesh.position, info.drag),
-        })),
+        finalMeshIds.map((meshId) => {
+          const mesh = meshes[meshId];
+
+          return {
+            id: mesh.id,
+            position: addVector(mesh.position, info.drag),
+          };
+        }),
       ),
     );
   }

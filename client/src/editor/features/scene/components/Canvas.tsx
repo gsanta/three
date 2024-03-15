@@ -8,15 +8,22 @@ import SelectedMesh from './SelectedMesh';
 import MeshRenderer from './MeshRenderer';
 
 const App = () => {
-  const { meshes } = useAppSelector((selector) => selector.scene.present);
+  const { meshes, roots } = useAppSelector((selector) => selector.scene.present);
   const { selectedMeshIds } = useAppSelector((selector) => selector.builder.present);
   const selectedMeshes = useSelectedMeshes();
-  const { tool } = useEditorContext();
+  const { tool, keyboard } = useEditorContext();
 
   return (
-    <Canvas style={{ backgroundColor: 'goldenrod' }} shadows camera={{ position: [0, 10, 15], fov: 25 }}>
+    <Canvas
+      onKeyDown={(e) => keyboard.onKeyDown(e.nativeEvent)}
+      style={{ backgroundColor: 'goldenrod' }}
+      shadows
+      camera={{ position: [0, 10, 15], fov: 25 }}
+      tabIndex={0}
+    >
       {selectedMeshes.length && <SelectedMesh selectedMeshes={selectedMeshes} />}
-      {meshes.map((meshInfo) => {
+      {roots.map((id) => {
+        const meshInfo = meshes[id];
         const isSelectedMesh = selectedMeshIds?.includes(meshInfo.id);
         if (isSelectedMesh) {
           return undefined;

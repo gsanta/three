@@ -1,4 +1,13 @@
 {
+    "group": {
+        "data": {
+            "scale": [
+                1,
+                1,
+                1
+            ]
+        }
+    },
     "box": {
         "data": {
             "geometry": "box",
@@ -30,14 +39,26 @@
                 2,
                 0.25
             ],
-            "position": [0.125, 0, 0.125]
+            "position": [
+                0.125,
+                0,
+                0.125
+            ]
         },
         "options": {
             "rotation": {
-                "y": [0, 90]
+                "y": [
+                    0,
+                    90
+                ]
             },
             "size": {
-                "scales": [0.5, 1, 2, 3],
+                "scales": [
+                    0.5,
+                    1,
+                    2,
+                    3
+                ],
                 "selected": 1,
                 "direction": "x"
             }
@@ -45,14 +66,22 @@
     },
     "roof": {
         "data": {
-            "position": [0, 2, 0],
+            "position": [
+                0,
+                2,
+                0
+            ],
             "geometry": "cone",
             "scale": [
                 1,
                 1,
                 1
             ],
-            "rotation": [0, 45, 0],
+            "rotation": [
+                0,
+                45,
+                0
+            ],
             "radialSegments": 4,
             "radius": 3.5,
             "height": 1

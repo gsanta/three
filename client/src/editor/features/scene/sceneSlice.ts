@@ -2,11 +2,13 @@ import MeshInfo, { PartialMeshInfo } from '@/editor/types/MeshInfo';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 interface SceneState {
-  meshes: MeshInfo[];
+  roots: string[];
+  meshes: Record<string, MeshInfo>;
 }
 
 const initialState: SceneState = {
-  meshes: [],
+  roots: [],
+  meshes: {},
 };
 
 export const sceneSlice = createSlice({
@@ -14,16 +16,70 @@ export const sceneSlice = createSlice({
   initialState,
   reducers: {
     addMesh: (state, action: PayloadAction<MeshInfo>) => {
-      state.meshes.push(action.payload);
+      const newMesh = action.payload;
+      state.meshes[newMesh.id] = newMesh;
+
+      if (!newMesh.parent) {
+        state.roots.push(newMesh.id);
+      }
+    },
+
+    deleteMeshes(state, action: PayloadAction<string[]>) {
+      const removables = [...action.payload];
+
+      state.roots = state.roots.filter((root) => !removables.includes(root));
+
+      const allRemovables: string[] = [];
+
+      while (removables.length) {
+        const next = removables.shift();
+        const mesh = state.meshes[next || ''];
+        removables.push(...mesh.children);
+        allRemovables.push(next || '');
+      }
+
+      allRemovables.forEach((meshId) => {
+        const mesh = state.meshes[meshId];
+
+        if (!mesh) {
+          return;
+        }
+
+        if (mesh.parent) {
+          const parent = state.meshes[mesh.parent];
+
+          if (parent) {
+            parent.children = parent.children.filter((child) => child !== meshId);
+          }
+        }
+
+        delete state.meshes[meshId];
+      });
+    },
+
+    groupMeshes(state, action: PayloadAction<{ children: string[]; parent: MeshInfo }>) {
+      const { children, parent } = action.payload;
+
+      state.roots = state.roots.filter((root) => !children.includes(root));
+      state.roots.push(parent.id);
+      state.meshes[parent.id] = parent;
     },
 
     setMeshes(state, action: PayloadAction<MeshInfo[]>) {
-      state.meshes = action.payload;
+      const meshes = action.payload;
+
+      meshes.forEach((mesh) => {
+        state.meshes[mesh.id] = mesh;
+
+        if (!mesh.parent) {
+          state.roots.push(mesh.id);
+        }
+      });
     },
 
     setMeshPosition(state, action: PayloadAction<{ meshId: string; position: [number, number, number] }>) {
       const { meshId, position } = action.payload;
-      const mesh = state.meshes.find((currentMesh) => currentMesh.id === meshId);
+      const mesh = state.meshes[meshId];
 
       if (mesh) {
         mesh.position = position;
@@ -32,7 +88,7 @@ export const sceneSlice = createSlice({
 
     addMeshPosition(state, action: PayloadAction<{ meshId: string; position: [number, number, number] }>) {
       const { meshId, position } = action.payload;
-      const mesh = state.meshes.find((currentMesh) => currentMesh.id === meshId);
+      const mesh = state.meshes[meshId];
 
       if (mesh) {
         mesh.position[0] += position[0];
@@ -43,7 +99,7 @@ export const sceneSlice = createSlice({
 
     updateMesh(state, action: PayloadAction<MeshInfo>) {
       const newMesh = action.payload;
-      const mesh = state.meshes.find((currentMesh) => currentMesh.id === newMesh.id);
+      const mesh = state.meshes[newMesh.id];
 
       if (mesh) {
         Object.assign(mesh, newMesh);
@@ -54,7 +110,7 @@ export const sceneSlice = createSlice({
       const newMeshes = action.payload;
 
       newMeshes.forEach((newMesh) => {
-        const mesh = state.meshes.find((currentMesh) => currentMesh.id === newMesh.id);
+        const mesh = state.meshes[newMesh.id];
 
         if (mesh) {
           Object.assign(mesh, newMesh);
@@ -64,6 +120,15 @@ export const sceneSlice = createSlice({
   },
 });
 
-export const { addMesh, addMeshPosition, setMeshes, setMeshPosition, updateMesh, updateMeshes } = sceneSlice.actions;
+export const {
+  addMesh,
+  addMeshPosition,
+  deleteMeshes,
+  groupMeshes,
+  setMeshes,
+  setMeshPosition,
+  updateMesh,
+  updateMeshes,
+} = sceneSlice.actions;
 
 export default sceneSlice.reducer;

@@ -14,11 +14,11 @@ export interface ToolInfo {
 abstract class Tool {
   name: ToolName;
 
-  iconName: IconName;
+  iconName?: IconName;
 
   protected store: Store;
 
-  constructor(store: Store, name: ToolName, iconName: IconName) {
+  constructor(store: Store, name: ToolName, iconName?: IconName) {
     this.name = name;
     this.iconName = iconName;
     this.store = store;

@@ -4,7 +4,6 @@ import parseBlocks from './utils/parseBlocks';
 import Axis from '@/editor/types/Axis';
 import { getBlock } from './utils/blockUtils';
 import { getAxisIndex } from '@/editor/utils/vectorUtils';
-import MeshInfo from '@/editor/types/MeshInfo';
 import blocks from '@/editor/utils/blocks.json';
 
 export type TransformType = 'move' | 'scale';
@@ -13,14 +12,14 @@ interface BuilderState {
   selectedBlockName: BlockType;
   blocks: Block[];
   selectedTransformType: TransformType;
-
-  selectedMeshIds?: string[];
+  selectedMeshIds: string[];
 }
 
 const initialState: BuilderState = {
   selectedBlockName: 'box',
   blocks: parseBlocks(blocks as unknown as Parameters<typeof parseBlocks>[0]),
   selectedTransformType: 'move',
+  selectedMeshIds: [],
 };
 
 export const builderSlice = createSlice({
@@ -43,8 +42,8 @@ export const builderSlice = createSlice({
     setSelectedTransformType: (state, action: PayloadAction<TransformType>) => {
       state.selectedTransformType = action.payload;
     },
-    setSelectedMeshes: (state, action: PayloadAction<MeshInfo[]>) => {
-      state.selectedMeshIds = action.payload.map((info) => info.id);
+    setSelectedMeshes: (state, action: PayloadAction<string[]>) => {
+      state.selectedMeshIds = action.payload;
     },
   },
 });
