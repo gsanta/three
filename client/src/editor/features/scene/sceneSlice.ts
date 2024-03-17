@@ -97,6 +97,11 @@ export const sceneSlice = createSlice({
       }
     },
 
+    update(state, action: PayloadAction<Partial<SceneState>>) {
+      state.meshes = action.payload.meshes || state.meshes;
+      state.roots = action.payload.roots || state.roots;
+    },
+
     updateMesh(state, action: PayloadAction<MeshInfo>) {
       const newMesh = action.payload;
       const mesh = state.meshes[newMesh.id];
@@ -127,6 +132,7 @@ export const {
   groupMeshes,
   setMeshes,
   setMeshPosition,
+  update,
   updateMesh,
   updateMeshes,
 } = sceneSlice.actions;

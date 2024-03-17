@@ -12,7 +12,8 @@
       "./node_modules/@types"
     ],
     "types": [
-      "node"
+      "node",
+      "jest"
     ],
     "target": "es6",
     "lib": [

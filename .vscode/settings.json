@@ -224,5 +224,8 @@
     "C_Cpp_Runner.linkerArgs": [],
     "cmake.sourceDirectory": "${workspaceFolder}/editor",
     "workbench.editor.empty.hint": "hidden",
-    "typescript.tsdk": "./client/node_modules/typescript/lib"
+    "typescript.tsdk": "./client/node_modules/typescript/lib",
+    "[typescript]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    }
 }
