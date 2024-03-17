@@ -1,28 +1,20 @@
-import { Canvas } from '@react-three/fiber';
 import { Grid, OrbitControls, Plane } from '@react-three/drei';
-import { Environment } from './Environment';
-import { useAppSelector } from '../../../../common/hooks/hooks';
-import useEditorContext from '@/app/editor/EditorContext';
-import useSelectedMeshes from '../../builder/useSelectedMeshes';
 import SelectedMesh from './SelectedMesh';
 import MeshRenderer from './MeshRenderer';
 import React from 'react';
+import useEditorContext from '@/app/editor/EditorContext';
+import { useAppSelector } from '@/common/hooks/hooks';
+import useSelectedMeshes from '../../builder/useSelectedMeshes';
 
-const App = () => {
+const CanvasContent = () => {
   const { meshes, roots } = useAppSelector((selector) => selector.scene.present);
   const { selectedMeshIds } = useAppSelector((selector) => selector.builder.present);
   const selectedMeshes = useSelectedMeshes();
-  const { tool, keyboard } = useEditorContext();
+  const { tool } = useEditorContext();
 
   return (
-    <Canvas
-      onKeyDown={(e) => keyboard.onKeyDown(e.nativeEvent)}
-      style={{ backgroundColor: 'goldenrod' }}
-      shadows
-      camera={{ position: [0, 10, 15], fov: 25 }}
-      tabIndex={0}
-    >
-      {selectedMeshes.length && <SelectedMesh selectedMeshes={selectedMeshes} />}
+    <>
+      {selectedMeshes.length ? <SelectedMesh selectedMeshes={selectedMeshes} /> : undefined}
       {roots.map((id) => {
         const meshInfo = meshes[id];
         const isSelectedMesh = selectedMeshIds?.includes(meshInfo.id);
@@ -46,10 +38,9 @@ const App = () => {
       </Plane>
       <Grid infiniteGrid />
 
-      <Environment />
       <OrbitControls makeDefault />
-    </Canvas>
+    </>
   );
 };
 
-export default App;
+export default CanvasContent;

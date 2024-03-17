@@ -22,14 +22,14 @@ class SelectTool extends Tool {
     const mesh = meshes[info.eventObjectName];
 
     if (mesh) {
-      this.store.dispatch(setSelectedMeshes([...(selectedMeshIds || []), mesh.id]));
+      const selectableMeshId = mesh.parent ? mesh.parent : mesh.id;
+      this.store.dispatch(setSelectedMeshes([...(selectedMeshIds || []), selectableMeshId]));
     } else {
       this.store.dispatch(setSelectedMeshes([]));
     }
   }
 
   onDragEnd(info: ToolInfo) {
-    const selectedMeshes = getSelectedMeshes(this.store);
     const { selectedMeshIds } = this.store.getState().builder.present;
     const { meshes } = this.store.getState().scene.present;
 
