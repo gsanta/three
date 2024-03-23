@@ -1,9 +1,9 @@
 import { Store } from '@/common/utils/store';
-import MeshInfo from '../types/MeshInfo';
+import MeshData from '../types/MeshData';
 
-export const getSelectedMeshes = (store: Store): MeshInfo[] => {
+export const getSelectedMeshes = (store: Store): MeshData[] => {
   const { meshes } = store.getState().scene.present;
-  const { selectedMeshIds } = store.getState().builder.present;
+  const { selectedMeshIds } = store.getState().scene.present;
 
   return selectedMeshIds?.map((id) => meshes[id]) || [];
 };

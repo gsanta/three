@@ -1,5 +1,5 @@
-import KeyboardService from '@/editor/features/tool/state/KeyboardService';
-import ToolService from '@/editor/features/tool/state/ToolService';
+import KeyboardService from '@/editor/services/tool/service/KeyboardService';
+import ToolService from '@/editor/services/tool/service/ToolService';
 import { createContext, useContext } from 'react';
 
 export type EditorContextType = {

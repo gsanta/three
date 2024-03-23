@@ -1,38 +1,45 @@
-import undoable from 'redux-undo';
-import builderSlice from '../../editor/features/builder/builderSlice';
-import sceneSlice from '../../editor/features/scene/sceneSlice';
-import settingsSlice from '../../editor/features/settings/state/settingsSlice';
-import toolSlice from '../../editor/features/tool/state/toolSlice';
-import userSlice from '../../editor/features/user/userSlice';
-import { configureStore } from '@reduxjs/toolkit';
+import undoable, { StateWithHistory } from 'redux-undo';
+import blockSlice, { BlockState } from '../../editor/features/block/blockSlice';
+import sceneSlice, { SceneState } from '../../editor/services/scene/sceneSlice';
+import settingsSlice, { SettingsState } from '../../editor/features/settings/state/settingsSlice';
+import toolSlice, { ToolState } from '../../editor/services/tool/state/toolSlice';
+import userSlice, { UserState } from '../../user/userSlice';
+import { EnhancedStore, configureStore } from '@reduxjs/toolkit';
 
-const builderSliceUndoable = undoable(builderSlice, { filter: () => false });
+const blockSliceUndoable = undoable(blockSlice, { filter: () => false });
 const sceneSliceUndoable = undoable(sceneSlice);
 
-export const store = configureStore({
-  reducer: {
-    settings: settingsSlice,
-    tool: toolSlice,
-    user: userSlice,
-    builder: builderSliceUndoable,
-    scene: sceneSliceUndoable,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [
-          'frame/initFrames',
-          'layer/initLayers',
-          'tool/initTools',
-          'settings/initSettings',
-          'editor/setEditor',
-        ],
-        ignoredPaths: ['frame.editor', 'layer.editor', 'settings.editor', 'tool.editor', 'editor.editor'],
-      },
-    }),
-});
+export type RootState = {
+  settings: SettingsState;
+  tool: ToolState;
+  user: UserState;
+  block: StateWithHistory<BlockState>;
+  scene: StateWithHistory<SceneState>;
+};
 
-export type Store = typeof store;
+export function setupStore(preloadedState?: RootState): EnhancedStore<RootState> {
+  const store = configureStore({
+    reducer: {
+      settings: settingsSlice,
+      tool: toolSlice,
+      user: userSlice,
+      block: blockSliceUndoable,
+      scene: sceneSliceUndoable,
+    },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+    preloadedState,
+  });
 
-export type RootState = ReturnType<typeof store.getState>;
+  return store;
+}
+
+export type Store = ReturnType<typeof setupStore>;
+
 export type AppDispatch = typeof store.dispatch;
+
+export const store = setupStore();
+
+export type PreloadedState = Omit<RootState, 'block' | 'scene'> & {
+  block: BlockState;
+  scene: SceneState;
+};

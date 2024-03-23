@@ -1,4 +1,4 @@
-import { UserState } from '../../editor/features/user/userSlice';
+import { UserState } from '../../user/userSlice';
 
 type GlobalProps = {
   user: UserState;

@@ -1,15 +1,15 @@
 import { EditorContext, EditorContextType } from '@/app/editor/EditorContext';
-import { setUser } from '../../editor/features/user/userSlice';
+import { setUser } from '../../user/userSlice';
 import { useAppDispatch } from '../hooks/hooks';
 import { store } from '../utils/store';
 import React, { ReactNode, useEffect, useMemo } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
-import AddTool from '@/editor/features/builder/AddTool';
-import ToolService from '@/editor/features/tool/state/ToolService';
-import SelectTool from '@/editor/features/builder/SelectTool';
-import KeyboardService from '@/editor/features/tool/state/KeyboardService';
-import GroupTool from '@/editor/features/builder/GroupTool';
+import AddTool from '@/editor/features/block/service/AddTool';
+import ToolService from '@/editor/services/tool/service/ToolService';
+import SelectTool from '@/editor/features/block/service/SelectTool';
+import KeyboardService from '@/editor/services/tool/service/KeyboardService';
+import GroupTool from '@/editor/features/block/service/GroupTool';
 
 type ProtectedPageProps = {
   children: ReactNode;
