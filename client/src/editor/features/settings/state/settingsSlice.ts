@@ -1,14 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-interface SettingsState {
+export type SettingsState = {
   color: string;
   canvasSize: {
     width: number;
     height: number;
   };
-}
+};
 
-const initialState: SettingsState = {
+export const initialSettingsState: SettingsState = {
   color: '#000000',
   canvasSize: {
     width: 0,
@@ -18,7 +18,7 @@ const initialState: SettingsState = {
 
 export const settingsSlice = createSlice({
   name: 'settings',
-  initialState,
+  initialState: initialSettingsState,
   reducers: {},
 });
 

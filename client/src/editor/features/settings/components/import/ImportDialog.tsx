@@ -3,7 +3,7 @@ import Dialog, { DialogProps, DialogBody, DialogFooter } from '../../../../../co
 import { Button } from '@chakra-ui/react';
 import DropZone from './DropZone';
 import { useAppDispatch } from '@/common/hooks/hooks';
-import { setMeshes } from '@/editor/features/scene/sceneSlice';
+import { setMeshes } from '@/editor/services/scene/sceneSlice';
 
 const ImportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children'>) => {
   const [fileName, setFileName] = useState<string>();
