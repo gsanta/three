@@ -3,15 +3,15 @@ import Dialog, { DialogProps, DialogBody, DialogFooter } from '../../../../commo
 import { Button, FormControl, FormLabel, Select } from '@chakra-ui/react';
 import FileType, { getFileTypes } from '../types/FileType';
 import { downloadString } from '../utils/fileUtils';
-import { useAppSelector } from '@/common/hooks/hooks';
+import useEditorContext from '@/app/editor/EditorContext';
 
 const ExportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children'>) => {
   const [selectedFileType, setSelectedFileType] = useState<FileType>(FileType.json);
 
-  const { meshes } = useAppSelector((state) => state.scene.present);
+  const { exporter } = useEditorContext();
 
   const exportDocument = () => {
-    downloadString(JSON.stringify(meshes), 'spright.json');
+    downloadString(exporter.export(), 'data.json');
 
     onClose();
   };

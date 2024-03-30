@@ -9,6 +9,7 @@ import { getBlock } from '../utils/blockUtils';
 import Num3 from '@/editor/types/Num3';
 import MeshData from '@/editor/types/MeshData';
 import MatrixUtils from '@/editor/utils/MatrixUtils';
+import SelectParent from './SelectParent';
 
 class SelectTool extends Tool {
   constructor(store: Store) {
@@ -21,8 +22,7 @@ class SelectTool extends Tool {
     const mesh = meshes[info.eventObjectName];
 
     if (mesh) {
-      const selectableMeshId = mesh.parent ? mesh.parent : mesh.id;
-      this.store.dispatch(setSelectedMeshes([...(selectedMeshIds || []), selectableMeshId]));
+      this.store.dispatch(setSelectedMeshes([...(selectedMeshIds || []), mesh.id]));
     } else {
       this.store.dispatch(setSelectedMeshes([]));
     }
@@ -56,6 +56,15 @@ class SelectTool extends Tool {
         }),
       ),
     );
+  }
+
+  selectParent() {
+    const { meshes, selectedMeshIds } = this.store.getState().scene.present;
+
+    const selectParent = new SelectParent(selectedMeshIds, meshes);
+    const newSelectedMeshIds = selectParent.execute();
+
+    this.store.dispatch(setSelectedMeshes(newSelectedMeshIds));
   }
 
   scaleMesh(scale: number, mesh: MeshData) {

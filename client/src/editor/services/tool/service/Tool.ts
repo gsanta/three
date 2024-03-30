@@ -16,6 +16,8 @@ abstract class Tool {
 
   iconName?: IconName;
 
+  showOnToolbar = true;
+
   protected store: Store;
 
   constructor(store: Store, name: ToolName, iconName?: IconName) {

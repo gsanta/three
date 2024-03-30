@@ -1,7 +1,9 @@
 enum ToolName {
   Add = 'add',
+  Cable = 'cable',
+  Erase = 'erase',
+  Group = 'group',
   Select = 'select',
-  Join = 'join',
 }
 
 export default ToolName;

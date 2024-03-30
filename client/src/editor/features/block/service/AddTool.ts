@@ -16,7 +16,6 @@ class AddTool extends Tool {
     if (!selectedBlock) {
       return;
     }
-
     this.store.dispatch(addMesh(MeshCreator.create(selectedBlock, { position: [pos.x, pos.y, pos.z] })));
   }
 }

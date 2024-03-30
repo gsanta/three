@@ -10,6 +10,10 @@ import ToolService from '@/editor/services/tool/service/ToolService';
 import SelectTool from '@/editor/features/block/service/SelectTool';
 import KeyboardService from '@/editor/services/tool/service/KeyboardService';
 import GroupTool from '@/editor/features/block/service/GroupTool';
+import ExportJson from '@/editor/services/io/ExportJson';
+import ImportJson from '@/editor/services/io/ImportJson';
+import EraseTool from '@/editor/features/block/service/EraseTool';
+import CableTool from '@/editor/features/block/service/CableTool';
 
 type ProtectedPageProps = {
   children: ReactNode;
@@ -36,8 +40,13 @@ const queryClient = new QueryClient({
 const ProtectedPage = ({ children }: ProtectedPageProps) => {
   const editorContext = useMemo<EditorContextType>(
     () => ({
-      tool: new ToolService([new AddTool(store), new SelectTool(store), new GroupTool(store)], store),
+      tool: new ToolService(
+        [new AddTool(store), new SelectTool(store), new GroupTool(store), new CableTool(store), new EraseTool(store)],
+        store,
+      ),
       keyboard: new KeyboardService(store),
+      exporter: new ExportJson(store),
+      importer: new ImportJson(store),
     }),
     [],
   );

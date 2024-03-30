@@ -4,12 +4,8 @@ import MeshData from '@/editor/types/MeshData';
 import { addVector } from '@/editor/utils/vectorUtils';
 import { Cone } from '@react-three/drei';
 import { MeshProps, MeshStandardMaterialProps } from '@react-three/fiber';
-
-type MeshRendererProps = {
-  meshInfo: MeshData;
-  meshProps?: MeshProps;
-  materialProps?: MeshStandardMaterialProps;
-};
+import Cable from './Cable';
+import BoxMesh from './BoxMesh';
 
 const MeshRenderer = ({ meshInfo, meshProps = {}, materialProps = {} }: MeshRendererProps) => {
   const { tool } = useEditorContext();
@@ -45,27 +41,11 @@ const MeshRenderer = ({ meshInfo, meshProps = {}, materialProps = {} }: MeshRend
     );
   }
 
-  const parent = meshInfo.parent ? meshes[meshInfo.parent] : undefined;
+  if (meshInfo.name === 'cable') {
+    return <Cable points={meshInfo.points} />;
+  }
 
-  return (
-    <mesh
-      onPointerDown={(e) => {
-        tool.onPointerDown(e);
-        e.stopPropagation();
-      }}
-      castShadow
-      position={addVector(meshInfo.position, parent?.position || [0, 0, 0])}
-      rotation={meshInfo.rotation}
-      scale={meshInfo.scale}
-      {...meshProps}
-      key={meshInfo.id}
-      name={meshInfo.name}
-      userData={{ modelId: meshInfo.id }}
-    >
-      <boxGeometry key="geometry" />
-      <meshStandardMaterial key="material" color="lightblue" {...materialProps} />
-    </mesh>
-  );
+  return <BoxMesh meshInfo={meshInfo} meshProps={meshProps} materialProps={materialProps} />;
 };
 
 export default MeshRenderer;

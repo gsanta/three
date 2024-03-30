@@ -19,27 +19,29 @@ type ExtendedRenderOptions = {
   preloadedState?: Partial<PreloadedState>;
 } & Parameters<(typeof ReactThreeTestRenderer)['create']>[1];
 
-export const renderWithProviders = async (
-  ui: React.ReactElement,
-  { preloadedState, ...renderOptions }: ExtendedRenderOptions = {},
-) => {
-  const defaultState: RootState = {
-    settings: preloadedState?.settings || initialSettingsState,
-    tool: preloadedState?.tool || initialToolState,
-    user: preloadedState?.user || initialUserState,
+export const createStoreState = (initialState?: Partial<PreloadedState>): RootState => {
+  return {
+    settings: initialState?.settings || initialSettingsState,
+    tool: initialState?.tool || initialToolState,
+    user: initialState?.user || initialUserState,
     block: {
-      present: preloadedState?.block || initialBlockState,
+      present: initialState?.block || initialBlockState,
       past: [],
       future: [],
     },
     scene: {
-      present: preloadedState?.scene || initialSceneState,
+      present: initialState?.scene || initialSceneState,
       past: [],
       future: [],
     },
   };
+};
 
-  const store = setupStore(defaultState);
+export const renderWithProviders = async (
+  ui: React.ReactElement,
+  { preloadedState, ...renderOptions }: ExtendedRenderOptions = {},
+) => {
+  const store = setupStore(createStoreState(preloadedState));
 
   const editorContext = {
     tool: new ToolService([new AddTool(store), new SelectTool(store), new GroupTool(store)], store),

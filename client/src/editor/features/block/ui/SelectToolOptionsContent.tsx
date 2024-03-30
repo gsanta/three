@@ -41,7 +41,9 @@ const SelectToolOptionsContent = ({ selectedMesh }: SelectToolOptionsContentProp
           value={toDegree(selectedMesh.rotation[1])}
         />
       )}
-      <Button onClick={() => tool.getJoinTool().execute()}>join</Button>
+      <Button onClick={() => tool.getGroupTool().group()}>Group</Button>
+      <Button onClick={() => tool.getGroupTool().ungroup()}>Ungroup</Button>
+      <Button onClick={() => tool.getSelectTool().selectParent()}>Select parent</Button>
     </Box>
   );
 };

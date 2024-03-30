@@ -63,8 +63,8 @@ class ToolService {
     return this.tools.find((tool) => tool.name === ToolName.Add) as AddTool;
   }
 
-  getJoinTool() {
-    return this.tools.find((tool) => tool.name === ToolName.Join) as GroupTool;
+  getGroupTool() {
+    return this.tools.find((tool) => tool.name === ToolName.Group) as GroupTool;
   }
 
   getToolInfo(): ToolInfo {

@@ -61,7 +61,7 @@
     "engine/**/*.js",
     "src/**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "src/editor/services/scene/ui/BoxMesh.tsz"  ],
   "exclude": [
     "node_modules"
   ]

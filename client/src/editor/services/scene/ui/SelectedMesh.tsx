@@ -35,10 +35,7 @@ const SelectedMesh = ({ selectedMeshes }: SelectedMeshProps) => {
         position.x = snapTo(position.x);
         position.y = snapTo(position.y, block?.snap?.y);
         position.z = snapTo(position.z);
-        // transformRef.current = position;
         setTransform(position);
-
-        // tool.onDrag(position);
       }}
       onDragEnd={() => {
         tool.onDragEnd(transform);
@@ -46,7 +43,7 @@ const SelectedMesh = ({ selectedMeshes }: SelectedMeshProps) => {
       }}
       userData={{ role: 'selection-pivot' }}
     >
-      <group>
+      <group name="selection-group">
         {selectedMeshes.map((meshInfo) => (
           <MeshRenderer
             key={meshInfo.id}
@@ -56,7 +53,7 @@ const SelectedMesh = ({ selectedMeshes }: SelectedMeshProps) => {
               position: addVector(meshInfo.position, transform ? transform.toArray() : [0, 0, 0]),
               onPointerDown: () => {},
             }}
-            materialProps={{ color: 'pink' }}
+            materialProps={{ color: 'pink', opacity: 0.5, transparent: true }}
           />
         ))}
       </group>

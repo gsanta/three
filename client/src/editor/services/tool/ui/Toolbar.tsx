@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Tooltip } from '@chakra-ui/react';
+import { Box, Text, Tooltip } from '@chakra-ui/react';
 import ToggleButton from '../../../../common/components/ToggleButton';
 import Icon from '../../../../common/components/icon/Icon';
 import { useAppDispatch, useAppSelector } from '../../../../common/hooks/hooks';
@@ -26,8 +26,8 @@ const Toolbar = () => {
       gap="1"
       alignItems="center"
     >
-      {tool.getTools().map(({ iconName, name }) => {
-        if (!iconName) {
+      {tool.getTools().map(({ iconName, name, showOnToolbar }) => {
+        if (!showOnToolbar) {
           return;
         }
 
@@ -40,7 +40,7 @@ const Toolbar = () => {
               onToggle={() => handleSelectTool(name)}
               variant="outline"
             >
-              <Icon name={iconName} />
+              {iconName ? <Icon name={iconName} /> : <Text>{name[0].toUpperCase()}</Text>}
             </ToggleButton>
           </Tooltip>
         );

@@ -2,14 +2,13 @@ import { useState } from 'react';
 import Dialog, { DialogProps, DialogBody, DialogFooter } from '../../../../../common/components/Dialog';
 import { Button } from '@chakra-ui/react';
 import DropZone from './DropZone';
-import { useAppDispatch } from '@/common/hooks/hooks';
-import { setMeshes } from '@/editor/services/scene/sceneSlice';
+import useEditorContext from '@/app/editor/EditorContext';
 
 const ImportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children'>) => {
   const [fileName, setFileName] = useState<string>();
   const [fileContent, setFileContent] = useState<string>('[]');
 
-  const dispatch = useAppDispatch();
+  const { importer } = useEditorContext();
 
   const handleSetFile = (name: string, content: string) => {
     setFileName(name);
@@ -17,8 +16,7 @@ const ImportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children
   };
 
   const handleImport = () => {
-    const meshes = JSON.parse(fileContent);
-    dispatch(setMeshes(meshes));
+    importer.import(fileContent);
     onClose();
   };
 

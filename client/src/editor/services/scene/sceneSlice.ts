@@ -106,6 +106,7 @@ export const sceneSlice = createSlice({
     update(state, action: PayloadAction<Partial<SceneState>>) {
       state.meshes = action.payload.meshes || state.meshes;
       state.roots = action.payload.roots || state.roots;
+      state.selectedMeshIds = action.payload.selectedMeshIds || state.selectedMeshIds;
     },
 
     updateMesh(state, action: PayloadAction<MeshData>) {
@@ -135,6 +136,7 @@ export const {
   addMesh,
   addMeshPosition,
   deleteMeshes,
+  deleteMesh,
   groupMeshes,
   setMeshes,
   setMeshPosition,
