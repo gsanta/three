@@ -18,11 +18,10 @@ class SelectTool extends Tool {
 
   onPointerDown(info: ToolInfo) {
     const { meshes } = this.store.getState().scene.present;
-    const { selectedMeshIds } = this.store.getState().scene.present;
     const mesh = meshes[info.eventObjectName];
 
     if (mesh) {
-      this.store.dispatch(setSelectedMeshes([...(selectedMeshIds || []), mesh.id]));
+      this.selectParent(info.eventObjectName);
     } else {
       this.store.dispatch(setSelectedMeshes([]));
     }
@@ -58,10 +57,10 @@ class SelectTool extends Tool {
     );
   }
 
-  selectParent() {
+  selectParent(id: string) {
     const { meshes, selectedMeshIds } = this.store.getState().scene.present;
 
-    const selectParent = new SelectParent(selectedMeshIds, meshes);
+    const selectParent = new SelectParent([id, ...selectedMeshIds], meshes);
     const newSelectedMeshIds = selectParent.execute();
 
     this.store.dispatch(setSelectedMeshes(newSelectedMeshIds));

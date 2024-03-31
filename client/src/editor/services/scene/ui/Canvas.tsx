@@ -5,7 +5,7 @@ import CanvasContent from './CanvasContent';
 import { useCallback } from 'react';
 
 const Canvas = () => {
-  const { keyboard, scene, tool } = useEditorContext();
+  const { keyboard, scene } = useEditorContext();
 
   // const canvasRef = useRef<HTMLCanvasElement | null>(null);
 

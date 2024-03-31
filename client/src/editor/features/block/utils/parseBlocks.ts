@@ -7,6 +7,7 @@ const defaultBlockData: Partial<Block['data']> = {
   position: [0, 0, 0],
   rotation: [0, 0, 0],
   scale: [0, 0, 0],
+  movable: true,
 };
 
 const defaultBlockOptions: Partial<Block['options']> = {

@@ -1,26 +1,25 @@
-import Num3 from '@/editor/types/Num3';
 import { useMemo } from 'react';
 import { CatmullRomCurve3, Vector3 } from 'three';
 import WrappedMeshProps from '../types/WrappedMeshProps';
 
-type CableProps = { points: Num3[] } & WrappedMeshProps;
+type CableProps = WrappedMeshProps<'cable', 'tube'>;
 
-const CableMesh = ({ points, meshProps }: CableProps) => {
+const CableMesh = ({ meshProps, meshInfo }: CableProps) => {
   const curve = useMemo(() => {
     return new CatmullRomCurve3(
-      points.map((point) => new Vector3(point[0], point[1], point[2])),
+      meshInfo.points.map((point) => new Vector3(point[0], point[1], point[2])),
       false,
       'catmullrom',
       0,
     );
-  }, [points]);
+  }, [meshInfo.points]);
 
-  if (points.length < 2) {
+  if (meshInfo.points.length < 2) {
     return null;
   }
 
   return (
-    <mesh {...meshProps}>
+    <mesh {...meshProps} userData={{ modelId: meshInfo.id }} key={meshInfo.id} name={meshInfo.name}>
       <tubeGeometry args={[curve, 70, 0.02, 50, false]} />
     </mesh>
   );

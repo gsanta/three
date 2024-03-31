@@ -2,7 +2,7 @@ import { addVector } from '@/editor/utils/vectorUtils';
 import WrappedMeshProps from '../types/WrappedMeshProps';
 import useEditorContext from '@/app/editor/EditorContext';
 import { useEffect, useRef } from 'react';
-import { Mesh } from 'three';
+import { Color, Mesh } from 'three';
 
 const BoxMesh = ({ meshInfo, meshProps, materialProps, parent }: WrappedMeshProps) => {
   const { scene } = useEditorContext();
@@ -32,7 +32,11 @@ const BoxMesh = ({ meshInfo, meshProps, materialProps, parent }: WrappedMeshProp
       userData={{ modelId: meshInfo.id }}
     >
       <boxGeometry key="geometry" />
-      <meshStandardMaterial key="material" color="red" {...materialProps} />
+      <meshStandardMaterial
+        key="material"
+        color={new Color(...(meshInfo.color || [0.5, 0.2, 0.5]))}
+        {...materialProps}
+      />
     </mesh>
   );
 };

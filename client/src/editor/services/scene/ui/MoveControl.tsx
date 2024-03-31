@@ -1,18 +1,19 @@
-import MeshData from '@/editor/types/MeshData';
 import { snapTo, addVector } from '@/editor/utils/vectorUtils';
 import { PivotControls } from '@react-three/drei';
 import { Mesh, Quaternion, Vector3 } from 'three';
-import useBlock from '../../../features/block/ui/hooks/useBlock';
 import { useEffect, useRef, useState } from 'react';
 import useEditorContext from '@/app/editor/EditorContext';
 import MeshRenderer from './MeshRenderer';
+import useSelectedMeshes from '@/editor/features/block/useSelectedMeshes';
+import { getBlock } from '@/editor/features/block/utils/blockUtils';
+import { useAppSelector } from '@/common/hooks/hooks';
 
-type SelectedMeshProps = {
-  selectedMeshes: MeshData[];
-};
+const MoveControl = () => {
+  const selectedMeshes = useSelectedMeshes();
 
-const SelectedMesh = ({ selectedMeshes }: SelectedMeshProps) => {
-  const block = useBlock(selectedMeshes[0].name);
+  const movableMeshes = selectedMeshes.filter((mesh) => mesh.movable);
+
+  const blocks = useAppSelector((selector) => selector.block.present.blocks);
   const [transform, setTransform] = useState<Vector3>(new Vector3(0));
   const selectedMeshRef = useRef<Mesh>(null);
   const { tool } = useEditorContext();
@@ -20,6 +21,10 @@ const SelectedMesh = ({ selectedMeshes }: SelectedMeshProps) => {
   useEffect(() => {
     tool.setSelectedMesh(selectedMeshRef.current || undefined);
   }, [tool]);
+
+  if (!movableMeshes.length) {
+    return null;
+  }
 
   return (
     <PivotControls
@@ -33,7 +38,7 @@ const SelectedMesh = ({ selectedMeshes }: SelectedMeshProps) => {
         const position = new Vector3();
         d.decompose(position, new Quaternion(), new Vector3());
         position.x = snapTo(position.x);
-        position.y = snapTo(position.y, block?.snap?.y);
+        position.y = snapTo(position.y, getBlock(blocks, selectedMeshes[0].name).snap?.y);
         position.z = snapTo(position.z);
         setTransform(position);
       }}
@@ -44,7 +49,7 @@ const SelectedMesh = ({ selectedMeshes }: SelectedMeshProps) => {
       userData={{ role: 'selection-pivot' }}
     >
       <group name="selection-group">
-        {selectedMeshes.map((meshInfo) => (
+        {movableMeshes.map((meshInfo) => (
           <MeshRenderer
             key={meshInfo.id}
             meshInfo={meshInfo}
@@ -61,4 +66,4 @@ const SelectedMesh = ({ selectedMeshes }: SelectedMeshProps) => {
   );
 };
 
-export default SelectedMesh;
+export default MoveControl;

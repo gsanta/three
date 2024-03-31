@@ -28,7 +28,7 @@ class CableTool extends Tool {
 
     const intersect = new Intersect(canvasElement, camera);
 
-    const [intersection] = intersect.calculate(mesh, clientX, clientY);
+    const [intersection] = intersect.calculate(mesh.children[1], clientX, clientY);
 
     if (!intersection) {
       return;

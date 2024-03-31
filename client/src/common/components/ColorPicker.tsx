@@ -1,16 +1,17 @@
 import { useAppDispatch, useAppSelector } from '../hooks/hooks';
-import { colorToHexString } from '../../editor/services/tool/colorUtils';
 import React, { useState } from 'react';
 import { ChromePicker, ColorResult } from 'react-color';
+import { setColor } from '@/editor/features/block/blockSlice';
 
 const ColorPicker = () => {
-  const color = useAppSelector((state) => state.settings.color);
+  const color = useAppSelector((state) => state.block.present.color);
 
-  const [tempColor, setTempColor] = useState<string | null>(color);
+  const [tempColor, setTempColor] = useState<string | null>(null);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleChangeComplete = (_newColor: ColorResult) => {
-    // dispatch(setColor(colorToHexString(newColor.rgb)));
+  const dispatch = useAppDispatch();
+
+  const handleChangeComplete = (newColor: ColorResult) => {
+    dispatch(setColor(newColor.rgb));
     setTempColor(null);
   };
 

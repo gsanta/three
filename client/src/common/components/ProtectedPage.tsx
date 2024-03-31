@@ -16,6 +16,7 @@ import EraseTool from '@/editor/features/block/service/EraseTool';
 import CableTool from '@/editor/features/block/service/CableTool';
 import SceneService from '@/editor/services/scene/SceneService';
 import RayHelperTool from '@/editor/features/block/service/RayHelperTool';
+import ColorTool from '@/editor/features/block/service/ColorTool';
 
 type ProtectedPageProps = {
   children: ReactNode;
@@ -52,6 +53,7 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
           new CableTool(store, scene),
           new EraseTool(store),
           new RayHelperTool(store, scene),
+          new ColorTool(store, scene),
         ],
         store,
       ),

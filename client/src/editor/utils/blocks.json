@@ -10,7 +10,7 @@
     },
     "box": {
         "data": {
-            "geometry": "box",
+            "shape": "box",
             "scale": [
                 1,
                 1,
@@ -20,7 +20,7 @@
     },
     "floor": {
         "data": {
-            "geometry": "box",
+            "shape": "box",
             "scale": [
                 5,
                 0.2,
@@ -33,7 +33,7 @@
     },
     "wall": {
         "data": {
-            "geometry": "box",
+            "shape": "box",
             "scale": [
                 5,
                 2,
@@ -71,7 +71,7 @@
                 2,
                 0
             ],
-            "geometry": "cone",
+            "shape": "cone",
             "scale": [
                 1,
                 1,
@@ -92,10 +92,74 @@
     },
     "cable": {
         "data": {
+            "shape": "tube",
             "scale": [
                 1,
                 1,
                 1
+            ],
+            "movable": false
+        }
+    },
+    "rod": {
+        "data": {
+            "scale": [
+                1,
+                1,
+                1
+            ]
+        }
+    },
+    "tree": {
+        "data": {
+            "shape": "model",
+            "path": "/tree.glb",
+            "parts": [
+                {
+                    "geometryPath": "Cylinder_1.geometry",
+                    "materialPath": "Material.002"
+                },
+                {
+                    "geometryPath": "Cylinder_2.geometry",
+                    "materialPath": "Material.004"
+                },
+                {
+                    "geometryPath": "Cylinder_3.geometry",
+                    "materialPath": "Material.003"
+                },
+                {
+                    "geometryPath": "Cylinder_4.geometry",
+                    "materialPath": "Material.001"
+                }
+            ],
+            "position": [0, 0.3, 0],
+            "scale": [
+                0.09,
+                0.71,
+                0.09
+            ]
+        }
+    },
+    "wall1": {
+        "data": {
+            "shape": "model",
+            "path": "/wall1.glb",
+            "parts": [
+                {
+                    "geometryPath": "Cube001.geometry",
+                    "materialPath": "Door Frame"
+                },
+                {
+                    "geometryPath": "Cube001_1.geometry",
+                    "materialPath": "Wall"
+                },
+                {
+                    "geometryPath": "Cube001_2.geometry",
+                    "materialPath": "Door"
+                }
+            ],
+            "scale": [
+                1, 1, 1
             ]
         }
     }

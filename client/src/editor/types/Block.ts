@@ -3,12 +3,16 @@ import Num3 from './Num3';
 
 export type BlockType = keyof typeof blocks;
 
-type Block = {
+export type ShapeType = 'box' | 'cone' | 'model' | 'tube';
+
+type Block<S extends ShapeType = ShapeType> = {
   data: {
     name: BlockType;
-    geometry: string;
+    color: [number, number, number];
+    shape: S;
     position: [number, number, number];
     scale: [number, number, number];
+    movable: boolean;
     rotation: [number, number, number];
     radialSegments: number;
     radius: number;
@@ -16,22 +20,20 @@ type Block = {
     points?: Num3[];
   } & (
     | {
-        name: BlockType;
-        radialSegments: never;
-        radius: never;
-        height: never;
-        points: never;
+        shape: 'model';
+        parts: { geometryPath: string; materialPath: string }[];
+        path: string;
       }
     | {
-        name: 'roof';
+        shape: 'tube';
+        points: Num3[];
+      }
+    | {
+        shape: 'cone';
         radialSegments: number;
         radius: number;
         height: number;
         points: never;
-      }
-    | {
-        name: 'cable';
-        points: Num3[];
       }
   );
   snap?: {

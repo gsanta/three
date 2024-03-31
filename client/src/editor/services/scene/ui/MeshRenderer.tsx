@@ -1,29 +1,41 @@
 import useEditorContext from '@/app/editor/EditorContext';
 import { useAppSelector } from '@/common/hooks/hooks';
 import { Cone } from '@react-three/drei';
-import { ThreeEvent } from '@react-three/fiber';
 import CableMesh from './CableMesh';
 import BoxMesh from './BoxMesh';
-import { useCallback } from 'react';
 import WrappedMeshProps from '../types/WrappedMeshProps';
+import { RodMesh } from './RodMesh';
+import { BlockType } from '@/editor/types/Block';
+import { ModelMesh } from './ModelMesh';
+
+const getComponent = (type: BlockType): (({ meshProps, meshInfo }: WrappedMeshProps) => React.JSX.Element | null) => {
+  switch (type) {
+    case 'cable':
+      return CableMesh as ({ meshProps, meshInfo }: WrappedMeshProps) => React.JSX.Element | null;
+    case 'rod':
+      return RodMesh;
+    case 'tree':
+    case 'wall1':
+      return ModelMesh as ({ meshProps, meshInfo }: WrappedMeshProps) => React.JSX.Element | null;
+    default:
+      return BoxMesh;
+  }
+};
 
 const MeshRenderer = ({ meshInfo, meshProps = {}, materialProps = {} }: Omit<WrappedMeshProps, 'parent'>) => {
   const { tool } = useEditorContext();
   const { meshes } = useAppSelector((selector) => selector.scene.present);
 
-  const handlePointerDown = useCallback(
-    (event: ThreeEvent<PointerEvent>) => {
-      tool.onPointerDown(event);
-      event.stopPropagation();
-    },
-    [tool],
-  );
-
   if (meshInfo.name === 'group') {
     return (
       <group key={meshInfo.id} position={meshProps.position} name={meshInfo.name} userData={{ modelId: meshInfo.id }}>
         {meshInfo.children.map((child) => (
-          <MeshRenderer key={meshes[child].id} meshInfo={meshes[child]} materialProps={materialProps} />
+          <MeshRenderer
+            key={meshes[child].id}
+            meshInfo={meshes[child]}
+            materialProps={materialProps}
+            meshProps={{ onPointerDown: meshProps.onPointerDown }}
+          />
         ))}
       </group>
     );
@@ -49,26 +61,11 @@ const MeshRenderer = ({ meshInfo, meshProps = {}, materialProps = {} }: Omit<Wra
     );
   }
 
-  if (meshInfo.name === 'cable') {
-    return (
-      <CableMesh
-        meshInfo={meshInfo}
-        meshProps={{ ...meshProps, onPointerDown: handlePointerDown }}
-        points={meshInfo.points}
-      />
-    );
-  }
+  const Component = getComponent(meshInfo.name);
 
   const parent = meshInfo.parent ? meshes[meshInfo.parent] : undefined;
 
-  return (
-    <BoxMesh
-      meshInfo={meshInfo}
-      meshProps={{ ...meshProps, onPointerDown: handlePointerDown }}
-      materialProps={materialProps}
-      parent={parent}
-    />
-  );
+  return <Component meshInfo={meshInfo} meshProps={{ ...meshProps }} materialProps={materialProps} parent={parent} />;
 };
 
 export default MeshRenderer;
