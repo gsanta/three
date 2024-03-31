@@ -3,12 +3,15 @@ import { IconName } from '../../../../common/components/icon/Icon';
 import type { Store } from '../../../../common/utils/store';
 import { Mesh, Vector3 } from 'three';
 import Num3 from '@/editor/types/Num3';
+import { ThreeEvent } from '@react-three/fiber';
 
 export interface ToolInfo {
   pos: Vector3;
   drag: Num3;
   eventObjectName: string;
   selectedMesh?: Mesh;
+  clientX: number;
+  clientY: number;
 }
 
 abstract class Tool {

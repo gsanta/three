@@ -14,6 +14,8 @@ import ExportJson from '@/editor/services/io/ExportJson';
 import ImportJson from '@/editor/services/io/ImportJson';
 import EraseTool from '@/editor/features/block/service/EraseTool';
 import CableTool from '@/editor/features/block/service/CableTool';
+import SceneService from '@/editor/services/scene/SceneService';
+import RayHelperTool from '@/editor/features/block/service/RayHelperTool';
 
 type ProtectedPageProps = {
   children: ReactNode;
@@ -38,17 +40,27 @@ const queryClient = new QueryClient({
 });
 
 const ProtectedPage = ({ children }: ProtectedPageProps) => {
+  const scene = useMemo(() => new SceneService(), []);
+
   const editorContext = useMemo<EditorContextType>(
     () => ({
       tool: new ToolService(
-        [new AddTool(store), new SelectTool(store), new GroupTool(store), new CableTool(store), new EraseTool(store)],
+        [
+          new AddTool(store),
+          new SelectTool(store),
+          new GroupTool(store),
+          new CableTool(store, scene),
+          new EraseTool(store),
+          new RayHelperTool(store, scene),
+        ],
         store,
       ),
       keyboard: new KeyboardService(store),
       exporter: new ExportJson(store),
       importer: new ImportJson(store),
+      scene,
     }),
-    [],
+    [scene],
   );
 
   return (

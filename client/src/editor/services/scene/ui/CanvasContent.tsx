@@ -1,24 +1,36 @@
-import { Grid, OrbitControls, Plane, Tube } from '@react-three/drei';
+import { Grid, OrbitControls, Plane } from '@react-three/drei';
 import SelectedMesh from './SelectedMesh';
 import MeshRenderer from './MeshRenderer';
-import React from 'react';
+import { useEffect } from 'react';
 import useEditorContext from '@/app/editor/EditorContext';
 import { useAppSelector } from '@/common/hooks/hooks';
 import useSelectedMeshes from '../../../features/block/useSelectedMeshes';
-import { CatmullRomCurve3, Curve, Vector3 } from 'three';
+import { CatmullRomCurve3, Vector3 } from 'three';
+import { useThree } from '@react-three/fiber';
 
 const CanvasContent = () => {
   const { meshes, roots } = useAppSelector((selector) => selector.scene.present);
   const { selectedMeshIds } = useAppSelector((selector) => selector.scene.present);
   const selectedMeshes = useSelectedMeshes();
-  const { tool } = useEditorContext();
+  const { tool, scene: sceneService } = useEditorContext();
+
+  const camera = useThree((state) => state.camera);
+  const scene = useThree((state) => state.scene);
+
+  useEffect(() => {
+    sceneService.setCamera(camera);
+    sceneService.setScene(scene);
+  }, [camera, scene, sceneService]);
+
+  const nonMovableMeshesIds = selectedMeshes.filter((mesh) => mesh.name === 'cable').map((mesh) => mesh.id);
+  const movableMeshes = selectedMeshes.filter((mesh) => mesh.name !== 'cable');
 
   return (
     <>
-      {selectedMeshes.length ? <SelectedMesh selectedMeshes={selectedMeshes} /> : undefined}
+      {movableMeshes.length ? <SelectedMesh selectedMeshes={movableMeshes} /> : undefined}
       {roots.map((id) => {
         const meshInfo = meshes[id];
-        const isSelectedMesh = selectedMeshIds?.includes(meshInfo.id);
+        const isSelectedMesh = selectedMeshIds?.includes(meshInfo.id) && !nonMovableMeshesIds.includes(meshInfo.id);
         if (isSelectedMesh) {
           return undefined;
         }

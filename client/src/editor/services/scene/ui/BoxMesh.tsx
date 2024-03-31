@@ -1,15 +1,11 @@
 import { addVector } from '@/editor/utils/vectorUtils';
-import MeshRendererProps from '../types/MeshRendererProps';
+import WrappedMeshProps from '../types/WrappedMeshProps';
 import useEditorContext from '@/app/editor/EditorContext';
 import { useEffect, useRef } from 'react';
-import { useAppSelector } from '@/common/hooks/hooks';
 import { Mesh } from 'three';
 
-const BoxMesh = ({ meshInfo, meshProps, materialProps }: MeshRendererProps) => {
-  const { scene, tool } = useEditorContext();
-  const { meshes } = useAppSelector((selector) => selector.scene.present);
-
-  const parent = meshInfo.parent ? meshes[meshInfo.parent] : undefined;
+const BoxMesh = ({ meshInfo, meshProps, materialProps, parent }: WrappedMeshProps) => {
+  const { scene } = useEditorContext();
 
   const meshRef = useRef<Mesh>(null);
 
@@ -24,10 +20,7 @@ const BoxMesh = ({ meshInfo, meshProps, materialProps }: MeshRendererProps) => {
 
   return (
     <mesh
-      onPointerDown={(e) => {
-        tool.onPointerDown(e);
-        e.stopPropagation();
-      }}
+      onPointerDown={meshProps?.onPointerDown}
       castShadow
       position={addVector(meshInfo.position, parent?.position || [0, 0, 0])}
       rotation={meshInfo.rotation}

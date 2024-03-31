@@ -1,37 +1,71 @@
 import { Store } from '@/common/utils/store';
-import { addMesh, update, updateMesh } from '@/editor/services/scene/sceneSlice';
+import { addMesh, setSelectedMeshes, updateMesh } from '@/editor/services/scene/sceneSlice';
 import Tool, { ToolInfo } from '@/editor/services/tool/service/Tool';
 import ToolName from '@/editor/services/tool/state/ToolName';
 import MeshCreator from './MeshCreator';
 import { getBlock } from '../utils/blockUtils';
-import { position } from '@chakra-ui/styled-system';
+import SceneService from '@/editor/services/scene/SceneService';
+import Intersect from './Intersect';
+import MeshData from '@/editor/types/MeshData';
+import { Vector3 } from 'three';
 
 class CableTool extends Tool {
-  constructor(store: Store) {
+  constructor(store: Store, scene: SceneService) {
     super(store, ToolName.Cable);
+
+    this.scene = scene;
   }
 
-  onPointerDown({ pos, eventObjectName }: ToolInfo) {
+  onPointerDown({ eventObjectName, clientX, clientY }: ToolInfo) {
+    const { meshes, selectedMeshIds } = this.store.getState().scene.present;
+    const canvasElement = this.scene.getCanvasElement();
+    const camera = this.scene.getCamera();
+    const mesh = this.scene.getMesh(eventObjectName);
+
+    if (!mesh) {
+      return;
+    }
+
+    const intersect = new Intersect(canvasElement, camera);
+
+    const [intersection] = intersect.calculate(mesh, clientX, clientY);
+
+    if (!intersection) {
+      return;
+    }
+
+    const point = intersection.point;
+    const cable = selectedMeshIds.find((root) => meshes[root].name === 'cable');
+
+    if (!cable) {
+      this.createMesh(point);
+    } else {
+      this.updateMesh(cable, point);
+    }
+  }
+
+  private createMesh(point: Vector3) {
     const { blocks } = this.store.getState().block.present;
     const cableBlock = getBlock(blocks, 'cable');
 
-    const { roots, meshes } = this.store.getState().scene.present;
-
-    const cable = roots.find((root) => meshes[root].name === 'cable');
-
-    const mesh = meshes[eventObjectName];
-
-    if (!cable) {
-      this.store.dispatch(addMesh(MeshCreator.create(cableBlock, { points: [[pos.x, pos.y, pos.z]] })));
-    } else {
-      const newMesh = {
-        ...meshes[cable],
-        points: [...meshes[cable].points, [pos.x, pos.y, pos.z]],
-      };
-
-      this.store.dispatch(updateMesh(newMesh));
-    }
+    const newMesh = MeshCreator.create(cableBlock, { points: [[point.x, point.y, point.z]] });
+    this.store.dispatch(addMesh(newMesh));
+    this.store.dispatch(setSelectedMeshes([newMesh.id]));
   }
+
+  private updateMesh(meshId: string, point: Vector3) {
+    const { meshes } = this.store.getState().scene.present;
+
+    const newMesh: MeshData = {
+      ...meshes[meshId],
+      name: 'cable',
+      points: [...meshes[meshId].points, [point.x, point.y, point.z]],
+    };
+
+    this.store.dispatch(updateMesh(newMesh));
+  }
+
+  private scene: SceneService;
 }
 
 export default CableTool;

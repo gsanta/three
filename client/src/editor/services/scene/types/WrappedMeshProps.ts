@@ -1,10 +1,11 @@
 import MeshData from '@/editor/types/MeshData';
 import { MeshProps, MeshStandardMaterialProps } from '@react-three/fiber';
 
-type MeshRendererProps = {
+type WrappedMeshProps = {
   meshInfo: MeshData;
   meshProps?: MeshProps;
   materialProps?: MeshStandardMaterialProps;
+  parent?: MeshData;
 };
 
-export default MeshRendererProps;
+export default WrappedMeshProps;

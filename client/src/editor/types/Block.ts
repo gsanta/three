@@ -10,6 +10,10 @@ type Block = {
     position: [number, number, number];
     scale: [number, number, number];
     rotation: [number, number, number];
+    radialSegments: number;
+    radius: number;
+    height: number;
+    points?: Num3[];
   } & (
     | {
         name: BlockType;
@@ -23,6 +27,7 @@ type Block = {
         radialSegments: number;
         radius: number;
         height: number;
+        points: never;
       }
     | {
         name: 'cable';

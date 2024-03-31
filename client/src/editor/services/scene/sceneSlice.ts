@@ -136,7 +136,6 @@ export const {
   addMesh,
   addMeshPosition,
   deleteMeshes,
-  deleteMesh,
   groupMeshes,
   setMeshes,
   setMeshPosition,

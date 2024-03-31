@@ -3,6 +3,7 @@ enum ToolName {
   Cable = 'cable',
   Erase = 'erase',
   Group = 'group',
+  RayHelper = 'ray-helper',
   Select = 'select',
 }
 

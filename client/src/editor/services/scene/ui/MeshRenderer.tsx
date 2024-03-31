@@ -1,15 +1,23 @@
 import useEditorContext from '@/app/editor/EditorContext';
 import { useAppSelector } from '@/common/hooks/hooks';
-import MeshData from '@/editor/types/MeshData';
-import { addVector } from '@/editor/utils/vectorUtils';
 import { Cone } from '@react-three/drei';
-import { MeshProps, MeshStandardMaterialProps } from '@react-three/fiber';
-import Cable from './Cable';
+import { ThreeEvent } from '@react-three/fiber';
+import CableMesh from './CableMesh';
 import BoxMesh from './BoxMesh';
+import { useCallback } from 'react';
+import WrappedMeshProps from '../types/WrappedMeshProps';
 
-const MeshRenderer = ({ meshInfo, meshProps = {}, materialProps = {} }: MeshRendererProps) => {
+const MeshRenderer = ({ meshInfo, meshProps = {}, materialProps = {} }: Omit<WrappedMeshProps, 'parent'>) => {
   const { tool } = useEditorContext();
   const { meshes } = useAppSelector((selector) => selector.scene.present);
+
+  const handlePointerDown = useCallback(
+    (event: ThreeEvent<PointerEvent>) => {
+      tool.onPointerDown(event);
+      event.stopPropagation();
+    },
+    [tool],
+  );
 
   if (meshInfo.name === 'group') {
     return (
@@ -42,10 +50,25 @@ const MeshRenderer = ({ meshInfo, meshProps = {}, materialProps = {} }: MeshRend
   }
 
   if (meshInfo.name === 'cable') {
-    return <Cable points={meshInfo.points} />;
+    return (
+      <CableMesh
+        meshInfo={meshInfo}
+        meshProps={{ ...meshProps, onPointerDown: handlePointerDown }}
+        points={meshInfo.points}
+      />
+    );
   }
 
-  return <BoxMesh meshInfo={meshInfo} meshProps={meshProps} materialProps={materialProps} />;
+  const parent = meshInfo.parent ? meshes[meshInfo.parent] : undefined;
+
+  return (
+    <BoxMesh
+      meshInfo={meshInfo}
+      meshProps={{ ...meshProps, onPointerDown: handlePointerDown }}
+      materialProps={materialProps}
+      parent={parent}
+    />
+  );
 };
 
 export default MeshRenderer;

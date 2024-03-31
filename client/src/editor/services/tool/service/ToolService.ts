@@ -15,10 +15,15 @@ class ToolService {
       pos: new Vector3(),
       drag: [0, 0, 0],
       eventObjectName: '',
+      clientX: 0,
+      clientY: 0,
     };
   }
 
   onPointerDown(event: ThreeEvent<PointerEvent>) {
+    this.info.pos = event.point;
+    this.info.clientX = event.clientX;
+    this.info.clientY = event.clientY;
     this.info.eventObjectName = event.eventObject.userData.modelId;
 
     const { selectedTool } = this.store.getState().tool;
@@ -27,6 +32,8 @@ class ToolService {
 
   onPointerMove(event: ThreeEvent<PointerEvent>) {
     this.info.pos = event.point;
+    this.info.clientX = event.clientX;
+    this.info.clientY = event.clientY;
 
     const { selectedTool } = this.store.getState().tool;
     this.getTool(selectedTool)?.onPointerMove(this.info);

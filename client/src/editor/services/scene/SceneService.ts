@@ -1,4 +1,4 @@
-import { Mesh } from 'three';
+import { Camera, Mesh, Scene } from 'three';
 
 class SceneService {
   constructor() {
@@ -24,7 +24,50 @@ class SceneService {
     this.meshes.delete(modelId);
   }
 
+  getMesh(modelId: string) {
+    return this.meshes.get(modelId);
+  }
+
+  setCamera(camera: Camera) {
+    this.camera = camera;
+  }
+
+  getCamera(): Camera {
+    if (!this.camera) {
+      throw new Error('Camera is not defined');
+    }
+    return this.camera;
+  }
+
+  setCanvasElement(canvas: HTMLCanvasElement) {
+    this.canvasElement = canvas;
+  }
+
+  getCanvasElement() {
+    if (!this.canvasElement) {
+      throw new Error('Canvas is not defined');
+    }
+    return this.canvasElement;
+  }
+
+  setScene(scene: Scene) {
+    this.scene = scene;
+  }
+
+  getScene() {
+    if (!this.scene) {
+      throw new Error('Scene is not defined');
+    }
+    return this.scene;
+  }
+
   private meshes: Map<string, Mesh>;
+
+  private camera: Camera | undefined;
+
+  private canvasElement: HTMLCanvasElement | undefined;
+
+  private scene: Scene | undefined;
 }
 
 export default SceneService;
