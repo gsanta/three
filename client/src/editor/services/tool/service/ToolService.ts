@@ -6,6 +6,8 @@ import { Mesh, Vector3 } from 'three';
 import SelectTool from '@/editor/features/block/service/SelectTool';
 import AddTool from '../../../features/block/service/AddTool';
 import GroupTool from '@/editor/features/block/service/GroupTool';
+import CableTool from '@/editor/features/block/service/CableTool';
+import MeshData from '@/editor/types/MeshData';
 
 class ToolService {
   constructor(tools: Tool[], store: Store) {
@@ -39,8 +41,8 @@ class ToolService {
     this.getTool(selectedTool)?.onPointerMove(this.info);
   }
 
-  onDrag(position: Vector3) {
-    this.info.drag = position.toArray();
+  onDrag(mesh: MeshData) {
+    this.info.draggedMesh = mesh;
 
     const { selectedTool } = this.store.getState().tool;
     this.getTool(selectedTool)?.onDrag(this.info);
@@ -52,6 +54,7 @@ class ToolService {
     const { selectedTool } = this.store.getState().tool;
     this.getTool(selectedTool)?.onDragEnd(this.info);
     this.info.drag = [0, 0, 0];
+    this.info.draggedMesh = undefined;
   }
 
   getTools(): Tool[] {
@@ -72,6 +75,10 @@ class ToolService {
 
   getGroupTool() {
     return this.tools.find((tool) => tool.name === ToolName.Group) as GroupTool;
+  }
+
+  getCableTool() {
+    return this.tools.find((tool) => tool.name === ToolName.Cable) as CableTool;
   }
 
   getToolInfo(): ToolInfo {

@@ -1,4 +1,4 @@
-import { addMesh } from '@/editor/services/scene/sceneSlice';
+import { addMeshes } from '@/editor/services/scene/sceneSlice';
 import CanvasContent from '@/editor/services/scene/ui/CanvasContent';
 import { renderWithProviders } from '@/editor/test/testUtils';
 import MeshCreator from '../service/MeshCreator';
@@ -17,7 +17,7 @@ describe('when select tool is active', () => {
       const meshData = MeshCreator.create(getBlock(initialBlockState.blocks, 'box'), { position: [2, 0, 1] });
 
       await act(() => {
-        store.dispatch(addMesh(meshData));
+        store.dispatch(addMeshes([meshData]));
         return Promise.resolve();
       });
 

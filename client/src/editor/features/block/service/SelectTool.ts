@@ -10,10 +10,12 @@ import Num3 from '@/editor/types/Num3';
 import MeshData from '@/editor/types/MeshData';
 import MatrixUtils from '@/editor/utils/MatrixUtils';
 import SelectParent from './SelectParent';
+import SceneService from '@/editor/services/scene/SceneService';
 
 class SelectTool extends Tool {
-  constructor(store: Store) {
+  constructor(store: Store, scene: SceneService) {
     super(store, ToolName.Select, 'BiRectangle');
+    this.scene = scene;
   }
 
   onPointerDown(info: ToolInfo) {
@@ -25,6 +27,11 @@ class SelectTool extends Tool {
     } else {
       this.store.dispatch(setSelectedMeshes([]));
     }
+  }
+
+  onDrag(info: ToolInfo) {
+    if (info.draggedMesh) {
+      }
   }
 
   onDragEnd(info: ToolInfo) {
@@ -81,20 +88,15 @@ class SelectTool extends Tool {
     this.store.dispatch(updateMesh(newMesh));
   }
 
-  rotateMesh(axis: 'x' | 'y' | 'z', rotation: number, info: ToolInfo) {
-    const { selectedMesh } = info;
-
-    if (!selectedMesh) {
-      return;
-    }
-
+  rotateMesh(axis: 'x' | 'y' | 'z', rotation: number) {
     const meshInfo = getSelectedMeshes(this.store)[0];
+    const mesh = this.scene.getMesh(meshInfo.id);
 
     const index = getAxisIndex(axis);
     const newRotation = [...meshInfo.rotation] as [number, number, number];
     newRotation[index] = toRadian(rotation);
 
-    const rotatedMatrix = MatrixUtils.setRotation(selectedMesh.matrixWorld, newRotation[index]);
+    const rotatedMatrix = MatrixUtils.setRotation(mesh.matrixWorld, newRotation[index]);
     const vertices = MatrixUtils.getBoxWorldPositions(rotatedMatrix);
     const bottomLeft = vertices[0];
 
@@ -107,12 +109,14 @@ class SelectTool extends Tool {
 
     const newMesh = {
       ...meshInfo,
-      position: [position[0] + deltaX, position[1], position[2] + deltaZ] as Num3,
+      // position: [position[0] + deltaX, position[1], position[2] + deltaZ] as Num3,
       rotation: newRotation,
     };
 
     this.store.dispatch(updateMesh(newMesh));
   }
+
+  private scene: SceneService;
 }
 
 export default SelectTool;

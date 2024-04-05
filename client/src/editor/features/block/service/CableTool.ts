@@ -1,5 +1,5 @@
 import { Store } from '@/common/utils/store';
-import { addMesh, setSelectedMeshes, updateMesh } from '@/editor/services/scene/sceneSlice';
+import { addMeshes, setSelectedMeshes, updateMesh } from '@/editor/services/scene/sceneSlice';
 import Tool, { ToolInfo } from '@/editor/services/tool/service/Tool';
 import ToolName from '@/editor/services/tool/state/ToolName';
 import MeshCreator from './MeshCreator';
@@ -8,6 +8,7 @@ import SceneService from '@/editor/services/scene/SceneService';
 import Intersect from './Intersect';
 import MeshData from '@/editor/types/MeshData';
 import { Vector3 } from 'three';
+import JoinPoles from './use_cases/JoinPoles';
 
 class CableTool extends Tool {
   constructor(store: Store, scene: SceneService) {
@@ -28,7 +29,7 @@ class CableTool extends Tool {
 
     const intersect = new Intersect(canvasElement, camera);
 
-    const [intersection] = intersect.calculate(mesh.children[1], clientX, clientY);
+    const [intersection] = intersect.calculate(mesh, clientX, clientY);
 
     if (!intersection) {
       return;
@@ -38,18 +39,34 @@ class CableTool extends Tool {
     const cable = selectedMeshIds.find((root) => meshes[root].name === 'cable');
 
     if (!cable) {
-      this.createMesh(point);
+      this.createMesh([point]);
     } else {
       this.updateMesh(cable, point);
     }
   }
 
-  private createMesh(point: Vector3) {
+  joinPoles() {
+    const { meshes } = this.store.getState().scene.present;
+
+    const poles = Object.values(meshes).filter((mesh) => mesh.name === 'pole');
+
+    if (poles.length < 2) {
+      return;
+    }
+
+    const joinPoles = new JoinPoles(this.store, this.scene);
+
+    joinPoles.join(poles[0], poles[1]);
+
+    // this.store.dispatch(updateSpecific({ id: '123', key: 'poles', val: { count: 12 } }));
+  }
+
+  private createMesh(points: Vector3[]) {
     const { blocks } = this.store.getState().block.present;
     const cableBlock = getBlock(blocks, 'cable');
 
-    const newMesh = MeshCreator.create(cableBlock, { points: [[point.x, point.y, point.z]] });
-    this.store.dispatch(addMesh(newMesh));
+    const newMesh = MeshCreator.create(cableBlock, { points: points.map((point) => [point.x, point.y, point.z]) });
+    this.store.dispatch(addMeshes([newMesh]));
     this.store.dispatch(setSelectedMeshes([newMesh.id]));
   }
 

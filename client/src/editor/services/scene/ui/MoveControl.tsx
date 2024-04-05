@@ -41,6 +41,7 @@ const MoveControl = () => {
         position.y = snapTo(position.y, getBlock(blocks, selectedMeshes[0].name).snap?.y);
         position.z = snapTo(position.z);
         setTransform(position);
+        tool.onDrag(movableMeshes);
       }}
       onDragEnd={() => {
         tool.onDragEnd(transform);

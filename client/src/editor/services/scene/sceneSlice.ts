@@ -1,29 +1,70 @@
 import MeshData, { PartialMeshData } from '@/editor/types/MeshData';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import Pole, { PartialPole } from './types/Pole';
+import { StateWithHistory } from 'redux-undo';
+
+export type Specifics = {
+  poles: Pole;
+  other: number;
+};
+
+export type SpecificRecords = {
+  [K in keyof Specifics]: Record<string, Specifics[K]>;
+};
+
+export type SpecificPartials = {
+  poles: PartialPole;
+  other: number;
+};
+
+export type SpecificType<T extends SpecificKeys> = SpecificRecords[T] extends Record<string, infer U> ? U : unknown;
+export type SpecificKeys = keyof SpecificRecords;
+
+export type SpecificPartial<T extends SpecificKeys> = SpecificPartials[T] extends Record<string, infer U> ? U : unknown;
 
 export type SceneState = {
   roots: string[];
   meshes: Record<string, MeshData>;
   selectedMeshIds: string[];
+
+  specifics: SpecificRecords;
 };
 
 export const initialSceneState: SceneState = {
   roots: [],
   meshes: {},
   selectedMeshIds: [],
+  specifics: {
+    poles: {},
+  },
+};
+
+export type SpecificUpdate<T extends SpecificKeys> = {
+  id: string;
+  key: T;
+  val: Specifics[T];
 };
 
 export const sceneSlice = createSlice({
   name: 'frame',
   initialState: initialSceneState,
   reducers: {
-    addMesh: (state, action: PayloadAction<MeshData>) => {
-      const newMesh = action.payload;
-      state.meshes[newMesh.id] = newMesh;
+    updateSpecific<T extends SpecificKeys>(state: SceneState, action: PayloadAction<SpecificUpdate<T>>) {
+      const { id, key, val } = action.payload;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (state.specifics[key][id] as any) = val;
+    },
 
-      if (!newMesh.parent) {
-        state.roots.push(newMesh.id);
-      }
+    addMeshes: (state, action: PayloadAction<MeshData[]>) => {
+      const newMeshes = action.payload;
+
+      newMeshes.forEach((newMesh) => {
+        state.meshes[newMesh.id] = newMesh;
+
+        if (!newMesh.parent) {
+          state.roots.push(newMesh.id);
+        }
+      });
     },
 
     deleteMeshes(state, action: PayloadAction<string[]>) {
@@ -132,8 +173,16 @@ export const sceneSlice = createSlice({
   },
 });
 
+export const getSpecific = <T extends keyof SpecificRecords>(
+  slice: StateWithHistory<SceneState>,
+  key: T,
+  id: string,
+): SpecificRecords[T] extends Record<string, infer U> ? U : unknown => {
+  return slice.present.specifics[key][id] as SpecificRecords[T] extends Record<string, infer U> ? U : unknown;
+};
+
 export const {
-  addMesh,
+  addMeshes,
   addMeshPosition,
   deleteMeshes,
   groupMeshes,
@@ -143,6 +192,7 @@ export const {
   update,
   updateMesh,
   updateMeshes,
+  updateSpecific,
 } = sceneSlice.actions;
 
 export default sceneSlice.reducer;

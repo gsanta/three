@@ -5,6 +5,16 @@ export type BlockType = keyof typeof blocks;
 
 export type ShapeType = 'box' | 'cone' | 'model' | 'tube';
 
+export type ModelPart = {
+  geometryPath?: string;
+  materialPath?: string;
+  position?: Num3;
+  rotation?: Num3;
+  scale?: Num3 | number;
+  parts: ModelPart[];
+  name?: string;
+};
+
 type Block<S extends ShapeType = ShapeType> = {
   data: {
     name: BlockType;
@@ -21,7 +31,7 @@ type Block<S extends ShapeType = ShapeType> = {
   } & (
     | {
         shape: 'model';
-        parts: { geometryPath: string; materialPath: string }[];
+        parts: ModelPart[];
         path: string;
       }
     | {

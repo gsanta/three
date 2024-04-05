@@ -132,7 +132,11 @@
                     "materialPath": "Material.001"
                 }
             ],
-            "position": [0, 0.3, 0],
+            "position": [
+                0,
+                0.3,
+                0
+            ],
             "scale": [
                 0.09,
                 0.71,
@@ -146,20 +150,129 @@
             "path": "/wall1.glb",
             "parts": [
                 {
-                    "geometryPath": "Cube001.geometry",
-                    "materialPath": "Door Frame"
-                },
-                {
-                    "geometryPath": "Cube001_1.geometry",
+                    "geometryPath": "Cube002.geometry",
                     "materialPath": "Wall"
                 },
                 {
-                    "geometryPath": "Cube001_2.geometry",
+                    "geometryPath": "Cube002_1.geometry",
+                    "materialPath": "Door Frame"
+                },
+                {
+                    "geometryPath": "Cube002_2.geometry",
                     "materialPath": "Door"
                 }
             ],
+            "position": [
+                0.5,
+                0,
+                0.5
+            ],
             "scale": [
-                1, 1, 1
+                1,
+                1,
+                0.25
+            ]
+        }
+    },
+    "wall2": {
+        "data": {
+            "shape": "model",
+            "path": "/wall2.glb",
+            "parts": [
+                {
+                    "geometryPath": "Cube001.geometry",
+                    "materialPath": "Wall"
+                }
+            ],
+            "scale": [
+                0.33,
+                0.33,
+                0.084
+            ]
+        },
+        "options": {
+            "rotation": {
+                "y": [
+                    0,
+                    90
+                ]
+            }
+        }
+    },
+    "base": {
+        "data": {
+            "shape": "model",
+            "path": "/base.glb",
+            "parts": [
+                {
+                    "geometryPath": "Cube.geometry",
+                    "materialPath": "Wall"
+                }
+            ],
+            "scale": [
+                -3.718,
+                -0.122,
+                -3.718
+            ]
+        }
+    },
+    "pole": {
+        "data": {
+            "shape": "model",
+            "path": "/pole.glb",
+            "parts": [
+                {
+                    "geometryPath": "Pole.geometry",
+                    "materialPath": "Main",
+                    "position": [
+                        -0.008,
+                        -0.002,
+                        0.01
+                    ],
+                    "rotation": [
+                        -3.14159,
+                        0,
+                        -3.14159
+                    ],
+                    "scale": [
+                        -0.136,
+                        -4.869,
+                        -0.136
+                    ]
+                },
+                {
+                    "geometryPath": "Pin1.geometry",
+                    "materialPath": "Metal",
+                    "position": [
+                        1.114,
+                        9.336,
+                        0.01
+                    ],
+                    "scale": -0.074,
+                    "name": "pin1"
+                },
+                {
+                    "geometryPath": "Pin2.geometry",
+                    "materialPath": "Metal",
+                    "position": [
+                        -0.475,
+                        9.336,
+                        0.01
+                    ],
+                    "scale": -0.074,
+                    "name": "pin2"
+                },
+                {
+                    "geometryPath": "Pin3.geometry",
+                    "materialPath": "Metal",
+                    "position": [
+                        -1.113,
+                        9.336,
+                        0.01
+                    ],
+                    "scale": -0.074,
+                    "name": "pin3"
+                }
             ]
         }
     }

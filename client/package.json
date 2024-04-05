@@ -60,6 +60,7 @@
     "redux-undo": "^1.1.0",
     "split.js": "^1.6.5",
     "three": "^0.161.0",
+    "type-fest": "^4.15.0",
     "typescript": "^5.3.3",
     "usehooks-ts": "^2.14.0",
     "uuid": "^9.0.1"

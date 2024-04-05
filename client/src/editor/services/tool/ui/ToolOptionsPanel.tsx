@@ -4,6 +4,7 @@ import React from 'react';
 import { useAppSelector } from '../../../../common/hooks/hooks';
 import AddToolOptions from '../../../features/block/ui/AddToolOptions';
 import SelectToolOptions from '../../../features/block/ui/SelectToolOptions';
+import CableToolOptions from '@/editor/features/block/ui/CableToolOptions';
 
 const ToolOptionsPanel = () => {
   const selectedTool = useAppSelector((state) => state.tool.selectedTool);
@@ -14,6 +15,8 @@ const ToolOptionsPanel = () => {
         return <AddToolOptions />;
       case ToolName.Select:
         return <SelectToolOptions />;
+      case ToolName.Cable:
+        return <CableToolOptions />;
       default:
         return null;
     }

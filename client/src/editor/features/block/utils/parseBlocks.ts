@@ -6,14 +6,14 @@ const defaultSnaps = { x: defaultSnap, y: defaultSnap, z: defaultSnap };
 const defaultBlockData: Partial<Block['data']> = {
   position: [0, 0, 0],
   rotation: [0, 0, 0],
-  scale: [0, 0, 0],
+  scale: [1, 1, 1],
   movable: true,
 };
 
 const defaultBlockOptions: Partial<Block['options']> = {
   rotation: {
     x: [0],
-    y: [0],
+    y: [0, 90, 180, -90],
     z: [0],
   },
   size: {

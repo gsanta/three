@@ -4,18 +4,14 @@ import { Cone } from '@react-three/drei';
 import CableMesh from './CableMesh';
 import BoxMesh from './BoxMesh';
 import WrappedMeshProps from '../types/WrappedMeshProps';
-import { RodMesh } from './RodMesh';
-import { BlockType } from '@/editor/types/Block';
+import { ShapeType } from '@/editor/types/Block';
 import { ModelMesh } from './ModelMesh';
 
-const getComponent = (type: BlockType): (({ meshProps, meshInfo }: WrappedMeshProps) => React.JSX.Element | null) => {
-  switch (type) {
-    case 'cable':
+const getComponent = (shape: ShapeType): (({ meshProps, meshInfo }: WrappedMeshProps) => React.JSX.Element | null) => {
+  switch (shape) {
+    case 'tube':
       return CableMesh as ({ meshProps, meshInfo }: WrappedMeshProps) => React.JSX.Element | null;
-    case 'rod':
-      return RodMesh;
-    case 'tree':
-    case 'wall1':
+    case 'model':
       return ModelMesh as ({ meshProps, meshInfo }: WrappedMeshProps) => React.JSX.Element | null;
     default:
       return BoxMesh;
@@ -61,7 +57,7 @@ const MeshRenderer = ({ meshInfo, meshProps = {}, materialProps = {} }: Omit<Wra
     );
   }
 
-  const Component = getComponent(meshInfo.name);
+  const Component = getComponent(meshInfo.shape);
 
   const parent = meshInfo.parent ? meshes[meshInfo.parent] : undefined;
 

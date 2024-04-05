@@ -25,7 +25,13 @@ class SceneService {
   }
 
   getMesh(modelId: string) {
-    return this.meshes.get(modelId);
+    const mesh = this.meshes.get(modelId);
+
+    if (!mesh) {
+      throw new Error('Mesh not found');
+    }
+
+    return mesh;
   }
 
   setCamera(camera: Camera) {

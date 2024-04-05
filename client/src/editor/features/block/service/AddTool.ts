@@ -1,12 +1,13 @@
 import { Store } from '../../../../common/utils/store';
 import Tool, { ToolInfo } from '../../../services/tool/service/Tool';
-import { addMesh } from '../../../services/scene/sceneSlice';
 import ToolName from '../../../services/tool/state/ToolName';
-import MeshCreator from './MeshCreator';
+import BlockFactory from './factory/BlockFactory';
 
 class AddTool extends Tool {
-  constructor(store: Store) {
+  constructor(store: Store, blockFactory: BlockFactory) {
     super(store, ToolName.Add, 'BiPlus');
+
+    this.blockFactory = blockFactory;
   }
 
   onPointerDown({ pos }: ToolInfo) {
@@ -16,8 +17,11 @@ class AddTool extends Tool {
     if (!selectedBlock) {
       return;
     }
-    this.store.dispatch(addMesh(MeshCreator.create(selectedBlock, { position: [pos.x, pos.y, pos.z] })));
+    this.blockFactory.create(selectedBlock.data.name, pos);
+    // this.store.dispatch(addMeshes([MeshCreator.create(selectedBlock, { position: [pos.x, pos.y, pos.z] })]));
   }
+
+  private blockFactory: BlockFactory;
 }
 
 export default AddTool;

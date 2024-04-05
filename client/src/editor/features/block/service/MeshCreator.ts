@@ -14,8 +14,8 @@ class MeshCreator {
     const { rotation: rotationOption } = block.selected;
     const scale = multiplyVector(block.data.scale, sizeOption.selected, sizeOption.direction);
 
-    const x = snapTo(pos[0] + scale[0] / 2) - scale[0] / 2;
-    const z = snapTo(pos[2] + scale[2] / 2) - scale[2] / 2;
+    const x = snapTo(pos[0]);
+    const z = snapTo(pos[2]);
     const y = pos[1] + positionData[1] + block.data.scale[1] / 2;
     const rotation = addVector(rotationOption, rotationData).map((degree) => toRadian(degree));
 

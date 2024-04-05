@@ -17,6 +17,7 @@ import CableTool from '@/editor/features/block/service/CableTool';
 import SceneService from '@/editor/services/scene/SceneService';
 import RayHelperTool from '@/editor/features/block/service/RayHelperTool';
 import ColorTool from '@/editor/features/block/service/ColorTool';
+import BlockFactory from '@/editor/features/block/service/factory/BlockFactory';
 
 type ProtectedPageProps = {
   children: ReactNode;
@@ -42,13 +43,14 @@ const queryClient = new QueryClient({
 
 const ProtectedPage = ({ children }: ProtectedPageProps) => {
   const scene = useMemo(() => new SceneService(), []);
+  const blockFactory = useMemo(() => new BlockFactory(store), []);
 
   const editorContext = useMemo<EditorContextType>(
     () => ({
       tool: new ToolService(
         [
-          new AddTool(store),
-          new SelectTool(store),
+          new AddTool(store, blockFactory),
+          new SelectTool(store, scene),
           new GroupTool(store),
           new CableTool(store, scene),
           new EraseTool(store),
@@ -62,7 +64,7 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
       importer: new ImportJson(store),
       scene,
     }),
-    [scene],
+    [blockFactory, scene],
   );
 
   return (
