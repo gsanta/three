@@ -1,5 +1,5 @@
 import { Store } from '@/common/utils/store';
-import { update } from '@/editor/services/scene/sceneSlice';
+import { update } from '@/editor/services/scene/blocksSlice';
 import Tool, { ToolInfo } from '@/editor/services/tool/service/Tool';
 import ToolName from '@/editor/services/tool/state/ToolName';
 
@@ -9,7 +9,11 @@ class EraseTool extends Tool {
   }
 
   onPointerDown({ eventObjectName }: ToolInfo) {
-    const { roots, meshes, selectedMeshIds } = this.store.getState().scene.present;
+    const {
+      rootBlocksIds: roots,
+      blocks: meshes,
+      selectedBlockIds: selectedMeshIds,
+    } = this.store.getState().blocks.present;
 
     const mesh = meshes[eventObjectName];
 
@@ -25,9 +29,9 @@ class EraseTool extends Tool {
 
     this.store.dispatch(
       update({
-        meshes: newMeshes,
-        roots: newRoots,
-        selectedMeshIds: newSelectedMeshIds,
+        blocks: newMeshes,
+        rootBlocksIds: newRoots,
+        selectedBlockIds: newSelectedMeshIds,
       }),
     );
   }

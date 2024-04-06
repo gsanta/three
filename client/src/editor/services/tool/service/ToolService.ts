@@ -7,7 +7,7 @@ import SelectTool from '@/editor/features/block/service/SelectTool';
 import AddTool from '../../../features/block/service/AddTool';
 import GroupTool from '@/editor/features/block/service/GroupTool';
 import CableTool from '@/editor/features/block/service/CableTool';
-import MeshData from '@/editor/types/MeshData';
+import Block from '@/editor/types/Block';
 
 class ToolService {
   constructor(tools: Tool[], store: Store) {
@@ -41,7 +41,7 @@ class ToolService {
     this.getTool(selectedTool)?.onPointerMove(this.info);
   }
 
-  onDrag(mesh: MeshData) {
+  onDrag(mesh: Block) {
     this.info.draggedMesh = mesh;
 
     const { selectedTool } = this.store.getState().tool;

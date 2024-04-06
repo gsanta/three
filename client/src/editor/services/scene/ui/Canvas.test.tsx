@@ -1,8 +1,8 @@
 // import App from './Canvas';
 import CanvasContent from './CanvasContent';
 import { findByModelId, renderWithProviders } from '@/editor/test/testUtils';
-import MeshCreator from '@/editor/features/block/service/MeshCreator';
-import { initialBlockState } from '@/editor/features/block/blockSlice';
+import BlockCreator from '@/editor/features/block/service/BlockCreator';
+import { initialBlockState } from '@/editor/features/block/addBlockSlice';
 import { getBlock } from '@/editor/features/block/utils/blockUtils';
 
 describe('when meshes are grouped', () => {
@@ -10,14 +10,14 @@ describe('when meshes are grouped', () => {
     const box = getBlock(initialBlockState.blocks, 'box');
     const group = getBlock(initialBlockState.blocks, 'group');
 
-    const child1 = MeshCreator.create(box);
-    const child2 = MeshCreator.create(box);
-    const child3 = MeshCreator.create(box);
+    const child1 = BlockCreator.create(box);
+    const child2 = BlockCreator.create(box);
+    const child3 = BlockCreator.create(box);
 
-    const parent1 = MeshCreator.create(group, { children: [child1.id, child2.id] });
-    const parent2 = MeshCreator.create(group, { children: [child3.id] });
+    const parent1 = BlockCreator.create(group, { children: [child1.id, child2.id] });
+    const parent2 = BlockCreator.create(group, { children: [child3.id] });
 
-    const grandParent = MeshCreator.create(group, { children: [parent1.id, parent2.id] });
+    const grandParent = BlockCreator.create(group, { children: [parent1.id, parent2.id] });
 
     const { renderer } = await renderWithProviders(<CanvasContent />, {
       preloadedState: {

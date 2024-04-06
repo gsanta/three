@@ -1,8 +1,8 @@
 import { useAppSelector } from '@/common/hooks/hooks';
-import Block from '../../../../types/Block';
+import BlockData from '../../../../types/BlockData';
 
-const useBlock = (blockName?: string): Block => {
-  const { blocks } = useAppSelector((state) => state.block.present);
+const useBlock = (blockName?: string): BlockData => {
+  const { blocks } = useAppSelector((state) => state.addBlock.present);
 
   const block = blocks.find((b) => b.data.name === blockName);
 

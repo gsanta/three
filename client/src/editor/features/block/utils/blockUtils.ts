@@ -1,6 +1,6 @@
-import Block, { BlockType } from '../../../types/Block';
+import BlockData, { BlockType } from '../../../types/BlockData';
 
-export const getBlock = (blocks: Block[], blockName: BlockType) => {
+export const getBlock = (blocks: BlockData[], blockName: BlockType) => {
   const block = blocks.find((b) => b.data.name === blockName);
 
   if (!block) {

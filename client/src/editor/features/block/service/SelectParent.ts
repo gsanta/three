@@ -1,7 +1,7 @@
-import MeshData from '@/editor/types/MeshData';
+import Block from '@/editor/types/Block';
 
 class SelectParent {
-  constructor(ids: string[], meshes: Record<string, MeshData>) {
+  constructor(ids: string[], meshes: Record<string, Block>) {
     this.ids = ids;
     this.meshes = meshes;
   }
@@ -20,7 +20,7 @@ class SelectParent {
 
   ids: string[];
 
-  meshes: Record<string, MeshData>;
+  meshes: Record<string, Block>;
 }
 
 export default SelectParent;

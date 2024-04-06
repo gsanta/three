@@ -1,9 +1,9 @@
-import { addMeshes } from '@/editor/services/scene/sceneSlice';
+import { addMeshes } from '@/editor/services/scene/blocksSlice';
 import CanvasContent from '@/editor/services/scene/ui/CanvasContent';
 import { renderWithProviders } from '@/editor/test/testUtils';
-import MeshCreator from '../service/MeshCreator';
+import BlockCreator from '../service/BlockCreator';
 import { getBlock } from '../utils/blockUtils';
-import { initialBlockState } from '../blockSlice';
+import { initialBlockState } from '../addBlockSlice';
 import { act } from '@react-three/test-renderer';
 import { setSelectedTool } from '@/editor/services/tool/state/toolSlice';
 import ToolName from '@/editor/services/tool/state/ToolName';
@@ -14,7 +14,7 @@ describe('when select tool is active', () => {
     it('gets selected', async () => {
       const { renderer, store } = await renderWithProviders(<CanvasContent />);
 
-      const meshData = MeshCreator.create(getBlock(initialBlockState.blocks, 'box'), { position: [2, 0, 1] });
+      const meshData = BlockCreator.create(getBlock(initialBlockState.blocks, 'box'), { position: [2, 0, 1] });
 
       await act(() => {
         store.dispatch(addMeshes([meshData]));
@@ -33,7 +33,7 @@ describe('when select tool is active', () => {
 
       const pivot = renderer.scene.findAllByProps({ autoTransform: false });
 
-      expect(store.getState().scene.present.selectedMeshIds).toEqual([meshData.id]);
+      expect(store.getState().blocks.present.selectedBlockIds).toEqual([meshData.id]);
 
       await renderer.fireEvent(
         renderer.scene.children[0].children[0].children[0].children[0].children[0],

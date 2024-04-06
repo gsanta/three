@@ -1,10 +1,10 @@
 import RadioSwitchButton from '@/common/components/RadioSwitchButton';
 import RadioSwitchGroup from '@/common/components/RadioSwitchGroup';
 import { FormControl, FormLabel } from '@chakra-ui/react';
-import Block from '../../../types/Block';
+import BlockData from '../../../types/BlockData';
 
 type SizeControlProps = {
-  block: Block;
+  block: BlockData;
   onChange(size: number): void;
   value: number;
 };

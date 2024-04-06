@@ -1,12 +1,12 @@
 import { Store } from '@/common/utils/store';
-import { addMeshes, setSelectedMeshes, updateMesh } from '@/editor/services/scene/sceneSlice';
+import { addMeshes, setSelectedMeshes, updateMesh } from '@/editor/services/scene/blocksSlice';
 import Tool, { ToolInfo } from '@/editor/services/tool/service/Tool';
 import ToolName from '@/editor/services/tool/state/ToolName';
-import MeshCreator from './MeshCreator';
+import BlockCreator from './BlockCreator';
 import { getBlock } from '../utils/blockUtils';
 import SceneService from '@/editor/services/scene/SceneService';
 import Intersect from './Intersect';
-import MeshData from '@/editor/types/MeshData';
+import Block from '@/editor/types/Block';
 import { Vector3 } from 'three';
 import JoinPoles from './use_cases/JoinPoles';
 
@@ -18,7 +18,7 @@ class CableTool extends Tool {
   }
 
   onPointerDown({ eventObjectName, clientX, clientY }: ToolInfo) {
-    const { meshes, selectedMeshIds } = this.store.getState().scene.present;
+    const { blocks: meshes, selectedBlockIds: selectedMeshIds } = this.store.getState().blocks.present;
     const canvasElement = this.scene.getCanvasElement();
     const camera = this.scene.getCamera();
     const mesh = this.scene.getMesh(eventObjectName);
@@ -46,7 +46,7 @@ class CableTool extends Tool {
   }
 
   joinPoles() {
-    const { meshes } = this.store.getState().scene.present;
+    const { blocks: meshes } = this.store.getState().blocks.present;
 
     const poles = Object.values(meshes).filter((mesh) => mesh.name === 'pole');
 
@@ -62,18 +62,18 @@ class CableTool extends Tool {
   }
 
   private createMesh(points: Vector3[]) {
-    const { blocks } = this.store.getState().block.present;
+    const { blocks } = this.store.getState().addBlock.present;
     const cableBlock = getBlock(blocks, 'cable');
 
-    const newMesh = MeshCreator.create(cableBlock, { points: points.map((point) => [point.x, point.y, point.z]) });
+    const newMesh = BlockCreator.create(cableBlock, { points: points.map((point) => [point.x, point.y, point.z]) });
     this.store.dispatch(addMeshes([newMesh]));
     this.store.dispatch(setSelectedMeshes([newMesh.id]));
   }
 
   private updateMesh(meshId: string, point: Vector3) {
-    const { meshes } = this.store.getState().scene.present;
+    const { blocks: meshes } = this.store.getState().blocks.present;
 
-    const newMesh: MeshData = {
+    const newMesh: Block = {
       ...meshes[meshId],
       name: 'cable',
       points: [...meshes[meshId].points, [point.x, point.y, point.z]],

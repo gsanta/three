@@ -1,30 +1,27 @@
-import { BlockType } from '@/editor/types/Block';
-import BlockCreator from './BlockCreator';
-import { Vector3 } from 'three';
-import PoleCreator from './PoleCreator';
-import { Store } from '@/common/utils/store';
-import CableCreator from './CableCreator';
+import { BlockCategories, BlockCategory } from '@/editor/services/scene/blocksSlice';
+import BlockData, { BlockType } from '@/editor/types/BlockData';
+import Block from '@/editor/types/Block';
+import type { PartialDeep } from 'type-fest';
 
-class BlockFactory {
-  constructor(store: Store) {
-    this.creators.push(new PoleCreator(store));
+abstract class BlockFactory<T extends BlockCategory | never = never> {
+  readonly type: BlockType;
 
-    this.cableCreator = new CableCreator(store, 'cable');
+  constructor(blockData: BlockData) {
+    this.type = blockData.data.name;
+    this.blockData = blockData;
   }
 
-  create(type: BlockType, pos: Vector3) {
-    const creator = this.creators.find((currCreator) => currCreator.type === type);
-
-    if (!creator) {
-      throw new Error(`Creator not found for type ${type}.`);
-    }
-
-    creator.create(pos);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  create(options: Partial<Block> = {}): { block: Block; decoration?: BlockCategories[T] } {
+    throw new Error('Unimplemented method');
   }
 
-  readonly cableCreator: CableCreator;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  updateDecoration(orig: BlockCategories[T], partial: PartialDeep<BlockCategories[T]>): BlockCategories[T] {
+    throw new Error('Unimplemented method');
+  }
 
-  private creators: (BlockCreator & { create(pos: Vector3): void })[] = [];
+  protected blockData: BlockData;
 }
 
 export default BlockFactory;

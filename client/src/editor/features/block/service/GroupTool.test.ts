@@ -1,7 +1,7 @@
 import { Store, setupStore } from '@/common/utils/store';
 import GroupTool from './GroupTool';
 import { createStoreState } from '@/editor/test/testUtils';
-import MeshCreator from './MeshCreator';
+import BlockCreator from './BlockCreator';
 import parseBlocks from '../utils/parseBlocks';
 import blocksJson from '@/editor/utils/blocks.json';
 import { getBlock } from '../utils/blockUtils';
@@ -12,8 +12,8 @@ describe('GroupTool', () => {
   let store: Store;
 
   beforeEach(() => {
-    const mesh1 = MeshCreator.create(getBlock(blocks, 'box'));
-    const mesh2 = MeshCreator.create(getBlock(blocks, 'box'));
+    const mesh1 = BlockCreator.create(getBlock(blocks, 'box'));
+    const mesh2 = BlockCreator.create(getBlock(blocks, 'box'));
 
     store = setupStore(
       createStoreState({
@@ -33,11 +33,11 @@ describe('GroupTool', () => {
     it('groups', () => {
       const groupTool = new GroupTool(store);
 
-      const children = store.getState().scene.present.roots;
+      const children = store.getState().blocks.present.rootBlocksIds;
 
       groupTool.group();
 
-      const { meshes, roots } = store.getState().scene.present;
+      const { blocks: meshes, rootBlocksIds: roots } = store.getState().blocks.present;
 
       expect(roots).toHaveLength(1);
       const parent = roots[0];

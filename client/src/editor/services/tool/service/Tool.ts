@@ -3,7 +3,7 @@ import { IconName } from '../../../../common/components/icon/Icon';
 import type { Store } from '../../../../common/utils/store';
 import { Mesh, Vector3 } from 'three';
 import Num3 from '@/editor/types/Num3';
-import MeshData from '@/editor/types/MeshData';
+import Block from '@/editor/types/Block';
 
 export interface ToolInfo {
   pos: Vector3;
@@ -12,7 +12,7 @@ export interface ToolInfo {
   selectedMesh?: Mesh;
   clientX: number;
   clientY: number;
-  draggedMesh?: MeshData;
+  draggedMesh?: Block;
 }
 
 abstract class Tool {

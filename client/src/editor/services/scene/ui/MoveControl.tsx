@@ -13,7 +13,7 @@ const MoveControl = () => {
 
   const movableMeshes = selectedMeshes.filter((mesh) => mesh.movable);
 
-  const blocks = useAppSelector((selector) => selector.block.present.blocks);
+  const blocks = useAppSelector((selector) => selector.addBlock.present.blocks);
   const [transform, setTransform] = useState<Vector3>(new Vector3(0));
   const selectedMeshRef = useRef<Mesh>(null);
   const { tool } = useEditorContext();

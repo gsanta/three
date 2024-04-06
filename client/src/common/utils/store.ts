@@ -1,20 +1,20 @@
 import undoable, { StateWithHistory } from 'redux-undo';
-import blockSlice, { BlockState } from '../../editor/features/block/blockSlice';
-import sceneSlice, { SceneState } from '../../editor/services/scene/sceneSlice';
+import addBlockSlice, { AddBlockState } from '../../editor/features/block/addBlockSlice';
+import blocksSlice, { BlocksState } from '../../editor/services/scene/blocksSlice';
 import settingsSlice, { SettingsState } from '../../editor/features/settings/state/settingsSlice';
 import toolSlice, { ToolState } from '../../editor/services/tool/state/toolSlice';
 import userSlice, { UserState } from '../../user/userSlice';
 import { EnhancedStore, configureStore } from '@reduxjs/toolkit';
 
-const blockSliceUndoable = undoable(blockSlice, { filter: () => false });
-const sceneSliceUndoable = undoable(sceneSlice);
+const addBlockSliceUndoable = undoable(addBlockSlice, { filter: () => false });
+const sceneSliceUndoable = undoable(blocksSlice);
 
 export type RootState = {
   settings: SettingsState;
   tool: ToolState;
   user: UserState;
-  block: StateWithHistory<BlockState>;
-  scene: StateWithHistory<SceneState>;
+  addBlock: StateWithHistory<AddBlockState>;
+  blocks: StateWithHistory<BlocksState>;
 };
 
 export function setupStore(preloadedState?: RootState): EnhancedStore<RootState> {
@@ -23,8 +23,8 @@ export function setupStore(preloadedState?: RootState): EnhancedStore<RootState>
       settings: settingsSlice,
       tool: toolSlice,
       user: userSlice,
-      block: blockSliceUndoable,
-      scene: sceneSliceUndoable,
+      addBlock: addBlockSliceUndoable,
+      blocks: sceneSliceUndoable,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
     preloadedState,
@@ -39,7 +39,7 @@ export type AppDispatch = typeof store.dispatch;
 
 export const store = setupStore();
 
-export type PreloadedState = Omit<RootState, 'block' | 'scene'> & {
-  block: BlockState;
-  scene: SceneState;
+export type PreloadedState = Omit<RootState, 'blocks' | 'addBlock'> & {
+  blocks: AddBlockState;
+  addBlock: BlocksState;
 };

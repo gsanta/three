@@ -1,7 +1,7 @@
-import MeshData from '@/editor/types/MeshData';
+import Block from '@/editor/types/Block';
 
 class Ungroup {
-  constructor(ids: string[], roots: string[], meshes: Record<string, MeshData>) {
+  constructor(ids: string[], roots: string[], meshes: Record<string, Block>) {
     this.ids = ids;
     this.meshes = { ...meshes };
     this.roots = [...roots];
@@ -46,7 +46,7 @@ class Ungroup {
 
   private ids: string[];
 
-  private meshes: Record<string, MeshData>;
+  private meshes: Record<string, Block>;
 
   private roots: string[];
 

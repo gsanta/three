@@ -4,10 +4,10 @@ import useBlock from './hooks/useBlock';
 import RotationControl from './RotationControl';
 import SizeControl from './SizeControl';
 import { findNearestValue, toDegree } from '@/editor/utils/mathUtils';
-import MeshData from '@/editor/types/MeshData';
+import Block from '@/editor/types/Block';
 
 type SelectToolOptionsContentProps = {
-  selectedMesh: MeshData;
+  selectedMesh: Block;
 };
 
 const SelectToolOptionsContent = ({ selectedMesh }: SelectToolOptionsContentProps) => {

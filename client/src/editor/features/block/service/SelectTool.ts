@@ -1,5 +1,5 @@
 import { Store } from '../../../../common/utils/store';
-import { setSelectedMeshes, updateMesh, updateMeshes } from '../../../services/scene/sceneSlice';
+import { setSelectedMeshes, updateMesh, updateMeshes } from '../../../services/scene/blocksSlice';
 import Tool, { ToolInfo } from '../../../services/tool/service/Tool';
 import ToolName from '../../../services/tool/state/ToolName';
 import { getSelectedMeshes } from '@/editor/utils/storeUtils';
@@ -7,7 +7,7 @@ import { addVector, getAxisIndex, snapTo } from '@/editor/utils/vectorUtils';
 import { toRadian } from '@/editor/utils/mathUtils';
 import { getBlock } from '../utils/blockUtils';
 import Num3 from '@/editor/types/Num3';
-import MeshData from '@/editor/types/MeshData';
+import Block from '@/editor/types/Block';
 import MatrixUtils from '@/editor/utils/MatrixUtils';
 import SelectParent from './SelectParent';
 import SceneService from '@/editor/services/scene/SceneService';
@@ -19,7 +19,7 @@ class SelectTool extends Tool {
   }
 
   onPointerDown(info: ToolInfo) {
-    const { meshes } = this.store.getState().scene.present;
+    const { blocks: meshes } = this.store.getState().blocks.present;
     const mesh = meshes[info.eventObjectName];
 
     if (mesh) {
@@ -31,12 +31,12 @@ class SelectTool extends Tool {
 
   onDrag(info: ToolInfo) {
     if (info.draggedMesh) {
-      }
+    }
   }
 
   onDragEnd(info: ToolInfo) {
-    const { selectedMeshIds } = this.store.getState().scene.present;
-    const { meshes } = this.store.getState().scene.present;
+    const { selectedBlockIds: selectedMeshIds } = this.store.getState().blocks.present;
+    const { blocks: meshes } = this.store.getState().blocks.present;
 
     const finalMeshIds: string[] = [];
 
@@ -65,7 +65,7 @@ class SelectTool extends Tool {
   }
 
   selectParent(id: string) {
-    const { meshes, selectedMeshIds } = this.store.getState().scene.present;
+    const { blocks: meshes, selectedBlockIds: selectedMeshIds } = this.store.getState().blocks.present;
 
     const selectParent = new SelectParent([id, ...selectedMeshIds], meshes);
     const newSelectedMeshIds = selectParent.execute();
@@ -73,8 +73,8 @@ class SelectTool extends Tool {
     this.store.dispatch(setSelectedMeshes(newSelectedMeshIds));
   }
 
-  scaleMesh(scale: number, mesh: MeshData) {
-    const block = getBlock(this.store.getState().block.present.blocks, mesh.name);
+  scaleMesh(scale: number, mesh: Block) {
+    const block = getBlock(this.store.getState().addBlock.present.blocks, mesh.name);
 
     const index = getAxisIndex(block.options.size.direction);
     const newScale = [...mesh.scale] as Num3;

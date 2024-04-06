@@ -5,7 +5,6 @@ type Pole = {
     pin2: string | null;
     pin3: string | null;
   };
-  name: string;
 };
 
 export type PartialPole = {

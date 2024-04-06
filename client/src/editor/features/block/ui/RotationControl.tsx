@@ -1,12 +1,12 @@
 import RadioSwitchButton from '@/common/components/RadioSwitchButton';
 import RadioSwitchGroup from '@/common/components/RadioSwitchGroup';
 import { FormControl, FormLabel } from '@chakra-ui/react';
-import Block from '../../../types/Block';
+import BlockData from '../../../types/BlockData';
 import Axis from '@/editor/types/Axis';
 
 type RotationControlProps = {
   axis: Axis;
-  block: Block;
+  block: BlockData;
   onChange(val: number): void;
   value: number;
 };

@@ -1,13 +1,5 @@
 {
-    "group": {
-        "data": {
-            "scale": [
-                1,
-                1,
-                1
-            ]
-        }
-    },
+    "group": {},
     "box": {
         "data": {
             "shape": "box",
@@ -16,19 +8,6 @@
                 1,
                 1
             ]
-        }
-    },
-    "floor": {
-        "data": {
-            "shape": "box",
-            "scale": [
-                5,
-                0.2,
-                5
-            ]
-        },
-        "snap": {
-            "y": 2
         }
     },
     "wall": {

@@ -1,12 +1,12 @@
-import Block from '@/editor/types/Block';
+import BlockData from '@/editor/types/BlockData';
 import { toRadian } from '@/editor/utils/mathUtils';
 import { addVector, multiplyVector, snapTo } from '@/editor/utils/vectorUtils';
 import { v4 as uuidv4 } from 'uuid';
 import Num3 from '@/editor/types/Num3';
-import MeshData from '@/editor/types/MeshData';
+import Block from '@/editor/types/Block';
 
-class MeshCreator {
-  static create(block: Block, options: Partial<MeshData> = {}): MeshData {
+class BlockCreator {
+  static create(block: BlockData, options: Partial<Block> = {}): Block {
     const { position: pos = [0, 0, 0], ...rest } = options;
 
     const { rotation: rotationData, position: positionData } = block.data;
@@ -32,4 +32,4 @@ class MeshCreator {
   }
 }
 
-export default MeshCreator;
+export default BlockCreator;

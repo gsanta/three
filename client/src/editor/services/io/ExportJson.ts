@@ -6,7 +6,7 @@ class ExportJson {
   }
 
   export() {
-    return JSON.stringify(this.store.getState().scene.present);
+    return JSON.stringify(this.store.getState().blocks.present);
   }
 
   private store: Store;

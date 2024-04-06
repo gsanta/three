@@ -1,5 +1,5 @@
 import { Store } from '@/common/utils/store';
-import { SceneState, update } from '../scene/sceneSlice';
+import { BlocksState, update } from '../scene/blocksSlice';
 
 class ImportJson {
   constructor(store: Store) {
@@ -7,7 +7,7 @@ class ImportJson {
   }
 
   import(json: string) {
-    const sceneState: Partial<SceneState> = JSON.parse(json);
+    const sceneState: Partial<BlocksState> = JSON.parse(json);
     this.store.dispatch(update(sceneState));
   }
 

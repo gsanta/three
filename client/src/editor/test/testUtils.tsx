@@ -10,9 +10,9 @@ import { EditorContext } from '@/app/editor/EditorContext';
 import { initialSettingsState } from '../features/settings/state/settingsSlice';
 import { initialToolState } from '../services/tool/state/toolSlice';
 import { initialUserState } from '@/user/userSlice';
-import { initialBlockState } from '../features/block/blockSlice';
-import { initialSceneState } from '../services/scene/sceneSlice';
-import { BlockType } from '../types/Block';
+import { initialBlockState } from '../features/block/addBlockSlice';
+import { initialSceneState } from '../services/scene/blocksSlice';
+import { BlockType } from '../types/BlockData';
 import { ReactThreeTestInstance } from '@react-three/test-renderer/dist/declarations/src/types';
 
 type ExtendedRenderOptions = {
@@ -24,12 +24,12 @@ export const createStoreState = (initialState?: Partial<PreloadedState>): RootSt
     settings: initialState?.settings || initialSettingsState,
     tool: initialState?.tool || initialToolState,
     user: initialState?.user || initialUserState,
-    block: {
+    addBlock: {
       present: initialState?.block || initialBlockState,
       past: [],
       future: [],
     },
-    scene: {
+    blocks: {
       present: initialState?.scene || initialSceneState,
       past: [],
       future: [],

@@ -4,7 +4,7 @@ import { Cone } from '@react-three/drei';
 import CableMesh from './CableMesh';
 import BoxMesh from './BoxMesh';
 import WrappedMeshProps from '../types/WrappedMeshProps';
-import { ShapeType } from '@/editor/types/Block';
+import { ShapeType } from '@/editor/types/BlockData';
 import { ModelMesh } from './ModelMesh';
 
 const getComponent = (shape: ShapeType): (({ meshProps, meshInfo }: WrappedMeshProps) => React.JSX.Element | null) => {
@@ -20,7 +20,7 @@ const getComponent = (shape: ShapeType): (({ meshProps, meshInfo }: WrappedMeshP
 
 const MeshRenderer = ({ meshInfo, meshProps = {}, materialProps = {} }: Omit<WrappedMeshProps, 'parent'>) => {
   const { tool } = useEditorContext();
-  const { meshes } = useAppSelector((selector) => selector.scene.present);
+  const { blocks: meshes } = useAppSelector((selector) => selector.blocks.present);
 
   if (meshInfo.name === 'group') {
     return (

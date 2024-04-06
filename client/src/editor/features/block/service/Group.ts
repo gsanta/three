@@ -1,10 +1,10 @@
-import MeshData from '@/editor/types/MeshData';
+import Block from '@/editor/types/Block';
 import { getBlock } from '../utils/blockUtils';
 import { v4 as uuidv4 } from 'uuid';
-import Block from '@/editor/types/Block';
+import BlockData from '@/editor/types/BlockData';
 
 class Group {
-  constructor(blocks: Block[], ids: string[], roots: string[], meshes: Record<string, MeshData>) {
+  constructor(blocks: BlockData[], ids: string[], roots: string[], meshes: Record<string, Block>) {
     this.blocks = blocks;
     this.ids = ids;
     this.meshes = { ...meshes };
@@ -28,7 +28,7 @@ class Group {
 
     const groupId = uuidv4();
 
-    const newGroup: MeshData = {
+    const newGroup: Block = {
       ...groupBlock.data,
       id: groupId,
       position: [0, 0, 0],
@@ -40,20 +40,20 @@ class Group {
     return newGroup;
   }
 
-  private updateMeshes(newGroup: MeshData) {
+  private updateMeshes(newGroup: Block) {
     this.meshes[newGroup.id] = newGroup;
   }
 
-  private updateRoots(newGroup: MeshData) {
+  private updateRoots(newGroup: Block) {
     this.roots = this.roots.filter((root) => !this.ids.includes(root));
     this.roots.push(newGroup.id);
   }
 
-  private blocks: Block[];
+  private blocks: BlockData[];
 
   private ids: string[];
 
-  private meshes: Record<string, MeshData>;
+  private meshes: Record<string, Block>;
 
   private roots: string[];
 }

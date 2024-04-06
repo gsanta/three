@@ -1,8 +1,8 @@
 import { useAppSelector } from '@/common/hooks/hooks';
 
 const useSelectedMeshes = () => {
-  const { selectedMeshIds } = useAppSelector((store) => store.scene.present);
-  const { meshes } = useAppSelector((store) => store.scene.present);
+  const { selectedBlockIds: selectedMeshIds } = useAppSelector((store) => store.blocks.present);
+  const { blocks: meshes } = useAppSelector((store) => store.blocks.present);
 
   return selectedMeshIds?.map((id) => meshes[id]) || [];
 };

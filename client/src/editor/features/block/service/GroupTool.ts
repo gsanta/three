@@ -1,7 +1,7 @@
 import { Store } from '@/common/utils/store';
 import Tool from '../../../services/tool/service/Tool';
 import ToolName from '../../../services/tool/state/ToolName';
-import { setSelectedMeshes, update } from '../../../services/scene/sceneSlice';
+import { setSelectedMeshes, update } from '../../../services/scene/blocksSlice';
 import Ungroup from './Ungroup';
 import Group from './Group';
 
@@ -13,8 +13,12 @@ class GroupTool extends Tool {
   }
 
   group() {
-    const { blocks } = this.store.getState().block.present;
-    const { meshes, roots, selectedMeshIds } = this.store.getState().scene.present;
+    const { blocks } = this.store.getState().addBlock.present;
+    const {
+      blocks: meshes,
+      rootBlocksIds: roots,
+      selectedBlockIds: selectedMeshIds,
+    } = this.store.getState().blocks.present;
 
     const ungroup = new Ungroup(selectedMeshIds, roots, meshes);
     const { roots: ungroupedRoots, meshes: ungroupedMeshes, ungroupedIds } = ungroup.execute();
@@ -24,8 +28,8 @@ class GroupTool extends Tool {
 
     this.store.dispatch(
       update({
-        roots: groupedRoots,
-        meshes: groupedMeshes,
+        rootBlocksIds: groupedRoots,
+        blocks: groupedMeshes,
       }),
     );
 
@@ -33,15 +37,19 @@ class GroupTool extends Tool {
   }
 
   ungroup() {
-    const { meshes, roots, selectedMeshIds } = this.store.getState().scene.present;
+    const {
+      blocks: meshes,
+      rootBlocksIds: roots,
+      selectedBlockIds: selectedMeshIds,
+    } = this.store.getState().blocks.present;
 
     const ungroup = new Ungroup(selectedMeshIds, roots, meshes);
     const { roots: ungroupedRoots, meshes: ungroupedMeshes } = ungroup.execute();
 
     this.store.dispatch(
       update({
-        roots: ungroupedRoots,
-        meshes: ungroupedMeshes,
+        rootBlocksIds: ungroupedRoots,
+        blocks: ungroupedMeshes,
       }),
     );
   }

@@ -1,5 +1,5 @@
 import { Store } from '@/common/utils/store';
-import { updateMesh } from '@/editor/services/scene/sceneSlice';
+import { updateMesh } from '@/editor/services/scene/blocksSlice';
 import Tool, { ToolInfo } from '@/editor/services/tool/service/Tool';
 import ToolName from '@/editor/services/tool/state/ToolName';
 import SceneService from '@/editor/services/scene/SceneService';
@@ -13,7 +13,7 @@ class ColorTool extends Tool {
   }
 
   onPointerDown({ eventObjectName }: ToolInfo) {
-    const { meshes } = this.store.getState().scene.present;
+    const { blocks: meshes } = this.store.getState().blocks.present;
     const mesh = meshes[eventObjectName];
 
     if (!mesh) {
@@ -23,7 +23,7 @@ class ColorTool extends Tool {
     this.store.dispatch(
       updateMesh({
         ...mesh,
-        color: colorToArray(this.store.getState().block.present.color),
+        color: colorToArray(this.store.getState().addBlock.present.color),
       }),
     );
   }

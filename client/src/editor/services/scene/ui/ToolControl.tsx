@@ -5,8 +5,8 @@ import { useCallback } from 'react';
 import useEditorContext from '@/app/editor/EditorContext';
 
 const ToolControl = () => {
-  const { meshes, roots } = useAppSelector((selector) => selector.scene.present);
-  const { selectedMeshIds } = useAppSelector((selector) => selector.scene.present);
+  const { blocks: meshes, rootBlocksIds: roots } = useAppSelector((selector) => selector.blocks.present);
+  const { selectedBlockIds: selectedMeshIds } = useAppSelector((selector) => selector.blocks.present);
   const { tool } = useEditorContext();
 
   const isSelected = (id: string) => selectedMeshIds?.includes(id);
