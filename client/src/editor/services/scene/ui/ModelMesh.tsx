@@ -3,7 +3,7 @@ import { useGLTF } from '@react-three/drei';
 import useEditorContext from '@/app/editor/EditorContext';
 import { BufferGeometry, Material, Mesh, NormalBufferAttributes } from 'three';
 import WrappedMeshProps from '../types/WrappedMeshProps';
-import { ModelPart } from '@/editor/types/BlockData';
+import { ModelPart } from '@/editor/types/BlockType';
 
 type ModelMeshProps = WrappedMeshProps<'model'>;
 

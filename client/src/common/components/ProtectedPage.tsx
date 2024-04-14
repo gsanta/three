@@ -17,7 +17,7 @@ import CableTool from '@/editor/features/block/service/CableTool';
 import SceneService from '@/editor/services/scene/SceneService';
 import RayHelperTool from '@/editor/features/block/service/RayHelperTool';
 import ColorTool from '@/editor/features/block/service/ColorTool';
-import BlockService from '@/editor/features/block/service/factory/BlockService';
+import BlockService from '@/editor/features/block/service/BlockService';
 
 type ProtectedPageProps = {
   children: ReactNode;

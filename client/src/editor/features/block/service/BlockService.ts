@@ -1,37 +1,33 @@
 import { Store } from '@/common/utils/store';
-import {
-  BlockCategories,
-  BlockCategory,
-  addMeshes,
-  createBlockDecoration,
-  updateBlockDecoration,
-} from '@/editor/services/scene/blocksSlice';
+import { addMeshes, createBlockDecoration, updateBlockDecoration } from '@/editor/services/scene/blocksSlice';
 import BlockFactory from './factory/BlockFactory';
 import type { PartialDeep } from 'type-fest';
 import PoleFactory from './factory/PoleFactory';
-import { getBlock } from '../utils/blockUtils';
 import Block from '@/editor/types/Block';
+import DefaultBlockFactory from './factory/DefaultBlockFactory';
+import BlockCategory, { BlockCategories } from '@/editor/types/BlockCategory';
+import BlockType from '@/editor/types/BlockType';
 
 class BlockService {
   constructor(store: Store) {
     this.store = store;
-    const blocks = this.store.getState().addBlock.present.blocks;
-
-    this.updaters.poles = new PoleFactory(getBlock(blocks, 'pole'));
+    this.updaters.poles = new PoleFactory('poles');
+    this.updaters.decorations = new DefaultBlockFactory('decorations');
+    this.updaters.walls = new DefaultBlockFactory('walls');
   }
 
-  create<T extends BlockCategory>(type: T, options: Partial<Block> = {}) {
-    const factory = this.updaters[type];
+  create(blockType: BlockType, options: Partial<Block> = {}) {
+    const factory = this.updaters[blockType.category];
 
     if (!factory) {
-      throw new Error(`Factory for type ${type} not found`);
+      throw new Error(`Factory for type ${blockType.category} not found`);
     }
 
-    const { block, decoration } = factory.create(options);
+    const { block, decoration } = factory.create(blockType, options);
 
     this.store.dispatch(addMeshes([block]));
     if (decoration) {
-      this.store.dispatch(createBlockDecoration({ key: type, value: decoration }));
+      this.store.dispatch(createBlockDecoration({ key: blockType.category, value: decoration }));
     }
   }
 

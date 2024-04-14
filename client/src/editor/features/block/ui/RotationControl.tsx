@@ -1,19 +1,19 @@
 import RadioSwitchButton from '@/common/components/RadioSwitchButton';
 import RadioSwitchGroup from '@/common/components/RadioSwitchGroup';
 import { FormControl, FormLabel } from '@chakra-ui/react';
-import BlockData from '../../../types/BlockData';
 import Axis from '@/editor/types/Axis';
+import BlockSettings from '@/editor/types/BlockSettings';
 
 type RotationControlProps = {
   axis: Axis;
-  block: BlockData;
+  block: BlockSettings;
   onChange(val: number): void;
   value: number;
 };
 
 const RotationControl = ({ axis, block, onChange, value }: RotationControlProps) => {
   return (
-    block.options.rotation[axis] && (
+    block.rotation[axis] && (
       <FormControl>
         <FormLabel display="flex" alignItems="center" gap="2" marginBottom="1">
           Rotation (y)
@@ -23,7 +23,7 @@ const RotationControl = ({ axis, block, onChange, value }: RotationControlProps)
           onChange={(val) => onChange(Number(val))}
           value={String(value)}
         >
-          {block.options.rotation[axis].map((rotation) => (
+          {block.rotation[axis].map((rotation) => (
             <RadioSwitchButton key={rotation} value={String(rotation)}>
               {String(rotation)}
             </RadioSwitchButton>

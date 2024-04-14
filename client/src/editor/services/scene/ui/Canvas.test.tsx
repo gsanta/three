@@ -2,13 +2,13 @@
 import CanvasContent from './CanvasContent';
 import { findByModelId, renderWithProviders } from '@/editor/test/testUtils';
 import BlockCreator from '@/editor/features/block/service/BlockCreator';
-import { initialBlockState } from '@/editor/features/block/addBlockSlice';
+import { initialBlockSettingsState } from '@/editor/features/block/blockSettingsSlice';
 import { getBlock } from '@/editor/features/block/utils/blockUtils';
 
 describe('when meshes are grouped', () => {
   it('renders the correct hierarhcy', async () => {
-    const box = getBlock(initialBlockState.blocks, 'box');
-    const group = getBlock(initialBlockState.blocks, 'group');
+    const box = getBlock(initialBlockSettingsState.blocks, 'box');
+    const group = getBlock(initialBlockSettingsState.blocks, 'group');
 
     const child1 = BlockCreator.create(box);
     const child2 = BlockCreator.create(box);

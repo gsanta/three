@@ -1,5 +1,5 @@
 import Block, { PartialMeshData } from '@/editor/types/Block';
-import { BlockCategories, BlockCategory, BlockCategoryRecords } from '@/editor/types/BlockCategory';
+import BlockCategory, { BlockCategories, BlockCategoryRecords } from '@/editor/types/BlockCategory';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { StateWithHistory } from 'redux-undo';
 

@@ -4,16 +4,16 @@ import { Mesh, Quaternion, Vector3 } from 'three';
 import { useEffect, useRef, useState } from 'react';
 import useEditorContext from '@/app/editor/EditorContext';
 import MeshRenderer from './MeshRenderer';
-import useSelectedMeshes from '@/editor/features/block/useSelectedMeshes';
+import useSelectedBlocks from '@/editor/features/block/useSelectedBlocks';
 import { getBlock } from '@/editor/features/block/utils/blockUtils';
 import { useAppSelector } from '@/common/hooks/hooks';
 
 const MoveControl = () => {
-  const selectedMeshes = useSelectedMeshes();
+  const selectedMeshes = useSelectedBlocks();
 
   const movableMeshes = selectedMeshes.filter((mesh) => mesh.movable);
 
-  const blocks = useAppSelector((selector) => selector.addBlock.present.blocks);
+  const blocks = useAppSelector((selector) => selector.blockSettings.present.blocks);
   const [transform, setTransform] = useState<Vector3>(new Vector3(0));
   const selectedMeshRef = useRef<Mesh>(null);
   const { tool } = useEditorContext();

@@ -1,10 +1,10 @@
-import BlockData, { ShapeType } from './BlockData';
+import BlockType, { ShapeType } from './BlockType';
 
 type Block<S extends ShapeType = ShapeType> = {
   id: string;
   children: string[];
   parent?: string;
-} & BlockData<S>['data'];
+} & BlockType<S>;
 
 export type PartialMeshData = Partial<Block> & { id: string };
 

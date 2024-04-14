@@ -3,7 +3,7 @@ import { setSelectedMeshes, updateMesh, updateMeshes } from '../../../services/s
 import Tool, { ToolInfo } from '../../../services/tool/service/Tool';
 import ToolName from '../../../services/tool/state/ToolName';
 import { getSelectedMeshes } from '@/editor/utils/storeUtils';
-import { addVector, getAxisIndex, snapTo } from '@/editor/utils/vectorUtils';
+import VectorUtils, { addVector, snapTo } from '@/editor/utils/vectorUtils';
 import { toRadian } from '@/editor/utils/mathUtils';
 import { getBlock } from '../utils/blockUtils';
 import Num3 from '@/editor/types/Num3';
@@ -73,15 +73,16 @@ class SelectTool extends Tool {
     this.store.dispatch(setSelectedMeshes(newSelectedMeshIds));
   }
 
-  scaleMesh(scale: number, mesh: Block) {
-    const block = getBlock(this.store.getState().addBlock.present.blocks, mesh.name);
+  scaleMesh(scale: number, block: Block) {
+    const { selectedSettings } = this.store.getState().blockSettings.present;
+    const settings = selectedSettings[block.category];
 
-    const index = getAxisIndex(block.options.size.direction);
-    const newScale = [...mesh.scale] as Num3;
-    newScale[index] = block.data.scale[index] * scale;
+    const index = VectorUtils.getAxisIndex('x');
+    const newScale = [...block.scale] as Num3;
+    newScale[index] = settings.scale[index] * scale;
 
     const newMesh = {
-      ...mesh,
+      ...block,
       scale: newScale,
     };
 
@@ -92,7 +93,7 @@ class SelectTool extends Tool {
     const meshInfo = getSelectedMeshes(this.store)[0];
     const mesh = this.scene.getMesh(meshInfo.id);
 
-    const index = getAxisIndex(axis);
+    const index = VectorUtils.getAxisIndex(axis);
     const newRotation = [...meshInfo.rotation] as [number, number, number];
     newRotation[index] = toRadian(rotation);
 

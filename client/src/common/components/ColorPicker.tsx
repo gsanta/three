@@ -1,10 +1,10 @@
 import { useAppDispatch, useAppSelector } from '../hooks/hooks';
 import React, { useState } from 'react';
 import { ChromePicker, ColorResult } from 'react-color';
-import { setColor } from '@/editor/features/block/addBlockSlice';
+import { setColor } from '@/editor/features/block/blockSettingsSlice';
 
 const ColorPicker = () => {
-  const color = useAppSelector((state) => state.addBlock.present.color);
+  const color = useAppSelector((state) => state.blockSettings.present.color);
 
   const [tempColor, setTempColor] = useState<string | null>(null);
 

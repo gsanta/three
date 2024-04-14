@@ -1,19 +1,19 @@
 import undoable, { StateWithHistory } from 'redux-undo';
-import addBlockSlice, { AddBlockState } from '../../editor/features/block/addBlockSlice';
+import blockSettingsSlice, { BlockSettingsState } from '../../editor/features/block/blockSettingsSlice';
 import blocksSlice, { BlocksState } from '../../editor/services/scene/blocksSlice';
 import settingsSlice, { SettingsState } from '../../editor/features/settings/state/settingsSlice';
 import toolSlice, { ToolState } from '../../editor/services/tool/state/toolSlice';
 import userSlice, { UserState } from '../../user/userSlice';
 import { EnhancedStore, configureStore } from '@reduxjs/toolkit';
 
-const addBlockSliceUndoable = undoable(addBlockSlice, { filter: () => false });
+const blockSettingsSliceUndoable = undoable(blockSettingsSlice, { filter: () => false });
 const sceneSliceUndoable = undoable(blocksSlice);
 
 export type RootState = {
   settings: SettingsState;
   tool: ToolState;
   user: UserState;
-  addBlock: StateWithHistory<AddBlockState>;
+  blockSettings: StateWithHistory<BlockSettingsState>;
   blocks: StateWithHistory<BlocksState>;
 };
 
@@ -23,7 +23,7 @@ export function setupStore(preloadedState?: RootState): EnhancedStore<RootState>
       settings: settingsSlice,
       tool: toolSlice,
       user: userSlice,
-      addBlock: addBlockSliceUndoable,
+      blockSettings: blockSettingsSliceUndoable,
       blocks: sceneSliceUndoable,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
@@ -39,7 +39,7 @@ export type AppDispatch = typeof store.dispatch;
 
 export const store = setupStore();
 
-export type PreloadedState = Omit<RootState, 'blocks' | 'addBlock'> & {
-  blocks: AddBlockState;
-  addBlock: BlocksState;
+export type PreloadedState = Omit<RootState, 'blocks' | 'blockSettings'> & {
+  blocks: BlocksState;
+  blockSettings: BlockSettingsState;
 };

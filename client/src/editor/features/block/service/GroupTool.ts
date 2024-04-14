@@ -13,7 +13,7 @@ class GroupTool extends Tool {
   }
 
   group() {
-    const { blocks } = this.store.getState().addBlock.present;
+    const { blocks } = this.store.getState().blockSettings.present;
     const {
       blocks: meshes,
       rootBlocksIds: roots,

@@ -10,9 +10,9 @@ import { EditorContext } from '@/app/editor/EditorContext';
 import { initialSettingsState } from '../features/settings/state/settingsSlice';
 import { initialToolState } from '../services/tool/state/toolSlice';
 import { initialUserState } from '@/user/userSlice';
-import { initialBlockState } from '../features/block/addBlockSlice';
+import { initialBlockSettingsState } from '../features/block/blockSettingsSlice';
 import { initialSceneState } from '../services/scene/blocksSlice';
-import { BlockType } from '../types/BlockData';
+import { BlockName } from '../types/BlockType';
 import { ReactThreeTestInstance } from '@react-three/test-renderer/dist/declarations/src/types';
 
 type ExtendedRenderOptions = {
@@ -24,8 +24,8 @@ export const createStoreState = (initialState?: Partial<PreloadedState>): RootSt
     settings: initialState?.settings || initialSettingsState,
     tool: initialState?.tool || initialToolState,
     user: initialState?.user || initialUserState,
-    addBlock: {
-      present: initialState?.block || initialBlockState,
+    blockSettings: {
+      present: initialState?.block || initialBlockSettingsState,
       past: [],
       future: [],
     },
@@ -62,7 +62,7 @@ export const renderWithProviders = async (
 };
 
 type FindMeshOptions = {
-  name?: BlockType;
+  name?: BlockName;
 };
 
 export const findByModelId = (

@@ -1,16 +1,16 @@
 import { defaultSnap } from '@/editor/utils/sceneUtils';
-import BlockData, { BlockType } from '../../../types/BlockData';
+import BlockType, { BlockName } from '../../../types/BlockType';
 
 const defaultSnaps = { x: defaultSnap, y: defaultSnap, z: defaultSnap };
 
-const defaultBlockData: Partial<BlockData['data']> = {
+const defaultBlock: Partial<BlockType> = {
   position: [0, 0, 0],
   rotation: [0, 0, 0],
   scale: [1, 1, 1],
   movable: true,
 };
 
-const defaultBlockOptions: Partial<BlockData['options']> = {
+const defaultBlockOptions: Partial<BlockType['options']> = {
   rotation: {
     x: [0],
     y: [0, 90, 180, -90],
@@ -23,28 +23,30 @@ const defaultBlockOptions: Partial<BlockData['options']> = {
   },
 };
 
-const defaultBlockSelected: Partial<BlockData['selected']> = {
+const defaultBlockSelected: Partial<BlockType['selected']> = {
   rotation: [0, 0, 0],
 };
 
-const parseBlocks = (blocks: Record<string, BlockData>): BlockData[] =>
+const parseBlocks = (blocks: Record<string, BlockType>): BlockType[] =>
   Object.keys(blocks).map((key) => {
-    const block = blocks[key as BlockType];
+    const block = blocks[key as BlockName];
     return {
-      data: {
-        ...defaultBlockData,
-        ...block.data,
-        name: key as BlockType,
-      },
-      snap: { ...defaultSnaps, ...(block?.snap || {}) },
-      options: {
-        ...defaultBlockOptions,
-        ...block.options,
-      },
-      selected: {
-        ...defaultBlockSelected,
-        ...block.selected,
-      },
+      ...defaultBlock,
+      ...block,
+      name: key as BlockName,
+      // data: {
+      //   ...block.data,
+      //   name: key as BlockName,
+      // },
+      // snap: { ...defaultSnaps, ...(block?.snap || {}) },
+      // options: {
+      //   ...defaultBlockOptions,
+      //   ...block.options,
+      // },
+      // selected: {
+      //   ...defaultBlockSelected,
+      //   ...block.selected,
+      // },
     };
   });
 

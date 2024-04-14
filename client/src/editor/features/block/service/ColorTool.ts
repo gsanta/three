@@ -23,7 +23,7 @@ class ColorTool extends Tool {
     this.store.dispatch(
       updateMesh({
         ...mesh,
-        color: colorToArray(this.store.getState().addBlock.present.color),
+        color: colorToArray(this.store.getState().blockSettings.present.color),
       }),
     );
   }

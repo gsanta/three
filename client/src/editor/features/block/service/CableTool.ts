@@ -62,7 +62,7 @@ class CableTool extends Tool {
   }
 
   private createMesh(points: Vector3[]) {
-    const { blocks } = this.store.getState().addBlock.present;
+    const { blocks } = this.store.getState().blockSettings.present;
     const cableBlock = getBlock(blocks, 'cable');
 
     const newMesh = BlockCreator.create(cableBlock, { points: points.map((point) => [point.x, point.y, point.z]) });

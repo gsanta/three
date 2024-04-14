@@ -1,18 +1,13 @@
 {
-    "group": {},
-    "box": {
-        "data": {
-            "shape": "box",
-            "scale": [
-                1,
-                1,
-                1
-            ]
-        }
-    },
-    "wall": {
-        "data": {
-            "shape": "box",
+    "blocks": {
+        "group": {},
+        "box": {
+            "category": "decoration",
+            "geometry": "box"
+        },
+        "wall": {
+            "category": "walls",
+            "geometry": "box",
             "scale": [
                 5,
                 2,
@@ -24,33 +19,13 @@
                 0.125
             ]
         },
-        "options": {
-            "rotation": {
-                "y": [
-                    0,
-                    90
-                ]
-            },
-            "size": {
-                "scales": [
-                    0.5,
-                    1,
-                    2,
-                    3
-                ],
-                "selected": 1,
-                "direction": "x"
-            }
-        }
-    },
-    "roof": {
-        "data": {
+        "roof": {
+            "geometry": "cone",
             "position": [
                 0,
                 2,
                 0
             ],
-            "shape": "cone",
             "scale": [
                 1,
                 1,
@@ -65,33 +40,19 @@
             "radius": 3.5,
             "height": 1
         },
-        "snap": {
-            "y": 2
-        }
-    },
-    "cable": {
-        "data": {
-            "shape": "tube",
+        "cable": {
+            "geometry": "tube",
             "scale": [
                 1,
                 1,
                 1
             ],
             "movable": false
-        }
-    },
-    "rod": {
-        "data": {
-            "scale": [
-                1,
-                1,
-                1
-            ]
-        }
-    },
-    "tree": {
-        "data": {
-            "shape": "model",
+        },
+        "rod": {},
+        "tree": {
+            "category": "decorations",
+            "geometry": "model",
             "path": "/tree.glb",
             "parts": [
                 {
@@ -121,11 +82,10 @@
                 0.71,
                 0.09
             ]
-        }
-    },
-    "wall1": {
-        "data": {
-            "shape": "model",
+        },
+        "wall1": {
+            "category": "walls",
+            "geometry": "model",
             "path": "/wall1.glb",
             "parts": [
                 {
@@ -151,11 +111,10 @@
                 1,
                 0.25
             ]
-        }
-    },
-    "wall2": {
-        "data": {
-            "shape": "model",
+        },
+        "wall2": {
+            "category": "walls",
+            "geometry": "model",
             "path": "/wall2.glb",
             "parts": [
                 {
@@ -169,18 +128,8 @@
                 0.084
             ]
         },
-        "options": {
-            "rotation": {
-                "y": [
-                    0,
-                    90
-                ]
-            }
-        }
-    },
-    "base": {
-        "data": {
-            "shape": "model",
+        "base": {
+            "geometry": "model",
             "path": "/base.glb",
             "parts": [
                 {
@@ -193,11 +142,10 @@
                 -0.122,
                 -3.718
             ]
-        }
-    },
-    "pole": {
-        "data": {
-            "shape": "model",
+        },
+        "pole": {
+            "category": "poles",
+            "geometry": "model",
             "path": "/pole.glb",
             "parts": [
                 {
@@ -254,5 +202,38 @@
                 }
             ]
         }
-    }
+    },
+    "settings": [
+        {
+            "category": "decorations",
+            "scale": {
+                "x": [0.5, 1, 2, 3],
+                "selected": [
+                    1
+                ]
+            }
+        },
+        {
+            "category": "walls",
+            "rotation": {
+                "y": [
+                    0,
+                    90
+                ]
+            },
+            "scale": {
+                "x": [
+                    0.5,
+                    1,
+                    2,
+                    3
+                ],
+                "selected": [1]
+            }
+        },
+        {
+            "category": "roof",
+            "snap": [0, 2, 0]
+        }
+    ]
 }

@@ -1,10 +1,10 @@
 import Block from '@/editor/types/Block';
 import { getBlock } from '../utils/blockUtils';
 import { v4 as uuidv4 } from 'uuid';
-import BlockData from '@/editor/types/BlockData';
+import BlockType from '@/editor/types/BlockType';
 
 class Group {
-  constructor(blocks: BlockData[], ids: string[], roots: string[], meshes: Record<string, Block>) {
+  constructor(blocks: BlockType[], ids: string[], roots: string[], meshes: Record<string, Block>) {
     this.blocks = blocks;
     this.ids = ids;
     this.meshes = { ...meshes };
@@ -49,7 +49,7 @@ class Group {
     this.roots.push(newGroup.id);
   }
 
-  private blocks: BlockData[];
+  private blocks: BlockType[];
 
   private ids: string[];
 

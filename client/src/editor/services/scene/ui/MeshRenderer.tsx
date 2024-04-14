@@ -4,7 +4,7 @@ import { Cone } from '@react-three/drei';
 import CableMesh from './CableMesh';
 import BoxMesh from './BoxMesh';
 import WrappedMeshProps from '../types/WrappedMeshProps';
-import { ShapeType } from '@/editor/types/BlockData';
+import { ShapeType } from '@/editor/types/BlockType';
 import { ModelMesh } from './ModelMesh';
 
 const getComponent = (shape: ShapeType): (({ meshProps, meshInfo }: WrappedMeshProps) => React.JSX.Element | null) => {
@@ -57,7 +57,7 @@ const MeshRenderer = ({ meshInfo, meshProps = {}, materialProps = {} }: Omit<Wra
     );
   }
 
-  const Component = getComponent(meshInfo.shape);
+  const Component = getComponent(meshInfo.geometry);
 
   const parent = meshInfo.parent ? meshes[meshInfo.parent] : undefined;
 
