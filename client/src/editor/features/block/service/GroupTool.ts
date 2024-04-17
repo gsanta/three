@@ -1,7 +1,7 @@
 import { Store } from '@/common/utils/store';
 import Tool from '../../../services/tool/service/Tool';
 import ToolName from '../../../services/tool/state/ToolName';
-import { setSelectedMeshes, update } from '../../../services/scene/blocksSlice';
+import { setSelectedBlocks, update } from '../../../services/scene/blocksSlice';
 import Ungroup from './Ungroup';
 import Group from './Group';
 
@@ -33,7 +33,7 @@ class GroupTool extends Tool {
       }),
     );
 
-    this.store.dispatch(setSelectedMeshes([newGroup.id]));
+    this.store.dispatch(setSelectedBlocks([newGroup.id]));
   }
 
   ungroup() {

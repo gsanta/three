@@ -41,6 +41,7 @@
             "height": 1
         },
         "cable": {
+            "category": "cables",
             "geometry": "tube",
             "scale": [
                 1,

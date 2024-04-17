@@ -1,18 +1,16 @@
 import MeshUtils from '@/editor/utils/MeshUtils';
 import { Vector3 } from 'three';
-import { getBlock } from '../../utils/blockUtils';
-import BlockCreator from '../BlockCreator';
 import { Store } from '@/common/utils/store';
-import { addMeshes } from '@/editor/services/scene/blocksSlice';
 import Block from '@/editor/types/Block';
 import SceneService from '@/editor/services/scene/SceneService';
 import BlockService from '../BlockService';
+import Num3 from '@/editor/types/Num3';
 
 class JoinPoles {
-  constructor(store: Store, scene: SceneService, updater: BlockService) {
+  constructor(store: Store, scene: SceneService, blockService: BlockService) {
     this.store = store;
     this.scene = scene;
-    this.updater = updater;
+    this.blockService = blockService;
   }
 
   join(pole1: Block, pole2: Block) {
@@ -30,26 +28,39 @@ class JoinPoles {
     const pos2 = new Vector3();
     pinMesh2.getWorldPosition(pos2);
 
-    const cable = this.createMesh([pos1, pos2]);
+    const cable = this.blockService.create<'cables'>(
+      'cable',
+      { dependsOn: [pole1.id, pole2.id] },
+      { points: [pos1, pos2].map((point) => [point.x, point.y, point.z]) as Num3[] },
+    );
 
-    this.store.dispatch(addMeshes([cable]));
+    const newPole1 = this.blockService.updateBlock(pole1.id, {
+      dependents: [cable.block.id],
+    });
 
-    this.updater.updateDecoration('poles', pole1.id, { pins: { [pinName]: cable.id } });
-    this.updater.updateDecoration('poles', pole2.id, { pins: { [pinName]: cable.id } });
-  }
+    const newPole2 = this.blockService.updateBlock(pole2.id, {
+      dependents: [cable.block.id],
+    });
 
-  private createMesh(points: Vector3[]) {
-    const { blocks } = this.store.getState().blockSettings.present;
-    const cableBlock = getBlock(blocks, 'cable');
+    const newPoleAssociation1 = this.blockService.updateAssociation('poles', pole1.id, {
+      pins: { [pinName]: cable.block.id },
+    });
+    const newPoleAssociation2 = this.blockService.updateAssociation('poles', pole2.id, {
+      pins: { [pinName]: cable.block.id },
+    });
 
-    return BlockCreator.create(cableBlock, { points: points.map((point) => [point.x, point.y, point.z]) });
+    this.blockService.executeUpdate([
+      { block: newPole1, category: 'poles', decoration: newPoleAssociation1 },
+      { block: newPole2, category: 'poles', decoration: newPoleAssociation2 },
+      cable,
+    ]);
   }
 
   private store: Store;
 
   private scene: SceneService;
 
-  private updater: BlockService;
+  private blockService: BlockService;
 }
 
 export default JoinPoles;

@@ -41,8 +41,9 @@ class ToolService {
     this.getTool(selectedTool)?.onPointerMove(this.info);
   }
 
-  onDrag(mesh: Block) {
-    this.info.draggedMesh = mesh;
+  onDrag(delta: Vector3) {
+    // this.info.draggedMesh = mesh;
+    this.info.drag = delta.toArray();
 
     const { selectedTool } = this.store.getState().tool;
     this.getTool(selectedTool)?.onDrag(this.info);

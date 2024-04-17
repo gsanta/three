@@ -1,5 +1,5 @@
 import { Store } from '@/common/utils/store';
-import { deleteMeshes, setSelectedMeshes } from '../../scene/blocksSlice';
+import { deleteMeshes, setSelectedBlocks } from '../../scene/blocksSlice';
 
 class KeyboardService {
   constructor(store: Store) {
@@ -9,7 +9,7 @@ class KeyboardService {
   onKeyDown(keyEvent: KeyboardEvent) {
     if (keyEvent.key === 'Backspace') {
       const selectedIds = this.store.getState().blocks.present.selectedBlockIds;
-      this.store.dispatch(setSelectedMeshes([]));
+      this.store.dispatch(setSelectedBlocks([]));
       this.store.dispatch(deleteMeshes(selectedIds || []));
     }
   }

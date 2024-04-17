@@ -1,20 +1,21 @@
 import { useMemo } from 'react';
 import { CatmullRomCurve3, Vector3 } from 'three';
 import WrappedMeshProps from '../types/WrappedMeshProps';
+import Cable from '../types/Cable';
 
-type CableProps = WrappedMeshProps<'cable', 'tube'>;
+type CableProps = WrappedMeshProps<'tube'> & { cable: Cable };
 
-const CableMesh = ({ meshProps, meshInfo }: CableProps) => {
+const CableMesh = ({ cable, meshProps, meshInfo }: CableProps) => {
   const curve = useMemo(() => {
     return new CatmullRomCurve3(
-      meshInfo.points.map((point) => new Vector3(point[0], point[1], point[2])),
+      cable.points.map((point) => new Vector3(point[0], point[1], point[2])),
       false,
       'catmullrom',
       0,
     );
-  }, [meshInfo.points]);
+  }, [cable.points]);
 
-  if (meshInfo.points.length < 2) {
+  if (cable.points.length < 2) {
     return null;
   }
 

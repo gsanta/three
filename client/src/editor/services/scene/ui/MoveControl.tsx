@@ -35,13 +35,13 @@ const MoveControl = () => {
       anchor={[0, 0, 0.4]}
       autoTransform={false}
       onDrag={(_l, d) => {
-        const position = new Vector3();
-        d.decompose(position, new Quaternion(), new Vector3());
-        position.x = snapTo(position.x);
-        position.y = snapTo(position.y, getBlock(blocks, selectedMeshes[0].name).snap?.y);
-        position.z = snapTo(position.z);
-        setTransform(position);
-        tool.onDrag(movableMeshes);
+        const newTransform = new Vector3();
+        d.decompose(newTransform, new Quaternion(), new Vector3());
+        newTransform.x = snapTo(newTransform.x);
+        newTransform.y = snapTo(newTransform.y, getBlock(blocks, selectedMeshes[0].name).snap?.y);
+        newTransform.z = snapTo(newTransform.z);
+        setTransform(newTransform);
+        tool.onDrag(newTransform);
       }}
       onDragEnd={() => {
         tool.onDragEnd(transform);

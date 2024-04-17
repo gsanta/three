@@ -41,7 +41,7 @@ class RayHelperTool extends Tool {
     // if (!cable) {
     //   const newMesh = MeshCreator.create(cableBlock, { points: [[point.x, point.y, point.z]] });
     //   this.store.dispatch(addMesh(newMesh));
-    //   this.store.dispatch(setSelectedMeshes([newMesh.id]));
+    //   this.store.dispatch(setSelectedBlocks([newMesh.id]));
     // } else {
     //   const newMesh = {
     //     ...meshes[cable],

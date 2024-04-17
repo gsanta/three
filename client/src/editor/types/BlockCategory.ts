@@ -1,7 +1,9 @@
+import Cable from '../services/scene/types/Cable';
 import Pole from '../services/scene/types/Pole';
 
 export type BlockCategories = {
-  decorations: { id: string };
+  cables: Cable;
+  decorations: Record<string, never>;
   poles: Pole;
   walls: Record<string, never>;
 };

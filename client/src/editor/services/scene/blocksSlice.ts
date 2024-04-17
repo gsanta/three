@@ -1,7 +1,6 @@
-import Block, { PartialMeshData } from '@/editor/types/Block';
+import Block from '@/editor/types/Block';
 import BlockCategory, { BlockCategories, BlockCategoryRecords } from '@/editor/types/BlockCategory';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { StateWithHistory } from 'redux-undo';
 
 export type BlocksState = {
   blocks: Record<string, Block>;
@@ -15,6 +14,8 @@ export const initialSceneState: BlocksState = {
   blocks: {},
   selectedBlockIds: [],
   categories: {
+    cables: {},
+    decorations: {},
     poles: {},
     walls: {},
   },
@@ -26,33 +27,29 @@ export type SpecificUpdate<T extends BlockCategory> = {
   val: BlockCategories[T];
 };
 
+type BlockCategoryEntries = {
+  [K in keyof BlockCategories]: { block?: Block; category: K; decoration?: BlockCategories[K] };
+}[keyof BlockCategories];
+
+// Update type constrained to keys and values from BlockCategories
+export type UpdateBlock = BlockCategoryEntries;
+
+export type UpdateBlocks = Array<UpdateBlock>;
+
 export const blocksSlice = createSlice({
   name: 'frame',
   initialState: initialSceneState,
   reducers: {
-    createBlockDecoration<T extends BlockCategory>(
-      state: BlocksState,
-      action: PayloadAction<{ key: T; value: BlockCategories[T] }>,
-    ) {
-      const { key, value } = action.payload;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (state.categories[key][value.id] as any) = value;
-    },
+    updateBlocks(state: BlocksState, action: PayloadAction<UpdateBlocks>) {
+      const updates = action.payload;
 
-    updateBlockDecoration<T extends BlockCategory>(state: BlocksState, action: PayloadAction<SpecificUpdate<T>>) {
-      const { id, key, val } = action.payload;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (state.categories[key][id] as any) = val;
-    },
+      updates.forEach(({ block, category, decoration }) => {
+        if (block) {
+          state.blocks[block.id] = block;
+        }
 
-    addMeshes: (state, action: PayloadAction<Block[]>) => {
-      const newMeshes = action.payload;
-
-      newMeshes.forEach((newMesh) => {
-        state.blocks[newMesh.id] = newMesh;
-
-        if (!newMesh.parent) {
-          state.rootBlocksIds.push(newMesh.id);
+        if (decoration) {
+          state.categories[category][decoration.id] = decoration;
         }
       });
     },
@@ -90,48 +87,8 @@ export const blocksSlice = createSlice({
       });
     },
 
-    groupMeshes(state, action: PayloadAction<{ children: string[]; parent: Block }>) {
-      const { children, parent } = action.payload;
-
-      state.rootBlocksIds = state.rootBlocksIds.filter((root) => !children.includes(root));
-      state.rootBlocksIds.push(parent.id);
-      state.blocks[parent.id] = parent;
-    },
-
-    setMeshes(state, action: PayloadAction<Block[]>) {
-      const meshes = action.payload;
-
-      meshes.forEach((mesh) => {
-        state.blocks[mesh.id] = mesh;
-
-        if (!mesh.parent) {
-          state.rootBlocksIds.push(mesh.id);
-        }
-      });
-    },
-
-    setMeshPosition(state, action: PayloadAction<{ meshId: string; position: [number, number, number] }>) {
-      const { meshId, position } = action.payload;
-      const mesh = state.blocks[meshId];
-
-      if (mesh) {
-        mesh.position = position;
-      }
-    },
-
-    setSelectedMeshes: (state, action: PayloadAction<string[]>) => {
+    setSelectedBlocks: (state, action: PayloadAction<string[]>) => {
       state.selectedBlockIds = action.payload;
-    },
-
-    addMeshPosition(state, action: PayloadAction<{ meshId: string; position: [number, number, number] }>) {
-      const { meshId, position } = action.payload;
-      const mesh = state.blocks[meshId];
-
-      if (mesh) {
-        mesh.position[0] += position[0];
-        mesh.position[1] += position[1];
-        mesh.position[2] += position[2];
-      }
     },
 
     update(state, action: PayloadAction<Partial<BlocksState>>) {
@@ -139,51 +96,9 @@ export const blocksSlice = createSlice({
       state.rootBlocksIds = action.payload.rootBlocksIds || state.rootBlocksIds;
       state.selectedBlockIds = action.payload.selectedBlockIds || state.selectedBlockIds;
     },
-
-    updateMesh(state, action: PayloadAction<Block>) {
-      const newMesh = action.payload;
-      const mesh = state.blocks[newMesh.id];
-
-      if (mesh) {
-        Object.assign(mesh, newMesh);
-      }
-    },
-
-    updateMeshes(state, action: PayloadAction<PartialMeshData[]>) {
-      const newMeshes = action.payload;
-
-      newMeshes.forEach((newMesh) => {
-        const mesh = state.blocks[newMesh.id];
-
-        if (mesh) {
-          Object.assign(mesh, newMesh);
-        }
-      });
-    },
   },
 });
 
-export const getSpecific = <T extends keyof BlockCategoryRecords>(
-  slice: StateWithHistory<BlocksState>,
-  key: T,
-  id: string,
-): BlockCategoryRecords[T] extends Record<string, infer U> ? U : unknown => {
-  return slice.present.categories[key][id] as BlockCategoryRecords[T] extends Record<string, infer U> ? U : unknown;
-};
-
-export const {
-  addMeshes,
-  addMeshPosition,
-  createBlockDecoration,
-  deleteMeshes,
-  groupMeshes,
-  setMeshes,
-  setMeshPosition,
-  setSelectedMeshes,
-  update,
-  updateMesh,
-  updateMeshes,
-  updateBlockDecoration,
-} = blocksSlice.actions;
+export const { deleteMeshes, setSelectedBlocks, update, updateBlocks } = blocksSlice.actions;
 
 export default blocksSlice.reducer;

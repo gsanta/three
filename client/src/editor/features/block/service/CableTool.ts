@@ -1,20 +1,20 @@
 import { Store } from '@/common/utils/store';
-import { addMeshes, setSelectedMeshes, updateMesh } from '@/editor/services/scene/blocksSlice';
+import { setSelectedBlocks } from '@/editor/services/scene/blocksSlice';
 import Tool, { ToolInfo } from '@/editor/services/tool/service/Tool';
 import ToolName from '@/editor/services/tool/state/ToolName';
-import BlockCreator from './BlockCreator';
-import { getBlock } from '../utils/blockUtils';
 import SceneService from '@/editor/services/scene/SceneService';
 import Intersect from './Intersect';
-import Block from '@/editor/types/Block';
 import { Vector3 } from 'three';
 import JoinPoles from './use_cases/JoinPoles';
+import BlockService from './BlockService';
+import Num3 from '@/editor/types/Num3';
 
 class CableTool extends Tool {
-  constructor(store: Store, scene: SceneService) {
+  constructor(store: Store, scene: SceneService, blockService: BlockService) {
     super(store, ToolName.Cable);
 
     this.scene = scene;
+    this.blockService = blockService;
   }
 
   onPointerDown({ eventObjectName, clientX, clientY }: ToolInfo) {
@@ -39,9 +39,9 @@ class CableTool extends Tool {
     const cable = selectedMeshIds.find((root) => meshes[root].name === 'cable');
 
     if (!cable) {
-      this.createMesh([point]);
+      this.createBlock([point]);
     } else {
-      this.updateMesh(cable, point);
+      this.updateBlock(cable, point);
     }
   }
 
@@ -54,35 +54,33 @@ class CableTool extends Tool {
       return;
     }
 
-    const joinPoles = new JoinPoles(this.store, this.scene);
+    const joinPoles = new JoinPoles(this.store, this.scene, this.blockService);
 
     joinPoles.join(poles[0], poles[1]);
-
-    // this.store.dispatch(updateSpecific({ id: '123', key: 'poles', val: { count: 12 } }));
   }
 
-  private createMesh(points: Vector3[]) {
-    const { blocks } = this.store.getState().blockSettings.present;
-    const cableBlock = getBlock(blocks, 'cable');
+  private createBlock(points: Vector3[]) {
+    const update = this.blockService.create<'cables'>(
+      'cable',
+      { dependsOn: [] },
+      { points: points.map((point) => [point.x, point.y, point.z]) as Num3[] },
+    );
 
-    const newMesh = BlockCreator.create(cableBlock, { points: points.map((point) => [point.x, point.y, point.z]) });
-    this.store.dispatch(addMeshes([newMesh]));
-    this.store.dispatch(setSelectedMeshes([newMesh.id]));
+    this.blockService.executeUpdate([update]);
+    this.store.dispatch(setSelectedBlocks([update.block.id]));
   }
 
-  private updateMesh(meshId: string, point: Vector3) {
-    const { blocks: meshes } = this.store.getState().blocks.present;
+  private updateBlock(meshId: string, point: Vector3) {
+    const update = this.blockService.updateAssociation<'cables'>('cables', meshId, {
+      points: [[point.x, point.y, point.z]],
+    });
 
-    const newMesh: Block = {
-      ...meshes[meshId],
-      name: 'cable',
-      points: [...meshes[meshId].points, [point.x, point.y, point.z]],
-    };
-
-    this.store.dispatch(updateMesh(newMesh));
+    this.blockService.executeUpdate([{ category: 'cables', decoration: update }]);
   }
 
   private scene: SceneService;
+
+  private blockService: BlockService;
 }
 
 export default CableTool;

@@ -11,15 +11,13 @@ class AddTool extends Tool {
   }
 
   onPointerDown({ pos }: ToolInfo) {
-    const { selectedBlockName, blocks } = this.store.getState().blockSettings.present;
-    const selectedBlock = blocks.find((block) => block.name === selectedBlockName);
+    const { selectedBlockName } = this.store.getState().blockSettings.present;
 
-    if (!selectedBlock) {
+    if (!selectedBlockName) {
       return;
     }
 
-    this.blockFactory.create(selectedBlock, { position: [pos.x, pos.y, pos.z] });
-    // this.store.dispatch(addMeshes([MeshCreator.create(selectedBlock, { position: [pos.x, pos.y, pos.z] })]));
+    this.blockFactory.create(selectedBlockName, { position: [pos.x, pos.y, pos.z] });
   }
 
   private blockFactory: BlockService;
