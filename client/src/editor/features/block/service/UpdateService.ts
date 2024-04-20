@@ -1,13 +1,15 @@
-import Update from './Update';
+import Edit from './Edit';
 import BlockStore from './BlockStore';
+import { Store } from '@/common/utils/store';
 
 class UpdateService {
-  constructor(store: BlockStore) {
-    this.store = store;
+  constructor(blockStore: BlockStore, dispatchStore: Store) {
+    this.store = blockStore;
+    this.dispatchStore = dispatchStore;
   }
 
-  getUpdate(): Update {
-    return new Update(this.store);
+  getUpdate(): Edit {
+    return new Edit(this.store, this.dispatchStore);
   }
 
   // create<T extends BlockCategory | never = never>(
@@ -34,6 +36,8 @@ class UpdateService {
   // }
 
   private store: BlockStore;
+
+  private dispatchStore: Store;
 }
 
 export default UpdateService;

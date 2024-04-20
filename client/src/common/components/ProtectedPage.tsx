@@ -46,20 +46,20 @@ const queryClient = new QueryClient({
 const ProtectedPage = ({ children }: ProtectedPageProps) => {
   const scene = useMemo(() => new SceneService(), []);
   const blockStore = useMemo(() => new BlockStore(store), []);
-  const update = useMemo(() => new UpdateService(blockStore), [blockStore]);
+  const update = useMemo(() => new UpdateService(blockStore, store), [blockStore]);
   const moveService = useMemo(() => new MoveService(store), []);
 
   const editorContext = useMemo<EditorContextType>(
     () => ({
       tool: new ToolService(
         [
-          new AddTool(store, update),
-          new SelectTool(store, scene, moveService),
+          new AddTool(blockStore, update),
+          new SelectTool(blockStore, scene, moveService, update),
           new GroupTool(store),
-          new CableTool(store, scene, update),
-          new EraseTool(store),
+          new CableTool(blockStore, scene, update),
+          new EraseTool(blockStore, update),
           new RayHelperTool(store, scene),
-          new ColorTool(store, update),
+          new ColorTool(blockStore, update),
         ],
         store,
       ),
@@ -68,7 +68,7 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
       importer: new ImportJson(store),
       scene,
     }),
-    [update, scene, moveService],
+    [blockStore, update, scene, moveService],
   );
 
   return (

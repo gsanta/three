@@ -10,12 +10,16 @@ class BlockStore {
     return this.store.getState().blocks.present.blocks;
   }
 
+  getSelectedBlockIds() {
+    return this.store.getState().blocks.present.selectedBlockIds;
+  }
+
   getDecoration<T extends BlockCategory>(category: T, id: string) {
     return this.store.getState().blocks.present.categories[category][id];
   }
 
   getBlockSettings() {
-    return this.store.getState().blockSettings.present.blocks;
+    return this.store.getState().blockSettings.present;
   }
 
   getRootBlockIds() {

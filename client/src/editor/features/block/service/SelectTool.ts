@@ -1,20 +1,17 @@
-import { Store } from '../../../../common/utils/store';
-import { setSelectedBlocks } from '../../../services/scene/blocksSlice';
 import Tool, { ToolInfo } from '../../../services/tool/service/Tool';
 import ToolName from '../../../services/tool/state/ToolName';
-import { getSelectedMeshes } from '@/editor/utils/storeUtils';
 import VectorUtils, { addVector, snapTo } from '@/editor/utils/vectorUtils';
 import { toRadian } from '@/editor/utils/mathUtils';
 import Num3 from '@/editor/types/Num3';
 import Block from '@/editor/types/Block';
 import MatrixUtils from '@/editor/utils/MatrixUtils';
-import SelectParent from './SelectParent';
 import SceneService from '@/editor/services/scene/SceneService';
 import MoveService from './move/MoveService';
 import UpdateService from './UpdateService';
+import BlockStore from './BlockStore';
 
 class SelectTool extends Tool {
-  constructor(store: Store, scene: SceneService, move: MoveService, update: UpdateService) {
+  constructor(store: BlockStore, scene: SceneService, move: MoveService, update: UpdateService) {
     super(store, ToolName.Select, 'BiRectangle');
 
     this.scene = scene;
@@ -23,18 +20,18 @@ class SelectTool extends Tool {
   }
 
   onPointerDown(info: ToolInfo) {
-    const { blocks: meshes } = this.store.getState().blocks.present;
-    const mesh = meshes[info.eventObjectName];
+    const block = this.store.getBlocks()[info.eventObjectName];
 
-    if (mesh) {
+    if (block) {
       this.selectParent(info.eventObjectName);
     } else {
-      this.store.dispatch(setSelectedBlocks([]));
+      this.update.getUpdate().select(null).commit();
     }
   }
 
   onDrag(info: ToolInfo) {
-    const { selectedBlockIds, blocks } = this.store.getState().blocks.present;
+    const blocks = this.store.getBlocks();
+    const selectedBlockIds = this.store.getSelectedBlockIds();
 
     selectedBlockIds.forEach((blockId) => {
       const block = blocks[blockId];
@@ -44,56 +41,63 @@ class SelectTool extends Tool {
   }
 
   onDragEnd(info: ToolInfo) {
-    const { selectedBlockIds: selectedMeshIds } = this.store.getState().blocks.present;
-    const { blocks } = this.store.getState().blocks.present;
+    const selectedBlockIds = this.store.getSelectedBlockIds();
+    const blocks = this.store.getBlocks();
 
     const finalBlockIds: string[] = [];
 
-    selectedMeshIds.forEach((meshId) => {
-      const mesh = blocks[meshId];
+    selectedBlockIds.forEach((blockId) => {
+      const block = blocks[blockId];
 
-      if (mesh.children.length) {
-        finalBlockIds.push(...mesh.children);
+      if (block.children.length) {
+        finalBlockIds.push(...block.children);
       } else {
-        finalBlockIds.push(mesh.id);
+        finalBlockIds.push(block.id);
       }
     });
 
-    const updates = finalBlockIds.map((blockId) => {
-      const block = blocks[blockId];
+    const edit = this.update.getUpdate();
 
-      return this.update.updateBlock(blockId, { position: addVector(block.position, info.drag) });
-    });
+    finalBlockIds.forEach((blockId) =>
+      edit.updateBlock(blockId, { position: addVector(blocks[blockId].position, info.drag) }),
+    );
 
-    this.update.executeUpdate(updates.map((update) => ({ block: update, category: update.category })));
+    edit.commit();
   }
 
   selectParent(id: string) {
-    const { blocks: meshes, selectedBlockIds: selectedMeshIds } = this.store.getState().blocks.present;
+    const block = this.store.getBlocks()[id];
 
-    const selectParent = new SelectParent([id, ...selectedMeshIds], meshes);
-    const newSelectedMeshIds = selectParent.execute();
+    const selectedBlockId = block.parent ? block.parent : block.id;
 
-    this.store.dispatch(setSelectedBlocks(newSelectedMeshIds));
+    this.update.getUpdate().select(selectedBlockId).commit();
   }
 
   scaleMesh(scale: number, block: Block) {
-    const { selectedSettings } = this.store.getState().blockSettings.present;
+    const { selectedSettings } = this.store.getBlockSettings();
     const settings = selectedSettings[block.category];
 
     const index = VectorUtils.getAxisIndex('x');
     const newScale = [...block.scale] as Num3;
     newScale[index] = settings.scale[index] * scale;
 
-    const update = this.update.updateBlock(block.id, {
-      scale: newScale,
-    });
-
-    this.update.executeUpdate([{ block: update, category: block.category }]);
+    this.update
+      .getUpdate()
+      .updateBlock(block.id, {
+        scale: newScale,
+      })
+      .commit();
   }
 
   rotateMesh(axis: 'x' | 'y' | 'z', rotation: number) {
-    const block = getSelectedMeshes(this.store)[0];
+    const selectedBlockIds = this.store.getSelectedBlockIds();
+
+    if (selectedBlockIds.length === 0) {
+      return;
+    }
+
+    const block = this.store.getBlocks()[selectedBlockIds[0]];
+
     const mesh = this.scene.getMesh(block.id);
 
     const index = VectorUtils.getAxisIndex(axis);
@@ -111,11 +115,12 @@ class SelectTool extends Tool {
 
     const position = block.position;
 
-    const update = this.update.updateBlock(block.id, {
-      rotation: newRotation,
-    });
-
-    this.update.executeUpdate([{ block: update, category: block.category }]);
+    this.update
+      .getUpdate()
+      .updateBlock(block.id, {
+        rotation: newRotation,
+      })
+      .commit();
   }
 
   private scene: SceneService;

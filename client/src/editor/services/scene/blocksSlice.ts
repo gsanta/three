@@ -27,12 +27,16 @@ export type SpecificUpdate<T extends BlockCategory> = {
   val: BlockCategories[T];
 };
 
-export type BlockCategoryEntries<K extends BlockCategory> = {
+export type DecorationUpdate<K extends BlockCategory> = {
   decoration: BlockCategories[K];
 };
 
+export type BlockUpdate = { block: Block };
+
+export type BlockSelect = { select: string | null };
+
 // Update type constrained to keys and values from BlockCategories
-export type UpdateBlock<K extends BlockCategory> = { block: Block } | BlockCategoryEntries<K> | { remove: Block };
+export type UpdateBlock<K extends BlockCategory> = BlockUpdate | DecorationUpdate<K> | { remove: Block } | BlockSelect;
 
 export type UpdateBlocks = Array<UpdateBlock<BlockCategory>>;
 
@@ -61,12 +65,16 @@ export const blocksSlice = createSlice({
             delete state.blocks[update.remove.id];
             delete state.categories[block.category][update.remove.id];
           }
-        } else {
-          const { block, decoration } = update;
-
-          if (block) {
-            state.blocks[block.id] = block;
+        } else if ('select' in update) {
+          if (update.select === null) {
+            state.selectedBlockIds = [];
+          } else if (!state.selectedBlockIds.includes(update.select)) {
+            state.selectedBlockIds.push(update.select);
           }
+        } else if ('block' in update) {
+          state.blocks[update.block.id] = update.block;
+        } else {
+          const { decoration } = update;
 
           if (decoration) {
             state.categories[decoration.category][decoration.id] = decoration;

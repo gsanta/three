@@ -1,4 +1,3 @@
-import { Store } from '@/common/utils/store';
 import Tool, { ToolInfo } from '@/editor/services/tool/service/Tool';
 import ToolName from '@/editor/services/tool/state/ToolName';
 import SceneService from '@/editor/services/scene/SceneService';
@@ -7,9 +6,10 @@ import { Vector3 } from 'three';
 import JoinPoles from './use_cases/JoinPoles';
 import UpdateService from './UpdateService';
 import Num3 from '@/editor/types/Num3';
+import BlockStore from './BlockStore';
 
 class CableTool extends Tool {
-  constructor(store: Store, scene: SceneService, updateService: UpdateService) {
+  constructor(store: BlockStore, scene: SceneService, updateService: UpdateService) {
     super(store, ToolName.Cable);
 
     this.scene = scene;
@@ -17,7 +17,8 @@ class CableTool extends Tool {
   }
 
   onPointerDown({ eventObjectName, clientX, clientY }: ToolInfo) {
-    const { blocks: meshes, selectedBlockIds: selectedMeshIds } = this.store.getState().blocks.present;
+    const blocks = this.store.getBlocks();
+    const selectedBlockIds = this.store.getSelectedBlockIds();
     const canvasElement = this.scene.getCanvasElement();
     const camera = this.scene.getCamera();
     const mesh = this.scene.getMesh(eventObjectName);
@@ -35,7 +36,7 @@ class CableTool extends Tool {
     }
 
     const point = intersection.point;
-    const cable = selectedMeshIds.find((root) => meshes[root].name === 'cable');
+    const cable = selectedBlockIds.find((root) => blocks[root].name === 'cable');
 
     if (!cable) {
       this.createBlock([point]);
@@ -45,9 +46,9 @@ class CableTool extends Tool {
   }
 
   joinPoles() {
-    const { blocks: meshes } = this.store.getState().blocks.present;
+    const blocks = this.store.getBlocks();
 
-    const poles = Object.values(meshes).filter((mesh) => mesh.name === 'pole');
+    const poles = Object.values(blocks).filter((block) => block.name === 'pole');
 
     if (poles.length < 2) {
       return;
@@ -66,7 +67,7 @@ class CableTool extends Tool {
         { dependsOn: [] },
         { points: points.map((point) => [point.x, point.y, point.z]) as Num3[] },
       )
-      .execute();
+      .commit();
 
     // const update = this.updateService.create<'cables'>(
     //   'cable',
@@ -81,10 +82,10 @@ class CableTool extends Tool {
   private updateBlock(meshId: string, point: Vector3) {
     this.updateService
       .getUpdate()
-      .updateAssociation<'cables'>('cables', meshId, {
+      .updateDecoration<'cables'>('cables', meshId, {
         points: [[point.x, point.y, point.z]],
       })
-      .execute();
+      .commit();
     // const update = this.updateService.updateAssociation<'cables'>('cables', meshId, {
     //   points: [[point.x, point.y, point.z]],
     // });

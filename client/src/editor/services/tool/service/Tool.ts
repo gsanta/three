@@ -4,6 +4,7 @@ import type { Store } from '../../../../common/utils/store';
 import { Mesh, Vector3 } from 'three';
 import Num3 from '@/editor/types/Num3';
 import Block from '@/editor/types/Block';
+import BlockStore from '@/editor/features/block/service/BlockStore';
 
 export interface ToolInfo {
   pos: Vector3;
@@ -22,9 +23,9 @@ abstract class Tool {
 
   showOnToolbar = true;
 
-  protected store: Store;
+  protected store: BlockStore;
 
-  constructor(store: Store, name: ToolName, iconName?: IconName) {
+  constructor(store: BlockStore, name: ToolName, iconName?: IconName) {
     this.name = name;
     this.iconName = iconName;
     this.store = store;

@@ -2,7 +2,7 @@
     "blocks": {
         "group": {},
         "box": {
-            "category": "decoration",
+            "category": "decorations",
             "geometry": "box"
         },
         "wall": {

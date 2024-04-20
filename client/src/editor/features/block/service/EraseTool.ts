@@ -1,40 +1,21 @@
-import { Store } from '@/common/utils/store';
-import { update } from '@/editor/services/scene/blocksSlice';
 import Tool, { ToolInfo } from '@/editor/services/tool/service/Tool';
 import ToolName from '@/editor/services/tool/state/ToolName';
+import Eraser from './Eraser';
+import BlockStore from './BlockStore';
+import UpdateService from './UpdateService';
 
 class EraseTool extends Tool {
-  constructor(store: Store) {
+  constructor(store: BlockStore, update: UpdateService) {
     super(store, ToolName.Erase);
+
+    this.eraser = new Eraser(store, update);
   }
 
   onPointerDown({ eventObjectName }: ToolInfo) {
-    const {
-      rootBlocksIds: roots,
-      blocks: meshes,
-      selectedBlockIds: selectedMeshIds,
-    } = this.store.getState().blocks.present;
-
-    const mesh = meshes[eventObjectName];
-
-    const newMeshes = { ...meshes };
-    let newRoots = [...roots];
-    let newSelectedMeshIds = [...selectedMeshIds];
-
-    if (mesh) {
-      delete newMeshes[mesh.id];
-      newRoots = newRoots.filter((root) => root !== mesh.id);
-      newSelectedMeshIds = newSelectedMeshIds.filter((id) => id !== mesh.id);
-    }
-
-    this.store.dispatch(
-      update({
-        blocks: newMeshes,
-        rootBlocksIds: newRoots,
-        selectedBlockIds: newSelectedMeshIds,
-      }),
-    );
+    this.eraser.erase([eventObjectName]);
   }
+
+  private eraser: Eraser;
 }
 
 export default EraseTool;

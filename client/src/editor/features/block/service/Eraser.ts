@@ -1,8 +1,8 @@
 import BlockStore from './BlockStore';
-import Update from './Update';
+import Edit from './Edit';
 import UpdateService from './UpdateService';
 
-class EraseService {
+class Eraser {
   constructor(store: BlockStore, update: UpdateService) {
     this.store = store;
     this.update = update;
@@ -27,9 +27,11 @@ class EraseService {
     }
 
     blocksToRemove.forEach((blockId) => this.removeBlock(blockId, edit));
+
+    edit.commit();
   }
 
-  private removeBlock(blockId: string, edit: Update) {
+  private removeBlock(blockId: string, edit: Edit) {
     const block = this.store.getBlocks()[blockId];
 
     const parent = this.store.getBlocks()[block.parent || ''];
@@ -39,9 +41,12 @@ class EraseService {
       edit.updateBlock(block.id, { children: newChildren });
     }
 
-    block.dependsOn.forEach((dependsOnId) => {});
+    block.dependsOn.forEach((dependsOnId) => {
+      const dependingBlock = this.store.getBlocks()[dependsOnId];
+      const dependents = dependingBlock.dependents.filter((id) => id !== block.id);
 
-    delete this.store.getBlocks()[blockId];
+      edit.updateBlock(dependsOnId, { dependents }, { mergeArrays: false });
+    });
   }
 
   private store: BlockStore;
@@ -49,4 +54,4 @@ class EraseService {
   private update: UpdateService;
 }
 
-export default EraseService;
+export default Eraser;

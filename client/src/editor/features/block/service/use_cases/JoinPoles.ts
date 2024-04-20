@@ -56,7 +56,7 @@ class JoinPoles {
       },
     );
 
-    edit.execute();
+    edit.commit();
   }
 
   private scene: SceneService;
