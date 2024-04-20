@@ -1,17 +1,22 @@
 import Cable from '../services/scene/types/Cable';
 import Pole from '../services/scene/types/Pole';
 
+type BlockCategory = 'cables' | 'decorations' | 'poles' | 'walls';
+
+export type EmptyBlockCategory<T extends BlockCategory> = {
+  category: T;
+  id: string;
+};
+
 export type BlockCategories = {
   cables: Cable;
-  decorations: Record<string, never>;
+  decorations: EmptyBlockCategory<'decorations'>;
   poles: Pole;
-  walls: Record<string, never>;
+  walls: EmptyBlockCategory<'walls'>;
 };
 
 export type BlockCategoryRecords = {
   [K in keyof BlockCategories]: Record<string, BlockCategories[K]>;
 };
-
-type BlockCategory = keyof BlockCategories;
 
 export default BlockCategory;

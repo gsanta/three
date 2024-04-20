@@ -1,13 +1,13 @@
 import { Store } from '../../../../common/utils/store';
 import Tool, { ToolInfo } from '../../../services/tool/service/Tool';
 import ToolName from '../../../services/tool/state/ToolName';
-import BlockService from './BlockService';
+import UpdateService from './UpdateService';
 
 class AddTool extends Tool {
-  constructor(store: Store, blockFactory: BlockService) {
+  constructor(store: Store, updateService: UpdateService) {
     super(store, ToolName.Add, 'BiPlus');
 
-    this.blockFactory = blockFactory;
+    this.updateService = updateService;
   }
 
   onPointerDown({ pos }: ToolInfo) {
@@ -17,10 +17,13 @@ class AddTool extends Tool {
       return;
     }
 
-    this.blockFactory.create(selectedBlockName, { position: [pos.x, pos.y, pos.z] });
+    this.updateService
+      .getUpdate()
+      .create(selectedBlockName, { position: [pos.x, pos.y, pos.z] })
+      .execute();
   }
 
-  private blockFactory: BlockService;
+  private updateService: UpdateService;
 }
 
 export default AddTool;

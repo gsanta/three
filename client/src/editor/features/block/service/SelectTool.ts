@@ -11,14 +11,14 @@ import MatrixUtils from '@/editor/utils/MatrixUtils';
 import SelectParent from './SelectParent';
 import SceneService from '@/editor/services/scene/SceneService';
 import MoveService from './move/MoveService';
-import BlockService from './BlockService';
+import UpdateService from './UpdateService';
 
 class SelectTool extends Tool {
-  constructor(store: Store, scene: SceneService, move: MoveService, blockService: BlockService) {
+  constructor(store: Store, scene: SceneService, move: MoveService, update: UpdateService) {
     super(store, ToolName.Select, 'BiRectangle');
 
     this.scene = scene;
-    this.blockService = blockService;
+    this.update = update;
     this.move = move;
   }
 
@@ -62,10 +62,10 @@ class SelectTool extends Tool {
     const updates = finalBlockIds.map((blockId) => {
       const block = blocks[blockId];
 
-      return this.blockService.updateBlock(blockId, { position: addVector(block.position, info.drag) });
+      return this.update.updateBlock(blockId, { position: addVector(block.position, info.drag) });
     });
 
-    this.blockService.executeUpdate(updates.map((update) => ({ block: update, category: update.category })));
+    this.update.executeUpdate(updates.map((update) => ({ block: update, category: update.category })));
   }
 
   selectParent(id: string) {
@@ -85,11 +85,11 @@ class SelectTool extends Tool {
     const newScale = [...block.scale] as Num3;
     newScale[index] = settings.scale[index] * scale;
 
-    const update = this.blockService.updateBlock(block.id, {
+    const update = this.update.updateBlock(block.id, {
       scale: newScale,
     });
 
-    this.blockService.executeUpdate([{ block: update, category: block.category }]);
+    this.update.executeUpdate([{ block: update, category: block.category }]);
   }
 
   rotateMesh(axis: 'x' | 'y' | 'z', rotation: number) {
@@ -111,16 +111,16 @@ class SelectTool extends Tool {
 
     const position = block.position;
 
-    const update = this.blockService.updateBlock(block.id, {
+    const update = this.update.updateBlock(block.id, {
       rotation: newRotation,
     });
 
-    this.blockService.executeUpdate([{ block: update, category: block.category }]);
+    this.update.executeUpdate([{ block: update, category: block.category }]);
   }
 
   private scene: SceneService;
 
-  private blockService: BlockService;
+  private update: UpdateService;
 
   private move: MoveService;
 }

@@ -27,14 +27,14 @@ export type SpecificUpdate<T extends BlockCategory> = {
   val: BlockCategories[T];
 };
 
-type BlockCategoryEntries = {
-  [K in keyof BlockCategories]: { block?: Block; category: K; decoration?: BlockCategories[K] };
-}[keyof BlockCategories];
+export type BlockCategoryEntries<K extends BlockCategory> = {
+  decoration: BlockCategories[K];
+};
 
 // Update type constrained to keys and values from BlockCategories
-export type UpdateBlock = BlockCategoryEntries;
+export type UpdateBlock<K extends BlockCategory> = { block: Block } | BlockCategoryEntries<K> | { remove: Block };
 
-export type UpdateBlocks = Array<UpdateBlock>;
+export type UpdateBlocks = Array<UpdateBlock<BlockCategory>>;
 
 export const blocksSlice = createSlice({
   name: 'frame',
@@ -43,13 +43,34 @@ export const blocksSlice = createSlice({
     updateBlocks(state: BlocksState, action: PayloadAction<UpdateBlocks>) {
       const updates = action.payload;
 
-      updates.forEach(({ block, category, decoration }) => {
-        if (block) {
-          state.blocks[block.id] = block;
-        }
+      updates.forEach((update) => {
+        if ('remove' in update) {
+          const rootIndex = state.rootBlocksIds.indexOf(update.remove.id);
+          if (rootIndex !== -1) {
+            state.rootBlocksIds.splice(rootIndex, 1);
+          }
 
-        if (decoration) {
-          state.categories[category][decoration.id] = decoration;
+          const selectedIndex = state.selectedBlockIds.indexOf(update.remove.id);
+          if (selectedIndex !== -1) {
+            state.selectedBlockIds.splice(rootIndex, 1);
+          }
+
+          const block = state.blocks[update.remove.id];
+
+          if (block) {
+            delete state.blocks[update.remove.id];
+            delete state.categories[block.category][update.remove.id];
+          }
+        } else {
+          const { block, decoration } = update;
+
+          if (block) {
+            state.blocks[block.id] = block;
+          }
+
+          if (decoration) {
+            state.categories[decoration.category][decoration.id] = decoration;
+          }
         }
       });
     },

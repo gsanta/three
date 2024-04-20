@@ -1,16 +1,14 @@
 import { Store } from '@/common/utils/store';
 import Tool, { ToolInfo } from '@/editor/services/tool/service/Tool';
 import ToolName from '@/editor/services/tool/state/ToolName';
-import SceneService from '@/editor/services/scene/SceneService';
 import { colorToArray } from '@/editor/services/tool/colorUtils';
-import BlockService from './BlockService';
+import UpdateService from './UpdateService';
 
 class ColorTool extends Tool {
-  constructor(store: Store, scene: SceneService, blockService: BlockService) {
+  constructor(store: Store, update: UpdateService) {
     super(store, ToolName.Color);
 
-    this.scene = scene;
-    this.blockService = blockService;
+    this.update = update;
   }
 
   onPointerDown({ eventObjectName }: ToolInfo) {
@@ -21,16 +19,15 @@ class ColorTool extends Tool {
       return;
     }
 
-    const update = this.blockService.updateBlock(eventObjectName, {
-      color: colorToArray(this.store.getState().blockSettings.present.color),
-    });
-
-    this.blockService.executeUpdate([{ block: update, category: block.category }]);
+    this.update
+      .getUpdate()
+      .updateBlock(eventObjectName, {
+        color: colorToArray(this.store.getState().blockSettings.present.color),
+      })
+      .execute();
   }
 
-  private scene: SceneService;
-
-  private blockService: BlockService;
+  private update: UpdateService;
 }
 
 export default ColorTool;

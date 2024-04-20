@@ -27,6 +27,8 @@ class BlockCreator {
       rotation: rotation as Num3,
       scale: scale,
       children: [],
+      dependents: [],
+      dependsOn: [],
     };
   }
 }

@@ -1,5 +1,6 @@
 type Pole = {
   id: string;
+  category: 'poles';
   pins: {
     pin1: string | null;
     pin2: string | null;
