@@ -1,22 +1,31 @@
 import { addVector } from '@/editor/utils/vectorUtils';
 import WrappedMeshProps from '../types/WrappedMeshProps';
 import useEditorContext from '@/app/editor/EditorContext';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { Color, Mesh } from 'three';
 
 const BoxMesh = ({ meshInfo, meshProps, materialProps, parent }: WrappedMeshProps) => {
   const { scene } = useEditorContext();
 
-  const meshRef = useRef<Mesh>(null);
+  // const meshRef = useRef<Mesh>(null);
 
-  useEffect(() => {
-    const id = meshRef.current?.userData.modelId;
-    scene.addMesh(meshRef.current);
+  const ref = useCallback(
+    (mesh: Mesh) => {
+      if (mesh) {
+        scene.addMesh(mesh);
+      }
+    },
+    [scene],
+  );
 
-    return () => {
-      scene.removeMesh(id);
-    };
-  }, [scene]);
+  // useEffect(() => {
+  //   const id = meshRef.current?.userData.modelId;
+  //   scene.addMesh(meshRef.current);
+
+  //   return () => {
+  //     scene.removeMesh(id);
+  //   };
+  // }, [scene]);
 
   return (
     <mesh
@@ -28,7 +37,7 @@ const BoxMesh = ({ meshInfo, meshProps, materialProps, parent }: WrappedMeshProp
       {...meshProps}
       key={meshInfo.id}
       name={meshInfo.name}
-      ref={meshRef}
+      ref={ref}
       userData={{ modelId: meshInfo.id }}
     >
       <boxGeometry key="geometry" />

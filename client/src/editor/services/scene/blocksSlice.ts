@@ -73,6 +73,10 @@ export const blocksSlice = createSlice({
           }
         } else if ('block' in update) {
           state.blocks[update.block.id] = update.block;
+
+          if (!update.block.parent) {
+            state.rootBlocksIds.push(update.block.id);
+          }
         } else {
           const { decoration } = update;
 
@@ -80,39 +84,6 @@ export const blocksSlice = createSlice({
             state.categories[decoration.category][decoration.id] = decoration;
           }
         }
-      });
-    },
-
-    deleteMeshes(state, action: PayloadAction<string[]>) {
-      const removables = [...action.payload];
-
-      state.rootBlocksIds = state.rootBlocksIds.filter((root) => !removables.includes(root));
-
-      const allRemovables: string[] = [];
-
-      while (removables.length) {
-        const next = removables.shift();
-        const mesh = state.blocks[next || ''];
-        removables.push(...mesh.children);
-        allRemovables.push(next || '');
-      }
-
-      allRemovables.forEach((meshId) => {
-        const mesh = state.blocks[meshId];
-
-        if (!mesh) {
-          return;
-        }
-
-        if (mesh.parent) {
-          const parent = state.blocks[mesh.parent];
-
-          if (parent) {
-            parent.children = parent.children.filter((child) => child !== meshId);
-          }
-        }
-
-        delete state.blocks[meshId];
       });
     },
 
@@ -128,6 +99,6 @@ export const blocksSlice = createSlice({
   },
 });
 
-export const { deleteMeshes, setSelectedBlocks, update, updateBlocks } = blocksSlice.actions;
+export const { setSelectedBlocks, update, updateBlocks } = blocksSlice.actions;
 
 export default blocksSlice.reducer;
