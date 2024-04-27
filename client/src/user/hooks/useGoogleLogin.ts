@@ -5,6 +5,7 @@ import { AxiosError } from 'axios';
 import { useMutation } from 'react-query';
 import { setUser } from '../userSlice';
 import { useCallback } from 'react';
+import { signIn, useSession } from 'next-auth/react';
 
 type GoogleLoginResponse = {
   id: number;
@@ -18,14 +19,13 @@ type UseGoogleLoginProps = {
 export const useGoogleLogin = ({ onClose }: UseGoogleLoginProps) => {
   const dispatch = useAppDispatch();
 
+  const { data: session, status } = useSession();
+
   const { mutate, error, isLoading, reset } = useMutation<GoogleLoginResponse, AxiosError<ServerError>, string>(
-    (credential) =>
-      api.post('/users/sign_in/google', undefined, {
-        headers: {
-          Authorization: `Bearer ${credential}`,
-          'Content-Type': 'application/json',
-        },
-      }),
+    async () => {
+      if (!(status === 'loading') && !session) void signIn('google');
+      if (session) window.close();
+    },
     {
       onSuccess(data) {
         dispatch(setUser({ isLoggedIn: true, email: data.email }));

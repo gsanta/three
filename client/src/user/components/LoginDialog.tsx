@@ -1,10 +1,9 @@
 import Dialog, { DialogBody, DialogButtons, DialogFooter } from '../../common/components/Dialog';
 import { FormControl, FormLabel, Input, FormErrorMessage, Button, Box } from '@chakra-ui/react';
 import React from 'react';
-import { emailRegex } from '../utils/userUtils';
 import ErrorMessage from '../../common/components/ErrorMessage';
 import useEmailLogin from '../hooks/useEmailLogin';
-import useGoogleLogin from '../hooks/useGoogleLogin';
+import { signIn } from 'next-auth/react';
 
 type LoginDialogProps = {
   isOpen: boolean;
@@ -12,20 +11,14 @@ type LoginDialogProps = {
 };
 
 const LoginDialog = ({ isOpen, onClose }: LoginDialogProps) => {
-  const { loginGooglError, isLoginGoogleLoading, loginGoogleReset } = useGoogleLogin({
-    onClose,
-  });
-
   const {
     form: { handleSubmit, formErrors, register, reset: resetForm },
     query: { loginEmail, loginEmailError, isLoginEmailLoding },
   } = useEmailLogin({
     onClose,
-    resetLogin: loginGoogleReset,
   });
 
   const handleClose = () => {
-    loginGoogleReset();
     resetForm();
     onClose();
   };
@@ -33,29 +26,19 @@ const LoginDialog = ({ isOpen, onClose }: LoginDialogProps) => {
   return (
     <Dialog isOpen={isOpen} onClose={handleClose} title="Log in">
       <form onSubmit={handleSubmit(loginEmail)}>
-        <DialogBody>
+        <DialogBody display="flex" flexDir="column" gap="1rem">
           <FormControl isInvalid={Boolean(formErrors.email)}>
             <FormLabel>Email</FormLabel>
-            <Input
-              {...register('email', {
-                required: {
-                  value: true,
-                  message: 'Please enter your email address',
-                },
-                pattern: {
-                  value: emailRegex,
-                  message: 'Invalid email address',
-                },
-              })}
-            />
+            <Input {...register('email')} />
             <FormErrorMessage>{formErrors.email?.message}</FormErrorMessage>
           </FormControl>
-          <FormControl>
+          <FormControl isInvalid={Boolean(formErrors.password)}>
             <FormLabel>Password</FormLabel>
             <Input type="password" {...register('password')} />
+            <FormErrorMessage>{formErrors.password?.message}</FormErrorMessage>
           </FormControl>
           <Box display="flex" marginTop="4" justifyContent="space-around">
-            {/* <GoogleLogin onLogin={loginGoogle} /> */}
+            <Button onClick={() => signIn('google')}>Log in with google</Button>
           </Box>
           {loginEmailError && (
             <ErrorMessage
@@ -65,14 +48,13 @@ const LoginDialog = ({ isOpen, onClose }: LoginDialogProps) => {
               }
             />
           )}
-          {loginGooglError && <ErrorMessage error={loginGooglError} />}
         </DialogBody>
         <DialogFooter>
           <DialogButtons>
-            <Button size="sm" onClick={handleClose} isDisabled={isLoginEmailLoding || isLoginGoogleLoading}>
+            <Button size="sm" onClick={handleClose} isDisabled={isLoginEmailLoding}>
               Close
             </Button>
-            <Button size="sm" colorScheme="orange" type="submit" isLoading={isLoginEmailLoding || isLoginGoogleLoading}>
+            <Button size="sm" colorScheme="orange" type="submit" isLoading={isLoginEmailLoding}>
               Log in
             </Button>
           </DialogButtons>

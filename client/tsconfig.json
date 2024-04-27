@@ -9,7 +9,8 @@
     },
     "outDir": "./build",
     "typeRoots": [
-      "./node_modules/@types"
+      "./node_modules/@types",
+      "./src/type_definitions"
     ],
     "types": [
       "node",
@@ -48,6 +49,9 @@
       }
     ]
   },
+  "files": [
+    "src/type_definitions/global.d.ts"
+  ],
   "include": [
     ".eslintrc.js",
     "webpack.config.js",
@@ -60,8 +64,7 @@
     "engine/**/*.ts",
     "engine/**/*.js",
     "src/**/*.tsx",
-    ".next/types/**/*.ts"
-, "src/editor/services/scene/ui/BoxMesh.tsz"  ],
+    ".next/types/**/*.ts" ],
   "exclude": [
     "node_modules"
   ]

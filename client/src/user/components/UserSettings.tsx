@@ -1,37 +1,34 @@
-import { signOut } from '../userSlice';
-import { useAppDispatch, useAppSelector } from '../../common/hooks/hooks';
+import { useAppSelector } from '../../common/hooks/hooks';
 import { Avatar, Button, ButtonGroup, useDisclosure, useToast } from '@chakra-ui/react';
-import React from 'react';
-import RegistrationDialog from './RegistrationDialog';
+import SignUpDialog from './SignUpDialog';
 import LoginDialog from './LoginDialog';
 import UserDialog from './UserDialog';
-import { useMutation } from 'react-query';
-import api from '../../common/utils/api';
+import { signOut, useSession } from 'next-auth/react';
 
 const UserSettings = () => {
   const toast = useToast();
-  const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
-  const dispatch = useAppDispatch();
+  const { data: session } = useSession();
+
+  const isLoggedIn = session?.user?.email;
 
   const { isOpen: isSignInDialogOpen, onOpen: onSignInDialogOpen, onClose: onSignInDialogClose } = useDisclosure();
   const { isOpen: isSignUpDialogOpen, onOpen: onSignUpDialogOpen, onClose: onSignUpDialogClose } = useDisclosure();
   const { isOpen: isUserDialogOpen, onOpen: onUserDialogOpen, onClose: onUserDialogClose } = useDisclosure();
 
-  const { mutate: logOut } = useMutation(() => api.delete('/users/sign_out'), {
-    onSuccess() {
-      dispatch(signOut());
+  const handleLogout = async () => {
+    try {
+      await signOut({ redirect: false });
       toast({
         title: 'Logged out successfully',
         position: 'top',
       });
-    },
-    onError() {
+    } catch {
       toast({
         title: 'Failed to log out',
         position: 'top',
       });
-    },
-  });
+    }
+  };
 
   return (
     <>
@@ -40,7 +37,7 @@ const UserSettings = () => {
           <Button size="sm" variant="ghost" onClick={onUserDialogOpen}>
             <Avatar name="Dan Abrahmov" size="sm" />
           </Button>
-          <Button size="sm" onClick={() => logOut()}>
+          <Button size="sm" onClick={handleLogout}>
             Log out
           </Button>
         </ButtonGroup>
@@ -55,7 +52,7 @@ const UserSettings = () => {
         </ButtonGroup>
       )}
       <LoginDialog isOpen={isSignInDialogOpen} onClose={onSignInDialogClose} />
-      <RegistrationDialog isOpen={isSignUpDialogOpen} onClose={onSignUpDialogClose} />
+      <SignUpDialog isOpen={isSignUpDialogOpen} onClose={onSignUpDialogClose} />
       <UserDialog isOpen={isUserDialogOpen} onClose={onUserDialogClose} />
     </>
   );

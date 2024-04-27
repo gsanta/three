@@ -1,29 +1,27 @@
 import { ServerError } from '../../common/components/ErrorMessage';
-import api from '../../common/utils/api';
 import { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { setUser } from '../userSlice';
 import { useAppDispatch } from '../../common/hooks/hooks';
 import { useCallback } from 'react';
-
-type LoginRequestData = {
-  email: string;
-  password: string;
-};
+import { signIn } from 'next-auth/react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { LoginSchema, loginSchema } from '@/schemas/LoginSchema';
 
 type UseEmailLoginProps = {
   onClose(): void;
-  resetLogin(): void;
 };
 
-const useEmailLogin = ({ onClose, resetLogin }: UseEmailLoginProps) => {
+const useEmailLogin = ({ onClose }: UseEmailLoginProps) => {
   const dispatch = useAppDispatch();
 
-  const { mutate, error, isLoading } = useMutation<unknown, AxiosError<ServerError>, LoginRequestData>(
-    async (data) => {
-      const resp = await api.post('/users/sign_in', {
-        user: data,
+  const { mutate, error, isLoading } = useMutation<unknown, AxiosError<ServerError>, LoginSchema>(
+    async ({ email, password }) => {
+      const resp = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
       });
       return resp;
     },
@@ -40,20 +38,16 @@ const useEmailLogin = ({ onClose, resetLogin }: UseEmailLoginProps) => {
     handleSubmit,
     formState: { errors: formErrors },
     reset,
-  } = useForm({
-    defaultValues: {
-      email: '',
-      password: '',
-    },
+  } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
     mode: 'onBlur',
   });
 
   const loginEmail = useCallback(
-    async (data: LoginRequestData) => {
-      resetLogin();
+    async (data: LoginSchema) => {
       mutate(data);
     },
-    [mutate, resetLogin],
+    [mutate],
   );
 
   return {

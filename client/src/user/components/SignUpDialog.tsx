@@ -1,23 +1,22 @@
 import Dialog, { DialogBody, DialogButtons, DialogFooter } from '../../common/components/Dialog';
 import { FormControl, FormLabel, Input, FormErrorMessage, Button, Box } from '@chakra-ui/react';
 import React from 'react';
-import { emailRegex } from '../utils/userUtils';
 import useEmailRegistration from '../hooks/useEmailRegistration';
 import useGoogleLogin from '../hooks/useGoogleLogin';
 import ErrorMessage from '../../common/components/ErrorMessage';
 
-type RegistrationDialogProps = {
+type SignUpDialogProps = {
   isOpen: boolean;
   onClose(): void;
 };
 
-const RegistrationDialog = ({ isOpen, onClose }: RegistrationDialogProps) => {
+const SignUpDialog = ({ isOpen, onClose }: SignUpDialogProps) => {
   const { loginGooglError, isLoginGoogleLoading, loginGoogleReset } = useGoogleLogin({
     onClose,
   });
 
   const {
-    form: { handleSubmit, formErrors, register, watch, reset },
+    form: { handleSubmit, formErrors, register, reset },
     query: { registerEmail, registerEmailError, isRegisterEmailLoading },
   } = useEmailRegistration({ onClose, resetLogin: loginGoogleReset });
 
@@ -30,53 +29,21 @@ const RegistrationDialog = ({ isOpen, onClose }: RegistrationDialogProps) => {
   return (
     <Dialog isOpen={isOpen} onClose={handleClose} title="Sign up">
       <form onSubmit={handleSubmit(registerEmail)}>
-        <DialogBody>
+        <DialogBody display="flex" flexDirection="column" gap="1rem">
           <FormControl isInvalid={Boolean(formErrors.email)}>
             <FormLabel>Email</FormLabel>
-            <Input
-              {...register('email', {
-                required: {
-                  value: true,
-                  message: 'Email is required',
-                },
-                pattern: {
-                  value: emailRegex,
-                  message: 'Invalid email address',
-                },
-              })}
-            />
+            <Input {...register('email')} />
             <FormErrorMessage>{formErrors.email?.message}</FormErrorMessage>
           </FormControl>
           <FormControl isInvalid={Boolean(formErrors.password)}>
             <FormLabel>Password</FormLabel>
-            <Input
-              type="password"
-              {...register('password', {
-                required: {
-                  value: true,
-                  message: 'Password is required',
-                },
-              })}
-            />
+            <Input type="password" {...register('password')} />
+            <FormErrorMessage>{formErrors.password?.message}</FormErrorMessage>
           </FormControl>
-          <FormControl isInvalid={Boolean(formErrors.password_confirmation)}>
+          <FormControl isInvalid={Boolean(formErrors.passwordConfirmation)}>
             <FormLabel>Password Confirmation</FormLabel>
-            <Input
-              type="password"
-              {...register('password_confirmation', {
-                required: {
-                  value: true,
-                  message: 'Password confirmation is required',
-                },
-                validate: (val: string) => {
-                  if (watch('password') != val) {
-                    return 'Your passwords do no match';
-                  }
-                  return undefined;
-                },
-              })}
-            />
-            <FormErrorMessage>{formErrors.password_confirmation?.message}</FormErrorMessage>
+            <Input type="password" {...register('passwordConfirmation')} />
+            <FormErrorMessage>{formErrors.passwordConfirmation?.message}</FormErrorMessage>
           </FormControl>
           <Box display="flex" marginTop="4" justifyContent="space-around">
             {/* <GoogleLogin onLogin={loginGoogle} /> */}
@@ -111,4 +78,4 @@ const RegistrationDialog = ({ isOpen, onClose }: RegistrationDialogProps) => {
   );
 };
 
-export default RegistrationDialog;
+export default SignUpDialog;

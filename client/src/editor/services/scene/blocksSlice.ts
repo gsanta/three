@@ -41,7 +41,7 @@ export type UpdateBlock<K extends BlockCategory> = BlockUpdate | DecorationUpdat
 export type UpdateBlocks = Array<UpdateBlock<BlockCategory>>;
 
 export const blocksSlice = createSlice({
-  name: 'frame',
+  name: 'block',
   initialState: initialSceneState,
   reducers: {
     updateBlocks(state: BlocksState, action: PayloadAction<UpdateBlocks>) {

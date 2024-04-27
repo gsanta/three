@@ -7,12 +7,8 @@ import { useMutation } from 'react-query';
 import { setUser } from '../userSlice';
 import { useCallback } from 'react';
 import { ServerError } from '../../common/components/ErrorMessage';
-
-type RegistrationRequestData = {
-  email: string;
-  password: string;
-  password_confirmation: string;
-};
+import { zodResolver } from '@hookform/resolvers/zod';
+import { RegisterSchema, registerSchema } from '@/schemas/RegisterSchema';
 
 type UseEmailRegistrationProps = {
   onClose(): void;
@@ -28,20 +24,19 @@ const useEmailRegistration = ({ onClose, resetLogin }: UseEmailRegistrationProps
     formState: { errors: formErrors },
     reset,
     watch,
-  } = useForm<RegistrationRequestData>({
+  } = useForm<RegisterSchema>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       email: '',
       password: '',
-      password_confirmation: '',
+      passwordConfirmation: '',
     },
     mode: 'onTouched',
   });
 
-  const { mutate, isLoading, error } = useMutation<unknown, AxiosError<ServerError>, RegistrationRequestData>(
+  const { mutate, isLoading, error } = useMutation<unknown, AxiosError<ServerError>, RegisterSchema>(
     async (data) => {
-      const resp = await api.post(usersPath, {
-        user: data,
-      });
+      const resp = await api.post(usersPath, data);
 
       return resp;
     },
@@ -54,7 +49,7 @@ const useEmailRegistration = ({ onClose, resetLogin }: UseEmailRegistrationProps
   );
 
   const handleRegistration = useCallback(
-    (data: RegistrationRequestData) => {
+    (data: RegisterSchema) => {
       resetLogin();
       reset();
       mutate(data);

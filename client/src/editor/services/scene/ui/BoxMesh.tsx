@@ -18,14 +18,14 @@ const BoxMesh = ({ meshInfo, meshProps, materialProps, parent }: WrappedMeshProp
     [scene],
   );
 
-  // useEffect(() => {
-  //   const id = meshRef.current?.userData.modelId;
-  //   scene.addMesh(meshRef.current);
+  useEffect(() => {
+    const id = meshRef.current?.userData.modelId;
+    scene.addMesh(meshRef.current);
 
-  //   return () => {
-  //     scene.removeMesh(id);
-  //   };
-  // }, [scene]);
+    return () => {
+      scene.removeMesh(ref);
+    };
+  }, [scene]);
 
   return (
     <mesh
