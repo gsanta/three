@@ -1,8 +1,8 @@
-import ExportJson from '@/client/editor/services/io/ExportJson';
-import ImportJson from '@/client/editor/services/io/ImportJson';
-import SceneService from '@/client/editor/services/scene/SceneService';
-import KeyboardService from '@/client/editor/services/tool/service/KeyboardService';
-import ToolService from '@/client/editor/services/tool/service/ToolService';
+import ExportJson from '@/client/editor/features/block/services/io/ExportJson';
+import ImportJson from '@/client/editor/features/block/services/io/ImportJson';
+import SceneStore from '@/client/editor/features/scene/SceneStore';
+import KeyboardService from '@/client/editor/features/tool/service/KeyboardService';
+import ToolService from '@/client/editor/features/tool/service/ToolService';
 import { createContext, useContext } from 'react';
 
 export type EditorContextType = {
@@ -10,7 +10,7 @@ export type EditorContextType = {
   keyboard: KeyboardService;
   exporter: ExportJson;
   importer: ImportJson;
-  scene: SceneService;
+  scene: SceneStore;
 };
 
 export const EditorContext = createContext<EditorContextType | undefined>(undefined);

@@ -1,4 +1,3 @@
-import { useAppSelector } from '../../common/hooks/hooks';
 import { Avatar, Button, ButtonGroup, useDisclosure, useToast } from '@chakra-ui/react';
 import SignUpDialog from './SignUpDialog';
 import LoginDialog from './LoginDialog';

@@ -1,20 +1,18 @@
 import undoable, { StateWithHistory } from 'redux-undo';
-import blockSettingsSlice, { BlockSettingsState } from '../../editor/features/block/blockSettingsSlice';
-import blocksSlice, { BlocksState } from '../../editor/services/scene/blocksSlice';
+import templateSlice, { BlockSettingsState } from '../../editor/features/template/templateSlice';
+import blockSlice, { BlockState } from '../../editor/features/block/blockSlice';
 import settingsSlice, { SettingsState } from '../../editor/features/settings/state/settingsSlice';
-import toolSlice, { ToolState } from '../../editor/services/tool/state/toolSlice';
-import userSlice, { UserState } from '../../user/userSlice';
+import toolSlice, { ToolState } from '../../editor/features/tool/toolSlice';
 import { EnhancedStore, configureStore } from '@reduxjs/toolkit';
 
-const blockSettingsSliceUndoable = undoable(blockSettingsSlice, { filter: () => false });
-const sceneSliceUndoable = undoable(blocksSlice);
+const blockSettingsSliceUndoable = undoable(templateSlice, { filter: () => false });
+const sceneSliceUndoable = undoable(blockSlice);
 
 export type RootState = {
   settings: SettingsState;
   tool: ToolState;
-  user: UserState;
-  blockSettings: StateWithHistory<BlockSettingsState>;
-  blocks: StateWithHistory<BlocksState>;
+  tempalte: StateWithHistory<BlockSettingsState>;
+  block: StateWithHistory<BlockState>;
 };
 
 export function setupStore(preloadedState?: RootState): EnhancedStore<RootState> {
@@ -22,9 +20,8 @@ export function setupStore(preloadedState?: RootState): EnhancedStore<RootState>
     reducer: {
       settings: settingsSlice,
       tool: toolSlice,
-      user: userSlice,
-      blockSettings: blockSettingsSliceUndoable,
-      blocks: sceneSliceUndoable,
+      template: blockSettingsSliceUndoable,
+      block: sceneSliceUndoable,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
     preloadedState,
@@ -40,6 +37,6 @@ export type AppDispatch = typeof store.dispatch;
 export const store = setupStore();
 
 export type PreloadedState = Omit<RootState, 'blocks' | 'blockSettings'> & {
-  blocks: BlocksState;
+  blocks: BlockState;
   blockSettings: BlockSettingsState;
 };

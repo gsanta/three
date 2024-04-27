@@ -4,11 +4,11 @@ import { useAppDispatch } from '../hooks/hooks';
 import { store } from '../utils/store';
 import React, { ReactNode, useEffect, useMemo } from 'react';
 import { Provider } from 'react-redux';
-import AddTool from '@/client/editor/features/block/service/AddTool';
-import ToolService from '@/client/editor/services/tool/service/ToolService';
-import SelectTool from '@/client/editor/features/block/service/SelectTool';
-import KeyboardService from '@/client/editor/services/tool/service/KeyboardService';
-import GroupTool from '@/client/editor/features/block/service/GroupTool';
+import AddTool from '@/client/editor/features/block/use_cases/add/AddTool';
+import ToolService from '@/client/editor/features/tool/service/ToolService';
+import SelectTool from '@/client/editor/features/block/use_cases/select/SelectTool';
+import KeyboardService from '@/client/editor/features/tool/service/KeyboardService';
+import GroupTool from '@/client/editor/features/block/use_cases/group/GroupTool';
 
 type ProtectedPageProps = {
   children: ReactNode;

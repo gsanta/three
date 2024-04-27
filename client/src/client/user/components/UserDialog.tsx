@@ -1,12 +1,11 @@
 import Dialog, { DialogBody } from '../../common/components/Dialog';
-import { useAppDispatch, useAppSelector } from '../../common/hooks/hooks';
 import api from '../../common/utils/api';
 import { usersPath } from '../../common/utils/routes';
 import { Avatar, Box, Button, ButtonGroup, FormControl, FormErrorMessage, Text } from '@chakra-ui/react';
 import { AxiosError } from 'axios';
+import { useSession } from 'next-auth/react';
 import React from 'react';
 import { useMutation } from 'react-query';
-import { signOut } from '../userSlice';
 
 type UserDialogProps = {
   isOpen: boolean;
@@ -14,8 +13,7 @@ type UserDialogProps = {
 };
 
 const UserDialog = ({ isOpen, onClose }: UserDialogProps) => {
-  const email = useAppSelector((state) => state.user.email);
-  const dispatch = useAppDispatch();
+  const { data } = useSession();
 
   const {
     mutateAsync: mutateDeleteUser,
@@ -29,7 +27,6 @@ const UserDialog = ({ isOpen, onClose }: UserDialogProps) => {
     },
     {
       onSuccess: () => {
-        dispatch(signOut());
         onClose();
       },
     },
@@ -39,7 +36,7 @@ const UserDialog = ({ isOpen, onClose }: UserDialogProps) => {
     <Dialog isOpen={isOpen} onClose={onClose} title="User">
       <DialogBody padding="1rem">
         <Box display="flex" justifyContent="center" gap="1rem" alignItems="center">
-          <Avatar name="Dan Abrahmov" /> <Text maxW="200px">{email}</Text>
+          <Avatar name={data?.user?.email || ''} /> <Text maxW="200px">{data?.user?.email}</Text>
         </Box>
         <ButtonGroup display="flex" justifyContent="space-around" marginTop="1rem">
           <FormControl isInvalid={isDeleteUserError} width="initial">

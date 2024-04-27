@@ -2,8 +2,6 @@ import { ServerError } from '../../common/components/ErrorMessage';
 import { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
-import { setUser } from '../userSlice';
-import { useAppDispatch } from '../../common/hooks/hooks';
 import { useCallback } from 'react';
 import { signIn } from 'next-auth/react';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,8 +12,6 @@ type UseEmailLoginProps = {
 };
 
 const useEmailLogin = ({ onClose }: UseEmailLoginProps) => {
-  const dispatch = useAppDispatch();
-
   const { mutate, error, isLoading } = useMutation<unknown, AxiosError<ServerError>, LoginSchema>(
     async ({ email, password }) => {
       const resp = await signIn('credentials', {
@@ -26,8 +22,7 @@ const useEmailLogin = ({ onClose }: UseEmailLoginProps) => {
       return resp;
     },
     {
-      onSuccess(_, variables) {
-        dispatch(setUser({ isLoggedIn: true, email: variables.email }));
+      onSuccess() {
         onClose();
       },
     },

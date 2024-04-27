@@ -47,25 +47,5 @@ type BlockType<S extends ShapeType = ShapeType> = {
       points: never;
     }
 );
-// snap?: {
-//   x: number;
-//   y: number;
-//   z: number;
-// };
-// options: {
-//   rotation: {
-//     x: number[];
-//     y: number[];
-//     z: number[];
-//   };
-//   size: {
-//     scales: number[];
-//     direction: 'x' | 'y' | 'z';
-//     selected: number;
-//   };
-// };
-// selected: {
-//   rotation: [number, number, number];
-// };
 
 export default BlockType;

@@ -1,8 +1,7 @@
 import Dialog, { DialogBody, DialogButtons, DialogFooter } from '../../common/components/Dialog';
 import { FormControl, FormLabel, Input, FormErrorMessage, Button, Box } from '@chakra-ui/react';
 import React from 'react';
-import useEmailRegistration from '../hooks/useEmailRegistration';
-import useGoogleLogin from '../hooks/useGoogleLogin';
+import useEmailSignUp from '../hooks/useEmailSignUp';
 import ErrorMessage from '../../common/components/ErrorMessage';
 
 type SignUpDialogProps = {
@@ -11,18 +10,13 @@ type SignUpDialogProps = {
 };
 
 const SignUpDialog = ({ isOpen, onClose }: SignUpDialogProps) => {
-  const { loginGooglError, isLoginGoogleLoading, loginGoogleReset } = useGoogleLogin({
-    onClose,
-  });
-
   const {
     form: { handleSubmit, formErrors, register, reset },
     query: { registerEmail, registerEmailError, isRegisterEmailLoading },
-  } = useEmailRegistration({ onClose, resetLogin: loginGoogleReset });
+  } = useEmailSignUp({ onClose });
 
   const handleClose = () => {
     reset();
-    loginGoogleReset();
     onClose();
   };
 
@@ -56,19 +50,13 @@ const SignUpDialog = ({ isOpen, onClose }: SignUpDialogProps) => {
               }
             />
           )}
-          {loginGooglError && <ErrorMessage error={loginGooglError} />}
         </DialogBody>
         <DialogFooter>
           <DialogButtons>
-            <Button size="sm" onClick={handleClose} isDisabled={isRegisterEmailLoading || isLoginGoogleLoading}>
+            <Button size="sm" onClick={handleClose} isDisabled={isRegisterEmailLoading}>
               Close
             </Button>
-            <Button
-              size="sm"
-              colorScheme="orange"
-              type="submit"
-              isLoading={isRegisterEmailLoading || isLoginGoogleLoading}
-            >
+            <Button size="sm" colorScheme="orange" type="submit" isLoading={isRegisterEmailLoading}>
               Sign Up
             </Button>
           </DialogButtons>

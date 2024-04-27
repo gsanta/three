@@ -1,5 +1,5 @@
-import Cable from '../services/scene/types/Cable';
-import Pole from '../services/scene/types/Pole';
+import Cable from '../features/block/types/Cable';
+import Pole from '../features/block/types/Pole';
 
 type BlockCategory = 'cables' | 'decorations' | 'poles' | 'walls';
 
