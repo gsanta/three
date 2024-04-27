@@ -1,24 +1,11 @@
-import React, { useEffect, useRef } from 'react';
 import { useGLTF } from '@react-three/drei';
 import WrappedMeshProps from '../../types/WrappedMeshProps';
-import useEditorContext from '@/app/editor/EditorContext';
-import { Mesh } from 'three';
+import useRegisterScene from '../hooks/useRegisterScene';
 
 export const RodMesh = ({ meshInfo, meshProps, materialProps, parent }: WrappedMeshProps) => {
+  const ref = useRegisterScene();
+
   const { nodes, materials } = useGLTF('/untitled.glb');
-
-  const { scene } = useEditorContext();
-
-  const meshRef = useRef<Mesh>(null);
-
-  useEffect(() => {
-    const id = meshRef.current?.userData.modelId;
-    scene.addMesh(meshRef.current);
-
-    return () => {
-      scene.removeMesh(id);
-    };
-  }, [scene]);
 
   return (
     <mesh
@@ -29,7 +16,7 @@ export const RodMesh = ({ meshInfo, meshProps, materialProps, parent }: WrappedM
       userData={{ modelId: meshInfo.id }}
       position={meshInfo.position}
       {...meshProps}
-      ref={meshRef}
+      ref={ref}
     >
       <meshStandardMaterial {...materials.Material} color="red" {...materialProps} />
     </mesh>

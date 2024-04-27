@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from 'react';
 import { useGLTF } from '@react-three/drei';
-import useEditorContext from '@/app/editor/EditorContext';
-import { BufferGeometry, Material, Mesh, NormalBufferAttributes } from 'three';
+import { BufferGeometry, Material, NormalBufferAttributes } from 'three';
 import WrappedMeshProps from '../../types/WrappedMeshProps';
 import { ModelPart } from '@/client/editor/types/BlockType';
+import useRegisterScene from '../hooks/useRegisterScene';
+import { GroupProps } from '@react-three/fiber';
 
 type ModelMeshProps = WrappedMeshProps<'model'>;
 
@@ -69,30 +69,19 @@ const ModelGroupPart = ({ part, ...rest }: ModelPartProps) => {
 };
 
 export const ModelMesh = ({ meshInfo, meshProps }: ModelMeshProps) => {
+  const ref = useRegisterScene();
+
   const { nodes, materials } = useGLTF(meshInfo.path);
 
-  const { scene } = useEditorContext();
-
-  const meshRef = useRef<Mesh>(null);
-
   const geometryNodes = nodes as unknown as NodesType;
-
-  useEffect(() => {
-    const id = meshRef.current?.userData.modelId;
-    scene.addMesh(meshRef.current);
-
-    return () => {
-      scene.removeMesh(id);
-    };
-  }, [scene]);
 
   return (
     <group
       position={meshInfo.position}
       rotation={meshInfo.rotation}
       scale={meshInfo.scale}
-      {...meshProps}
-      ref={meshRef}
+      {...(meshProps as GroupProps)}
+      ref={ref}
       userData={{ modelId: meshInfo.id }}
     >
       {meshInfo.parts.map((childPart) =>

@@ -2,7 +2,7 @@ import { useAppSelector } from '@/client/common/hooks/hooks';
 import BlockType from '../../../../types/BlockType';
 
 const useBlock = (blockName?: string): BlockType => {
-  const { blocks } = useAppSelector((state) => state.tempalte.present);
+  const { blocks } = useAppSelector((state) => state.template.present);
 
   const block = blocks.find((b) => b.name === blockName);
 

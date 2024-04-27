@@ -1,31 +1,10 @@
 import { addVector } from '@/client/editor/utils/vectorUtils';
 import WrappedMeshProps from '../../types/WrappedMeshProps';
-import useEditorContext from '@/app/editor/EditorContext';
-import { useCallback, useEffect, useRef } from 'react';
-import { Color, Mesh } from 'three';
+import { Color } from 'three';
+import useRegisterScene from '../hooks/useRegisterScene';
 
 const BoxMesh = ({ meshInfo, meshProps, materialProps, parent }: WrappedMeshProps) => {
-  const { scene } = useEditorContext();
-
-  // const meshRef = useRef<Mesh>(null);
-
-  const ref = useCallback(
-    (mesh: Mesh) => {
-      if (mesh) {
-        scene.addMesh(mesh);
-      }
-    },
-    [scene],
-  );
-
-  useEffect(() => {
-    const id = meshRef.current?.userData.modelId;
-    scene.addMesh(meshRef.current);
-
-    return () => {
-      scene.removeMesh(ref);
-    };
-  }, [scene]);
+  const ref = useRegisterScene();
 
   return (
     <mesh

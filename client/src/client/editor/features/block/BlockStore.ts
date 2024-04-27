@@ -19,7 +19,7 @@ class BlockStore {
   }
 
   getBlockSettings() {
-    return this.store.getState().tempalte.present;
+    return this.store.getState().template.present;
   }
 
   getRootBlockIds() {

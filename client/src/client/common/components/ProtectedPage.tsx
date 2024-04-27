@@ -18,6 +18,7 @@ import ColorTool from '@/client/editor/features/block/use_cases/color/ColorTool'
 import UpdateService from '@/client/editor/features/block/services/update/UpdateService';
 import MoveService from '@/client/editor/features/block/use_cases/move/MoveService';
 import BlockStore from '@/client/editor/features/block/BlockStore';
+import TemplateStore from '@/client/editor/features/template/TemplateStore';
 
 type ProtectedPageProps = {
   children: ReactNode;
@@ -38,17 +39,18 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
   const blockStore = useMemo(() => new BlockStore(store), []);
   const update = useMemo(() => new UpdateService(blockStore, store), [blockStore]);
   const moveService = useMemo(() => new MoveService(store), []);
+  const templates = useMemo(() => new TemplateStore(store), []);
 
   const editorContext = useMemo<EditorContextType>(
     () => ({
       tool: new ToolService(
         [
           new AddTool(blockStore, update),
-          new SelectTool(blockStore, scene, moveService, update),
-          new GroupTool(store),
+          new SelectTool(blockStore, update, scene, moveService),
+          new GroupTool(blockStore, update, templates),
           new CableTool(blockStore, scene, update),
           new EraseTool(blockStore, update),
-          new RayTool(store, scene),
+          new RayTool(blockStore, update, scene),
           new ColorTool(blockStore, update),
         ],
         store,
@@ -58,7 +60,7 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
       importer: new ImportJson(store),
       scene,
     }),
-    [blockStore, update, scene, moveService],
+    [blockStore, update, scene, moveService, templates],
   );
 
   return (

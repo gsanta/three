@@ -12,7 +12,7 @@ const SelectToolOptionsContent = ({ block }: { block: Block }) => {
   const { tool } = useEditorContext();
 
   const selectedBlock = useBlock(block?.name);
-  const { settings } = useAppSelector((state) => state.tempalte.present);
+  const { settings } = useAppSelector((state) => state.template.present);
   const blockSettings = settings[selectedBlock.category];
 
   const handleRotationChange = (direction: 'x' | 'y' | 'z', val: number) => {

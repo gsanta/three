@@ -1,8 +1,9 @@
-import { Camera, Mesh, Scene } from 'three';
+import { Camera, Group, Mesh, Scene } from 'three';
 
 class SceneStore {
   constructor() {
     this.meshes = new Map();
+    this.groups = new Map();
   }
 
   addMesh(mesh: Mesh | null) {
@@ -12,16 +13,24 @@ class SceneStore {
     this.meshes.set(mesh.userData.modelId, mesh);
   }
 
-  removeMesh(modelId?: string) {
+  addGroup(group: Group | null) {
+    if (!group) {
+      throw new Error('Group is null');
+    }
+    this.groups.set(group.userData.modelId, group);
+  }
+
+  removeMeshOrGroup(modelId?: string) {
     if (!modelId) {
       throw new Error('ModelId is undefined');
     }
 
-    if (!this.meshes.get(modelId)) {
+    if (!this.meshes.get(modelId) && !this.groups.get(modelId)) {
       throw new Error('Mesh not found by modelId: ' + modelId);
     }
 
     this.meshes.delete(modelId);
+    this.groups.delete(modelId);
   }
 
   getMesh(modelId: string) {
@@ -68,6 +77,8 @@ class SceneStore {
   }
 
   private meshes: Map<string, Mesh>;
+
+  private groups: Map<string, Group>;
 
   private camera: Camera | undefined;
 

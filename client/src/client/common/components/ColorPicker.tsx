@@ -4,7 +4,7 @@ import { ChromePicker, ColorResult } from 'react-color';
 import { setColor } from '@/client/editor/features/template/templateSlice';
 
 const ColorPicker = () => {
-  const color = useAppSelector((state) => state.tempalte.present.color);
+  const color = useAppSelector((state) => state.template.present.color);
 
   const [tempColor, setTempColor] = useState<string | null>(null);
 

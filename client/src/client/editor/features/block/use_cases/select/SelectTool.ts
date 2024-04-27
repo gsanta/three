@@ -11,11 +11,10 @@ import UpdateService from '../../services/update/UpdateService';
 import BlockStore from '../../BlockStore';
 
 class SelectTool extends Tool {
-  constructor(store: BlockStore, scene: SceneStore, move: MoveService, update: UpdateService) {
+  constructor(store: BlockStore, update: UpdateService, scene: SceneStore, move: MoveService) {
     super(store, update, ToolName.Select, 'BiRectangle');
 
     this.scene = scene;
-    this.update = update;
     this.move = move;
   }
 
@@ -124,8 +123,6 @@ class SelectTool extends Tool {
   }
 
   private scene: SceneStore;
-
-  private update: UpdateService;
 
   private move: MoveService;
 }

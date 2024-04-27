@@ -11,7 +11,7 @@ const sceneSliceUndoable = undoable(blockSlice);
 export type RootState = {
   settings: SettingsState;
   tool: ToolState;
-  tempalte: StateWithHistory<BlockSettingsState>;
+  template: StateWithHistory<BlockSettingsState>;
   block: StateWithHistory<BlockState>;
 };
 

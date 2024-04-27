@@ -9,10 +9,10 @@ import RotationControl from '../../components/RotationControl';
 import SizeControl from '../../components/SizeControl';
 
 const AddToolOptions = () => {
-  const { blocks, selectedBlockName } = useAppSelector((state) => state.tempalte.present);
+  const { blocks, selectedBlockName } = useAppSelector((state) => state.template.present);
   const selectedBlock = useBlock(selectedBlockName);
 
-  const { settings, selectedSettings } = useAppSelector((state) => state.tempalte.present);
+  const { settings, selectedSettings } = useAppSelector((state) => state.template.present);
   const blockSettings = settings[selectedBlock.category];
   const selectedValues = selectedSettings[selectedBlock.category];
 
