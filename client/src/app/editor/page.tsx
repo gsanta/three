@@ -2,15 +2,15 @@
 
 import { Box, ChakraProvider, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import './app.scss';
-import Layout from '../../common/components/Layout';
+import Layout from '../../client/common/components/Layout';
 import Split from 'react-split';
-import Canvas from '../../editor/services/scene/ui/Canvas';
-import Header from '../../common/components/Header';
-import Toolbar from '../../editor/services/tool/ui/Toolbar';
-import ToolOptionsPanel from '../../editor/services/tool/ui/ToolOptionsPanel';
-import ColorPicker from '../../common/components/ColorPicker';
-import ProtectedPage from '../../common/components/ProtectedPage';
-import theme from '@/common/themes/theme';
+import Canvas from '../../client/editor/services/scene/ui/Canvas';
+import Header from '../../client/common/components/Header';
+import Toolbar from '../../client/editor/services/tool/ui/Toolbar';
+import ToolOptionsPanel from '../../client/editor/services/tool/ui/ToolOptionsPanel';
+import ColorPicker from '../../client/common/components/ColorPicker';
+import ProtectedPage from '../../client/common/components/ProtectedPage';
+import theme from '@/client/common/themes/theme';
 
 const Page = () => {
   return (

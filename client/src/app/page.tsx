@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import prisma from '../lib/db';
+import prisma from '../bff/config/db';
 
 async function getData() {
   // const res = await fetch('https://api.example.com/...')

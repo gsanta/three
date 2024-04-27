@@ -1,7 +1,7 @@
-import db from '@/lib/db';
+import db from '@/bff/config/db';
 import { NextResponse } from 'next/server';
 import { hash } from 'bcrypt';
-import { registerSchema } from '@/schemas/RegisterSchema';
+import { registerSchema } from '@/common/validations/RegisterSchema';
 
 export async function POST(req: Request) {
   try {

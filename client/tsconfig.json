@@ -10,7 +10,7 @@
     "outDir": "./build",
     "typeRoots": [
       "./node_modules/@types",
-      "./src/type_definitions"
+      "src/client/type_definitions"
     ],
     "types": [
       "node",
@@ -50,7 +50,7 @@
     ]
   },
   "files": [
-    "src/type_definitions/global.d.ts"
+    "src/client/type_definitions/global.d.ts"
   ],
   "include": [
     ".eslintrc.js",
