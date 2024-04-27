@@ -4,23 +4,39 @@ class SceneStore {
   constructor() {
     this.meshes = new Map();
     this.groups = new Map();
+    this.objInstances = new Map();
   }
 
-  addMesh(mesh: Mesh | null) {
+  addMesh(mesh: Mesh | null, instanceId: string) {
     if (!mesh) {
       throw new Error('Mesh is null');
     }
+    const existingInstances = this.objInstances.get(mesh.userData.modelId);
+
+    if (!existingInstances) {
+      this.objInstances.set(mesh.userData.modelId, new Set());
+    }
+
     this.meshes.set(mesh.userData.modelId, mesh);
+    this.objInstances.get(mesh.userData.modelId)?.add(instanceId);
   }
 
-  addGroup(group: Group | null) {
+  addGroup(group: Group | null, instanceId: string) {
     if (!group) {
       throw new Error('Group is null');
     }
+
+    const existingInstances = this.objInstances.get(group.userData.modelId);
+
+    if (!existingInstances) {
+      this.objInstances.set(group.userData.modelId, new Set());
+    }
+
     this.groups.set(group.userData.modelId, group);
+    this.objInstances.get(group.userData.modelId)?.add(instanceId);
   }
 
-  removeMeshOrGroup(modelId?: string) {
+  removeMeshOrGroup(modelId: string, instanceId: string) {
     if (!modelId) {
       throw new Error('ModelId is undefined');
     }
@@ -29,8 +45,14 @@ class SceneStore {
       throw new Error('Mesh not found by modelId: ' + modelId);
     }
 
-    this.meshes.delete(modelId);
-    this.groups.delete(modelId);
+    this.objInstances.get(modelId)?.delete(instanceId);
+
+    if (this.objInstances.get(modelId)?.size === 0) {
+      this.objInstances.delete(modelId);
+
+      this.meshes.delete(modelId);
+      this.groups.delete(modelId);
+    }
   }
 
   getMesh(modelId: string) {
@@ -79,6 +101,8 @@ class SceneStore {
   private meshes: Map<string, Mesh>;
 
   private groups: Map<string, Group>;
+
+  private objInstances: Map<string, Set<string>>;
 
   private camera: Camera | undefined;
 

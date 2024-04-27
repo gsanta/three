@@ -18,8 +18,8 @@ const CanvasContent = () => {
 
   return (
     <>
-      <MoveControl />
       <ToolControl />
+      <MoveControl />
       <mesh position={[5, 1, 0]} castShadow>
         <cylinderGeometry args={[0.02, 0.02, 2, 8]} />
         <meshStandardMaterial color="brown" />

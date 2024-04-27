@@ -9,18 +9,18 @@ class Eraser {
   }
 
   erase(blockIds: string[]) {
-    const rootBlockIds = this.store.getRootBlockIds().filter((root) => !blockIds.includes(root));
+    const queue = [...blockIds];
 
     const blocksToRemove: string[] = [];
 
     const edit = this.update.getUpdate();
 
-    while (rootBlockIds.length) {
-      const next = rootBlockIds.shift();
+    while (queue.length) {
+      const next = queue.shift();
       if (next) {
         const block = this.store.getBlocks()[next];
-        rootBlockIds.push(...block.children);
-        rootBlockIds.push(...block.dependents);
+        queue.push(...block.children);
+        queue.push(...block.dependents);
         blocksToRemove.push(next);
         edit.remove(next);
       }

@@ -80,7 +80,11 @@ export const blockSlice = createSlice({
               state.rootBlocksIds.splice(rootIndex, 1);
             }
           } else {
-            state.rootBlocksIds.push(update.block.id);
+            const rootIndex = state.rootBlocksIds.indexOf(update.block.id);
+
+            if (rootIndex === -1) {
+              state.rootBlocksIds.push(update.block.id);
+            }
           }
         } else {
           const { decoration } = update;
