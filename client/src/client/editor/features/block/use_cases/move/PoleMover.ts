@@ -19,10 +19,10 @@ class PoleMover extends BlockMover {
     const decoration = this.store.getDecoration(pole.category as 'poles', pole.id);
 
     for (let i = 1; i <= maxPolePinNumber; i++) {
-      const pin = decoration.pins[`pin${i}` as Pins];
-      if (pin) {
-        this.moveCable(edit, pin, `pin${i}`);
-      }
+      const cables = decoration.pins[`pin${i}` as Pins];
+      cables.forEach((cable) => {
+        this.moveCable(edit, cable, `pin${i}`);
+      });
     }
   }
 

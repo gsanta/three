@@ -13,7 +13,7 @@ class CableFactory extends BlockFactory<'cables'> {
 
   create(blockType: BlockType, options: Partial<Block> = {}, decorationOptions: Partial<Cable> = {}) {
     const block = BlockCreator.create(blockType, options);
-    const cable: Cable = { points: [], ...decorationOptions, category: 'cables', id: block.id };
+    const cable: Cable = { points: [], end1: null, end2: null, ...decorationOptions, category: 'cables', id: block.id };
 
     return {
       block,

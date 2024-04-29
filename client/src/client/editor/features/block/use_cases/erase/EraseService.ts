@@ -1,11 +1,16 @@
+import { BlockCategories } from '@/client/editor/types/BlockCategory';
 import BlockStore from '../../BlockStore';
 import Edit from '../../services/update/Edit';
 import UpdateService from '../../services/update/UpdateService';
+import BlockEraser from './erasers/BlockEraser';
+import PoleEraser from './erasers/PoleEraser';
 
-class Eraser {
+class EraseService {
   constructor(store: BlockStore, update: UpdateService) {
     this.store = store;
     this.update = update;
+
+    this.erasers.poles = new PoleEraser(store);
   }
 
   erase(blockIds: string[]) {
@@ -47,11 +52,26 @@ class Eraser {
 
       edit.updateBlock(dependsOnId, { dependents }, { mergeArrays: false });
     });
+
+    block.dependents.forEach((dependentId) => {
+      const dependent = this.store.getBlocks()[dependentId];
+
+      dependent.dependsOn.forEach((dependsOnId) => {
+        const dependsOn = this.store.getBlocks()[dependsOnId];
+
+        const eraser = this.erasers[block.category];
+        if (eraser) {
+          eraser.eraseDependent(edit, dependsOn, dependent);
+        }
+      });
+    });
   }
 
   private store: BlockStore;
 
   private update: UpdateService;
+
+  private erasers: Partial<{ [K in keyof BlockCategories]: BlockEraser }> = {};
 }
 
-export default Eraser;
+export default EraseService;

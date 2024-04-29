@@ -19,7 +19,11 @@ abstract class BlockFactory<T extends BlockCategory | never = never> {
     throw new Error('Unimplemented method');
   }
 
-  updateDecoration(orig: BlockCategories[T], partial: PartialDeep<BlockCategories[T]>): BlockCategories[T] {
+  updateDecoration(
+    orig: BlockCategories[T],
+    partial: PartialDeep<BlockCategories[T]>,
+    options: { mergeArrays: boolean } = { mergeArrays: true },
+  ): BlockCategories[T] {
     throw new Error('Unimplemented method');
   }
 }

@@ -47,16 +47,17 @@ class CableTool extends Tool {
 
   joinPoles() {
     const blocks = this.store.getBlocks();
+    const selectedBlockIds = this.store.getSelectedBlockIds();
 
-    const poles = Object.values(blocks).filter((block) => block.name === 'pole');
+    const polesIds = selectedBlockIds.filter((id) => blocks[id].category === 'poles');
 
-    if (poles.length < 2) {
+    if (polesIds.length < 2) {
       return;
     }
 
     const joinPoles = new JoinPoles(this.scene, this.updateService);
 
-    joinPoles.join(poles[0], poles[1]);
+    joinPoles.join(blocks[polesIds[0]], blocks[polesIds[1]]);
   }
 
   private createBlock(points: Vector3[]) {

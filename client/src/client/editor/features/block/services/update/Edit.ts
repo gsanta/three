@@ -74,7 +74,12 @@ class Edit {
     return this;
   }
 
-  updateDecoration<T extends BlockCategory>(category: T, id: string, partial: PartialDeep<BlockCategories[T]>): this {
+  updateDecoration<T extends BlockCategory>(
+    category: T,
+    id: string,
+    partial: PartialDeep<BlockCategories[T]>,
+    options: { mergeArrays: boolean } = { mergeArrays: true },
+  ): this {
     if (this.isRemoved(id)) {
       return this;
     }
@@ -83,7 +88,11 @@ class Edit {
     const [prevDecoration, index] = this.getDecorationFromUpdates(id);
 
     const updated =
-      this.updaters[category]?.updateDecoration((prevDecoration as BlockCategories[T]) || origDecoration, partial) ||
+      this.updaters[category]?.updateDecoration(
+        (prevDecoration as BlockCategories[T]) || origDecoration,
+        partial,
+        options,
+      ) ||
       ({
         category,
         id,

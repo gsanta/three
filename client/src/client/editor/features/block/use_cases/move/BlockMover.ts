@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Block from '@/client/editor/types/Block';
 import BlockCategory, { BlockCategories } from '@/client/editor/types/BlockCategory';
-import Num3 from '@/client/editor/types/Num3';
 import Edit from '../../services/update/Edit';
 
 abstract class BlockMover {
