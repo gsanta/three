@@ -1,32 +1,32 @@
-import { Store } from '@/client/common/utils/store';
 import BlockCategory from '@/client/editor/types/BlockCategory';
 import BlockMover from './BlockMover';
-import Num3 from '@/client/editor/types/Num3';
 import PoleMover from './PoleMover';
 import Block from '@/client/editor/types/Block';
-import { updateBlocks } from '@/client/editor/features/block/blockSlice';
+import UpdateService from '../../services/update/UpdateService';
+import SceneStore from '../../../scene/SceneStore';
+import BlockStore from '../../BlockStore';
 
 class MoveService {
-  constructor(store: Store) {
-    this.store = store;
-    this.movers.poles = new PoleMover(store);
+  constructor(store: BlockStore, update: UpdateService, scene: SceneStore) {
+    this.update = update;
+    this.movers.poles = new PoleMover(store, scene);
   }
 
-  move(delta: Num3, block: Block) {
+  move(block: Block) {
     const mover = this.movers[block.category];
 
     if (mover) {
-      const { categories } = this.store.getState().block.present;
+      const edit = this.update.getUpdate();
 
-      const updates = mover.move(delta, block, categories[block.category][block.id]);
+      mover.move(edit, block);
 
-      this.store.dispatch(updateBlocks(updates));
+      edit.commit();
     }
   }
 
-  private store: Store;
+  private update: UpdateService;
 
-  private movers: Partial<Record<BlockCategory, BlockMover<BlockCategory>>> = {};
+  private movers: Partial<Record<BlockCategory, BlockMover>> = {};
 }
 
 export default MoveService;

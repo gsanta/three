@@ -1,19 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import BlockType from '@/client/editor/types/BlockType';
 import Block from '@/client/editor/types/Block';
-import type { PartialDeep } from 'type-fest';
 import BlockCategory, { BlockCategories } from '@/client/editor/types/BlockCategory';
 import Num3 from '@/client/editor/types/Num3';
-import { UpdateBlock } from '@/client/editor/features/block/blockSlice';
+import Edit from '../../services/update/Edit';
 
-abstract class BlockMover<T extends BlockCategory | never = never> {
+abstract class BlockMover {
   readonly category: BlockCategory;
 
   constructor(category: BlockCategory) {
     this.category = category;
   }
 
-  move(delta: Num3, block: Block, decoration: Partial<BlockCategories[T]>): UpdateBlock[] {
+  move(edit: Edit, block: Block) {
     throw new Error('Unimplemented method');
   }
 }

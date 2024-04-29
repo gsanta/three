@@ -22,13 +22,13 @@ class BlockCreator {
 
     return {
       ...block,
+      children: settings.children || [],
+      dependents: settings.dependents || [],
+      dependsOn: settings.dependsOn || [],
       id: uuidv4(),
       position: [x, y, z],
       rotation: rotation as Num3,
       scale: scale,
-      children: [],
-      dependents: [],
-      dependsOn: [],
     };
   }
 }

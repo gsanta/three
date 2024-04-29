@@ -122,7 +122,7 @@ class Edit {
   }
 
   getLastBlock() {
-    const lastUpdateWithBlock = this.updates.reverse().find((update) => !Boolean('block' in update)) as {
+    const lastUpdateWithBlock = this.updates.reverse().find((update) => Boolean('block' in update)) as {
       block: Block;
     };
 

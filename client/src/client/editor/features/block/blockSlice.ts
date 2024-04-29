@@ -71,26 +71,30 @@ export const blockSlice = createSlice({
           } else if (!state.selectedBlockIds.includes(update.select)) {
             state.selectedBlockIds.push(update.select);
           }
-        } else if ('block' in update) {
-          state.blocks[update.block.id] = update.block;
+        } else {
+          if ('block' in update) {
+            state.blocks[update.block.id] = update.block;
 
-          if (update.block.parent) {
-            const rootIndex = state.rootBlocksIds.indexOf(update.block.id);
-            if (rootIndex !== -1) {
-              state.rootBlocksIds.splice(rootIndex, 1);
-            }
-          } else {
-            const rootIndex = state.rootBlocksIds.indexOf(update.block.id);
+            if (update.block.parent) {
+              const rootIndex = state.rootBlocksIds.indexOf(update.block.id);
+              if (rootIndex !== -1) {
+                state.rootBlocksIds.splice(rootIndex, 1);
+              }
+            } else {
+              const rootIndex = state.rootBlocksIds.indexOf(update.block.id);
 
-            if (rootIndex === -1) {
-              state.rootBlocksIds.push(update.block.id);
+              if (rootIndex === -1) {
+                state.rootBlocksIds.push(update.block.id);
+              }
             }
           }
-        } else {
-          const { decoration } = update;
 
-          if (decoration) {
-            state.categories[decoration.category][decoration.id] = decoration;
+          if ('decoration' in update) {
+            const { decoration } = update;
+
+            if (decoration) {
+              state.categories[decoration.category][decoration.id] = decoration;
+            }
           }
         }
       });

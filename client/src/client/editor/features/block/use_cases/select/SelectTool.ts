@@ -28,14 +28,14 @@ class SelectTool extends Tool {
     }
   }
 
-  onDrag(info: ToolInfo) {
+  onDrag() {
     const blocks = this.store.getBlocks();
     const selectedBlockIds = this.store.getSelectedBlockIds();
 
     selectedBlockIds.forEach((blockId) => {
       const block = blocks[blockId];
 
-      this.move.move(info.drag, block);
+      this.move.move(block);
     });
   }
 

@@ -1,6 +1,6 @@
-import { Mesh } from 'three';
+import { Mesh, Object3D } from 'three';
 
-const findByNameRecursive = (mesh: Mesh, name: string): Mesh | undefined => {
+const findByNameRecursive = (mesh: Object3D, name: string): Object3D | undefined => {
   if (mesh.name === name) {
     return mesh;
   }
@@ -17,7 +17,7 @@ const findByNameRecursive = (mesh: Mesh, name: string): Mesh | undefined => {
 };
 
 class MeshUtils {
-  static findByName(mesh: Mesh, name: string): Mesh {
+  static findByName(mesh: Object3D, name: string): Object3D {
     const found = findByNameRecursive(mesh, name);
 
     if (!found) {

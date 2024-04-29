@@ -38,7 +38,7 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
   const scene = useMemo(() => new SceneStore(), []);
   const blockStore = useMemo(() => new BlockStore(store), []);
   const update = useMemo(() => new UpdateService(blockStore, store), [blockStore]);
-  const moveService = useMemo(() => new MoveService(store), []);
+  const moveService = useMemo(() => new MoveService(blockStore, update, scene), [blockStore, scene, update]);
   const templates = useMemo(() => new TemplateStore(store), []);
 
   const editorContext = useMemo<EditorContextType>(

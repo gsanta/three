@@ -1,4 +1,4 @@
-import { Camera, Group, Mesh, Scene } from 'three';
+import { Camera, Group, Mesh, Object3D, Scene } from 'three';
 
 class SceneStore {
   constructor() {
@@ -57,6 +57,20 @@ class SceneStore {
 
   getMesh(modelId: string) {
     const mesh = this.meshes.get(modelId);
+
+    if (!mesh) {
+      throw new Error('Mesh not found');
+    }
+
+    return mesh;
+  }
+
+  getObj3d(modelId: string) {
+    let mesh: Object3D | undefined = this.meshes.get(modelId);
+
+    if (!mesh) {
+      mesh = this.groups.get(modelId);
+    }
 
     if (!mesh) {
       throw new Error('Mesh not found');

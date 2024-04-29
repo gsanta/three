@@ -16,8 +16,8 @@ class JoinPoles {
   }
 
   private joinPins(pole1: Block, pole2: Block, pinName: 'pin1' | 'pin2' | 'pin3') {
-    const mesh1 = this.scene.getMesh(pole1.id);
-    const mesh2 = this.scene.getMesh(pole2.id);
+    const mesh1 = this.scene.getObj3d(pole1.id);
+    const mesh2 = this.scene.getObj3d(pole2.id);
     const pinMesh1 = MeshUtils.findByName(mesh1, pinName);
     const pinMesh2 = MeshUtils.findByName(mesh2, pinName);
 
