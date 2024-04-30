@@ -32,6 +32,7 @@ class ToolService {
   }
 
   onPointerMove(event: ThreeEvent<PointerEvent>) {
+    console.log(event.point);
     this.info.pos = event.point;
     this.info.clientX = event.clientX;
     this.info.clientY = event.clientY;

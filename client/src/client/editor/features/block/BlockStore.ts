@@ -18,6 +18,10 @@ class BlockStore {
     return this.store.getState().block.present.categories[category][id];
   }
 
+  getDecorations<T extends BlockCategory>(category: T) {
+    return this.store.getState().block.present.categories[category];
+  }
+
   getBlockSettings() {
     return this.store.getState().template.present;
   }

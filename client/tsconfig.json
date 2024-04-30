@@ -1,10 +1,10 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
       "@/*": [
-        "./*"
+        "./src/*"
       ]
     },
     "outDir": "./build",
@@ -64,7 +64,9 @@
     "engine/**/*.ts",
     "engine/**/*.js",
     "src/**/*.tsx",
-    ".next/types/**/*.ts" ],
+    ".next/types/**/*.ts",
+    "test/**/*.ts"
+  ],
   "exclude": [
     "node_modules"
   ]
