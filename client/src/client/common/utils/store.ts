@@ -3,7 +3,7 @@ import templateSlice, { BlockSettingsState } from '../../editor/features/templat
 import blockSlice, { BlockState } from '../../editor/features/block/blockSlice';
 import settingsSlice, { SettingsState } from '../../editor/features/settings/state/settingsSlice';
 import toolSlice, { ToolState } from '../../editor/features/tool/toolSlice';
-import { EnhancedStore, configureStore } from '@reduxjs/toolkit';
+import { EnhancedStore, configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
 
 const blockSettingsSliceUndoable = undoable(templateSlice, { filter: () => false });
 const sceneSliceUndoable = undoable(blockSlice);
@@ -15,6 +15,8 @@ export type RootState = {
   block: StateWithHistory<BlockState>;
 };
 
+export const testMiddleware = createListenerMiddleware();
+
 export function setupStore(preloadedState?: RootState): EnhancedStore<RootState> {
   const store = configureStore({
     reducer: {
@@ -23,7 +25,8 @@ export function setupStore(preloadedState?: RootState): EnhancedStore<RootState>
       template: blockSettingsSliceUndoable,
       block: sceneSliceUndoable,
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(testMiddleware.middleware),
+
     preloadedState,
   });
 

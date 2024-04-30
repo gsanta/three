@@ -10,6 +10,10 @@ class BlockStore {
     return this.store.getState().block.present.blocks;
   }
 
+  getBlocksAsArray() {
+    return Object.keys(this.store.getState().block.present.blocks);
+  }
+
   getSelectedBlockIds() {
     return this.store.getState().block.present.selectedBlockIds;
   }

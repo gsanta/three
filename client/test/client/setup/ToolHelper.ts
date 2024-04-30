@@ -17,12 +17,23 @@ class ToolHelper {
     } as ThreeEvent<PointerEvent>);
   }
 
-  pointerDown({ eventObject }: { eventObject?: Object3D } = {}) {
+  pointerDown({ eventObject, eventObjectName }: { eventObject?: Object3D; eventObjectName?: string } = {}) {
+    let eventObj = this.testScene.getPlane() as Object3D;
+    if (eventObject) {
+      eventObj = eventObject;
+    } else if (eventObjectName) {
+      eventObj = {
+        userData: {
+          modelId: eventObjectName,
+        },
+      } as unknown as Object3D;
+    }
+
     this.context.tool.onPointerDown({
       point: this.context.tool.getToolInfo().pos,
       clientX: 0,
       clientY: 0,
-      eventObject: eventObject || (this.testScene.getPlane() as Object3D),
+      eventObject: eventObj,
     } as ThreeEvent<PointerEvent>);
   }
 

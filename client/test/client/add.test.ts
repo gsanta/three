@@ -12,6 +12,10 @@ describe('Add', () => {
     env = setupTestEnv();
   });
 
+  afterEach(() => {
+    env.teardown();
+  });
+
   describe('when adding a box', () => {
     it('is created where the user clicks', () => {
       store.dispatch(setSelectedTool(ToolName.Add));
