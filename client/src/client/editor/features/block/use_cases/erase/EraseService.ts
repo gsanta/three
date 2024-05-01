@@ -47,10 +47,7 @@ class EraseService {
     }
 
     block.dependsOn.forEach((dependsOnId) => {
-      const dependingBlock = this.store.getBlocks()[dependsOnId];
-      const dependents = dependingBlock.dependents.filter((id) => id !== block.id);
-
-      edit.updateBlock(dependsOnId, { dependents }, { mergeArrays: false });
+      edit.updateBlock(dependsOnId, { dependents: [block.id] }, { arrayMergeStrategy: 'exclude-update' });
     });
 
     block.dependents.forEach((dependentId) => {
@@ -58,6 +55,7 @@ class EraseService {
 
       dependent.dependsOn.forEach((dependsOnId) => {
         const dependsOn = this.store.getBlocks()[dependsOnId];
+        edit.updateBlock(dependsOnId, { dependents: [dependentId] }, { arrayMergeStrategy: 'exclude-update' });
 
         const eraser = this.erasers[block.category];
         if (eraser) {

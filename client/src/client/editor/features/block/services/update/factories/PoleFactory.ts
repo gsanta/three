@@ -5,6 +5,10 @@ import Block from '@/client/editor/types/Block';
 import BlockType from '@/client/editor/types/BlockType';
 
 class PoleFactory extends BlockFactory<'poles'> {
+  constructor() {
+    super('poles');
+  }
+
   create(blockType: BlockType, options: Partial<Block> = {}) {
     const block = BlockCreator.create(blockType, options);
     const pole: Pole = { id: block.id, category: 'poles', pins: { pin1: [], pin2: [], pin3: [] } };

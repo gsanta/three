@@ -19,9 +19,10 @@ type ModelPartProps = {
   };
   nodes: NodesType;
   part: ModelPart;
+  partMaterialProps: WrappedMeshProps['partMaterialProps'];
 };
 
-const ModelMeshPart = ({ materials, nodes, part }: ModelPartProps) => {
+const ModelMeshPart = ({ materials, nodes, part, partMaterialProps }: ModelPartProps) => {
   const geometryPaths = part.geometryPath?.split('.') || [];
 
   const materialPaths = part.materialPath?.split('.') || [];
@@ -38,23 +39,29 @@ const ModelMeshPart = ({ materials, nodes, part }: ModelPartProps) => {
   } else {
     material = materials[materialPaths[0]];
   }
+  material.opacity = 0.1;
 
   const geometry = geometryPaths.reduce(
     (prev: NodesOrObject3DType, curr: string) => (prev as NodesType)[curr] as NodesOrObject3DType,
     nodes,
   ) as BufferGeometry<NormalBufferAttributes>;
 
+  const color = partMaterialProps?.[part?.name || '']?.['material-color'];
+
   return (
     <mesh
       castShadow
       receiveShadow
       geometry={geometry}
-      material={material}
+      material={color ? undefined : material}
+      // material-color={partMaterialProps?.[part?.name || '']?.['material-color']}
       position={part.position}
       rotation={part.rotation}
       scale={part.scale}
       name={part.name || ''}
-    />
+    >
+      {color && <meshStandardMaterial color={color} />}
+    </mesh>
   );
 };
 
@@ -68,7 +75,7 @@ const ModelGroupPart = ({ part, ...rest }: ModelPartProps) => {
   );
 };
 
-export const ModelMesh = ({ meshInfo, meshProps }: ModelMeshProps) => {
+export const ModelMesh = ({ meshInfo, meshProps, partMaterialProps }: ModelMeshProps) => {
   const ref = useRegisterScene();
 
   const { nodes, materials } = useGLTF(meshInfo.path);
@@ -88,7 +95,12 @@ export const ModelMesh = ({ meshInfo, meshProps }: ModelMeshProps) => {
         childPart.parts ? (
           <ModelGroupPart materials={materials} nodes={geometryNodes} part={childPart} />
         ) : (
-          <ModelMeshPart materials={materials} nodes={geometryNodes} part={childPart} />
+          <ModelMeshPart
+            materials={materials}
+            nodes={geometryNodes}
+            part={childPart}
+            partMaterialProps={partMaterialProps}
+          />
         ),
       )}
     </group>

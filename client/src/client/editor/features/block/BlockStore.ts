@@ -11,7 +11,7 @@ class BlockStore {
   }
 
   getBlocksAsArray() {
-    return Object.keys(this.store.getState().block.present.blocks);
+    return Object.values(this.store.getState().block.present.blocks);
   }
 
   getSelectedBlockIds() {

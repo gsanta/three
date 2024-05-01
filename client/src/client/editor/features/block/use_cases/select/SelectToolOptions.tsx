@@ -40,7 +40,7 @@ const SelectToolOptionsContent = ({ block }: { block: Block }) => {
       )}
       <Button onClick={() => tool.getGroupTool().group()}>Group</Button>
       <Button onClick={() => tool.getGroupTool().ungroup()}>Ungroup</Button>
-      <Button onClick={() => tool.getSelectTool().selectParent(block.id)}>Select parent</Button>
+      <Button onClick={() => tool.getSelectTool().selectRoot(block.id)}>Select parent</Button>
     </Box>
   );
 };

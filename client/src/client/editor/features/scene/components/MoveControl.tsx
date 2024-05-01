@@ -10,6 +10,8 @@ import { useAppSelector } from '@/client/common/hooks/hooks';
 
 const MoveControl = () => {
   const selectedMeshes = useSelectedBlocks();
+  const { selectedPartNames } = useAppSelector((store) => store.block.present);
+  const selectedPartName = selectedPartNames.length ? selectedPartNames[0] : undefined;
 
   const movableMeshes = selectedMeshes.filter((mesh) => mesh.movable);
 
@@ -60,6 +62,7 @@ const MoveControl = () => {
               onPointerDown: () => {},
             }}
             materialProps={{ color: 'pink', opacity: 0.5, transparent: true }}
+            partMaterialProps={selectedPartName ? { [selectedPartName]: { 'material-color': 'green' } } : undefined}
           />
         ))}
       </group>

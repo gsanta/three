@@ -16,10 +16,10 @@ class Edit {
     this.store = store;
     this.dispatchStore = dispatchStore;
 
-    this.updaters.poles = new PoleFactory('poles');
-    this.updaters.decorations = new DefaultBlockFactory<'decorations'>('decorations');
-    this.updaters.walls = new DefaultBlockFactory<'walls'>('walls');
+    this.updaters.poles = new PoleFactory();
     this.updaters.cables = new CableFactory();
+
+    this.defaultFactory = new DefaultBlockFactory();
   }
 
   commit() {
@@ -36,11 +36,9 @@ class Edit {
 
     const factory = this.updaters[blockType.category as T];
 
-    if (!factory) {
-      throw new Error(`Factory for type ${blockType.category} not found`);
-    }
-
-    const { block, decoration } = factory.create(blockType, options, decorationOptions);
+    const { block, decoration } = factory
+      ? factory.create(blockType, options, decorationOptions)
+      : this.defaultFactory.create(blockType, options);
 
     this.updates.push({ block, decoration });
 
@@ -56,7 +54,11 @@ class Edit {
     this.updateDecoration(category, id, decoration);
   }
 
-  updateBlock(id: string, update: PartialDeep<Block>, options: { mergeArrays: boolean } = { mergeArrays: true }): this {
+  updateBlock(
+    id: string,
+    update: PartialDeep<Block>,
+    options: { arrayMergeStrategy: 'merge' | 'exclude-update' } = { arrayMergeStrategy: 'merge' },
+  ): this {
     if (this.isRemoved(id)) {
       return this;
     }
@@ -124,8 +126,8 @@ class Edit {
     return this;
   }
 
-  select(id: string | null): this {
-    this.updates.push({ select: id });
+  select(id: string | null, partName?: string): this {
+    this.updates.push({ select: id, partName });
 
     return this;
   }
@@ -147,12 +149,19 @@ class Edit {
   private mergeBlocks(
     orig: Block,
     update: PartialDeep<Block>,
-    { mergeArrays }: { mergeArrays: boolean } = { mergeArrays: true },
+    options: { arrayMergeStrategy: 'merge' | 'exclude-update' } = { arrayMergeStrategy: 'merge' },
   ) {
+    const { arrayMergeStrategy } = options;
+
+    const dependents =
+      arrayMergeStrategy === 'merge'
+        ? [...new Set([...orig.dependents, ...(update.dependents || [])])]
+        : orig.dependents.filter((id) => !update.dependents?.includes(id));
+
     return {
       ...orig,
       ...update,
-      dependents: mergeArrays ? [...new Set([...orig.dependents, ...(update.dependents || [])])] : update.dependents,
+      dependents: dependents,
       dependsOn: [...new Set([...orig.dependsOn, ...(update.dependsOn || [])])],
       children: [...new Set([...orig.children, ...(update.children || [])])],
     } as Block;
@@ -185,6 +194,8 @@ class Edit {
   private updates: UpdateBlocks = [];
 
   private updaters: Partial<{ [K in keyof BlockCategories]: BlockFactory<K> }> = {};
+
+  private defaultFactory: DefaultBlockFactory;
 
   private store: BlockStore;
 

@@ -5,9 +5,9 @@ import type { PartialDeep } from 'type-fest';
 import BlockCategory, { BlockCategories } from '@/client/editor/types/BlockCategory';
 
 abstract class BlockFactory<T extends BlockCategory | never = never> {
-  readonly category: BlockCategory;
+  readonly category?: BlockCategory;
 
-  constructor(category: BlockCategory) {
+  constructor(category?: BlockCategory) {
     this.category = category;
   }
 

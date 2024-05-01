@@ -1,7 +1,7 @@
 import Cable from '../features/block/types/Cable';
 import Pole from '../features/block/types/Pole';
 
-type BlockCategory = 'cables' | 'decorations' | 'poles' | 'walls';
+type BlockCategory = 'cables' | 'decorations' | 'poles' | 'walls' | 'building-bases';
 
 export type EmptyBlockCategory<T extends BlockCategory> = {
   category: T;
@@ -13,6 +13,7 @@ export type BlockCategories = {
   decorations: EmptyBlockCategory<'decorations'>;
   poles: Pole;
   walls: EmptyBlockCategory<'walls'>;
+  ['building-bases']: EmptyBlockCategory<'building-bases'>;
 };
 
 export type BlockCategoryRecords = {

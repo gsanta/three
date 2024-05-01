@@ -2,7 +2,7 @@ import { Vector3 } from 'three';
 import { store } from '@/client/common/utils/store';
 import { setSelectedTool } from '@/client/editor/features/tool/toolSlice';
 import ToolName from '@/client/editor/features/tool/state/ToolName';
-import TestEnv, { setupTestEnv } from './setup/TestEnv';
+import TestEnv, { setupTestEnv } from './helpers/TestEnv';
 import { setSelectedGeometry } from '@/client/editor/features/template/templateSlice';
 
 describe('Add', () => {

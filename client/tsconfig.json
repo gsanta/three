@@ -10,7 +10,8 @@
     "outDir": "./build",
     "typeRoots": [
       "./node_modules/@types",
-      "src/client/type_definitions"
+      "src/client/type_definitions",
+      "test/client/helpers/matchers"
     ],
     "types": [
       "node",
@@ -50,7 +51,8 @@
     ]
   },
   "files": [
-    "src/client/type_definitions/global.d.ts"
+    "src/client/type_definitions/global.d.ts",
+    "test/client/helpers/matchers/matchers.d.ts"
   ],
   "include": [
     ".eslintrc.js",
@@ -65,7 +67,7 @@
     "engine/**/*.js",
     "src/**/*.tsx",
     ".next/types/**/*.ts",
-    "test/**/*.ts"
+    "test/**/*.ts",
   ],
   "exclude": [
     "node_modules"

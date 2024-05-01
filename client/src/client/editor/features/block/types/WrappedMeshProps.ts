@@ -6,6 +6,7 @@ type WrappedMeshProps<S extends ShapeType = ShapeType> = {
   meshInfo: Block<S>;
   meshProps?: MeshProps;
   materialProps?: MeshStandardMaterialProps;
+  partMaterialProps?: Record<string, { 'material-color'?: string }>;
   parent?: Block;
 };
 

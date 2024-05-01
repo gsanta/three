@@ -7,8 +7,4 @@ type BlockSelectedSettings = {
   scale: Num3;
 };
 
-// export const defaultBlockSelectedSettings: Omit<BlockSelectedSettings, 'category'> = {
-//   rotation: [],
-// };
-
 export default BlockSelectedSettings;

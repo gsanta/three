@@ -13,7 +13,7 @@ const renderComponent = (
   blocks: Record<string, Block>,
   categories: BlockCategoryRecords,
 ): JSX.Element => {
-  const { meshInfo: block, meshProps, materialProps } = meshRendererProps;
+  const { meshInfo: block, meshProps, materialProps, partMaterialProps } = meshRendererProps;
 
   const parent = block.parent ? blocks[block.parent] : undefined;
 
@@ -29,7 +29,15 @@ const renderComponent = (
         />
       );
     case 'model':
-      return <ModelMesh meshInfo={block} meshProps={{ ...meshProps }} materialProps={materialProps} parent={parent} />;
+      return (
+        <ModelMesh
+          meshInfo={block}
+          meshProps={{ ...meshProps }}
+          materialProps={materialProps}
+          parent={parent}
+          partMaterialProps={partMaterialProps}
+        />
+      );
     default:
       return <BoxMesh meshInfo={block} meshProps={{ ...meshProps }} materialProps={materialProps} parent={parent} />;
   }

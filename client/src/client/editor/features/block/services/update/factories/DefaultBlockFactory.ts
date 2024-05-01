@@ -4,7 +4,7 @@ import BlockCreator from './BlockCreator';
 import BlockType from '@/client/editor/types/BlockType';
 import BlockCategory, { BlockCategories } from '@/client/editor/types/BlockCategory';
 
-class DefaultBlockFactory<T extends BlockCategory> extends BlockFactory<T> {
+class DefaultBlockFactory extends BlockFactory<BlockCategory> {
   create(blockType: BlockType, options: Partial<Block> = {}) {
     const block = BlockCreator.create(blockType, options);
 
@@ -13,7 +13,7 @@ class DefaultBlockFactory<T extends BlockCategory> extends BlockFactory<T> {
       decoration: {
         category: block.category,
         id: block.id,
-      } as BlockCategories[T],
+      } as BlockCategories[BlockCategory],
     };
   }
 }

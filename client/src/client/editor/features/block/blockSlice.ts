@@ -7,17 +7,20 @@ export type BlockState = {
   categories: BlockCategoryRecords;
   rootBlocksIds: string[];
   selectedBlockIds: string[];
+  selectedPartNames: string[];
 };
 
 export const initialBlockState: BlockState = {
   rootBlocksIds: [],
   blocks: {},
   selectedBlockIds: [],
+  selectedPartNames: [],
   categories: {
     cables: {},
     decorations: {},
     poles: {},
     walls: {},
+    'building-bases': {},
   },
 };
 
@@ -33,7 +36,7 @@ export type DecorationUpdate<K extends BlockCategory> = {
 
 export type BlockUpdate = { block: Block };
 
-export type BlockSelect = { select: string | null };
+export type BlockSelect = { select: string | null; partName?: string };
 
 // Update type constrained to keys and values from BlockCategories
 export type UpdateBlock<K extends BlockCategory> = BlockUpdate | DecorationUpdate<K> | { remove: Block } | BlockSelect;
@@ -68,8 +71,12 @@ export const blockSlice = createSlice({
         } else if ('select' in update) {
           if (update.select === null) {
             state.selectedBlockIds = [];
+            state.selectedPartNames = [];
           } else if (!state.selectedBlockIds.includes(update.select)) {
             state.selectedBlockIds.push(update.select);
+            if (update.partName) {
+              state.selectedPartNames.push(update.partName);
+            }
           }
         } else {
           if ('block' in update) {
@@ -100,8 +107,9 @@ export const blockSlice = createSlice({
       });
     },
 
-    setSelectedBlocks: (state, action: PayloadAction<string[]>) => {
-      state.selectedBlockIds = action.payload;
+    setSelection: (state, action: PayloadAction<{ blocks: string[]; parts: string[] }>) => {
+      state.selectedBlockIds = action.payload.blocks;
+      state.selectedPartNames = action.payload.parts;
     },
 
     update(state, action: PayloadAction<Partial<BlockState>>) {
@@ -112,6 +120,6 @@ export const blockSlice = createSlice({
   },
 });
 
-export const { setSelectedBlocks, update, updateBlocks } = blockSlice.actions;
+export const { setSelection: setSelectedBlocks, update, updateBlocks } = blockSlice.actions;
 
 export default blockSlice.reducer;

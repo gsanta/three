@@ -16,7 +16,7 @@ class RayTool extends Tool {
   onPointerDown({ eventObjectName, clientX, clientY }: ToolInfo) {
     const canvasElement = this.scene.getCanvasElement();
     const camera = this.scene.getCamera();
-    const mesh = this.scene.getMesh(eventObjectName);
+    const mesh = this.scene.getObj3d(eventObjectName);
 
     if (!mesh) {
       return;

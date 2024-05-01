@@ -1,4 +1,4 @@
-import { Camera, Intersection, Mesh, Object3D, Ray, Raycaster, Vector2 } from 'three';
+import { Camera, Intersection, Object3D, Ray, Raycaster, Vector2 } from 'three';
 
 class Intersect {
   constructor(canvasElement: HTMLCanvasElement, camera: Camera) {
@@ -6,7 +6,7 @@ class Intersect {
     this.camera = camera;
   }
 
-  calculate(mesh: Mesh, clientX: number, clientY: number): [Intersection<Object3D> | undefined, Ray] {
+  calculate(mesh: Object3D, clientX: number, clientY: number): [Intersection<Object3D>[] | undefined, Ray] {
     const raycaster = new Raycaster();
 
     const pointer = new Vector2();
@@ -16,16 +16,13 @@ class Intersect {
 
     raycaster.setFromCamera(pointer, this.camera);
 
-    const intersects = raycaster.intersectObjects([mesh], false);
+    const intersects = raycaster.intersectObjects(mesh.children.length > 0 ? mesh.children : [mesh], false);
 
     if (intersects.length) {
-      console.log(intersects[0].point);
-      return [intersects[0], raycaster.ray];
+      return [intersects, raycaster.ray];
     }
 
-    console.log('not intersecting');
-
-    return [undefined, raycaster.ray];
+    return [[], raycaster.ray];
   }
 
   private camera: Camera;

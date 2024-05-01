@@ -9,6 +9,7 @@ import SceneStore from '@/client/editor/features/scene/SceneStore';
 import MoveService from '../move/MoveService';
 import UpdateService from '../../services/update/UpdateService';
 import BlockStore from '../../BlockStore';
+import Intersect from '../Intersect';
 
 class SelectTool extends Tool {
   constructor(store: BlockStore, update: UpdateService, scene: SceneStore, move: MoveService) {
@@ -22,7 +23,7 @@ class SelectTool extends Tool {
     const block = this.store.getBlocks()[info.eventObjectName];
 
     if (block) {
-      this.selectParent(info.eventObjectName);
+      this.selectRoot(info.eventObjectName, info.clientX, info.clientY);
     } else {
       this.update.getUpdate().select(null).commit();
     }
@@ -64,12 +65,28 @@ class SelectTool extends Tool {
     edit.commit();
   }
 
-  selectParent(id: string) {
+  selectRoot(id: string, clientX: number, clientY: number) {
+    const canvasElement = this.scene.getCanvasElement();
+    const camera = this.scene.getCamera();
+    const mesh = this.scene.getObj3d(id);
+
+    if (!mesh) {
+      return;
+    }
+
+    const intersect = new Intersect(canvasElement, camera);
+
+    const [intersects] = intersect.calculate(mesh, clientX, clientY);
+
+    const partName = intersects
+      ?.map((intersection) => intersection.object.name)
+      .find((name) => name && name !== 'root');
+
     const block = this.store.getBlocks()[id];
 
     const selectedBlockId = block.parent ? block.parent : block.id;
 
-    this.update.getUpdate().select(selectedBlockId).commit();
+    this.update.getUpdate().select(selectedBlockId, partName).commit();
   }
 
   scaleMesh(scale: number, block: Block) {
