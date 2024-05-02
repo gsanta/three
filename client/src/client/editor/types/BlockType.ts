@@ -14,6 +14,7 @@ export type ModelPart = {
   scale?: Num3 | number;
   parts: ModelPart[];
   name?: string;
+  orientation: number;
 };
 
 type BlockType<S extends ShapeType = ShapeType> = {
@@ -29,12 +30,9 @@ type BlockType<S extends ShapeType = ShapeType> = {
   radius: number;
   height: number;
   points?: Num3[];
+  parts: ModelPart[];
+  path: string;
 } & (
-  | {
-      geometry: 'model';
-      parts: ModelPart[];
-      path: string;
-    }
   | {
       geometry: 'tube';
       points: Num3[];

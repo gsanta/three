@@ -18,6 +18,10 @@ class BlockStore {
     return this.store.getState().block.present.selectedBlockIds;
   }
 
+  getSelectedPartNames() {
+    return this.store.getState().block.present.selectedPartNames;
+  }
+
   getDecoration<T extends BlockCategory>(category: T, id: string) {
     return this.store.getState().block.present.categories[category][id];
   }

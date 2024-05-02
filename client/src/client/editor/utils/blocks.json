@@ -84,6 +84,56 @@
                 0.09
             ]
         },
+        "wall_new": {
+            "category": "walls",
+            "geometry": "model",
+            "path": "/wall_new.glb",
+            "parts": [
+                {
+                    "geometryPath": "Cube001.geometry",
+                    "materialPath": "Wall",
+                    "rotation": [
+                        -3.14159,
+                        0,
+                        -3.14159
+                    ],
+                    "scale": [
+                        -3.718,
+                        -0.122,
+                        -3.718
+                    ]
+                }
+            ]
+        },
+        "wall_door": {
+            "category": "walls",
+            "geometry": "model",
+            "path": "/wall_door.glb",
+            "rotation": [
+                0,
+                0,
+                0
+            ],
+            "scale": [
+                -3.718,
+                -0.122,
+                -3.718
+            ],
+            "parts": [
+                {
+                    "geometryPath": "Cube007.geometry",
+                    "materialPath": "Wall"
+                },
+                {
+                    "geometryPath": "Cube007_1.geometry",
+                    "materialPath": "Wood1"
+                },
+                {
+                    "geometryPath": "Cube007_2.geometry",
+                    "materialPath": "Wood2"
+                }
+            ]
+        },
         "wall1": {
             "category": "walls",
             "geometry": "model",
@@ -212,9 +262,9 @@
                     "geometryPath": "base.geometry",
                     "materialPath": "Wall",
                     "position": [
-                        -0.008,
-                        0.13,
-                        0.01
+                        -0.092,
+                        0.007,
+                        0.054
                     ],
                     "rotation": [
                         -3.14159,
@@ -232,9 +282,9 @@
                     "geometryPath": "wall1.geometry",
                     "materialPath": "wall-placeholder",
                     "position": [
-                        -0.008,
-                        0.13,
-                        0.01
+                        -3.603,
+                        0.255,
+                        0.054
                     ],
                     "rotation": [
                         -3.14159,
@@ -246,15 +296,16 @@
                         -0.122,
                         -3.718
                     ],
-                    "name": "wall1"
+                    "name": "wall1",
+                    "orientation": 90
                 },
                 {
                     "geometryPath": "wall2.geometry",
                     "materialPath": "wall-placeholder",
                     "position": [
-                        -0.008,
-                        0.13,
-                        0.01
+                        -0.092,
+                        0.255,
+                        -3.522
                     ],
                     "rotation": [
                         -3.14159,
@@ -272,9 +323,9 @@
                     "geometryPath": "wall3.geometry",
                     "materialPath": "wall-placeholder",
                     "position": [
-                        -0.008,
-                        0.13,
-                        0.01
+                        3.465,
+                        0.255,
+                        0.054
                     ],
                     "rotation": [
                         -3.14159,
@@ -286,15 +337,16 @@
                         -0.122,
                         -3.718
                     ],
-                    "name": "wall3"
+                    "name": "wall3",
+                    "orientation": -90
                 },
                 {
                     "geometryPath": "wall4.geometry",
                     "materialPath": "wall-placeholder",
                     "position": [
-                        -0.008,
-                        0.13,
-                        0.01
+                        -0.092,
+                        0.255,
+                        3.595
                     ],
                     "rotation": [
                         -3.14159,
@@ -306,7 +358,8 @@
                         -0.122,
                         -3.718
                     ],
-                    "name": "wall24"
+                    "name": "wall4",
+                    "orientation": 180
                 }
             ]
         }

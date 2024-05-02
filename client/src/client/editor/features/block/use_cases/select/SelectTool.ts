@@ -114,7 +114,7 @@ class SelectTool extends Tool {
 
     const block = this.store.getBlocks()[selectedBlockIds[0]];
 
-    const mesh = this.scene.getMesh(block.id);
+    const mesh = this.scene.getObj3d(block.id);
 
     const index = VectorUtils.getAxisIndex(axis);
     const newRotation = [...block.rotation] as [number, number, number];

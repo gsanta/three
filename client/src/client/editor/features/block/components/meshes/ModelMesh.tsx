@@ -39,7 +39,6 @@ const ModelMeshPart = ({ materials, nodes, part, partMaterialProps }: ModelPartP
   } else {
     material = materials[materialPaths[0]];
   }
-  material.opacity = 0.1;
 
   const geometry = geometryPaths.reduce(
     (prev: NodesOrObject3DType, curr: string) => (prev as NodesType)[curr] as NodesOrObject3DType,
@@ -54,7 +53,6 @@ const ModelMeshPart = ({ materials, nodes, part, partMaterialProps }: ModelPartP
       receiveShadow
       geometry={geometry}
       material={color ? undefined : material}
-      // material-color={partMaterialProps?.[part?.name || '']?.['material-color']}
       position={part.position}
       rotation={part.rotation}
       scale={part.scale}

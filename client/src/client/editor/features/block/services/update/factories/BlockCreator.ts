@@ -15,9 +15,9 @@ class BlockCreator {
     const selectedRotation = settings.rotation || [0, 0, 0];
     const scale = VectorUtils.multiplyVec3(block.scale, selectedSize || [1, 1, 1]);
 
-    const x = snapTo(pos[0]);
-    const z = snapTo(pos[2]);
-    const y = pos[1] + positionData[1] + scale[1] / 2;
+    const x = pos[0]; //snapTo(pos[0]);
+    const z = pos[2]; //snapTo(pos[2]);
+    const y = pos[1]; // + positionData[1] + scale[1] / 2;
     const rotation = addVector(selectedRotation, rotationData).map((degree) => toRadian(degree));
 
     return {
@@ -25,6 +25,8 @@ class BlockCreator {
       children: settings.children || [],
       dependents: settings.dependents || [],
       dependsOn: settings.dependsOn || [],
+      slotSources: settings.slotSources || [],
+      slotTarget: settings.slotTarget,
       id: uuidv4(),
       position: [x, y, z],
       rotation: rotation as Num3,
