@@ -267,9 +267,9 @@
                         0.054
                     ],
                     "rotation": [
-                        -3.14159,
                         0,
-                        -3.14159
+                        0,
+                        0
                     ],
                     "scale": [
                         -3.718,
@@ -287,9 +287,9 @@
                         0.054
                     ],
                     "rotation": [
-                        -3.14159,
                         0,
-                        -3.14159
+                        0,
+                        0
                     ],
                     "scale": [
                         -3.718,
@@ -308,9 +308,9 @@
                         -3.522
                     ],
                     "rotation": [
-                        -3.14159,
                         0,
-                        -3.14159
+                        0,
+                        0
                     ],
                     "scale": [
                         -3.718,
@@ -328,9 +328,9 @@
                         0.054
                     ],
                     "rotation": [
-                        -3.14159,
                         0,
-                        -3.14159
+                        0,
+                        0
                     ],
                     "scale": [
                         -3.718,
@@ -349,9 +349,9 @@
                         3.595
                     ],
                     "rotation": [
-                        -3.14159,
                         0,
-                        -3.14159
+                        0,
+                        0
                     ],
                     "scale": [
                         -3.718,
@@ -360,6 +360,52 @@
                     ],
                     "name": "wall4",
                     "orientation": 180
+                },
+                {
+                    "geometryPath": "base001.geometry",
+                    "materialPath": "wall-placeholder",
+                    "position": [
+                        -0.069,
+                        3.434,
+                        0.037
+                    ],
+                    "rotation": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "scale": [
+                        -3.718,
+                        -0.122,
+                        -3.718
+                    ],
+                    "name": "ceil",
+                    "slot": {
+                        "axes": [
+                            "y"
+                        ]
+                    }
+                }
+            ]
+        },
+        "roof-1": {
+            "category": "walls",
+            "geometry": "model",
+            "path": "/roof_1.glb",
+            "parts": [
+                {
+                    "geometryPath": "Cube.geometry",
+                    "materialPath": "Roog",
+                    "position": [
+                        -0.069,
+                        0.088,
+                        0.037
+                    ],
+                    "scale": [
+                        -3.922,
+                        -0.064,
+                        -3.922
+                    ]
                 }
             ]
         }

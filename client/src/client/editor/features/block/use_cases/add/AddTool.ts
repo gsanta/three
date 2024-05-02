@@ -55,10 +55,15 @@ class AddTool extends Tool {
     const orientation = block.parts.find((part) => part.name === partName)?.orientation || 0;
 
     if (templateName) {
-      this.updateService
-        .getUpdate()
-        .create(templateName as BlockName, { position: [pos.x, pos.y, pos.z], rotation: [0, orientation, 0] })
-        .commit();
+      const edit = this.updateService.getUpdate().create(templateName as BlockName, {
+        dependsOn: [blockId],
+        position: [pos.x, pos.y, pos.z],
+        rotation: [0, orientation, 0],
+      });
+
+      const lastBlock = edit.getLastBlock();
+
+      edit.updateBlock(blockId, { dependents: [lastBlock.id] }).commit();
     }
   }
 
