@@ -42,8 +42,7 @@ class EraseService {
     const parent = this.store.getBlocks()[block.parent || ''];
 
     if (parent) {
-      const newChildren = parent.children.filter((child) => child !== blockId);
-      edit.updateBlock(block.id, { children: newChildren });
+      edit.updateBlock(parent.id, { children: [blockId] }, { arrayMergeStrategy: 'exclude-update' });
     }
 
     block.dependsOn.forEach((dependsOnId) => {

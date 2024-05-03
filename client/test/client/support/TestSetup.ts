@@ -14,6 +14,7 @@ import RayTool from '@/client/editor/features/block/use_cases/ray/RayTool';
 import SelectTool from '@/client/editor/features/block/use_cases/select/SelectTool';
 import SceneStore from '@/client/editor/features/scene/SceneStore';
 import TemplateStore from '@/client/editor/features/template/TemplateStore';
+import ToolStore from '@/client/editor/features/tool/ToolStore';
 import KeyboardService from '@/client/editor/features/tool/service/KeyboardService';
 import ToolService from '@/client/editor/features/tool/service/ToolService';
 
@@ -24,13 +25,14 @@ class TestSetup {
     this.update = new UpdateService(this.blockStore, store);
     this.move = new MoveService(this.blockStore, this.update, this.scene);
     this.templates = new TemplateStore(store);
+    this.toolStore = new ToolStore(store);
   }
 
   setup(): EditorContextType {
     return {
       tool: new ToolService(
         [
-          new AddTool(this.blockStore, this.update),
+          new AddTool(this.blockStore, this.scene, this.toolStore, this.update),
           new SelectTool(this.blockStore, this.update, this.scene, this.move),
           new GroupTool(this.blockStore, this.update, this.templates),
           new CableTool(this.blockStore, this.scene, this.update),
@@ -56,6 +58,8 @@ class TestSetup {
   private move: MoveService;
 
   private templates: TemplateStore;
+
+  private toolStore: ToolStore;
 }
 
 export default TestSetup;

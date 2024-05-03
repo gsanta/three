@@ -15,7 +15,7 @@ import BlockCategory from '@/client/editor/types/BlockCategory';
 export type TransformType = 'move' | 'scale';
 
 export type BlockSettingsState = {
-  selectedBlockName: BlockName;
+  selectedBlockName: string;
   blocks: BlockType[];
   settings: Record<string, BlockSettings>;
   selectedSettings: Record<string, BlockSelectedSettings>;
@@ -49,7 +49,7 @@ export const blockSettingsSlice = createSlice({
       const axisIndex = VectorUtils.getAxisIndex(axis);
       state.selectedSettings[block.category].rotation[axisIndex] = rotation;
     },
-    setSelectedGeometry: (state, action: PayloadAction<BlockName>) => {
+    setSelectedGeometry: (state, action: PayloadAction<string>) => {
       state.selectedBlockName = action.payload;
     },
     setSelectedTransformType: (state, action: PayloadAction<TransformType>) => {

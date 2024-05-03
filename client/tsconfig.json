@@ -11,7 +11,7 @@
     "typeRoots": [
       "./node_modules/@types",
       "src/client/type_definitions",
-      "test/client/helpers/matchers"
+      "test/client/support/matchers"
     ],
     "types": [
       "node",
@@ -52,7 +52,7 @@
   },
   "files": [
     "src/client/type_definitions/global.d.ts",
-    "test/client/helpers/matchers/matchers.d.ts"
+    "test/client/support/matchers/matchers.d.ts"
   ],
   "include": [
     ".eslintrc.js",

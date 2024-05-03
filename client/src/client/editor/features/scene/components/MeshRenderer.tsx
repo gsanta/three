@@ -48,9 +48,10 @@ const MeshRenderer = (props: Omit<WrappedMeshProps, 'parent'>) => {
   const { tool } = useEditorContext();
   const { blocks, categories } = useAppSelector((selector) => selector.block.present);
 
-  if (block.name === 'group') {
+  if (block.children.length) {
     return (
-      <group key={block.id} position={meshProps.position} name={block.name} userData={{ modelId: block.id }}>
+      <group key={block.id} name={block.name} userData={{ modelId: block.id }}>
+        {block.name !== 'group' && renderComponent(props, blocks, categories)}
         {block.children.map((child) => (
           <MeshRenderer
             key={blocks[child].id}

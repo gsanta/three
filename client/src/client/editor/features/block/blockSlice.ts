@@ -47,6 +47,20 @@ export const blockSlice = createSlice({
   name: 'block',
   initialState: initialBlockState,
   reducers: {
+    clear(state: BlockState) {
+      state.rootBlocksIds = [];
+      state.blocks = {};
+      state.selectedBlockIds = [];
+      state.selectedPartNames = [];
+      state.categories = {
+        cables: {},
+        decorations: {},
+        poles: {},
+        walls: {},
+        'building-bases': {},
+      };
+    },
+
     updateBlocks(state: BlockState, action: PayloadAction<UpdateBlocks>) {
       const updates = action.payload;
 
@@ -120,6 +134,6 @@ export const blockSlice = createSlice({
   },
 });
 
-export const { setSelection: setSelectedBlocks, update, updateBlocks } = blockSlice.actions;
+export const { clear: clearBlockSlice, setSelection: setSelectedBlocks, update, updateBlocks } = blockSlice.actions;
 
 export default blockSlice.reducer;

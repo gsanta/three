@@ -1,5 +1,5 @@
 import { store } from '@/client/common/utils/store';
-import TestEnv, { setupTestEnv } from '../helpers/TestEnv';
+import TestEnv, { setupTestEnv } from '../../support/TestEnv';
 import { setSelectedTool } from '@/client/editor/features/tool/toolSlice';
 import ToolName from '@/client/editor/features/tool/state/ToolName';
 import { Vector3 } from 'three';
@@ -29,7 +29,7 @@ describe('JoinPoles', () => {
     env.toolHelper.pointerDown({ eventObjectName: poles[1].id });
 
     store.dispatch(setSelectedTool(ToolName.Cable));
-    env.context.tool.getCableTool().joinPoles();
+    env.tool.getCableTool().joinPoles();
   };
 
   describe('when joining two poles', () => {

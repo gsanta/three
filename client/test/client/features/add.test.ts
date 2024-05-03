@@ -2,7 +2,7 @@ import { Vector3 } from 'three';
 import { store } from '@/client/common/utils/store';
 import { setSelectedTool } from '@/client/editor/features/tool/toolSlice';
 import ToolName from '@/client/editor/features/tool/state/ToolName';
-import TestEnv, { setupTestEnv } from './helpers/TestEnv';
+import TestEnv, { setupTestEnv } from '../support/TestEnv';
 import { setSelectedGeometry } from '@/client/editor/features/template/templateSlice';
 
 describe('Add', () => {
@@ -27,7 +27,7 @@ describe('Add', () => {
       expect(Object.values(env.blockStore.getBlocks())[0]).toMatchObject({
         geometry: 'box',
         name: 'box',
-        position: [0, 0.6, 5],
+        position: [0, 0.1, 5],
         rotation: [0, 0, 0],
         scale: [1, 1, 1],
       });

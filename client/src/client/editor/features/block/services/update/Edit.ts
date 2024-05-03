@@ -11,6 +11,16 @@ import PoleFactory from './factories/PoleFactory';
 import BlockStore from '../../BlockStore';
 import { Store } from '@/client/common/utils/store';
 
+type MergeStrategies = 'merge' | 'exclude-update';
+
+const mergeArrays = <T>(arr1: T[], arr2: T[] | undefined, mergeStrategy: MergeStrategies) => {
+  if (mergeStrategy === 'merge') {
+    return [...new Set([...arr1, ...(arr2 || [])])];
+  }
+
+  return arr1.filter((id) => !arr2?.includes(id));
+};
+
 class Edit {
   constructor(store: BlockStore, dispatchStore: Store) {
     this.store = store;
@@ -57,7 +67,7 @@ class Edit {
   updateBlock(
     id: string,
     update: PartialDeep<Block>,
-    options: { arrayMergeStrategy: 'merge' | 'exclude-update' } = { arrayMergeStrategy: 'merge' },
+    options: { arrayMergeStrategy: MergeStrategies } = { arrayMergeStrategy: 'merge' },
   ): this {
     if (this.isRemoved(id)) {
       return this;
@@ -149,21 +159,16 @@ class Edit {
   private mergeBlocks(
     orig: Block,
     update: PartialDeep<Block>,
-    options: { arrayMergeStrategy: 'merge' | 'exclude-update' } = { arrayMergeStrategy: 'merge' },
+    options: { arrayMergeStrategy: MergeStrategies } = { arrayMergeStrategy: 'merge' },
   ) {
     const { arrayMergeStrategy } = options;
-
-    const dependents =
-      arrayMergeStrategy === 'merge'
-        ? [...new Set([...orig.dependents, ...(update.dependents || [])])]
-        : orig.dependents.filter((id) => !update.dependents?.includes(id));
 
     return {
       ...orig,
       ...update,
-      dependents: dependents,
-      dependsOn: [...new Set([...orig.dependsOn, ...(update.dependsOn || [])])],
-      children: [...new Set([...orig.children, ...(update.children || [])])],
+      dependents: mergeArrays(orig.dependents, update.dependents, arrayMergeStrategy),
+      dependsOn: mergeArrays(orig.dependsOn, update.dependsOn, arrayMergeStrategy),
+      children: mergeArrays(orig.children, update.children, arrayMergeStrategy),
     } as Block;
   }
 

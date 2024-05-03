@@ -6,7 +6,7 @@ import MeshUtils from '@/client/editor/utils/MeshUtils';
 
 expect.extend({
   toMatchMeshPosition(actual: Num3, { block, env, meshName }: { block: Block; env: TestEnv; meshName: string }) {
-    const baseMesh = env.context.scene.getMesh(block.id);
+    const baseMesh = env.sceneStore.getMesh(block.id);
     const expected = new Vector3();
     MeshUtils.findByName(baseMesh, meshName).getWorldPosition(expected);
 

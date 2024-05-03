@@ -25,6 +25,7 @@ class BlockCreator {
       children: settings.children || [],
       dependents: settings.dependents || [],
       dependsOn: settings.dependsOn || [],
+      parent: settings.parent,
       slotSources: settings.slotSources || [],
       slotTarget: settings.slotTarget,
       id: uuidv4(),

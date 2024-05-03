@@ -1,16 +1,16 @@
-import { EditorContextType } from '@/app/editor/EditorContext';
 import { ThreeEvent } from '@react-three/fiber';
 import { Object3D, Vector3 } from 'three';
-import TestScene from './TestScene';
+import TestStore from './TestStore';
+import ToolService from '@/client/editor/features/tool/service/ToolService';
 
 class ToolHelper {
-  constructor(context: EditorContextType, testScene: TestScene) {
-    this.context = context;
+  constructor(tool: ToolService, testScene: TestStore) {
+    this.tool = tool;
     this.testScene = testScene;
   }
 
   pointerMove(point: Vector3) {
-    this.context.tool.onPointerMove({
+    this.tool.onPointerMove({
       point,
       clientX: 0,
       clientY: 0,
@@ -29,17 +29,17 @@ class ToolHelper {
       } as unknown as Object3D;
     }
 
-    this.context.tool.onPointerDown({
-      point: this.context.tool.getToolInfo().pos,
+    this.tool.onPointerDown({
+      point: this.tool.getToolInfo().pos,
       clientX: 0,
       clientY: 0,
       eventObject: eventObj,
     } as ThreeEvent<PointerEvent>);
   }
 
-  private context: EditorContextType;
+  private tool: ToolService;
 
-  private testScene: TestScene;
+  private testScene: TestStore;
 }
 
 export default ToolHelper;

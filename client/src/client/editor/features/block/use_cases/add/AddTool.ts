@@ -7,7 +7,6 @@ import UpdateService from '../../services/update/UpdateService';
 import SceneStore from '../../../scene/SceneStore';
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { Vector3 } from 'three';
-import { toRadian } from '@/client/editor/utils/mathUtils';
 
 class AddTool extends Tool {
   constructor(store: BlockStore, scene: SceneStore, toolStore: ToolStore, update: UpdateService) {
@@ -56,14 +55,14 @@ class AddTool extends Tool {
 
     if (templateName) {
       const edit = this.updateService.getUpdate().create(templateName as BlockName, {
-        dependsOn: [blockId],
+        parent: blockId,
         position: [pos.x, pos.y, pos.z],
         rotation: [0, orientation, 0],
       });
 
       const lastBlock = edit.getLastBlock();
 
-      edit.updateBlock(blockId, { dependents: [lastBlock.id] }).commit();
+      edit.updateBlock(blockId, { children: [lastBlock.id] }).commit();
     }
   }
 
