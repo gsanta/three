@@ -21,7 +21,7 @@ const SelectToolOptionsContent = ({ block }: { block: Block }) => {
   } = useAppSelector((state) => state.tool);
   const { selectedPartNames } = useAppSelector((state) => state.block.present);
   const blockSettings = settings[selectedBlock.category];
-  const selectedPartName = selectedPartNames[0];
+  const hasSelectedPart = Object.keys(selectedPartNames);
 
   const dispatch = useAppDispatch();
 
@@ -45,7 +45,7 @@ const SelectToolOptionsContent = ({ block }: { block: Block }) => {
 
   const scaleX = findNearestValue(blockSettings.scale.x, block.scale[0] / selectedBlock.scale[0]);
 
-  if (selectedPartName) {
+  if (hasSelectedPart) {
     return (
       <Box padding="4" display="flex" flexDir="column" gap="4">
         <FormControl>

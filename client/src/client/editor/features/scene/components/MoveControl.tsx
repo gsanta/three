@@ -3,20 +3,21 @@ import { PivotControls } from '@react-three/drei';
 import { Mesh, Quaternion, Vector3 } from 'three';
 import { useEffect, useRef, useState } from 'react';
 import useEditorContext from '@/app/editor/EditorContext';
-import MeshRenderer from './MeshRenderer';
 import useSelectedBlocks from '@/client/editor/features/block/components/hooks/useSelectedBlocks';
 import { getBlock } from '@/client/editor/features/block/utils/blockUtils';
 import { useAppSelector } from '@/client/common/hooks/hooks';
+import Num3 from '@/client/editor/types/Num3';
+import { ModelMesh } from '../../block/components/meshes/ModelMesh';
+import Block from '@/client/editor/types/Block';
 
 const MoveControl = () => {
-  const selectedMeshes = useSelectedBlocks();
-  const { selectedPartNames } = useAppSelector((store) => store.block.present);
-  const selectedPartName = selectedPartNames.length ? selectedPartNames[0] : undefined;
+  const selectedBlocks = useSelectedBlocks();
+  const movableBlocks = selectedBlocks.filter((mesh) => mesh.movable);
 
-  const movableMeshes = selectedMeshes.filter((mesh) => mesh.movable);
+  const templates = useAppSelector((selector) => selector.template.present.blocks);
+  const { blocks, selectedPartNames } = useAppSelector((selector) => selector.block.present);
 
-  const blocks = useAppSelector((selector) => selector.template.present.blocks);
-  const [transform, setTransform] = useState<Vector3>(new Vector3(0));
+  const [transform, setTransform] = useState<Num3>([0, 0, 0]);
   const selectedMeshRef = useRef<Mesh>(null);
   const { tool } = useEditorContext();
 
@@ -24,7 +25,7 @@ const MoveControl = () => {
     tool.setSelectedMesh(selectedMeshRef.current || undefined);
   }, [tool]);
 
-  if (!movableMeshes.length) {
+  if (!movableBlocks.length) {
     return null;
   }
 
@@ -40,30 +41,47 @@ const MoveControl = () => {
         const newTransform = new Vector3();
         d.decompose(newTransform, new Quaternion(), new Vector3());
         newTransform.x = snapTo(newTransform.x);
-        newTransform.y = snapTo(newTransform.y, getBlock(blocks, selectedMeshes[0].name).snap?.y);
+        newTransform.y = snapTo(newTransform.y, getBlock(templates, selectedBlocks[0].name).snap?.y);
         newTransform.z = snapTo(newTransform.z);
-        setTransform(newTransform);
+        setTransform(newTransform.toArray());
         tool.onDrag(newTransform);
       }}
       onDragEnd={() => {
-        tool.onDragEnd(transform);
-        setTransform(new Vector3(0));
+        tool.onDragEnd(new Vector3(transform[0], transform[1], transform[2]));
+        setTransform([0, 0, 0]);
       }}
       userData={{ role: 'selection-pivot' }}
     >
       <group name="selection-group">
-        {movableMeshes.map((meshInfo) => (
-          <MeshRenderer
-            key={meshInfo.id}
-            meshInfo={meshInfo}
+        {movableBlocks.map((block) => (
+          <ModelMesh
+            additions={{
+              position: transform,
+            }}
+            block={block as Block<'model'>}
+            key={block.id}
             meshProps={{
               ref: selectedMeshRef,
-              position: addVector(meshInfo.position, transform ? transform.toArray() : [0, 0, 0]),
+              position: addVector(block.position, transform),
               onPointerDown: () => {},
             }}
             materialProps={{ color: 'pink', opacity: 0.5, transparent: true }}
-            partMaterialProps={selectedPartName ? { [selectedPartName]: { 'material-color': 'green' } } : undefined}
+            parent={block.parent ? blocks[block.parent] : undefined}
+            selectedParts={selectedPartNames[block.id]} // partMaterialProps={partMaterialProps}
           />
+          // <MeshRenderer
+          //   additions={{
+          //     position: transform,
+          //   }}
+          //   key={meshInfo.id}
+          //   block={meshInfo}
+          //   meshProps={{
+          //     ref: selectedMeshRef,
+          //     position: addVector(meshInfo.position, transform),
+          //     onPointerDown: () => {},
+          //   }}
+          //   materialProps={{ color: 'pink', opacity: 0.5, transparent: true }}
+          // />
         ))}
       </group>
     </PivotControls>

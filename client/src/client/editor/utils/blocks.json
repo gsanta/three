@@ -446,6 +446,18 @@
             }
         },
         {
+            "category": "poles",
+            "rotation": {
+                "y": [
+                    0,
+                    45,
+                    90,
+                    135,
+                    180
+                ]
+            }
+        },
+        {
             "category": "roof",
             "snap": [
                 0,

@@ -18,7 +18,7 @@ class CableTool extends Tool {
 
   onPointerDown({ eventObjectName, clientX, clientY }: ToolInfo) {
     const blocks = this.store.getBlocks();
-    const selectedBlockIds = this.store.getSelectedBlockIds();
+    const selectedBlockIds = this.store.getSelectedRootBlockIds();
     const canvasElement = this.scene.getCanvasElement();
     const camera = this.scene.getCamera();
     const mesh = this.scene.getMesh(eventObjectName);
@@ -47,7 +47,7 @@ class CableTool extends Tool {
 
   joinPoles() {
     const blocks = this.store.getBlocks();
-    const selectedBlockIds = this.store.getSelectedBlockIds();
+    const selectedBlockIds = this.store.getSelectedRootBlockIds();
 
     const polesIds = selectedBlockIds.filter((id) => blocks[id].category === 'poles');
 

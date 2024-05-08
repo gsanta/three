@@ -2,7 +2,7 @@ import { useGLTF } from '@react-three/drei';
 import WrappedMeshProps from '../../types/WrappedMeshProps';
 import useRegisterScene from '../hooks/useRegisterScene';
 
-export const RodMesh = ({ meshInfo, meshProps, materialProps, parent }: WrappedMeshProps) => {
+export const RodMesh = ({ block: meshInfo, meshProps, materialProps, parent }: WrappedMeshProps) => {
   const ref = useRegisterScene();
 
   const { nodes, materials } = useGLTF('/untitled.glb');

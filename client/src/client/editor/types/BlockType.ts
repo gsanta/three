@@ -32,18 +32,19 @@ type BlockType<S extends ShapeType = ShapeType> = {
   points?: Num3[];
   parts: ModelPart[];
   path: string;
-} & (
-  | {
-      geometry: 'tube';
-      points: Num3[];
-    }
-  | {
-      geometry: 'cone';
-      radialSegments: number;
-      radius: number;
-      height: number;
-      points: never;
-    }
-);
+};
+// & (
+//   | {
+//       geometry: 'tube';
+//       points: Num3[];
+//     }
+//   | {
+//       geometry: 'cone';
+//       radialSegments: number;
+//       radius: number;
+//       height: number;
+//       points: never;
+//     }
+// );
 
 export default BlockType;

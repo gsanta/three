@@ -3,7 +3,7 @@ import WrappedMeshProps from '../../types/WrappedMeshProps';
 import useRegisterScene from '../hooks/useRegisterScene';
 import { GroupProps } from '@react-three/fiber';
 
-export const TreeMesh = ({ meshInfo, meshProps }: WrappedMeshProps) => {
+export const TreeMesh = ({ block: meshInfo, meshProps }: WrappedMeshProps) => {
   const ref = useRegisterScene();
 
   const { nodes, materials } = useGLTF('/tree.glb');

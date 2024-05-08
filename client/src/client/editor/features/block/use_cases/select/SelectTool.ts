@@ -31,7 +31,7 @@ class SelectTool extends Tool {
 
   onDrag() {
     const blocks = this.store.getBlocks();
-    const selectedBlockIds = this.store.getSelectedBlockIds();
+    const selectedBlockIds = this.store.getSelectedRootBlockIds();
 
     selectedBlockIds.forEach((blockId) => {
       const block = blocks[blockId];
@@ -41,7 +41,7 @@ class SelectTool extends Tool {
   }
 
   onDragEnd(info: ToolInfo) {
-    const selectedBlockIds = this.store.getSelectedBlockIds();
+    const selectedBlockIds = this.store.getSelectedRootBlockIds();
     const blocks = this.store.getBlocks();
 
     const finalBlockIds: string[] = [];
@@ -51,6 +51,10 @@ class SelectTool extends Tool {
 
       if (block.children.length) {
         finalBlockIds.push(...block.children);
+
+        if (block.name !== 'group') {
+          finalBlockIds.push(block.id);
+        }
       } else {
         finalBlockIds.push(block.id);
       }
@@ -84,9 +88,9 @@ class SelectTool extends Tool {
 
     const block = this.store.getBlocks()[id];
 
-    const selectedBlockId = block.parent ? block.parent : block.id;
+    // const selectedBlockId = block.parent ? block.parent : block.id;
 
-    this.update.getUpdate().select(selectedBlockId, partName).commit();
+    this.update.getUpdate().select(block.id, partName).commit();
   }
 
   scaleMesh(scale: number, block: Block) {
@@ -106,7 +110,7 @@ class SelectTool extends Tool {
   }
 
   rotateMesh(axis: 'x' | 'y' | 'z', rotation: number) {
-    const selectedBlockIds = this.store.getSelectedBlockIds();
+    const selectedBlockIds = this.store.getSelectedRootBlockIds();
 
     if (selectedBlockIds.length === 0) {
       return;

@@ -1,9 +1,10 @@
 import { useGLTF } from '@react-three/drei';
-import { BufferGeometry, Material, NormalBufferAttributes } from 'three';
+import { BufferGeometry, Material, MeshStandardMaterial, NormalBufferAttributes } from 'three';
 import WrappedMeshProps from '../../types/WrappedMeshProps';
 import { ModelPart } from '@/client/editor/types/BlockType';
 import useRegisterScene from '../hooks/useRegisterScene';
 import { GroupProps } from '@react-three/fiber';
+import { addVector } from '@/client/editor/utils/vectorUtils';
 
 type ModelMeshProps = WrappedMeshProps<'model'>;
 
@@ -19,10 +20,10 @@ type ModelPartProps = {
   };
   nodes: NodesType;
   part: ModelPart;
-  partMaterialProps: WrappedMeshProps['partMaterialProps'];
+  selectedParts: ModelMeshProps['selectedParts'];
 };
 
-const ModelMeshPart = ({ materials, nodes, part, partMaterialProps }: ModelPartProps) => {
+const ModelMeshPart = ({ materials, nodes, part, selectedParts }: ModelPartProps) => {
   const geometryPaths = part.geometryPath?.split('.') || [];
 
   const materialPaths = part.materialPath?.split('.') || [];
@@ -45,21 +46,19 @@ const ModelMeshPart = ({ materials, nodes, part, partMaterialProps }: ModelPartP
     nodes,
   ) as BufferGeometry<NormalBufferAttributes>;
 
-  const color = partMaterialProps?.[part?.name || '']?.['material-color'];
+  const color = selectedParts.includes(part?.name || '') ? 'green' : undefined;
 
   return (
     <mesh
       castShadow
       receiveShadow
       geometry={geometry}
-      material={color ? undefined : material}
+      material={color ? new MeshStandardMaterial({ color: 'green' }) : material}
       position={part.position}
       rotation={part.rotation}
       scale={part.scale}
       name={part.name || ''}
-    >
-      {color && <meshStandardMaterial color={color} />}
-    </mesh>
+    />
   );
 };
 
@@ -73,31 +72,39 @@ const ModelGroupPart = ({ part, ...rest }: ModelPartProps) => {
   );
 };
 
-export const ModelMesh = ({ meshInfo, meshProps, partMaterialProps }: ModelMeshProps) => {
+export const ModelMesh = ({ additions, block, meshProps, selectedParts = [] }: ModelMeshProps) => {
   const ref = useRegisterScene();
+  const position = additions?.position ? addVector(additions.position, block.position) : block.position;
 
-  const { nodes, materials } = useGLTF(meshInfo.path);
+  const { nodes, materials } = useGLTF(block.path);
 
   const geometryNodes = nodes as unknown as NodesType;
 
   return (
     <group
-      position={meshInfo.position}
-      rotation={meshInfo.rotation}
-      scale={meshInfo.scale}
+      rotation={block.rotation}
+      scale={block.scale}
       {...(meshProps as GroupProps)}
+      position={position}
       ref={ref}
-      userData={{ modelId: meshInfo.id }}
+      userData={{ modelId: block.id }}
     >
-      {meshInfo.parts.map((childPart) =>
+      {block.parts.map((childPart) =>
         childPart.parts ? (
-          <ModelGroupPart materials={materials} nodes={geometryNodes} part={childPart} />
-        ) : (
-          <ModelMeshPart
+          <ModelGroupPart
+            key={childPart.name}
             materials={materials}
             nodes={geometryNodes}
             part={childPart}
-            partMaterialProps={partMaterialProps}
+            selectedParts={selectedParts}
+          />
+        ) : (
+          <ModelMeshPart
+            key={childPart.name}
+            materials={materials}
+            nodes={geometryNodes}
+            part={childPart}
+            selectedParts={selectedParts}
           />
         ),
       )}

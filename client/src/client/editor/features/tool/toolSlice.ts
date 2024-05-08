@@ -6,6 +6,9 @@ export type ToolState = {
   select: {
     templateName: string;
   };
+  move: {
+    
+  }
 };
 
 export const initialToolState: ToolState = {
@@ -13,6 +16,9 @@ export const initialToolState: ToolState = {
   select: {
     templateName: 'box',
   },
+  move: {
+
+  }
 };
 
 export const toolSlice = createSlice({

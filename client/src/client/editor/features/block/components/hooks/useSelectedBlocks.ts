@@ -1,10 +1,9 @@
 import { useAppSelector } from '@/client/common/hooks/hooks';
 
 const useSelectedBlocks = () => {
-  const { selectedBlockIds: selectedMeshIds } = useAppSelector((store) => store.block.present);
-  const { blocks: meshes } = useAppSelector((store) => store.block.present);
+  const { blocks, selectedBlocks } = useAppSelector((store) => store.block.present);
 
-  return selectedMeshIds?.map((id) => meshes[id]) || [];
+  return Object.keys(selectedBlocks)?.map((id) => blocks[id]) || [];
 };
 
 export default useSelectedBlocks;

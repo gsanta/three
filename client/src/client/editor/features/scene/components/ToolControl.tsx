@@ -1,15 +1,17 @@
-import { useAppSelector } from '@/client/common/hooks/hooks';
-import MeshRenderer from './MeshRenderer';
 import { ThreeEvent } from '@react-three/fiber';
 import { useCallback } from 'react';
 import useEditorContext from '@/app/editor/EditorContext';
+import useNotSelectedBlocks from '../../block/components/hooks/useNotSelectedBlocks';
+import { ModelMesh } from '../../block/components/meshes/ModelMesh';
+import Block from '@/client/editor/types/Block';
+import { useAppSelector } from '@/client/common/hooks/hooks';
 
 const ToolControl = () => {
-  const { blocks: meshes, rootBlocksIds: roots } = useAppSelector((selector) => selector.block.present);
-  const { selectedBlockIds: selectedMeshIds } = useAppSelector((selector) => selector.block.present);
   const { tool } = useEditorContext();
 
-  const isSelected = (id: string) => selectedMeshIds?.includes(id);
+  const blocks = useNotSelectedBlocks();
+  const movableBlocks = blocks.filter((mesh) => mesh.movable);
+  const { selectedPartNames } = useAppSelector((selector) => selector.block.present);
 
   const handlePointerDown = useCallback(
     (event: ThreeEvent<PointerEvent>) => {
@@ -21,11 +23,14 @@ const ToolControl = () => {
 
   return (
     <>
-      {roots
-        .filter((id) => !meshes[id].movable || !isSelected(id))
-        .map((id) => (
-          <MeshRenderer key={id} meshInfo={meshes[id]} meshProps={{ onPointerDown: handlePointerDown }} />
-        ))}
+      {movableBlocks.map((block) => (
+        <ModelMesh
+          key={block.id}
+          block={block as Block<'model'>}
+          meshProps={{ onPointerDown: handlePointerDown }}
+          selectedParts={selectedPartNames[block.id]}
+        />
+      ))}
     </>
   );
 };

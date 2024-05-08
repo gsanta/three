@@ -6,7 +6,7 @@ import useRegisterScene from '../hooks/useRegisterScene';
 
 type CableProps = WrappedMeshProps<'tube'> & { cable: Cable };
 
-const CableMesh = ({ cable, meshProps, meshInfo }: CableProps) => {
+const CableMesh = ({ cable, meshProps, block: meshInfo }: CableProps) => {
   const ref = useRegisterScene();
 
   const curve = useMemo(() => {

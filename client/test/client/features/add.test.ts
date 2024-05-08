@@ -45,7 +45,7 @@ describe('Add', () => {
     expect(Object.values(env.blockStore.getBlocks())[0]).toMatchObject({
       geometry: 'model',
       name: 'pole',
-      position: [0, 0.6, 5],
+      position: [0, 0.1, 5],
       rotation: [0, 0, 0],
       scale: [1, 1, 1],
     });

@@ -19,7 +19,7 @@ class GroupTool extends Tool {
   }
 
   group() {
-    const selectedBlockIds = this.store.getSelectedBlockIds();
+    const selectedBlockIds = this.store.getSelectedRootBlockIds();
     const edit = this.update.getUpdate();
 
     const ungroupedIds = this.ungrouper.execute(selectedBlockIds, edit);
@@ -29,7 +29,7 @@ class GroupTool extends Tool {
   }
 
   ungroup() {
-    const selectedBlockIds = this.store.getSelectedBlockIds();
+    const selectedBlockIds = this.store.getSelectedRootBlockIds();
 
     const edit = this.update.getUpdate();
     this.ungrouper.execute(selectedBlockIds, edit);

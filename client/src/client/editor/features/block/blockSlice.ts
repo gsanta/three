@@ -6,15 +6,17 @@ export type BlockState = {
   blocks: Record<string, Block>;
   categories: BlockCategoryRecords;
   rootBlocksIds: string[];
-  selectedBlockIds: string[];
-  selectedPartNames: string[];
+  selectedRootBlockIds: string[];
+  selectedBlocks: Record<string, boolean>;
+  selectedPartNames: Record<string, string[]>;
 };
 
 export const initialBlockState: BlockState = {
   rootBlocksIds: [],
   blocks: {},
-  selectedBlockIds: [],
-  selectedPartNames: [],
+  selectedBlocks: {},
+  selectedRootBlockIds: [],
+  selectedPartNames: {},
   categories: {
     cables: {},
     decorations: {},
@@ -50,8 +52,10 @@ export const blockSlice = createSlice({
     clear(state: BlockState) {
       state.rootBlocksIds = [];
       state.blocks = {};
-      state.selectedBlockIds = [];
-      state.selectedPartNames = [];
+      state.selectedRootBlockIds = [];
+
+      state.selectedBlocks = {};
+      state.selectedPartNames = {};
       state.categories = {
         cables: {},
         decorations: {},
@@ -71,9 +75,9 @@ export const blockSlice = createSlice({
             state.rootBlocksIds.splice(rootIndex, 1);
           }
 
-          const selectedIndex = state.selectedBlockIds.indexOf(update.remove.id);
+          const selectedIndex = state.selectedRootBlockIds.indexOf(update.remove.id);
           if (selectedIndex !== -1) {
-            state.selectedBlockIds.splice(rootIndex, 1);
+            state.selectedRootBlockIds.splice(rootIndex, 1);
           }
 
           const block = state.blocks[update.remove.id];
@@ -84,12 +88,21 @@ export const blockSlice = createSlice({
           }
         } else if ('select' in update) {
           if (update.select === null) {
-            state.selectedBlockIds = [];
-            state.selectedPartNames = [];
-          } else if (!state.selectedBlockIds.includes(update.select)) {
-            state.selectedBlockIds.push(update.select);
+            state.selectedRootBlockIds = [];
+            state.selectedPartNames = {};
+            state.selectedBlocks = {};
+          } else {
             if (update.partName) {
-              state.selectedPartNames.push(update.partName);
+              if (!state.selectedPartNames[update.select]) {
+                state.selectedPartNames[update.select] = [];
+              }
+
+              state.selectedPartNames[update.select] = [
+                ...new Set([...state.selectedPartNames[update.select], update.partName]),
+              ];
+            } else {
+              state.selectedBlocks[update.select] = true;
+              state.selectedRootBlockIds = [...new Set([...state.selectedRootBlockIds, update.select])];
             }
           }
         } else {
@@ -121,19 +134,14 @@ export const blockSlice = createSlice({
       });
     },
 
-    setSelection: (state, action: PayloadAction<{ blocks: string[]; parts: string[] }>) => {
-      state.selectedBlockIds = action.payload.blocks;
-      state.selectedPartNames = action.payload.parts;
-    },
-
     update(state, action: PayloadAction<Partial<BlockState>>) {
       state.blocks = action.payload.blocks || state.blocks;
       state.rootBlocksIds = action.payload.rootBlocksIds || state.rootBlocksIds;
-      state.selectedBlockIds = action.payload.selectedBlockIds || state.selectedBlockIds;
+      state.selectedRootBlockIds = action.payload.selectedRootBlockIds || state.selectedRootBlockIds;
     },
   },
 });
 
-export const { clear: clearBlockSlice, setSelection: setSelectedBlocks, update, updateBlocks } = blockSlice.actions;
+export const { clear: clearBlockSlice, update, updateBlocks } = blockSlice.actions;
 
 export default blockSlice.reducer;

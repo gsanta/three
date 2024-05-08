@@ -13,7 +13,7 @@ const renderComponent = (
   blocks: Record<string, Block>,
   categories: BlockCategoryRecords,
 ): JSX.Element => {
-  const { meshInfo: block, meshProps, materialProps, partMaterialProps } = meshRendererProps;
+  const { additions, block: block, meshProps, materialProps, partMaterialProps } = meshRendererProps;
 
   const parent = block.parent ? blocks[block.parent] : undefined;
 
@@ -21,8 +21,9 @@ const renderComponent = (
     case 'tube':
       return (
         <CableMesh
+          additions={additions}
           cable={categories.cables[block.id]}
-          meshInfo={block}
+          block={block}
           meshProps={{ ...meshProps }}
           materialProps={materialProps}
           parent={parent}
@@ -31,7 +32,8 @@ const renderComponent = (
     case 'model':
       return (
         <ModelMesh
-          meshInfo={block}
+          additions={additions}
+          block={block}
           meshProps={{ ...meshProps }}
           materialProps={materialProps}
           parent={parent}
@@ -39,12 +41,20 @@ const renderComponent = (
         />
       );
     default:
-      return <BoxMesh meshInfo={block} meshProps={{ ...meshProps }} materialProps={materialProps} parent={parent} />;
+      return (
+        <BoxMesh
+          additions={additions}
+          block={block}
+          meshProps={{ ...meshProps }}
+          materialProps={materialProps}
+          parent={parent}
+        />
+      );
   }
 };
 
 const MeshRenderer = (props: Omit<WrappedMeshProps, 'parent'>) => {
-  const { meshInfo: block, meshProps = {}, materialProps = {} } = props;
+  const { additions, block: block, meshProps = {}, materialProps = {} } = props;
   const { tool } = useEditorContext();
   const { blocks, categories } = useAppSelector((selector) => selector.block.present);
 
@@ -54,8 +64,9 @@ const MeshRenderer = (props: Omit<WrappedMeshProps, 'parent'>) => {
         {block.name !== 'group' && renderComponent(props, blocks, categories)}
         {block.children.map((child) => (
           <MeshRenderer
+            additions={additions}
             key={blocks[child].id}
-            meshInfo={blocks[child]}
+            block={blocks[child]}
             materialProps={materialProps}
             meshProps={{ onPointerDown: meshProps.onPointerDown }}
           />

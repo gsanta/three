@@ -32,8 +32,8 @@ class AddTool extends Tool {
 
   addToSlot() {
     const { templateName } = this.toolStore.getSelectOptions();
-    const blockId = this.store.getSelectedBlockIds()[0];
-    const partName = this.store.getSelectedPartNames()[0];
+    const blockId = this.store.getSelectedRootBlockIds()[0];
+    const partName = this.store.getSelectedPartNames()[blockId][0];
 
     if (!blockId || !partName) {
       return;

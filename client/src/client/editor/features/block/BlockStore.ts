@@ -22,8 +22,8 @@ class BlockStore {
     return Object.values(this.store.getState().block.present.blocks);
   }
 
-  getSelectedBlockIds() {
-    return this.store.getState().block.present.selectedBlockIds;
+  getSelectedRootBlockIds() {
+    return this.store.getState().block.present.selectedRootBlockIds;
   }
 
   getSelectedPartNames() {

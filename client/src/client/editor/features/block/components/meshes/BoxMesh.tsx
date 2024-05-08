@@ -3,7 +3,7 @@ import WrappedMeshProps from '../../types/WrappedMeshProps';
 import { Color } from 'three';
 import useRegisterScene from '../hooks/useRegisterScene';
 
-const BoxMesh = ({ meshInfo, meshProps, materialProps, parent }: WrappedMeshProps) => {
+const BoxMesh = ({ block: meshInfo, meshProps, materialProps, parent }: WrappedMeshProps) => {
   const ref = useRegisterScene();
 
   return (
