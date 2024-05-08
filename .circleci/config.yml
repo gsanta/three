@@ -1,143 +1,18 @@
 version: 2.1
-orbs:
-  codecov: codecov/codecov@1.0.2
 jobs:
-  editor_web_build:
-    working_directory: ~/editor
-    machine:
-      image: ubuntu-2004:current
-    resource_class: large
+  build_and_test:
+    executor: node/default
     steps:
       - checkout
+      - node/install-packages:
+          pkg-manager: yarn
       - run:
-          name: Compile the editor for web with emscripten
-          command: |
-            set -x
-            cd editor
-            make compile-emscripten-docker
-      - persist_to_workspace:
-          root: editor/build/emscripten-ci
-          paths:
-            - spright.js
-            - spright.wasm
-  editor_test:
-    working_directory: ~/editor
-    machine:
-      image: ubuntu-2004:current
-    resource_class: large
-    steps:
-      - checkout
+          command: yarn test
+          name: Run tests
       - run:
-          name: Test
-          command: |
-            set -x
-            cd editor
-            make test
-      - store_test_results:
-          path: editor/build/tests-coverage/test_result.xml
-  editor_test_and_coverage:
-    working_directory: ~/editor
-    machine:
-      image: ubuntu-2004:current
-    resource_class: large
-    steps:
-      - checkout
-      - run:
-          name: Test and coverage
-          command: |
-            set -x
-            cd editor
-            make test-with-coverage-xml
-      - store_test_results:
-          path: editor/build/tests-coverage/test_result.xml
-      - codecov/upload:
-          file: editor/build/tests-coverage/coverage.xml
-  editor_lint:
-    machine:
-      image: ubuntu-2004:current
-    resource_class: large
-    steps:
-      - checkout
-      - run:
-          name: Lints the cpp files for the editor
-          command: |
-            set -x
-            cd editor
-            docker-compose run --rm clang-format; echo $?
-  client_lint:
-    docker:
-      - image: cimg/node:18.16.0
-    steps:
-      - checkout
-      - run:
-          name: Install Dependencies
-          command: cd client && yarn
-      - run:
-          name: Lints the ts files for the client
-          command: ./client/node_modules/.bin/eslint $(git diff --diff-filter=ACMR --name-only origin/master...HEAD | grep -E '\.(ts|tsx)$' | xargs)
-  client_build:
-    working_directory: ~/client
-    docker:
-      - image: cimg/node:18.16.0
-    steps:
-      - checkout
-      - run:
-          name: Install Dependencies
-          command: cd client && yarn
-      - run:
-          name: Builds the client
-          command: cd client && yarn build
-  assemble_frontend:
-    docker:
-      - image: cimg/node:18.16.0
-    steps:
-      - checkout
-      - add_ssh_keys:
-          fingerprints:
-            - "dc:92:64:8c:74:1a:84:49:fd:90:ba:7c:5a:0a:50:ec"
-      - attach_workspace:
-          at: /tmp/editor/emscripten
-      - run:
-          name: Copy files
-          command: |
-            mkdir -p client/static
-            cp /tmp/editor/emscripten/spright.js client/static
-            cp /tmp/editor/emscripten/spright.wasm client/static
-            git config user.email "santagergely90@gmail.com"
-            git config user.name "CircleCI Job"
-            git add -A
-            git commit --allow-empty -am "Automatic commit from CircleCI [skip ci]"
-            git push origin master
-  deploy:
-    docker:
-      - image: cimg/node:18.16.0
-    steps:
-      - run:
-          name: Trigger deploy
-          command: |
-            curl $RENDER_DEPLOY_HOOK_FRONTEND
+          command: yarn build
+          name: Build app
 workflows:
-  build-and-test:
-    when:
-      and:
-        - not:
-            equal: [ master, << pipeline.git.branch >> ]
+  build_and_test:
     jobs:
-      - editor_web_build
-      - editor_lint
-      - editor_test
-      - client_build
-      - client_lint
-  deploy:
-    when:
-      and:
-        - equal: [ master, << pipeline.git.branch >> ]
-    jobs:
-      - editor_web_build
-      - editor_test_and_coverage
-      - assemble_frontend:
-          requires:
-            - editor_web_build
-      - deploy:
-          requires:
-            - assemble_frontend
+      - build_and_test
