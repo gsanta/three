@@ -18,6 +18,7 @@ import SelectTool from '@/client/editor/features/block/use_cases/select/SelectTo
 import MoveService from '@/client/editor/features/block/use_cases/move/MoveService';
 import ToolStore from '@/client/editor/features/tool/ToolStore';
 import TemplateStore from '@/client/editor/features/template/TemplateStore';
+import TestSceneService from './TestSceneService';
 
 type TestEnv = {
   meshFactory: TestMeshFactory;
@@ -37,6 +38,8 @@ export const setupTestEnv = (): TestEnv => {
   const meshFactory = new TestMeshFactory();
   const update = new UpdateService(blockStore, store);
 
+  const scene = new TestSceneService();
+
   const sceneStore = new SceneStore();
   const move = new MoveService(blockStore, update, sceneStore);
 
@@ -46,7 +49,7 @@ export const setupTestEnv = (): TestEnv => {
   const tool = new ToolService(
     [
       new AddTool(blockStore, sceneStore, toolStore, update),
-      new SelectTool(blockStore, update, sceneStore, move),
+      new SelectTool(blockStore, move, scene, sceneStore, update),
       new GroupTool(blockStore, update, templates),
       new CableTool(blockStore, sceneStore, update),
       new EraseTool(blockStore, update),

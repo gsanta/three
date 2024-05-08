@@ -13,6 +13,10 @@ describe('JoinPoles', () => {
     env = setupTestEnv();
   });
 
+  afterEach(() => {
+    env.teardown();
+  });
+
   const joinPoles = () => {
     store.dispatch(setSelectedTool(ToolName.Add));
     store.dispatch(setSelectedGeometry('pole'));

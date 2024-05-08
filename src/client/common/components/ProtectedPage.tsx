@@ -20,6 +20,7 @@ import MoveService from '@/client/editor/features/block/use_cases/move/MoveServi
 import BlockStore from '@/client/editor/features/block/BlockStore';
 import TemplateStore from '@/client/editor/features/template/TemplateStore';
 import ToolStore from '@/client/editor/features/tool/ToolStore';
+import SceneServiceImpl from '@/client/editor/features/scene/SceneServiceImpl';
 
 type ProtectedPageProps = {
   children: ReactNode;
@@ -36,10 +37,11 @@ const queryClient = new QueryClient({
 });
 
 const ProtectedPage = ({ children }: ProtectedPageProps) => {
-  const scene = useMemo(() => new SceneStore(), []);
+  const sceneStore = useMemo(() => new SceneStore(), []);
   const blockStore = useMemo(() => new BlockStore(store), []);
   const update = useMemo(() => new UpdateService(blockStore, store), [blockStore]);
-  const moveService = useMemo(() => new MoveService(blockStore, update, scene), [blockStore, scene, update]);
+  const moveService = useMemo(() => new MoveService(blockStore, update, sceneStore), [blockStore, sceneStore, update]);
+  const scene = useMemo(() => new SceneServiceImpl(sceneStore), [sceneStore]);
   const templates = useMemo(() => new TemplateStore(store), []);
   const toolStore = useMemo(() => new ToolStore(store), []);
 
@@ -47,12 +49,12 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
     () => ({
       tool: new ToolService(
         [
-          new AddTool(blockStore, scene, toolStore, update),
-          new SelectTool(blockStore, update, scene, moveService),
+          new AddTool(blockStore, sceneStore, toolStore, update),
+          new SelectTool(blockStore, moveService, scene, sceneStore, update),
           new GroupTool(blockStore, update, templates),
-          new CableTool(blockStore, scene, update),
+          new CableTool(blockStore, sceneStore, update),
           new EraseTool(blockStore, update),
-          new RayTool(blockStore, update, scene),
+          new RayTool(blockStore, update, sceneStore),
           new ColorTool(blockStore, update),
         ],
         store,
@@ -60,9 +62,9 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
       keyboard: new KeyboardService(store),
       exporter: new ExportJson(store),
       importer: new ImportJson(store),
-      scene,
+      scene: sceneStore,
     }),
-    [blockStore, scene, toolStore, update, moveService, templates],
+    [blockStore, sceneStore, toolStore, update, moveService, scene, templates],
   );
 
   return (

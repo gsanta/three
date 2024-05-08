@@ -25,7 +25,13 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ message: 'User created.' }, { status: 201 });
-  } catch (error: any) {
-    return NextResponse.json({ message: 'User not created.', error: error?.message }, { status: 400 });
+  } catch (error) {
+    let message = 'unkown error';
+
+    if (error instanceof Error) {
+      message = error.message;
+    }
+
+    return NextResponse.json({ message: 'User not created.', error: message }, { status: 400 });
   }
 }

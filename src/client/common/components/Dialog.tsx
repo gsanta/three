@@ -27,6 +27,7 @@ export type DialogProps = {
 export type DialogBodyProps = ModalBodyProps;
 
 export const DialogBody = (props: DialogBodyProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return <ModalBody paddingBlockEnd="2" {...(props as any)} />;
 };
 
@@ -34,6 +35,7 @@ export type DialogFooterProps = ModalFooterProps;
 
 export const DialogFooter = ({ children, ...rest }: DialogFooterProps) => {
   return (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     <ModalFooter paddingInline="2" paddingTop="0" {...(rest as any)}>
       <HStack justifyContent="end">{children}</HStack>
     </ModalFooter>
@@ -42,6 +44,7 @@ export const DialogFooter = ({ children, ...rest }: DialogFooterProps) => {
 
 export const DialogButtons = ({ children, ...rest }: DialogFooterProps) => {
   return (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     <ModalFooter paddingInline="2" {...(rest as any)}>
       <HStack justifyContent="end">
         <ButtonGroup>{children}</ButtonGroup>
@@ -63,6 +66,7 @@ const Dialog = ({ children, isOpen, onClose, title, ...rest }: DialogProps) => {
       trapFocus={true}
     >
       <ModalOverlay />
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
       <ModalContent {...(rest as any)} bgColor="chakra-body-bg">
         <ModalHeader>
           <Text as="h1" color="gray.300" size="3" textTransform="uppercase">

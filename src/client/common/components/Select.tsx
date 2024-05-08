@@ -7,6 +7,7 @@ const Select = forwardRef<SelectProps, 'select'>((props, ref) => {
   const { placeholder, children, ...rest } = props;
 
   return (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     <_Select ref={ref} {...(rest as any)}>
       {placeholder && (
         <option hidden disabled value="">

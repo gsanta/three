@@ -1,23 +1,29 @@
 import Tool, { ToolInfo } from '../../../tool/service/Tool';
 import ToolName from '../../../tool/state/ToolName';
-import VectorUtils, { addVector, snapTo } from '@/client/editor/utils/vectorUtils';
+import VectorUtils, { addVector } from '@/client/editor/utils/vectorUtils';
 import { toRadian } from '@/client/editor/utils/mathUtils';
 import Num3 from '@/client/editor/types/Num3';
 import Block from '@/client/editor/types/Block';
-import MatrixUtils from '@/client/editor/utils/MatrixUtils';
 import SceneStore from '@/client/editor/features/scene/SceneStore';
 import MoveService from '../move/MoveService';
 import UpdateService from '../../services/update/UpdateService';
 import BlockStore from '../../BlockStore';
-import Intersect from '../Intersect';
 import { store } from '@/client/common/utils/store';
 import { updateSelectTool } from '../../../tool/toolSlice';
+import SceneService from '../../../scene/SceneService';
 
 class SelectTool extends Tool {
-  constructor(_store: BlockStore, update: UpdateService, scene: SceneStore, move: MoveService) {
-    super(_store, update, ToolName.Select, 'BiRectangle');
+  constructor(
+    blockStore: BlockStore,
+    move: MoveService,
+    scene: SceneService,
+    sceneStore: SceneStore,
+    update: UpdateService,
+  ) {
+    super(blockStore, update, ToolName.Select, 'BiRectangle');
 
     this.scene = scene;
+    this.sceneStore = sceneStore;
     this.move = move;
   }
 
@@ -74,17 +80,13 @@ class SelectTool extends Tool {
   }
 
   selectRoot(id: string, clientX: number, clientY: number) {
-    const canvasElement = this.scene.getCanvasElement();
-    const camera = this.scene.getCamera();
-    const mesh = this.scene.getObj3d(id);
+    const mesh = this.sceneStore.getObj3d(id);
 
     if (!mesh) {
       return;
     }
 
-    const intersect = new Intersect(canvasElement, camera);
-
-    const [intersects] = intersect.calculate(mesh, clientX, clientY);
+    const [intersects] = this.scene.intersection(mesh, clientX, clientY);
 
     const partName = intersects
       ?.map((intersection) => intersection.object.name)
@@ -126,22 +128,9 @@ class SelectTool extends Tool {
 
     const block = this.store.getBlocks()[selectedBlockIds[0]];
 
-    const mesh = this.scene.getObj3d(block.id);
-
     const index = VectorUtils.getAxisIndex(axis);
     const newRotation = [...block.rotation] as [number, number, number];
     newRotation[index] = toRadian(rotation);
-
-    const rotatedMatrix = MatrixUtils.setRotation(mesh.matrixWorld, newRotation[index]);
-    const vertices = MatrixUtils.getBoxWorldPositions(rotatedMatrix);
-    const bottomLeft = vertices[0];
-
-    const snappedX = snapTo(bottomLeft.x);
-    const snappedZ = snapTo(bottomLeft.z);
-    const deltaX = bottomLeft.x - snappedX;
-    const deltaZ = bottomLeft.z - snappedZ;
-
-    const position = block.position;
 
     this.update
       .getUpdate()
@@ -151,9 +140,11 @@ class SelectTool extends Tool {
       .commit();
   }
 
-  private scene: SceneStore;
+  private sceneStore: SceneStore;
 
   private move: MoveService;
+
+  private scene: SceneService;
 }
 
 export default SelectTool;

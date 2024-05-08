@@ -1,6 +1,6 @@
 import BlockType from '@/client/editor/types/BlockType';
 import { toRadian } from '@/client/editor/utils/mathUtils';
-import VectorUtils, { addVector, snapTo } from '@/client/editor/utils/vectorUtils';
+import VectorUtils, { addVector } from '@/client/editor/utils/vectorUtils';
 import { v4 as uuidv4 } from 'uuid';
 import Num3 from '@/client/editor/types/Num3';
 import Block from '@/client/editor/types/Block';
@@ -10,7 +10,7 @@ class BlockCreator {
     // const { position: pos = [0, 0, 0], ...rest } = settings;
     const pos = settings.position || [0, 0, 0];
 
-    const { rotation: rotationData, position: positionData } = block;
+    const { rotation: rotationData } = block;
     const selectedSize = settings.scale;
     const selectedRotation = settings.rotation || [0, 0, 0];
     const scale = VectorUtils.multiplyVec3(block.scale, selectedSize || [1, 1, 1]);
