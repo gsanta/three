@@ -1,0 +1,10 @@
+public
+deploy
+
+.env
+
+prisma/dev.db
+prisma/dev.db-journal
+
+.next
+.swc
