@@ -11,6 +11,7 @@ import BlockStore from '../../BlockStore';
 import { store } from '@/client/common/utils/store';
 import { updateSelectTool } from '../../../tool/toolSlice';
 import SceneService from '../../../scene/SceneService';
+import Selector from './Selector';
 
 class SelectTool extends Tool {
   constructor(
@@ -22,16 +23,17 @@ class SelectTool extends Tool {
   ) {
     super(blockStore, update, ToolName.Select, 'BiRectangle');
 
-    this.scene = scene;
-    this.sceneStore = sceneStore;
     this.move = move;
+    this.selector = new Selector(blockStore, scene, sceneStore);
   }
 
   onPointerDown(info: ToolInfo) {
     const block = this.store.getBlocks()[info.eventObjectName];
 
     if (block) {
-      this.selectRoot(info.eventObjectName, info.clientX, info.clientY);
+      const edit = this.update.getUpdate();
+      this.selector.select(edit, info.eventObjectName, info.clientX, info.clientY);
+      edit.commit();
     } else {
       this.update.getUpdate().select(null).commit();
     }
@@ -79,30 +81,6 @@ class SelectTool extends Tool {
     edit.commit();
   }
 
-  selectRoot(id: string, clientX: number, clientY: number) {
-    const mesh = this.sceneStore.getObj3d(id);
-
-    if (!mesh) {
-      return;
-    }
-
-    const [intersects] = this.scene.intersection(mesh, clientX, clientY);
-
-    const partName = intersects
-      ?.map((intersection) => intersection.object.name)
-      .find((name) => name && name !== 'root');
-
-    const block = this.store.getBlocks()[id];
-
-    const update = this.update.getUpdate();
-
-    update.select(block.id, partName);
-
-    block.children.forEach((child) => update.select(child));
-
-    update.commit();
-  }
-
   scaleMesh(scale: number, block: Block) {
     const { selectedSettings } = this.store.getBlockSettings();
     const settings = selectedSettings[block.category];
@@ -140,11 +118,9 @@ class SelectTool extends Tool {
       .commit();
   }
 
-  private sceneStore: SceneStore;
-
   private move: MoveService;
 
-  private scene: SceneService;
+  private selector: Selector;
 }
 
 export default SelectTool;

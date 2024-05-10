@@ -46,6 +46,14 @@ class BlockStore {
     return this.store.getState().template.present;
   }
 
+  getBlockTemplates() {
+    return this.store.getState().template.present.blocks;
+  }
+
+  getBlockTemplatesByName(name: string) {
+    return this.store.getState().template.present.blocks.find((block) => block.name === name);
+  }
+
   getRootBlockIds() {
     return this.store.getState().block.present.rootBlocksIds;
   }

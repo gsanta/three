@@ -3,7 +3,24 @@
         "group": {},
         "box": {
             "category": "decorations",
-            "geometry": "box"
+            "geometry": "model",
+            "path": "/box.glb",
+            "parts": [
+                {
+                    "geometryPath": "Box.geometry",
+                    "materialPath": "Box",
+                    "position": [
+                        -0.069,
+                        0.019,
+                        0.037
+                    ],
+                    "scale": [
+                        0.534,
+                        0.534,
+                        0.534
+                    ]
+                }
+            ]
         },
         "wall": {
             "category": "walls",
@@ -362,7 +379,7 @@
                     "orientation": 180
                 },
                 {
-                    "geometryPath": "base001.geometry",
+                    "geometryPath": "ceil.geometry",
                     "materialPath": "wall-placeholder",
                     "position": [
                         -0.069,
@@ -382,6 +399,26 @@
                     "name": "ceil",
                     "slot": {
                         "axes": [
+                            "y"
+                        ]
+                    }
+                },
+                {
+                    "geometryPath": "floor.geometry",
+                    "materialPath": "wall-placeholder",
+                    "position": [
+                        -0.092,
+                        0.257,
+                        0.049
+                    ],
+                    "scale": [
+                        -3.628,
+                        -0.122,
+                        -79.359
+                    ],
+                    "name": "floor",
+                    "slot": {
+                        "allowMovement": [
                             "y"
                         ]
                     }

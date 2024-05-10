@@ -1,4 +1,5 @@
 import * as blocks from '../utils/blocks.json';
+import Axis from './Axis';
 import BlockCategory from './BlockCategory';
 import Num3 from './Num3';
 
@@ -15,6 +16,9 @@ export type ModelPart = {
   parts: ModelPart[];
   name?: string;
   orientation: number;
+  slot?: {
+    allowMovement?: Axis[];
+  };
 };
 
 type BlockType<S extends ShapeType = ShapeType> = {
