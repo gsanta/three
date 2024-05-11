@@ -1,14 +1,14 @@
 import BlockCategory from '@/client/editor/types/BlockCategory';
 import BlockMover from './BlockMover';
 import PoleMover from './PoleMover';
-import UpdateService from '../../../features/block/services/update/UpdateService';
-import SceneStore from '../../../features/scene/SceneStore';
-import BlockStore from '../../../features/block/BlockStore';
+import UpdateService from '../../../services/update/UpdateService';
+import SceneStore from '../../../components/scene/SceneStore';
+import BlockStore from '../../../stores/block/BlockStore';
 import Num3 from '@/client/editor/types/Num3';
 import BaseMover from './BaseMover';
-import ToolStore from '@/client/editor/features/tool/ToolStore';
+import ToolStore from '@/client/editor/stores/tool/ToolStore';
 import { store } from '@/client/common/utils/store';
-import { updateSelectTool } from '@/client/editor/features/tool/toolSlice';
+import { updateSelectTool } from '@/client/editor/stores/tool/toolSlice';
 
 class MoveBlock {
   constructor(blockStore: BlockStore, update: UpdateService, sceneStore: SceneStore, toolStore: ToolStore) {

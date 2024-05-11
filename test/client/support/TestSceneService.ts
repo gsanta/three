@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import SceneService from '@/client/editor/features/scene/SceneService';
+import SceneService from '@/client/editor/components/scene/SceneService';
 import { Object3D, Object3DEventMap, Intersection, Ray } from 'three';
 
 class TestSceneService implements SceneService {

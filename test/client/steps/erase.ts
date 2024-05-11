@@ -1,6 +1,6 @@
 import { store } from '@/client/common/utils/store';
-import ToolName from '@/client/editor/features/tool/state/ToolName';
-import { setSelectedTool } from '@/client/editor/features/tool/toolSlice';
+import ToolName from '@/client/editor/types/ToolName';
+import { setSelectedTool } from '@/client/editor/stores/tool/toolSlice';
 import TestEnv from '../support/TestEnv';
 import BlockCategory from '@/client/editor/types/BlockCategory';
 

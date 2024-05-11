@@ -1,7 +1,7 @@
 import { store } from '@/client/common/utils/store';
-import { setSelectedGeometry } from '@/client/editor/features/template/templateSlice';
-import ToolName from '@/client/editor/features/tool/state/ToolName';
-import { setSelectedTool, updateSelectTool } from '@/client/editor/features/tool/toolSlice';
+import { setSelectedGeometry } from '@/client/editor/stores/template/templateSlice';
+import ToolName from '@/client/editor/types/ToolName';
+import { setSelectedTool, updateSelectTool } from '@/client/editor/stores/tool/toolSlice';
 import { Vector3 } from 'three';
 import TestEnv from '../support/TestEnv';
 

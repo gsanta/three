@@ -1,11 +1,11 @@
 import { Object3D, Object3DEventMap } from 'three';
-import SceneService from '../../features/scene/SceneService';
-import SceneStore from '../../features/scene/SceneStore';
-import BlockStore from '../../features/block/BlockStore';
+import SceneService from '../../components/scene/SceneService';
+import SceneStore from '../../components/scene/SceneStore';
+import BlockStore from '../../stores/block/BlockStore';
 import Block from '@/client/editor/types/Block';
-import Edit from '../../features/block/services/update/Edit';
+import Edit from '../../services/update/Edit';
 import { store } from '@/client/common/utils/store';
-import { updateSelectTool } from '../../features/tool/toolSlice';
+import { updateSelectTool } from '../../stores/tool/toolSlice';
 
 class Selector {
   constructor(blockStore: BlockStore, scene: SceneService, sceneStore: SceneStore) {

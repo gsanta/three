@@ -1,9 +1,9 @@
 import { Object3D, Vector3 } from 'three';
 import { store } from '@/client/common/utils/store';
-import { setSelectedTool, updateSelectTool } from '@/client/editor/features/tool/toolSlice';
-import ToolName from '@/client/editor/features/tool/state/ToolName';
+import { setSelectedTool, updateSelectTool } from '@/client/editor/stores/tool/toolSlice';
+import ToolName from '@/client/editor/types/ToolName';
 import TestEnv, { setupTestEnv } from '../support/TestEnv';
-import { setSelectedGeometry } from '@/client/editor/features/template/templateSlice';
+import { setSelectedGeometry } from '@/client/editor/stores/template/templateSlice';
 
 describe('Add', () => {
   let env: TestEnv;

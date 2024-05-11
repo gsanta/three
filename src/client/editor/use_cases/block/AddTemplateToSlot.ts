@@ -1,8 +1,8 @@
 import MeshUtils from '@/client/editor/utils/MeshUtils';
-import SceneStore from '../../features/scene/SceneStore';
-import BlockStore from '../../features/block/BlockStore';
+import SceneStore from '../../components/scene/SceneStore';
+import BlockStore from '../../stores/block/BlockStore';
 import { Vector3 } from 'three';
-import Edit from '../../features/block/services/update/Edit';
+import Edit from '../../services/update/Edit';
 import { BlockName } from '@/client/editor/types/BlockType';
 
 class AddTemplateToSlot {

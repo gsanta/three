@@ -1,22 +1,22 @@
 import { EditorContextType } from '@/app/editor/EditorContext';
 import { store } from '@/client/common/utils/store';
-import BlockStore from '@/client/editor/features/block/BlockStore';
-import ExportJson from '@/client/editor/features/block/services/io/ExportJson';
-import ImportJson from '@/client/editor/features/block/services/io/ImportJson';
-import UpdateService from '@/client/editor/features/block/services/update/UpdateService';
-import AddTool from '@/client/editor/features/block/use_cases/add/AddTool';
-import CableTool from '@/client/editor/features/block/use_cases/cable/CableTool';
-import ColorTool from '@/client/editor/features/block/use_cases/color/ColorTool';
-import EraseTool from '@/client/editor/features/block/use_cases/erase/EraseTool';
-import GroupTool from '@/client/editor/features/block/use_cases/group/GroupTool';
+import BlockStore from '@/client/editor/stores/block/BlockStore';
+import ExportJson from '@/client/editor/controllers/io/ExportJson';
+import ImportJson from '@/client/editor/controllers/io/ImportJson';
+import UpdateService from '@/client/editor/services/update/UpdateService';
+import AddTool from '@/client/editor/controllers/tools/AddTool';
+import CableTool from '@/client/editor/controllers/tools/CableTool';
+import ColorTool from '@/client/editor/controllers/tools/ColorTool';
+import EraseTool from '@/client/editor/controllers/tools/EraseTool';
+import GroupTool from '@/client/group/GroupTool';
 import MoveBlock from '@/client/editor/use_cases/block/move/MoveBlock';
-import RayTool from '@/client/editor/features/block/use_cases/ray/RayTool';
-import SelectTool from '@/client/editor/features/block/use_cases/select/SelectTool';
-import SceneStore from '@/client/editor/features/scene/SceneStore';
-import TemplateStore from '@/client/editor/features/template/TemplateStore';
-import ToolStore from '@/client/editor/features/tool/ToolStore';
-import KeyboardService from '@/client/editor/features/tool/service/KeyboardService';
-import ToolService from '@/client/editor/features/tool/service/ToolService';
+import RayTool from '@/client/editor/controllers/tools/RayTool';
+import SelectTool from '@/client/editor/controllers/tools/SelectTool';
+import SceneStore from '@/client/editor/components/scene/SceneStore';
+import TemplateStore from '@/client/editor/stores/template/TemplateStore';
+import ToolStore from '@/client/editor/stores/tool/ToolStore';
+import KeyboardService from '@/client/editor/services/KeyboardService';
+import ToolService from '@/client/editor/services/ToolService';
 
 class TestSetup {
   constructor() {

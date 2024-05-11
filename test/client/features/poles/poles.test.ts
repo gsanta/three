@@ -1,10 +1,10 @@
 import { store } from '@/client/common/utils/store';
 import TestEnv, { setupTestEnv } from '../../support/TestEnv';
-import { setSelectedTool } from '@/client/editor/features/tool/toolSlice';
-import ToolName from '@/client/editor/features/tool/state/ToolName';
+import { setSelectedTool } from '@/client/editor/stores/tool/toolSlice';
+import ToolName from '@/client/editor/types/ToolName';
 import { Vector3 } from 'three';
-import { setSelectedGeometry } from '@/client/editor/features/template/templateSlice';
-import Pole from '@/client/editor/features/block/types/Pole';
+import { setSelectedGeometry } from '@/client/editor/stores/template/templateSlice';
+import Pole from '@/client/editor/types/block/Pole';
 
 describe('JoinPoles', () => {
   let env: TestEnv;

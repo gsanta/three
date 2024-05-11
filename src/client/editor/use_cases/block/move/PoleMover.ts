@@ -1,12 +1,12 @@
-import { Pins, maxPolePinNumber } from '@/client/editor/features/block/types/Pole';
+import { Pins, maxPolePinNumber } from '@/client/editor/types/block/Pole';
 import Num3 from '@/client/editor/types/Num3';
 import BlockMover from './BlockMover';
 import Block from '@/client/editor/types/Block';
-import Edit from '../../../features/block/services/update/Edit';
-import SceneStore from '../../../features/scene/SceneStore';
+import Edit from '../../../services/update/Edit';
+import SceneStore from '../../../components/scene/SceneStore';
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { Vector3 } from 'three';
-import BlockStore from '../../../features/block/BlockStore';
+import BlockStore from '../../../stores/block/BlockStore';
 
 class PoleMover extends BlockMover {
   constructor(store: BlockStore, scene: SceneStore) {

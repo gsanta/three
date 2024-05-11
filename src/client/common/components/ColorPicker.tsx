@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '../hooks/hooks';
 import React, { useState } from 'react';
 import { ChromePicker, ColorResult } from 'react-color';
-import { setColor } from '@/client/editor/features/template/templateSlice';
+import { setColor } from '@/client/editor/stores/template/templateSlice';
 
 const ColorPicker = () => {
   const color = useAppSelector((state) => state.template.present.color);

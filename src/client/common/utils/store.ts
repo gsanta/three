@@ -1,8 +1,8 @@
 import undoable, { StateWithHistory } from 'redux-undo';
-import templateSlice, { BlockSettingsState } from '../../editor/features/template/templateSlice';
-import blockSlice, { BlockState } from '../../editor/features/block/blockSlice';
-import settingsSlice, { SettingsState } from '../../editor/features/settings/state/settingsSlice';
-import toolSlice, { ToolState } from '../../editor/features/tool/toolSlice';
+import templateSlice, { BlockSettingsState } from '../../editor/stores/template/templateSlice';
+import blockSlice, { BlockState } from '../../editor/stores/block/blockSlice';
+import settingsSlice, { SettingsState } from '../../editor/stores/settingsSlice';
+import toolSlice, { ToolState } from '../../editor/stores/tool/toolSlice';
 import { EnhancedStore, configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
 
 const blockSettingsSliceUndoable = undoable(templateSlice, { filter: () => false });

@@ -1,23 +1,23 @@
 import TestStore from './TestStore';
 import ToolHelper from './ToolHelper';
-import BlockStore from '@/client/editor/features/block/BlockStore';
+import BlockStore from '@/client/editor/stores/block/BlockStore';
 import { store, testMiddleware } from '@/client/common/utils/store';
 import TestMeshFactory from './TestMeshFactory';
-import { UpdateBlocks, clearBlockSlice, updateBlocks } from '@/client/editor/features/block/blockSlice';
+import { UpdateBlocks, clearBlockSlice, updateBlocks } from '@/client/editor/stores/block/blockSlice';
 import { Mesh } from 'three';
-import UpdateService from '@/client/editor/features/block/services/update/UpdateService';
-import SceneStore from '@/client/editor/features/scene/SceneStore';
-import ToolService from '@/client/editor/features/tool/service/ToolService';
-import AddTool from '@/client/editor/features/block/use_cases/add/AddTool';
-import CableTool from '@/client/editor/features/block/use_cases/cable/CableTool';
-import ColorTool from '@/client/editor/features/block/use_cases/color/ColorTool';
-import EraseTool from '@/client/editor/features/block/use_cases/erase/EraseTool';
-import GroupTool from '@/client/editor/features/block/use_cases/group/GroupTool';
-import RayTool from '@/client/editor/features/block/use_cases/ray/RayTool';
-import SelectTool from '@/client/editor/features/block/use_cases/select/SelectTool';
+import UpdateService from '@/client/editor/services/update/UpdateService';
+import SceneStore from '@/client/editor/components/scene/SceneStore';
+import ToolService from '@/client/editor/services/ToolService';
+import AddTool from '@/client/editor/controllers/tools/AddTool';
+import CableTool from '@/client/editor/controllers/tools/CableTool';
+import ColorTool from '@/client/editor/controllers/tools/ColorTool';
+import EraseTool from '@/client/editor/controllers/tools/EraseTool';
+import GroupTool from '@/client/group/GroupTool';
+import RayTool from '@/client/editor/controllers/tools/RayTool';
+import SelectTool from '@/client/editor/controllers/tools/SelectTool';
 import MoveBlock from '@/client/editor/use_cases/block/move/MoveBlock';
-import ToolStore from '@/client/editor/features/tool/ToolStore';
-import TemplateStore from '@/client/editor/features/template/TemplateStore';
+import ToolStore from '@/client/editor/stores/tool/ToolStore';
+import TemplateStore from '@/client/editor/stores/template/TemplateStore';
 import TestSceneService from './TestSceneService';
 
 type TestEnv = {
