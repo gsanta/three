@@ -1,8 +1,8 @@
 import MeshUtils from '@/client/editor/utils/MeshUtils';
-import SceneStore from '../../../scene/SceneStore';
-import BlockStore from '../../BlockStore';
+import SceneStore from '../../features/scene/SceneStore';
+import BlockStore from '../../features/block/BlockStore';
 import { Vector3 } from 'three';
-import Edit from '../../services/update/Edit';
+import Edit from '../../features/block/services/update/Edit';
 import { BlockName } from '@/client/editor/types/BlockType';
 
 class AddTemplateToSlot {
@@ -50,7 +50,10 @@ class AddTemplateToSlot {
 
       const lastBlock = edit.getLastBlock();
 
-      edit.updateBlock(blockId, { children: [lastBlock.id] });
+      edit.updateBlock(blockId, {
+        children: [lastBlock.id],
+        slotSources: [{ slotName: partName, blockId: lastBlock.id }],
+      });
     }
   }
 

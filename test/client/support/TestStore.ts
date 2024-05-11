@@ -24,13 +24,27 @@ class TestStore {
     return this.lastModifiedBlock;
   }
 
+  getLastCreatedBlock() {
+    if (!this.lastCreatedBlock) {
+      throw new Error('No block was created.');
+    }
+
+    return this.lastCreatedBlock;
+  }
+
   setLastModifiedBlock(block: Block) {
     this.lastModifiedBlock = block;
+  }
+
+  setLastCreatedBlock(block: Block) {
+    this.lastCreatedBlock = block;
   }
 
   private plane: Mesh | undefined;
 
   private lastModifiedBlock: Block | undefined;
+
+  private lastCreatedBlock: Block | undefined;
 }
 
 export default TestStore;

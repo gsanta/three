@@ -1,6 +1,12 @@
 import BlockCategory, { BlockCategories } from '@/client/editor/types/BlockCategory';
 import BlockFactory from './factories/BlockFactory';
-import { BlockUpdate, DecorationUpdate, UpdateBlocks, updateBlocks } from '@/client/editor/features/block/blockSlice';
+import {
+  BlockCreate,
+  BlockUpdate,
+  DecorationUpdate,
+  UpdateBlocks,
+  updateBlocks,
+} from '@/client/editor/features/block/blockSlice';
 import { BlockName } from '@/client/editor/types/BlockType';
 import { PartialDeep } from 'type-fest';
 import { getBlock } from '../../utils/blockUtils';
@@ -50,7 +56,7 @@ class Edit {
       ? factory.create(blockType, options, decorationOptions)
       : this.defaultFactory.create(blockType, options);
 
-    this.updates.push({ block, decoration });
+    this.updates.push({ type: 'create', block, decoration });
 
     return this;
   }
@@ -73,15 +79,21 @@ class Edit {
       return this;
     }
     const origBlock = this.store.getBlocks()[id];
-    const [prevBlock, index] = this.getBlockFromUpdates(id);
+    const [prevUpdate, index] = this.getBlockFromUpdates(id);
 
-    const newBlock = this.mergeBlocks(prevBlock || origBlock, update, options);
+    const newBlock = this.mergeBlocks(prevUpdate?.block || origBlock, update, options);
 
     if (index !== -1) {
       this.updates.splice(index, 1);
     }
 
-    this.updates.push({ block: newBlock });
+    const prevDecoration = prevUpdate?.decoration;
+
+    if (prevDecoration) {
+      this.updates.push({ type: prevUpdate?.type || 'update', block: newBlock, decoration: prevDecoration });
+    } else {
+      this.updates.push({ type: 'update', block: newBlock });
+    }
 
     return this;
   }
@@ -97,11 +109,11 @@ class Edit {
     }
 
     const origDecoration = this.store.getDecoration(category, id);
-    const [prevDecoration, index] = this.getDecorationFromUpdates(id);
+    const [prevUpdate, index] = this.getDecorationFromUpdates(id);
 
     const updated =
       this.updaters[category]?.updateDecoration(
-        (prevDecoration as BlockCategories[T]) || origDecoration,
+        (prevUpdate?.decoration as BlockCategories[T]) || origDecoration,
         partial,
         options,
       ) ||
@@ -114,7 +126,12 @@ class Edit {
       this.updates.splice(index, 1);
     }
 
-    this.updates.push({ decoration: updated });
+    const prevBlock = prevUpdate?.block;
+    if (prevBlock) {
+      this.updates.push({ type: prevUpdate?.type || 'update', block: prevBlock, decoration: updated });
+    } else {
+      this.updates.push({ type: 'update', decoration: updated });
+    }
 
     return this;
   }
@@ -169,27 +186,39 @@ class Edit {
       dependents: mergeArrays(orig.dependents, update.dependents, arrayMergeStrategy),
       dependsOn: mergeArrays(orig.dependsOn, update.dependsOn, arrayMergeStrategy),
       children: mergeArrays(orig.children, update.children, arrayMergeStrategy),
+      slotSources: mergeArrays(orig.slotSources, update.slotSources, arrayMergeStrategy),
     } as Block;
   }
 
-  private getBlockFromUpdates(id: string): [Block | undefined, number] {
-    const index = this.updates.findIndex((update) => ('block' in update ? update.block.id === id : false));
+  private getBlockFromUpdates(
+    id: string,
+  ): [BlockUpdate<BlockCategory> | BlockCreate<BlockCategory> | undefined, number] {
+    const index = this.updates.findIndex((update) => ('block' in update ? update.block?.id === id : false));
 
     if (index === -1) {
       return [undefined, -1];
     }
 
-    return [(this.updates[index] as BlockUpdate).block, index];
+    return [this.updates[index] as BlockUpdate<BlockCategory> | BlockCreate<BlockCategory> | undefined, index];
   }
 
-  private getDecorationFromUpdates(id: string): [BlockCategories[BlockCategory] | undefined, number] {
-    const index = this.updates.findIndex((update) => ('decoration' in update ? update.decoration.id === id : false));
+  private getDecorationFromUpdates(
+    id: string,
+  ): [BlockUpdate<BlockCategory> | BlockCreate<BlockCategory> | DecorationUpdate<BlockCategory> | undefined, number] {
+    const index = this.updates.findIndex((update) => ('decoration' in update ? update.decoration?.id === id : false));
 
     if (index === -1) {
       return [undefined, -1];
     }
 
-    return [(this.updates[index] as DecorationUpdate<BlockCategory>).decoration, index];
+    return [
+      this.updates[index] as
+        | BlockUpdate<BlockCategory>
+        | BlockCreate<BlockCategory>
+        | DecorationUpdate<BlockCategory>
+        | undefined,
+      index,
+    ];
   }
 
   private isRemoved(id: string) {

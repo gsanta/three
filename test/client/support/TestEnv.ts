@@ -15,7 +15,7 @@ import EraseTool from '@/client/editor/features/block/use_cases/erase/EraseTool'
 import GroupTool from '@/client/editor/features/block/use_cases/group/GroupTool';
 import RayTool from '@/client/editor/features/block/use_cases/ray/RayTool';
 import SelectTool from '@/client/editor/features/block/use_cases/select/SelectTool';
-import MoveService from '@/client/editor/features/block/use_cases/move/MoveService';
+import MoveBlock from '@/client/editor/use_cases/block/move/MoveBlock';
 import ToolStore from '@/client/editor/features/tool/ToolStore';
 import TemplateStore from '@/client/editor/features/template/TemplateStore';
 import TestSceneService from './TestSceneService';
@@ -23,6 +23,7 @@ import TestSceneService from './TestSceneService';
 type TestEnv = {
   meshFactory: TestMeshFactory;
   blockStore: BlockStore;
+  sceneService: TestSceneService;
   sceneStore: SceneStore;
   testScene: TestStore;
   tool: ToolService;
@@ -41,7 +42,7 @@ export const setupTestEnv = (): TestEnv => {
   const scene = new TestSceneService();
 
   const sceneStore = new SceneStore();
-  const move = new MoveService(blockStore, update, sceneStore);
+  const move = new MoveBlock(blockStore, update, sceneStore);
 
   const templates = new TemplateStore(store);
   const toolStore = new ToolStore(store);
@@ -67,7 +68,11 @@ export const setupTestEnv = (): TestEnv => {
       const payload = action.payload as UpdateBlocks;
 
       payload.forEach((u) => {
-        if ('block' in u) {
+        if ('type' in u && u.type === 'create') {
+          testStore.setLastCreatedBlock(u.block);
+        }
+
+        if ('block' in u && u.block) {
           sceneStore.addMesh(meshFactory.create(u.block) as unknown as Mesh, u.block.id);
           testStore.setLastModifiedBlock(u.block);
         }
@@ -83,6 +88,7 @@ export const setupTestEnv = (): TestEnv => {
   return {
     blockStore,
     meshFactory,
+    sceneService: scene,
     sceneStore,
     testScene: testStore,
     tool,

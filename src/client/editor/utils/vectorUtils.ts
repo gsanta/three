@@ -18,6 +18,10 @@ class VectorUtils {
   static multiplyVec3(vec1: Num3, vec2: Num3): Num3 {
     return [vec1[0] * vec2[0], vec1[1] * vec2[1], vec1[2] * vec2[2]];
   }
+
+  static subtractNum3(vec1: Num3, vec2: Num3): Num3 {
+    return vec1.map((val, index) => val - vec2[index]) as Num3;
+  }
 }
 
 export default VectorUtils;

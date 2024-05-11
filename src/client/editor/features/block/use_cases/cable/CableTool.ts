@@ -3,7 +3,7 @@ import ToolName from '@/client/editor/features/tool/state/ToolName';
 import SceneStore from '@/client/editor/features/scene/SceneStore';
 import Intersect from '../Intersect';
 import { Vector3 } from 'three';
-import JoinPoles from './JoinPoles';
+import JoinPoles from '../../../../use_cases/block/JoinPoles';
 import UpdateService from '../../services/update/UpdateService';
 import Num3 from '@/client/editor/types/Num3';
 import BlockStore from '../../BlockStore';

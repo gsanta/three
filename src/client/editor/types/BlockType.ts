@@ -29,6 +29,7 @@ type BlockType<S extends ShapeType = ShapeType> = {
   position: [number, number, number];
   scale: [number, number, number];
   movable: boolean;
+  moveAxis: [boolean, boolean, boolean];
   rotation: [number, number, number];
   radialSegments: number;
   radius: number;

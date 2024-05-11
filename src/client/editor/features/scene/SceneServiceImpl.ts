@@ -1,4 +1,4 @@
-import { Intersection, Object3D, Ray } from 'three';
+import { Intersection, Object3D } from 'three';
 import SceneStore from './SceneStore';
 import Intersect from '../block/use_cases/Intersect';
 import SceneService from './SceneService';
@@ -8,8 +8,8 @@ class SceneServiceImpl implements SceneService {
     this.intersect = new Intersect(sceneStore);
   }
 
-  intersection(mesh: Object3D, clientX: number, clientY: number): [Intersection<Object3D>[] | undefined, Ray] {
-    return this.intersect.calculate(mesh, clientX, clientY);
+  intersection(mesh: Object3D, clientX: number, clientY: number): Intersection<Object3D>[] | undefined {
+    return this.intersect.calculate(mesh, clientX, clientY)[0];
   }
 
   private intersect: Intersect;

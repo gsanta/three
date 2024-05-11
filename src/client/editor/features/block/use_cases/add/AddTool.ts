@@ -4,7 +4,7 @@ import ToolName from '../../../tool/state/ToolName';
 import BlockStore from '../../BlockStore';
 import UpdateService from '../../services/update/UpdateService';
 import SceneStore from '../../../scene/SceneStore';
-import AddTemplateToSlot from './AddToSlot';
+import AddTemplateToSlot from '../../../../use_cases/block/AddTemplateToSlot';
 
 class AddTool extends Tool {
   constructor(blockStore: BlockStore, sceneStore: SceneStore, toolStore: ToolStore, update: UpdateService) {

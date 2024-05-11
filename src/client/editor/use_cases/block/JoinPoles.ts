@@ -2,7 +2,7 @@ import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { Vector3 } from 'three';
 import Block from '@/client/editor/types/Block';
 import SceneStore from '@/client/editor/features/scene/SceneStore';
-import UpdateService from '../../services/update/UpdateService';
+import UpdateService from '../../features/block/services/update/UpdateService';
 import Num3 from '@/client/editor/types/Num3';
 
 class JoinPoles {

@@ -33,15 +33,24 @@ export type SpecificUpdate<T extends BlockCategory> = {
 };
 
 export type DecorationUpdate<K extends BlockCategory> = {
+  type: 'update';
+  block?: Block;
   decoration: BlockCategories[K];
 };
 
-export type BlockUpdate = { block: Block };
+export type BlockUpdate<K extends BlockCategory> = { type: 'update'; block: Block; decoration?: BlockCategories[K] };
+
+export type BlockCreate<K extends BlockCategory> = { type: 'create'; block: Block; decoration?: BlockCategories[K] };
 
 export type BlockSelect = { select: string | null; partName?: string };
 
 // Update type constrained to keys and values from BlockCategories
-export type UpdateBlock<K extends BlockCategory> = BlockUpdate | DecorationUpdate<K> | { remove: Block } | BlockSelect;
+export type UpdateBlock<K extends BlockCategory> =
+  | BlockUpdate<K>
+  | DecorationUpdate<K>
+  | BlockCreate<K>
+  | { remove: Block }
+  | BlockSelect;
 
 export type UpdateBlocks = Array<UpdateBlock<BlockCategory>>;
 
@@ -106,7 +115,7 @@ export const blockSlice = createSlice({
             }
           }
         } else {
-          if ('block' in update) {
+          if ('block' in update && update.block) {
             state.blocks[update.block.id] = update.block;
 
             if (update.block.parent) {

@@ -5,26 +5,28 @@ import { toRadian } from '@/client/editor/utils/mathUtils';
 import Num3 from '@/client/editor/types/Num3';
 import Block from '@/client/editor/types/Block';
 import SceneStore from '@/client/editor/features/scene/SceneStore';
-import MoveService from '../move/MoveService';
+import MoveBlock from '../../../../use_cases/block/move/MoveBlock';
 import UpdateService from '../../services/update/UpdateService';
 import BlockStore from '../../BlockStore';
 import { store } from '@/client/common/utils/store';
 import { updateSelectTool } from '../../../tool/toolSlice';
 import SceneService from '../../../scene/SceneService';
-import Selector from './Selector';
+import Selector from '../../../../use_cases/block/SelectBlock';
+import ToolStore from '../../../tool/ToolStore';
 
 class SelectTool extends Tool {
   constructor(
     blockStore: BlockStore,
-    move: MoveService,
     scene: SceneService,
     sceneStore: SceneStore,
+    toolStore: ToolStore,
     update: UpdateService,
   ) {
     super(blockStore, update, ToolName.Select, 'BiRectangle');
 
-    this.move = move;
+    this.move = new MoveBlock(blockStore, update, sceneStore, toolStore);
     this.selector = new Selector(blockStore, scene, sceneStore);
+    this.toolStore = toolStore;
   }
 
   onPointerDown(info: ToolInfo) {
@@ -40,16 +42,7 @@ class SelectTool extends Tool {
   }
 
   onDrag(info: ToolInfo) {
-    const blocks = this.store.getBlocks();
-    const selectedBlockIds = this.store.getSelectedRootBlockIds();
-
-    store.dispatch(updateSelectTool({ drag: info.drag }));
-
-    selectedBlockIds.forEach((blockId) => {
-      const block = blocks[blockId];
-
-      this.move.move(block);
-    });
+    this.move.perform(info.drag, info.dragDelta);
   }
 
   onDragEnd(info: ToolInfo) {
@@ -74,11 +67,15 @@ class SelectTool extends Tool {
 
     const edit = this.update.getUpdate();
 
+    const drag = this.toolStore.getSelectOptions().drag;
+
     finalBlockIds.forEach((blockId) =>
-      edit.updateBlock(blockId, { position: addVector(blocks[blockId].position, info.drag) }),
+      edit.updateBlock(blockId, { position: addVector(blocks[blockId].position, drag) }),
     );
 
     edit.commit();
+
+    store.dispatch(updateSelectTool({ drag: [0, 0, 0] }));
   }
 
   scaleMesh(scale: number, block: Block) {
@@ -118,9 +115,11 @@ class SelectTool extends Tool {
       .commit();
   }
 
-  private move: MoveService;
+  private move: MoveBlock;
 
   private selector: Selector;
+
+  private toolStore: ToolStore;
 }
 
 export default SelectTool;

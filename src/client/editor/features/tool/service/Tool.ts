@@ -9,6 +9,7 @@ import UpdateService from '../../block/services/update/UpdateService';
 export interface ToolInfo {
   pos: Vector3;
   drag: Num3;
+  dragDelta: Num3;
   eventObjectName: string;
   selectedMesh?: Mesh;
   clientX: number;

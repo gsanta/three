@@ -7,14 +7,18 @@ import SelectTool from '@/client/editor/features/block/use_cases/select/SelectTo
 import AddTool from '../../block/use_cases/add/AddTool';
 import GroupTool from '@/client/editor/features/block/use_cases/group/GroupTool';
 import CableTool from '@/client/editor/features/block/use_cases/cable/CableTool';
+import VectorUtils from '@/client/editor/utils/vectorUtils';
+import ToolStore from '../ToolStore';
 
 class ToolService {
-  constructor(tools: Tool[], store: Store) {
+  constructor(tools: Tool[], store: Store, toolStore: ToolStore) {
     this.tools = tools;
     this.store = store;
+    this.toolStore = toolStore;
     this.info = {
       pos: new Vector3(),
       drag: [0, 0, 0],
+      dragDelta: [0, 0, 0],
       eventObjectName: '',
       clientX: 0,
       clientY: 0,
@@ -43,6 +47,9 @@ class ToolService {
   onDrag(delta: Vector3) {
     // this.info.draggedMesh = mesh;
     this.info.drag = delta.toArray();
+
+    const prevDrag = this.toolStore.getSelectOptions().drag;
+    this.info.dragDelta = VectorUtils.subtractNum3(this.info.drag, prevDrag);
 
     const { selectedTool } = this.store.getState().tool;
     this.getTool(selectedTool)?.onDrag(this.info);
@@ -92,6 +99,8 @@ class ToolService {
   private info: ToolInfo;
 
   private tools: Tool[];
+
+  private toolStore: ToolStore;
 
   private store: Store;
 

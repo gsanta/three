@@ -9,7 +9,7 @@ import CableTool from '@/client/editor/features/block/use_cases/cable/CableTool'
 import ColorTool from '@/client/editor/features/block/use_cases/color/ColorTool';
 import EraseTool from '@/client/editor/features/block/use_cases/erase/EraseTool';
 import GroupTool from '@/client/editor/features/block/use_cases/group/GroupTool';
-import MoveService from '@/client/editor/features/block/use_cases/move/MoveService';
+import MoveBlock from '@/client/editor/use_cases/block/move/MoveBlock';
 import RayTool from '@/client/editor/features/block/use_cases/ray/RayTool';
 import SelectTool from '@/client/editor/features/block/use_cases/select/SelectTool';
 import SceneStore from '@/client/editor/features/scene/SceneStore';
@@ -23,7 +23,7 @@ class TestSetup {
     this.scene = new SceneStore();
     this.blockStore = new BlockStore(store);
     this.update = new UpdateService(this.blockStore, store);
-    this.move = new MoveService(this.blockStore, this.update, this.scene);
+    this.move = new MoveBlock(this.blockStore, this.update, this.scene);
     this.templates = new TemplateStore(store);
     this.toolStore = new ToolStore(store);
   }
@@ -55,7 +55,7 @@ class TestSetup {
 
   private update: UpdateService;
 
-  private move: MoveService;
+  private move: MoveBlock;
 
   private templates: TemplateStore;
 

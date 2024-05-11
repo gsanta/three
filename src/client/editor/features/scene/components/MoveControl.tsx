@@ -15,6 +15,7 @@ const MoveControl = () => {
 
   const templates = useAppSelector((selector) => selector.template.present.blocks);
   const { selectedPartNames } = useAppSelector((selector) => selector.block.present);
+  const { drag, moveAxis } = useAppSelector((selector) => selector.tool.select);
 
   const [transform, setTransform] = useState<Num3>([0, 0, 0]);
   const selectedMeshRef = useRef<Mesh>(null);
@@ -31,7 +32,8 @@ const MoveControl = () => {
   return (
     <PivotControls
       depthTest={false}
-      activeAxes={[true, true, true]}
+      activeAxes={moveAxis}
+      disableRotations={true}
       rotation={[0, Math.PI / 2, 0]}
       scale={1}
       anchor={[0, 0, 0.4]}
@@ -55,7 +57,7 @@ const MoveControl = () => {
         {movableBlocks.map((block) => (
           <MeshRenderer
             additions={{
-              position: transform,
+              position: drag,
             }}
             block={block}
             key={block.id}
@@ -67,20 +69,6 @@ const MoveControl = () => {
             materialProps={{ color: 'pink', opacity: 0.5, transparent: true }}
             selectedParts={selectedPartNames[block.id]}
           />
-
-          // <MeshRenderer
-          //   additions={{
-          //     position: transform,
-          //   }}
-          //   key={meshInfo.id}
-          //   block={meshInfo}
-          //   meshProps={{
-          //     ref: selectedMeshRef,
-          //     position: addVector(meshInfo.position, transform),
-          //     onPointerDown: () => {},
-          //   }}
-          //   materialProps={{ color: 'pink', opacity: 0.5, transparent: true }}
-          // />
         ))}
       </group>
     </PivotControls>

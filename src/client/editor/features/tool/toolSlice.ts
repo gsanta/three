@@ -5,6 +5,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export type ToolState = {
   selectedTool: ToolName;
   select: {
+    moveAxis: [boolean, boolean, boolean];
     templateName: string;
     drag: Num3;
   };
@@ -13,6 +14,7 @@ export type ToolState = {
 export const initialToolState: ToolState = {
   selectedTool: ToolName.Add,
   select: {
+    moveAxis: [true, true, true],
     templateName: 'box',
     drag: [0, 0, 0],
   },

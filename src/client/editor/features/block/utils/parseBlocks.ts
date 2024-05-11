@@ -5,6 +5,7 @@ const defaultBlock: Partial<BlockType> = {
   rotation: [0, 0, 0],
   scale: [1, 1, 1],
   movable: true,
+  moveAxis: [true, false, true],
 };
 
 const parseBlocks = (blocks: Record<string, BlockType>): BlockType[] =>

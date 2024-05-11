@@ -1,9 +1,11 @@
 import { Object3D, Object3DEventMap } from 'three';
-import SceneService from '../../../scene/SceneService';
-import SceneStore from '../../../scene/SceneStore';
-import BlockStore from '../../BlockStore';
+import SceneService from '../../features/scene/SceneService';
+import SceneStore from '../../features/scene/SceneStore';
+import BlockStore from '../../features/block/BlockStore';
 import Block from '@/client/editor/types/Block';
-import Edit from '../../services/update/Edit';
+import Edit from '../../features/block/services/update/Edit';
+import { store } from '@/client/common/utils/store';
+import { updateSelectTool } from '../../features/tool/toolSlice';
 
 class Selector {
   constructor(blockStore: BlockStore, scene: SceneService, sceneStore: SceneStore) {
@@ -24,7 +26,9 @@ class Selector {
     const partName = this.checkPartIntersection(mesh, clientX, clientY);
 
     if (partName) {
+      edit.select(null);
       edit.select(block.id, partName);
+      store.dispatch(updateSelectTool({ moveAxis: block.moveAxis }));
       return;
     }
 
@@ -32,6 +36,7 @@ class Selector {
 
     if (isMovable) {
       edit.select(block.id);
+      store.dispatch(updateSelectTool({ moveAxis: block.moveAxis }));
       return;
     }
 
@@ -43,11 +48,13 @@ class Selector {
       const parent = this.blockStore.getBlocks()[selectedBlock];
 
       parent.children.forEach((child) => edit.select(child));
+
+      store.dispatch(updateSelectTool({ moveAxis: parent.moveAxis }));
     }
   }
 
   private checkPartIntersection(mesh: Object3D<Object3DEventMap>, clientX: number, clientY: number) {
-    const [intersects] = this.scene.intersection(mesh, clientX, clientY);
+    const intersects = this.scene.intersection(mesh, clientX, clientY);
 
     return intersects?.map((intersection) => intersection.object.name).find((name) => name && name !== 'root');
   }

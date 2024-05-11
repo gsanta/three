@@ -16,7 +16,6 @@ import SceneStore from '@/client/editor/features/scene/SceneStore';
 import RayTool from '@/client/editor/features/block/use_cases/ray/RayTool';
 import ColorTool from '@/client/editor/features/block/use_cases/color/ColorTool';
 import UpdateService from '@/client/editor/features/block/services/update/UpdateService';
-import MoveService from '@/client/editor/features/block/use_cases/move/MoveService';
 import BlockStore from '@/client/editor/features/block/BlockStore';
 import TemplateStore from '@/client/editor/features/template/TemplateStore';
 import ToolStore from '@/client/editor/features/tool/ToolStore';
@@ -40,7 +39,6 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
   const sceneStore = useMemo(() => new SceneStore(), []);
   const blockStore = useMemo(() => new BlockStore(store), []);
   const update = useMemo(() => new UpdateService(blockStore, store), [blockStore]);
-  const moveService = useMemo(() => new MoveService(blockStore, update, sceneStore), [blockStore, sceneStore, update]);
   const scene = useMemo(() => new SceneServiceImpl(sceneStore), [sceneStore]);
   const templates = useMemo(() => new TemplateStore(store), []);
   const toolStore = useMemo(() => new ToolStore(store), []);
@@ -50,7 +48,7 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
       tool: new ToolService(
         [
           new AddTool(blockStore, sceneStore, toolStore, update),
-          new SelectTool(blockStore, moveService, scene, sceneStore, update),
+          new SelectTool(blockStore, scene, sceneStore, toolStore, update),
           new GroupTool(blockStore, update, templates),
           new CableTool(blockStore, sceneStore, update),
           new EraseTool(blockStore, update),
@@ -58,13 +56,14 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
           new ColorTool(blockStore, update),
         ],
         store,
+        toolStore,
       ),
       keyboard: new KeyboardService(store),
       exporter: new ExportJson(store),
       importer: new ImportJson(store),
       scene: sceneStore,
     }),
-    [blockStore, sceneStore, toolStore, update, moveService, scene, templates],
+    [blockStore, sceneStore, toolStore, update, scene, templates],
   );
 
   return (
