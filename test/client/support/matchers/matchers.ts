@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-standalone-expect */
 import Block from '@/client/editor/types/Block';
 import Num3 from '@/client/editor/types/Num3';
 import { Vector3 } from 'three';
@@ -5,6 +6,15 @@ import TestEnv from '../TestEnv';
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 
 expect.extend({
+  toMatchBlock(blockId: string, expectedBlock: Partial<Block>) {
+    const block = testEnv.blockStore.getBlock(blockId);
+    // const pass = this.equals(actual, expected.toArray());
+
+    expect(block).toMatchObject(expectedBlock);
+
+    return { pass: true, message: () => 'abcd' };
+  },
+
   toMatchMeshPosition(actual: Num3, { block, env, meshName }: { block: Block; env: TestEnv; meshName: string }) {
     const baseMesh = env.sceneStore.getMesh(block.id);
     const expected = new Vector3();

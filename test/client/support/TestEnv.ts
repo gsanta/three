@@ -42,7 +42,6 @@ export const setupTestEnv = (): TestEnv => {
   const scene = new TestSceneService();
 
   const sceneStore = new SceneStore();
-  const move = new MoveBlock(blockStore, update, sceneStore);
 
   const templates = new TemplateStore(store);
   const toolStore = new ToolStore(store);
@@ -50,7 +49,7 @@ export const setupTestEnv = (): TestEnv => {
   const tool = new ToolService(
     [
       new AddTool(blockStore, sceneStore, toolStore, update),
-      new SelectTool(blockStore, move, scene, sceneStore, update),
+      new SelectTool(blockStore, scene, sceneStore, toolStore, update),
       new GroupTool(blockStore, update, templates),
       new CableTool(blockStore, sceneStore, update),
       new EraseTool(blockStore, update),
@@ -58,6 +57,7 @@ export const setupTestEnv = (): TestEnv => {
       new ColorTool(blockStore, update),
     ],
     store,
+    toolStore,
   );
 
   const toolHelper = new ToolHelper(tool, testStore);

@@ -56,6 +56,8 @@ const MeshRenderer = (props: Omit<WrappedMeshProps, 'parent'>) => {
       />
     );
   }
+
+  return undefined;
 };
 
 export default MeshRenderer;

@@ -45,6 +45,14 @@ class EraseBlock {
       edit.updateBlock(parent.id, { children: [blockId] }, { arrayMergeStrategy: 'exclude-update' });
     }
 
+    if (block.slotTarget) {
+      edit.updateBlock(
+        block.slotTarget.blockId,
+        { slotSources: [{ blockId: block.id, slotName: block.slotTarget.slotName }] },
+        { arrayMergeStrategy: 'exclude-update' },
+      );
+    }
+
     block.dependsOn.forEach((dependsOnId) => {
       edit.updateBlock(dependsOnId, { dependents: [block.id] }, { arrayMergeStrategy: 'exclude-update' });
     });

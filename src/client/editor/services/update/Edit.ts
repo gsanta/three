@@ -9,7 +9,7 @@ import {
 } from '@/client/editor/stores/block/blockSlice';
 import { BlockName } from '@/client/editor/types/BlockType';
 import { PartialDeep } from 'type-fest';
-import Block from '@/client/editor/types/Block';
+import Block, { BlockSlotSource } from '@/client/editor/types/Block';
 import CableFactory from './factories/CableFactory';
 import DefaultBlockFactory from './factories/DefaultBlockFactory';
 import PoleFactory from './factories/PoleFactory';
@@ -25,6 +25,32 @@ const mergeArrays = <T>(arr1: T[], arr2: T[] | undefined, mergeStrategy: MergeSt
   }
 
   return arr1.filter((id) => !arr2?.includes(id));
+};
+
+const mergeSlotSources = (
+  arr1: Block['slotSources'],
+  arr2: Block['slotSources'] | undefined,
+  mergeStrategy: MergeStrategies,
+) => {
+  const find = (arr: Block['slotSources'], source: BlockSlotSource) => {
+    return arr.find(
+      (existingSource) => existingSource.blockId === source.blockId && existingSource.slotName === source.slotName,
+    );
+  };
+
+  if (mergeStrategy === 'merge') {
+    const ret = [...(arr1 || [])];
+
+    arr2?.forEach((slotSource) => {
+      if (!find(arr1, slotSource)) {
+        ret.push(slotSource);
+      }
+    });
+
+    return ret;
+  }
+
+  return arr1.filter((slotSource) => !arr2 || !find(arr2, slotSource));
 };
 
 class Edit {
@@ -186,7 +212,7 @@ class Edit {
       dependents: mergeArrays(orig.dependents, update.dependents, arrayMergeStrategy),
       dependsOn: mergeArrays(orig.dependsOn, update.dependsOn, arrayMergeStrategy),
       children: mergeArrays(orig.children, update.children, arrayMergeStrategy),
-      slotSources: mergeArrays(orig.slotSources, update.slotSources, arrayMergeStrategy),
+      slotSources: mergeSlotSources(orig.slotSources || [], update.slotSources, arrayMergeStrategy),
     } as Block;
   }
 

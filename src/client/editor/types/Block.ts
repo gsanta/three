@@ -1,14 +1,16 @@
 import BlockType, { ShapeType } from './BlockType';
 
+export type BlockSlotSource = {
+  slotName: string;
+  blockId: string;
+};
+
 type Block<S extends ShapeType = ShapeType> = {
   id: string;
   children: string[];
   dependsOn: string[];
   dependents: string[];
-  slotSources: {
-    slotName: string;
-    blockId: string;
-  }[];
+  slotSources: BlockSlotSource[];
   slotTarget?: {
     slotName: string;
     blockId: string;
