@@ -6,6 +6,7 @@ const defaultBlock: Partial<BlockType> = {
   scale: [1, 1, 1],
   movable: true,
   moveAxis: [true, false, true],
+  slots: {},
 };
 
 const parseBlocks = (blocks: Record<string, BlockType>): BlockType[] =>

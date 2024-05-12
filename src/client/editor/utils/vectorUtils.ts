@@ -22,6 +22,10 @@ class VectorUtils {
   static subtractNum3(vec1: Num3, vec2: Num3): Num3 {
     return vec1.map((val, index) => val - vec2[index]) as Num3;
   }
+
+  static addNum3(vec1: Num3, vec2: Num3): Num3 {
+    return vec1.map((val, index) => val + vec2[index]) as Num3;
+  }
 }
 
 export default VectorUtils;

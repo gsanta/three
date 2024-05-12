@@ -21,6 +21,8 @@ class BlockUtils {
 
     return block;
   }
+
+  getPart(block: Block, name: string) {}
 }
 
 export default BlockUtils;

@@ -50,7 +50,7 @@ class BlockStore {
     return this.store.getState().template.present.blocks;
   }
 
-  getBlockTemplatesByName(name: string) {
+  getTemplateByName(name: string) {
     return this.store.getState().template.present.blocks.find((block) => block.name === name);
   }
 

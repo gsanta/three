@@ -63,7 +63,7 @@ class Selector {
     const slotTarget = block.slotTarget;
     if (slotTarget) {
       const targetBlock = this.blockStore.getBlock(slotTarget.blockId);
-      const template = this.blockStore.getBlockTemplatesByName(targetBlock.name);
+      const template = this.blockStore.getTemplateByName(targetBlock.name);
 
       const slotTargetPart = template?.parts.find((part) => part.name === slotTarget.slotName);
       if (slotTargetPart?.slot?.allowMovement) {

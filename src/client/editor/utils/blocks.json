@@ -445,6 +445,161 @@
                     ]
                 }
             ]
+        },
+        "road-1": {
+            "category": "roads",
+            "geometry": "model",
+            "path": "/road1.glb",
+            "parts": [
+                {
+                    "geometryPath": "Cube008.geometry",
+                    "materialPath": "Road",
+                    "position": [
+                        -0.002,
+                        0.001,
+                        -0.019
+                    ],
+                    "scale": [
+                        2.184,
+                        0.067,
+                        2.484
+                    ],
+                    "name": "root"
+                },
+                {
+                    "geometryPath": "Cube008_1.geometry",
+                    "materialPath": "White",
+                    "position": [
+                        -0.002,
+                        0.001,
+                        -0.019
+                    ],
+                    "scale": [
+                        2.184,
+                        0.067,
+                        2.484
+                    ],
+                    "name": "stripes"
+                },
+                {
+                    "geometryPath": "EndNorth.geometry",
+                    "materialPath": "wall-placeholder",
+                    "position": [
+                        -0.002,
+                        0.068,
+                        -2.011
+                    ],
+                    "scale": [
+                        2.184,
+                        0.067,
+                        2.484
+                    ],
+                    "name": "end-north"
+                },
+                {
+                    "geometryPath": "EndSouth.geometry",
+                    "materialPath": "wall-placeholder",
+                    "position": [
+                        -0.002,
+                        0.074,
+                        1.977
+                    ],
+                    "scale": [
+                        2.184,
+                        0.067,
+                        2.484
+                    ],
+                    "name": "end-south"
+                }
+            ],
+            "slots": {
+                "end-south": {
+                    "categories": [
+                        "roads"
+                    ],
+                    "slots": [
+                        "end-north"
+                    ]
+                },
+                "end-north": {
+                    "categories": [
+                        "roads"
+                    ],
+                    "slots": [
+                        "end-south"
+                    ]
+                }
+            }
+        },
+        "road-2": {
+            "category": "roads",
+            "geometry": "model",
+            "path": "/road2.glb",
+            "parts": [
+                {
+                    "geometryPath": "Base001.geometry",
+                    "materialPath": "Road",
+                    "position": [
+                        -0.002,
+                        0.137,
+                        -0.019
+                    ],
+                    "scale": [
+                        -2.975,
+                        -0.132,
+                        -2.775
+                    ],
+                    "name": "root"
+                },
+                {
+                    "geometryPath": "EndNorth001.geometry",
+                    "materialPath": "wall-placeholder",
+                    "position": [
+                        0.009,
+                        0.08,
+                        -2.806
+                    ],
+                    "scale": [
+                        -2.975,
+                        -0.132,
+                        -2.775
+                    ],
+                    "name": "end-north"
+                },
+                {
+                    "geometryPath": "EndSouth001.geometry",
+                    "materialPath": "wall-placeholder",
+                    "position": [
+                        0.009,
+                        0.08,
+                        2.769
+                    ],
+                    "scale": [
+                        -2.975,
+                        -0.132,
+                        -2.775
+                    ],
+                    "name": "end-south"
+                }
+            ],
+            "slots": {
+                "end-south": {
+                    "categories": [
+                        "roads"
+                    ],
+                    "slots": [
+                        "end-north"
+                    ]
+                },
+                "end-north": {
+                    "categories": [
+                        "roads"
+                    ],
+                    "slots": [
+                        "end-south"
+                    ]
+                }
+            }
         }
     },
     "settings": [

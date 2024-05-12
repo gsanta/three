@@ -21,6 +21,7 @@ export const initialBlockState: BlockState = {
     cables: {},
     decorations: {},
     poles: {},
+    roads: {},
     walls: {},
     'building-bases': {},
   },

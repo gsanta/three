@@ -17,6 +17,7 @@ export type ModelPart = {
   name?: string;
   orientation: number;
   slot?: {
+    allowed?: Record<string, { slots: [] }>;
     allowMovement?: Axis[];
   };
 };
@@ -37,6 +38,7 @@ type BlockType<S extends ShapeType = ShapeType> = {
   points?: Num3[];
   parts: ModelPart[];
   path: string;
+  slots: Record<string, { categories?: string[]; slots?: string[] }>;
 };
 // & (
 //   | {

@@ -89,7 +89,7 @@ describe('Add', () => {
       });
     });
 
-    describe('whe removing Walls from a Building base', () => {
+    describe('when removing Walls from a Building base', () => {
       it('removes it from the corresponding slot', () => {
         addTemplate('building-base-1');
 
