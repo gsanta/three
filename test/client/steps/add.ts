@@ -5,7 +5,7 @@ import { setSelectedTool, updateSelectTool } from '@/client/editor/stores/tool/t
 import { Vector3 } from 'three';
 import TestEnv from '../support/TestEnv';
 
-export const addBlockToScene = ({ templateName, where }: { templateName: string; where: Vector3 }, env: TestEnv) => {
+export const addTemplate = ({ templateName, where }: { templateName: string; where: Vector3 }, env: TestEnv) => {
   store.dispatch(setSelectedTool(ToolName.Add));
   store.dispatch(setSelectedGeometry(templateName));
 

@@ -1,6 +1,6 @@
 import { Vector3 } from 'three';
 import TestEnv, { setupTestEnv } from '../support/TestEnv';
-import { addBlockToScene, addBlockToSlot } from '../steps/add';
+import { addTemplate, addBlockToSlot } from '../steps/add';
 import { eraseOneBlockByCategory } from '../steps/erase';
 
 describe('Erase', () => {
@@ -16,7 +16,7 @@ describe('Erase', () => {
 
   describe('when erasing a child', () => {
     it('removes the child and the parent-child relation', () => {
-      addBlockToScene({ templateName: 'building-base-1', where: new Vector3(0, 0.1, 5) }, env);
+      addTemplate({ templateName: 'building-base-1', where: new Vector3(0, 0.1, 5) }, env);
 
       addBlockToSlot({ slotName: 'wall1', templateName: 'wall_door' }, env);
 
@@ -34,7 +34,7 @@ describe('Erase', () => {
 
   describe('when erasing a parent', () => {
     it("removes it with it's children", () => {
-      addBlockToScene({ templateName: 'building-base-1', where: new Vector3(0, 0.1, 5) }, env);
+      addTemplate({ templateName: 'building-base-1', where: new Vector3(0, 0.1, 5) }, env);
 
       addBlockToSlot({ slotName: 'wall1', templateName: 'wall_door' }, env);
 

@@ -13,7 +13,7 @@ class BlockCreator {
     const { rotation: rotationData } = block;
     const selectedSize = settings.scale;
     const selectedRotation = settings.rotation || [0, 0, 0];
-    const scale = VectorUtils.multiplyVec3(block.scale, selectedSize || [1, 1, 1]);
+    const scale = VectorUtils.multiply(block.scale, selectedSize || [1, 1, 1]);
 
     const x = pos[0]; //snapTo(pos[0]);
     const z = pos[2]; //snapTo(pos[2]);

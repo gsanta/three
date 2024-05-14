@@ -15,6 +15,22 @@ expect.extend({
     return { pass: true, message: () => 'abcd' };
   },
 
+  toBeCloseToPosition(actualPosition: Num3, expectedPosition: Num3) {
+    expect(actualPosition[0]).toBeCloseTo(expectedPosition[0]);
+    expect(actualPosition[1]).toBeCloseTo(expectedPosition[1]);
+    expect(actualPosition[2]).toBeCloseTo(expectedPosition[2]);
+
+    return { pass: true, message: () => 'Positions were close' };
+  },
+
+  toBeCloseTo(received: number, expected: number, precision = 0.05) {
+    const pass = Math.abs(received - expected) < precision;
+    return {
+      pass,
+      message: () => `expected ${received} to be close to ${expected} with precision ${precision}`,
+    };
+  },
+
   toMatchMeshPosition(actual: Num3, { block, env, meshName }: { block: Block; env: TestEnv; meshName: string }) {
     const baseMesh = env.sceneStore.getMesh(block.id);
     const expected = new Vector3();

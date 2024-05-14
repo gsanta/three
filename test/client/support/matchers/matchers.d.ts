@@ -3,6 +3,7 @@ import Block from '@/client/editor/types/Block';
 
 interface CustomMatchers<R = unknown> {
   toMatchBlock(expectedBlock: Partial<Block>): R;
+  toBeCloseToPosition(expectedPosition: Num3): R;
   toMatchMeshPosition({ block, env, meshName }: { block: Block; env: TestEnv; meshName: string }): R;
 }
 

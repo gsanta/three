@@ -1,5 +1,6 @@
 import Axis from '../types/Axis';
 import Num3 from '../types/Num3';
+import { toRadian } from './mathUtils';
 import { defaultSnap } from './sceneUtils';
 
 class VectorUtils {
@@ -15,16 +16,26 @@ class VectorUtils {
     return 2;
   };
 
-  static multiplyVec3(vec1: Num3, vec2: Num3): Num3 {
+  static multiply(vec1: Num3, vec2: Num3): Num3 {
     return [vec1[0] * vec2[0], vec1[1] * vec2[1], vec1[2] * vec2[2]];
   }
 
-  static subtractNum3(vec1: Num3, vec2: Num3): Num3 {
+  static sub(vec1: Num3, vec2: Num3): Num3 {
     return vec1.map((val, index) => val - vec2[index]) as Num3;
   }
 
-  static addNum3(vec1: Num3, vec2: Num3): Num3 {
+  static add(vec1: Num3, vec2: Num3): Num3 {
     return vec1.map((val, index) => val + vec2[index]) as Num3;
+  }
+
+  static rotate(vec: Num3, angle: number) {
+    const result = [0, vec[1], 0] as Num3;
+    const rad = toRadian(angle);
+
+    result[0] = -(vec[0] * Math.cos(rad) - vec[2] * Math.sin(rad));
+    result[2] = vec[0] * Math.sin(rad) + vec[2] * Math.cos(rad);
+
+    return result;
   }
 }
 

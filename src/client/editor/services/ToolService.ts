@@ -49,7 +49,7 @@ class ToolService {
     this.info.drag = delta.toArray();
 
     const prevDrag = this.toolStore.getSelectOptions().drag;
-    this.info.dragDelta = VectorUtils.subtractNum3(this.info.drag, prevDrag);
+    this.info.dragDelta = VectorUtils.sub(this.info.drag, prevDrag);
 
     const { selectedTool } = this.store.getState().tool;
     this.getTool(selectedTool)?.onDrag(this.info);

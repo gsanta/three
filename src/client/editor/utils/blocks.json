@@ -544,6 +544,11 @@
                         0.137,
                         -0.019
                     ],
+                    "rotation": [
+                        -3.14,
+                        0,
+                        -3.14
+                    ],
                     "scale": [
                         -2.975,
                         -0.132,
@@ -558,6 +563,11 @@
                         0.009,
                         0.08,
                         -2.806
+                    ],
+                    "rotation": [
+                        -3.14,
+                        0,
+                        -3.14
                     ],
                     "scale": [
                         -2.975,
@@ -574,12 +584,57 @@
                         0.08,
                         2.769
                     ],
+                    "rotation": [
+                        -3.14,
+                        0,
+                        -3.14
+                    ],
                     "scale": [
                         -2.975,
                         -0.132,
                         -2.775
                     ],
                     "name": "end-south"
+                },
+                {
+                    "geometryPath": "EndEast.geometry",
+                    "materialPath": "wall-placeholder",
+                    "position": [
+                        2.987,
+                        0.079,
+                        -0.015
+                    ],
+                    "rotation": [
+                        -3.14,
+                        0,
+                        -3.14
+                    ],
+                    "scale": [
+                        -2.975,
+                        -0.132,
+                        -2.775
+                    ],
+                    "name": "end-east"
+                },
+                {
+                    "geometryPath": "EndWest.geometry",
+                    "materialPath": "wall-placeholder",
+                    "position": [
+                        -2.991,
+                        0.079,
+                        -0.015
+                    ],
+                    "rotation": [
+                        -3.14,
+                        0,
+                        -3.14
+                    ],
+                    "scale": [
+                        -2.975,
+                        -0.132,
+                        -2.775
+                    ],
+                    "name": "end-west"
                 }
             ],
             "slots": {
@@ -598,6 +653,24 @@
                     "slots": [
                         "end-south"
                     ]
+                },
+                "end-west": {
+                    "categories": [
+                        "roads"
+                    ],
+                    "slots": [
+                        "end-south"
+                    ],
+                    "rotation": 90
+                },
+                "end-east": {
+                    "categories": [
+                        "roads"
+                    ],
+                    "slots": [
+                        "end-north"
+                    ],
+                    "rotation": 90
                 }
             }
         }

@@ -6,6 +6,7 @@ import Edit from '../../services/update/Edit';
 import { BlockName } from '@/client/editor/types/BlockType';
 import Block from '../../types/Block';
 import VectorUtils from '../../utils/vectorUtils';
+import { toDegree } from '../../utils/mathUtils';
 
 class AddTemplateToSlot {
   constructor(blockStore: BlockStore, sceneStore: SceneStore) {
@@ -41,24 +42,28 @@ class AddTemplateToSlot {
 
     const slotInfo = block.slots[slot];
 
-    const targetSlot = slotInfo.slots?.find((acceptedSlotName) => template?.slots[acceptedSlotName]);
+    const targetSlotName = slotInfo.slots?.find((acceptedSlotName) => template?.slots[acceptedSlotName]);
+    const targetPosition = template?.parts.find((part) => part.name === targetSlotName)?.position;
 
-    if (targetSlot) {
-      const mesh = this.sceneStore.getObj3d(block.id);
-
-      const partMesh = MeshUtils.findByName(mesh, slot);
-      const pos = new Vector3();
-      partMesh.getWorldPosition(pos);
-
-      const targetPart = template?.parts.find((part) => part.name === targetSlot);
-
-      const orientation = block.parts.find((part) => part.name === slot)?.orientation || 0;
-
-      edit.create(templateName as BlockName, {
-        position: VectorUtils.subtractNum3([pos.x, pos.y, pos.z], targetPart?.position || [0, 0, 0]),
-        rotation: [0, orientation, 0],
-      });
+    if (!targetPosition) {
+      return;
     }
+
+    const mesh = this.sceneStore.getObj3d(block.id);
+
+    const partMesh = MeshUtils.findByName(mesh, slot);
+    const pos = new Vector3();
+    partMesh.getWorldPosition(pos);
+
+    const rotation = slotInfo.rotation || 0;
+
+    const finalRotation = rotation + toDegree(block.rotation[1]);
+    const targetPos = VectorUtils.rotate(targetPosition, finalRotation);
+
+    edit.create(templateName as BlockName, {
+      position: VectorUtils.sub([pos.x, pos.y, pos.z], targetPos || [0, 0, 0]),
+      rotation: [0, finalRotation, 0],
+    });
   }
 
   private snapSlotToBlock(edit: Edit, block: Block, slot: string, templateName: string) {

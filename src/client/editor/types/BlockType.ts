@@ -38,7 +38,7 @@ type BlockType<S extends ShapeType = ShapeType> = {
   points?: Num3[];
   parts: ModelPart[];
   path: string;
-  slots: Record<string, { categories?: string[]; slots?: string[] }>;
+  slots: Record<string, { categories?: string[]; slots?: string[]; rotation?: number }>;
 };
 // & (
 //   | {
