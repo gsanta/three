@@ -1,8 +1,8 @@
 import { Grid, OrbitControls, Plane } from '@react-three/drei';
 import MoveControl from './MoveControl';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import useEditorContext from '@/app/editor/EditorContext';
-import { useThree } from '@react-three/fiber';
+import { ThreeEvent, useThree } from '@react-three/fiber';
 import ToolControl from './ToolControl';
 
 const CanvasContent = () => {
@@ -16,6 +16,14 @@ const CanvasContent = () => {
     sceneService.setScene(scene);
   }, [camera, scene, sceneService]);
 
+  const handlePointerEnter = useCallback(
+    (event: ThreeEvent<PointerEvent>) => {
+      tool.onPointerEnter(event);
+      // event.stopPropagation();
+    },
+    [tool],
+  );
+
   return (
     <>
       <ToolControl />
@@ -27,6 +35,7 @@ const CanvasContent = () => {
       <Plane
         args={[100, 100]}
         name="plane"
+        onPointerEnter={handlePointerEnter}
         rotation={[-Math.PI / 2, 0, 0]}
         position={[2, -0.1, 0]}
         onPointerDown={(e) => tool.onPointerDown(e)}

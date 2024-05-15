@@ -5,6 +5,7 @@ import { ModelPart } from '@/client/editor/types/BlockType';
 import useRegisterScene from '../hooks/useRegisterScene';
 import { GroupProps } from '@react-three/fiber';
 import { addVector } from '@/client/editor/utils/vectorUtils';
+import Block from '../../types/Block';
 
 type ModelMeshProps = WrappedMeshProps<'model'>;
 
@@ -15,6 +16,7 @@ type NodesType = {
 type NodesOrObject3DType = NodesType | BufferGeometry<NormalBufferAttributes>;
 
 type ModelPartProps = {
+  block: Block;
   materials: {
     [name: string]: Material;
   };
@@ -23,7 +25,13 @@ type ModelPartProps = {
   selectedParts: ModelMeshProps['selectedParts'];
 };
 
-const ModelMeshPart = ({ materials, nodes, part, selectedParts }: ModelPartProps) => {
+const ModelMeshPart = ({ block, materials, nodes, part, selectedParts }: ModelPartProps) => {
+  const color = selectedParts.includes(part?.name || '') ? 'green' : undefined;
+
+  if (!block.isHovered && part.role === 'slot' && !color) {
+    return null;
+  }
+
   const geometryPaths = part.geometryPath?.split('.') || [];
 
   const materialPaths = part.materialPath?.split('.') || [];
@@ -45,8 +53,6 @@ const ModelMeshPart = ({ materials, nodes, part, selectedParts }: ModelPartProps
     (prev: NodesOrObject3DType, curr: string) => (prev as NodesType)[curr] as NodesOrObject3DType,
     nodes,
   ) as BufferGeometry<NormalBufferAttributes>;
-
-  const color = selectedParts.includes(part?.name || '') ? 'green' : undefined;
 
   return (
     <mesh
@@ -92,6 +98,7 @@ export const ModelMesh = ({ additions, block, meshProps, selectedParts = [] }: M
       {block.parts.map((childPart) =>
         childPart.parts ? (
           <ModelGroupPart
+            block={block}
             key={childPart.name}
             materials={materials}
             nodes={geometryNodes}
@@ -100,6 +107,7 @@ export const ModelMesh = ({ additions, block, meshProps, selectedParts = [] }: M
           />
         ) : (
           <ModelMeshPart
+            block={block}
             key={childPart.name}
             materials={materials}
             nodes={geometryNodes}

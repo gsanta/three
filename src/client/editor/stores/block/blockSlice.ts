@@ -5,6 +5,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 export type BlockState = {
   blocks: Record<string, Block>;
   categories: BlockCategoryRecords;
+  hovered: string | null;
   rootBlocksIds: string[];
   selectedRootBlockIds: string[];
   selectedBlocks: Record<string, boolean>;
@@ -14,6 +15,7 @@ export type BlockState = {
 export const initialBlockState: BlockState = {
   rootBlocksIds: [],
   blocks: {},
+  hovered: null,
   selectedBlocks: {},
   selectedRootBlockIds: [],
   selectedPartNames: {},
@@ -144,6 +146,17 @@ export const blockSlice = createSlice({
       });
     },
 
+    hover(state, action: PayloadAction<string | null>) {
+      if (state.hovered) {
+        state.blocks[state.hovered].isHovered = false;
+      }
+      state.hovered = action.payload;
+
+      if (state.hovered) {
+        state.blocks[state.hovered].isHovered = true;
+      }
+    },
+
     update(state, action: PayloadAction<Partial<BlockState>>) {
       state.blocks = action.payload.blocks || state.blocks;
       state.rootBlocksIds = action.payload.rootBlocksIds || state.rootBlocksIds;
@@ -152,6 +165,6 @@ export const blockSlice = createSlice({
   },
 });
 
-export const { clear: clearBlockSlice, update, updateBlocks } = blockSlice.actions;
+export const { clear: clearBlockSlice, hover, update, updateBlocks } = blockSlice.actions;
 
 export default blockSlice.reducer;

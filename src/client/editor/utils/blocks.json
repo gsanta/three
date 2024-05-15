@@ -494,7 +494,8 @@
                         0.067,
                         2.484
                     ],
-                    "name": "end-north"
+                    "name": "end-north",
+                    "role": "slot"
                 },
                 {
                     "geometryPath": "EndSouth.geometry",
@@ -509,7 +510,8 @@
                         0.067,
                         2.484
                     ],
-                    "name": "end-south"
+                    "name": "end-south",
+                    "role": "slot"
                 }
             ],
             "slots": {
@@ -537,7 +539,7 @@
             "path": "/road2.glb",
             "parts": [
                 {
-                    "geometryPath": "Base001.geometry",
+                    "geometryPath": "Cube012.geometry",
                     "materialPath": "Road",
                     "position": [
                         -0.002,
@@ -557,12 +559,31 @@
                     "name": "root"
                 },
                 {
+                    "geometryPath": "Cube012_1.geometry",
+                    "materialPath": "White",
+                    "position": [
+                        -0.002,
+                        0.137,
+                        -0.019
+                    ],
+                    "rotation": [
+                        -3.14,
+                        0,
+                        -3.14
+                    ],
+                    "scale": [
+                        -2.975,
+                        -0.132,
+                        -2.775
+                    ]
+                },
+                {
                     "geometryPath": "EndNorth001.geometry",
                     "materialPath": "wall-placeholder",
                     "position": [
                         0.009,
                         0.08,
-                        -2.806
+                        -3.022
                     ],
                     "rotation": [
                         -3.14,
@@ -574,7 +595,8 @@
                         -0.132,
                         -2.775
                     ],
-                    "name": "end-north"
+                    "name": "end-north",
+                    "role": "slot"
                 },
                 {
                     "geometryPath": "EndSouth001.geometry",
@@ -582,7 +604,7 @@
                     "position": [
                         0.009,
                         0.08,
-                        2.769
+                        2.979
                     ],
                     "rotation": [
                         -3.14,
@@ -594,7 +616,8 @@
                         -0.132,
                         -2.775
                     ],
-                    "name": "end-south"
+                    "name": "end-south",
+                    "role": "slot"
                 },
                 {
                     "geometryPath": "EndEast.geometry",
@@ -614,7 +637,8 @@
                         -0.132,
                         -2.775
                     ],
-                    "name": "end-east"
+                    "name": "end-east",
+                    "role": "slot"
                 },
                 {
                     "geometryPath": "EndWest.geometry",
@@ -634,7 +658,8 @@
                         -0.132,
                         -2.775
                     ],
-                    "name": "end-west"
+                    "name": "end-west",
+                    "role": "slot"
                 }
             ],
             "slots": {
@@ -687,6 +712,17 @@
                 ],
                 "selected": [
                     1
+                ]
+            }
+        },
+        {
+            "category": "roads",
+            "rotation": {
+                "y": [
+                    0,
+                    90,
+                    180,
+                    270
                 ]
             }
         },

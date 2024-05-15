@@ -10,6 +10,7 @@ type Block<S extends ShapeType = ShapeType> = {
   children: string[];
   dependsOn: string[];
   dependents: string[];
+  isHovered: boolean;
   slotSources: BlockSlotSource[];
   slotTarget?: {
     slotName: string;

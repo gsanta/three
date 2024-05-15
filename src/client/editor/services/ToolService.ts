@@ -35,10 +35,30 @@ class ToolService {
     this.getTool(selectedTool)?.onPointerDown(this.info);
   }
 
+  onPointerEnter(event: ThreeEvent<PointerEvent>) {
+    const { selectedTool } = this.store.getState().tool;
+
+    this.info.eventObjectName = event.eventObject.name === 'plane' ? 'plane' : event.eventObject.userData.modelId;
+
+    this.getTool(selectedTool)?.onPointerEnter(this.info);
+  }
+
+  onPointerLeave(event: ThreeEvent<PointerEvent>) {
+    const { selectedTool } = this.store.getState().tool;
+
+    this.info.eventObjectName = event.eventObject.userData.modelId;
+
+    this.getTool(selectedTool)?.onPointerLeave(this.info);
+  }
+
   onPointerMove(event: ThreeEvent<PointerEvent>) {
     this.info.pos = event.point;
     this.info.clientX = event.clientX;
     this.info.clientY = event.clientY;
+
+    this.info.eventObjectName = event.eventObject.userData.modelId;
+
+    console.log(this.info.eventObjectName);
 
     const { selectedTool } = this.store.getState().tool;
     this.getTool(selectedTool)?.onPointerMove(this.info);

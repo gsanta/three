@@ -25,6 +25,7 @@ class BlockCreator {
       children: settings.children || [],
       dependents: settings.dependents || [],
       dependsOn: settings.dependsOn || [],
+      isHovered: false,
       parent: settings.parent,
       slotSources: settings.slotSources || [],
       slotTarget: settings.slotTarget,

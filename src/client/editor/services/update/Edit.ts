@@ -94,6 +94,8 @@ class Edit {
 
     this.updateBlock(id, block);
     this.updateDecoration(category, id, decoration);
+
+    return this;
   }
 
   updateBlock(

@@ -13,6 +13,7 @@ import { updateSelectTool } from '../../stores/tool/toolSlice';
 import SceneService from '../../components/scene/SceneService';
 import Selector from '../../use_cases/block/SelectBlock';
 import ToolStore from '../../stores/tool/ToolStore';
+import { hover } from '../../stores/block/blockSlice';
 
 class SelectTool extends Tool {
   constructor(
@@ -38,6 +39,24 @@ class SelectTool extends Tool {
       edit.commit();
     } else {
       this.update.getUpdate().select(null).commit();
+    }
+  }
+
+  onPointerEnter(info: ToolInfo) {
+    const block = this.store.getBlocks()[info.eventObjectName];
+
+    if (info.eventObjectName === 'plane') {
+      store.dispatch(hover(null));
+    } else if (block) {
+      store.dispatch(hover(block.id));
+    }
+  }
+
+  onPointerLeave(info: ToolInfo) {
+    const block = this.store.getBlocks()[info.eventObjectName];
+
+    if (block) {
+      this.update.getUpdate().update(block.id, { isHovered: false }, {}).commit();
     }
   }
 

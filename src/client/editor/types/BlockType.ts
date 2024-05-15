@@ -16,6 +16,7 @@ export type ModelPart = {
   parts: ModelPart[];
   name?: string;
   orientation: number;
+  role?: string;
   slot?: {
     allowed?: Record<string, { slots: [] }>;
     allowMovement?: Axis[];

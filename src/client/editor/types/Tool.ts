@@ -42,6 +42,12 @@ abstract class Tool {
   onPointerMove(_info: ToolInfo) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onPointerEnter(_info: ToolInfo) {}
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onPointerLeave(_info: ToolInfo) {}
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onDrag(_info: ToolInfo) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
