@@ -2,40 +2,44 @@ import { ThreeEvent } from '@react-three/fiber';
 import { Object3D, Vector3 } from 'three';
 import TestStore from './TestStore';
 import ToolService from '@/client/editor/services/ToolService';
+import SceneStore from '@/client/editor/components/scene/SceneStore';
 
 class ToolHelper {
-  constructor(tool: ToolService, testScene: TestStore) {
+  constructor(sceneStore: SceneStore, tool: ToolService, testScene: TestStore) {
     this.tool = tool;
     this.testScene = testScene;
+    this.sceneStore = sceneStore;
   }
 
-  pointerMove(point: Vector3) {
+  pointerMove({ blockId, point }: { blockId?: string; point?: Vector3 } = {}) {
     this.tool.onPointerMove({
       point,
       clientX: 0,
       clientY: 0,
+      eventObject: this.getEventObject(blockId),
     } as ThreeEvent<PointerEvent>);
   }
 
-  pointerDown({ eventObject, eventObjectName }: { eventObject?: Object3D; eventObjectName?: string } = {}) {
-    let eventObj = this.testScene.getPlane() as Object3D;
-    if (eventObject) {
-      eventObj = eventObject;
-    } else if (eventObjectName) {
-      eventObj = {
-        userData: {
-          modelId: eventObjectName,
-        },
-      } as unknown as Object3D;
-    }
-
+  pointerDown({ blockId }: { blockId?: string } = {}) {
     this.tool.onPointerDown({
       point: this.tool.getToolInfo().pos,
       clientX: 0,
       clientY: 0,
-      eventObject: eventObj,
+      eventObject: this.getEventObject(blockId),
     } as ThreeEvent<PointerEvent>);
   }
+
+  private getEventObject(blockId?: string) {
+    let eventObj = this.testScene.getPlane() as Object3D;
+
+    if (blockId) {
+      eventObj = this.sceneStore.getObj3d(blockId);
+    }
+
+    return eventObj;
+  }
+
+  private sceneStore: SceneStore;
 
   private tool: ToolService;
 

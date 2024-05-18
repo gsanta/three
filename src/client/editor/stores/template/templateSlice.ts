@@ -37,12 +37,6 @@ export const blockSettingsSlice = createSlice({
   name: 'frame',
   initialState: initialBlockSettingsState,
   reducers: {
-    setBlockSize(state, action: PayloadAction<{ size: number; axis: Axis; blockName: BlockName }>) {
-      const { size, blockName, axis } = action.payload;
-      const block = BlockUtils.getBlock(state.blocks, blockName);
-      const axisIndex = VectorUtils.getAxisIndex(axis);
-      state.selectedSettings[block.category].size[axisIndex] = size;
-    },
     setBlockRotation(state, action: PayloadAction<{ axis: Axis; blockName: BlockName; rotation: number }>) {
       const { axis, blockName, rotation } = action.payload;
       const block = BlockUtils.getBlock(state.blocks, blockName);
@@ -62,7 +56,6 @@ export const blockSettingsSlice = createSlice({
   },
 });
 
-export const { setBlockSize, setBlockRotation, setColor, setSelectedGeometry, setSelectedTransformType } =
-  blockSettingsSlice.actions;
+export const { setBlockRotation, setColor, setSelectedGeometry, setSelectedTransformType } = blockSettingsSlice.actions;
 
 export default blockSettingsSlice.reducer;

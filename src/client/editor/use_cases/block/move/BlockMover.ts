@@ -10,7 +10,7 @@ abstract class BlockMover {
     this.category = category;
   }
 
-  move(edit: Edit, block: Block) {
+  move(_edit: Edit, _block: Block) {
     throw new Error('Unimplemented method');
   }
 }

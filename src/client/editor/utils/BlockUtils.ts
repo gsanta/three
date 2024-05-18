@@ -1,5 +1,5 @@
 import Block from '../types/Block';
-import BlockType, { BlockName } from '../types/BlockType';
+import BlockType from '../types/BlockType';
 
 class BlockUtils {
   static iterateDescendents(blocks: Record<string, Block>, block: Block, doWork: (descendantId: Block) => void) {
@@ -12,7 +12,7 @@ class BlockUtils {
     });
   }
 
-  static getBlock(blocks: BlockType[], blockName: BlockName) {
+  static getBlock(blocks: BlockType[], blockName: string) {
     const block = blocks.find((b) => b.name === blockName);
 
     if (!block) {
@@ -21,8 +21,6 @@ class BlockUtils {
 
     return block;
   }
-
-  getPart(block: Block, name: string) {}
 }
 
 export default BlockUtils;

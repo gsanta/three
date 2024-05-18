@@ -7,7 +7,6 @@ import {
   UpdateBlocks,
   updateBlocks,
 } from '@/client/editor/stores/block/blockSlice';
-import { BlockName } from '@/client/editor/types/BlockType';
 import { PartialDeep } from 'type-fest';
 import Block, { BlockSlotSource } from '@/client/editor/types/Block';
 import CableFactory from './factories/CableFactory';
@@ -69,7 +68,7 @@ class Edit {
   }
 
   create<T extends BlockCategory | never = never>(
-    blockName: BlockName,
+    blockName: string,
     options: Partial<Block> = {},
     decorationOptions: Partial<BlockCategories[T]> = {},
   ): this {

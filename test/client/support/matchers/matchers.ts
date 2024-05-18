@@ -40,8 +40,7 @@ expect.extend({
 
     if (pass) {
       return {
-        message: () =>
-          `Expected: ${this.utils.printExpected(expected)}\nReceived: ${this.utils.printReceived(actual.toArray())}`,
+        message: () => `Expected: ${this.utils.printExpected(expected)}\nReceived: ${this.utils.printReceived(actual)}`,
         pass: true,
       };
     }

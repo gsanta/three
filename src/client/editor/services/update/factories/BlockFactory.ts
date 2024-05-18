@@ -12,17 +12,17 @@ abstract class BlockFactory<T extends BlockCategory | never = never> {
   }
 
   create(
-    blockType: BlockType,
-    blockOptions: Partial<Block> = {},
-    decorationOptions: Partial<BlockCategories[T]> = {},
+    _blockType: BlockType,
+    _blockOptions: Partial<Block> = {},
+    _decorationOptions: Partial<BlockCategories[T]> = {},
   ): { block: Block; decoration?: BlockCategories[T] } {
     throw new Error('Unimplemented method');
   }
 
   updateDecoration(
-    orig: BlockCategories[T],
-    partial: PartialDeep<BlockCategories[T]>,
-    options: { mergeArrays: boolean } = { mergeArrays: true },
+    _orig: BlockCategories[T],
+    _partial: PartialDeep<BlockCategories[T]>,
+    _options: { mergeArrays: boolean } = { mergeArrays: true },
   ): BlockCategories[T] {
     throw new Error('Unimplemented method');
   }

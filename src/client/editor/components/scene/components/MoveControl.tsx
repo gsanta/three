@@ -7,13 +7,17 @@ import useSelectedBlocks from '@/client/editor/components/hooks/useSelectedBlock
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import Num3 from '@/client/editor/types/Num3';
 import MeshRenderer from './MeshRenderer';
-import BlockUtils from '@/client/editor/utils/BlockUtils';
+import { ThreeEvent } from '@react-three/fiber';
 
-const MoveControl = () => {
+type MoveControlProps = {
+  onPointerDown: (event: ThreeEvent<PointerEvent>) => void;
+  onPointerEnter: (event: ThreeEvent<PointerEvent>) => void;
+};
+
+const MoveControl = ({ onPointerDown, onPointerEnter }: MoveControlProps) => {
   const selectedBlocks = useSelectedBlocks();
   const movableBlocks = selectedBlocks.filter((mesh) => mesh.movable);
 
-  const templates = useAppSelector((selector) => selector.template.present.blocks);
   const { selectedPartNames } = useAppSelector((selector) => selector.block.present);
   const { drag, moveAxis } = useAppSelector((selector) => selector.tool.select);
 
@@ -42,7 +46,7 @@ const MoveControl = () => {
         const newTransform = new Vector3();
         d.decompose(newTransform, new Quaternion(), new Vector3());
         newTransform.x = snapTo(newTransform.x);
-        newTransform.y = snapTo(newTransform.y, BlockUtils.getBlock(templates, selectedBlocks[0].name).snap?.y);
+        newTransform.y = snapTo(newTransform.y);
         newTransform.z = snapTo(newTransform.z);
         setTransform(newTransform.toArray());
         tool.onDrag(newTransform);
@@ -64,7 +68,8 @@ const MoveControl = () => {
             meshProps={{
               ref: selectedMeshRef,
               position: addVector(block.position, transform),
-              onPointerDown: () => {},
+              onPointerDown,
+              onPointerEnter,
             }}
             materialProps={{ color: 'pink', opacity: 0.5, transparent: true }}
             selectedParts={selectedPartNames[block.id]}

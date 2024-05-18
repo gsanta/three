@@ -2,29 +2,27 @@ import Tool, { ToolInfo } from '@/client/editor/types/Tool';
 import ToolName from '@/client/editor/types/ToolName';
 import { ArrowHelper } from 'three';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
-import IntersectMesh from '../../use_cases/IntersectMesh';
 import BlockStore from '../../stores/block/BlockStore';
 import UpdateService from '../../services/update/UpdateService';
+import SceneService from '../../components/scene/SceneService';
+import SceneServiceImpl from '../../components/scene/SceneServiceImpl';
 
 class RayTool extends Tool {
   constructor(store: BlockStore, update: UpdateService, scene: SceneStore) {
     super(store, update, ToolName.RayHelper);
 
     this.scene = scene;
+    this.sceneService = new SceneServiceImpl(this.scene);
   }
 
-  onPointerDown({ eventObjectName, clientX, clientY }: ToolInfo) {
-    const canvasElement = this.scene.getCanvasElement();
-    const camera = this.scene.getCamera();
-    const mesh = this.scene.getObj3d(eventObjectName);
+  onPointerDown({ eventObject, clientX, clientY }: ToolInfo) {
+    const mesh = this.scene.getObj3d(eventObject?.userData.modelId || '');
 
     if (!mesh) {
       return;
     }
 
-    const intersect = new IntersectMesh(canvasElement, camera);
-
-    const [intersection, ray] = intersect.calculate(mesh, clientX, clientY);
+    const [intersection, ray] = this.sceneService.intersection(mesh, clientX, clientY);
 
     if (!intersection) {
       return;
@@ -34,7 +32,7 @@ class RayTool extends Tool {
       this.scene.getScene().remove(this.arrow);
     }
 
-    const arrow = new ArrowHelper(ray.direction, ray.origin, intersection.distance, 0xff0000);
+    const arrow = new ArrowHelper(ray.direction, ray.origin, intersection[0].distance, 0xff0000);
     this.scene.getScene().add(arrow);
 
     this.arrow = arrow;
@@ -54,6 +52,8 @@ class RayTool extends Tool {
   }
 
   private scene: SceneStore;
+
+  private sceneService: SceneService;
 
   private arrow: ArrowHelper | undefined;
 }

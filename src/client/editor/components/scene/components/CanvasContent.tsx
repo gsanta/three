@@ -1,9 +1,12 @@
 import { Grid, OrbitControls, Plane } from '@react-three/drei';
-import MoveControl from './MoveControl';
 import { useCallback, useEffect } from 'react';
 import useEditorContext from '@/app/editor/EditorContext';
 import { ThreeEvent, useThree } from '@react-three/fiber';
-import ToolControl from './ToolControl';
+import useNotSelectedBlocks from '../../hooks/useNotSelectedBlocks';
+import { useAppSelector } from '@/client/common/hooks/hooks';
+import MeshRenderer from './MeshRenderer';
+import Block from '@/client/editor/types/Block';
+import MoveControl from './MoveControl';
 
 const CanvasContent = () => {
   const { tool, scene: sceneService } = useEditorContext();
@@ -11,12 +14,15 @@ const CanvasContent = () => {
   const camera = useThree((state) => state.camera);
   const scene = useThree((state) => state.scene);
 
+  const blocks = useNotSelectedBlocks();
+  const { selectedPartNames } = useAppSelector((selector) => selector.block.present);
+
   useEffect(() => {
     sceneService.setCamera(camera);
     sceneService.setScene(scene);
   }, [camera, scene, sceneService]);
 
-  const handlePointerEnter = useCallback(
+  const handleDefaultPointerEnter = useCallback(
     (event: ThreeEvent<PointerEvent>) => {
       tool.onPointerEnter(event);
       // event.stopPropagation();
@@ -24,10 +30,36 @@ const CanvasContent = () => {
     [tool],
   );
 
+  const handlePointerDown = useCallback(
+    (event: ThreeEvent<PointerEvent>) => {
+      tool.onPointerDown(event);
+      event.stopPropagation();
+    },
+    [tool],
+  );
+
+  const handlePointerEnter = useCallback(
+    (event: ThreeEvent<PointerEvent>) => {
+      tool.onPointerEnter(event);
+      event.stopPropagation();
+    },
+    [tool],
+  );
+
   return (
     <>
-      <ToolControl />
-      <MoveControl />
+      {blocks.map((block) => (
+        <MeshRenderer
+          key={block.id}
+          block={block as Block<'model'>}
+          meshProps={{
+            onPointerDown: handlePointerDown,
+            onPointerEnter: handlePointerEnter,
+          }}
+          selectedParts={selectedPartNames[block.id]}
+        />
+      ))}
+      <MoveControl onPointerDown={handlePointerDown} onPointerEnter={handlePointerEnter} />
       <mesh position={[5, 1, 0]} castShadow>
         <cylinderGeometry args={[0.02, 0.02, 2, 8]} />
         <meshStandardMaterial color="brown" />
@@ -35,7 +67,7 @@ const CanvasContent = () => {
       <Plane
         args={[100, 100]}
         name="plane"
-        onPointerEnter={handlePointerEnter}
+        onPointerEnter={handleDefaultPointerEnter}
         rotation={[-Math.PI / 2, 0, 0]}
         position={[2, -0.1, 0]}
         onPointerDown={(e) => tool.onPointerDown(e)}

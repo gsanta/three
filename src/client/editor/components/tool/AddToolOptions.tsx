@@ -2,11 +2,10 @@ import { useAppDispatch, useAppSelector } from '../../../common/hooks/hooks';
 import { Box, FormControl, FormLabel } from '@chakra-ui/react';
 import RadioSwitchButton from '../../../common/components/RadioSwitchButton';
 import RadioSwitchGroup from '../../../common/components/RadioSwitchGroup';
-import { setBlockRotation, setBlockSize, setSelectedGeometry } from '../../stores/template/templateSlice';
+import { setBlockRotation, setSelectedGeometry } from '../../stores/template/templateSlice';
 import { BlockName } from '../../types/BlockType';
 import useBlock from '../hooks/useBlock';
 import RotationControl from './RotationControl';
-import SizeControl from './SizeControl';
 
 const AddToolOptions = () => {
   const { blocks, selectedBlockName } = useAppSelector((state) => state.template.present);
@@ -20,10 +19,6 @@ const AddToolOptions = () => {
 
   const handleGeometryChange = (val: string) => {
     dispatch(setSelectedGeometry(val as BlockName));
-  };
-
-  const handleSizeChange = (size: number) => {
-    dispatch(setBlockSize({ axis: 'x', size, blockName: selectedBlock.name }));
   };
 
   const handleRotationChange = (axis: 'x' | 'y' | 'z', rotation: number) => {
@@ -44,7 +39,6 @@ const AddToolOptions = () => {
           ))}
         </RadioSwitchGroup>
       </FormControl>
-      <SizeControl axis="x" block={blockSettings} onChange={handleSizeChange} value={selectedValues.scale[0]} />
       <RotationControl
         axis="y"
         block={blockSettings}

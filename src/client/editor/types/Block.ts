@@ -11,6 +11,7 @@ type Block<S extends ShapeType = ShapeType> = {
   dependsOn: string[];
   dependents: string[];
   isHovered: boolean;
+  isSelected: boolean;
   slotSources: BlockSlotSource[];
   slotTarget?: {
     slotName: string;

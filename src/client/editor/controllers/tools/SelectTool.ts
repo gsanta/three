@@ -31,11 +31,11 @@ class SelectTool extends Tool {
   }
 
   onPointerDown(info: ToolInfo) {
-    const block = this.store.getBlocks()[info.eventObjectName];
+    const block = this.store.getBlocks()[info.eventObject?.userData.modelId || ''];
 
     if (block) {
       const edit = this.update.getUpdate();
-      this.selector.select(edit, info.eventObjectName, info.clientX, info.clientY);
+      this.selector.select(edit, info.eventObject?.userData.modelId || '', info.clientX, info.clientY);
       edit.commit();
     } else {
       this.update.getUpdate().select(null).commit();
@@ -43,9 +43,9 @@ class SelectTool extends Tool {
   }
 
   onPointerEnter(info: ToolInfo) {
-    const block = this.store.getBlocks()[info.eventObjectName];
+    const block = this.store.getBlocks()[info.eventObject?.userData.modelId || ''];
 
-    if (info.eventObjectName === 'plane') {
+    if (info.eventObject?.name === 'plane') {
       store.dispatch(hover(null));
     } else if (block) {
       store.dispatch(hover(block.id));
@@ -53,7 +53,7 @@ class SelectTool extends Tool {
   }
 
   onPointerLeave(info: ToolInfo) {
-    const block = this.store.getBlocks()[info.eventObjectName];
+    const block = this.store.getBlocks()[info.eventObject?.userData.modelId || ''];
 
     if (block) {
       this.update.getUpdate().update(block.id, { isHovered: false }, {}).commit();

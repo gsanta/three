@@ -15,7 +15,6 @@ import EraseTool from '@/client/editor/controllers/tools/EraseTool';
 import GroupTool from '@/client/group/GroupTool';
 import RayTool from '@/client/editor/controllers/tools/RayTool';
 import SelectTool from '@/client/editor/controllers/tools/SelectTool';
-import MoveBlock from '@/client/editor/use_cases/block/move/MoveBlock';
 import ToolStore from '@/client/editor/stores/tool/ToolStore';
 import TemplateStore from '@/client/editor/stores/template/TemplateStore';
 import TestSceneService from './TestSceneService';
@@ -60,7 +59,7 @@ export const setupTestEnv = (): TestEnv => {
     toolStore,
   );
 
-  const toolHelper = new ToolHelper(tool, testStore);
+  const toolHelper = new ToolHelper(sceneStore, tool, testStore);
 
   const listener = testMiddleware.startListening({
     actionCreator: updateBlocks as any,

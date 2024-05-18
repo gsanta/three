@@ -10,7 +10,7 @@ describe('Add', () => {
     it('is created where the user clicks', () => {
       store.dispatch(setSelectedTool(ToolName.Add));
 
-      testEnv.toolHelper.pointerMove(new Vector3(0, 0.1, 5));
+      testEnv.toolHelper.pointerMove({ point: new Vector3(0, 0.1, 5) });
       testEnv.toolHelper.pointerDown();
 
       expect(Object.keys(testEnv.blockStore.getBlocks())).toHaveLength(1);
@@ -40,7 +40,7 @@ describe('Add', () => {
 
     testEnv.sceneService.setIntersection([{ object: childMesh as Object3D, distance: 1, point: new Vector3() }]);
 
-    testEnv.toolHelper.pointerDown({ eventObjectName: blockId });
+    testEnv.toolHelper.pointerDown({ blockId });
     testEnv.tool.getAddTool().addToSlot();
   };
 
@@ -129,7 +129,7 @@ describe('Add', () => {
     store.dispatch(setSelectedTool(ToolName.Add));
     store.dispatch(setSelectedGeometry('pole'));
 
-    testEnv.toolHelper.pointerMove(new Vector3(0, 0.1, 5));
+    testEnv.toolHelper.pointerMove({ point: new Vector3(0, 0.1, 5) });
     testEnv.toolHelper.pointerDown();
 
     expect(Object.keys(testEnv.blockStore.getBlocks())).toHaveLength(1);

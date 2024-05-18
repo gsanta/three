@@ -6,7 +6,7 @@ import BlockCategory from '@/client/editor/types/BlockCategory';
 
 export const eraseBlockById = ({ blockId }: { blockId: string }, env: TestEnv) => {
   store.dispatch(setSelectedTool(ToolName.Erase));
-  env.toolHelper.pointerDown({ eventObjectName: blockId });
+  env.toolHelper.pointerDown({ blockId });
 };
 
 export const eraseOneBlockByCategory = ({ category }: { category: BlockCategory }, env: TestEnv) => {

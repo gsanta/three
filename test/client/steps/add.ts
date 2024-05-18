@@ -9,7 +9,7 @@ export const addTemplate = ({ templateName, where }: { templateName: string; whe
   store.dispatch(setSelectedTool(ToolName.Add));
   store.dispatch(setSelectedGeometry(templateName));
 
-  env.toolHelper.pointerMove(where);
+  env.toolHelper.pointerMove({ point: where });
   env.toolHelper.pointerDown();
 };
 

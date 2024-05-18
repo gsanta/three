@@ -11,8 +11,8 @@ class EraseTool extends Tool {
     this.eraser = new EraseBlock(store, update);
   }
 
-  onPointerDown({ eventObjectName }: ToolInfo) {
-    this.eraser.erase([eventObjectName]);
+  onPointerDown({ eventObject }: ToolInfo) {
+    this.eraser.erase([eventObject?.userData.modelId || '']);
   }
 
   private eraser: EraseBlock;

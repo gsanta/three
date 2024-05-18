@@ -1,5 +1,5 @@
 import { ThreeEvent } from '@react-three/fiber';
-import Tool, { ToolInfo } from '../types/Tool';
+import Tool, { EventObject, ToolInfo } from '../types/Tool';
 import ToolName from '../types/ToolName';
 import { Store } from '@/client/common/utils/store';
 import { Mesh, Vector3 } from 'three';
@@ -19,7 +19,6 @@ class ToolService {
       pos: new Vector3(),
       drag: [0, 0, 0],
       dragDelta: [0, 0, 0],
-      eventObjectName: '',
       clientX: 0,
       clientY: 0,
     };
@@ -29,7 +28,8 @@ class ToolService {
     this.info.pos = event.point;
     this.info.clientX = event.clientX;
     this.info.clientY = event.clientY;
-    this.info.eventObjectName = event.eventObject.userData.modelId;
+
+    this.setEventObject(event);
 
     const { selectedTool } = this.store.getState().tool;
     this.getTool(selectedTool)?.onPointerDown(this.info);
@@ -38,7 +38,7 @@ class ToolService {
   onPointerEnter(event: ThreeEvent<PointerEvent>) {
     const { selectedTool } = this.store.getState().tool;
 
-    this.info.eventObjectName = event.eventObject.name === 'plane' ? 'plane' : event.eventObject.userData.modelId;
+    this.setEventObject(event);
 
     this.getTool(selectedTool)?.onPointerEnter(this.info);
   }
@@ -46,7 +46,7 @@ class ToolService {
   onPointerLeave(event: ThreeEvent<PointerEvent>) {
     const { selectedTool } = this.store.getState().tool;
 
-    this.info.eventObjectName = event.eventObject.userData.modelId;
+    this.setEventObject(event);
 
     this.getTool(selectedTool)?.onPointerLeave(this.info);
   }
@@ -56,9 +56,7 @@ class ToolService {
     this.info.clientX = event.clientX;
     this.info.clientY = event.clientY;
 
-    this.info.eventObjectName = event.eventObject.userData.modelId;
-
-    console.log(this.info.eventObjectName);
+    this.setEventObject(event);
 
     const { selectedTool } = this.store.getState().tool;
     this.getTool(selectedTool)?.onPointerMove(this.info);
@@ -114,6 +112,13 @@ class ToolService {
 
   setSelectedMesh(mesh?: Mesh) {
     this.info.selectedMesh = mesh;
+  }
+
+  private setEventObject(event: ThreeEvent<PointerEvent>) {
+    this.info.eventObject = {
+      name: event.eventObject.name,
+      userData: event.eventObject.userData as EventObject['userData'],
+    };
   }
 
   private info: ToolInfo;

@@ -8,8 +8,6 @@ global.ResizeObserver = jest.fn().mockImplementation(() => ({
   disconnect: jest.fn(),
 }));
 
-global.IS_REACT_ACT_ENVIRONMENT = true;
-
 //   let env: TestEnv;
 
 //   beforeEach(() => {

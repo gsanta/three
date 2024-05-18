@@ -6,11 +6,18 @@ import Block from '@/client/editor/types/Block';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import UpdateService from '../services/update/UpdateService';
 
+export type EventObject = {
+  name: string;
+  userData: {
+    modelId: string;
+  };
+};
+
 export interface ToolInfo {
   pos: Vector3;
   drag: Num3;
   dragDelta: Num3;
-  eventObjectName: string;
+  eventObject?: EventObject;
   selectedMesh?: Mesh;
   clientX: number;
   clientY: number;

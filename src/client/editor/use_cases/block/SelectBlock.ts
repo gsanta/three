@@ -54,7 +54,7 @@ class Selector {
   }
 
   private checkPartIntersection(mesh: Object3D<Object3DEventMap>, clientX: number, clientY: number) {
-    const intersects = this.scene.intersection(mesh, clientX, clientY);
+    const [intersects] = this.scene.intersection(mesh, clientX, clientY);
 
     return intersects?.map((intersection) => intersection.object.name).find((name) => name && name !== 'root');
   }

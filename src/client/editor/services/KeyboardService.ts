@@ -1,5 +1,4 @@
 import { Store } from '@/client/common/utils/store';
-import { setSelection } from '../stores/block/blockSlice';
 
 class KeyboardService {
   constructor(store: Store) {
@@ -8,7 +7,7 @@ class KeyboardService {
 
   onKeyDown(keyEvent: KeyboardEvent) {
     if (keyEvent.key === 'Backspace') {
-      this.store.dispatch(setSelection([]));
+      // this.store.dispatch(setSelection([]));
     }
   }
 

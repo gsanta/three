@@ -28,14 +28,6 @@ const ToolControl = () => {
     [tool],
   );
 
-  const handlePointerLeave = useCallback(
-    (event: ThreeEvent<PointerEvent>) => {
-      // tool.onPointerLeave(event);
-      // event.stopPropagation();
-    },
-    [tool],
-  );
-
   return (
     <>
       {blocks.map((block) => (
@@ -45,7 +37,6 @@ const ToolControl = () => {
           meshProps={{
             onPointerDown: handlePointerDown,
             onPointerEnter: handlePointerEnter,
-            onPointerLeave: handlePointerLeave,
           }}
           selectedParts={selectedPartNames[block.id]}
         />

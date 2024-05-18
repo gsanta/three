@@ -10,7 +10,7 @@ class DefaultFactory extends BlockFactory<BlockCategory> {
   create(
     blockType: BlockType,
     blockOptions: Partial<Block> = {},
-    decorationOptions: Partial<BlockCategories[BlockCategory]> = {},
+    _decorationOptions: Partial<BlockCategories[BlockCategory]> = {},
   ): { block: Block; decoration?: BlockCategories[BlockCategory] } {
     const block = BlockCreator.create(blockType, blockOptions);
 
@@ -18,9 +18,9 @@ class DefaultFactory extends BlockFactory<BlockCategory> {
   }
 
   updateDecoration(
-    orig: BlockCategories[BlockCategory],
-    partial: PartialDeep<BlockCategories[BlockCategory]>,
-    options: { mergeArrays: boolean } = { mergeArrays: true },
+    _orig: BlockCategories[BlockCategory],
+    _partial: PartialDeep<BlockCategories[BlockCategory]>,
+    _options: { mergeArrays: boolean } = { mergeArrays: true },
   ): BlockCategories[BlockCategory] {
     throw new Error('Unimplemented method');
   }

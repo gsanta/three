@@ -10,7 +10,7 @@ abstract class BlockEraser {
     this.category = category;
   }
 
-  eraseDependent(edit: Edit, block: Block, dependent: Block) {}
+  eraseDependent(_edit: Edit, _block: Block, _dependent: Block) {}
 }
 
 export default BlockEraser;

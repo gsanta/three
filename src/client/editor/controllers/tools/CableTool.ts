@@ -1,7 +1,6 @@
-import Tool, { ToolInfo } from '@/client/editor/types/Tool';
+import Tool from '@/client/editor/types/Tool';
 import ToolName from '@/client/editor/types/ToolName';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
-import IntersectMesh from '../../use_cases/IntersectMesh';
 import { Vector3 } from 'three';
 import JoinPoles from '../../use_cases/block/JoinPoles';
 import UpdateService from '../../services/update/UpdateService';
@@ -16,34 +15,34 @@ class CableTool extends Tool {
     this.updateService = update;
   }
 
-  onPointerDown({ eventObjectName, clientX, clientY }: ToolInfo) {
-    const blocks = this.store.getBlocks();
-    const selectedBlockIds = this.store.getSelectedRootBlockIds();
-    const canvasElement = this.scene.getCanvasElement();
-    const camera = this.scene.getCamera();
-    const mesh = this.scene.getMesh(eventObjectName);
+  // onPointerDown({ eventObject, clientX, clientY }: ToolInfo) {
+  //   const blocks = this.store.getBlocks();
+  //   const selectedBlockIds = this.store.getSelectedRootBlockIds();
+  //   const canvasElement = this.scene.getCanvasElement();
+  //   const camera = this.scene.getCamera();
+  //   const mesh = this.scene.getMesh(eventObject?.userData.modelId || '');
 
-    if (!mesh) {
-      return;
-    }
+  //   if (!mesh) {
+  //     return;
+  //   }
 
-    const intersect = new IntersectMesh(canvasElement, camera);
+  //   const intersect = new IntersectMesh(canvasElement, camera);
 
-    const intersection = intersect.calculate(mesh, clientX, clientY);
+  //   const intersection = intersect.calculate(mesh, clientX, clientY);
 
-    if (!intersection) {
-      return;
-    }
+  //   if (!intersection) {
+  //     return;
+  //   }
 
-    const point = intersection.point;
-    const cable = selectedBlockIds.find((root) => blocks[root].name === 'cable');
+  //   const point = intersection.point;
+  //   const cable = selectedBlockIds.find((root) => blocks[root].name === 'cable');
 
-    if (!cable) {
-      this.createBlock([point]);
-    } else {
-      this.updateBlock(cable, point);
-    }
-  }
+  //   if (!cable) {
+  //     this.createBlock([point]);
+  //   } else {
+  //     this.updateBlock(cable, point);
+  //   }
+  // }
 
   joinPoles() {
     const blocks = this.store.getBlocks();
@@ -69,15 +68,6 @@ class CableTool extends Tool {
         { points: points.map((point) => [point.x, point.y, point.z]) as Num3[] },
       )
       .commit();
-
-    // const update = this.updateService.create<'cables'>(
-    //   'cable',
-    //   { dependsOn: [] },
-    //   { points: points.map((point) => [point.x, point.y, point.z]) as Num3[] },
-    // );
-
-    // this.updateService.executeUpdate([update]);
-    // this.store.dispatch(setSelectedBlocks([update.block.id]));
   }
 
   private updateBlock(meshId: string, point: Vector3) {

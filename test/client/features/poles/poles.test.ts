@@ -21,16 +21,16 @@ describe('JoinPoles', () => {
     store.dispatch(setSelectedTool(ToolName.Add));
     store.dispatch(setSelectedGeometry('pole'));
 
-    env.toolHelper.pointerMove(new Vector3(0, 0.1, 5));
+    env.toolHelper.pointerMove({ point: new Vector3(0, 0.1, 5) });
     env.toolHelper.pointerDown();
 
-    env.toolHelper.pointerMove(new Vector3(0, 0.1, 10));
+    env.toolHelper.pointerMove({ point: new Vector3(0, 0.1, 10) });
     env.toolHelper.pointerDown();
 
     store.dispatch(setSelectedTool(ToolName.Select));
     const poles = env.blockStore.getBlocksAsArray();
-    env.toolHelper.pointerDown({ eventObjectName: poles[0].id });
-    env.toolHelper.pointerDown({ eventObjectName: poles[1].id });
+    env.toolHelper.pointerDown({ blockId: poles[0].id });
+    env.toolHelper.pointerDown({ blockId: poles[1].id });
 
     store.dispatch(setSelectedTool(ToolName.Cable));
     env.tool.getCableTool().joinPoles();
@@ -61,7 +61,7 @@ describe('JoinPoles', () => {
 
       const poles = Object.values(env.blockStore.getDecorations('poles'));
 
-      env.toolHelper.pointerDown({ eventObjectName: poles[0].id });
+      env.toolHelper.pointerDown({ blockId: poles[0].id });
 
       expect(env.blockStore.getBlocksAsArray()).toHaveLength(1);
       expect(Object.values(env.blockStore.getDecorations('cables'))).toHaveLength(0);

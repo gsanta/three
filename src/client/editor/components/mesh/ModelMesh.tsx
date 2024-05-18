@@ -28,7 +28,7 @@ type ModelPartProps = {
 const ModelMeshPart = ({ block, materials, nodes, part, selectedParts }: ModelPartProps) => {
   const color = selectedParts.includes(part?.name || '') ? 'green' : undefined;
 
-  if (!block.isHovered && part.role === 'slot' && !color) {
+  if (!block.isHovered && !block.isSelected && part.role === 'slot' && !color) {
     return null;
   }
 

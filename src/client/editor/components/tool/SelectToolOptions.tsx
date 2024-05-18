@@ -87,7 +87,6 @@ const SelectToolOptions = () => {
       )}
       <Button onClick={() => tool.getGroupTool().group()}>Group</Button>
       <Button onClick={() => tool.getGroupTool().ungroup()}>Ungroup</Button>
-      <Button onClick={() => tool.getSelectTool().selectRoot(block.id)}>Select parent</Button>
     </Box>
   );
 };

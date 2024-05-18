@@ -74,6 +74,7 @@ export const blockSlice = createSlice({
         poles: {},
         walls: {},
         'building-bases': {},
+        roads: {},
       };
     },
 
@@ -100,6 +101,9 @@ export const blockSlice = createSlice({
           }
         } else if ('select' in update) {
           if (update.select === null) {
+            Object.keys(state.selectedBlocks).forEach((selectedBlock) => {
+              state.blocks[selectedBlock].isSelected = false;
+            });
             state.selectedRootBlockIds = [];
             state.selectedPartNames = {};
             state.selectedBlocks = {};
@@ -112,10 +116,10 @@ export const blockSlice = createSlice({
               state.selectedPartNames[update.select] = [
                 ...new Set([...state.selectedPartNames[update.select], update.partName]),
               ];
-            } else {
-              state.selectedBlocks[update.select] = true;
-              state.selectedRootBlockIds = [...new Set([...state.selectedRootBlockIds, update.select])];
             }
+            state.selectedBlocks[update.select] = true;
+            state.blocks[update.select].isSelected = true;
+            state.selectedRootBlockIds = [...new Set([...state.selectedRootBlockIds, update.select])];
           }
         } else {
           if ('block' in update && update.block) {
