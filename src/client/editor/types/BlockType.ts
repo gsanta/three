@@ -1,3 +1,4 @@
+import { Orientation } from '../utils/OrientationUtils';
 import * as blocks from '../utils/blocks.json';
 import Axis from './Axis';
 import BlockCategory from './BlockCategory';
@@ -39,7 +40,7 @@ type BlockType<S extends ShapeType = ShapeType> = {
   points?: Num3[];
   parts: ModelPart[];
   path: string;
-  slots: Record<string, { categories?: string[]; slots?: string[]; rotation?: number }>;
+  slots: Record<string, { categories?: string[]; slots?: string[]; rotation?: number; orientation: Orientation }>;
 };
 // & (
 //   | {

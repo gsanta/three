@@ -1,3 +1,11 @@
+class MathUtils {
+  static normalizeAngle(angle: number) {
+    return ((angle % 360) + 360) % 360;
+  }
+}
+
+export default MathUtils;
+
 export const toRadian = (degree: number) => (degree * Math.PI) / 180;
 
 export const toDegree = (rad: number, roundInt = true) => {

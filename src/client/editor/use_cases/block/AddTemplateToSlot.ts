@@ -6,7 +6,8 @@ import Edit from '../../services/update/Edit';
 import { BlockName } from '@/client/editor/types/BlockType';
 import Block from '../../types/Block';
 import VectorUtils from '../../utils/vectorUtils';
-import { toDegree } from '../../utils/mathUtils';
+import BlockUtils from '../../utils/BlockUtils';
+import MathUtils from '../../utils/mathUtils';
 
 class AddTemplateToSlot {
   constructor(blockStore: BlockStore, sceneStore: SceneStore) {
@@ -28,42 +29,60 @@ class AddTemplateToSlot {
 
     const block = this.blockStore.getBlocks()[blockId];
 
-    const slotInfo = block.slots[partName];
+    const template = this.blockStore.getTemplateByName(templateName);
 
-    if (slotInfo?.slots) {
+    const hasTargetSlot = template?.parts.find((part) => part.role === 'slot');
+
+    if (hasTargetSlot) {
       this.snapSlotToSlot(edit, block, partName, templateName);
     } else {
       this.snapSlotToBlock(edit, block, partName, templateName);
     }
   }
 
-  private snapSlotToSlot(edit: Edit, block: Block, slot: string, templateName: string) {
+  private snapSlotToSlot(edit: Edit, block: Block, partName: string, templateName: string) {
     const template = this.blockStore.getTemplateByName(templateName);
 
-    const slotInfo = block.slots[slot];
-
-    const targetSlotName = slotInfo.slots?.find((acceptedSlotName) => template?.slots[acceptedSlotName]);
-    const targetPosition = template?.parts.find((part) => part.name === targetSlotName)?.position;
-
-    if (!targetPosition) {
+    if (!template) {
       return;
     }
 
+    const rotatedPart = BlockUtils.findMatchingSlot(block, partName, template);
+
+    if (!rotatedPart) {
+      return;
+    }
+
+    const { part: targetPart, rotation: targetRotation } = rotatedPart;
+
     const mesh = this.sceneStore.getObj3d(block.id);
 
-    const partMesh = MeshUtils.findByName(mesh, slot);
+    const partMesh = MeshUtils.findByName(mesh, partName);
     const pos = new Vector3();
     partMesh.getWorldPosition(pos);
 
-    const rotation = slotInfo.rotation || 0;
+    // const finalRotation = rotation + toDegree(block.rotation[1]);
+    const targetPos = VectorUtils.rotate(targetPart.position || [0, 0, 0], targetRotation) || [0, 0, 0];
+    const targetX = -targetPos[0];
+    const targetZ = -targetPos[2];
+    const targetY = -targetPos[1];
 
-    const finalRotation = rotation + toDegree(block.rotation[1]);
-    const targetPos = VectorUtils.rotate(targetPosition, finalRotation);
+    const idealNextPartOrientation = MathUtils.normalizeAngle(targetPart.orientation + 180);
+    let idealNextSelectedPart = template.parts.find((part) => part.orientation === idealNextPartOrientation);
 
-    edit.create(templateName as BlockName, {
-      position: VectorUtils.sub([pos.x, pos.y, pos.z], targetPos || [0, 0, 0]),
-      rotation: [0, finalRotation, 0],
-    });
+    if (!idealNextSelectedPart) {
+      idealNextSelectedPart = template.parts
+        .filter((part) => part.role === 'slot')
+        .find((part) => part.name !== targetPart.name);
+    }
+
+    edit
+      .select(null)
+      .create(templateName as BlockName, {
+        position: VectorUtils.add([pos.x, pos.y, pos.z], [targetX, targetY, targetZ] || [0, 0, 0]),
+        rotation: [0, targetRotation, 0],
+      })
+      .select(edit.getLastBlock().id, idealNextSelectedPart?.name);
   }
 
   private snapSlotToBlock(edit: Edit, block: Block, slot: string, templateName: string) {

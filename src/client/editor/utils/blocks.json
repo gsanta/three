@@ -355,7 +355,7 @@
                         -3.718
                     ],
                     "name": "wall3",
-                    "orientation": -90
+                    "orientation": 270
                 },
                 {
                     "geometryPath": "wall4.geometry",
@@ -495,6 +495,7 @@
                         2.484
                     ],
                     "name": "end-north",
+                    "orientation": 0,
                     "role": "slot"
                 },
                 {
@@ -511,6 +512,7 @@
                         2.484
                     ],
                     "name": "end-south",
+                    "orientation": 180,
                     "role": "slot"
                 }
             ],
@@ -519,17 +521,13 @@
                     "categories": [
                         "roads"
                     ],
-                    "slots": [
-                        "end-north"
-                    ]
+                    "orientation": 180
                 },
                 "end-north": {
                     "categories": [
                         "roads"
                     ],
-                    "slots": [
-                        "end-south"
-                    ]
+                    "orientation": 0
                 }
             }
         },
@@ -596,6 +594,7 @@
                         -2.775
                     ],
                     "name": "end-north",
+                    "orientation": 0,
                     "role": "slot"
                 },
                 {
@@ -617,6 +616,7 @@
                         -2.775
                     ],
                     "name": "end-south",
+                    "orientation": 180,
                     "role": "slot"
                 },
                 {
@@ -638,6 +638,7 @@
                         -2.775
                     ],
                     "name": "end-east",
+                    "orientation": 90,
                     "role": "slot"
                 },
                 {
@@ -659,6 +660,7 @@
                         -2.775
                     ],
                     "name": "end-west",
+                    "orientation": 270,
                     "role": "slot"
                 }
             ],
@@ -689,6 +691,101 @@
                     "rotation": 90
                 },
                 "end-east": {
+                    "categories": [
+                        "roads"
+                    ],
+                    "slots": [
+                        "end-north"
+                    ],
+                    "rotation": 90
+                }
+            }
+        },
+        "road-3": {
+            "category": "roads",
+            "geometry": "model",
+            "path": "/road3.glb",
+            "parts": [
+                {
+                    "geometryPath": "Cube018.geometry",
+                    "materialPath": "Road",
+                    "position": [
+                        0.001,
+                        0.001,
+                        0.003
+                    ],
+                    "scale": [
+                        2.184,
+                        0.067,
+                        2.484
+                    ],
+                    "name": "root"
+                },
+                {
+                    "geometryPath": "Cube018_1.geometry",
+                    "materialPath": "White",
+                    "position": [
+                        0.001,
+                        0.001,
+                        0.003
+                    ],
+                    "scale": [
+                        2.184,
+                        0.067,
+                        2.484
+                    ],
+                    "name": "stripes"
+                },
+                {
+                    "geometryPath": "Road3EndSouth.geometry",
+                    "materialPath": "wall-placeholder",
+                    "position": [
+                        -1.543,
+                        0.074,
+                        2.482
+                    ],
+                    "scale": [
+                        2.184,
+                        0.067,
+                        2.484
+                    ],
+                    "name": "end-south",
+                    "orientation": 180,
+                    "role": "slot"
+                },
+                {
+                    "geometryPath": "Road3EndNorth.geometry",
+                    "materialPath": "wall-placeholder",
+                    "position": [
+                        2.51,
+                        0.068,
+                        -1.506
+                    ],
+                    "rotation": [
+                        0,
+                        -1.5707,
+                        0
+                    ],
+                    "scale": [
+                        2.184,
+                        0.067,
+                        2.484
+                    ],
+                    "name": "end-east",
+                    "orientation": 90,
+                    "role": "slot"
+                }
+            ],
+            "slots": {
+                "end-south": {
+                    "categories": [
+                        "roads"
+                    ],
+                    "slots": [
+                        "end-north"
+                    ]
+                },
+                "end-west": {
                     "categories": [
                         "roads"
                     ],

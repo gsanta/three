@@ -32,8 +32,8 @@ class VectorUtils {
     const result = [0, vec[1], 0] as Num3;
     const rad = toRadian(angle);
 
-    result[0] = -(vec[0] * Math.cos(rad) - vec[2] * Math.sin(rad));
-    result[2] = vec[0] * Math.sin(rad) + vec[2] * Math.cos(rad);
+    result[0] = vec[0] * Math.cos(rad) + vec[2] * Math.sin(rad);
+    result[2] = -vec[0] * Math.sin(rad) + vec[2] * Math.cos(rad);
 
     return result;
   }
