@@ -4,9 +4,8 @@ import useEditorContext from '@/app/editor/EditorContext';
 import { ThreeEvent, useThree } from '@react-three/fiber';
 import useNotSelectedBlocks from '../../hooks/useNotSelectedBlocks';
 import { useAppSelector } from '@/client/common/hooks/hooks';
-import MeshRenderer from './MeshRenderer';
-import Block from '@/client/editor/types/Block';
 import MoveControl from './MoveControl';
+import MeshHierarchyRenderer from './MeshHierarchyRenderer';
 
 const CanvasContent = () => {
   const { tool, scene: sceneService } = useEditorContext();
@@ -48,17 +47,12 @@ const CanvasContent = () => {
 
   return (
     <>
-      {blocks.map((block) => (
-        <MeshRenderer
-          key={block.id}
-          block={block as Block<'model'>}
-          meshProps={{
-            onPointerDown: handlePointerDown,
-            onPointerEnter: handlePointerEnter,
-          }}
-          selectedParts={selectedPartNames[block.id]}
-        />
-      ))}
+      <MeshHierarchyRenderer
+        onPointerDown={handlePointerDown}
+        onPointerEnter={handlePointerEnter}
+        blocks={blocks}
+        selectedPartNames={selectedPartNames}
+      />
       <MoveControl onPointerDown={handlePointerDown} onPointerEnter={handlePointerEnter} />
       <mesh position={[5, 1, 0]} castShadow>
         <cylinderGeometry args={[0.02, 0.02, 2, 8]} />

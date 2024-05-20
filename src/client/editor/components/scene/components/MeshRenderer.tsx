@@ -4,6 +4,7 @@ import BoxMesh from '../../mesh/BoxMesh';
 import WrappedMeshProps from '../../../types/block/WrappedMeshProps';
 import { ModelMesh } from '../../mesh/ModelMesh';
 import Block from '@/client/editor/types/Block';
+import { addVector } from '@/client/editor/utils/vectorUtils';
 
 const isModelMesh = (block: Block): block is Block<'model'> => block.geometry === 'model';
 
@@ -12,13 +13,35 @@ const isTubeMesh = (block: Block): block is Block<'tube'> => block.geometry === 
 const isBoxMesh = (block: Block): block is Block<'box'> => block.geometry === 'box';
 
 const MeshRenderer = (props: Omit<WrappedMeshProps, 'parent'>) => {
-  const { additions, block: block, meshProps, materialProps, selectedParts } = props;
+  const { block, meshProps, materialProps, selectedParts } = props;
   const { blocks, categories } = useAppSelector((selector) => selector.block.present);
 
   const parent = block.parent ? blocks[block.parent] : undefined;
 
+  const { position, rotation, ...restMeshProps } = meshProps || {};
+  const { additions, ...restProps } = props;
+
   if (isModelMesh(block)) {
-    return (
+    return block.children?.length ? (
+      <group
+        key={block.id}
+        position={addVector(additions?.position || [0, 0, 0], block.position)}
+        rotation={block.rotation}
+      >
+        <ModelMesh
+          // additions={additions}
+          block={block}
+          meshProps={{ ...restMeshProps }}
+          materialProps={materialProps}
+          overwrites={{ rotation: [0, 0, 0], position: [0, 0, 0] }}
+          parent={parent}
+          selectedParts={selectedParts}
+        />
+        {block.children.map((child) => (
+          <MeshRenderer {...restProps} block={blocks[child]} />
+        ))}
+      </group>
+    ) : (
       <ModelMesh
         additions={additions}
         block={block}

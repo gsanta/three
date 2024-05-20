@@ -824,6 +824,17 @@
             }
         },
         {
+            "category": "building-bases",
+            "rotation": {
+                "y": [
+                    0,
+                    90,
+                    180,
+                    270
+                ]
+            }
+        },
+        {
             "category": "walls",
             "rotation": {
                 "y": [

@@ -78,9 +78,11 @@ const ModelGroupPart = ({ part, ...rest }: ModelPartProps) => {
   );
 };
 
-export const ModelMesh = ({ additions, block, meshProps, selectedParts = [] }: ModelMeshProps) => {
+export const ModelMesh = ({ additions, block, meshProps, overwrites, selectedParts = [] }: ModelMeshProps) => {
   const ref = useRegisterScene();
-  const position = additions?.position ? addVector(additions.position, block.position) : block.position;
+  const blockPosition = overwrites?.position ? overwrites.position : block.position;
+  const position = additions?.position ? addVector(additions.position, blockPosition) : blockPosition;
+  const blockRotation = overwrites?.rotation ? overwrites.rotation : block.rotation;
 
   const { nodes, materials } = useGLTF(block.path);
 
@@ -88,7 +90,7 @@ export const ModelMesh = ({ additions, block, meshProps, selectedParts = [] }: M
 
   return (
     <group
-      rotation={block.rotation}
+      rotation={blockRotation}
       scale={block.scale}
       {...(meshProps as GroupProps)}
       position={position}

@@ -4,7 +4,7 @@ import ToolName from '../../types/ToolName';
 import BlockStore from '../../stores/block/BlockStore';
 import UpdateService from '../../services/update/UpdateService';
 import SceneStore from '../../components/scene/SceneStore';
-import AddTemplateToSlot from '../../use_cases/block/AddTemplateToSlot';
+import ApplyTemplateToSlot from '../../use_cases/block/ApplyTemplateToSlot';
 
 class AddTool extends Tool {
   constructor(blockStore: BlockStore, sceneStore: SceneStore, toolStore: ToolStore, update: UpdateService) {
@@ -13,7 +13,7 @@ class AddTool extends Tool {
     this.toolStore = toolStore;
     this.updateService = update;
 
-    this.addTemplateToSlot = new AddTemplateToSlot(blockStore, sceneStore);
+    this.addTemplateToSlot = new ApplyTemplateToSlot(blockStore, sceneStore);
   }
 
   onPointerDown({ pos }: ToolInfo) {
@@ -41,7 +41,7 @@ class AddTool extends Tool {
 
   private toolStore: ToolStore;
 
-  private addTemplateToSlot: AddTemplateToSlot;
+  private addTemplateToSlot: ApplyTemplateToSlot;
 }
 
 export default AddTool;

@@ -8,12 +8,15 @@ import Block from '../../types/Block';
 import VectorUtils from '../../utils/vectorUtils';
 import BlockUtils from '../../utils/BlockUtils';
 import MathUtils from '../../utils/mathUtils';
+import AddBlockToSlot from './AddBlockToSlot';
 
-class AddTemplateToSlot {
+class ApplyTemplateToSlot {
   constructor(blockStore: BlockStore, sceneStore: SceneStore) {
     this.blockStore = blockStore;
 
     this.sceneStore = sceneStore;
+
+    this.addBlockToSlot = new AddBlockToSlot(sceneStore);
   }
 
   perform(edit: Edit, templateName: string) {
@@ -36,7 +39,7 @@ class AddTemplateToSlot {
     if (hasTargetSlot) {
       this.snapSlotToSlot(edit, block, partName, templateName);
     } else {
-      this.snapSlotToBlock(edit, block, partName, templateName);
+      this.addBlockToSlot.perform(edit, block, partName, templateName);
     }
   }
 
@@ -85,38 +88,11 @@ class AddTemplateToSlot {
       .select(edit.getLastBlock().id, idealNextSelectedPart?.name);
   }
 
-  private snapSlotToBlock(edit: Edit, block: Block, slot: string, templateName: string) {
-    const mesh = this.sceneStore.getObj3d(block.id);
-
-    const partMesh = MeshUtils.findByName(mesh, slot);
-    const pos = new Vector3();
-    partMesh.getWorldPosition(pos);
-
-    const orientation = block.parts.find((part) => part.name === slot)?.orientation || 0;
-
-    if (templateName) {
-      edit.create(templateName as BlockName, {
-        parent: block.id,
-        position: [pos.x, pos.y, pos.z],
-        rotation: [0, orientation, 0],
-        slotTarget: {
-          blockId: block.id,
-          slotName: slot,
-        },
-      });
-
-      const lastBlock = edit.getLastBlock();
-
-      edit.updateBlock(block.id, {
-        children: [lastBlock.id],
-        slotSources: [{ slotName: slot, blockId: lastBlock.id }],
-      });
-    }
-  }
-
   private blockStore: BlockStore;
 
   private sceneStore: SceneStore;
+
+  private addBlockToSlot: AddBlockToSlot;
 }
 
-export default AddTemplateToSlot;
+export default ApplyTemplateToSlot;

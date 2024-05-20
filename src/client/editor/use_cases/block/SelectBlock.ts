@@ -47,8 +47,6 @@ class Selector {
 
       const parent = this.blockStore.getBlocks()[selectedBlock];
 
-      parent.children.forEach((child) => edit.select(child));
-
       store.dispatch(updateSelectTool({ moveAxis: parent.moveAxis }));
     }
   }

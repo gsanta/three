@@ -14,6 +14,7 @@ import SceneService from '../../components/scene/SceneService';
 import Selector from '../../use_cases/block/SelectBlock';
 import ToolStore from '../../stores/tool/ToolStore';
 import { hover } from '../../stores/block/blockSlice';
+import MoveBlockToSlot from '../../use_cases/block/MoveBlockToSlot';
 
 class SelectTool extends Tool {
   constructor(
@@ -26,6 +27,7 @@ class SelectTool extends Tool {
     super(blockStore, update, ToolName.Select, 'BiRectangle');
 
     this.move = new MoveBlock(blockStore, update, sceneStore, toolStore);
+    this.moveBlockToSlot = new MoveBlockToSlot(blockStore, sceneStore);
     this.selector = new Selector(blockStore, scene, sceneStore);
     this.toolStore = toolStore;
   }
@@ -68,27 +70,11 @@ class SelectTool extends Tool {
     const selectedBlockIds = this.store.getSelectedRootBlockIds();
     const blocks = this.store.getBlocks();
 
-    const finalBlockIds: string[] = [];
-
-    selectedBlockIds.forEach((blockId) => {
-      const block = blocks[blockId];
-
-      if (block.children.length) {
-        finalBlockIds.push(...block.children);
-
-        if (block.name !== 'group') {
-          finalBlockIds.push(block.id);
-        }
-      } else {
-        finalBlockIds.push(block.id);
-      }
-    });
-
     const edit = this.update.getUpdate();
 
     const drag = this.toolStore.getSelectOptions().drag;
 
-    finalBlockIds.forEach((blockId) =>
+    selectedBlockIds.forEach((blockId) =>
       edit.updateBlock(blockId, { position: addVector(blocks[blockId].position, drag) }),
     );
 
@@ -120,7 +106,7 @@ class SelectTool extends Tool {
       return;
     }
 
-    const block = this.store.getBlocks()[selectedBlockIds[0]];
+    let block = this.store.getBlocks()[selectedBlockIds[0]];
 
     const index = VectorUtils.getAxisIndex(axis);
     const newRotation = [...block.rotation] as [number, number, number];
@@ -132,6 +118,8 @@ class SelectTool extends Tool {
         rotation: newRotation,
       })
       .commit();
+
+    block = this.store.getBlocks()[selectedBlockIds[0]];
   }
 
   private move: MoveBlock;
@@ -139,6 +127,8 @@ class SelectTool extends Tool {
   private selector: Selector;
 
   private toolStore: ToolStore;
+
+  private moveBlockToSlot: MoveBlockToSlot;
 }
 
 export default SelectTool;

@@ -38,9 +38,9 @@ const MoveControl = ({ onPointerDown, onPointerEnter }: MoveControlProps) => {
       depthTest={false}
       activeAxes={moveAxis}
       disableRotations={true}
-      rotation={[0, Math.PI / 2, 0]}
+      rotation={[0, 0, 0]}
       scale={1}
-      anchor={[0, 0, 0.4]}
+      anchor={[0, 1.5, 0]}
       autoTransform={false}
       onDrag={(_l, d) => {
         const newTransform = new Vector3();
@@ -58,23 +58,25 @@ const MoveControl = ({ onPointerDown, onPointerEnter }: MoveControlProps) => {
       userData={{ role: 'selection-pivot' }}
     >
       <group name="selection-group">
-        {movableBlocks.map((block) => (
-          <MeshRenderer
-            additions={{
-              position: drag,
-            }}
-            block={block}
-            key={block.id}
-            meshProps={{
-              ref: selectedMeshRef,
-              position: addVector(block.position, transform),
-              onPointerDown,
-              onPointerEnter,
-            }}
-            materialProps={{ color: 'pink', opacity: 0.5, transparent: true }}
-            selectedParts={selectedPartNames[block.id]}
-          />
-        ))}
+        {movableBlocks
+          .filter((block) => !block.parent)
+          .map((block) => (
+            <MeshRenderer
+              additions={{
+                position: drag,
+              }}
+              block={block}
+              key={block.id}
+              meshProps={{
+                ref: selectedMeshRef,
+                position: addVector(block.position, transform),
+                onPointerDown,
+                onPointerEnter,
+              }}
+              materialProps={{ color: 'pink', opacity: 0.5, transparent: true }}
+              selectedParts={selectedPartNames[block.id]}
+            />
+          ))}
       </group>
     </PivotControls>
   );
