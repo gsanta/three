@@ -1,4 +1,3 @@
-import { Orientation } from '../utils/OrientationUtils';
 import * as blocks from '../utils/blocks.json';
 import Axis from './Axis';
 import BlockCategory from './BlockCategory';
@@ -10,18 +9,20 @@ export type ShapeType = 'box' | 'cone' | 'model' | 'tube';
 
 export type ModelPart = {
   geometryPath?: string;
+  index: string;
   materialPath?: string;
   position?: Num3;
   rotation?: Num3;
   scale?: Num3 | number;
   parts: ModelPart[];
   name?: string;
+};
+
+export type ModelPartDetail = {
+  allowMovement?: Axis[];
+  isHidden?: boolean;
   orientation: number;
-  role?: string;
-  slot?: {
-    allowed?: Record<string, { slots: [] }>;
-    allowMovement?: Axis[];
-  };
+  role?: 'slot';
 };
 
 type BlockType<S extends ShapeType = ShapeType> = {
@@ -39,21 +40,8 @@ type BlockType<S extends ShapeType = ShapeType> = {
   height: number;
   points?: Num3[];
   parts: ModelPart[];
+  partDetails: Record<string, ModelPartDetail | undefined>;
   path: string;
-  slots: Record<string, { categories?: string[]; slots?: string[]; rotation?: number; orientation: Orientation }>;
 };
-// & (
-//   | {
-//       geometry: 'tube';
-//       points: Num3[];
-//     }
-//   | {
-//       geometry: 'cone';
-//       radialSegments: number;
-//       radius: number;
-//       height: number;
-//       points: never;
-//     }
-// );
 
 export default BlockType;

@@ -44,11 +44,14 @@ class CableTool extends Tool {
   //   }
   // }
 
-  joinPoles() {
+  onExecute() {
+    console.log('on execute');
     const blocks = this.store.getBlocks();
     const selectedBlockIds = this.store.getSelectedRootBlockIds();
 
     const polesIds = selectedBlockIds.filter((id) => blocks[id].category === 'poles');
+
+    console.log('selected ids: ' + blocks[selectedBlockIds[0]].category);
 
     if (polesIds.length < 2) {
       return;

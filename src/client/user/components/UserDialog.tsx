@@ -2,10 +2,10 @@ import Dialog, { DialogBody } from '../../common/components/Dialog';
 import api from '../../common/utils/api';
 import { usersPath } from '../../common/utils/routes';
 import { Avatar, Box, Button, ButtonGroup, FormControl, FormErrorMessage, Text } from '@chakra-ui/react';
+import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useSession } from 'next-auth/react';
 import React from 'react';
-import { useMutation } from 'react-query';
 
 type UserDialogProps = {
   isOpen: boolean;
@@ -18,19 +18,17 @@ const UserDialog = ({ isOpen, onClose }: UserDialogProps) => {
   const {
     mutateAsync: mutateDeleteUser,
     isError: isDeleteUserError,
-    isLoading: isDeleteUserLoading,
-  } = useMutation<unknown, AxiosError<unknown>, unknown>(
-    async () => {
+    isPending: isDeleteUserLoading,
+  } = useMutation<unknown, AxiosError<unknown>, unknown>({
+    mutationFn: async () => {
       const resp = await api.delete(usersPath);
 
       return resp;
     },
-    {
-      onSuccess: () => {
-        onClose();
-      },
+    onSuccess: () => {
+      onClose();
     },
-  );
+  });
 
   return (
     <Dialog isOpen={isOpen} onClose={onClose} title="User">

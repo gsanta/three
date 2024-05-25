@@ -1,12 +1,11 @@
 import BlockType from '@/client/editor/types/BlockType';
 import { toRadian } from '@/client/editor/utils/mathUtils';
 import VectorUtils, { addVector } from '@/client/editor/utils/vectorUtils';
-import { v4 as uuidv4 } from 'uuid';
 import Num3 from '@/client/editor/types/Num3';
 import Block from '@/client/editor/types/Block';
 
 class BlockCreator {
-  static create(block: BlockType, settings: Partial<Block>): Block {
+  static create(id: string, block: BlockType, settings: Partial<Block>): Block {
     // const { position: pos = [0, 0, 0], ...rest } = settings;
     const pos = settings.position || [0, 0, 0];
 
@@ -30,7 +29,7 @@ class BlockCreator {
       parent: settings.parent,
       slotSources: settings.slotSources || [],
       slotTarget: settings.slotTarget,
-      id: uuidv4(),
+      id: id,
       position: [x, y, z],
       rotation: rotation as Num3,
       scale: scale,

@@ -5,6 +5,9 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@/test/*": [
+        "./test/*"
       ]
     },
     "outDir": "./build",
@@ -22,7 +25,7 @@
       "es6",
       "dom"
     ],
-    "module": "esnext",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "sourceMap": true,
     "allowJs": true,
@@ -68,7 +71,9 @@
     "src/**/*.tsx",
     ".next/types/**/*.ts",
     "test/**/*.ts",
-  ],
+    "prisma/seed/**/*.ts",
+    "cucumber.js"
+,   ],
   "exclude": [
     "node_modules"
   ]

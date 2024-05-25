@@ -1,12 +1,16 @@
 import undoable, { StateWithHistory } from 'redux-undo';
 import templateSlice, { BlockSettingsState } from '../../editor/stores/template/templateSlice';
-import blockSlice, { BlockState } from '../../editor/stores/block/blockSlice';
+import blockSlice, { BlockState, hover } from '../../editor/stores/block/blockSlice';
 import settingsSlice, { SettingsState } from '../../editor/stores/settingsSlice';
 import toolSlice, { ToolState } from '../../editor/stores/tool/toolSlice';
 import { EnhancedStore, configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
 
 const blockSettingsSliceUndoable = undoable(templateSlice, { filter: () => false });
-const sceneSliceUndoable = undoable(blockSlice);
+const sceneSliceUndoable = undoable(blockSlice, {
+  filter: (action) => {
+    return action.type !== hover.type;
+  },
+});
 
 export type RootState = {
   settings: SettingsState;

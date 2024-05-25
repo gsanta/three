@@ -3,14 +3,15 @@ import BlockFactory from './BlockFactory';
 import BlockCreator from './BlockCreator';
 import Block from '@/client/editor/types/Block';
 import BlockType from '@/client/editor/types/BlockType';
+import SceneService from '@/client/editor/components/scene/SceneService';
 
 class PoleFactory extends BlockFactory<'poles'> {
-  constructor() {
-    super('poles');
+  constructor(sceneService: SceneService) {
+    super(sceneService, 'poles');
   }
 
   create(blockType: BlockType, options: Partial<Block> = {}) {
-    const block = BlockCreator.create(blockType, options);
+    const block = BlockCreator.create(this.sceneService.uuid(), blockType, options);
     const pole: Pole = { id: block.id, category: 'poles', pins: { pin1: [], pin2: [], pin3: [] } };
 
     return {

@@ -1,7 +1,6 @@
 import { EditorContext, EditorContextType } from '@/app/editor/EditorContext';
 import { store } from '../utils/store';
-import React, { ReactNode, useMemo } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactNode, useMemo } from 'react';
 import { Provider } from 'react-redux';
 import AddTool from '@/client/editor/controllers/tools/AddTool';
 import ToolService from '@/client/editor/services/ToolService';
@@ -20,6 +19,7 @@ import BlockStore from '@/client/editor/stores/block/BlockStore';
 import TemplateStore from '@/client/editor/stores/template/TemplateStore';
 import ToolStore from '@/client/editor/stores/tool/ToolStore';
 import SceneServiceImpl from '@/client/editor/components/scene/SceneServiceImpl';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 type ProtectedPageProps = {
   children: ReactNode;
@@ -37,11 +37,11 @@ const queryClient = new QueryClient({
 
 const ProtectedPage = ({ children }: ProtectedPageProps) => {
   const sceneStore = useMemo(() => new SceneStore(), []);
-  const blockStore = useMemo(() => new BlockStore(store), []);
-  const update = useMemo(() => new UpdateService(blockStore, store), [blockStore]);
-  const scene = useMemo(() => new SceneServiceImpl(sceneStore), [sceneStore]);
   const templates = useMemo(() => new TemplateStore(store), []);
   const toolStore = useMemo(() => new ToolStore(store), []);
+  const blockStore = useMemo(() => new BlockStore(store), []);
+  const scene = useMemo(() => new SceneServiceImpl(sceneStore), [sceneStore]);
+  const update = useMemo(() => new UpdateService(blockStore, store, scene), [blockStore, scene]);
 
   const editorContext = useMemo<EditorContextType>(
     () => ({

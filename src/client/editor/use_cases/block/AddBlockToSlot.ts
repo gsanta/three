@@ -16,7 +16,7 @@ class AddBlockToSlot {
     const sourcePart = sourceBlock.parts.find((part) => part.name === sourcePartName);
 
     const sourcePartPos = sourcePartMesh.position;
-    const sourcePartOrientation = sourcePart?.orientation || 0;
+    const sourcePartOrientation = sourceBlock.partDetails[sourcePart?.index || '']?.orientation || 0;
     const finalRotation = MathUtils.normalizeAngle(toDegree(sourceBlock.rotation[1]) + sourcePartOrientation);
 
     edit.create(templateName as BlockName, {

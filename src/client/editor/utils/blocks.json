@@ -22,42 +22,7 @@
                 }
             ]
         },
-        "wall": {
-            "category": "walls",
-            "geometry": "box",
-            "scale": [
-                5,
-                2,
-                0.25
-            ],
-            "position": [
-                0.125,
-                0,
-                0.125
-            ]
-        },
-        "roof": {
-            "geometry": "cone",
-            "position": [
-                0,
-                2,
-                0
-            ],
-            "scale": [
-                1,
-                1,
-                1
-            ],
-            "rotation": [
-                0,
-                45,
-                0
-            ],
-            "radialSegments": 4,
-            "radius": 3.5,
-            "height": 1
-        },
-        "cable": {
+        "cable-1": {
             "category": "cables",
             "geometry": "tube",
             "scale": [
@@ -74,34 +39,33 @@
             "path": "/tree.glb",
             "parts": [
                 {
-                    "geometryPath": "Cylinder_1.geometry",
-                    "materialPath": "Material.002"
-                },
-                {
-                    "geometryPath": "Cylinder_2.geometry",
-                    "materialPath": "Material.004"
-                },
-                {
-                    "geometryPath": "Cylinder_3.geometry",
-                    "materialPath": "Material.003"
-                },
-                {
-                    "geometryPath": "Cylinder_4.geometry",
-                    "materialPath": "Material.001"
+                    "scale": [
+                        0.09,
+                        0.71,
+                        0.09
+                    ],
+                    "parts": [
+                        {
+                            "geometryPath": "Cylinder_1.geometry",
+                            "materialPath": "Material.002"
+                        },
+                        {
+                            "geometryPath": "Cylinder_2.geometry",
+                            "materialPath": "Material.004"
+                        },
+                        {
+                            "geometryPath": "Cylinder_3.geometry",
+                            "materialPath": "Material.003"
+                        },
+                        {
+                            "geometryPath": "Cylinder_4.geometry",
+                            "materialPath": "Material.001"
+                        }
+                    ]
                 }
-            ],
-            "position": [
-                0,
-                0.3,
-                0
-            ],
-            "scale": [
-                0.09,
-                0.71,
-                0.09
             ]
         },
-        "wall_new": {
+        "wall-1": {
             "category": "walls",
             "geometry": "model",
             "path": "/wall_new.glb",
@@ -151,35 +115,6 @@
                 }
             ]
         },
-        "wall1": {
-            "category": "walls",
-            "geometry": "model",
-            "path": "/wall1.glb",
-            "parts": [
-                {
-                    "geometryPath": "Cube002.geometry",
-                    "materialPath": "Wall"
-                },
-                {
-                    "geometryPath": "Cube002_1.geometry",
-                    "materialPath": "Door Frame"
-                },
-                {
-                    "geometryPath": "Cube002_2.geometry",
-                    "materialPath": "Door"
-                }
-            ],
-            "position": [
-                0.5,
-                0,
-                0.5
-            ],
-            "scale": [
-                1,
-                1,
-                0.25
-            ]
-        },
         "wall2": {
             "category": "walls",
             "geometry": "model",
@@ -211,7 +146,7 @@
                 -3.718
             ]
         },
-        "pole": {
+        "pole-1": {
             "category": "poles",
             "geometry": "model",
             "path": "/pole.glb",
@@ -239,9 +174,9 @@
                     "geometryPath": "Pin1.geometry",
                     "materialPath": "Metal",
                     "position": [
-                        1.114,
-                        9.336,
-                        0.01
+                        1,
+                        5,
+                        0
                     ],
                     "scale": -0.074,
                     "name": "pin1"
@@ -250,9 +185,9 @@
                     "geometryPath": "Pin2.geometry",
                     "materialPath": "Metal",
                     "position": [
-                        -0.475,
-                        9.336,
-                        0.01
+                        -0.5,
+                        5,
+                        0
                     ],
                     "scale": -0.074,
                     "name": "pin2"
@@ -261,9 +196,9 @@
                     "geometryPath": "Pin3.geometry",
                     "materialPath": "Metal",
                     "position": [
-                        -1.113,
-                        9.336,
-                        0.01
+                        -1,
+                        5,
+                        0
                     ],
                     "scale": -0.074,
                     "name": "pin3"
@@ -276,6 +211,7 @@
             "path": "/building_base_1.glb",
             "parts": [
                 {
+                    "index": "#1",
                     "geometryPath": "base.geometry",
                     "materialPath": "Wall",
                     "position": [
@@ -296,6 +232,7 @@
                     "name": "root"
                 },
                 {
+                    "index": "#2",
                     "geometryPath": "wall1.geometry",
                     "materialPath": "wall-placeholder",
                     "position": [
@@ -313,10 +250,10 @@
                         -0.122,
                         -3.718
                     ],
-                    "name": "wall1",
-                    "orientation": 90
+                    "name": "wall1"
                 },
                 {
+                    "index": "#3",
                     "geometryPath": "wall2.geometry",
                     "materialPath": "wall-placeholder",
                     "position": [
@@ -337,6 +274,7 @@
                     "name": "wall2"
                 },
                 {
+                    "index": "#4",
                     "geometryPath": "wall3.geometry",
                     "materialPath": "wall-placeholder",
                     "position": [
@@ -354,10 +292,10 @@
                         -0.122,
                         -3.718
                     ],
-                    "name": "wall3",
-                    "orientation": 270
+                    "name": "wall3"
                 },
                 {
+                    "index": "#5",
                     "geometryPath": "wall4.geometry",
                     "materialPath": "wall-placeholder",
                     "position": [
@@ -375,10 +313,10 @@
                         -0.122,
                         -3.718
                     ],
-                    "name": "wall4",
-                    "orientation": 180
+                    "name": "wall4"
                 },
                 {
+                    "index": "#6",
                     "geometryPath": "ceil.geometry",
                     "materialPath": "wall-placeholder",
                     "position": [
@@ -397,13 +335,10 @@
                         -3.718
                     ],
                     "name": "ceil",
-                    "slot": {
-                        "axes": [
-                            "y"
-                        ]
-                    }
+                    "slot": {}
                 },
                 {
+                    "index": "#7",
                     "geometryPath": "floor.geometry",
                     "materialPath": "wall-placeholder",
                     "position": [
@@ -416,14 +351,31 @@
                         -0.122,
                         -79.359
                     ],
-                    "name": "floor",
-                    "slot": {
-                        "allowMovement": [
-                            "y"
-                        ]
-                    }
+                    "name": "floor"
                 }
-            ]
+            ],
+            "partDetails": {
+                "#2": {
+                    "orientation": 90
+                },
+                "#4": {
+                    "orientation": 270
+                },
+                "#5": {
+                    "orientation": 180
+                },
+                "#6": {
+                    "axes": [
+                        "y"
+                    ]
+                },
+                "#7": {
+                    "orientation": 180,
+                    "allowMovement": [
+                        "y"
+                    ]
+                }
+            }
         },
         "roof-1": {
             "category": "walls",
@@ -452,6 +404,7 @@
             "path": "/road1.glb",
             "parts": [
                 {
+                    "index": "#1",
                     "geometryPath": "Cube008.geometry",
                     "materialPath": "Road",
                     "position": [
@@ -467,6 +420,7 @@
                     "name": "root"
                 },
                 {
+                    "index": "#2",
                     "geometryPath": "Cube008_1.geometry",
                     "materialPath": "White",
                     "position": [
@@ -482,6 +436,7 @@
                     "name": "stripes"
                 },
                 {
+                    "index": "#3",
                     "geometryPath": "EndNorth.geometry",
                     "materialPath": "wall-placeholder",
                     "position": [
@@ -494,11 +449,10 @@
                         0.067,
                         2.484
                     ],
-                    "name": "end-north",
-                    "orientation": 0,
-                    "role": "slot"
+                    "name": "end-north"
                 },
                 {
+                    "index": "#4",
                     "geometryPath": "EndSouth.geometry",
                     "materialPath": "wall-placeholder",
                     "position": [
@@ -511,23 +465,16 @@
                         0.067,
                         2.484
                     ],
-                    "name": "end-south",
-                    "orientation": 180,
-                    "role": "slot"
+                    "name": "end-south"
                 }
             ],
-            "slots": {
-                "end-south": {
-                    "categories": [
-                        "roads"
-                    ],
-                    "orientation": 180
+            "partDetails": {
+                "#3": {
+                    "role": "slot"
                 },
-                "end-north": {
-                    "categories": [
-                        "roads"
-                    ],
-                    "orientation": 0
+                "#4": {
+                    "role": "slot",
+                    "orientation": 180
                 }
             }
         },
@@ -537,6 +484,7 @@
             "path": "/road2.glb",
             "parts": [
                 {
+                    "index": "#1",
                     "geometryPath": "Cube012.geometry",
                     "materialPath": "Road",
                     "position": [
@@ -557,6 +505,7 @@
                     "name": "root"
                 },
                 {
+                    "index": "#2",
                     "geometryPath": "Cube012_1.geometry",
                     "materialPath": "White",
                     "position": [
@@ -576,6 +525,7 @@
                     ]
                 },
                 {
+                    "index": "#3",
                     "geometryPath": "EndNorth001.geometry",
                     "materialPath": "wall-placeholder",
                     "position": [
@@ -593,11 +543,10 @@
                         -0.132,
                         -2.775
                     ],
-                    "name": "end-north",
-                    "orientation": 0,
-                    "role": "slot"
+                    "name": "end-north"
                 },
                 {
+                    "index": "#4",
                     "geometryPath": "EndSouth001.geometry",
                     "materialPath": "wall-placeholder",
                     "position": [
@@ -615,11 +564,10 @@
                         -0.132,
                         -2.775
                     ],
-                    "name": "end-south",
-                    "orientation": 180,
-                    "role": "slot"
+                    "name": "end-south"
                 },
                 {
+                    "index": "#5",
                     "geometryPath": "EndEast.geometry",
                     "materialPath": "wall-placeholder",
                     "position": [
@@ -637,11 +585,10 @@
                         -0.132,
                         -2.775
                     ],
-                    "name": "end-east",
-                    "orientation": 90,
-                    "role": "slot"
+                    "name": "end-east"
                 },
                 {
+                    "index": "#6",
                     "geometryPath": "EndWest.geometry",
                     "materialPath": "wall-placeholder",
                     "position": [
@@ -659,45 +606,24 @@
                         -0.132,
                         -2.775
                     ],
-                    "name": "end-west",
-                    "orientation": 270,
-                    "role": "slot"
+                    "name": "end-west"
                 }
             ],
-            "slots": {
-                "end-south": {
-                    "categories": [
-                        "roads"
-                    ],
-                    "slots": [
-                        "end-north"
-                    ]
+            "partDetails": {
+                "#3": {
+                    "role": "slot"
                 },
-                "end-north": {
-                    "categories": [
-                        "roads"
-                    ],
-                    "slots": [
-                        "end-south"
-                    ]
+                "#4": {
+                    "role": "slot",
+                    "orientation": 180
                 },
-                "end-west": {
-                    "categories": [
-                        "roads"
-                    ],
-                    "slots": [
-                        "end-south"
-                    ],
-                    "rotation": 90
+                "#5": {
+                    "role": "slot",
+                    "orientation": 90
                 },
-                "end-east": {
-                    "categories": [
-                        "roads"
-                    ],
-                    "slots": [
-                        "end-north"
-                    ],
-                    "rotation": 90
+                "#6": {
+                    "role": "slot",
+                    "orientation": 270
                 }
             }
         },
@@ -707,6 +633,7 @@
             "path": "/road3.glb",
             "parts": [
                 {
+                    "index": "#1",
                     "geometryPath": "Cube018.geometry",
                     "materialPath": "Road",
                     "position": [
@@ -722,6 +649,7 @@
                     "name": "root"
                 },
                 {
+                    "index": "#2",
                     "geometryPath": "Cube018_1.geometry",
                     "materialPath": "White",
                     "position": [
@@ -737,6 +665,7 @@
                     "name": "stripes"
                 },
                 {
+                    "index": "#3",
                     "geometryPath": "Road3EndSouth.geometry",
                     "materialPath": "wall-placeholder",
                     "position": [
@@ -749,11 +678,10 @@
                         0.067,
                         2.484
                     ],
-                    "name": "end-south",
-                    "orientation": 180,
-                    "role": "slot"
+                    "name": "end-south"
                 },
                 {
+                    "index": "#4",
                     "geometryPath": "Road3EndNorth.geometry",
                     "materialPath": "wall-placeholder",
                     "position": [
@@ -771,28 +699,94 @@
                         0.067,
                         2.484
                     ],
-                    "name": "end-east",
-                    "orientation": 90,
-                    "role": "slot"
+                    "name": "end-east"
                 }
             ],
-            "slots": {
-                "end-south": {
-                    "categories": [
-                        "roads"
+            "partDetails": {
+                "#3": {
+                    "role": "slot",
+                    "orientation": 180
+                },
+                "#4": {
+                    "role": "slot",
+                    "orientation": 90
+                }
+            }
+        },
+        "lamp-1": {
+            "category": "decorations",
+            "geometry": "model",
+            "path": "/lamp1.glb",
+            "parts": [
+                {
+                    "index": "#1",
+                    "geometryPath": "Lamp1Body.geometry",
+                    "materialPath": "DarkGray",
+                    "position": [
+                        0.003,
+                        0.017,
+                        -0.003
                     ],
-                    "slots": [
-                        "end-north"
+                    "scale": [
+                        0.102,
+                        1.563,
+                        0.102
+                    ],
+                    "name": "root"
+                },
+                {
+                    "index": "#2",
+                    "position": [
+                        0.003,
+                        2.737,
+                        -0.003
+                    ],
+                    "scale": [
+                        0.102,
+                        1.563,
+                        0.102
+                    ],
+                    "parts": [
+                        {
+                            "geometryPath": "Cube022.geometry",
+                            "materialPath": "DarkGray"
+                        },
+                        {
+                            "geometryPath": "Cube022_1.geometry",
+                            "materialPath": "Road"
+                        }
                     ]
                 },
-                "end-west": {
-                    "categories": [
-                        "roads"
+                {
+                    "index": "#3",
+                    "position": [
+                        0.003,
+                        2.737,
+                        -0.003
                     ],
-                    "slots": [
-                        "end-north"
+                    "scale": [
+                        0.102,
+                        1.563,
+                        0.102
                     ],
-                    "rotation": 90
+                    "parts": [
+                        {
+                            "geometryPath": "Cube023.geometry",
+                            "materialPath": "DarkGray"
+                        },
+                        {
+                            "geometryPath": "Cube023_1.geometry",
+                            "materialPath": "Wood1"
+                        }
+                    ]
+                }
+            ],
+            "partDetails": {
+                "#2": {
+                    "isHidden": true
+                },
+                "#3": {
+                    "isHidden": true
                 }
             }
         }

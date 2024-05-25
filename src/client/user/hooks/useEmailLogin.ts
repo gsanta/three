@@ -1,19 +1,19 @@
 import { ServerError } from '../../common/components/ErrorMessage';
 import { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
-import { useMutation } from 'react-query';
 import { useCallback } from 'react';
 import { signIn } from 'next-auth/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginSchema, loginSchema } from '@/common/validations/LoginSchema';
+import { useMutation } from '@tanstack/react-query';
 
 type UseEmailLoginProps = {
   onClose(): void;
 };
 
 const useEmailLogin = ({ onClose }: UseEmailLoginProps) => {
-  const { mutate, error, isLoading } = useMutation<unknown, AxiosError<ServerError>, LoginSchema>(
-    async ({ email, password }) => {
+  const { mutate, error, isPending } = useMutation<unknown, AxiosError<ServerError>, LoginSchema>({
+    mutationFn: async ({ email, password }) => {
       const resp = await signIn('credentials', {
         email,
         password,
@@ -21,12 +21,10 @@ const useEmailLogin = ({ onClose }: UseEmailLoginProps) => {
       });
       return resp;
     },
-    {
-      onSuccess() {
-        onClose();
-      },
+    onSuccess() {
+      onClose();
     },
-  );
+  });
 
   const {
     register,
@@ -49,7 +47,7 @@ const useEmailLogin = ({ onClose }: UseEmailLoginProps) => {
     query: {
       loginEmail,
       loginEmailError: error,
-      isLoginEmailLoding: isLoading,
+      isLoginEmailLoding: isPending,
     },
     form: {
       register,

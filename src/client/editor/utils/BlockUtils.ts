@@ -27,20 +27,22 @@ class BlockUtils {
 
   static findMatchingSlot(sourceBlock: Block, sourcePartName: string, target: BlockType): RotatedPart | undefined {
     const sourcePart = sourceBlock.parts.find((part) => part.name === sourcePartName);
-    const orientation = sourcePart?.orientation || 0;
+    const orientation = sourceBlock.partDetails[sourcePart?.index || '']?.orientation || 0;
     const rotation = toDegree(sourceBlock.rotation[1]);
     const realRotation = MathUtils.normalizeAngle(orientation - rotation);
     const bestMatch = MathUtils.normalizeAngle(realRotation + 180);
 
-    const slots = target?.parts?.filter((part) => part.role === 'slot');
+    const slots = target?.parts?.filter((part) => target.partDetails[part.index]?.role === 'slot');
 
     const result = slots.reduce((rotatedPart: RotatedPart | undefined, slot) => {
       let targetRotation = 0;
 
-      if (slot.orientation > bestMatch) {
-        targetRotation = slot.orientation - bestMatch;
+      const targetOrientation = target.partDetails[slot?.index || '']?.orientation || 0;
+
+      if (targetOrientation > bestMatch) {
+        targetRotation = targetOrientation - bestMatch;
       } else {
-        targetRotation = slot.orientation + (360 - bestMatch);
+        targetRotation = targetOrientation + (360 - bestMatch);
       }
 
       if (!rotatedPart || rotatedPart.rotation > targetRotation) {

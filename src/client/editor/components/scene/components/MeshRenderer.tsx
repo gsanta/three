@@ -8,7 +8,7 @@ import { addVector } from '@/client/editor/utils/vectorUtils';
 
 const isModelMesh = (block: Block): block is Block<'model'> => block.geometry === 'model';
 
-const isTubeMesh = (block: Block): block is Block<'tube'> => block.geometry === 'tube';
+const isTubeMesh = (block: Block): block is Block<'tube'> => block.category === 'cables';
 
 const isBoxMesh = (block: Block): block is Block<'box'> => block.geometry === 'box';
 
@@ -20,6 +20,20 @@ const MeshRenderer = (props: Omit<WrappedMeshProps, 'parent'>) => {
 
   const { position, rotation, ...restMeshProps } = meshProps || {};
   const { additions, ...restProps } = props;
+
+  if (isTubeMesh(block)) {
+    return (
+      <CableMesh
+        additions={additions}
+        cable={categories.cables[block.id]}
+        block={block}
+        meshProps={{ ...meshProps }}
+        materialProps={materialProps}
+        parent={parent}
+        selectedParts={selectedParts}
+      />
+    );
+  }
 
   if (isModelMesh(block)) {
     return block.children?.length ? (
@@ -57,20 +71,6 @@ const MeshRenderer = (props: Omit<WrappedMeshProps, 'parent'>) => {
     return (
       <BoxMesh
         additions={additions}
-        block={block}
-        meshProps={{ ...meshProps }}
-        materialProps={materialProps}
-        parent={parent}
-        selectedParts={selectedParts}
-      />
-    );
-  }
-
-  if (isTubeMesh(block)) {
-    return (
-      <CableMesh
-        additions={additions}
-        cable={categories.cables[block.id]}
         block={block}
         meshProps={{ ...meshProps }}
         materialProps={materialProps}

@@ -24,6 +24,11 @@ class ToolService {
     };
   }
 
+  onExecute() {
+    const { selectedTool } = this.store.getState().tool;
+    this.getTool(selectedTool)?.onExecute(this.info);
+  }
+
   onPointerDown(event: ThreeEvent<PointerEvent>) {
     this.info.pos = event.point;
     this.info.clientX = event.clientX;

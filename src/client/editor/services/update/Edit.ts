@@ -15,6 +15,7 @@ import PoleFactory from './factories/PoleFactory';
 import BlockStore from '../../stores/block/BlockStore';
 import { Store } from '@/client/common/utils/store';
 import BlockUtils from '../../utils/BlockUtils';
+import SceneService from '../../components/scene/SceneService';
 
 type MergeStrategies = 'merge' | 'exclude-update';
 
@@ -53,14 +54,14 @@ const mergeSlotSources = (
 };
 
 class Edit {
-  constructor(store: BlockStore, dispatchStore: Store) {
+  constructor(store: BlockStore, dispatchStore: Store, sceneService: SceneService) {
     this.store = store;
     this.dispatchStore = dispatchStore;
 
-    this.updaters.poles = new PoleFactory();
-    this.updaters.cables = new CableFactory();
+    this.updaters.poles = new PoleFactory(sceneService);
+    this.updaters.cables = new CableFactory(sceneService);
 
-    this.defaultFactory = new DefaultBlockFactory();
+    this.defaultFactory = new DefaultBlockFactory(sceneService);
   }
 
   commit() {

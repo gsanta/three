@@ -73,7 +73,7 @@ class SceneStore {
     }
 
     if (!mesh) {
-      throw new Error('Mesh not found');
+      throw new Error(`Mesh not found with id ${modelId}`);
     }
 
     return mesh;

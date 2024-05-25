@@ -34,7 +34,7 @@ class ApplyTemplateToSlot {
 
     const template = this.blockStore.getTemplateByName(templateName);
 
-    const hasTargetSlot = template?.parts.find((part) => part.role === 'slot');
+    const hasTargetSlot = template?.parts.find((part) => template.partDetails[part.index]?.role === 'slot');
 
     if (hasTargetSlot) {
       this.snapSlotToSlot(edit, block, partName, templateName);
@@ -70,12 +70,15 @@ class ApplyTemplateToSlot {
     const targetZ = -targetPos[2];
     const targetY = -targetPos[1];
 
-    const idealNextPartOrientation = MathUtils.normalizeAngle(targetPart.orientation + 180);
-    let idealNextSelectedPart = template.parts.find((part) => part.orientation === idealNextPartOrientation);
+    const targetPartOrientation = template.partDetails[targetPart.index]?.orientation || 0;
+    const idealNextPartOrientation = MathUtils.normalizeAngle(targetPartOrientation + 180);
+    let idealNextSelectedPart = template.parts.find(
+      (part) => template.partDetails[part.index]?.orientation === idealNextPartOrientation,
+    );
 
     if (!idealNextSelectedPart) {
       idealNextSelectedPart = template.parts
-        .filter((part) => part.role === 'slot')
+        .filter((part) => template.partDetails[part.index]?.role === 'slot')
         .find((part) => part.name !== targetPart.name);
     }
 

@@ -3,12 +3,14 @@ import BlockType from '@/client/editor/types/BlockType';
 import Block from '@/client/editor/types/Block';
 import type { PartialDeep } from 'type-fest';
 import BlockCategory, { BlockCategories } from '@/client/editor/types/BlockCategory';
+import SceneService from '@/client/editor/components/scene/SceneService';
 
 abstract class BlockFactory<T extends BlockCategory | never = never> {
   readonly category?: BlockCategory;
 
-  constructor(category?: BlockCategory) {
+  constructor(sceneService: SceneService, category?: BlockCategory) {
     this.category = category;
+    this.sceneService = sceneService;
   }
 
   create(
@@ -26,6 +28,8 @@ abstract class BlockFactory<T extends BlockCategory | never = never> {
   ): BlockCategories[T] {
     throw new Error('Unimplemented method');
   }
+
+  protected sceneService: SceneService;
 }
 
 export default BlockFactory;

@@ -2,9 +2,23 @@ import { Canvas as ThreeCanvas } from '@react-three/fiber';
 import { Environment } from './Environment';
 import useEditorContext from '@/app/editor/EditorContext';
 import CanvasContent from './CanvasContent';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
+import SkyBox from './Skybox';
+import api from '@/client/common/utils/api';
+import { useQuery } from '@tanstack/react-query';
+import { setTemplates } from '@/client/editor/stores/template/templateSlice';
+import { useAppDispatch } from '@/client/common/hooks/hooks';
 
 const Canvas = () => {
+  const { data, isSuccess } = useQuery({ queryKey: ['abcd'], queryFn: () => api.get('/api/block') });
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(setTemplates(data.data.items));
+    }
+  }, [data, isSuccess]);
+
   const { keyboard, scene } = useEditorContext();
 
   // const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -23,12 +37,13 @@ const Canvas = () => {
       onKeyDown={(e) => keyboard.onKeyDown(e.nativeEvent)}
       style={{ backgroundColor: 'goldenrod' }}
       shadows
-      camera={{ position: [0, 10, 15], fov: 25 }}
+      camera={{ position: [0, 50, 75], fov: 25 }}
       tabIndex={0}
       ref={canvasRef}
     >
       <CanvasContent />
       <Environment />
+      <SkyBox />
     </ThreeCanvas>
   );
 };

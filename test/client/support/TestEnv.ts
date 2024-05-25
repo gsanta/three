@@ -36,9 +36,9 @@ export const setupTestEnv = (): TestEnv => {
   testStore.setup();
   const blockStore = new BlockStore(store);
   const meshFactory = new TestMeshFactory();
-  const update = new UpdateService(blockStore, store);
-
   const scene = new TestSceneService();
+
+  const update = new UpdateService(blockStore, store, scene);
 
   const sceneStore = new SceneStore();
 

@@ -53,9 +53,22 @@ export const blockSettingsSlice = createSlice({
     setColor(state, action: PayloadAction<RGBColor>) {
       state.color = action.payload;
     },
+
+    setTemplates(state, action: PayloadAction<BlockType[]>) {
+      state.blocks = action.payload.map((block) => ({
+        ...block,
+        geometry: block.geometry || 'model',
+        movable: block.movable || true,
+        partDetails: block.partDetails || {},
+        rotation: block.rotation || [0, 0, 0],
+        scale: block.scale || [1, 1, 1],
+      }));
+      state.selectedBlockName = state.blocks[0].name;
+    },
   },
 });
 
-export const { setBlockRotation, setColor, setSelectedGeometry, setSelectedTransformType } = blockSettingsSlice.actions;
+export const { setBlockRotation, setColor, setSelectedGeometry, setSelectedTransformType, setTemplates } =
+  blockSettingsSlice.actions;
 
 export default blockSettingsSlice.reducer;

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import ToolName from './ToolName';
 import { IconName } from '../../common/components/icon/Icon';
 import { Mesh, Vector3 } from 'three';
@@ -42,23 +43,19 @@ abstract class Tool {
     this.update = update;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onPointerDown(_info: ToolInfo) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onPointerMove(_info: ToolInfo) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onPointerEnter(_info: ToolInfo) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onPointerLeave(_info: ToolInfo) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onDrag(_info: ToolInfo) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onDragEnd(_info: ToolInfo) {}
+
+  onExecute(_info: ToolInfo) {}
 }
 
 export default Tool;

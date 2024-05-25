@@ -27,7 +27,7 @@ class JoinPoles {
     pinMesh2.getWorldPosition(pos2);
 
     const edit = this.update.getUpdate().create<'cables'>(
-      'cable',
+      'cable-1',
       { dependsOn: [pole1.id, pole2.id] },
       {
         points: [pos1, pos2].map((point) => [point.x, point.y, point.z]) as Num3[],

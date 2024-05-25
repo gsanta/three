@@ -28,7 +28,11 @@ type ModelPartProps = {
 const ModelMeshPart = ({ block, materials, nodes, part, selectedParts }: ModelPartProps) => {
   const color = selectedParts.includes(part?.name || '') ? 'green' : undefined;
 
-  if (!block.isHovered && !block.isSelected && part.role === 'slot' && !color) {
+  if (block.partDetails[part.index]?.isHidden) {
+    return null;
+  }
+
+  if (!block.isHovered && !block.isSelected && block.partDetails[part.index]?.role === 'slot' && !color) {
     return null;
   }
 
@@ -68,11 +72,19 @@ const ModelMeshPart = ({ block, materials, nodes, part, selectedParts }: ModelPa
   );
 };
 
-const ModelGroupPart = ({ part, ...rest }: ModelPartProps) => {
+const ModelGroupPart = ({ part, block, ...rest }: ModelPartProps) => {
+  if (block.partDetails[part.index]?.isHidden) {
+    return null;
+  }
+
   return (
     <group position={part.position} rotation={part.rotation} scale={part.scale} name={part.name || ''}>
       {part.parts.map((childPart) =>
-        childPart.parts ? <ModelGroupPart {...rest} part={childPart} /> : <ModelMeshPart {...rest} part={childPart} />,
+        childPart.parts ? (
+          <ModelGroupPart {...rest} block={block} part={childPart} />
+        ) : (
+          <ModelMeshPart {...rest} block={block} part={childPart} />
+        ),
       )}
     </group>
   );

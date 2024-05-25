@@ -6,7 +6,7 @@ import BlockCategory, { BlockCategories } from '@/client/editor/types/BlockCateg
 
 class DefaultBlockFactory extends BlockFactory<BlockCategory> {
   create(blockType: BlockType, options: Partial<Block> = {}) {
-    const block = BlockCreator.create(blockType, options);
+    const block = BlockCreator.create(this.sceneService.uuid(), blockType, options);
 
     return {
       block,

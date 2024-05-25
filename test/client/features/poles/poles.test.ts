@@ -33,7 +33,7 @@ describe('JoinPoles', () => {
     env.toolHelper.pointerDown({ blockId: poles[1].id });
 
     store.dispatch(setSelectedTool(ToolName.Cable));
-    env.tool.getCableTool().joinPoles();
+    env.tool.getCableTool().onExecute();
   };
 
   describe('when joining two poles', () => {

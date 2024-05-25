@@ -2,11 +2,11 @@ import api from '../../common/utils/api';
 import { usersPath } from '../../common/utils/routes';
 import { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
-import { useMutation } from 'react-query';
 import { useCallback } from 'react';
 import { ServerError } from '../../common/components/ErrorMessage';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterSchema, registerSchema } from '@/common/validations/RegisterSchema';
+import { useMutation } from '@tanstack/react-query';
 
 type UseEmailSignUpProps = {
   onClose(): void;
@@ -29,18 +29,16 @@ const useEmailSignUp = ({ onClose }: UseEmailSignUpProps) => {
     mode: 'onTouched',
   });
 
-  const { mutate, isLoading, error } = useMutation<unknown, AxiosError<ServerError>, RegisterSchema>(
-    async (data) => {
+  const { mutate, isPending, error } = useMutation<unknown, AxiosError<ServerError>, RegisterSchema>({
+    mutationFn: async (data) => {
       const resp = await api.post(usersPath, data);
 
       return resp;
     },
-    {
-      onSuccess() {
-        onClose();
-      },
+    onSuccess() {
+      onClose();
     },
-  );
+  });
 
   const handleRegistration = useCallback(
     (data: RegisterSchema) => {
@@ -54,7 +52,7 @@ const useEmailSignUp = ({ onClose }: UseEmailSignUpProps) => {
     query: {
       registerEmail: handleRegistration,
       registerEmailError: error,
-      isRegisterEmailLoading: isLoading,
+      isRegisterEmailLoading: isPending,
     },
     form: {
       register,

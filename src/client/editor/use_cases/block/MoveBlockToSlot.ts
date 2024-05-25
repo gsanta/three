@@ -28,7 +28,7 @@ class MoveBlockToSlot {
     const sourcePartPos = new Vector3();
     sourcePartMesh.getWorldPosition(sourcePartPos);
 
-    const sourcePartOrientation = sourcePart?.orientation || 0;
+    const sourcePartOrientation = sourceBlock.partDetails[sourcePart?.index || '']?.orientation || 0;
     const finalRotation = MathUtils.normalizeAngle(toDegree(sourceBlock.rotation[1]) + sourcePartOrientation);
 
     edit.updateBlock(targetBlock.id, {
