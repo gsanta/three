@@ -11,7 +11,7 @@ Then(
   function (this: ExtendedWorld, blockId: string, pin: string, x: number, y: number, z: number) {
     const cables = Object.values(this.env.blockStore.getDecorations('cables'));
 
-    const realBlockId = blockId === 'examined' ? this.env.storedBlockId || '' : blockId;
+    const realBlockId = blockId === 'examined' ? this.env.testScene.storedBlockId || '' : blockId;
 
     const cable = cables.find(
       (currCable) =>
@@ -34,7 +34,7 @@ Then(
 );
 
 Then('pin {string} of block {string} is empty', function (this: ExtendedWorld, pin: string, blockId: string) {
-  const realBlockId = blockId === 'examined' ? this.env.storedBlockId || '' : blockId;
+  const realBlockId = blockId === 'examined' ? this.env.testScene.storedBlockId || '' : blockId;
 
   const pole = this.env.blockStore.getDecorations('poles')[realBlockId];
 

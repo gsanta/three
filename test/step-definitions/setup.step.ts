@@ -8,10 +8,9 @@ import ToolName from '@/client/editor/types/ToolName';
 import ExtendedWorld from './ExtendedWorld';
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 import findClosestBlock from './helpers/findClosestBlock';
-import { setupTestEnv } from './support/TestEnv';
 
 Given('I have an empty canvas', function (this: ExtendedWorld) {
-  this.env = setupTestEnv();
+  this.env.teardown();
 });
 
 export function addTemplateToPosition(this: ExtendedWorld, template: string, x: number, y: number, z: number) {

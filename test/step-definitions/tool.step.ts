@@ -44,5 +44,5 @@ When('I examine block at {float},{float},{float}', function (this: ExtendedWorld
     throw new Error(`Block was not found near position (${x},${y},${z})`);
   }
 
-  this.env.storedBlockId = blockWithDistance[0].id;
+  this.env.testScene.storedBlockId = blockWithDistance[0].id;
 });

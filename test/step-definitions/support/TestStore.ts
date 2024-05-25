@@ -2,6 +2,8 @@ import Block from '@/client/editor/types/Block';
 import { DoubleSide, Mesh, MeshBasicMaterial, PlaneGeometry } from 'three';
 
 class TestStore {
+  storedBlockId?: string;
+
   setup() {
     const geometry = new PlaneGeometry(1, 1);
     const material = new MeshBasicMaterial({ color: 0xffff00, side: DoubleSide });

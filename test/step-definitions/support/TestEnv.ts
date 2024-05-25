@@ -24,7 +24,6 @@ type TestEnv = {
   blockStore: BlockStore;
   sceneService: TestSceneService;
   sceneStore: SceneStore;
-  storedBlockId?: string;
   testScene: TestStore;
   tool: ToolService;
   toolHelper: ToolHelper;
@@ -73,7 +72,6 @@ export const setupTestEnv = (): TestEnv => {
         }
 
         if ('block' in u && u.block) {
-          console.log('mesh created: ' + u.block.id);
           sceneStore.addMesh(meshFactory.create(u.block) as unknown as Mesh, u.block.id);
           testStore.setLastModifiedBlock(u.block);
         }
@@ -82,8 +80,9 @@ export const setupTestEnv = (): TestEnv => {
   });
 
   const teardown = () => {
-    testMiddleware.clearListeners();
+    // testMiddleware.clearListeners();
     store.dispatch(clearBlockSlice());
+    testStore.storedBlockId = undefined;
   };
 
   return {

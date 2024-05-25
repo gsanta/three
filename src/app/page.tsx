@@ -21,9 +21,6 @@ async function getData() {
 const Page = async () => {
   const data = await getData();
 
-  console.log('the data');
-  console.log(data);
-
   return (
     <div>
       <h1>Home page</h1>
