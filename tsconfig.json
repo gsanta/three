@@ -18,7 +18,6 @@
     ],
     "types": [
       "node",
-      "jest"
     ],
     "target": "es6",
     "lib": [
@@ -55,7 +54,6 @@
   },
   "files": [
     "src/client/type_definitions/global.d.ts",
-    "test/client/support/matchers/matchers.d.ts"
   ],
   "include": [
     ".eslintrc.js",
