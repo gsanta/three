@@ -17,7 +17,7 @@ const Canvas = () => {
     if (isSuccess) {
       dispatch(setTemplates(data.data.items));
     }
-  }, [data, isSuccess]);
+  }, [data, dispatch, isSuccess]);
 
   const { keyboard, scene } = useEditorContext();
 
