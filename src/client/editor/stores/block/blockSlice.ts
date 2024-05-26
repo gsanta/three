@@ -90,7 +90,11 @@ export const blockSlice = createSlice({
 
           const selectedIndex = state.selectedRootBlockIds.indexOf(update.remove.id);
           if (selectedIndex !== -1) {
-            state.selectedRootBlockIds.splice(rootIndex, 1);
+            state.selectedRootBlockIds.splice(selectedIndex, 1);
+          }
+
+          if (state.selectedBlocks[update.remove.id]) {
+            delete state.selectedBlocks[update.remove.id];
           }
 
           const block = state.blocks[update.remove.id];

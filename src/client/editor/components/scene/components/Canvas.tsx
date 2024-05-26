@@ -3,7 +3,7 @@ import { Environment } from './Environment';
 import useEditorContext from '@/app/editor/EditorContext';
 import CanvasContent from './CanvasContent';
 import { useCallback, useEffect } from 'react';
-import SkyBox from './Skybox';
+import SkyBox from './TheSkyBox';
 import api from '@/client/common/utils/api';
 import { useQuery } from '@tanstack/react-query';
 import { setTemplates } from '@/client/editor/stores/template/templateSlice';

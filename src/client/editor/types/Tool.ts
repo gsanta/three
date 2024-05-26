@@ -56,6 +56,8 @@ abstract class Tool {
   onDragEnd(_info: ToolInfo) {}
 
   onExecute(_info: ToolInfo) {}
+
+  onRendered() {}
 }
 
 export default Tool;

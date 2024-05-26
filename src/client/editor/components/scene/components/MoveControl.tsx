@@ -16,7 +16,7 @@ type MoveControlProps = {
 
 const MoveControl = ({ onPointerDown, onPointerEnter }: MoveControlProps) => {
   const selectedBlocks = useSelectedBlocks();
-  const movableBlocks = selectedBlocks.filter((mesh) => mesh.movable);
+  const movableBlocks = selectedBlocks.filter((block) => block.movable);
 
   const { selectedPartNames } = useAppSelector((selector) => selector.block.present);
   const { drag, moveAxis } = useAppSelector((selector) => selector.tool.select);

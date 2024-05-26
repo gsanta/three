@@ -5,6 +5,7 @@ import BlockStore from '../../stores/block/BlockStore';
 import UpdateService from '../../services/update/UpdateService';
 import SceneStore from '../../components/scene/SceneStore';
 import ApplyTemplateToSlot from '../../use_cases/block/ApplyTemplateToSlot';
+import AddBlock from '../../use_cases/add/AddBlock';
 
 class AddTool extends Tool {
   constructor(blockStore: BlockStore, sceneStore: SceneStore, toolStore: ToolStore, update: UpdateService) {
@@ -14,19 +15,22 @@ class AddTool extends Tool {
     this.updateService = update;
 
     this.addTemplateToSlot = new ApplyTemplateToSlot(blockStore, sceneStore);
+
+    this.addBlock = new AddBlock(blockStore, sceneStore, update);
   }
 
   onPointerDown({ pos }: ToolInfo) {
-    const { selectedBlockName } = this.store.getBlockSettings();
+    this.addBlock.perform(pos);
 
-    if (!selectedBlockName) {
-      return;
+    this.executeAfterRender = true;
+  }
+
+  onRendered() {
+    try {
+      this.addBlock.performAfterRender();
+    } finally {
+      this.executeAfterRender = false;
     }
-
-    this.updateService
-      .getUpdate()
-      .create(selectedBlockName, { position: [pos.x, pos.y, pos.z] })
-      .commit();
   }
 
   addToSlot() {
@@ -42,6 +46,10 @@ class AddTool extends Tool {
   private toolStore: ToolStore;
 
   private addTemplateToSlot: ApplyTemplateToSlot;
+
+  private addBlock: AddBlock;
+
+  private executeAfterRender = false;
 }
 
 export default AddTool;

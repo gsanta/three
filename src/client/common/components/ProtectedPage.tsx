@@ -66,6 +66,8 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
     [blockStore, sceneStore, toolStore, update, scene, templates],
   );
 
+  editorContext.scene.setToolService(editorContext.tool);
+
   return (
     <QueryClientProvider client={queryClient}>
       <EditorContext.Provider value={editorContext}>

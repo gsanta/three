@@ -1,4 +1,5 @@
 import { Camera, Group, Mesh, Object3D, Scene } from 'three';
+import ToolService from '../../services/ToolService';
 
 class SceneStore {
   constructor() {
@@ -19,6 +20,8 @@ class SceneStore {
 
     this.meshes.set(mesh.userData.modelId, mesh);
     this.objInstances.get(mesh.userData.modelId)?.add(instanceId);
+
+    this.toolService?.onRendered();
   }
 
   addGroup(group: Group | null, instanceId: string) {
@@ -34,6 +37,8 @@ class SceneStore {
 
     this.groups.set(group.userData.modelId, group);
     this.objInstances.get(group.userData.modelId)?.add(instanceId);
+
+    this.toolService?.onRendered();
   }
 
   removeMeshOrGroup(modelId: string, instanceId: string) {
@@ -112,6 +117,11 @@ class SceneStore {
     return this.scene;
   }
 
+  // TODO: this should be added in the constructor, but causes circular dep
+  setToolService(toolService: ToolService) {
+    this.toolService = toolService;
+  }
+
   private meshes: Map<string, Mesh>;
 
   private groups: Map<string, Group>;
@@ -123,6 +133,8 @@ class SceneStore {
   private canvasElement: HTMLCanvasElement | undefined;
 
   private scene: Scene | undefined;
+
+  private toolService?: ToolService;
 }
 
 export default SceneStore;

@@ -3,6 +3,8 @@ import { useAppSelector } from '@/client/common/hooks/hooks';
 const useSelectedBlocks = () => {
   const { blocks, selectedBlocks } = useAppSelector((store) => store.block.present);
 
+  console.log(selectedBlocks);
+
   return Object.keys(selectedBlocks)?.map((id) => blocks[id]) || [];
 };
 
