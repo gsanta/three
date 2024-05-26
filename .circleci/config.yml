@@ -3,13 +3,15 @@ orbs:
   node: circleci/node@5.0.2
 jobs:
   build_and_test:
-    executor: node/default
+    docker:
+      - image: cimg/node:20.11.0
+        environment:
+          DATABASE_URL: postgresql://postgres@localhost/circle_test
+      - image: cimg/postgres:14.0
+        environment:
+          POSTGRES_USER: postgres
     steps:
       - checkout
-      - node/install:
-          node-version: "20.11.0"
-      - node/install-packages:
-          pkg-manager: npm
       - run:
           command: npm run test
           name: Run tests
