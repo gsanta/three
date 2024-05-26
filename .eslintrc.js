@@ -14,12 +14,8 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
-    jest: true,
   },
   settings: {
-    jest: {
-      version: 'detect',
-    },
     react: {
       version: 'detect',
     },
@@ -28,8 +24,6 @@ module.exports = {
     'airbnb/hooks',
     'plugin:@typescript-eslint/recommended',
     'airbnb-typescript',
-    'plugin:jest/recommended',
-    'plugin:jest/style',
     'plugin:prettier/recommended',
     'prettier/prettier',
   ],
@@ -43,9 +37,6 @@ module.exports = {
 
     /* @typescript-eslint/eslint-plugin already defines this plugin */
     // '@typescript-eslint',
-
-    /* eslint-plugin-jest already defines this plugin */
-    // 'jest',
 
     /* eslint-plugin-prettier already defines this plugin */
     // 'prettier',
@@ -111,7 +102,6 @@ module.exports = {
         unnamedComponents: 'arrow-function',
       },
     ],
-    'jest/expect-expect': 'off',
   },
   overrides: [
     {
