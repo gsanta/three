@@ -1,22 +1,4 @@
 import Link from 'next/link';
-import prisma from '../bff/config/db';
-
-async function getData() {
-  // const res = await fetch('https://api.example.com/...')
-  // // The return value is *not* serialized
-  // // You can return Date, Map, Set, etc.
-
-  // if (!res.ok) {
-  //   // This will activate the closest `error.js` Error Boundary
-  //   throw new Error('Failed to fetch data')
-  // }
-
-  // return res.json()
-
-  const posts = await prisma.user.findMany();
-
-  return posts;
-}
 
 const Page = async () => {
   return (
