@@ -15,7 +15,8 @@
     "build": "next build",
     "start": "next start --port 3012",
     "lint": "next lint",
-    "test": "cucumber-js 'test/**/*.feature'"
+    "test": "cucumber-js 'test/**/*.feature'",
+    "test:ci": "cucumber-js 'test/**/*.feature' --format 'junit':'cucumber-report.xml'"
   },
   "author": "Gergely Santa",
   "license": "MIT",
