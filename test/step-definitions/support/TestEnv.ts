@@ -5,7 +5,6 @@ import { store, testMiddleware } from '@/client/common/utils/store';
 import TestMeshFactory from './TestMeshFactory';
 import { UpdateBlocks, clearBlockSlice, updateBlocks } from '@/client/editor/stores/block/blockSlice';
 import { Mesh } from 'three';
-import UpdateService from '@/client/editor/services/update/UpdateService';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import ToolService from '@/client/editor/services/ToolService';
 import AddTool from '@/client/editor/controllers/tools/AddTool';
@@ -18,6 +17,8 @@ import SelectTool from '@/client/editor/controllers/tools/SelectTool';
 import ToolStore from '@/client/editor/stores/tool/ToolStore';
 import TemplateStore from '@/client/editor/stores/template/TemplateStore';
 import TestSceneService from './TestSceneService';
+import TransactionService from '@/client/editor/services/update/TransactionService';
+import FactoryService from '@/client/editor/services/factory/FactoryService';
 
 type TestEnv = {
   meshFactory: TestMeshFactory;
@@ -27,7 +28,7 @@ type TestEnv = {
   testScene: TestStore;
   tool: ToolService;
   toolHelper: ToolHelper;
-  update: UpdateService;
+  update: TransactionService;
   teardown(): void;
 };
 
@@ -37,8 +38,9 @@ export const setupTestEnv = (): TestEnv => {
   const blockStore = new BlockStore(store);
   const meshFactory = new TestMeshFactory();
   const scene = new TestSceneService();
+  const factoryService = new FactoryService(blockStore, scene);
 
-  const update = new UpdateService(blockStore, store, scene);
+  const update = new TransactionService(blockStore, store, scene);
 
   const sceneStore = new SceneStore();
 
@@ -47,10 +49,10 @@ export const setupTestEnv = (): TestEnv => {
 
   const tool = new ToolService(
     [
-      new AddTool(blockStore, sceneStore, toolStore, update),
+      new AddTool(blockStore, factoryService, sceneStore, toolStore, update),
       new SelectTool(blockStore, scene, sceneStore, toolStore, update),
       new GroupTool(blockStore, update, templates),
-      new CableTool(blockStore, sceneStore, update),
+      new CableTool(blockStore, factoryService, sceneStore, update),
       new EraseTool(blockStore, update),
       new RayTool(blockStore, update, sceneStore),
       new ColorTool(blockStore, update),
@@ -62,12 +64,13 @@ export const setupTestEnv = (): TestEnv => {
   const toolHelper = new ToolHelper(sceneStore, tool, testStore);
 
   testMiddleware.startListening({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     actionCreator: updateBlocks as any,
     effect: async (action) => {
       const payload = action.payload as UpdateBlocks;
 
       payload.forEach((u) => {
-        if ('type' in u && u.type === 'create') {
+        if ('type' in u && 'block' in u && u.type === 'update') {
           testStore.setLastCreatedBlock(u.block);
         }
 

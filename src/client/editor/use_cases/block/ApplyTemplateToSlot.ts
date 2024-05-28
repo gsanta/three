@@ -3,20 +3,22 @@ import SceneStore from '../../components/scene/SceneStore';
 import BlockStore from '../../stores/block/BlockStore';
 import { Vector3 } from 'three';
 import Edit from '../../services/update/Edit';
-import { BlockName } from '@/client/editor/types/BlockType';
 import Block from '../../types/Block';
 import VectorUtils from '../../utils/vectorUtils';
 import BlockUtils from '../../utils/BlockUtils';
 import MathUtils from '../../utils/mathUtils';
 import AddBlockToSlot from './AddBlockToSlot';
+import FactoryService from '../../services/factory/FactoryService';
 
 class ApplyTemplateToSlot {
-  constructor(blockStore: BlockStore, sceneStore: SceneStore) {
+  constructor(blockStore: BlockStore, factoryService: FactoryService, sceneStore: SceneStore) {
     this.blockStore = blockStore;
+
+    this.factoryService = factoryService;
 
     this.sceneStore = sceneStore;
 
-    this.addBlockToSlot = new AddBlockToSlot(sceneStore);
+    this.addBlockToSlot = new AddBlockToSlot(factoryService, sceneStore);
   }
 
   perform(edit: Edit, templateName: string) {
@@ -82,16 +84,19 @@ class ApplyTemplateToSlot {
         .find((part) => part.name !== targetPart.name);
     }
 
-    edit
-      .select(null)
-      .create(templateName as BlockName, {
-        position: VectorUtils.add([pos.x, pos.y, pos.z], [targetX, targetY, targetZ] || [0, 0, 0]),
-        rotation: [0, targetRotation, 0],
-      })
-      .select(edit.getLastBlock().id, idealNextSelectedPart?.name);
+    edit.select(null);
+
+    this.factoryService.create(edit, templateName, {
+      position: VectorUtils.add([pos.x, pos.y, pos.z], [targetX, targetY, targetZ] || [0, 0, 0]),
+      rotation: [0, targetRotation, 0],
+    });
+
+    edit.select(edit.getLastBlock().id, idealNextSelectedPart?.name);
   }
 
   private blockStore: BlockStore;
+
+  private factoryService: FactoryService;
 
   private sceneStore: SceneStore;
 

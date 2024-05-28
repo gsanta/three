@@ -6,24 +6,26 @@ import Cable from '@/client/editor/types/block/Cable';
 import mergeDeep from '@/client/editor/utils/mergeDeep';
 import { PartialDeep } from 'type-fest';
 import SceneService from '@/client/editor/components/scene/SceneService';
+import BlockCategory, { BlockCategoryType } from '@/client/editor/types/BlockCategory';
 
-class CableFactory extends BlockFactory<'cables'> {
+class CableFactory extends BlockFactory {
   constructor(sceneService: SceneService) {
     super(sceneService, 'cables');
   }
 
-  create(blockType: BlockType, options: Partial<Block> = {}, decorationOptions: Partial<Cable> = {}) {
-    const block = BlockCreator.create(this.sceneService.uuid(), blockType, options);
-    const cable: Cable = { points: [], end1: null, end2: null, ...decorationOptions, category: 'cables', id: block.id };
+  create(blockType: BlockType, overrides: Partial<Block> = {}) {
+    const block = BlockCreator.create(this.sceneService.uuid(), blockType, overrides);
 
-    return {
-      block,
-      decoration: cable,
-    };
+    return block;
+  }
+
+  createCategory(block: Block, overrides: Partial<BlockCategoryType> & { category: BlockCategory }): Cable {
+    const cable: Cable = { points: [], end1: null, end2: null, ...overrides, category: 'cables', id: block.id };
+    return cable;
   }
 
   updateDecoration(orig: Cable, partial: PartialDeep<Cable>) {
-    const updated: Cable = mergeDeep<Cable>(orig, partial);
+    const updated: Cable = mergeDeep<Cable>(orig, partial, 'merge');
 
     return updated;
   }

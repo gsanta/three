@@ -1,5 +1,5 @@
-import UpdateService from '@/client/editor/services/update/UpdateService';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
+import TransactionService from '@/client/editor/services/update/TransactionService';
 import ToolStore from '@/client/editor/stores/tool/ToolStore';
 import Block from '@/client/editor/types/Block';
 import Num3 from '@/client/editor/types/Num3';
@@ -7,7 +7,7 @@ import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { Box3 } from 'three';
 
 class BaseMover {
-  constructor(updateService: UpdateService, sceneStore: SceneStore, toolStore: ToolStore) {
+  constructor(updateService: TransactionService, sceneStore: SceneStore, toolStore: ToolStore) {
     this.updateService = updateService;
     this.sceneStore = sceneStore;
     this.toolStore = toolStore;
@@ -60,7 +60,7 @@ class BaseMover {
 
   private toolStore: ToolStore;
 
-  private updateService: UpdateService;
+  private updateService: TransactionService;
 }
 
 export default BaseMover;

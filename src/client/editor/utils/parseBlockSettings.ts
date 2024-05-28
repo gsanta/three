@@ -20,9 +20,13 @@ const parseBlockSettings = (
     const setting = settings.find((currentSetting) => currentSetting.category === block.category);
 
     if (setting) {
-      settingsRecord[block.category] = mergeDeep<BlockSettings>(defaultBlockSettings, setting, {
-        category: block.category,
-      });
+      settingsRecord[block.category] = mergeDeep<BlockSettings>(
+        mergeDeep<BlockSettings>(defaultBlockSettings, setting, 'merge'),
+        {
+          category: block.category,
+        },
+        'merge',
+      );
       selectedSettingsRecord[block.category] = {
         category: block.category,
         scale: {
@@ -35,7 +39,11 @@ const parseBlockSettings = (
         },
       };
     } else {
-      settingsRecord[block.category] = mergeDeep<BlockSettings>(defaultBlockSettings, { category: block.category });
+      settingsRecord[block.category] = mergeDeep<BlockSettings>(
+        defaultBlockSettings,
+        { category: block.category },
+        'merge',
+      );
       selectedSettingsRecord[block.category] = {
         category: block.category,
         rotation: [

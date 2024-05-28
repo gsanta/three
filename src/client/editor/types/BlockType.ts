@@ -27,6 +27,7 @@ export type ModelPartDetail = {
 
 type BlockType<S extends ShapeType = ShapeType> = {
   category: BlockCategory;
+  categories: BlockCategory[];
   name: BlockName;
   color: [number, number, number];
   geometry: S;
@@ -35,13 +36,10 @@ type BlockType<S extends ShapeType = ShapeType> = {
   movable: boolean;
   moveAxis: [boolean, boolean, boolean];
   rotation: [number, number, number];
-  radialSegments: number;
-  radius: number;
-  height: number;
-  points?: Num3[];
   parts: ModelPart[];
   partDetails: Record<string, ModelPartDetail | undefined>;
   path: string;
+  type: string;
 };
 
 export default BlockType;

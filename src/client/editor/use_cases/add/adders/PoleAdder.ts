@@ -1,15 +1,16 @@
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import BlockAdder from './BlockAdder';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
-import UpdateService from '@/client/editor/services/update/UpdateService';
 import JoinPoles from '../../block/JoinPoles';
+import TransactionService from '@/client/editor/services/update/TransactionService';
+import FactoryService from '@/client/editor/services/factory/FactoryService';
 
 class PoleAdder extends BlockAdder {
-  constructor(blockStore: BlockStore, scene: SceneStore, update: UpdateService) {
+  constructor(blockStore: BlockStore, factory: FactoryService, scene: SceneStore, update: TransactionService) {
     super('poles');
 
     this.blockStore = blockStore;
-    this.joinPoles = new JoinPoles(scene, update);
+    this.joinPoles = new JoinPoles(scene, factory, update);
     this.update = update;
   }
 
@@ -33,7 +34,7 @@ class PoleAdder extends BlockAdder {
 
   private joinPoles: JoinPoles;
 
-  private update: UpdateService;
+  private update: TransactionService;
 }
 
 export default PoleAdder;

@@ -22,6 +22,7 @@ export const initialBlockState: BlockState = {
   categories: {
     cables: {},
     decorations: {},
+    devices: {},
     poles: {},
     roads: {},
     walls: {},
@@ -37,23 +38,15 @@ export type SpecificUpdate<T extends BlockCategory> = {
 
 export type DecorationUpdate<K extends BlockCategory> = {
   type: 'update';
-  block?: Block;
   decoration: BlockCategories[K];
 };
 
-export type BlockUpdate<K extends BlockCategory> = { type: 'update'; block: Block; decoration?: BlockCategories[K] };
-
-export type BlockCreate<K extends BlockCategory> = { type: 'create'; block: Block; decoration?: BlockCategories[K] };
+export type BlockUpdate = { type: 'update'; block: Block };
 
 export type BlockSelect = { select: string | null; partName?: string };
 
 // Update type constrained to keys and values from BlockCategories
-export type UpdateBlock<K extends BlockCategory> =
-  | BlockUpdate<K>
-  | DecorationUpdate<K>
-  | BlockCreate<K>
-  | { remove: Block }
-  | BlockSelect;
+export type UpdateBlock<K extends BlockCategory> = BlockUpdate | DecorationUpdate<K> | { remove: Block } | BlockSelect;
 
 export type UpdateBlocks = Array<UpdateBlock<BlockCategory>>;
 
@@ -71,6 +64,7 @@ export const blockSlice = createSlice({
       state.categories = {
         cables: {},
         decorations: {},
+        devices: {},
         poles: {},
         walls: {},
         'building-bases': {},

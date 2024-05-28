@@ -5,7 +5,7 @@ import { Mesh, Vector3 } from 'three';
 import Num3 from '@/client/editor/types/Num3';
 import Block from '@/client/editor/types/Block';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
-import UpdateService from '../services/update/UpdateService';
+import TransactionService from '../services/update/TransactionService';
 
 export type EventObject = {
   name: string;
@@ -34,9 +34,9 @@ abstract class Tool {
 
   protected store: BlockStore;
 
-  protected update: UpdateService;
+  protected update: TransactionService;
 
-  constructor(store: BlockStore, update: UpdateService, name: ToolName, iconName?: IconName) {
+  constructor(store: BlockStore, update: TransactionService, name: ToolName, iconName?: IconName) {
     this.name = name;
     this.iconName = iconName;
     this.store = store;

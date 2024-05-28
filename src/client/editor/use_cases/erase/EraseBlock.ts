@@ -1,12 +1,12 @@
 import { BlockCategories } from '@/client/editor/types/BlockCategory';
 import BlockStore from '../../stores/block/BlockStore';
 import Edit from '../../services/update/Edit';
-import UpdateService from '../../services/update/UpdateService';
+import TransactionService from '../../services/update/TransactionService';
 import BlockEraser from './erasers/BlockEraser';
 import PoleEraser from './erasers/PoleEraser';
 
 class EraseBlock {
-  constructor(store: BlockStore, update: UpdateService) {
+  constructor(store: BlockStore, update: TransactionService) {
     this.store = store;
     this.update = update;
 
@@ -42,19 +42,19 @@ class EraseBlock {
     const parent = this.store.getBlocks()[block.parent || ''];
 
     if (parent) {
-      edit.updateBlock(parent.id, { children: [blockId] }, { arrayMergeStrategy: 'exclude-update' });
+      edit.updateBlock(parent.id, { children: [blockId] }, { arrayMergeStrategy: 'exclude' });
     }
 
     if (block.slotTarget) {
       edit.updateBlock(
         block.slotTarget.blockId,
         { slotSources: [{ blockId: block.id, slotName: block.slotTarget.slotName }] },
-        { arrayMergeStrategy: 'exclude-update' },
+        { arrayMergeStrategy: 'exclude' },
       );
     }
 
     block.dependsOn.forEach((dependsOnId) => {
-      edit.updateBlock(dependsOnId, { dependents: [block.id] }, { arrayMergeStrategy: 'exclude-update' });
+      edit.updateBlock(dependsOnId, { dependents: [block.id] }, { arrayMergeStrategy: 'exclude' });
     });
 
     block.dependents.forEach((dependentId) => {
@@ -62,7 +62,7 @@ class EraseBlock {
 
       dependent.dependsOn.forEach((dependsOnId) => {
         const dependsOn = this.store.getBlocks()[dependsOnId];
-        edit.updateBlock(dependsOnId, { dependents: [dependentId] }, { arrayMergeStrategy: 'exclude-update' });
+        edit.updateBlock(dependsOnId, { dependents: [dependentId] }, { arrayMergeStrategy: 'exclude' });
 
         const eraser = this.erasers[block.category];
         if (eraser) {
@@ -74,7 +74,7 @@ class EraseBlock {
 
   private store: BlockStore;
 
-  private update: UpdateService;
+  private update: TransactionService;
 
   private erasers: Partial<{ [K in keyof BlockCategories]: BlockEraser }> = {};
 }

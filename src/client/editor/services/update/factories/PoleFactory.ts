@@ -5,19 +5,20 @@ import Block from '@/client/editor/types/Block';
 import BlockType from '@/client/editor/types/BlockType';
 import SceneService from '@/client/editor/components/scene/SceneService';
 
-class PoleFactory extends BlockFactory<'poles'> {
+class PoleFactory extends BlockFactory {
   constructor(sceneService: SceneService) {
     super(sceneService, 'poles');
   }
 
-  create(blockType: BlockType, options: Partial<Block> = {}) {
-    const block = BlockCreator.create(this.sceneService.uuid(), blockType, options);
-    const pole: Pole = { id: block.id, category: 'poles', pins: { pin1: [], pin2: [], pin3: [] } };
+  create(blockType: BlockType, overrides: Partial<Block> = {}) {
+    const block = BlockCreator.create(this.sceneService.uuid(), blockType, overrides);
 
-    return {
-      block,
-      decoration: pole,
-    };
+    return block;
+  }
+
+  createCategory(block: Block, overrides: Partial<Block> = {}): Pole {
+    const pole: Pole = { pins: { pin1: [], pin2: [], pin3: [] }, ...overrides, id: block.id, category: 'poles' };
+    return pole;
   }
 
   updateDecoration(orig: Pole, partial: PartialPole, options: { mergeArrays: boolean } = { mergeArrays: true }) {

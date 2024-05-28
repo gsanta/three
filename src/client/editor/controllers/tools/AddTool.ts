@@ -2,21 +2,28 @@ import ToolStore from '../../stores/tool/ToolStore';
 import Tool, { ToolInfo } from '../../types/Tool';
 import ToolName from '../../types/ToolName';
 import BlockStore from '../../stores/block/BlockStore';
-import UpdateService from '../../services/update/UpdateService';
+import TransactionService from '../../services/update/TransactionService';
 import SceneStore from '../../components/scene/SceneStore';
 import ApplyTemplateToSlot from '../../use_cases/block/ApplyTemplateToSlot';
 import AddBlock from '../../use_cases/add/AddBlock';
+import FactoryService from '../../services/factory/FactoryService';
 
 class AddTool extends Tool {
-  constructor(blockStore: BlockStore, sceneStore: SceneStore, toolStore: ToolStore, update: UpdateService) {
+  constructor(
+    blockStore: BlockStore,
+    factoryService: FactoryService,
+    sceneStore: SceneStore,
+    toolStore: ToolStore,
+    update: TransactionService,
+  ) {
     super(blockStore, update, ToolName.Add, 'BiPlus');
 
     this.toolStore = toolStore;
     this.updateService = update;
 
-    this.addTemplateToSlot = new ApplyTemplateToSlot(blockStore, sceneStore);
+    this.addTemplateToSlot = new ApplyTemplateToSlot(blockStore, factoryService, sceneStore);
 
-    this.addBlock = new AddBlock(blockStore, sceneStore, update);
+    this.addBlock = new AddBlock(blockStore, factoryService, sceneStore, update);
   }
 
   onPointerDown({ pos }: ToolInfo) {
@@ -41,7 +48,7 @@ class AddTool extends Tool {
     edit.commit();
   }
 
-  private updateService: UpdateService;
+  private updateService: TransactionService;
 
   private toolStore: ToolStore;
 

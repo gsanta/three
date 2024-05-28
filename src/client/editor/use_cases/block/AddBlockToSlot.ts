@@ -3,10 +3,11 @@ import Edit from '../../services/update/Edit';
 import Block from '../../types/Block';
 import MeshUtils from '../../utils/MeshUtils';
 import MathUtils, { toDegree } from '../../utils/mathUtils';
-import { BlockName } from '../../types/BlockType';
+import FactoryService from '../../services/factory/FactoryService';
 
 class AddBlockToSlot {
-  constructor(sceneStore: SceneStore) {
+  constructor(factoryService: FactoryService, sceneStore: SceneStore) {
+    this.factoryService = factoryService;
     this.sceneStore = sceneStore;
   }
 
@@ -19,7 +20,7 @@ class AddBlockToSlot {
     const sourcePartOrientation = sourceBlock.partDetails[sourcePart?.index || '']?.orientation || 0;
     const finalRotation = MathUtils.normalizeAngle(toDegree(sourceBlock.rotation[1]) + sourcePartOrientation);
 
-    edit.create(templateName as BlockName, {
+    this.factoryService.create(edit, templateName, {
       parent: sourceBlock.id,
       position: [sourcePartPos.x, sourcePartPos.y, sourcePartPos.z],
       rotation: [0, finalRotation, 0],
@@ -36,6 +37,8 @@ class AddBlockToSlot {
       slotSources: [{ slotName: sourcePartName, blockId: lastBlock.id }],
     });
   }
+
+  private factoryService: FactoryService;
 
   private sceneStore: SceneStore;
 }

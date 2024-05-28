@@ -47,9 +47,14 @@ class PoleMover extends BlockMover {
 
     const newPoints = [[vec.x, vec.y, vec.z] as Num3, [vec2.x, vec2.y, vec2.z] as Num3];
 
-    edit.updateDecoration('cables', cableId, {
-      points: newPoints,
-    });
+    edit.updateDecoration(
+      'cables',
+      cableId,
+      {
+        points: newPoints,
+      },
+      { arrayMergeStrategy: 'replace' },
+    );
   }
 
   private store: BlockStore;

@@ -1,7 +1,7 @@
 import BlockCategory from '@/client/editor/types/BlockCategory';
 import BlockMover from './BlockMover';
 import PoleMover from './PoleMover';
-import UpdateService from '../../../services/update/UpdateService';
+import TransactionService from '../../../services/update/TransactionService';
 import SceneStore from '../../../components/scene/SceneStore';
 import BlockStore from '../../../stores/block/BlockStore';
 import Num3 from '@/client/editor/types/Num3';
@@ -11,7 +11,7 @@ import { store } from '@/client/common/utils/store';
 import { updateSelectTool } from '@/client/editor/stores/tool/toolSlice';
 
 class MoveBlock {
-  constructor(blockStore: BlockStore, update: UpdateService, sceneStore: SceneStore, toolStore: ToolStore) {
+  constructor(blockStore: BlockStore, update: TransactionService, sceneStore: SceneStore, toolStore: ToolStore) {
     this.blockStore = blockStore;
     this.baseMover = new BaseMover(update, sceneStore, toolStore);
     this.update = update;
@@ -44,7 +44,7 @@ class MoveBlock {
 
   private blockStore: BlockStore;
 
-  private update: UpdateService;
+  private update: TransactionService;
 
   private movers: Partial<Record<BlockCategory, BlockMover>> = {};
 

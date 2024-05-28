@@ -2,19 +2,12 @@ import BlockFactory from './BlockFactory';
 import Block from '@/client/editor/types/Block';
 import BlockCreator from './BlockCreator';
 import BlockType from '@/client/editor/types/BlockType';
-import BlockCategory, { BlockCategories } from '@/client/editor/types/BlockCategory';
 
-class DefaultBlockFactory extends BlockFactory<BlockCategory> {
-  create(blockType: BlockType, options: Partial<Block> = {}) {
-    const block = BlockCreator.create(this.sceneService.uuid(), blockType, options);
+class DefaultBlockFactory extends BlockFactory {
+  create(blockType: BlockType, overrides: Partial<Block> = {}) {
+    const block = BlockCreator.create(this.sceneService.uuid(), blockType, overrides);
 
-    return {
-      block,
-      decoration: {
-        category: block.category,
-        id: block.id,
-      } as BlockCategories[BlockCategory],
-    };
+    return block;
   }
 }
 

@@ -1,11 +1,13 @@
 import { BlockTemplate, Prisma } from '@prisma/client';
 
-const poleTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails'> & {
+const poleTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails' | 'categories'> & {
+  categories: Prisma.JsonArray;
   parts?: Prisma.JsonArray;
   partDetails?: Prisma.JsonObject;
 })[] = [
   {
     category: 'poles',
+    categories: ['pole'],
     name: 'pole-1',
     path: '/pole.glb',
     parts: [
@@ -38,11 +40,14 @@ const poleTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails'> & 
         name: 'pin3',
       },
     ],
+    type: 'poles',
   },
   {
     category: 'cables',
+    categories: ['cables'],
     name: 'cable-1',
     path: null,
+    type: 'cables',
   },
 ];
 

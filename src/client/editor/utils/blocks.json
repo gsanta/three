@@ -23,6 +23,9 @@
             ]
         },
         "cable-1": {
+            "categories": [
+                "cables"
+            ],
             "category": "cables",
             "geometry": "tube",
             "scale": [
@@ -30,7 +33,8 @@
                 1,
                 1
             ],
-            "movable": false
+            "movable": false,
+            "type": "cables"
         },
         "rod": {},
         "tree": {
@@ -66,6 +70,7 @@
             ]
         },
         "wall-1": {
+            "categories": [],
             "category": "walls",
             "geometry": "model",
             "path": "/wall_new.glb",
@@ -87,6 +92,7 @@
             ]
         },
         "wall_door": {
+            "categories": [],
             "category": "walls",
             "geometry": "model",
             "path": "/wall_door.glb",
@@ -116,6 +122,7 @@
             ]
         },
         "wall2": {
+            "categories": [],
             "category": "walls",
             "geometry": "model",
             "path": "/wall2.glb",
@@ -132,6 +139,7 @@
             ]
         },
         "base": {
+            "categories": [],
             "geometry": "model",
             "path": "/base.glb",
             "parts": [
@@ -148,6 +156,9 @@
         },
         "pole-1": {
             "category": "poles",
+            "categories": [
+                "poles"
+            ],
             "geometry": "model",
             "path": "/pole.glb",
             "parts": [
@@ -203,9 +214,11 @@
                     "scale": -0.074,
                     "name": "pin3"
                 }
-            ]
+            ],
+            "type": "poles"
         },
         "building-base-1": {
+            "categories": [],
             "category": "building-bases",
             "geometry": "model",
             "path": "/building_base_1.glb",
@@ -399,6 +412,7 @@
             ]
         },
         "road-1": {
+            "categories": [],
             "category": "roads",
             "geometry": "model",
             "path": "/road1.glb",
@@ -479,6 +493,7 @@
             }
         },
         "road-2": {
+            "categories": [],
             "category": "roads",
             "geometry": "model",
             "path": "/road2.glb",
@@ -628,6 +643,7 @@
             }
         },
         "road-3": {
+            "categories": [],
             "category": "roads",
             "geometry": "model",
             "path": "/road3.glb",
@@ -793,20 +809,6 @@
     },
     "settings": [
         {
-            "category": "decorations",
-            "scale": {
-                "x": [
-                    0.5,
-                    1,
-                    2,
-                    3
-                ],
-                "selected": [
-                    1
-                ]
-            }
-        },
-        {
             "category": "roads",
             "rotation": {
                 "y": [
@@ -834,17 +836,6 @@
                 "y": [
                     0,
                     90
-                ]
-            },
-            "scale": {
-                "x": [
-                    0.5,
-                    1,
-                    2,
-                    3
-                ],
-                "selected": [
-                    1
                 ]
             }
         },

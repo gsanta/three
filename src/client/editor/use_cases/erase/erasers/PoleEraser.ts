@@ -27,7 +27,7 @@ class PoleEraser extends BlockEraser {
             [cableEnd.pin]: pole.pins[cableEnd.pin].filter((cableId) => cableId !== cable.id),
           },
         },
-        { mergeArrays: false },
+        { arrayMergeStrategy: 'replace' },
       );
     }
   }

@@ -2,11 +2,13 @@ import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { Vector3 } from 'three';
 import Block from '@/client/editor/types/Block';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
-import UpdateService from '../../services/update/UpdateService';
+import TransactionService from '../../services/update/TransactionService';
 import Num3 from '@/client/editor/types/Num3';
+import FactoryService from '../../services/factory/FactoryService';
 
 class JoinPoles {
-  constructor(scene: SceneStore, update: UpdateService) {
+  constructor(scene: SceneStore, factory: FactoryService, update: TransactionService) {
+    this.factory = factory;
     this.scene = scene;
     this.update = update;
   }
@@ -26,13 +28,18 @@ class JoinPoles {
     const pos2 = new Vector3();
     pinMesh2.getWorldPosition(pos2);
 
-    const edit = this.update.getUpdate().create<'cables'>(
+    const edit = this.update.getUpdate();
+
+    this.factory.create(
+      edit,
       'cable-1',
       { dependsOn: [pole1.id, pole2.id] },
       {
-        points: [pos1, pos2].map((point) => [point.x, point.y, point.z]) as Num3[],
-        end1: { pin: pinName, device: pole1.id },
-        end2: { pin: pinName, device: pole2.id },
+        cables: {
+          points: [pos1, pos2].map((point) => [point.x, point.y, point.z]) as Num3[],
+          end1: { pin: pinName, device: pole1.id },
+          end2: { pin: pinName, device: pole2.id },
+        },
       },
     );
 
@@ -61,9 +68,11 @@ class JoinPoles {
     edit.commit();
   }
 
+  private factory: FactoryService;
+
   private scene: SceneStore;
 
-  private update: UpdateService;
+  private update: TransactionService;
 }
 
 export default JoinPoles;

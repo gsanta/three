@@ -1,10 +1,12 @@
 import { BlockTemplate, Prisma } from '@prisma/client';
 
-const buildingTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails'> & {
+const buildingTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'partDetails'> & {
+  categories: Prisma.JsonArray;
   parts: Prisma.JsonArray;
   partDetails?: Prisma.JsonObject;
 })[] = [
   {
+    categories: [],
     category: 'building-bases',
     name: 'building-base-1',
     path: '/building_base_1.glb',
@@ -91,8 +93,10 @@ const buildingTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails'
         allowMovement: ['y'],
       },
     },
+    type: 'building',
   },
   {
+    categories: [],
     category: 'walls',
     name: 'wall-1',
     path: '/wall_new.glb',
@@ -104,8 +108,10 @@ const buildingTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails'
         scale: [-3.718, -0.122, -3.718],
       },
     ],
+    type: 'walls',
   },
   {
+    categories: [],
     category: 'walls',
     name: 'wall-door-1',
     path: '/wall_door.glb',
@@ -128,8 +134,10 @@ const buildingTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails'
         ],
       },
     ],
+    type: 'walls',
   },
   {
+    categories: [],
     category: 'walls',
     name: 'roof-1',
     path: '/roof_1.glb',
@@ -141,6 +149,7 @@ const buildingTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails'
         scale: [-3.922, -0.064, -3.922],
       },
     ],
+    type: 'walls',
   },
 ];
 

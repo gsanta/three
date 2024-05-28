@@ -1,18 +1,25 @@
 import { Vector3 } from 'three';
-import UpdateService from '../../services/update/UpdateService';
+import TransactionService from '../../services/update/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
 import BlockCategory from '../../types/BlockCategory';
 import BlockAdder from './adders/BlockAdder';
 import PoleAdder from './adders/PoleAdder';
 import SceneStore from '../../components/scene/SceneStore';
+import FactoryService from '../../services/factory/FactoryService';
 
 class AddBlock {
-  constructor(blockStore: BlockStore, sceneStore: SceneStore, updateService: UpdateService) {
+  constructor(
+    blockStore: BlockStore,
+    factoryService: FactoryService,
+    sceneStore: SceneStore,
+    updateService: TransactionService,
+  ) {
     this.blockStore = blockStore;
+    this.factoryService = factoryService;
     this.updateService = updateService;
 
     this.adders = {
-      ['poles']: new PoleAdder(blockStore, sceneStore, updateService),
+      ['poles']: new PoleAdder(blockStore, factoryService, sceneStore, updateService),
     };
   }
 
@@ -23,7 +30,8 @@ class AddBlock {
       return;
     }
 
-    const edit = this.updateService.getUpdate().create(selectedBlockName, { position: [pos.x, pos.y, pos.z] });
+    const edit = this.updateService.getUpdate();
+    this.factoryService.create(edit, selectedBlockName, { position: [pos.x, pos.y, pos.z] });
     const blockId = edit.getLastBlock().id;
     edit.select(blockId).commit();
 
@@ -44,7 +52,9 @@ class AddBlock {
 
   private blockStore: BlockStore;
 
-  private updateService: UpdateService;
+  private factoryService: FactoryService;
+
+  private updateService: TransactionService;
 
   private adders: Partial<Record<BlockCategory, BlockAdder>>;
 

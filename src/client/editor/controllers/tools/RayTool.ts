@@ -3,12 +3,12 @@ import ToolName from '@/client/editor/types/ToolName';
 import { ArrowHelper } from 'three';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import BlockStore from '../../stores/block/BlockStore';
-import UpdateService from '../../services/update/UpdateService';
+import TransactionService from '../../services/update/TransactionService';
 import SceneService from '../../components/scene/SceneService';
 import SceneServiceImpl from '../../components/scene/SceneServiceImpl';
 
 class RayTool extends Tool {
-  constructor(store: BlockStore, update: UpdateService, scene: SceneStore) {
+  constructor(store: BlockStore, update: TransactionService, scene: SceneStore) {
     super(store, update, ToolName.RayHelper);
 
     this.scene = scene;

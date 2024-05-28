@@ -4,10 +4,10 @@ import Ungroup from './Ungroup';
 import Group from './Group';
 import BlockStore from '../editor/stores/block/BlockStore';
 import TemplateStore from '../editor/stores/template/TemplateStore';
-import UpdateService from '../editor/services/update/UpdateService';
+import TransactionService from '../editor/services/update/TransactionService';
 
 class GroupTool extends Tool {
-  constructor(store: BlockStore, update: UpdateService, templates: TemplateStore) {
+  constructor(store: BlockStore, update: TransactionService, templates: TemplateStore) {
     super(store, update, ToolName.Group);
 
     this.templates = templates;

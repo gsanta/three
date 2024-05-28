@@ -6,7 +6,7 @@ import Num3 from '@/client/editor/types/Num3';
 import Block from '@/client/editor/types/Block';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import MoveBlock from '../../use_cases/block/move/MoveBlock';
-import UpdateService from '../../services/update/UpdateService';
+import TransactionService from '../../services/update/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
 import { store } from '@/client/common/utils/store';
 import { updateSelectTool } from '../../stores/tool/toolSlice';
@@ -22,7 +22,7 @@ class SelectTool extends Tool {
     scene: SceneService,
     sceneStore: SceneStore,
     toolStore: ToolStore,
-    update: UpdateService,
+    update: TransactionService,
   ) {
     super(blockStore, update, ToolName.Select, 'BiRectangle');
 
