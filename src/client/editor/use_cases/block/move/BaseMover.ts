@@ -1,5 +1,5 @@
 import SceneStore from '@/client/editor/components/scene/SceneStore';
-import TransactionService from '@/client/editor/services/update/TransactionService';
+import TransactionService from '@/client/editor/services/transaction/TransactionService';
 import ToolStore from '@/client/editor/stores/tool/ToolStore';
 import Block from '@/client/editor/types/Block';
 import Num3 from '@/client/editor/types/Num3';

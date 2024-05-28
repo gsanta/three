@@ -8,6 +8,7 @@ import SizeControl from './SizeControl';
 import RadioSwitchButton from '@/client/common/components/RadioSwitchButton';
 import RadioSwitchGroup from '@/client/common/components/RadioSwitchGroup';
 import { updateSelectTool } from '../../stores/tool/toolSlice';
+import DeviceControl from './DeviceControl';
 
 const SelectToolOptions = () => {
   const selectedBlocks = useSelectedBlocks();
@@ -22,7 +23,7 @@ const SelectToolOptions = () => {
   const {
     select: { templateName },
   } = useAppSelector((state) => state.tool);
-  const { selectedPartNames } = useAppSelector((state) => state.block.present);
+  const { selectedPartNames, categories } = useAppSelector((state) => state.block.present);
   const blockSettings = settings[selectedTemplate?.category || ''];
   const hasSelectedPart = Object.keys(selectedPartNames).length;
 
@@ -87,6 +88,13 @@ const SelectToolOptions = () => {
       )}
       <Button onClick={() => tool.getGroupTool().group()}>Group</Button>
       <Button onClick={() => tool.getGroupTool().ungroup()}>Ungroup</Button>
+      {block?.categories.map((category) => {
+        if (category === 'devices') {
+          return <DeviceControl device={categories.devices[block.id]} />;
+        }
+
+        return undefined;
+      })}
     </Box>
   );
 };

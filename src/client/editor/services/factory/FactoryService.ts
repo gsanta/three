@@ -1,18 +1,20 @@
 import SceneService from '../../components/scene/SceneService';
-import BlockFactory from '../update/factories/BlockFactory';
-import PoleFactory from '../update/factories/PoleFactory';
-import CableFactory from '../update/factories/CableFactory';
+import BlockFactory from './creators/BlockFactory';
+import PoleFactory from './creators/PoleFactory';
+import CableFactory from './creators/CableFactory';
 import Block from '../../types/Block';
 import BlockCategory, { PartialBlockCategories } from '../../types/BlockCategory';
 import Edit from '../update/Edit';
 import BlockStore from '../../stores/block/BlockStore';
-import DefaultBlockFactory from '../update/factories/DefaultBlockFactory';
+import DefaultBlockFactory from './creators/DefaultBlockFactory';
+import LampFactory from './creators/LampFactory';
 
 class FactoryService {
   constructor(blockStore: BlockStore, sceneService: SceneService) {
     this.blockStore = blockStore;
     this.factories.poles = new PoleFactory(sceneService);
     this.factories.cables = new CableFactory(sceneService);
+    this.factories.lamps = new LampFactory(sceneService);
     this.defaultBlockFactory = new DefaultBlockFactory(sceneService);
   }
 

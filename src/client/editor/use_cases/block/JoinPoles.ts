@@ -2,7 +2,7 @@ import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { Vector3 } from 'three';
 import Block from '@/client/editor/types/Block';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
-import TransactionService from '../../services/update/TransactionService';
+import TransactionService from '../../services/transaction/TransactionService';
 import Num3 from '@/client/editor/types/Num3';
 import FactoryService from '../../services/factory/FactoryService';
 

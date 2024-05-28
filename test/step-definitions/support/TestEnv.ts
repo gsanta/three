@@ -17,8 +17,8 @@ import SelectTool from '@/client/editor/controllers/tools/SelectTool';
 import ToolStore from '@/client/editor/stores/tool/ToolStore';
 import TemplateStore from '@/client/editor/stores/template/TemplateStore';
 import TestSceneService from './TestSceneService';
-import TransactionService from '@/client/editor/services/update/TransactionService';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
+import TransactionService from '@/client/editor/services/transaction/TransactionService';
 
 type TestEnv = {
   meshFactory: TestMeshFactory;

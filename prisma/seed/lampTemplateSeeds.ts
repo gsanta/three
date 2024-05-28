@@ -6,7 +6,7 @@ const lampTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'p
   partDetails?: Prisma.JsonObject;
 })[] = [
   {
-    categories: ['device'],
+    categories: ['devices'],
     category: 'decorations',
     name: 'lamp-1',
     path: '/lamp1.glb',
@@ -51,7 +51,7 @@ const lampTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'p
       },
     ],
     partDetails: {
-      '#2': {
+      '#3': {
         isHidden: true,
       },
     },

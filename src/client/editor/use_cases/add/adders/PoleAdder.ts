@@ -2,8 +2,8 @@ import BlockStore from '@/client/editor/stores/block/BlockStore';
 import BlockAdder from './BlockAdder';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import JoinPoles from '../../block/JoinPoles';
-import TransactionService from '@/client/editor/services/update/TransactionService';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
+import TransactionService from '@/client/editor/services/transaction/TransactionService';
 
 class PoleAdder extends BlockAdder {
   constructor(blockStore: BlockStore, factory: FactoryService, scene: SceneStore, update: TransactionService) {

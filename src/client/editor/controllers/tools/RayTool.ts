@@ -3,7 +3,7 @@ import ToolName from '@/client/editor/types/ToolName';
 import { ArrowHelper } from 'three';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import BlockStore from '../../stores/block/BlockStore';
-import TransactionService from '../../services/update/TransactionService';
+import TransactionService from '../../services/transaction/TransactionService';
 import SceneService from '../../components/scene/SceneService';
 import SceneServiceImpl from '../../components/scene/SceneServiceImpl';
 

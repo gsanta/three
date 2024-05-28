@@ -730,6 +730,9 @@
             }
         },
         "lamp-1": {
+            "categories": [
+                "devices"
+            ],
             "category": "decorations",
             "geometry": "model",
             "path": "/lamp1.glb",
@@ -798,9 +801,6 @@
                 }
             ],
             "partDetails": {
-                "#2": {
-                    "isHidden": true
-                },
                 "#3": {
                     "isHidden": true
                 }

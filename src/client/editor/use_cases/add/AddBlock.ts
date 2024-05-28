@@ -1,5 +1,5 @@
 import { Vector3 } from 'three';
-import TransactionService from '../../services/update/TransactionService';
+import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
 import BlockCategory from '../../types/BlockCategory';
 import BlockAdder from './adders/BlockAdder';

@@ -2,7 +2,7 @@ import Tool from '@/client/editor/types/Tool';
 import ToolName from '@/client/editor/types/ToolName';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import JoinPoles from '../../use_cases/block/JoinPoles';
-import TransactionService from '../../services/update/TransactionService';
+import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
 import FactoryService from '../../services/factory/FactoryService';
 

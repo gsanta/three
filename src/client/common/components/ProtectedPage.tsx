@@ -20,7 +20,7 @@ import ToolStore from '@/client/editor/stores/tool/ToolStore';
 import SceneServiceImpl from '@/client/editor/components/scene/SceneServiceImpl';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
-import TransactionService from '@/client/editor/services/update/TransactionService';
+import TransactionService from '@/client/editor/services/transaction/TransactionService';
 
 type ProtectedPageProps = {
   children: ReactNode;
@@ -43,19 +43,19 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
   const blockStore = useMemo(() => new BlockStore(store), []);
   const scene = useMemo(() => new SceneServiceImpl(sceneStore), [sceneStore]);
   const factoryService = useMemo(() => new FactoryService(blockStore, scene), [blockStore, scene]);
-  const update = useMemo(() => new TransactionService(blockStore, store, scene), [blockStore, scene]);
+  const transaction = useMemo(() => new TransactionService(blockStore, store, scene), [blockStore, scene]);
 
   const editorContext = useMemo<EditorContextType>(
     () => ({
       tool: new ToolService(
         [
-          new AddTool(blockStore, factoryService, sceneStore, toolStore, update),
-          new SelectTool(blockStore, scene, sceneStore, toolStore, update),
-          new GroupTool(blockStore, update, templates),
-          new CableTool(blockStore, factoryService, sceneStore, update),
-          new EraseTool(blockStore, update),
-          new RayTool(blockStore, update, sceneStore),
-          new ColorTool(blockStore, update),
+          new AddTool(blockStore, factoryService, sceneStore, toolStore, transaction),
+          new SelectTool(blockStore, scene, sceneStore, toolStore, transaction),
+          new GroupTool(blockStore, transaction, templates),
+          new CableTool(blockStore, factoryService, sceneStore, transaction),
+          new EraseTool(blockStore, transaction),
+          new RayTool(blockStore, transaction, sceneStore),
+          new ColorTool(blockStore, transaction),
         ],
         store,
         toolStore,
@@ -64,8 +64,9 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
       exporter: new ExportJson(store),
       importer: new ImportJson(store),
       scene: sceneStore,
+      transaction,
     }),
-    [blockStore, factoryService, sceneStore, toolStore, update, scene, templates],
+    [blockStore, factoryService, sceneStore, toolStore, transaction, scene, templates],
   );
 
   editorContext.scene.setToolService(editorContext.tool);

@@ -5,7 +5,7 @@ import { Mesh, Vector3 } from 'three';
 import Num3 from '@/client/editor/types/Num3';
 import Block from '@/client/editor/types/Block';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
-import TransactionService from '../services/update/TransactionService';
+import TransactionService from '../services/transaction/TransactionService';
 
 export type EventObject = {
   name: string;

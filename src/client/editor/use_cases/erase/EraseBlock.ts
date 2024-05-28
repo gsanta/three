@@ -1,7 +1,7 @@
 import { BlockCategories } from '@/client/editor/types/BlockCategory';
 import BlockStore from '../../stores/block/BlockStore';
 import Edit from '../../services/update/Edit';
-import TransactionService from '../../services/update/TransactionService';
+import TransactionService from '../../services/transaction/TransactionService';
 import BlockEraser from './erasers/BlockEraser';
 import PoleEraser from './erasers/PoleEraser';
 

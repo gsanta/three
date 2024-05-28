@@ -2,7 +2,7 @@ import ToolStore from '../../stores/tool/ToolStore';
 import Tool, { ToolInfo } from '../../types/Tool';
 import ToolName from '../../types/ToolName';
 import BlockStore from '../../stores/block/BlockStore';
-import TransactionService from '../../services/update/TransactionService';
+import TransactionService from '../../services/transaction/TransactionService';
 import SceneStore from '../../components/scene/SceneStore';
 import ApplyTemplateToSlot from '../../use_cases/block/ApplyTemplateToSlot';
 import AddBlock from '../../use_cases/add/AddBlock';

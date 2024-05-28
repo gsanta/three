@@ -1,4 +1,4 @@
-import Edit from './Edit';
+import Edit from '../update/Edit';
 import BlockStore from '../../stores/block/BlockStore';
 import { Store } from '@/client/common/utils/store';
 import SceneService from '../../components/scene/SceneService';
@@ -11,7 +11,7 @@ class TransactionService {
   }
 
   getUpdate(): Edit {
-    return new Edit(this.store, this.dispatchStore, this.sceneService);
+    return new Edit(this.store, this.dispatchStore);
   }
 
   private store: BlockStore;

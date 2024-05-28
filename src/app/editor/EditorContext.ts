@@ -4,6 +4,7 @@ import SceneStore from '@/client/editor/components/scene/SceneStore';
 import KeyboardService from '@/client/editor/services/KeyboardService';
 import ToolService from '@/client/editor/services/ToolService';
 import { createContext, useContext } from 'react';
+import TransactionService from '@/client/editor/services/transaction/TransactionService';
 
 export type EditorContextType = {
   tool: ToolService;
@@ -11,6 +12,7 @@ export type EditorContextType = {
   exporter: ExportJson;
   importer: ImportJson;
   scene: SceneStore;
+  transaction: TransactionService;
 };
 
 export const EditorContext = createContext<EditorContextType | undefined>(undefined);

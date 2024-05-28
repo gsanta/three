@@ -2,7 +2,7 @@ import Tool, { ToolInfo } from '@/client/editor/types/Tool';
 import ToolName from '@/client/editor/types/ToolName';
 import EraseBlock from '../../use_cases/erase/EraseBlock';
 import BlockStore from '../../stores/block/BlockStore';
-import TransactionService from '../../services/update/TransactionService';
+import TransactionService from '../../services/transaction/TransactionService';
 
 class EraseTool extends Tool {
   constructor(store: BlockStore, update: TransactionService) {

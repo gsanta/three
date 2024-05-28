@@ -3,6 +3,7 @@ import BlockType from '@/client/editor/types/BlockType';
 import Block from '@/client/editor/types/Block';
 import BlockCategory, { BlockCategoryType } from '@/client/editor/types/BlockCategory';
 import SceneService from '@/client/editor/components/scene/SceneService';
+import BlockCreator from './BlockCreator';
 
 abstract class BlockFactory {
   readonly category?: BlockCategory;
@@ -12,8 +13,10 @@ abstract class BlockFactory {
     this.sceneService = sceneService;
   }
 
-  create(_blockType: BlockType, _overrides: Partial<Block> = {}): Block {
-    throw new Error('Unimplemented method');
+  create(blockType: BlockType, overrides: Partial<Block> = {}): Block {
+    const block = BlockCreator.create(this.sceneService.uuid(), blockType, overrides);
+
+    return block;
   }
 
   createCategory(

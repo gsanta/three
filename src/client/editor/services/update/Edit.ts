@@ -1,14 +1,12 @@
 import BlockCategory, { BlockCategories, BlockCategoryType } from '@/client/editor/types/BlockCategory';
-import BlockFactory from './factories/BlockFactory';
 import { BlockUpdate, DecorationUpdate, UpdateBlocks, updateBlocks } from '@/client/editor/stores/block/blockSlice';
 import { PartialDeep } from 'type-fest';
 import Block, { BlockSlotSource } from '@/client/editor/types/Block';
-import CableFactory from './factories/CableFactory';
-import PoleFactory from './factories/PoleFactory';
 import BlockStore from '../../stores/block/BlockStore';
 import { Store } from '@/client/common/utils/store';
-import SceneService from '../../components/scene/SceneService';
 import mergeDeep, { MergeStrategy, mergeArrays } from '../../utils/mergeDeep';
+import BlockUpdater from '../transaction/updaters/BlockUpdater';
+import LampUpdater from '../transaction/updaters/LampUpdater';
 
 const mergeSlotSources = (
   arr1: Block['slotSources'],
@@ -37,15 +35,21 @@ const mergeSlotSources = (
 };
 
 class Edit {
-  constructor(store: BlockStore, dispatchStore: Store, sceneService: SceneService) {
+  constructor(store: BlockStore, dispatchStore: Store) {
     this.store = store;
     this.dispatchStore = dispatchStore;
 
-    this.updaters.poles = new PoleFactory(sceneService);
-    this.updaters.cables = new CableFactory(sceneService);
+    this.updaters.lamps = new LampUpdater(store);
   }
 
   commit() {
+    this.updates.forEach((update) => {
+      if ('type' in update && update.type === 'update' && 'decoration' in update) {
+        const block = this.store.getBlock(update.decoration.id);
+        this.updaters[block?.type]?.onUpdateDecorators(this, update.decoration);
+      }
+    });
+
     this.dispatchStore.dispatch(updateBlocks(this.updates));
   }
 
@@ -199,7 +203,7 @@ class Edit {
 
   private updates: UpdateBlocks = [];
 
-  private updaters: Partial<{ [K in keyof BlockCategories]: BlockFactory }> = {};
+  private updaters: Record<string, BlockUpdater> = {};
 
   private store: BlockStore;
 
