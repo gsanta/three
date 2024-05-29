@@ -5,8 +5,10 @@ import KeyboardService from '@/client/editor/services/KeyboardService';
 import ToolService from '@/client/editor/services/ToolService';
 import { createContext, useContext } from 'react';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
+import ControllerService from '@/client/editor/services/controller/ControllerService';
 
 export type EditorContextType = {
+  controller: ControllerService;
   tool: ToolService;
   keyboard: KeyboardService;
   exporter: ExportJson;

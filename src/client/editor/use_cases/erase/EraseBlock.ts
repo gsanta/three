@@ -18,7 +18,7 @@ class EraseBlock {
 
     const blocksToRemove: string[] = [];
 
-    const edit = this.update.getUpdate();
+    const edit = this.update.getTransaction();
 
     while (queue.length) {
       const next = queue.shift();

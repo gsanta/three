@@ -23,6 +23,7 @@ abstract class BlockFactory {
     _block: Block,
     _overrides: Partial<BlockCategoryType> & { category: BlockCategory },
   ): BlockCategoryType {
+    console.log('the type: ' + _block.type);
     throw new Error('Unimplemented method');
   }
 

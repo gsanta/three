@@ -28,7 +28,7 @@ class JoinPoles {
     const pos2 = new Vector3();
     pinMesh2.getWorldPosition(pos2);
 
-    const edit = this.update.getUpdate();
+    const edit = this.update.getTransaction();
 
     this.factory.create(
       edit,

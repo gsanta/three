@@ -19,7 +19,7 @@ class ColorTool extends Tool {
     }
 
     this.update
-      .getUpdate()
+      .getTransaction()
       .updateBlock(eventObject?.userData.modelId || '', {
         color: colorToArray(this.store.getBlockSettings().color),
       })

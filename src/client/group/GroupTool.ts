@@ -20,7 +20,7 @@ class GroupTool extends Tool {
 
   group() {
     const selectedBlockIds = this.store.getSelectedRootBlockIds();
-    const edit = this.update.getUpdate();
+    const edit = this.update.getTransaction();
 
     const ungroupedIds = this.ungrouper.execute(selectedBlockIds, edit);
     this.grouper.execute(ungroupedIds, edit);
@@ -31,7 +31,7 @@ class GroupTool extends Tool {
   ungroup() {
     const selectedBlockIds = this.store.getSelectedRootBlockIds();
 
-    const edit = this.update.getUpdate();
+    const edit = this.update.getTransaction();
     this.ungrouper.execute(selectedBlockIds, edit);
 
     edit.commit();

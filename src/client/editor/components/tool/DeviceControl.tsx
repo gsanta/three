@@ -9,13 +9,10 @@ type SizeControlProps = {
 };
 
 const DeviceControl = ({ device }: SizeControlProps) => {
-  const { transaction } = useEditorContext();
+  const { controller } = useEditorContext();
 
   const handleChange = (change: 'on' | 'off') => {
-    transaction
-      .getUpdate()
-      .updateDecoration(device.category, device.id, { isOn: change === 'on' })
-      .commit();
+    controller.deviceController[change === 'on' ? 'turnOn' : 'turnOff'](device);
   };
 
   return (

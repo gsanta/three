@@ -19,10 +19,12 @@ import TemplateStore from '@/client/editor/stores/template/TemplateStore';
 import TestSceneService from './TestSceneService';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
+import ControllerService from '@/client/editor/services/controller/ControllerService';
 
 type TestEnv = {
-  meshFactory: TestMeshFactory;
+  controller: ControllerService;
   blockStore: BlockStore;
+  meshFactory: TestMeshFactory;
   sceneService: TestSceneService;
   sceneStore: SceneStore;
   testScene: TestStore;
@@ -90,6 +92,7 @@ export const setupTestEnv = (): TestEnv => {
 
   return {
     blockStore,
+    controller: new ControllerService(update),
     meshFactory,
     sceneService: scene,
     sceneStore,

@@ -43,7 +43,7 @@ class AddTool extends Tool {
   addToSlot() {
     const { templateName } = this.toolStore.getSelectOptions();
 
-    const edit = this.updateService.getUpdate();
+    const edit = this.updateService.getTransaction();
     this.addTemplateToSlot.perform(edit, templateName);
     edit.commit();
   }

@@ -21,6 +21,7 @@ import SceneServiceImpl from '@/client/editor/components/scene/SceneServiceImpl'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
+import ControllerService from '@/client/editor/services/controller/ControllerService';
 
 type ProtectedPageProps = {
   children: ReactNode;
@@ -47,6 +48,11 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
 
   const editorContext = useMemo<EditorContextType>(
     () => ({
+      controller: new ControllerService(transaction),
+      exporter: new ExportJson(store),
+      importer: new ImportJson(store),
+      keyboard: new KeyboardService(store),
+      scene: sceneStore,
       tool: new ToolService(
         [
           new AddTool(blockStore, factoryService, sceneStore, toolStore, transaction),
@@ -60,10 +66,6 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
         store,
         toolStore,
       ),
-      keyboard: new KeyboardService(store),
-      exporter: new ExportJson(store),
-      importer: new ImportJson(store),
-      scene: sceneStore,
       transaction,
     }),
     [blockStore, factoryService, sceneStore, toolStore, transaction, scene, templates],

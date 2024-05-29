@@ -28,7 +28,7 @@ class MoveBlock {
 
     store.dispatch(updateSelectTool({ drag: finalDrag }));
 
-    const edit = this.update.getUpdate();
+    const edit = this.update.getTransaction();
 
     selectedBlockIds.forEach((blockId) => {
       const block = this.blockStore.getBlock(blockId);

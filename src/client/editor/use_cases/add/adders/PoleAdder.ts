@@ -27,7 +27,7 @@ class PoleAdder extends BlockAdder {
 
     this.joinPoles.join(this.blockStore.getBlock(selectedBlocks[0]), this.blockStore.getBlock(selectedBlocks[1]));
 
-    this.update.getUpdate().select(null).select(blockId).commit();
+    this.update.getTransaction().select(null).select(blockId).commit();
   }
 
   private blockStore: BlockStore;

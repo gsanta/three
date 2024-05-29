@@ -36,11 +36,11 @@ class SelectTool extends Tool {
     const block = this.store.getBlocks()[info.eventObject?.userData.modelId || ''];
 
     if (block) {
-      const edit = this.update.getUpdate();
+      const edit = this.update.getTransaction();
       this.selector.select(edit, info.eventObject?.userData.modelId || '', info.clientX, info.clientY);
       edit.commit();
     } else {
-      this.update.getUpdate().select(null).commit();
+      this.update.getTransaction().select(null).commit();
     }
   }
 
@@ -58,7 +58,7 @@ class SelectTool extends Tool {
     const block = this.store.getBlocks()[info.eventObject?.userData.modelId || ''];
 
     if (block) {
-      this.update.getUpdate().update(block.id, { isHovered: false }, {}).commit();
+      this.update.getTransaction().update(block.id, { isHovered: false }, {}).commit();
     }
   }
 
@@ -70,7 +70,7 @@ class SelectTool extends Tool {
     const selectedBlockIds = this.store.getSelectedRootBlockIds();
     const blocks = this.store.getBlocks();
 
-    const edit = this.update.getUpdate();
+    const edit = this.update.getTransaction();
 
     const drag = this.toolStore.getSelectOptions().drag;
 
@@ -92,7 +92,7 @@ class SelectTool extends Tool {
     newScale[index] = settings.scale[index] * scale;
 
     this.update
-      .getUpdate()
+      .getTransaction()
       .updateBlock(block.id, {
         scale: newScale,
       })
@@ -113,7 +113,7 @@ class SelectTool extends Tool {
     newRotation[index] = toRadian(rotation);
 
     this.update
-      .getUpdate()
+      .getTransaction()
       .updateBlock(block.id, {
         rotation: newRotation,
       })

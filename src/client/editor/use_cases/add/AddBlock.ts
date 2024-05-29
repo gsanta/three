@@ -30,7 +30,7 @@ class AddBlock {
       return;
     }
 
-    const edit = this.updateService.getUpdate();
+    const edit = this.updateService.getTransaction();
     this.factoryService.create(edit, selectedBlockName, { position: [pos.x, pos.y, pos.z] });
     const blockId = edit.getLastBlock().id;
     edit.select(blockId).commit();
