@@ -6,12 +6,17 @@ import ImportDialog from './import/ImportDialog';
 import { useBoolean } from 'usehooks-ts';
 import { useAppDispatch } from '@/client/common/hooks/hooks';
 import { ActionCreators } from 'redux-undo';
+import useSaveSnapshot from '../../hooks/useSaveSnapshot';
+import useLoadSnapshot from '../../hooks/useLoadSnapshot';
 
 const SettingsPanel = () => {
   const [isExportDialogOpen, setExportDialogOpen] = useState(false);
   const { value: isImportDialogOpen, setTrue: openImportDialog, setFalse: closeImportDialog } = useBoolean(false);
 
   const dispatch = useAppDispatch();
+
+  const { mutate: saveSnapshot } = useSaveSnapshot();
+  const { refetchSnapshot } = useLoadSnapshot();
 
   const handleUndo = () => {
     dispatch(ActionCreators.undo());
@@ -39,12 +44,12 @@ const SettingsPanel = () => {
       </Menu>
       <ButtonGroup>
         <Tooltip label="Save to server">
-          <Button variant="outline" size="sm" onClick={() => {}}>
+          <Button variant="outline" size="sm" onClick={() => saveSnapshot({})}>
             <Icon name="BiCloudUpload" />
           </Button>
         </Tooltip>
         <Tooltip label="Download from server">
-          <Button variant="outline" size="sm" onClick={() => {}}>
+          <Button variant="outline" size="sm" onClick={() => refetchSnapshot({})}>
             <Icon name="BiCloudDownload" />
           </Button>
         </Tooltip>

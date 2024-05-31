@@ -1,8 +1,9 @@
-import { NextAuthOptions } from 'next-auth';
+import { NextAuthOptions, getServerSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import db from './db';
 import bcrypt from 'bcrypt';
+import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from 'next';
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID!;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET!;
@@ -68,3 +69,9 @@ export const authOptions: NextAuthOptions = {
     signIn: '/editor',
   },
 };
+
+export function auth(
+  ...args: [GetServerSidePropsContext['req'], GetServerSidePropsContext['res']] | [NextApiRequest, NextApiResponse] | []
+) {
+  return getServerSession(...args, authOptions);
+}

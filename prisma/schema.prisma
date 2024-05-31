@@ -11,13 +11,14 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
   name      String?
   password  String?
-  provider  String   @default("credentials")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  provider  String     @default("credentials")
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  snapshots Snapshot[]
 }
 
 model BlockTemplate {
@@ -29,4 +30,13 @@ model BlockTemplate {
   partDetails Json?
   path        String?
   type        String  @default("unknown")
+}
+
+model Snapshot {
+  id        String   @id @default(uuid())
+  state     Json?
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    Int?
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
 }
