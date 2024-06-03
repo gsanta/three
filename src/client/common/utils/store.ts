@@ -4,6 +4,7 @@ import blockSlice, { BlockState, hover } from '../../editor/stores/block/blockSl
 import settingsSlice, { SettingsState } from '../../editor/stores/settingsSlice';
 import toolSlice, { ToolState } from '../../editor/stores/tool/toolSlice';
 import { EnhancedStore, configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
+import temporarySlice, { TemporaryState } from '@/client/editor/stores/block/temporarySlice';
 
 const blockSettingsSliceUndoable = undoable(templateSlice, { filter: () => false });
 const sceneSliceUndoable = undoable(blockSlice, {
@@ -16,6 +17,7 @@ export type RootState = {
   settings: SettingsState;
   tool: ToolState;
   template: StateWithHistory<BlockSettingsState>;
+  temporary: TemporaryState;
   block: StateWithHistory<BlockState>;
 };
 
@@ -27,6 +29,7 @@ export function setupStore(preloadedState?: RootState): EnhancedStore<RootState>
       settings: settingsSlice,
       tool: toolSlice,
       template: blockSettingsSliceUndoable,
+      temporary: temporarySlice,
       block: sceneSliceUndoable,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(testMiddleware.middleware),

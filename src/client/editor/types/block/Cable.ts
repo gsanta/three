@@ -1,16 +1,15 @@
 import Num3 from '@/client/editor/types/Num3';
-import { Pins } from './Pole';
 
 type Cable = {
   id: string;
   category: 'cables';
   points: Num3[];
   end1: {
-    pin: Pins;
+    pin: string;
     device: string;
   } | null;
   end2: {
-    pin: Pins;
+    pin: string;
     device: string;
   } | null;
 };

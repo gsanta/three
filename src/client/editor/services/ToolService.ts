@@ -1,7 +1,7 @@
 import { ThreeEvent } from '@react-three/fiber';
 import Tool, { EventObject, ToolInfo } from '../types/Tool';
 import ToolName from '../types/ToolName';
-import { Store } from '@/client/common/utils/store';
+import { store } from '@/client/common/utils/store';
 import { Mesh, Vector3 } from 'three';
 import SelectTool from '@/client/editor/controllers/tools/SelectTool';
 import AddTool from '../controllers/tools/AddTool';
@@ -9,11 +9,11 @@ import GroupTool from '@/client/group/GroupTool';
 import CableTool from '@/client/editor/controllers/tools/CableTool';
 import VectorUtils from '@/client/editor/utils/vectorUtils';
 import ToolStore from '../stores/tool/ToolStore';
+import { setSelectedTool } from '../stores/tool/toolSlice';
 
 class ToolService {
-  constructor(tools: Tool[], store: Store, toolStore: ToolStore) {
+  constructor(tools: Tool[], toolStore: ToolStore) {
     this.tools = tools;
-    this.store = store;
     this.toolStore = toolStore;
     this.info = {
       pos: new Vector3(),
@@ -25,7 +25,7 @@ class ToolService {
   }
 
   onExecute() {
-    const { selectedTool } = this.store.getState().tool;
+    const { selectedTool } = store.getState().tool;
     this.getTool(selectedTool)?.onExecute(this.info);
   }
 
@@ -36,20 +36,21 @@ class ToolService {
 
     this.setEventObject(event);
 
-    const { selectedTool } = this.store.getState().tool;
+    const { selectedTool } = store.getState().tool;
     this.getTool(selectedTool)?.onPointerDown(this.info);
   }
 
-  onPointerEnter(event: ThreeEvent<PointerEvent>) {
-    const { selectedTool } = this.store.getState().tool;
+  onPointerEnter(event: ThreeEvent<PointerEvent>, partIndex?: string) {
+    const { selectedTool } = store.getState().tool;
 
     this.setEventObject(event);
+    this.info.partIndex = partIndex;
 
     this.getTool(selectedTool)?.onPointerEnter(this.info);
   }
 
   onPointerLeave(event: ThreeEvent<PointerEvent>) {
-    const { selectedTool } = this.store.getState().tool;
+    const { selectedTool } = store.getState().tool;
 
     this.setEventObject(event);
 
@@ -63,7 +64,7 @@ class ToolService {
 
     this.setEventObject(event);
 
-    const { selectedTool } = this.store.getState().tool;
+    const { selectedTool } = store.getState().tool;
     this.getTool(selectedTool)?.onPointerMove(this.info);
   }
 
@@ -74,21 +75,21 @@ class ToolService {
     const prevDrag = this.toolStore.getSelectOptions().drag;
     this.info.dragDelta = VectorUtils.sub(this.info.drag, prevDrag);
 
-    const { selectedTool } = this.store.getState().tool;
+    const { selectedTool } = store.getState().tool;
     this.getTool(selectedTool)?.onDrag(this.info);
   }
 
   onDragEnd(delta: Vector3) {
     this.info.drag = delta.toArray();
 
-    const { selectedTool } = this.store.getState().tool;
+    const { selectedTool } = store.getState().tool;
     this.getTool(selectedTool)?.onDragEnd(this.info);
     this.info.drag = [0, 0, 0];
     this.info.draggedMesh = undefined;
   }
 
   onRendered() {
-    const { selectedTool } = this.store.getState().tool;
+    const { selectedTool } = store.getState().tool;
     this.getTool(selectedTool)?.onRendered();
   }
 
@@ -96,7 +97,7 @@ class ToolService {
     return this.tools;
   }
 
-  getTool(name: ToolName) {
+  getTool(name?: ToolName) {
     return this.tools.find((tool) => tool.name === name);
   }
 
@@ -124,6 +125,11 @@ class ToolService {
     this.info.selectedMesh = mesh;
   }
 
+  setSelectedTool(toolName: ToolName) {
+    this.getTool(store.getState().tool.selectedTool)?.onDeselect();
+    store.dispatch(setSelectedTool(toolName));
+  }
+
   private setEventObject(event: ThreeEvent<PointerEvent>) {
     this.info.eventObject = {
       name: event.eventObject.name,
@@ -136,8 +142,6 @@ class ToolService {
   private tools: Tool[];
 
   private toolStore: ToolStore;
-
-  private store: Store;
 
   private mesh: Mesh | undefined;
 }

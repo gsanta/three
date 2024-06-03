@@ -17,16 +17,16 @@ export type TransformType = 'move' | 'scale';
 export type BlockSettingsState = {
   selectedBlockName: string;
   blocks: BlockType[];
-  settings: Record<string, BlockSettings>;
+  settings: Partial<Record<string, BlockSettings>>;
   selectedSettings: Record<string, BlockSelectedSettings>;
   selectedTransformType: TransformType;
   color: RGBColor;
 };
 
-const parsedBlocks = parseBlocks(blocks.blocks as unknown as Parameters<typeof parseBlocks>[0]);
+const parsedBlocks = parseBlocks([] as Parameters<typeof parseBlocks>[0]);
 
 export const initialBlockSettingsState: BlockSettingsState = {
-  selectedBlockName: 'box',
+  selectedBlockName: 'building-base-1',
   blocks: parsedBlocks,
   ...parseBlockSettings(blocks.settings as (PartialDeep<BlockSettings> & { category: BlockCategory })[], parsedBlocks),
   selectedTransformType: 'move',

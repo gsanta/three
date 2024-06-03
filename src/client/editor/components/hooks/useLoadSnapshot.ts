@@ -22,7 +22,7 @@ const useLoadSnapshot = () => {
   });
 
   useEffect(() => {
-    if (data) {
+    if (data?.data.state) {
       dispatch(update(JSON.parse(data.data.state)));
     }
   }, [data, dispatch]);

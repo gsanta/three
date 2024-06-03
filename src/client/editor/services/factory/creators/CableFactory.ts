@@ -5,14 +5,9 @@ import BlockType from '@/client/editor/types/BlockType';
 import Cable from '@/client/editor/types/block/Cable';
 import mergeDeep from '@/client/editor/utils/mergeDeep';
 import { PartialDeep } from 'type-fest';
-import SceneService from '@/client/editor/components/scene/SceneService';
 import BlockCategory, { BlockCategoryType } from '@/client/editor/types/BlockCategory';
 
 class CableFactory extends BlockFactory {
-  constructor(sceneService: SceneService) {
-    super(sceneService, 'cables');
-  }
-
   create(blockType: BlockType, overrides: Partial<Block> = {}) {
     const block = BlockCreator.create(this.sceneService.uuid(), blockType, overrides);
 

@@ -10,7 +10,7 @@ import { setTemplates } from '@/client/editor/stores/template/templateSlice';
 import { useAppDispatch } from '@/client/common/hooks/hooks';
 
 const Canvas = () => {
-  const { data, isSuccess } = useQuery({ queryKey: ['abcd'], queryFn: () => api.get('/api/block') });
+  const { data, isSuccess } = useQuery({ queryKey: ['blocks'], queryFn: () => api.get('/api/block') });
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const Canvas = () => {
       tabIndex={0}
       ref={canvasRef}
     >
-      <CanvasContent />
+      {data && <CanvasContent />}
       <Environment />
       <SkyBox />
     </ThreeCanvas>

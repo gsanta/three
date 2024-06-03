@@ -1,58 +1,30 @@
-import MeshUtils from '@/client/editor/utils/MeshUtils';
 import SceneStore from '../../components/scene/SceneStore';
+import FactoryService from '../../services/factory/FactoryService';
+import Edit from '../../services/update/Edit';
+import BlockUtils from '../../utils/BlockUtils';
+import MeshUtils from '../../utils/MeshUtils';
+import VectorUtils from '../../utils/vectorUtils';
+import MathUtils from '../../utils/mathUtils';
 import BlockStore from '../../stores/block/BlockStore';
 import { Vector3 } from 'three';
-import Edit from '../../services/update/Edit';
-import Block from '../../types/Block';
-import VectorUtils from '../../utils/vectorUtils';
-import BlockUtils from '../../utils/BlockUtils';
-import MathUtils from '../../utils/mathUtils';
-import AddBlockToSlot from './AddBlockToSlot';
-import FactoryService from '../../services/factory/FactoryService';
 
-class ApplyTemplateToSlot {
+class AddSlotToSlot {
   constructor(blockStore: BlockStore, factoryService: FactoryService, sceneStore: SceneStore) {
     this.blockStore = blockStore;
-
     this.factoryService = factoryService;
-
     this.sceneStore = sceneStore;
-
-    this.addBlockToSlot = new AddBlockToSlot(factoryService, sceneStore);
   }
 
-  perform(edit: Edit, templateName: string) {
-    const partNames = this.blockStore.getSelectedPartNames();
+  perform(edit: Edit, targetBlockId: string, targetPartIndex: string, templateName: string) {
+    const block = this.blockStore.getBlocks()[targetBlockId];
 
-    const blockId = Object.keys(partNames)[0];
-
-    if (!blockId) {
-      return;
-    }
-
-    const partName = partNames[blockId][0];
-
-    const block = this.blockStore.getBlocks()[blockId];
-
-    const template = this.blockStore.getTemplateByName(templateName);
-
-    const hasTargetSlot = template?.parts.find((part) => template.partDetails[part.index]?.role === 'slot');
-
-    if (hasTargetSlot) {
-      this.snapSlotToSlot(edit, block, partName, templateName);
-    } else {
-      this.addBlockToSlot.perform(edit, block, partName, templateName);
-    }
-  }
-
-  private snapSlotToSlot(edit: Edit, block: Block, partName: string, templateName: string) {
     const template = this.blockStore.getTemplateByName(templateName);
 
     if (!template) {
       return;
     }
 
-    const rotatedPart = BlockUtils.findMatchingSlot(block, partName, template);
+    const rotatedPart = BlockUtils.findMatchingSlot(block, targetPartIndex, template);
 
     if (!rotatedPart) {
       return;
@@ -62,7 +34,7 @@ class ApplyTemplateToSlot {
 
     const mesh = this.sceneStore.getObj3d(block.id);
 
-    const partMesh = MeshUtils.findByName(mesh, partName);
+    const partMesh = MeshUtils.findByName(mesh, targetPartIndex);
     const pos = new Vector3();
     partMesh.getWorldPosition(pos);
 
@@ -91,7 +63,7 @@ class ApplyTemplateToSlot {
       rotation: [0, targetRotation, 0],
     });
 
-    edit.select(edit.getLastBlock().id, idealNextSelectedPart?.name);
+    edit.select(edit.getLastBlock().id, idealNextSelectedPart?.index);
   }
 
   private blockStore: BlockStore;
@@ -99,8 +71,6 @@ class ApplyTemplateToSlot {
   private factoryService: FactoryService;
 
   private sceneStore: SceneStore;
-
-  private addBlockToSlot: AddBlockToSlot;
 }
 
-export default ApplyTemplateToSlot;
+export default AddSlotToSlot;

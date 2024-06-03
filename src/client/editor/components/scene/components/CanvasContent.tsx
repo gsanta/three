@@ -6,6 +6,7 @@ import useNotSelectedBlocks from '../../hooks/useNotSelectedBlocks';
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import MoveControl from './MoveControl';
 import MeshHierarchyRenderer from './MeshHierarchyRenderer';
+import TemporaryCableRenderer from './TemporaryCableRenderer';
 
 const CanvasContent = () => {
   const { tool, scene: sceneService } = useEditorContext();
@@ -14,7 +15,7 @@ const CanvasContent = () => {
   const scene = useThree((state) => state.scene);
 
   const blocks = useNotSelectedBlocks();
-  const { selectedPartNames } = useAppSelector((selector) => selector.block.present);
+  const { selectedPartIndexes } = useAppSelector((selector) => selector.block.present);
 
   useEffect(() => {
     sceneService.setCamera(camera);
@@ -38,8 +39,8 @@ const CanvasContent = () => {
   );
 
   const handlePointerEnter = useCallback(
-    (event: ThreeEvent<PointerEvent>) => {
-      tool.onPointerEnter(event);
+    (event: ThreeEvent<PointerEvent>, partIndex?: string) => {
+      tool.onPointerEnter(event, partIndex);
       event.stopPropagation();
     },
     [tool],
@@ -51,13 +52,14 @@ const CanvasContent = () => {
         onPointerDown={handlePointerDown}
         onPointerEnter={handlePointerEnter}
         blocks={blocks}
-        selectedPartNames={selectedPartNames}
+        selectedPartIndexes={selectedPartIndexes}
       />
       <MoveControl onPointerDown={handlePointerDown} onPointerEnter={handlePointerEnter} />
       <mesh position={[5, 1, 0]} castShadow>
         <cylinderGeometry args={[0.02, 0.02, 2, 8]} />
         <meshStandardMaterial color="brown" />
       </mesh>
+      <TemporaryCableRenderer />
       <Plane
         args={[100, 100]}
         name="plane"

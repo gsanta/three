@@ -5,13 +5,13 @@ import { ThreeEvent } from '@react-three/fiber';
 type MeshHierarchyRendererProps = {
   blocks: Block[];
   onPointerDown: (event: ThreeEvent<PointerEvent>) => void;
-  onPointerEnter: (event: ThreeEvent<PointerEvent>) => void;
+  onPointerEnter: (event: ThreeEvent<PointerEvent>, partIndex?: string) => void;
   parent?: string;
-  selectedPartNames: Record<string, string[]>;
+  selectedPartIndexes: Record<string, string[]>;
 };
 
 const MeshHierarchyRenderer = (props: MeshHierarchyRendererProps) => {
-  const { blocks, onPointerDown, onPointerEnter, selectedPartNames } = props;
+  const { blocks, onPointerDown, onPointerEnter, selectedPartIndexes } = props;
 
   return blocks
     .filter((block) => !block.parent)
@@ -23,7 +23,7 @@ const MeshHierarchyRenderer = (props: MeshHierarchyRendererProps) => {
           onPointerDown: onPointerDown,
           onPointerEnter: onPointerEnter,
         }}
-        selectedParts={selectedPartNames[block.id]}
+        selectedParts={selectedPartIndexes[block.id]}
       />
     ));
 };

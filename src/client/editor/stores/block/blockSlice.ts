@@ -5,20 +5,22 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 export type BlockState = {
   blocks: Record<string, Block>;
   categories: BlockCategoryRecords;
-  hovered: string | null;
+  hovered?: {
+    block: string;
+    partIndex?: string;
+  };
   rootBlocksIds: string[];
   selectedRootBlockIds: string[];
   selectedBlocks: Record<string, boolean>;
-  selectedPartNames: Record<string, string[]>;
+  selectedPartIndexes: Record<string, string[]>;
 };
 
 export const initialBlockState: BlockState = {
   rootBlocksIds: [],
   blocks: {},
-  hovered: null,
   selectedBlocks: {},
   selectedRootBlockIds: [],
-  selectedPartNames: {},
+  selectedPartIndexes: {},
   categories: {
     cables: {},
     decorations: {},
@@ -43,7 +45,7 @@ export type DecorationUpdate<K extends BlockCategory> = {
 
 export type BlockUpdate = { type: 'update'; block: Block };
 
-export type BlockSelect = { select: string | null; partName?: string };
+export type BlockSelect = { select: string | null; partIndex?: string };
 
 // Update type constrained to keys and values from BlockCategories
 export type UpdateBlock<K extends BlockCategory> = BlockUpdate | DecorationUpdate<K> | { remove: Block } | BlockSelect;
@@ -60,7 +62,7 @@ export const blockSlice = createSlice({
       state.selectedRootBlockIds = [];
 
       state.selectedBlocks = {};
-      state.selectedPartNames = {};
+      state.selectedPartIndexes = {};
       state.categories = {
         cables: {},
         decorations: {},
@@ -103,16 +105,16 @@ export const blockSlice = createSlice({
               state.blocks[selectedBlock].isSelected = false;
             });
             state.selectedRootBlockIds = [];
-            state.selectedPartNames = {};
+            state.selectedPartIndexes = {};
             state.selectedBlocks = {};
           } else {
-            if (update.partName) {
-              if (!state.selectedPartNames[update.select]) {
-                state.selectedPartNames[update.select] = [];
+            if (update.partIndex) {
+              if (!state.selectedPartIndexes[update.select]) {
+                state.selectedPartIndexes[update.select] = [];
               }
 
-              state.selectedPartNames[update.select] = [
-                ...new Set([...state.selectedPartNames[update.select], update.partName]),
+              state.selectedPartIndexes[update.select] = [
+                ...new Set([...state.selectedPartIndexes[update.select], update.partIndex]),
               ];
             }
             state.selectedBlocks[update.select] = true;
@@ -148,14 +150,14 @@ export const blockSlice = createSlice({
       });
     },
 
-    hover(state, action: PayloadAction<string | null>) {
+    hover(state, action: PayloadAction<{ block: string; partIndex?: string } | undefined>) {
       if (state.hovered) {
-        state.blocks[state.hovered].isHovered = false;
+        state.blocks[state.hovered.block].isHovered = false;
       }
       state.hovered = action.payload;
 
       if (state.hovered) {
-        state.blocks[state.hovered].isHovered = true;
+        state.blocks[state.hovered.block].isHovered = true;
       }
     },
 

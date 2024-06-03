@@ -26,7 +26,7 @@ class BlockUtils {
   }
 
   static findMatchingSlot(sourceBlock: Block, sourcePartName: string, target: BlockType): RotatedPart | undefined {
-    const sourcePart = sourceBlock.parts.find((part) => part.name === sourcePartName);
+    const sourcePart = sourceBlock.parts.find((part) => part.index === sourcePartName);
     const orientation = sourceBlock.partDetails[sourcePart?.index || '']?.orientation || 0;
     const rotation = toDegree(sourceBlock.rotation[1]);
     const realRotation = MathUtils.normalizeAngle(orientation - rotation);

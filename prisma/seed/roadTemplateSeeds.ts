@@ -1,6 +1,6 @@
 import { BlockTemplate, Prisma } from '@prisma/client';
 
-const blockTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'partDetails'> & {
+const roadTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'partDetails'> & {
   categories: Prisma.JsonArray;
   parts: Prisma.JsonArray;
   partDetails: Prisma.JsonObject;
@@ -188,4 +188,4 @@ const blockTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | '
   },
 ];
 
-export default blockTempalteSeeds;
+export default roadTempalteSeeds;

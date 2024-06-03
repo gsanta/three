@@ -14,14 +14,26 @@ class JoinPoles {
   }
 
   join(pole1: Block, pole2: Block) {
-    (['pin1', 'pin2', 'pin3'] as const).map((pinName) => this.joinPins(pole1, pole2, pinName));
+    let pairs: [string, string][] = [];
+    if (pole1.type === 'poles' && pole2.type === 'poles') {
+      pairs = [
+        ['#2', '#2'],
+        ['#3', '#3'],
+        ['#4', '#4'],
+      ];
+    } else if (pole1.type === 'weather-heads' && pole2.type === 'poles') {
+      pairs = [['#2', '#5']];
+    } else if (pole1.type === 'poles' && pole2.type === 'weather-heads') {
+      pairs = [['#2', '#5']];
+    }
+    pairs.forEach(([pinName1, pinName2]) => this.joinPins(pole1, pole2, pinName1, pinName2));
   }
 
-  private joinPins(pole1: Block, pole2: Block, pinName: 'pin1' | 'pin2' | 'pin3') {
+  private joinPins(pole1: Block, pole2: Block, pinName1: string, pinName2: string) {
     const mesh1 = this.scene.getObj3d(pole1.id);
     const mesh2 = this.scene.getObj3d(pole2.id);
-    const pinMesh1 = MeshUtils.findByName(mesh1, pinName);
-    const pinMesh2 = MeshUtils.findByName(mesh2, pinName);
+    const pinMesh1 = MeshUtils.findByName(mesh1, pinName1);
+    const pinMesh2 = MeshUtils.findByName(mesh2, pinName2);
 
     const pos1 = new Vector3();
     pinMesh1.getWorldPosition(pos1);
@@ -37,8 +49,8 @@ class JoinPoles {
       {
         cables: {
           points: [pos1, pos2].map((point) => [point.x, point.y, point.z]) as Num3[],
-          end1: { pin: pinName, device: pole1.id },
-          end2: { pin: pinName, device: pole2.id },
+          end1: { pin: pinName1, device: pole1.id },
+          end2: { pin: pinName2, device: pole2.id },
         },
       },
     );
@@ -51,7 +63,11 @@ class JoinPoles {
         dependents: [cable.id],
       },
       {
-        pins: { [pinName]: [cable.id] },
+        pins: {
+          [pinName1]: {
+            wires: [cable.id],
+          },
+        },
       },
     );
 
@@ -61,7 +77,11 @@ class JoinPoles {
         dependents: [cable.id],
       },
       {
-        pins: { [pinName]: [cable.id] },
+        pins: {
+          [pinName2]: {
+            wires: [cable.id],
+          },
+        },
       },
     );
 
