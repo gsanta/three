@@ -6,10 +6,7 @@ import SceneService from '@/client/editor/components/scene/SceneService';
 import BlockCreator from './BlockCreator';
 
 abstract class BlockFactory {
-  readonly category?: BlockCategory;
-
-  constructor(sceneService: SceneService, category?: BlockCategory) {
-    this.category = category;
+  constructor(sceneService: SceneService) {
     this.sceneService = sceneService;
   }
 

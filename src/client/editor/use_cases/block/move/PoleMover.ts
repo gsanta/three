@@ -20,7 +20,7 @@ class PoleMover extends BlockMover {
 
     for (let i = 1; i <= maxPolePinNumber; i++) {
       const cables = decoration.pins[`pin${i}` as Pins];
-      cables.forEach((cable) => {
+      cables?.wires.forEach((cable) => {
         this.moveCable(edit, cable, `pin${i}`);
       });
     }

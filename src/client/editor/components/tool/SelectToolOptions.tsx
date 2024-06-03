@@ -23,9 +23,9 @@ const SelectToolOptions = () => {
   const {
     select: { templateName },
   } = useAppSelector((state) => state.tool);
-  const { selectedPartNames, categories } = useAppSelector((state) => state.block.present);
+  const { selectedPartIndexes, categories } = useAppSelector((state) => state.block.present);
   const blockSettings = settings[selectedTemplate?.category || ''];
-  const hasSelectedPart = Object.keys(selectedPartNames).length;
+  const hasSelectedPart = Object.keys(selectedPartIndexes).length;
 
   const dispatch = useAppDispatch();
 

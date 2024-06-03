@@ -140,16 +140,42 @@ const buildingTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' 
     categories: [],
     category: 'walls',
     name: 'roof-1',
-    path: '/roof_1.glb',
+    path: '/roof1.glb',
     parts: [
       {
-        geometryPath: 'Cube.geometry',
+        index: '#1',
+        geometryPath: 'Roof1Roof.geometry',
         materialPath: 'Roog',
         position: [-0.069, 0.088, 0.037],
+        rotation: [-3.14159, 0, -3.14159],
+        scale: [-3.922, -0.064, -3.922],
+      },
+      {
+        index: '#2',
+        geometryPath: 'Roof1Area1.geometry',
+        materialPath: 'wall-placeholder',
+        position: [-0.069, 0.088, 0.037],
+        rotation: [-3.14159, 0, -3.14159],
+        scale: [-3.922, -0.064, -3.922],
+      },
+      {
+        index: '#3',
+        geometryPath: 'Roof1Area2.geometry',
+        materialPath: 'wall-placeholder',
+        position: [-0.069, 0.088, 0.037],
+        rotation: [-3.14159, 0, -3.14159],
         scale: [-3.922, -0.064, -3.922],
       },
     ],
-    type: 'walls',
+    partDetails: {
+      '#2': {
+        role: 'slot',
+      },
+      '#3': {
+        role: 'slot',
+      },
+    },
+    type: 'roofs',
   },
 ];
 

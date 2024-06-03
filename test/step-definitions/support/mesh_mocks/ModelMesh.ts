@@ -1,4 +1,3 @@
-import { Vector3 } from 'three';
 import BaseMesh from './BaseMesh';
 import ChildMesh from './ChildMesh';
 import Block from '@/client/editor/types/Block';

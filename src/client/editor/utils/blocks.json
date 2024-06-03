@@ -409,7 +409,8 @@
                         -3.922
                     ]
                 }
-            ]
+            ],
+            "type": "roofs"
         },
         "road-1": {
             "categories": [],

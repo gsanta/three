@@ -10,7 +10,7 @@ const ToolControl = () => {
   const { tool } = useEditorContext();
 
   const blocks = useNotSelectedBlocks();
-  const { selectedPartNames } = useAppSelector((selector) => selector.block.present);
+  const { selectedPartIndexes } = useAppSelector((selector) => selector.block.present);
 
   const handlePointerDown = useCallback(
     (event: ThreeEvent<PointerEvent>) => {
@@ -38,7 +38,7 @@ const ToolControl = () => {
             onPointerDown: handlePointerDown,
             onPointerEnter: handlePointerEnter,
           }}
-          selectedParts={selectedPartNames[block.id]}
+          selectedParts={selectedPartIndexes[block.id]}
         />
       ))}
     </>

@@ -1,4 +1,4 @@
-import Tool, { ToolInfo } from '../../types/Tool';
+import { ToolInfo } from '../../types/Tool';
 import ToolName from '../../types/ToolName';
 import VectorUtils, { addVector } from '@/client/editor/utils/vectorUtils';
 import { toRadian } from '@/client/editor/utils/mathUtils';
@@ -11,12 +11,12 @@ import BlockStore from '../../stores/block/BlockStore';
 import { store } from '@/client/common/utils/store';
 import { updateSelectTool } from '../../stores/tool/toolSlice';
 import SceneService from '../../components/scene/SceneService';
-import Selector from '../../use_cases/block/SelectBlock';
+import Selector from '../../use_cases/block/Selector';
 import ToolStore from '../../stores/tool/ToolStore';
-import { hover } from '../../stores/block/blockSlice';
 import MoveBlockToSlot from '../../use_cases/block/MoveBlockToSlot';
+import HoverTool from './HoverTool';
 
-class SelectTool extends Tool {
+class SelectTool extends HoverTool {
   constructor(
     blockStore: BlockStore,
     scene: SceneService,
@@ -24,34 +24,16 @@ class SelectTool extends Tool {
     toolStore: ToolStore,
     update: TransactionService,
   ) {
-    super(blockStore, update, ToolName.Select, 'BiRectangle');
+    super(blockStore, scene, sceneStore, update, ToolName.Select, 'BiRectangle');
 
     this.move = new MoveBlock(blockStore, update, sceneStore, toolStore);
     this.moveBlockToSlot = new MoveBlockToSlot(blockStore, sceneStore);
-    this.selector = new Selector(blockStore, scene, sceneStore);
+    this.selector = new Selector(blockStore, scene, sceneStore, update);
     this.toolStore = toolStore;
   }
 
   onPointerDown(info: ToolInfo) {
-    const block = this.store.getBlocks()[info.eventObject?.userData.modelId || ''];
-
-    if (block) {
-      const edit = this.update.getTransaction();
-      this.selector.select(edit, info.eventObject?.userData.modelId || '', info.clientX, info.clientY);
-      edit.commit();
-    } else {
-      this.update.getTransaction().select(null).commit();
-    }
-  }
-
-  onPointerEnter(info: ToolInfo) {
-    const block = this.store.getBlocks()[info.eventObject?.userData.modelId || ''];
-
-    if (info.eventObject?.name === 'plane') {
-      store.dispatch(hover(null));
-    } else if (block) {
-      store.dispatch(hover(block.id));
-    }
+    this.selector.select(info.eventObject?.userData.modelId, info.clientX, info.clientY);
   }
 
   onPointerLeave(info: ToolInfo) {

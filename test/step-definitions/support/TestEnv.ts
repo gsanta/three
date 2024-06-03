@@ -54,7 +54,7 @@ export const setupTestEnv = (): TestEnv => {
       new AddTool(blockStore, factoryService, sceneStore, toolStore, update),
       new SelectTool(blockStore, scene, sceneStore, toolStore, update),
       new GroupTool(blockStore, update, templates),
-      new CableTool(blockStore, factoryService, sceneStore, update),
+      new CableTool(blockStore, factoryService, scene, sceneStore, update),
       new EraseTool(blockStore, update),
       new RayTool(blockStore, update, sceneStore),
       new ColorTool(blockStore, update),

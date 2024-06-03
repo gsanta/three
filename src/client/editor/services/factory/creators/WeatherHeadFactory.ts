@@ -1,8 +1,8 @@
-import Pole, { createPin } from '@/client/editor/types/block/Pole';
 import BlockFactory from './BlockFactory';
 import Block from '@/client/editor/types/Block';
+import Pole, { createPin } from '@/client/editor/types/block/Pole';
 
-class PoleFactory extends BlockFactory {
+class WeatherHeadFactory extends BlockFactory {
   createCategory(block: Block, overrides: Partial<Block> = {}): Pole {
     const pins: Pole['pins'] = {
       pin1: createPin('in-out', []),
@@ -15,4 +15,4 @@ class PoleFactory extends BlockFactory {
   }
 }
 
-export default PoleFactory;
+export default WeatherHeadFactory;

@@ -38,5 +38,5 @@ Then('pin {string} of block {string} is empty', function (this: ExtendedWorld, p
 
   const pole = this.env.blockStore.getDecorations('poles')[realBlockId];
 
-  assert.equal(pole.pins[pin as Pins].length, 0);
+  assert.equal(pole.pins[pin as Pins]?.wires.length, 0);
 });

@@ -3,7 +3,7 @@ import { BufferGeometry, Material, MeshStandardMaterial, NormalBufferAttributes 
 import WrappedMeshProps from '../../types/block/WrappedMeshProps';
 import { ModelPart } from '@/client/editor/types/BlockType';
 import useRegisterScene from '../hooks/useRegisterScene';
-import { GroupProps } from '@react-three/fiber';
+import { GroupProps, ThreeEvent } from '@react-three/fiber';
 import { addVector } from '@/client/editor/utils/vectorUtils';
 import Block from '../../types/Block';
 
@@ -21,12 +21,13 @@ type ModelPartProps = {
     [name: string]: Material;
   };
   nodes: NodesType;
+  onPointerEnter?: (event: ThreeEvent<PointerEvent>, partIndex?: string) => void;
   part: ModelPart;
   selectedParts: ModelMeshProps['selectedParts'];
 };
 
-const ModelMeshPart = ({ block, materials, nodes, part, selectedParts }: ModelPartProps) => {
-  const color = selectedParts.includes(part?.name || '') ? 'green' : undefined;
+const ModelMeshPart = ({ block, materials, nodes, onPointerEnter, part, selectedParts }: ModelPartProps) => {
+  const color = selectedParts.includes(part.index) ? 'green' : undefined;
 
   if (block.partDetails[part.index]?.isHidden) {
     return null;
@@ -64,10 +65,12 @@ const ModelMeshPart = ({ block, materials, nodes, part, selectedParts }: ModelPa
       receiveShadow
       geometry={geometry}
       material={color ? new MeshStandardMaterial({ color: 'green' }) : material}
+      onPointerEnter={onPointerEnter ? (e) => onPointerEnter(e, part.index) : undefined}
       position={part.position}
       rotation={part.rotation}
       scale={part.scale}
-      name={part.name || ''}
+      name={part.index || ''}
+      userData={{ modelId: block.id }}
     />
   );
 };
@@ -125,6 +128,7 @@ export const ModelMesh = ({ additions, block, meshProps, overwrites, selectedPar
             key={childPart.name}
             materials={materials}
             nodes={geometryNodes}
+            onPointerEnter={meshProps?.onPointerEnter}
             part={childPart}
             selectedParts={selectedParts}
           />

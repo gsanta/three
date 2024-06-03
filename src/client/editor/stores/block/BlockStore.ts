@@ -6,6 +6,10 @@ class BlockStore {
     this.store = store;
   }
 
+  getHovered() {
+    return this.store.getState().block.present.hovered;
+  }
+
   getBlock(id?: string) {
     if (!id) {
       throw new Error('Id is not defined');
@@ -26,8 +30,12 @@ class BlockStore {
     return this.store.getState().block.present.selectedRootBlockIds;
   }
 
-  getSelectedPartNames() {
-    return this.store.getState().block.present.selectedPartNames;
+  getSelectedPart(blockId?: string) {
+    return this.getSelectedPartIndexes()[blockId || '']?.[0];
+  }
+
+  getSelectedPartIndexes() {
+    return this.store.getState().block.present.selectedPartIndexes;
   }
 
   getDecoration<T extends BlockCategory>(category: T, id?: string) {

@@ -1,42 +1,47 @@
 import SceneStore from '../../components/scene/SceneStore';
 import Edit from '../../services/update/Edit';
-import Block from '../../types/Block';
 import MeshUtils from '../../utils/MeshUtils';
 import MathUtils, { toDegree } from '../../utils/mathUtils';
 import FactoryService from '../../services/factory/FactoryService';
+import BlockStore from '../../stores/block/BlockStore';
 
 class AddBlockToSlot {
-  constructor(factoryService: FactoryService, sceneStore: SceneStore) {
+  constructor(blockStore: BlockStore, factoryService: FactoryService, sceneStore: SceneStore) {
+    this.blockStore = blockStore;
     this.factoryService = factoryService;
     this.sceneStore = sceneStore;
   }
 
-  perform(edit: Edit, sourceBlock: Block, sourcePartName: string, templateName: string) {
-    const mesh = this.sceneStore.getObj3d(sourceBlock.id);
-    const sourcePartMesh = MeshUtils.findByName(mesh, sourcePartName);
-    const sourcePart = sourceBlock.parts.find((part) => part.name === sourcePartName);
+  perform(edit: Edit, targetBlockId: string, targetPartIndex: string, templateName: string) {
+    const targetBlock = this.blockStore.getBlocks()[targetBlockId];
+
+    const mesh = this.sceneStore.getObj3d(targetBlock.id);
+    const sourcePartMesh = MeshUtils.findByName(mesh, targetPartIndex);
+    const sourcePart = targetBlock.parts.find((part) => part.name === targetPartIndex);
 
     const sourcePartPos = sourcePartMesh.position;
-    const sourcePartOrientation = sourceBlock.partDetails[sourcePart?.index || '']?.orientation || 0;
-    const finalRotation = MathUtils.normalizeAngle(toDegree(sourceBlock.rotation[1]) + sourcePartOrientation);
+    const sourcePartOrientation = targetBlock.partDetails[sourcePart?.index || '']?.orientation || 0;
+    const finalRotation = MathUtils.normalizeAngle(toDegree(targetBlock.rotation[1]) + sourcePartOrientation);
 
     this.factoryService.create(edit, templateName, {
-      parent: sourceBlock.id,
+      parent: targetBlock.id,
       position: [sourcePartPos.x, sourcePartPos.y, sourcePartPos.z],
       rotation: [0, finalRotation, 0],
       slotTarget: {
-        blockId: sourceBlock.id,
-        slotName: sourcePartName,
+        blockId: targetBlock.id,
+        slotName: targetPartIndex,
       },
     });
 
     const lastBlock = edit.getLastBlock();
 
-    edit.updateBlock(sourceBlock.id, {
+    edit.updateBlock(targetBlockId, {
       children: [lastBlock.id],
-      slotSources: [{ slotName: sourcePartName, blockId: lastBlock.id }],
+      slotSources: [{ slotName: targetPartIndex, blockId: lastBlock.id }],
     });
   }
+
+  private blockStore: BlockStore;
 
   private factoryService: FactoryService;
 
