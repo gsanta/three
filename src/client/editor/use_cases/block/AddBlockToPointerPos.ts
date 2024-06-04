@@ -4,6 +4,7 @@ import FactoryService from '../../services/factory/FactoryService';
 import BlockStore from '../../stores/block/BlockStore';
 import SceneService from '../../components/scene/SceneService';
 import MeshUtils from '../../utils/MeshUtils';
+import { ArrowHelper, Vector3 } from 'three';
 
 class AddBlockToPointerPos {
   constructor(
@@ -30,13 +31,17 @@ class AddBlockToPointerPos {
 
     const mesh = this.sceneStore.getObj3d(targetBlock.id);
     const targetPartMesh = MeshUtils.findByName(mesh, targetPartIndex);
+    const vec = new Vector3();
+    targetPartMesh.getWorldPosition(vec);
 
     const [intersections] = this.sceneService.intersection(targetPartMesh, clientX, clientY);
 
     if (intersections?.length) {
       const intersection = intersections[0];
 
-      const targetPos = intersection.point;
+      const rootBlock = this.blockStore.getRootBlock(targetBlockId);
+
+      const targetPos = intersection.point.sub(new Vector3(...rootBlock.position));
 
       this.factoryService.create(edit, templateName, {
         parent: targetBlock.id,
@@ -45,7 +50,7 @@ class AddBlockToPointerPos {
 
       const lastBlock = edit.getLastBlock();
 
-      edit.updateBlock(targetBlockId, {
+      edit.updateBlock(rootBlock.id, {
         children: [lastBlock.id],
       });
     }

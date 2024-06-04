@@ -26,6 +26,15 @@ class BlockStore {
     return Object.values(this.store.getState().block.present.blocks);
   }
 
+  getRootBlock(blockId: string) {
+    let block = this.getBlock(blockId);
+    do {
+      block = this.getBlock(block.parent);
+    } while (block.parent);
+
+    return block;
+  }
+
   getSelectedRootBlockIds() {
     return this.store.getState().block.present.selectedRootBlockIds;
   }

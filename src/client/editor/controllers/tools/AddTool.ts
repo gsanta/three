@@ -34,8 +34,6 @@ class AddTool extends HoverTool {
     this.toolStore = toolStore;
     this.updateService = update;
 
-    this.addTemplateToSlot = new ApplyTemplateToSlot(blockStore, factoryService, sceneStore);
-
     this.addBlock = new AddBlock(blockStore, factoryService, sceneStore, update);
 
     this.addBlockToSlot = new AddBlockToSlot(blockStore, factoryService, sceneStore);

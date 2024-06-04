@@ -49,6 +49,7 @@ const poleTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails' | '
     path: '/pole2.glb',
     parts: [
       {
+        index: '#1',
         geometryPath: 'Pole1Body.geometry',
         materialPath: 'Main',
         position: [-0.008, -0.002, 0.01],
@@ -56,6 +57,7 @@ const poleTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails' | '
         scale: [-0.113, -4.042, -0.113],
       },
       {
+        index: '#2',
         geometryPath: 'Pole1Pin1.geometry',
         materialPath: 'DarkGray',
         position: [-0.913, 7.154, 0.011],
@@ -63,6 +65,7 @@ const poleTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails' | '
         name: 'pin1',
       },
       {
+        index: '#3',
         geometryPath: 'Pole1Pin2.geometry',
         materialPath: 'DarkGray',
         position: [-0.378, 7.154, 0.011],
@@ -70,6 +73,7 @@ const poleTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails' | '
         name: 'pin2',
       },
       {
+        index: '#4',
         geometryPath: 'Pole1Pin3.geometry',
         materialPath: 'DarkGray',
         position: [0.865, 7.154, 0.011],
@@ -77,6 +81,7 @@ const poleTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails' | '
         name: 'pin3',
       },
       {
+        index: '#5',
         geometryPath: 'Pole1Pin4.geometry',
         materialPath: 'DarkGray',
         position: [0.006, 6.336, 0.216],
@@ -84,6 +89,24 @@ const poleTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails' | '
         name: 'pin4',
       },
     ],
+    partDetails: {
+      '#2': {
+        role: 'slot',
+        type: 'pin',
+      },
+      '#3': {
+        role: 'slot',
+        type: 'pin',
+      },
+      '#4': {
+        role: 'slot',
+        type: 'pin',
+      },
+      '#5': {
+        role: 'slot',
+        type: 'pin',
+      },
+    },
     type: 'poles',
   },
   {

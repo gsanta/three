@@ -18,14 +18,14 @@ class JoinPoles {
     let pairs: [Pins, Pins][] = [];
     if (pole1.type === 'poles' && pole2.type === 'poles') {
       pairs = [
-        ['pin1', 'pin1'],
-        ['pin2', 'pin2'],
-        ['pin3', 'pin3'],
+        ['#2', '#2'],
+        ['#3', '#3'],
+        ['#4', '#4'],
       ];
     } else if (pole1.type === 'weather-heads' && pole2.type === 'poles') {
-      pairs = [['pin1', 'pin4']];
+      pairs = [['#2', '#5']];
     } else if (pole1.type === 'poles' && pole2.type === 'weather-heads') {
-      pairs = [['pin4', 'pin1']];
+      pairs = [['#2', '#5']];
     }
     pairs.forEach(([pinName1, pinName2]) => this.joinPins(pole1, pole2, pinName1, pinName2));
   }

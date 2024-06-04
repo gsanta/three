@@ -35,7 +35,6 @@ class Selector {
 
     const partName = this.checkPartIntersection(mesh, clientX, clientY);
     const isMovable = this.checkIsBlockMoveable(block);
-    const selectedBlock = block.parent ? block.parent : block.id;
 
     if (partName) {
       edit.select(null);
@@ -45,12 +44,10 @@ class Selector {
       edit.select(block.id);
       store.dispatch(updateSelectTool({ moveAxis: block.moveAxis }));
       return;
-    } else if (selectedBlock) {
-      edit.select(selectedBlock);
+    } else {
+      edit.select(block.id);
 
-      const parent = this.blockStore.getBlocks()[selectedBlock];
-
-      store.dispatch(updateSelectTool({ moveAxis: parent.moveAxis }));
+      store.dispatch(updateSelectTool({ moveAxis: block.moveAxis }));
     }
 
     edit.commit();

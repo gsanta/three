@@ -1,6 +1,6 @@
 import Tool, { ToolInfo } from '@/client/editor/types/Tool';
 import ToolName from '@/client/editor/types/ToolName';
-import { ArrowHelper } from 'three';
+import { ArrowHelper, Vector3 } from 'three';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import BlockStore from '../../stores/block/BlockStore';
 import TransactionService from '../../services/transaction/TransactionService';
@@ -33,6 +33,7 @@ class RayTool extends Tool {
     }
 
     const arrow = new ArrowHelper(ray.direction, ray.origin, intersection[0].distance, 0xff0000);
+
     this.scene.getScene().add(arrow);
 
     this.arrow = arrow;

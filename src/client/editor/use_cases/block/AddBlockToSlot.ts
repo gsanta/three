@@ -4,6 +4,7 @@ import MeshUtils from '../../utils/MeshUtils';
 import MathUtils, { toDegree } from '../../utils/mathUtils';
 import FactoryService from '../../services/factory/FactoryService';
 import BlockStore from '../../stores/block/BlockStore';
+import { Vector3 } from 'three';
 
 class AddBlockToSlot {
   constructor(blockStore: BlockStore, factoryService: FactoryService, sceneStore: SceneStore) {
@@ -17,7 +18,7 @@ class AddBlockToSlot {
 
     const mesh = this.sceneStore.getObj3d(targetBlock.id);
     const sourcePartMesh = MeshUtils.findByName(mesh, targetPartIndex);
-    const sourcePart = targetBlock.parts.find((part) => part.name === targetPartIndex);
+    const sourcePart = targetBlock.parts.find((part) => part.index === targetPartIndex);
 
     const sourcePartPos = sourcePartMesh.position;
     const sourcePartOrientation = targetBlock.partDetails[sourcePart?.index || '']?.orientation || 0;

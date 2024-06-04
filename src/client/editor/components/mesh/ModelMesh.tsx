@@ -33,9 +33,9 @@ const ModelMeshPart = ({ block, materials, nodes, onPointerEnter, part, selected
     return null;
   }
 
-  if (!block.isHovered && !block.isSelected && block.partDetails[part.index]?.role === 'slot' && !color) {
-    return null;
-  }
+  // if (!block.isHovered && !block.isSelected && block.partDetails[part.index]?.role === 'slot' && !color) {
+  //   return null;
+  // }
 
   const geometryPaths = part.geometryPath?.split('.') || [];
 

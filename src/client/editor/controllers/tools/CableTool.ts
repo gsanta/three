@@ -43,17 +43,21 @@ class CableTool extends HoverTool {
   }
 
   onPointerDown(info: ToolInfo) {
+    const modelId = info.eventObject?.userData.modelId;
     if (this.isDrawingCable) {
-      const mesh = this.scene.getObj3d(info.eventObject?.userData.modelId || '');
+      if (modelId) {
+        const mesh = this.scene.getObj3d(modelId);
+        const targetBlock = this.blockStore.getBlock(modelId);
 
-      const partName = this.checkPartIntersection(mesh, info.clientX, info.clientY);
+        const partName = this.checkPartIntersection(mesh, info.clientX, info.clientY);
 
-      const selectedBlockId = this.blockStore.getSelectedRootBlockIds()[0];
-      const block1 = this.blockStore.getBlock(selectedBlockId);
-      const block2 = this.blockStore.getBlock(info.eventObject?.userData.modelId);
+        const selectedBlockId = this.blockStore.getSelectedRootBlockIds()[0];
+        const block1 = this.blockStore.getBlock(selectedBlockId);
+        const block2 = this.blockStore.getBlock(info.eventObject?.userData.modelId);
 
-      if (partName?.startsWith('pin')) {
-        this.joinPoles.join(block1, block2);
+        if (targetBlock.partDetails[partName || '']?.type === 'pin') {
+          this.joinPoles.join(block1, block2);
+        }
       }
     } else {
       this.selector.select(info.eventObject?.userData.modelId, info.clientX, info.clientY);
@@ -63,7 +67,7 @@ class CableTool extends HoverTool {
   onPointerMove({ pos }: ToolInfo) {
     const selectedBlockId = this.blockStore.getSelectedRootBlockIds()[0];
     const selectedPart = this.blockStore.getSelectedPart(selectedBlockId);
-
+    console.log('selectedPart: ' + selectedPart);
     if (selectedPart) {
       this.isDrawingCable = true;
       const mesh1 = this.scene.getObj3d(selectedBlockId);
