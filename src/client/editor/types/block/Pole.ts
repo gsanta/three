@@ -10,7 +10,7 @@ export type Pin = {
 type Pole = {
   id: string;
   category: 'poles';
-  pins: Partial<Record<Pins, Pin>>;
+  pins: Partial<Record<string, Pin>>;
 };
 
 export type PartialPole = {

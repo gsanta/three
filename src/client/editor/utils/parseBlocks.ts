@@ -8,13 +8,11 @@ const defaultBlock: Partial<BlockType> = {
   moveAxis: [true, false, true],
 };
 
-const parseBlocks = (blocks: Record<string, BlockType>): BlockType[] =>
-  Object.keys(blocks).map((key) => {
-    const block = blocks[key as BlockName];
+const parseBlocks = (blocks: BlockType[]): BlockType[] =>
+  blocks.map((block) => {
     return {
       ...defaultBlock,
       ...block,
-      name: key as BlockName,
       partDetails: block.partDetails || {},
       // data: {
       //   ...block.data,

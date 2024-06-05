@@ -5,7 +5,6 @@ import SceneStore from '@/client/editor/components/scene/SceneStore';
 import TransactionService from '../../services/transaction/TransactionService';
 import Num3 from '@/client/editor/types/Num3';
 import FactoryService from '../../services/factory/FactoryService';
-import { Pins } from '../../types/block/Pole';
 
 class JoinPoles {
   constructor(scene: SceneStore, factory: FactoryService, update: TransactionService) {
@@ -15,7 +14,7 @@ class JoinPoles {
   }
 
   join(pole1: Block, pole2: Block) {
-    let pairs: [Pins, Pins][] = [];
+    let pairs: [string, string][] = [];
     if (pole1.type === 'poles' && pole2.type === 'poles') {
       pairs = [
         ['#2', '#2'],
@@ -30,7 +29,7 @@ class JoinPoles {
     pairs.forEach(([pinName1, pinName2]) => this.joinPins(pole1, pole2, pinName1, pinName2));
   }
 
-  private joinPins(pole1: Block, pole2: Block, pinName1: Pins, pinName2: Pins) {
+  private joinPins(pole1: Block, pole2: Block, pinName1: string, pinName2: string) {
     const mesh1 = this.scene.getObj3d(pole1.id);
     const mesh2 = this.scene.getObj3d(pole2.id);
     const pinMesh1 = MeshUtils.findByName(mesh1, pinName1);

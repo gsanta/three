@@ -6,7 +6,7 @@ class ModelMesh extends BaseMesh {
   constructor(block: Block) {
     super(block);
 
-    this.children = block.parts.map((part) => new ChildMesh(this, block, part.name || ''));
+    this.children = block.parts.map((part) => new ChildMesh(this, block, part.index || ''));
   }
 }
 

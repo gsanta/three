@@ -67,7 +67,7 @@ class CableTool extends HoverTool {
   onPointerMove({ pos }: ToolInfo) {
     const selectedBlockId = this.blockStore.getSelectedRootBlockIds()[0];
     const selectedPart = this.blockStore.getSelectedPart(selectedBlockId);
-    console.log('selectedPart: ' + selectedPart);
+
     if (selectedPart) {
       this.isDrawingCable = true;
       const mesh1 = this.scene.getObj3d(selectedBlockId);

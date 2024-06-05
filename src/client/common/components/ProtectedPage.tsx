@@ -63,7 +63,6 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
           new RayTool(blockStore, transaction, sceneStore),
           new ColorTool(blockStore, transaction),
         ],
-        store,
         toolStore,
       ),
       transaction,
