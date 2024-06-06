@@ -1,6 +1,6 @@
 import Tool, { ToolInfo } from '@/client/editor/types/Tool';
 import ToolName from '@/client/editor/types/ToolName';
-import { ArrowHelper, Vector3 } from 'three';
+import { ArrowHelper } from 'three';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import BlockStore from '../../stores/block/BlockStore';
 import TransactionService from '../../services/transaction/TransactionService';

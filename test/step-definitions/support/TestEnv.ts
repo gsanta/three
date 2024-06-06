@@ -20,6 +20,13 @@ import TestSceneService from './TestSceneService';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
 import ControllerService from '@/client/editor/services/controller/ControllerService';
+import buildingTempalteSeeds from 'prisma/seed/buildingTemplateSeeds';
+import lampTempalteSeeds from 'prisma/seed/lampTemplateSeeds';
+import plantTempalteSeeds from 'prisma/seed/plantTemplateSeeds';
+import poleTempalteSeeds from 'prisma/seed/poleTemplateSeeds';
+import roadTempalteSeeds from 'prisma/seed/roadTemplateSeeds';
+import { setTemplates } from '@/client/editor/stores/template/templateSlice';
+import BlockType from '@/client/editor/types/BlockType';
 
 type TestEnv = {
   controller: ControllerService;
@@ -82,6 +89,17 @@ export const setupTestEnv = (): TestEnv => {
       });
     },
   });
+
+  // TODO: used for tests right now, later it should come from db
+  const seeds = [
+    ...buildingTempalteSeeds,
+    ...lampTempalteSeeds,
+    ...plantTempalteSeeds,
+    ...poleTempalteSeeds,
+    ...roadTempalteSeeds,
+  ];
+
+  store.dispatch(setTemplates(seeds as BlockType[]));
 
   const teardown = () => {
     // testMiddleware.clearListeners();

@@ -1,4 +1,4 @@
-import BlockType, { BlockName } from '../types/BlockType';
+import BlockType from '../types/BlockType';
 
 const defaultBlock: Partial<BlockType> = {
   position: [0, 0, 0],

@@ -4,7 +4,6 @@ import MeshUtils from '../../utils/MeshUtils';
 import MathUtils, { toDegree } from '../../utils/mathUtils';
 import FactoryService from '../../services/factory/FactoryService';
 import BlockStore from '../../stores/block/BlockStore';
-import { Vector3 } from 'three';
 
 class AddBlockToSlot {
   constructor(blockStore: BlockStore, factoryService: FactoryService, sceneStore: SceneStore) {

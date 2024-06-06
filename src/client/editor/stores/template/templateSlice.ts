@@ -11,33 +11,19 @@ import { PartialDeep } from 'type-fest';
 import BlockSelectedSettings from '@/client/editor/types/BlockSelectedSettings';
 import BlockCategory from '@/client/editor/types/BlockCategory';
 import BlockUtils from '../../utils/BlockUtils';
-import poleTempalteSeeds from 'prisma/seed/poleTemplateSeeds';
-import buildingTempalteSeeds from 'prisma/seed/buildingTemplateSeeds';
-import lampTempalteSeeds from 'prisma/seed/lampTemplateSeeds';
-import plantTempalteSeeds from 'prisma/seed/plantTemplateSeeds';
-import roadTempalteSeeds from 'prisma/seed/roadTemplateSeeds';
 
 export type TransformType = 'move' | 'scale';
 
 export type BlockSettingsState = {
   selectedBlockName: string;
   blocks: BlockType[];
-  settings: Record<string, BlockSettings>;
+  settings: Partial<Record<string, BlockSettings>>;
   selectedSettings: Record<string, BlockSelectedSettings>;
   selectedTransformType: TransformType;
   color: RGBColor;
 };
 
-// TODO: used for tests right now, later it should come from db
-const seeds = [
-  ...buildingTempalteSeeds,
-  ...lampTempalteSeeds,
-  ...plantTempalteSeeds,
-  ...poleTempalteSeeds,
-  ...roadTempalteSeeds,
-];
-
-const parsedBlocks = parseBlocks(seeds as Parameters<typeof parseBlocks>[0]);
+const parsedBlocks = parseBlocks([] as Parameters<typeof parseBlocks>[0]);
 
 export const initialBlockSettingsState: BlockSettingsState = {
   selectedBlockName: 'building-base-1',

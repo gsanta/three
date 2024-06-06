@@ -4,7 +4,7 @@ import FactoryService from '../../services/factory/FactoryService';
 import BlockStore from '../../stores/block/BlockStore';
 import SceneService from '../../components/scene/SceneService';
 import MeshUtils from '../../utils/MeshUtils';
-import { ArrowHelper, Vector3 } from 'three';
+import { Vector3 } from 'three';
 
 class AddBlockToPointerPos {
   constructor(
