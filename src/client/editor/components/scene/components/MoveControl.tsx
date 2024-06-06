@@ -18,7 +18,7 @@ const MoveControl = ({ onPointerDown, onPointerEnter }: MoveControlProps) => {
   const selectedBlocks = useSelectedBlocks();
   const movableBlocks = selectedBlocks.filter((block) => block.movable);
 
-  const { selectedPartNames } = useAppSelector((selector) => selector.block.present);
+  const { selectedPartIndexes } = useAppSelector((selector) => selector.block.present);
   const { drag, moveAxis } = useAppSelector((selector) => selector.tool.select);
 
   const [transform, setTransform] = useState<Num3>([0, 0, 0]);
@@ -74,7 +74,7 @@ const MoveControl = ({ onPointerDown, onPointerEnter }: MoveControlProps) => {
                 onPointerEnter,
               }}
               materialProps={{ color: 'pink', opacity: 0.5, transparent: true }}
-              selectedParts={selectedPartNames[block.id]}
+              selectedParts={selectedPartIndexes[block.id]}
             />
           ))}
       </group>

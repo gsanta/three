@@ -23,6 +23,7 @@ export interface ToolInfo {
   clientX: number;
   clientY: number;
   draggedMesh?: Block;
+  partIndex?: string;
 }
 
 abstract class Tool {
@@ -56,6 +57,8 @@ abstract class Tool {
   onDragEnd(_info: ToolInfo) {}
 
   onExecute(_info: ToolInfo) {}
+
+  onDeselect() {}
 
   onRendered() {}
 }

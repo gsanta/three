@@ -23,6 +23,7 @@ export type ModelPartDetail = {
   isHidden?: boolean;
   orientation: number;
   role?: 'slot';
+  type?: string;
 };
 
 type BlockType<S extends ShapeType = ShapeType> = {

@@ -23,9 +23,9 @@ const SelectToolOptions = () => {
   const {
     select: { templateName },
   } = useAppSelector((state) => state.tool);
-  const { selectedPartNames, categories } = useAppSelector((state) => state.block.present);
+  const { selectedPartIndexes, categories } = useAppSelector((state) => state.block.present);
   const blockSettings = settings[selectedTemplate?.category || ''];
-  const hasSelectedPart = Object.keys(selectedPartNames).length;
+  const hasSelectedPart = Object.keys(selectedPartIndexes).length;
 
   const dispatch = useAppDispatch();
 
@@ -49,9 +49,10 @@ const SelectToolOptions = () => {
     tool.getAddTool().addToSlot();
   };
 
-  const scaleX = selectedTemplate
-    ? findNearestValue(blockSettings.scale.x, block.scale[0] / selectedTemplate.scale[0])
-    : 0;
+  const scaleX =
+    selectedTemplate && blockSettings
+      ? findNearestValue(blockSettings.scale.x, block.scale[0] / selectedTemplate.scale[0])
+      : 0;
 
   if (hasSelectedPart) {
     return (
@@ -75,7 +76,7 @@ const SelectToolOptions = () => {
 
   return (
     <Box padding="4" display="flex" flexDir="column" gap="4">
-      {selectedTemplate && (
+      {selectedTemplate && blockSettings && (
         <>
           <SizeControl axis="x" block={blockSettings} onChange={handleSizeChange} value={scaleX} />
           <RotationControl

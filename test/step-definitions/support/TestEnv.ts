@@ -20,6 +20,13 @@ import TestSceneService from './TestSceneService';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
 import ControllerService from '@/client/editor/services/controller/ControllerService';
+import buildingTempalteSeeds from 'prisma/seed/buildingTemplateSeeds';
+import lampTempalteSeeds from 'prisma/seed/lampTemplateSeeds';
+import plantTempalteSeeds from 'prisma/seed/plantTemplateSeeds';
+import poleTempalteSeeds from 'prisma/seed/poleTemplateSeeds';
+import roadTempalteSeeds from 'prisma/seed/roadTemplateSeeds';
+import { setTemplates } from '@/client/editor/stores/template/templateSlice';
+import BlockType from '@/client/editor/types/BlockType';
 
 type TestEnv = {
   controller: ControllerService;
@@ -51,15 +58,14 @@ export const setupTestEnv = (): TestEnv => {
 
   const tool = new ToolService(
     [
-      new AddTool(blockStore, factoryService, sceneStore, toolStore, update),
+      new AddTool(blockStore, factoryService, scene, sceneStore, toolStore, update),
       new SelectTool(blockStore, scene, sceneStore, toolStore, update),
       new GroupTool(blockStore, update, templates),
-      new CableTool(blockStore, factoryService, sceneStore, update),
+      new CableTool(blockStore, factoryService, scene, sceneStore, update),
       new EraseTool(blockStore, update),
       new RayTool(blockStore, update, sceneStore),
       new ColorTool(blockStore, update),
     ],
-    store,
     toolStore,
   );
 
@@ -83,6 +89,17 @@ export const setupTestEnv = (): TestEnv => {
       });
     },
   });
+
+  // TODO: used for tests right now, later it should come from db
+  const seeds = [
+    ...buildingTempalteSeeds,
+    ...lampTempalteSeeds,
+    ...plantTempalteSeeds,
+    ...poleTempalteSeeds,
+    ...roadTempalteSeeds,
+  ];
+
+  store.dispatch(setTemplates(seeds as BlockType[]));
 
   const teardown = () => {
     // testMiddleware.clearListeners();

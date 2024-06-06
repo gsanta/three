@@ -55,15 +55,14 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
       scene: sceneStore,
       tool: new ToolService(
         [
-          new AddTool(blockStore, factoryService, sceneStore, toolStore, transaction),
+          new AddTool(blockStore, factoryService, scene, sceneStore, toolStore, transaction),
           new SelectTool(blockStore, scene, sceneStore, toolStore, transaction),
           new GroupTool(blockStore, transaction, templates),
-          new CableTool(blockStore, factoryService, sceneStore, transaction),
+          new CableTool(blockStore, factoryService, scene, sceneStore, transaction),
           new EraseTool(blockStore, transaction),
           new RayTool(blockStore, transaction, sceneStore),
           new ColorTool(blockStore, transaction),
         ],
-        store,
         toolStore,
       ),
       transaction,

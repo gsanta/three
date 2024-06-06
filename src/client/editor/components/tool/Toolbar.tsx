@@ -2,18 +2,16 @@ import React from 'react';
 import { Box, Text, Tooltip } from '@chakra-ui/react';
 import ToggleButton from '../../../common/components/ToggleButton';
 import Icon from '../../../common/components/icon/Icon';
-import { useAppDispatch, useAppSelector } from '../../../common/hooks/hooks';
+import { useAppSelector } from '../../../common/hooks/hooks';
 import useEditorContext from '@/app/editor/EditorContext';
 import ToolName from '../../types/ToolName';
-import { setSelectedTool } from '../../stores/tool/toolSlice';
 
 const Toolbar = () => {
   const { tool } = useEditorContext();
   const { selectedTool } = useAppSelector((state) => state.tool);
-  const dispatch = useAppDispatch();
 
   const handleSelectTool = (name: ToolName) => {
-    dispatch(setSelectedTool(name as ToolName));
+    tool.setSelectedTool(name as ToolName);
   };
 
   return (

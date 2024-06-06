@@ -19,15 +19,21 @@ class PoleEraser extends BlockEraser {
     const cableEnd = cable.end1?.device === poleBlock.id ? cable.end1 : cable.end2;
 
     if (cableEnd) {
+      const origPin = pole.pins[cableEnd.pin];
+
       edit.updateDecoration(
         'poles',
         pole.id,
         {
           pins: {
-            [cableEnd.pin]: pole.pins[cableEnd.pin].filter((cableId) => cableId !== cable.id),
+            ...pole.pins,
+            [cableEnd.pin]: {
+              ...origPin,
+              wires: [cable.id],
+            },
           },
         },
-        { arrayMergeStrategy: 'replace' },
+        { arrayMergeStrategy: 'exclude' },
       );
     }
   }

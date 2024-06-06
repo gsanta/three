@@ -33,6 +33,7 @@ class RayTool extends Tool {
     }
 
     const arrow = new ArrowHelper(ray.direction, ray.origin, intersection[0].distance, 0xff0000);
+
     this.scene.getScene().add(arrow);
 
     this.arrow = arrow;

@@ -140,8 +140,8 @@ class Edit {
     return this;
   }
 
-  select(id: string | null, partName?: string): this {
-    this.updates.push({ select: id, partName });
+  select(id: string | null, partIndex?: string): this {
+    this.updates.push({ select: id, partIndex });
 
     return this;
   }
