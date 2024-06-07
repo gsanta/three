@@ -1,13 +1,13 @@
 import { BlockTemplate, Prisma } from '@prisma/client';
 
-const poleTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails' | 'categories'> & {
-  categories: Prisma.JsonArray;
+const poleTempalteSeeds: (Omit<BlockTemplate, 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+  decorations: Prisma.JsonArray;
   parts?: Prisma.JsonArray;
   partDetails?: Prisma.JsonObject;
 })[] = [
   {
     category: 'poles',
-    categories: ['poles'],
+    decorations: ['poles'],
     path: '/pole.glb',
     parts: [
       {
@@ -43,7 +43,7 @@ const poleTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails' | '
   },
   {
     category: 'poles',
-    categories: ['poles'],
+    decorations: ['poles'],
     path: '/pole2.glb',
     parts: [
       {
@@ -109,7 +109,7 @@ const poleTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails' | '
   },
   {
     category: 'poles',
-    categories: ['poles'],
+    decorations: ['poles'],
     path: '/weather_head_1.glb',
     parts: [
       {
@@ -137,7 +137,7 @@ const poleTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails' | '
   },
   {
     category: 'cables',
-    categories: ['cables'],
+    decorations: ['cables'],
     path: null,
     type: 'cable-1',
   },

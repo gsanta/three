@@ -12,16 +12,16 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
-CREATE TABLE "BlockTemplate" (
+CREATE TABLE "BlockTye" (
     "id" SERIAL NOT NULL,
     "category" TEXT NOT NULL,
-    "categories" JSONB NOT NULL DEFAULT '[]',
+    "decorations" JSONB NOT NULL DEFAULT '[]',
     "parts" JSONB,
     "partDetails" JSONB,
     "path" TEXT,
     "type" TEXT NOT NULL,
 
-    CONSTRAINT "BlockTemplate_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "BlockTye_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -39,7 +39,7 @@ CREATE TABLE "Snapshot" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "BlockTemplate_type_key" ON "BlockTemplate"("type");
+CREATE UNIQUE INDEX "BlockTye_type_key" ON "BlockTye"("type");
 
 -- AddForeignKey
 ALTER TABLE "Snapshot" ADD CONSTRAINT "Snapshot_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;

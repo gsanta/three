@@ -2,7 +2,7 @@ import { Given, Then, When } from '@cucumber/cucumber';
 import assert from 'assert';
 import { Vector3 } from 'three';
 import { store } from '@/client/common/utils/store';
-import { setSelectedGeometry } from '@/client/editor/stores/template/templateSlice';
+import { setSelectedGeometry } from '@/client/editor/stores/blockType/blockTypeSlice';
 import { setSelectedTool, updateSelectTool } from '@/client/editor/stores/tool/toolSlice';
 import ToolName from '@/client/editor/types/ToolName';
 import ExtendedWorld from './ExtendedWorld';

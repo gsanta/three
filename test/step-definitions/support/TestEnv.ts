@@ -15,7 +15,7 @@ import GroupTool from '@/client/group/GroupTool';
 import RayTool from '@/client/editor/controllers/tools/RayTool';
 import SelectTool from '@/client/editor/controllers/tools/SelectTool';
 import ToolStore from '@/client/editor/stores/tool/ToolStore';
-import TemplateStore from '@/client/editor/stores/template/TemplateStore';
+import TemplateStore from '@/client/editor/stores/blockType/TemplateStore';
 import TestSceneService from './TestSceneService';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
@@ -25,7 +25,7 @@ import lampTempalteSeeds from 'prisma/seed/lampTemplateSeeds';
 import plantTempalteSeeds from 'prisma/seed/plantTemplateSeeds';
 import poleTempalteSeeds from 'prisma/seed/poleTemplateSeeds';
 import roadTempalteSeeds from 'prisma/seed/roadTemplateSeeds';
-import { setTemplates } from '@/client/editor/stores/template/templateSlice';
+import { setTemplates } from '@/client/editor/stores/blockType/blockTypeSlice';
 import BlockType from '@/client/editor/types/BlockType';
 
 type TestEnv = {

@@ -28,8 +28,8 @@ export type ModelPartDetail = {
 
 type BlockType<S extends ShapeType = ShapeType> = {
   category: string;
-  categories: BlockCategory[];
   color: [number, number, number];
+  decorations: BlockCategory[];
   geometry: S;
   position: [number, number, number];
   scale: [number, number, number];

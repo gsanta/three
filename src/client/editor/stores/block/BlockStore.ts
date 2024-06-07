@@ -52,23 +52,23 @@ class BlockStore {
       throw new Error('Id is not defined');
     }
 
-    return this.store.getState().block.present.categories[category][id];
+    return this.store.getState().block.present.decorations[category][id];
   }
 
   getDecorations<T extends BlockCategory>(category: T) {
-    return this.store.getState().block.present.categories[category];
+    return this.store.getState().block.present.decorations[category];
   }
 
   getBlockSettings() {
-    return this.store.getState().template.present;
+    return this.store.getState().blockType;
   }
 
   getBlockTemplates() {
-    return this.store.getState().template.present.blocks;
+    return this.store.getState().blockType.blocks;
   }
 
   getTemplateByType(type: string) {
-    return this.store.getState().template.present.blocks.find((block) => block.type === type);
+    return this.store.getState().blockType.blocks.find((block) => block.type === type);
   }
 
   getRootBlockIds() {

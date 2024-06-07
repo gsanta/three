@@ -3,7 +3,7 @@ import ExtendedWorld from './ExtendedWorld';
 import { setSelectedTool } from '@/client/editor/stores/tool/toolSlice';
 import ToolName from '@/client/editor/types/ToolName';
 import { store } from '@/client/common/utils/store';
-import { setSelectedGeometry } from '@/client/editor/stores/template/templateSlice';
+import { setSelectedGeometry } from '@/client/editor/stores/blockType/blockTypeSlice';
 import { Vector3 } from 'three';
 import findClosestBlock from './helpers/findClosestBlock';
 

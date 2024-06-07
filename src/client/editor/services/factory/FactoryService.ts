@@ -37,7 +37,7 @@ class FactoryService {
 
     edit.create(block);
 
-    template.categories.forEach((categoryName: BlockCategory) => {
+    template.decorations.forEach((categoryName: BlockCategory) => {
       const category = factory.createCategory(block, {
         ...categoryOverrides[categoryName],
         category: categoryName,

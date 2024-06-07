@@ -1,13 +1,13 @@
 import { BlockTemplate, Prisma } from '@prisma/client';
 
-const plantTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'partDetails'> & {
-  categories: Prisma.JsonArray;
+const plantTempalteSeeds: (Omit<BlockTemplate, 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+  decorations: Prisma.JsonArray;
   parts: Prisma.JsonArray;
   partDetails?: Prisma.JsonObject;
 })[] = [
   {
-    categories: [],
     category: 'decorations',
+    decorations: [],
     path: '/tree.glb',
     parts: [
       {

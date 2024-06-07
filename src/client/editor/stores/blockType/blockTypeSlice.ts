@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import BlockType, { BlockName } from '../../types/BlockType';
+import BlockType from '../../types/BlockType';
 import Axis from '@/client/editor/types/Axis';
 import { RGBColor } from '@/client/editor/utils/colorUtils';
 import BlockSettings from '@/client/editor/types/BlockSettings';
@@ -9,7 +9,7 @@ import BlockUtils from '../../utils/BlockUtils';
 
 export type TransformType = 'move' | 'scale';
 
-export type BlockSettingsState = {
+export type BlockTypeState = {
   selectedBlockName: string;
   blocks: BlockType[];
   settings: Partial<Record<string, BlockSettings>>;
@@ -18,7 +18,7 @@ export type BlockSettingsState = {
   color: RGBColor;
 };
 
-export const initialBlockSettingsState: BlockSettingsState = {
+export const initialBlockTypeState: BlockTypeState = {
   selectedBlockName: 'building-base-1',
   blocks: [],
   settings: {},
@@ -27,9 +27,9 @@ export const initialBlockSettingsState: BlockSettingsState = {
   color: { r: 1, g: 1, b: 1 },
 };
 
-export const blockSettingsSlice = createSlice({
+export const blockTypeSlice = createSlice({
   name: 'frame',
-  initialState: initialBlockSettingsState,
+  initialState: initialBlockTypeState,
   reducers: {
     setBlockRotation(state, action: PayloadAction<{ axis: Axis; blockName: string; rotation: number }>) {
       const { axis, blockName, rotation } = action.payload;
@@ -63,6 +63,6 @@ export const blockSettingsSlice = createSlice({
 });
 
 export const { setBlockRotation, setColor, setSelectedGeometry, setSelectedTransformType, setTemplates } =
-  blockSettingsSlice.actions;
+  blockTypeSlice.actions;
 
-export default blockSettingsSlice.reducer;
+export default blockTypeSlice.reducer;

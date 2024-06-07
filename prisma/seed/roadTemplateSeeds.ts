@@ -1,13 +1,13 @@
 import { BlockTemplate, Prisma } from '@prisma/client';
 
-const roadTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'partDetails'> & {
-  categories: Prisma.JsonArray;
+const roadTempalteSeeds: (Omit<BlockTemplate, 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+  decorations: Prisma.JsonArray;
   parts: Prisma.JsonArray;
   partDetails: Prisma.JsonObject;
 })[] = [
   {
     category: 'roads',
-    categories: [],
+    decorations: [],
     parts: [
       {
         index: '#1',
@@ -55,8 +55,8 @@ const roadTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'p
     type: 'road-1',
   },
   {
-    categories: [],
     category: 'roads',
+    decorations: [],
     parts: [
       {
         index: '#1',
@@ -133,8 +133,8 @@ const roadTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'p
     type: 'road-2',
   },
   {
-    categories: [],
     category: 'roads',
+    decorations: [],
     path: '/road3.glb',
     parts: [
       {

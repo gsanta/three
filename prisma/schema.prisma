@@ -21,10 +21,10 @@ model User {
   snapshots Snapshot[]
 }
 
-model BlockTemplate {
+model BlockTye {
   id          Int     @id @default(autoincrement())
   category    String
-  categories  Json    @default("[]")
+  decorations Json    @default("[]")
   parts       Json?
   partDetails Json?
   path        String?

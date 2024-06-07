@@ -4,7 +4,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export type BlockState = {
   blocks: Record<string, Block>;
-  categories: BlockCategoryRecords;
+  decorations: BlockCategoryRecords;
   hovered?: {
     block: string;
     partIndex?: string;
@@ -21,7 +21,7 @@ export const initialBlockState: BlockState = {
   selectedBlocks: {},
   selectedRootBlockIds: [],
   selectedPartIndexes: {},
-  categories: {
+  decorations: {
     cables: {},
     decorations: {},
     devices: {},
@@ -63,7 +63,7 @@ export const blockSlice = createSlice({
 
       state.selectedBlocks = {};
       state.selectedPartIndexes = {};
-      state.categories = {
+      state.decorations = {
         cables: {},
         decorations: {},
         devices: {},
@@ -97,8 +97,8 @@ export const blockSlice = createSlice({
 
           if (block) {
             delete state.blocks[update.remove.id];
-            block.categories.forEach((category) => {
-              delete state.categories[category][update.remove.id];
+            block.decorations.forEach((category) => {
+              delete state.decorations[category][update.remove.id];
             });
           }
         } else if ('select' in update) {
@@ -145,7 +145,7 @@ export const blockSlice = createSlice({
             const { decoration } = update;
 
             if (decoration) {
-              state.categories[decoration.category][decoration.id] = decoration;
+              state.decorations[decoration.category][decoration.id] = decoration;
             }
           }
         }

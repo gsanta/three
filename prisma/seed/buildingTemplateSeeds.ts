@@ -1,13 +1,13 @@
 import { BlockTemplate, Prisma } from '@prisma/client';
 
-const buildingTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'partDetails'> & {
-  categories: Prisma.JsonArray;
+const buildingTempalteSeeds: (Omit<BlockTemplate, 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+  decorations: Prisma.JsonArray;
   parts: Prisma.JsonArray;
   partDetails?: Prisma.JsonObject;
 })[] = [
   {
-    categories: [],
     category: 'building-bases',
+    decorations: [],
     path: '/building_base_1.glb',
     parts: [
       {
@@ -95,8 +95,8 @@ const buildingTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' 
     type: 'building-base-1',
   },
   {
-    categories: [],
     category: 'walls',
+    decorations: [],
     path: '/wall_new.glb',
     parts: [
       {
@@ -109,8 +109,8 @@ const buildingTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' 
     type: 'wall-1',
   },
   {
-    categories: [],
     category: 'walls',
+    decorations: [],
     path: '/wall_door.glb',
     parts: [
       {
@@ -134,8 +134,8 @@ const buildingTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' 
     type: 'wall-door-1',
   },
   {
-    categories: [],
     category: 'walls',
+    decorations: [],
     path: '/roof1.glb',
     parts: [
       {

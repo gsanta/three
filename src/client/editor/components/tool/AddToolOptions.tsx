@@ -2,16 +2,16 @@ import { useAppDispatch, useAppSelector } from '../../../common/hooks/hooks';
 import { Box, FormControl, FormLabel } from '@chakra-ui/react';
 import RadioSwitchButton from '../../../common/components/RadioSwitchButton';
 import RadioSwitchGroup from '../../../common/components/RadioSwitchGroup';
-import { setBlockRotation, setSelectedGeometry } from '../../stores/template/templateSlice';
+import { setBlockRotation, setSelectedGeometry } from '../../stores/blockType/blockTypeSlice';
 import { BlockName } from '../../types/BlockType';
 import useTemplate from '../hooks/useTemplate';
 import RotationControl from './RotationControl';
 
 const AddToolOptions = () => {
-  const { blocks, selectedBlockName } = useAppSelector((state) => state.template.present);
+  const { blocks, selectedBlockName } = useAppSelector((state) => state.blockType);
   const selectedBlock = useTemplate(selectedBlockName);
 
-  const { settings, selectedSettings } = useAppSelector((state) => state.template.present);
+  const { settings, selectedSettings } = useAppSelector((state) => state.blockType);
   const blockSettings = selectedBlock && settings[selectedBlock.category];
   const selectedValues = selectedBlock && selectedSettings[selectedBlock.category];
 
