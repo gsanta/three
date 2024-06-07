@@ -6,7 +6,7 @@ import { useCallback, useEffect } from 'react';
 import SkyBox from './TheSkyBox';
 import api from '@/client/common/utils/api';
 import { useQuery } from '@tanstack/react-query';
-import { setTemplates } from '@/client/editor/stores/template/templateSlice';
+import { setTemplates } from '@/client/editor/stores/blockType/blockTypeSlice';
 import { useAppDispatch } from '@/client/common/hooks/hooks';
 
 const Canvas = () => {

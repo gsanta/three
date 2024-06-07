@@ -3,7 +3,7 @@ Feature: Lamp
     Given I have an empty canvas
     When I select tool 'add'
     And I select template 'lamp-1'
-    And I move pointer to 0,0.1,5
+    And I move pointer to '0,0.1,5'
     And I press pointer
     And I examine block at 0,0.1,5
     Then The device 'examined' is turned 'off'
@@ -14,7 +14,7 @@ Feature: Lamp
     Given I have an empty canvas
     When I select tool 'add'
     And I select template 'lamp-1'
-    And I move pointer to 0,0.1,5
+    And I move pointer to '0,0.1,5'
     And I press pointer
     And I examine block at 0,0.1,5
     And I turn on device 'examined'

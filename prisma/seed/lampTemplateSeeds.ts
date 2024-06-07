@@ -1,14 +1,13 @@
-import { BlockTemplate, Prisma } from '@prisma/client';
+import { BlockType, Prisma } from '@prisma/client';
 
-const lampTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'partDetails'> & {
-  categories: Prisma.JsonArray;
+const lampTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+  decorations: Prisma.JsonArray;
   parts: Prisma.JsonArray;
   partDetails?: Prisma.JsonObject;
 })[] = [
   {
-    categories: ['devices'],
-    category: 'decorations',
-    name: 'lamp-1',
+    category: 'lamps',
+    decorations: ['devices'],
     path: '/lamp1.glb',
     parts: [
       {
@@ -55,7 +54,7 @@ const lampTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'p
         isHidden: true,
       },
     },
-    type: 'lamps',
+    type: 'lamp-1',
   },
 ];
 

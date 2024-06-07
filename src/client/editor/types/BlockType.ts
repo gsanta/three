@@ -1,6 +1,6 @@
 import * as blocks from '../utils/blocks.json';
 import Axis from './Axis';
-import BlockCategory from './BlockCategory';
+import BlockDecoration from './BlockCategory';
 import Num3 from './Num3';
 
 export type BlockName = keyof typeof blocks.blocks;
@@ -21,16 +21,16 @@ export type ModelPart = {
 export type ModelPartDetail = {
   allowMovement?: Axis[];
   isHidden?: boolean;
+  isSelected?: boolean;
   orientation: number;
   role?: 'slot';
   type?: string;
 };
 
 type BlockType<S extends ShapeType = ShapeType> = {
-  category: BlockCategory;
-  categories: BlockCategory[];
-  name: BlockName;
+  category: string;
   color: [number, number, number];
+  decorations: BlockDecoration[];
   geometry: S;
   position: [number, number, number];
   scale: [number, number, number];

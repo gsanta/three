@@ -14,7 +14,7 @@ const isBoxMesh = (block: Block): block is Block<'box'> => block.geometry === 'b
 
 const MeshRenderer = (props: Omit<WrappedMeshProps, 'parent'>) => {
   const { block, meshProps, materialProps, selectedParts } = props;
-  const { blocks, categories } = useAppSelector((selector) => selector.block.present);
+  const { blocks, decorations: categories } = useAppSelector((selector) => selector.block.present);
 
   const parent = block.parent ? blocks[block.parent] : undefined;
 

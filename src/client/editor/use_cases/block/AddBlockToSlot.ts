@@ -1,18 +1,25 @@
 import SceneStore from '../../components/scene/SceneStore';
-import Edit from '../../services/update/Edit';
 import MeshUtils from '../../utils/MeshUtils';
 import MathUtils, { toDegree } from '../../utils/mathUtils';
 import FactoryService from '../../services/factory/FactoryService';
 import BlockStore from '../../stores/block/BlockStore';
+import TransactionService from '../../services/transaction/TransactionService';
 
 class AddBlockToSlot {
-  constructor(blockStore: BlockStore, factoryService: FactoryService, sceneStore: SceneStore) {
+  constructor(
+    blockStore: BlockStore,
+    factoryService: FactoryService,
+    sceneStore: SceneStore,
+    updateService: TransactionService,
+  ) {
     this.blockStore = blockStore;
     this.factoryService = factoryService;
     this.sceneStore = sceneStore;
+    this.updateService = updateService;
   }
 
-  perform(edit: Edit, targetBlockId: string, targetPartIndex: string, templateName: string) {
+  perform(targetBlockId: string, targetPartIndex: string, templateName: string) {
+    const edit = this.updateService.getTransaction();
     const targetBlock = this.blockStore.getBlocks()[targetBlockId];
 
     const mesh = this.sceneStore.getObj3d(targetBlock.id);
@@ -39,6 +46,8 @@ class AddBlockToSlot {
       children: [lastBlock.id],
       slotSources: [{ slotName: targetPartIndex, blockId: lastBlock.id }],
     });
+
+    edit.commit();
   }
 
   private blockStore: BlockStore;
@@ -46,6 +55,8 @@ class AddBlockToSlot {
   private factoryService: FactoryService;
 
   private sceneStore: SceneStore;
+
+  private updateService: TransactionService;
 }
 
 export default AddBlockToSlot;

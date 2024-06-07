@@ -5,7 +5,7 @@ import BlockType from '@/client/editor/types/BlockType';
 import Cable from '@/client/editor/types/block/Cable';
 import mergeDeep from '@/client/editor/utils/mergeDeep';
 import { PartialDeep } from 'type-fest';
-import BlockCategory, { BlockCategoryType } from '@/client/editor/types/BlockCategory';
+import BlockDecoration, { BlockCategoryType } from '@/client/editor/types/BlockCategory';
 
 class CableFactory extends BlockFactory {
   create(blockType: BlockType, overrides: Partial<Block> = {}) {
@@ -14,8 +14,8 @@ class CableFactory extends BlockFactory {
     return block;
   }
 
-  createCategory(block: Block, overrides: Partial<BlockCategoryType> & { category: BlockCategory }): Cable {
-    const cable: Cable = { points: [], end1: null, end2: null, ...overrides, category: 'cables', id: block.id };
+  createCategory(block: Block, overrides: Partial<BlockCategoryType> & { category: BlockDecoration }): Cable {
+    const cable: Cable = { end1: null, end2: null, ...overrides, category: 'cables', id: block.id };
     return cable;
   }
 

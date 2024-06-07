@@ -1,14 +1,13 @@
-import { BlockTemplate, Prisma } from '@prisma/client';
+import { BlockType, Prisma } from '@prisma/client';
 
-const buildingTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'partDetails'> & {
-  categories: Prisma.JsonArray;
+const buildingTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+  decorations: Prisma.JsonArray;
   parts: Prisma.JsonArray;
   partDetails?: Prisma.JsonObject;
 })[] = [
   {
-    categories: [],
     category: 'building-bases',
-    name: 'building-base-1',
+    decorations: [],
     path: '/building_base_1.glb',
     parts: [
       {
@@ -78,27 +77,31 @@ const buildingTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' 
     partDetails: {
       '#2': {
         orientation: 90,
+        type: 'placeholder',
       },
       '#4': {
         orientation: 270,
+        type: 'placeholder',
       },
       '#5': {
         orientation: 180,
+        type: 'placeholder',
       },
       '#6': {
         axes: ['y'],
+        type: 'placeholder',
       },
       '#7': {
         orientation: 180,
         allowMovement: ['y'],
+        type: 'placeholder',
       },
     },
-    type: 'building',
+    type: 'building-base-1',
   },
   {
-    categories: [],
     category: 'walls',
-    name: 'wall-1',
+    decorations: [],
     path: '/wall_new.glb',
     parts: [
       {
@@ -108,12 +111,11 @@ const buildingTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' 
         scale: [-3.718, -0.122, -3.718],
       },
     ],
-    type: 'walls',
+    type: 'wall-1',
   },
   {
-    categories: [],
     category: 'walls',
-    name: 'wall-door-1',
+    decorations: [],
     path: '/wall_door.glb',
     parts: [
       {
@@ -134,12 +136,11 @@ const buildingTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' 
         ],
       },
     ],
-    type: 'walls',
+    type: 'wall-door-1',
   },
   {
-    categories: [],
-    category: 'walls',
-    name: 'roof-1',
+    category: 'roofs',
+    decorations: [],
     path: '/roof1.glb',
     parts: [
       {
@@ -175,7 +176,7 @@ const buildingTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' 
         role: 'slot',
       },
     },
-    type: 'roofs',
+    type: 'roof-1',
   },
 ];
 

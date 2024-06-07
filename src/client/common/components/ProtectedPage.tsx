@@ -15,7 +15,7 @@ import SceneStore from '@/client/editor/components/scene/SceneStore';
 import RayTool from '@/client/editor/controllers/tools/RayTool';
 import ColorTool from '@/client/editor/controllers/tools/ColorTool';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
-import TemplateStore from '@/client/editor/stores/template/TemplateStore';
+import TemplateStore from '@/client/editor/stores/blockType/TemplateStore';
 import ToolStore from '@/client/editor/stores/tool/ToolStore';
 import SceneServiceImpl from '@/client/editor/components/scene/SceneServiceImpl';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';

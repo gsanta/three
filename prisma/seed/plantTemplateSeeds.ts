@@ -1,14 +1,13 @@
-import { BlockTemplate, Prisma } from '@prisma/client';
+import { BlockType, Prisma } from '@prisma/client';
 
-const plantTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'partDetails'> & {
-  categories: Prisma.JsonArray;
+const plantTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+  decorations: Prisma.JsonArray;
   parts: Prisma.JsonArray;
   partDetails?: Prisma.JsonObject;
 })[] = [
   {
-    categories: [],
     category: 'decorations',
-    name: 'tree-1',
+    decorations: [],
     path: '/tree.glb',
     parts: [
       {
@@ -33,7 +32,7 @@ const plantTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | '
         ],
       },
     ],
-    type: 'plants',
+    type: 'tree-1',
   },
 ];
 

@@ -1,14 +1,15 @@
 import { Then } from '@cucumber/cucumber';
 import ExtendedWorld from './ExtendedWorld';
-import MeshUtils from '@/client/editor/utils/MeshUtils';
-import { Vector3 } from 'three';
 import assert from 'assert';
 import isPositionCloseTo from './helpers/isPositionCloseTo';
 import { Pins } from '@/client/editor/types/block/Pole';
+import { checkBlockExists, checkDecorationExists, checkPosition } from './helpers/checks';
+import Cable from '@/client/editor/types/block/Cable';
 
 Then(
-  'cable for block {string} and pin {string} ends at position {float},{float},{float}',
-  function (this: ExtendedWorld, blockId: string, pin: string, x: number, y: number, z: number) {
+  'cable for block {string} and pin {string} ends at position {string}',
+  function (this: ExtendedWorld, blockId: string, pin: string, position: string) {
+    const [x, y, z] = checkPosition.call(this, position);
     const cables = Object.values(this.env.blockStore.getDecorations('cables'));
 
     const realBlockId = blockId === 'examined' ? this.env.testScene.storedBlockId || '' : blockId;
@@ -23,15 +24,30 @@ Then(
       throw new Error(`Cable for block ${realBlockId} in pin ${pin} not found.`);
     }
 
-    const blockMesh = this.env.sceneStore.getMesh(realBlockId);
-    const actual = new Vector3();
-    MeshUtils.findByName(blockMesh, pin).getWorldPosition(actual);
+    const cableEnd = cable.end1?.device === realBlockId ? cable.end1 : cable.end2;
 
-    const isClose = isPositionCloseTo([x, y, z], [actual.x, actual.y, actual.z]);
+    if (!cableEnd) {
+      throw new Error("Shouldn't happen");
+    }
 
-    assert.ok(isClose, `Expected (${x}, ${y}, ${z}) to be close to (${actual.x}, ${actual.y}, ${actual.z})`);
+    const isClose = isPositionCloseTo([x, y, z], cableEnd.point);
+
+    assert.ok(isClose, `Expected (${x}, ${y}, ${z}) to be close to (${cableEnd.point.join(', ')})`);
   },
 );
+
+Then('cable {string} ends at position {string}', function (this: ExtendedWorld, blockId: string, posStr: string) {
+  const cable = checkDecorationExists.call(this, 'cables', blockId) as Cable;
+  const [x, y, z] = checkPosition.call(this, posStr);
+
+  const isClose1 = cable.end1 ? isPositionCloseTo([x, y, z], cable.end1.point) : false;
+  const isClose2 = cable.end2 ? isPositionCloseTo([x, y, z], cable.end2.point) : false;
+
+  assert.ok(
+    isClose1 || isClose2,
+    `Expected cable to end at (${x}, ${y}, ${z}), but ends are end1: (${cable.end1?.point.join(',')}), end2: (${cable.end2?.point.join(',')})`,
+  );
+});
 
 Then('pin {string} of block {string} is empty', function (this: ExtendedWorld, pin: string, blockId: string) {
   const realBlockId = blockId === 'examined' ? this.env.testScene.storedBlockId || '' : blockId;

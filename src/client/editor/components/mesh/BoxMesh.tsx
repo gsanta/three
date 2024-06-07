@@ -15,7 +15,7 @@ const BoxMesh = ({ block: meshInfo, meshProps, materialProps, parent }: WrappedM
       scale={meshInfo.scale}
       {...meshProps}
       key={meshInfo.id}
-      name={meshInfo.name}
+      name={meshInfo.type}
       ref={ref}
       userData={{ modelId: meshInfo.id }}
     >

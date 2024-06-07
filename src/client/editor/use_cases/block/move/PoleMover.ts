@@ -1,12 +1,10 @@
-import { Pins, maxPolePinNumber } from '@/client/editor/types/block/Pole';
 import Num3 from '@/client/editor/types/Num3';
 import BlockMover from './BlockMover';
 import Block from '@/client/editor/types/Block';
 import Edit from '../../../services/update/Edit';
 import SceneStore from '../../../components/scene/SceneStore';
-import MeshUtils from '@/client/editor/utils/MeshUtils';
-import { Vector3 } from 'three';
 import BlockStore from '../../../stores/block/BlockStore';
+import { addVector } from '@/client/editor/utils/vectorUtils';
 
 class PoleMover extends BlockMover {
   constructor(store: BlockStore, scene: SceneStore) {
@@ -15,43 +13,50 @@ class PoleMover extends BlockMover {
     this.store = store;
   }
 
-  move(edit: Edit, pole: Block) {
+  move(edit: Edit, pole: Block, dragDelta: Num3) {
     const decoration = this.store.getDecoration(pole.category as 'poles', pole.id);
 
-    for (let i = 1; i <= maxPolePinNumber; i++) {
-      const cables = decoration.pins[`pin${i}` as Pins];
+    Object.keys(decoration.pins).forEach((key) => {
+      const cables = decoration.pins[key];
       cables?.wires.forEach((cable) => {
-        this.moveCable(edit, cable, `pin${i}`);
+        this.moveCable(edit, cable, pole, dragDelta);
       });
-    }
+    });
   }
 
-  private moveCable(edit: Edit, cableId: string, pinName: string) {
-    const cable = this.store.getBlocks()[cableId];
+  private moveCable(edit: Edit, cableId: string, pole: Block, dragDelta: Num3) {
+    const cable = this.store.getDecoration('cables', cableId);
 
-    const poles = cable.dependsOn
-      .filter((id) => this.store.getBlocks()[id].category === 'poles')
-      .map((id) => this.store.getBlocks()[id]);
+    const endName = cable.end1?.device === pole.id ? 'end1' : 'end2';
+    const end = cable[endName];
 
-    const pole1Mesh = this.scene.getObj3d(poles[0].id);
-    const pin1Mesh = MeshUtils.findByName(pole1Mesh, pinName);
+    if (!end) {
+      return;
+    }
+    // const pole1Id = cable.end1?.device;
+    // const pin1Index = cable.end1?.pin;
+    // const pole2Id = cable.end2?.device;
+    // const pin2Index = cable.end2?.pin;
 
-    const pole2Mesh = this.scene.getObj3d(poles[1].id);
-    const pin2Mesh = MeshUtils.findByName(pole2Mesh, pinName);
+    // const pole1Mesh = this.scene.getObj3d(pole1Id || '');
+    // const pin1Mesh = MeshUtils.findByName(pole1Mesh, pin1Index || '');
 
-    const vec = new Vector3();
-    pin1Mesh.getWorldPosition(vec);
+    // const pole2Mesh = this.scene.getObj3d(pole2Id || '');
+    // const pin2Mesh = MeshUtils.findByName(pole2Mesh, pin2Index);
 
-    const vec2 = new Vector3();
-    pin2Mesh.getWorldPosition(vec2);
+    // const vec = new Vector3();
+    // pin1Mesh.getWorldPosition(vec);
 
-    const newPoints = [[vec.x, vec.y, vec.z] as Num3, [vec2.x, vec2.y, vec2.z] as Num3];
+    // const vec2 = new Vector3();
+    // pin2Mesh.getWorldPosition(vec2);
 
     edit.updateDecoration(
       'cables',
       cableId,
       {
-        points: newPoints,
+        [endName]: {
+          point: addVector(end.point, dragDelta),
+        },
       },
       { arrayMergeStrategy: 'replace' },
     );

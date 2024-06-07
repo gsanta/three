@@ -1,14 +1,13 @@
-import { BlockTemplate, Prisma } from '@prisma/client';
+import { BlockType, Prisma } from '@prisma/client';
 
-const roadTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'partDetails'> & {
-  categories: Prisma.JsonArray;
+const roadTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+  decorations: Prisma.JsonArray;
   parts: Prisma.JsonArray;
   partDetails: Prisma.JsonObject;
 })[] = [
   {
     category: 'roads',
-    categories: [],
-    name: 'road-1',
+    decorations: [],
     parts: [
       {
         index: '#1',
@@ -46,19 +45,20 @@ const roadTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'p
     partDetails: {
       '#3': {
         role: 'slot',
+        type: 'placeholder',
       },
       '#4': {
         role: 'slot',
         orientation: 180,
+        type: 'placeholder',
       },
     },
     path: '/road1.glb',
-    type: 'roads',
+    type: 'road-1',
   },
   {
-    categories: [],
     category: 'roads',
-    name: 'road-2',
+    decorations: [],
     parts: [
       {
         index: '#1',
@@ -117,27 +117,31 @@ const roadTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'p
     partDetails: {
       '#3': {
         role: 'slot',
+        type: 'placeholder',
       },
       '#4': {
         role: 'slot',
         orientation: 180,
+        type: 'placeholder',
       },
       '#5': {
         role: 'slot',
         orientation: 90,
+
+        type: 'placeholder',
       },
       '#6': {
         role: 'slot',
         orientation: 270,
+        type: 'placeholder',
       },
     },
     path: '/road2.glb',
-    type: 'roads',
+    type: 'road-2',
   },
   {
-    categories: [],
     category: 'roads',
-    name: 'road-3',
+    decorations: [],
     path: '/road3.glb',
     parts: [
       {
@@ -178,13 +182,15 @@ const roadTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'p
       '#3': {
         role: 'slot',
         orientation: 180,
+        type: 'placeholder',
       },
       '#4': {
         role: 'slot',
         orientation: 90,
+        type: 'placeholder',
       },
     },
-    type: 'roads',
+    type: 'road-3',
   },
 ];
 

@@ -1,8 +1,8 @@
-import BlockCategory from './BlockCategory';
+import BlockDecoration from './BlockCategory';
 import Num3 from './Num3';
 
 type BlockSettings = {
-  category: BlockCategory;
+  category: BlockDecoration;
   rotation: {
     x: number[];
     y: number[];
@@ -19,7 +19,7 @@ type BlockSettings = {
 };
 
 export const defaultBlockSettings: BlockSettings = {
-  category: '' as unknown as BlockCategory,
+  category: '' as unknown as BlockDecoration,
   rotation: {
     x: [0],
     y: [0],
