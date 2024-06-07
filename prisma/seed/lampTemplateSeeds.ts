@@ -7,8 +7,7 @@ const lampTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'p
 })[] = [
   {
     categories: ['devices'],
-    category: 'decorations',
-    name: 'lamp-1',
+    category: 'lamps',
     path: '/lamp1.glb',
     parts: [
       {
@@ -55,7 +54,7 @@ const lampTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'p
         isHidden: true,
       },
     },
-    type: 'lamps',
+    type: 'lamp-1',
   },
 ];
 

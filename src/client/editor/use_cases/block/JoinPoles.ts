@@ -15,15 +15,15 @@ class JoinPoles {
 
   join(pole1: Block, pole2: Block) {
     let pairs: [string, string][] = [];
-    if (pole1.type === 'poles' && pole2.type === 'poles') {
+    if (pole1.category === 'poles' && pole2.category === 'poles') {
       pairs = [
         ['#2', '#2'],
         ['#3', '#3'],
         ['#4', '#4'],
       ];
-    } else if (pole1.type === 'weather-heads' && pole2.type === 'poles') {
+    } else if (pole1.category === 'weather-heads' && pole2.category === 'poles') {
       pairs = [['#2', '#5']];
-    } else if (pole1.type === 'poles' && pole2.type === 'weather-heads') {
+    } else if (pole1.category === 'poles' && pole2.category === 'weather-heads') {
       pairs = [['#2', '#5']];
     }
     pairs.forEach(([pinName1, pinName2]) => this.joinPins(pole1, pole2, pinName1, pinName2));

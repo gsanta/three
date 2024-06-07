@@ -1,15 +1,10 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import BlockType, { BlockName } from '../../types/BlockType';
-import parseBlocks from '../../utils/parseBlocks';
 import Axis from '@/client/editor/types/Axis';
-import blocks from '@/client/editor/utils/blocks.json';
 import { RGBColor } from '@/client/editor/utils/colorUtils';
 import BlockSettings from '@/client/editor/types/BlockSettings';
-import parseBlockSettings from '../../utils/parseBlockSettings';
 import VectorUtils from '@/client/editor/utils/vectorUtils';
-import { PartialDeep } from 'type-fest';
 import BlockSelectedSettings from '@/client/editor/types/BlockSelectedSettings';
-import BlockCategory from '@/client/editor/types/BlockCategory';
 import BlockUtils from '../../utils/BlockUtils';
 
 export type TransformType = 'move' | 'scale';
@@ -23,12 +18,11 @@ export type BlockSettingsState = {
   color: RGBColor;
 };
 
-const parsedBlocks = parseBlocks([] as Parameters<typeof parseBlocks>[0]);
-
 export const initialBlockSettingsState: BlockSettingsState = {
   selectedBlockName: 'building-base-1',
-  blocks: parsedBlocks,
-  ...parseBlockSettings(blocks.settings as (PartialDeep<BlockSettings> & { category: BlockCategory })[], parsedBlocks),
+  blocks: [],
+  settings: {},
+  selectedSettings: {},
   selectedTransformType: 'move',
   color: { r: 1, g: 1, b: 1 },
 };
@@ -37,7 +31,7 @@ export const blockSettingsSlice = createSlice({
   name: 'frame',
   initialState: initialBlockSettingsState,
   reducers: {
-    setBlockRotation(state, action: PayloadAction<{ axis: Axis; blockName: BlockName; rotation: number }>) {
+    setBlockRotation(state, action: PayloadAction<{ axis: Axis; blockName: string; rotation: number }>) {
       const { axis, blockName, rotation } = action.payload;
       const block = BlockUtils.getBlock(state.blocks, blockName);
       const axisIndex = VectorUtils.getAxisIndex(axis);
@@ -63,7 +57,7 @@ export const blockSettingsSlice = createSlice({
         rotation: block.rotation || [0, 0, 0],
         scale: block.scale || [1, 1, 1],
       }));
-      state.selectedBlockName = state.blocks[0].name;
+      state.selectedBlockName = state.blocks[0].type;
     },
   },
 });

@@ -8,7 +8,6 @@ const roadTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'p
   {
     category: 'roads',
     categories: [],
-    name: 'road-1',
     parts: [
       {
         index: '#1',
@@ -53,12 +52,11 @@ const roadTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'p
       },
     },
     path: '/road1.glb',
-    type: 'roads',
+    type: 'road-1',
   },
   {
     categories: [],
     category: 'roads',
-    name: 'road-2',
     parts: [
       {
         index: '#1',
@@ -132,12 +130,11 @@ const roadTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'p
       },
     },
     path: '/road2.glb',
-    type: 'roads',
+    type: 'road-2',
   },
   {
     categories: [],
     category: 'roads',
-    name: 'road-3',
     path: '/road3.glb',
     parts: [
       {
@@ -184,7 +181,7 @@ const roadTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | 'p
         orientation: 90,
       },
     },
-    type: 'roads',
+    type: 'road-3',
   },
 ];
 

@@ -8,7 +8,7 @@ class Ungroup {
 
   execute(ids: string[], edit: Edit) {
     ids.forEach((blockId) => {
-      if (this.blocks.getBlocks()[blockId].name === 'group') {
+      if (this.blocks.getBlocks()[blockId].type === 'group') {
         this.ungroupedIds.push(...this.blocks.getBlocks()[blockId].children);
 
         this.blocks.getBlocks()[blockId].children.forEach((id) => edit.updateBlock(id, { parent: undefined }));

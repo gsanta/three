@@ -56,7 +56,7 @@ class AddBlock {
 
   private updateService: TransactionService;
 
-  private adders: Partial<Record<BlockCategory, BlockAdder>>;
+  private adders: Partial<Record<string, BlockAdder>>;
 
   private blockId?: string;
 }

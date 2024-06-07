@@ -7,8 +7,7 @@ const poleTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails' | '
 })[] = [
   {
     category: 'poles',
-    categories: ['pole'],
-    name: 'pole-1',
+    categories: ['poles'],
     path: '/pole.glb',
     parts: [
       {
@@ -40,12 +39,11 @@ const poleTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails' | '
         index: '#4',
       },
     ],
-    type: 'poles',
+    type: 'pole-1',
   },
   {
     category: 'poles',
-    categories: ['pole'],
-    name: 'pole-2',
+    categories: ['poles'],
     path: '/pole2.glb',
     parts: [
       {
@@ -107,12 +105,11 @@ const poleTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails' | '
         type: 'pin',
       },
     },
-    type: 'poles',
+    type: 'pole-2',
   },
   {
     category: 'poles',
     categories: ['poles'],
-    name: 'weather-head-1',
     path: '/weather_head_1.glb',
     parts: [
       {
@@ -136,14 +133,13 @@ const poleTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails' | '
         role: 'slot',
       },
     },
-    type: 'weather-heads',
+    type: 'weather-head-1',
   },
   {
     category: 'cables',
     categories: ['cables'],
-    name: 'cable-1',
     path: null,
-    type: 'cables',
+    type: 'cable-1',
   },
 ];
 

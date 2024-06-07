@@ -46,7 +46,7 @@ class Edit {
     this.updates.forEach((update) => {
       if ('type' in update && update.type === 'update' && 'decoration' in update) {
         const block = this.store.getBlock(update.decoration.id);
-        this.updaters[block?.type]?.onUpdateDecorators(this, update.decoration);
+        this.updaters[block?.category]?.onUpdateDecorators(this, update.decoration);
       }
     });
 

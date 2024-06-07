@@ -8,7 +8,6 @@ const buildingTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' 
   {
     categories: [],
     category: 'building-bases',
-    name: 'building-base-1',
     path: '/building_base_1.glb',
     parts: [
       {
@@ -93,12 +92,11 @@ const buildingTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' 
         allowMovement: ['y'],
       },
     },
-    type: 'building',
+    type: 'building-base-1',
   },
   {
     categories: [],
     category: 'walls',
-    name: 'wall-1',
     path: '/wall_new.glb',
     parts: [
       {
@@ -108,12 +106,11 @@ const buildingTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' 
         scale: [-3.718, -0.122, -3.718],
       },
     ],
-    type: 'walls',
+    type: 'wall-1',
   },
   {
     categories: [],
     category: 'walls',
-    name: 'wall-door-1',
     path: '/wall_door.glb',
     parts: [
       {
@@ -134,12 +131,11 @@ const buildingTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' 
         ],
       },
     ],
-    type: 'walls',
+    type: 'wall-door-1',
   },
   {
     categories: [],
     category: 'walls',
-    name: 'roof-1',
     path: '/roof1.glb',
     parts: [
       {
@@ -175,7 +171,7 @@ const buildingTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' 
         role: 'slot',
       },
     },
-    type: 'roofs',
+    type: 'roof-1',
   },
 ];
 

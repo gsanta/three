@@ -46,7 +46,7 @@ class MoveBlock {
 
   private update: TransactionService;
 
-  private movers: Partial<Record<BlockCategory, BlockMover>> = {};
+  private movers: Partial<Record<string, BlockMover>> = {};
 
   private baseMover: BaseMover;
 

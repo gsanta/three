@@ -97,7 +97,9 @@ export const blockSlice = createSlice({
 
           if (block) {
             delete state.blocks[update.remove.id];
-            delete state.categories[block.category][update.remove.id];
+            block.categories.forEach((category) => {
+              delete state.categories[category][update.remove.id];
+            });
           }
         } else if ('select' in update) {
           if (update.select === null) {

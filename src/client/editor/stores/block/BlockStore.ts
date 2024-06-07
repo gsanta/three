@@ -67,8 +67,8 @@ class BlockStore {
     return this.store.getState().template.present.blocks;
   }
 
-  getTemplateByName(name: string) {
-    return this.store.getState().template.present.blocks.find((block) => block.name === name);
+  getTemplateByType(type: string) {
+    return this.store.getState().template.present.blocks.find((block) => block.type === type);
   }
 
   getRootBlockIds() {

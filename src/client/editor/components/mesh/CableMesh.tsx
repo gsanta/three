@@ -23,7 +23,7 @@ const CableMesh = ({ cable, meshProps, block: meshInfo }: CableProps) => {
   }
 
   return (
-    <mesh {...meshProps} userData={{ modelId: meshInfo.id }} key={meshInfo.id} name={meshInfo.name} ref={ref}>
+    <mesh {...meshProps} userData={{ modelId: meshInfo.id }} key={meshInfo.id} name={meshInfo.type} ref={ref}>
       <tubeGeometry args={[curve, 70, 0.02, 50, false]} />
     </mesh>
   );

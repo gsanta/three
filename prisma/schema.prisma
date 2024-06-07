@@ -25,11 +25,10 @@ model BlockTemplate {
   id          Int     @id @default(autoincrement())
   category    String
   categories  Json    @default("[]")
-  name        String  @unique
   parts       Json?
   partDetails Json?
   path        String?
-  type        String  @default("unknown")
+  type        String  @unique
 }
 
 model Snapshot {

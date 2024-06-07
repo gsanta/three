@@ -23,7 +23,7 @@ const AddToolOptions = () => {
 
   const handleRotationChange = (axis: 'x' | 'y' | 'z', rotation: number) => {
     if (selectedBlock) {
-      dispatch(setBlockRotation({ axis, blockName: selectedBlock.name, rotation }));
+      dispatch(setBlockRotation({ axis, blockName: selectedBlock.type, rotation }));
     }
   };
 
@@ -35,8 +35,8 @@ const AddToolOptions = () => {
         </FormLabel>
         <RadioSwitchGroup defaultValue={selectedBlockName} name="geometry-selector" onChange={handleGeometryChange}>
           {blocks.map((block) => (
-            <RadioSwitchButton key={block.name} value={block.name}>
-              {block.name}
+            <RadioSwitchButton key={block.type} value={block.type}>
+              {block.type}
             </RadioSwitchButton>
           ))}
         </RadioSwitchGroup>

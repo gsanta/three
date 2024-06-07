@@ -16,7 +16,7 @@ class BlockUtils {
   }
 
   static getBlock(blocks: BlockType[], blockName: string) {
-    const block = blocks.find((b) => b.name === blockName);
+    const block = blocks.find((b) => b.type === blockName);
 
     if (!block) {
       throw new Error('Block not found: ' + blockName);

@@ -18,7 +18,7 @@ const SelectToolOptions = () => {
 
   const { blocks: templates, settings } = useAppSelector((state) => state.template.present);
 
-  const selectedTemplate = templates.find((b) => b.name === block?.name);
+  const selectedTemplate = templates.find((b) => b.type === block?.type);
 
   const {
     select: { templateName },
@@ -63,8 +63,8 @@ const SelectToolOptions = () => {
           </FormLabel>
           <RadioSwitchGroup defaultValue={templateName} name="geometry-selector" onChange={handleGeometryChange}>
             {templates.map((template) => (
-              <RadioSwitchButton key={template.name} value={template.name}>
-                {template.name}
+              <RadioSwitchButton key={template.type} value={template.type}>
+                {template.type}
               </RadioSwitchButton>
             ))}
           </RadioSwitchGroup>

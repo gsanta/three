@@ -12,9 +12,9 @@ class PoleEraser extends BlockEraser {
   }
 
   eraseDependent(edit: Edit, poleBlock: Block, dependent: Block) {
-    const pole = this.store.getDecoration(poleBlock.category as 'poles', poleBlock.id);
+    const pole = this.store.getDecoration('poles', poleBlock.id);
 
-    const cable = this.store.getDecoration(dependent.category as 'cables', dependent.id);
+    const cable = this.store.getDecoration('cables', dependent.id);
 
     const cableEnd = cable.end1?.device === poleBlock.id ? cable.end1 : cable.end2;
 

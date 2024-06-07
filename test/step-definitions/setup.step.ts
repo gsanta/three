@@ -69,6 +69,6 @@ Then(
       throw new Error(`Block was not found near position (${x},${y},${z})`);
     }
 
-    assert.equal(blockWithDistance[0].name, blockName);
+    assert.equal(blockWithDistance[0].type, blockName);
   },
 );

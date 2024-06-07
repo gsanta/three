@@ -18,7 +18,7 @@ class AddSlotToSlot {
   perform(edit: Edit, targetBlockId: string, targetPartIndex: string, templateName: string) {
     const block = this.blockStore.getBlocks()[targetBlockId];
 
-    const template = this.blockStore.getTemplateByName(templateName);
+    const template = this.blockStore.getTemplateByType(templateName);
 
     if (!template) {
       return;

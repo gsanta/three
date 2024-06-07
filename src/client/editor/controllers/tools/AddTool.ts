@@ -48,7 +48,7 @@ class AddTool extends HoverTool {
       return;
     }
 
-    const template = this.store.getTemplateByName(selectedBlockName);
+    const template = this.store.getTemplateByType(selectedBlockName);
 
     const hovered = this.blockStore.getHovered();
 
@@ -60,7 +60,7 @@ class AddTool extends HoverTool {
         edit,
         hovered?.block || '',
         hovered?.partIndex || '',
-        template?.name || '',
+        template?.type || '',
         clientX,
         clientY,
       );
@@ -107,9 +107,9 @@ class AddTool extends HoverTool {
     }
 
     const block = this.blockStore.getBlock(targetBlockId);
-    if (block.type === 'roads') {
+    if (block.category === 'roads') {
       return 'source-slot-target-slot';
-    } else if (block.type === 'roofs') {
+    } else if (block.category === 'roofs') {
       return 'source-origin-target-pointer-pos';
     }
     return 'source-origin-target-slot';

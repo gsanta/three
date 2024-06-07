@@ -76,7 +76,7 @@ class EraseBlock {
 
   private update: TransactionService;
 
-  private erasers: Partial<{ [K in keyof BlockCategories]: BlockEraser }> = {};
+  private erasers: Partial<{ [key: string]: BlockEraser }> = {};
 }
 
 export default EraseBlock;

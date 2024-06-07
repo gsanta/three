@@ -8,7 +8,6 @@ const plantTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | '
   {
     categories: [],
     category: 'decorations',
-    name: 'tree-1',
     path: '/tree.glb',
     parts: [
       {
@@ -33,7 +32,7 @@ const plantTempalteSeeds: (Omit<BlockTemplate, 'categories' | 'id' | 'parts' | '
         ],
       },
     ],
-    type: 'plants',
+    type: 'tree-1',
   },
 ];
 
