@@ -42,6 +42,8 @@ class TestStore {
     this.lastCreatedBlock = block;
   }
 
+  storedTestData: Record<string, unknown> = {};
+
   private plane: Mesh | undefined;
 
   private lastModifiedBlock: Block | undefined;

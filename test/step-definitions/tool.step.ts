@@ -7,6 +7,7 @@ import { setSelectedGeometry } from '@/client/editor/stores/blockType/blockTypeS
 import { Vector3 } from 'three';
 import findClosestBlock from './helpers/findClosestBlock';
 import MeshUtils from '@/client/editor/utils/MeshUtils';
+import { checkPosition } from './helpers/checks';
 
 When('I select tool {string}', function (this: ExtendedWorld, toolName: ToolName) {
   store.dispatch(setSelectedTool(toolName));
@@ -29,8 +30,9 @@ When('I press pointer over block {string}', function (this: ExtendedWorld, block
 });
 
 When(
-  'I press pointer over block {string} and part {string} at {float},{float},{float}',
-  function (this: ExtendedWorld, blockId: string, partIndex: string, x: number, y: number, z: number) {
+  'I press pointer over block {string} and part {string} at position {string}',
+  function (this: ExtendedWorld, blockId: string, partIndex: string, position: string) {
+    const [x, y, z] = checkPosition.call(this, position);
     const block = this.env.blockStore.getBlock(blockId);
 
     if (!block) {
@@ -52,7 +54,9 @@ When('I press pointer at {float},{float},{float}', function (this: ExtendedWorld
   this.env.toolHelper.pointerDown({ blockId: blockWithDistance?.[0].id });
 });
 
-When('I move pointer to {float},{float},{float}', function (this: ExtendedWorld, x: number, y: number, z: number) {
+When('I move pointer to {string}', function (this: ExtendedWorld, position: string) {
+  const [x, y, z] = checkPosition.call(this, position);
+
   this.env.toolHelper.pointerMove({ point: new Vector3(x, y, z) });
 });
 

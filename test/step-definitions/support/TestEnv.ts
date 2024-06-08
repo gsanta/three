@@ -85,7 +85,7 @@ export const setupTestEnv = (): TestEnv => {
         }
 
         if ('block' in u && u.block) {
-          sceneStore.addMesh(meshFactory.create(u.block) as unknown as Mesh, u.block.id);
+          sceneStore.addMesh(meshFactory.create(u.block, sceneStore) as unknown as Mesh, u.block.id);
           testStore.setLastModifiedBlock(u.block);
         }
       });
@@ -96,7 +96,7 @@ export const setupTestEnv = (): TestEnv => {
     actionCreator: update,
     effect: async (action) => {
       Object.values(action.payload.blocks || {}).forEach((block) => {
-        sceneStore.addMesh(meshFactory.create(block) as unknown as Mesh, block.id);
+        sceneStore.addMesh(meshFactory.create(block, sceneStore) as unknown as Mesh, block.id);
       });
     },
   });

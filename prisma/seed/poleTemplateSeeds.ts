@@ -8,42 +8,6 @@ const poleTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'part
   {
     category: 'poles',
     decorations: ['poles'],
-    path: '/pole.glb',
-    parts: [
-      {
-        geometryPath: 'Pole.geometry',
-        materialPath: 'Main',
-        position: [-0.008, -0.002, 0.01],
-        rotation: [-3.14159, 0, -3.14159],
-        scale: [-0.136, -4.869, -0.136],
-      },
-      {
-        geometryPath: 'Pin1.geometry',
-        materialPath: 'Metal',
-        position: [1.114, 9.336, 0.01],
-        scale: -0.074,
-        index: '#2',
-      },
-      {
-        geometryPath: 'Pin2.geometry',
-        materialPath: 'Metal',
-        position: [-0.475, 9.336, 0.01],
-        scale: -0.074,
-        index: '#3',
-      },
-      {
-        geometryPath: 'Pin3.geometry',
-        materialPath: 'Metal',
-        position: [-1.113, 9.336, 0.01],
-        scale: -0.074,
-        index: '#4',
-      },
-    ],
-    type: 'pole-1',
-  },
-  {
-    category: 'poles',
-    decorations: ['poles'],
     path: '/pole2.glb',
     parts: [
       {
@@ -105,7 +69,7 @@ const poleTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'part
         type: 'pin',
       },
     },
-    type: 'pole-2',
+    type: 'pole-1',
   },
   {
     category: 'weather-heads',

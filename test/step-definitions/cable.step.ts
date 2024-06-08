@@ -5,10 +5,12 @@ import { Vector3 } from 'three';
 import assert from 'assert';
 import isPositionCloseTo from './helpers/isPositionCloseTo';
 import { Pins } from '@/client/editor/types/block/Pole';
+import { checkPosition } from './helpers/checks';
 
 Then(
-  'cable for block {string} and pin {string} ends at position {float},{float},{float}',
-  function (this: ExtendedWorld, blockId: string, pin: string, x: number, y: number, z: number) {
+  'cable for block {string} and pin {string} ends at position {string}',
+  function (this: ExtendedWorld, blockId: string, pin: string, position: string) {
+    const [x, y, z] = checkPosition.call(this, position);
     const cables = Object.values(this.env.blockStore.getDecorations('cables'));
 
     const realBlockId = blockId === 'examined' ? this.env.testScene.storedBlockId || '' : blockId;

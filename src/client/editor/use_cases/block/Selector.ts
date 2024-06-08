@@ -1,4 +1,4 @@
-import { Object3D, Object3DEventMap } from 'three';
+import { Object3D, Object3DEventMap, Vector3 } from 'three';
 import SceneService from '../../components/scene/SceneService';
 import SceneStore from '../../components/scene/SceneStore';
 import BlockStore from '../../stores/block/BlockStore';
@@ -30,6 +30,9 @@ class Selector {
     if (!mesh) {
       return;
     }
+
+    const pos = new Vector3();
+    mesh.getWorldPosition(pos);
 
     const edit = this.updateService.getTransaction();
 

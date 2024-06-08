@@ -7,11 +7,11 @@ import { setSelectedTool, updateSelectTool } from '@/client/editor/stores/tool/t
 import ToolName from '@/client/editor/types/ToolName';
 import ExtendedWorld from './ExtendedWorld';
 import findClosestBlock from './helpers/findClosestBlock';
-import { BlockState, update } from '@/client/editor/stores/block/blockSlice';
 import AddBlock from '@/client/editor/use_cases/add/AddBlock';
 import Num3 from '@/client/editor/types/Num3';
 import AddBlockToSlot from '@/client/editor/use_cases/block/AddBlockToSlot';
 import AddBlockToPointerPos from '@/client/editor/use_cases/block/AddBlockToPointerPos';
+import JoinPoles from '@/client/editor/use_cases/block/JoinPoles';
 
 Given('I have an empty canvas', function (this: ExtendedWorld) {
   this.env.teardown();
@@ -42,6 +42,8 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
     this.env.update,
   );
 
+  const joinPoles = new JoinPoles(this.env.sceneStore, this.env.services.factory, this.env.update);
+
   const data = table.hashes() as SceneHash[];
 
   data.forEach((row) => {
@@ -49,7 +51,19 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
 
     this.env.sceneService.setUuid(row.ID);
 
-    if (row.PARENT === '-') {
+    const block = this.env.blockStore.getTemplateByType(row.TYPE);
+
+    if (!block) {
+      throw new Error(`Block type ${row.TYPE} not found.`);
+    }
+
+    if (block.category === 'cables') {
+      const block1Id = row.POS.split(':')[0];
+      const block2Id = row.POS.split(':')[1];
+      const block1 = this.env.blockStore.getBlock(block1Id);
+      const block2 = this.env.blockStore.getBlock(block2Id);
+      joinPoles.join(block1, block2);
+    } else if (row.PARENT === '-') {
       addBlock.perform(new Vector3(...pos), row.TYPE);
     } else if (row.PARENT.includes(':')) {
       const [parentId, partIndex] = row.PARENT.split(':');
@@ -57,7 +71,9 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
     } else {
       const intersectingParent = row.POS.split(':')[0];
       const intersectingParentMesh = this.env.sceneStore.getObj3d(intersectingParent);
-      const intersectingParentPos = this.env.blockStore.getBlock(intersectingParent).position;
+      const intersectingParentPos = new Vector3();
+      intersectingParentMesh.getWorldPosition(intersectingParentPos);
+      // ; this.env.blockStore.getBlock(intersectingParent).position;
       const relativePos = row.POS.split(':')[1]
         ?.split(',')
         .map((p) => Number(p)) as Num3;
@@ -72,9 +88,6 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
       addBlockToPointerPos.perform(row.PARENT, '#1', row.TYPE, 0, 0);
     }
   });
-
-  // const data = (await import('../data/house.json')) as unknown as Partial<BlockState>;
-  // store.dispatch(update(data));
 });
 
 export function addTemplateToPosition(this: ExtendedWorld, template: string, x: number, y: number, z: number) {

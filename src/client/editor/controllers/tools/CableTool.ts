@@ -43,11 +43,11 @@ class CableTool extends HoverTool {
   }
 
   onPointerDown(info: ToolInfo) {
-    const modelId = info.eventObject?.userData.modelId;
+    const blockId = info.eventObject?.userData.modelId;
     if (this.isDrawingCable) {
-      if (modelId) {
-        const mesh = this.scene.getObj3d(modelId);
-        const targetBlock = this.blockStore.getBlock(modelId);
+      if (blockId) {
+        const mesh = this.scene.getObj3d(blockId);
+        const targetBlock = this.blockStore.getBlock(blockId);
 
         const partName = this.checkPartIntersection(mesh, info.clientX, info.clientY);
 
