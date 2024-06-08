@@ -62,6 +62,7 @@ class JoinPoles {
       {
         dependents: [cable.id],
       },
+      'poles',
       {
         pins: {
           [pinName1]: {
@@ -76,6 +77,7 @@ class JoinPoles {
       {
         dependents: [cable.id],
       },
+      'poles',
       {
         pins: {
           [pinName2]: {

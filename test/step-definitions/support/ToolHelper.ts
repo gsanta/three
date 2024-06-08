@@ -11,6 +11,15 @@ class ToolHelper {
     this.sceneStore = sceneStore;
   }
 
+  pointerEnter({ blockId, partIndex }: { blockId: string; partIndex: string }) {
+    this.tool.onPointerEnter(
+      {
+        eventObject: this.getEventObject(blockId),
+      } as ThreeEvent<PointerEvent>,
+      partIndex,
+    );
+  }
+
   pointerMove({ blockId, point }: { blockId?: string; point?: Vector3 } = {}) {
     this.tool.onPointerMove({
       point,

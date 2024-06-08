@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Block from '@/client/editor/types/Block';
-import BlockCategory from '@/client/editor/types/BlockCategory';
+import BlockDecoration from '@/client/editor/types/BlockCategory';
 import Edit from '../../../services/update/Edit';
 import BlockStore from '../../../stores/block/BlockStore';
 import BlockEraser from './BlockEraser';

@@ -21,7 +21,7 @@ model User {
   snapshots Snapshot[]
 }
 
-model BlockTye {
+model BlockType {
   id          Int     @id @default(autoincrement())
   category    String
   decorations Json    @default("[]")

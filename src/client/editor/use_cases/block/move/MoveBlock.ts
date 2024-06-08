@@ -1,4 +1,3 @@
-import BlockCategory from '@/client/editor/types/BlockCategory';
 import BlockMover from './BlockMover';
 import PoleMover from './PoleMover';
 import TransactionService from '../../../services/transaction/TransactionService';

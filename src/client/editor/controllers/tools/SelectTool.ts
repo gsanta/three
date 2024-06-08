@@ -40,7 +40,7 @@ class SelectTool extends HoverTool {
     const block = this.store.getBlocks()[info.eventObject?.userData.modelId || ''];
 
     if (block) {
-      this.update.getTransaction().update(block.id, { isHovered: false }, {}).commit();
+      this.update.getTransaction().updateBlock(block.id, { isHovered: false }).commit();
     }
   }
 

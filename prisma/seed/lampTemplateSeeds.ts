@@ -1,6 +1,6 @@
-import { BlockTemplate, Prisma } from '@prisma/client';
+import { BlockType, Prisma } from '@prisma/client';
 
-const lampTempalteSeeds: (Omit<BlockTemplate, 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+const lampTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'partDetails'> & {
   decorations: Prisma.JsonArray;
   parts: Prisma.JsonArray;
   partDetails?: Prisma.JsonObject;

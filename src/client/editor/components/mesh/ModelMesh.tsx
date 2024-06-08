@@ -26,8 +26,8 @@ type ModelPartProps = {
   selectedParts: ModelMeshProps['selectedParts'];
 };
 
-const ModelMeshPart = ({ block, materials, nodes, onPointerEnter, part, selectedParts }: ModelPartProps) => {
-  const color = selectedParts.includes(part.index) ? 'green' : undefined;
+const ModelMeshPart = ({ block, materials, nodes, onPointerEnter, part }: ModelPartProps) => {
+  const color = block.partDetails[part.index]?.isSelected ? 'green' : undefined;
 
   if (block.partDetails[part.index]?.isHidden) {
     return null;
@@ -52,6 +52,14 @@ const ModelMeshPart = ({ block, materials, nodes, onPointerEnter, part, selected
     ) as unknown as Material;
   } else {
     material = materials[materialPaths[0]];
+
+    if (part.index === '#1' && block.isSelected) {
+      material.transparent = true;
+      material.opacity = 0.2;
+    } else {
+      material.transparent = false;
+      material.opacity = 1;
+    }
   }
 
   const geometry = geometryPaths.reduce(

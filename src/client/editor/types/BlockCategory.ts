@@ -2,7 +2,7 @@ import Cable from './block/Cable';
 import Device from './block/Device';
 import Pole from './block/Pole';
 
-export type BlockCategory = 'cables' | 'decorations' | 'devices' | 'poles' | 'roads' | 'walls' | 'building-bases';
+export type BlockDecoration = 'cables' | 'decorations' | 'devices' | 'poles' | 'roads' | 'walls' | 'building-bases';
 
 export type BlockCategoryType =
   | Cable
@@ -13,7 +13,7 @@ export type BlockCategoryType =
   | EmptyBlockCategory<'walls'>
   | EmptyBlockCategory<'building-bases'>;
 
-export type EmptyBlockCategory<T extends BlockCategory> = {
+export type EmptyBlockCategory<T extends BlockDecoration> = {
   category: T;
   id: string;
 };
@@ -36,4 +36,4 @@ export type BlockCategoryRecords = {
   [K in keyof BlockCategories]: Record<string, BlockCategories[K]>;
 };
 
-export default BlockCategory;
+export default BlockDecoration;

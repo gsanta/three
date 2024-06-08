@@ -8,7 +8,7 @@ import plantTempalteSeeds from './plantTemplateSeeds';
 const prisma = new PrismaClient();
 const main = async () => {
   for (const template of roadTemplateSeeds) {
-    await prisma.blockTemplate.upsert({
+    await prisma.blockType.upsert({
       where: { type: template.type },
       update: {},
       create: template,
@@ -16,7 +16,7 @@ const main = async () => {
   }
 
   for (const template of buildingTempalteSeeds) {
-    await prisma.blockTemplate.upsert({
+    await prisma.blockType.upsert({
       where: { type: template.type },
       update: {},
       create: template,
@@ -24,7 +24,7 @@ const main = async () => {
   }
 
   for (const template of lampTempalteSeeds) {
-    await prisma.blockTemplate.upsert({
+    await prisma.blockType.upsert({
       where: { type: template.type },
       update: {},
       create: template,
@@ -32,7 +32,7 @@ const main = async () => {
   }
 
   for (const template of poleTempalteSeeds) {
-    await prisma.blockTemplate.upsert({
+    await prisma.blockType.upsert({
       where: { type: template.type },
       update: {},
       create: template,
@@ -40,7 +40,7 @@ const main = async () => {
   }
 
   for (const template of plantTempalteSeeds) {
-    await prisma.blockTemplate.upsert({
+    await prisma.blockType.upsert({
       where: { type: template.type },
       update: {},
       create: template,

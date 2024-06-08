@@ -1,4 +1,4 @@
-import BlockType from '@/client/editor/types/BlockType';
+import BlockType, { ModelPartDetail } from '@/client/editor/types/BlockType';
 import { toRadian } from '@/client/editor/utils/mathUtils';
 import VectorUtils, { addVector } from '@/client/editor/utils/vectorUtils';
 import Num3 from '@/client/editor/types/Num3';
@@ -19,6 +19,12 @@ class BlockCreator {
     const y = pos[1]; // + positionData[1] + scale[1] / 2;
     const rotation = addVector(selectedRotation, rotationData).map((degree) => toRadian(degree));
 
+    const partDetails: Record<string, ModelPartDetail | undefined> = {};
+
+    Object.entries(block.partDetails).forEach(([key, val]) => {
+      partDetails[key] = { ...val, isSelected: val?.isSelected || false } as ModelPartDetail;
+    });
+
     return {
       ...block,
       children: settings.children || [],
@@ -30,6 +36,7 @@ class BlockCreator {
       slotSources: settings.slotSources || [],
       slotTarget: settings.slotTarget,
       id: id,
+      partDetails,
       position: [x, y, z],
       rotation: rotation as Num3,
       scale: scale,

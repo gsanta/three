@@ -3,7 +3,7 @@ import BlockFactory from './creators/BlockFactory';
 import PoleFactory from './creators/PoleFactory';
 import CableFactory from './creators/CableFactory';
 import Block from '../../types/Block';
-import BlockCategory, { PartialBlockCategories } from '../../types/BlockCategory';
+import BlockDecoration, { PartialBlockCategories } from '../../types/BlockCategory';
 import Edit from '../update/Edit';
 import BlockStore from '../../stores/block/BlockStore';
 import DefaultBlockFactory from './creators/DefaultBlockFactory';
@@ -37,7 +37,7 @@ class FactoryService {
 
     edit.create(block);
 
-    template.decorations.forEach((categoryName: BlockCategory) => {
+    template.decorations.forEach((categoryName: BlockDecoration) => {
       const category = factory.createCategory(block, {
         ...categoryOverrides[categoryName],
         category: categoryName,

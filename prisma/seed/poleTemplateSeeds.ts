@@ -1,6 +1,6 @@
-import { BlockTemplate, Prisma } from '@prisma/client';
+import { BlockType, Prisma } from '@prisma/client';
 
-const poleTempalteSeeds: (Omit<BlockTemplate, 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+const poleTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'partDetails'> & {
   decorations: Prisma.JsonArray;
   parts?: Prisma.JsonArray;
   partDetails?: Prisma.JsonObject;
@@ -108,7 +108,7 @@ const poleTempalteSeeds: (Omit<BlockTemplate, 'decorations' | 'id' | 'parts' | '
     type: 'pole-2',
   },
   {
-    category: 'poles',
+    category: 'weather-heads',
     decorations: ['poles'],
     path: '/weather_head_1.glb',
     parts: [

@@ -1,4 +1,4 @@
-import BlockCategory, { BlockCategories, BlockCategoryType } from '@/client/editor/types/BlockCategory';
+import BlockDecoration, { BlockCategories, BlockCategoryType } from '@/client/editor/types/BlockCategory';
 import { BlockUpdate, DecorationUpdate, UpdateBlocks, updateBlocks } from '@/client/editor/stores/block/blockSlice';
 import { PartialDeep } from 'type-fest';
 import Block, { BlockSlotSource } from '@/client/editor/types/Block';
@@ -59,19 +59,20 @@ class Edit {
     return this;
   }
 
-  createDecoration<T extends BlockCategory>(data: BlockCategories[T]): this {
+  createDecoration<T extends BlockDecoration>(data: BlockCategories[T]): this {
     this.updates.push({ type: 'update', decoration: data });
 
     return this;
   }
 
-  update<T extends BlockCategory>(id: string, block: Partial<Block>, decoration: PartialDeep<BlockCategories[T]>) {
-    const blocks = this.store.getBlocks();
-    const origBlock = blocks[id];
-    const category = origBlock.category as T;
-
+  update<T extends BlockDecoration>(
+    id: string,
+    block: Partial<Block>,
+    decorationType: BlockDecoration,
+    decoration: PartialDeep<BlockCategories[T]>,
+  ) {
     this.updateBlock(id, block);
-    this.updateDecoration(category, id, decoration);
+    this.updateDecoration(decorationType, id, decoration);
 
     return this;
   }
@@ -98,7 +99,7 @@ class Edit {
     return this;
   }
 
-  updateDecoration<T extends BlockCategory>(
+  updateDecoration<T extends BlockDecoration>(
     category: T,
     id: string,
     partial: PartialDeep<BlockCategoryType>,
@@ -187,14 +188,14 @@ class Edit {
     return [this.updates[index] as BlockUpdate | undefined, index];
   }
 
-  private getDecorationFromUpdates(id: string): [DecorationUpdate<BlockCategory> | undefined, number] {
+  private getDecorationFromUpdates(id: string): [DecorationUpdate<BlockDecoration> | undefined, number] {
     const index = this.updates.findIndex((update) => ('decoration' in update ? update.decoration.id === id : false));
 
     if (index === -1) {
       return [undefined, -1];
     }
 
-    return [this.updates[index] as DecorationUpdate<BlockCategory> | undefined, index];
+    return [this.updates[index] as DecorationUpdate<BlockDecoration> | undefined, index];
   }
 
   private isRemoved(id: string) {

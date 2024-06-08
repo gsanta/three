@@ -1,4 +1,3 @@
-import { BlockCategories } from '@/client/editor/types/BlockCategory';
 import BlockStore from '../../stores/block/BlockStore';
 import Edit from '../../services/update/Edit';
 import TransactionService from '../../services/transaction/TransactionService';

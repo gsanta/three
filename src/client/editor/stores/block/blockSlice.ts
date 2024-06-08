@@ -1,5 +1,5 @@
 import Block from '@/client/editor/types/Block';
-import BlockCategory, { BlockCategories, BlockCategoryRecords } from '@/client/editor/types/BlockCategory';
+import BlockDecoration, { BlockCategories, BlockCategoryRecords } from '@/client/editor/types/BlockCategory';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export type BlockState = {
@@ -32,13 +32,13 @@ export const initialBlockState: BlockState = {
   },
 };
 
-export type SpecificUpdate<T extends BlockCategory> = {
+export type SpecificUpdate<T extends BlockDecoration> = {
   id: string;
   key: T;
   val: BlockCategories[T];
 };
 
-export type DecorationUpdate<K extends BlockCategory> = {
+export type DecorationUpdate<K extends BlockDecoration> = {
   type: 'update';
   decoration: BlockCategories[K];
 };
@@ -48,9 +48,13 @@ export type BlockUpdate = { type: 'update'; block: Block };
 export type BlockSelect = { select: string | null; partIndex?: string };
 
 // Update type constrained to keys and values from BlockCategories
-export type UpdateBlock<K extends BlockCategory> = BlockUpdate | DecorationUpdate<K> | { remove: Block } | BlockSelect;
+export type UpdateBlock<K extends BlockDecoration> =
+  | BlockUpdate
+  | DecorationUpdate<K>
+  | { remove: Block }
+  | BlockSelect;
 
-export type UpdateBlocks = Array<UpdateBlock<BlockCategory>>;
+export type UpdateBlocks = Array<UpdateBlock<BlockDecoration>>;
 
 export const blockSlice = createSlice({
   name: 'block',
@@ -105,6 +109,11 @@ export const blockSlice = createSlice({
           if (update.select === null) {
             Object.keys(state.selectedBlocks).forEach((selectedBlock) => {
               state.blocks[selectedBlock].isSelected = false;
+              Object.values(state.blocks[selectedBlock].partDetails).forEach((val) => {
+                if (val) {
+                  val.isSelected = false;
+                }
+              });
             });
             state.selectedRootBlockIds = [];
             state.selectedPartIndexes = {};
@@ -118,6 +127,11 @@ export const blockSlice = createSlice({
               state.selectedPartIndexes[update.select] = [
                 ...new Set([...state.selectedPartIndexes[update.select], update.partIndex]),
               ];
+
+              const partDetail = state.blocks[update.select].partDetails[update.partIndex];
+              if (partDetail) {
+                partDetail.isSelected = true;
+              }
             }
             state.selectedBlocks[update.select] = true;
             state.blocks[update.select].isSelected = true;

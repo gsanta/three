@@ -1,6 +1,6 @@
-import { BlockTemplate, Prisma } from '@prisma/client';
+import { BlockType, Prisma } from '@prisma/client';
 
-const buildingTempalteSeeds: (Omit<BlockTemplate, 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+const buildingTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'partDetails'> & {
   decorations: Prisma.JsonArray;
   parts: Prisma.JsonArray;
   partDetails?: Prisma.JsonObject;
@@ -134,7 +134,7 @@ const buildingTempalteSeeds: (Omit<BlockTemplate, 'decorations' | 'id' | 'parts'
     type: 'wall-door-1',
   },
   {
-    category: 'walls',
+    category: 'roofs',
     decorations: [],
     path: '/roof1.glb',
     parts: [
