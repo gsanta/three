@@ -79,9 +79,7 @@ class ToolService {
     this.getTool(selectedTool)?.onDrag(this.info);
   }
 
-  onDragEnd(delta: Vector3) {
-    this.info.drag = delta.toArray();
-
+  onDragEnd() {
     const { selectedTool } = store.getState().tool;
     this.getTool(selectedTool)?.onDragEnd(this.info);
     this.info.drag = [0, 0, 0];

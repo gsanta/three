@@ -27,7 +27,7 @@ class CableTool extends HoverTool {
 
     this.factoryService = factoryService;
 
-    this.joinPoles = new JoinPoles(sceneStore, factoryService, update);
+    this.joinPoles = new JoinPoles(blockStore, sceneStore, factoryService, update);
 
     this.scene = sceneStore;
 
@@ -43,11 +43,11 @@ class CableTool extends HoverTool {
   }
 
   onPointerDown(info: ToolInfo) {
-    const modelId = info.eventObject?.userData.modelId;
+    const blockId = info.eventObject?.userData.modelId;
     if (this.isDrawingCable) {
-      if (modelId) {
-        const mesh = this.scene.getObj3d(modelId);
-        const targetBlock = this.blockStore.getBlock(modelId);
+      if (blockId) {
+        const mesh = this.scene.getObj3d(blockId);
+        const targetBlock = this.blockStore.getBlock(blockId);
 
         const partName = this.checkPartIntersection(mesh, info.clientX, info.clientY);
 
@@ -56,7 +56,8 @@ class CableTool extends HoverTool {
         const block2 = this.blockStore.getBlock(info.eventObject?.userData.modelId);
 
         if (targetBlock.partDetails[partName || '']?.type === 'pin') {
-          this.joinPoles.join(block1, block2);
+          const pairs: [string, string][] = block1.category === 'weather-heads' ? [['#2', '#5']] : [['#5', '#2']];
+          this.joinPoles.join(block1, block2, pairs);
         }
       }
     } else {
@@ -95,9 +96,13 @@ class CableTool extends HoverTool {
       return;
     }
 
-    const joinPoles = new JoinPoles(this.scene, this.factoryService, this.updateService);
+    const joinPoles = new JoinPoles(this.blockStore, this.scene, this.factoryService, this.updateService);
 
-    joinPoles.join(blocks[polesIds[0]], blocks[polesIds[1]]);
+    joinPoles.join(blocks[polesIds[0]], blocks[polesIds[1]], [
+      ['#2', '#2'],
+      ['#3', '#3'],
+      ['#4', '#4'],
+    ]);
   }
 
   private blockStore: BlockStore;

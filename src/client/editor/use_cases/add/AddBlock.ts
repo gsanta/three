@@ -1,7 +1,6 @@
 import { Vector3 } from 'three';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
-import BlockCategory from '../../types/BlockCategory';
 import BlockAdder from './adders/BlockAdder';
 import PoleAdder from './adders/PoleAdder';
 import SceneStore from '../../components/scene/SceneStore';
@@ -23,15 +22,9 @@ class AddBlock {
     };
   }
 
-  perform(pos: Vector3) {
-    const { selectedBlockName } = this.blockStore.getBlockSettings();
-
-    if (!selectedBlockName) {
-      return;
-    }
-
+  perform(pos: Vector3, blockType: string) {
     const edit = this.updateService.getTransaction();
-    this.factoryService.create(edit, selectedBlockName, { position: [pos.x, pos.y, pos.z] });
+    this.factoryService.create(edit, blockType, { position: [pos.x, pos.y, pos.z] });
     const blockId = edit.getLastBlock().id;
     edit.select(blockId).commit();
 
@@ -56,7 +49,7 @@ class AddBlock {
 
   private updateService: TransactionService;
 
-  private adders: Partial<Record<BlockCategory, BlockAdder>>;
+  private adders: Partial<Record<string, BlockAdder>>;
 
   private blockId?: string;
 }

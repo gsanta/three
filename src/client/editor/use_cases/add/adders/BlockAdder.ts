@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import BlockCategory from '@/client/editor/types/BlockCategory';
+import BlockDecoration from '@/client/editor/types/BlockCategory';
 
 abstract class BlockAdder {
-  category: BlockCategory;
+  category: BlockDecoration;
 
-  constructor(category: BlockCategory) {
+  constructor(category: BlockDecoration) {
     this.category = category;
   }
 

@@ -6,13 +6,18 @@ import { When, Then } from '@cucumber/cucumber';
 import assert from 'assert';
 import { Vector3 } from 'three';
 import ExtendedWorld from './ExtendedWorld';
+import findClosestBlock from './helpers/findClosestBlock';
 
 function selectBlockAtPosition(this: ExtendedWorld, x: number, y: number, z: number, partName?: string) {
   store.dispatch(setSelectedTool(ToolName.Select));
 
-  const block = this.env.blockStore
-    .getBlocksAsArray()
-    .find((currBlock) => currBlock.position[0] === x && currBlock.position[1] === y && currBlock.position[2] === z);
+  const blockWithDistance = findClosestBlock(this.env.blockStore.getBlocksAsArray(), [x, y, z]);
+
+  if (!blockWithDistance || blockWithDistance[1] > 1) {
+    throw new Error(`Block was not found near position (${x},${y},${z})`);
+  }
+
+  const block = blockWithDistance[0];
 
   if (!block) {
     throw new Error(`Block not found at position (${x},${y},${z})`);
@@ -29,7 +34,7 @@ function selectBlockAtPosition(this: ExtendedWorld, x: number, y: number, z: num
   this.env.toolHelper.pointerDown({ blockId: block.id });
 }
 
-When('I select a block at position {int},{int},{int} with part {string}', selectBlockAtPosition);
+When('I select a block at position {float},{float},{float} with part {string}', selectBlockAtPosition);
 
 When('I select a block at position {int},{int},{int}', function (this: ExtendedWorld, x: number, y: number, z: number) {
   selectBlockAtPosition.bind(this, x, y, z);

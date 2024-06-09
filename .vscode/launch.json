@@ -25,6 +25,28 @@
         "uriFormat": "%s",
         "action": "debugWithChrome"
       }
+    },
+    {
+        "name": "Cucumber all",
+        "type": "node",
+        "request": "launch",
+        "console": "integratedTerminal",
+        "program": "${workspaceRoot}/node_modules/@cucumber/cucumber/bin/cucumber-js",
+        "args": [
+            "${workspaceRoot}/test/**/*.feature",
+        ]
+    },
+    {
+        "name": "Cucumber @important",
+        "type": "node",
+        "request": "launch",
+        "console": "integratedTerminal",
+        "program": "${workspaceRoot}/node_modules/@cucumber/cucumber/bin/cucumber-js",
+        "args": [
+            "${workspaceRoot}/test/**/*.feature",
+            "--tags",
+            "@important"
+        ]
     }
   ]
 }

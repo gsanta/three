@@ -6,7 +6,7 @@ class TemplateStore {
   }
 
   getTemplates() {
-    return this.store.getState().template.present.blocks;
+    return this.store.getState().blockType.blocks;
   }
 
   private store: Store;

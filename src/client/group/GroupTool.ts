@@ -3,7 +3,7 @@ import ToolName from '../editor/types/ToolName';
 import Ungroup from './Ungroup';
 import Group from './Group';
 import BlockStore from '../editor/stores/block/BlockStore';
-import TemplateStore from '../editor/stores/template/TemplateStore';
+import TemplateStore from '../editor/stores/blockType/TemplateStore';
 import TransactionService from '../editor/services/transaction/TransactionService';
 
 class GroupTool extends Tool {

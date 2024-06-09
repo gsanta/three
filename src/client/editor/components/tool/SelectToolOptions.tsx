@@ -16,14 +16,14 @@ const SelectToolOptions = () => {
 
   const { tool } = useEditorContext();
 
-  const { blocks: templates, settings } = useAppSelector((state) => state.template.present);
+  const { blocks: templates, settings } = useAppSelector((state) => state.blockType);
 
-  const selectedTemplate = templates.find((b) => b.name === block?.name);
+  const selectedTemplate = templates.find((b) => b.type === block?.type);
 
   const {
     select: { templateName },
   } = useAppSelector((state) => state.tool);
-  const { selectedPartIndexes, categories } = useAppSelector((state) => state.block.present);
+  const { selectedPartIndexes, decorations: categories } = useAppSelector((state) => state.block.present);
   const blockSettings = settings[selectedTemplate?.category || ''];
   const hasSelectedPart = Object.keys(selectedPartIndexes).length;
 
@@ -63,8 +63,8 @@ const SelectToolOptions = () => {
           </FormLabel>
           <RadioSwitchGroup defaultValue={templateName} name="geometry-selector" onChange={handleGeometryChange}>
             {templates.map((template) => (
-              <RadioSwitchButton key={template.name} value={template.name}>
-                {template.name}
+              <RadioSwitchButton key={template.type} value={template.type}>
+                {template.type}
               </RadioSwitchButton>
             ))}
           </RadioSwitchGroup>
@@ -89,7 +89,7 @@ const SelectToolOptions = () => {
       )}
       <Button onClick={() => tool.getGroupTool().group()}>Group</Button>
       <Button onClick={() => tool.getGroupTool().ungroup()}>Ungroup</Button>
-      {block?.categories.map((category) => {
+      {block?.decorations.map((category) => {
         if (category === 'devices') {
           return <DeviceControl device={categories.devices[block.id]} />;
         }

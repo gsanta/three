@@ -1,5 +1,5 @@
 import { Store } from '@/client/common/utils/store';
-import BlockCategory from '@/client/editor/types/BlockCategory';
+import BlockDecoration from '@/client/editor/types/BlockCategory';
 
 class BlockStore {
   constructor(store: Store) {
@@ -28,9 +28,9 @@ class BlockStore {
 
   getRootBlock(blockId: string) {
     let block = this.getBlock(blockId);
-    do {
+    while (block.parent) {
       block = this.getBlock(block.parent);
-    } while (block.parent);
+    }
 
     return block;
   }
@@ -47,28 +47,28 @@ class BlockStore {
     return this.store.getState().block.present.selectedPartIndexes;
   }
 
-  getDecoration<T extends BlockCategory>(category: T, id?: string) {
+  getDecoration<T extends BlockDecoration>(category: T, id?: string) {
     if (!id) {
       throw new Error('Id is not defined');
     }
 
-    return this.store.getState().block.present.categories[category][id];
+    return this.store.getState().block.present.decorations[category][id];
   }
 
-  getDecorations<T extends BlockCategory>(category: T) {
-    return this.store.getState().block.present.categories[category];
+  getDecorations<T extends BlockDecoration>(category: T) {
+    return this.store.getState().block.present.decorations[category];
   }
 
   getBlockSettings() {
-    return this.store.getState().template.present;
+    return this.store.getState().blockType;
   }
 
   getBlockTemplates() {
-    return this.store.getState().template.present.blocks;
+    return this.store.getState().blockType.blocks;
   }
 
-  getTemplateByName(name: string) {
-    return this.store.getState().template.present.blocks.find((block) => block.name === name);
+  getTemplateByType(type: string) {
+    return this.store.getState().blockType.blocks.find((block) => block.type === type);
   }
 
   getRootBlockIds() {

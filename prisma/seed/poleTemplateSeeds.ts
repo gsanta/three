@@ -1,51 +1,13 @@
-import { BlockTemplate, Prisma } from '@prisma/client';
+import { BlockType, Prisma } from '@prisma/client';
 
-const poleTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails' | 'categories'> & {
-  categories: Prisma.JsonArray;
+const poleTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+  decorations: Prisma.JsonArray;
   parts?: Prisma.JsonArray;
   partDetails?: Prisma.JsonObject;
 })[] = [
   {
     category: 'poles',
-    categories: ['pole'],
-    name: 'pole-1',
-    path: '/pole.glb',
-    parts: [
-      {
-        geometryPath: 'Pole.geometry',
-        materialPath: 'Main',
-        position: [-0.008, -0.002, 0.01],
-        rotation: [-3.14159, 0, -3.14159],
-        scale: [-0.136, -4.869, -0.136],
-      },
-      {
-        geometryPath: 'Pin1.geometry',
-        materialPath: 'Metal',
-        position: [1.114, 9.336, 0.01],
-        scale: -0.074,
-        index: '#2',
-      },
-      {
-        geometryPath: 'Pin2.geometry',
-        materialPath: 'Metal',
-        position: [-0.475, 9.336, 0.01],
-        scale: -0.074,
-        index: '#3',
-      },
-      {
-        geometryPath: 'Pin3.geometry',
-        materialPath: 'Metal',
-        position: [-1.113, 9.336, 0.01],
-        scale: -0.074,
-        index: '#4',
-      },
-    ],
-    type: 'poles',
-  },
-  {
-    category: 'poles',
-    categories: ['pole'],
-    name: 'pole-2',
+    decorations: ['poles'],
     path: '/pole2.glb',
     parts: [
       {
@@ -107,12 +69,11 @@ const poleTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails' | '
         type: 'pin',
       },
     },
-    type: 'poles',
+    type: 'pole-1',
   },
   {
-    category: 'poles',
-    categories: ['poles'],
-    name: 'weather-head-1',
+    category: 'weather-heads',
+    decorations: ['poles'],
     path: '/weather_head_1.glb',
     parts: [
       {
@@ -134,16 +95,16 @@ const poleTempalteSeeds: (Omit<BlockTemplate, 'id' | 'parts' | 'partDetails' | '
     partDetails: {
       '#2': {
         role: 'slot',
+        type: 'pin',
       },
     },
-    type: 'weather-heads',
+    type: 'weather-head-1',
   },
   {
     category: 'cables',
-    categories: ['cables'],
-    name: 'cable-1',
+    decorations: ['cables'],
     path: null,
-    type: 'cables',
+    type: 'cable-1',
   },
 ];
 

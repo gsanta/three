@@ -36,9 +36,9 @@ class AddTool extends HoverTool {
 
     this.addBlock = new AddBlock(blockStore, factoryService, sceneStore, update);
 
-    this.addBlockToSlot = new AddBlockToSlot(blockStore, factoryService, sceneStore);
+    this.addBlockToSlot = new AddBlockToSlot(blockStore, factoryService, sceneStore, update);
     this.addSlotToSlot = new AddSlotToSlot(blockStore, factoryService, sceneStore);
-    this.addBlockToPointerPos = new AddBlockToPointerPos(blockStore, factoryService, sceneService, sceneStore);
+    this.addBlockToPointerPos = new AddBlockToPointerPos(blockStore, factoryService, sceneService, sceneStore, update);
   }
 
   onPointerDown({ clientX, clientY, pos }: ToolInfo) {
@@ -48,25 +48,22 @@ class AddTool extends HoverTool {
       return;
     }
 
-    const template = this.store.getTemplateByName(selectedBlockName);
+    const template = this.store.getTemplateByType(selectedBlockName);
 
     const hovered = this.blockStore.getHovered();
 
     const applyPosition = this.determineApplyPosition(hovered?.block);
 
     if (applyPosition === 'source-origin-target-pointer-pos') {
-      const edit = this.update.getTransaction();
       this.addBlockToPointerPos.perform(
-        edit,
         hovered?.block || '',
         hovered?.partIndex || '',
-        template?.name || '',
+        template?.type || '',
         clientX,
         clientY,
       );
-      edit.commit();
     } else if (applyPosition === 'source-origin-target-plane') {
-      this.addBlock.perform(pos);
+      this.addBlock.perform(pos, selectedBlockName);
     }
 
     this.executeAfterRender = true;
@@ -95,7 +92,7 @@ class AddTool extends HoverTool {
       this.addSlotToSlot.perform(edit, blockId, partIndex, templateName);
     } else if (applyPosition === 'source-origin-target-pointer-pos') {
     } else {
-      this.addBlockToSlot.perform(edit, blockId, partIndex, templateName);
+      this.addBlockToSlot.perform(blockId, partIndex, templateName);
     }
 
     edit.commit();
@@ -107,9 +104,9 @@ class AddTool extends HoverTool {
     }
 
     const block = this.blockStore.getBlock(targetBlockId);
-    if (block.type === 'roads') {
+    if (block.category === 'roads') {
       return 'source-slot-target-slot';
-    } else if (block.type === 'roofs') {
+    } else if (block.category === 'roofs') {
       return 'source-origin-target-pointer-pos';
     }
     return 'source-origin-target-slot';

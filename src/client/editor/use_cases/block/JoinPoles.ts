@@ -3,37 +3,29 @@ import { Vector3 } from 'three';
 import Block from '@/client/editor/types/Block';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import TransactionService from '../../services/transaction/TransactionService';
-import Num3 from '@/client/editor/types/Num3';
 import FactoryService from '../../services/factory/FactoryService';
+import BlockStore from '../../stores/block/BlockStore';
 
 class JoinPoles {
-  constructor(scene: SceneStore, factory: FactoryService, update: TransactionService) {
+  constructor(blockStore: BlockStore, scene: SceneStore, factory: FactoryService, update: TransactionService) {
+    this.blockStore = blockStore;
     this.factory = factory;
     this.scene = scene;
     this.update = update;
   }
 
-  join(pole1: Block, pole2: Block) {
-    let pairs: [string, string][] = [];
-    if (pole1.type === 'poles' && pole2.type === 'poles') {
-      pairs = [
-        ['#2', '#2'],
-        ['#3', '#3'],
-        ['#4', '#4'],
-      ];
-    } else if (pole1.type === 'weather-heads' && pole2.type === 'poles') {
-      pairs = [['#2', '#5']];
-    } else if (pole1.type === 'poles' && pole2.type === 'weather-heads') {
-      pairs = [['#2', '#5']];
-    }
+  join(pole1: Block, pole2: Block, pairs: [string, string][]) {
     pairs.forEach(([pinName1, pinName2]) => this.joinPins(pole1, pole2, pinName1, pinName2));
   }
 
-  private joinPins(pole1: Block, pole2: Block, pinName1: string, pinName2: string) {
-    const mesh1 = this.scene.getObj3d(pole1.id);
-    const mesh2 = this.scene.getObj3d(pole2.id);
+  private joinPins(poleBlock1: Block, poleBlock2: Block, pinName1: string, pinName2: string) {
+    const mesh1 = this.scene.getObj3d(poleBlock1.id);
+    const mesh2 = this.scene.getObj3d(poleBlock2.id);
     const pinMesh1 = MeshUtils.findByName(mesh1, pinName1);
     const pinMesh2 = MeshUtils.findByName(mesh2, pinName2);
+
+    const pole1 = this.blockStore.getDecoration('poles', poleBlock1.id);
+    const pole2 = this.blockStore.getDecoration('poles', poleBlock2.id);
 
     const pos1 = new Vector3();
     pinMesh1.getWorldPosition(pos1);
@@ -45,12 +37,11 @@ class JoinPoles {
     this.factory.create(
       edit,
       'cable-1',
-      { dependsOn: [pole1.id, pole2.id] },
+      { dependsOn: [poleBlock1.id, poleBlock2.id] },
       {
         cables: {
-          points: [pos1, pos2].map((point) => [point.x, point.y, point.z]) as Num3[],
-          end1: { pin: pinName1, device: pole1.id },
-          end2: { pin: pinName2, device: pole2.id },
+          end1: { pin: pinName1, device: poleBlock1.id, point: pos1.toArray() },
+          end2: { pin: pinName2, device: poleBlock2.id, point: pos2.toArray() },
         },
       },
     );
@@ -58,12 +49,15 @@ class JoinPoles {
     const cable = edit.getLastBlock();
 
     edit.update<'poles'>(
-      pole1.id,
+      poleBlock1.id,
       {
         dependents: [cable.id],
       },
+      'poles',
       {
         pins: {
+          // TODO: merging should preserve existing pins
+          ...pole1.pins,
           [pinName1]: {
             wires: [cable.id],
           },
@@ -72,12 +66,14 @@ class JoinPoles {
     );
 
     edit.update<'poles'>(
-      pole2.id,
+      poleBlock2.id,
       {
         dependents: [cable.id],
       },
+      'poles',
       {
         pins: {
+          ...pole2.pins,
           [pinName2]: {
             wires: [cable.id],
           },
@@ -87,6 +83,8 @@ class JoinPoles {
 
     edit.commit();
   }
+
+  private blockStore: BlockStore;
 
   private factory: FactoryService;
 

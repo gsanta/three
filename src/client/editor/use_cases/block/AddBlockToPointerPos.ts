@@ -1,10 +1,10 @@
 import SceneStore from '../../components/scene/SceneStore';
-import Edit from '../../services/update/Edit';
 import FactoryService from '../../services/factory/FactoryService';
 import BlockStore from '../../stores/block/BlockStore';
 import SceneService from '../../components/scene/SceneService';
 import MeshUtils from '../../utils/MeshUtils';
 import { Vector3 } from 'three';
+import TransactionService from '../../services/transaction/TransactionService';
 
 class AddBlockToPointerPos {
   constructor(
@@ -12,27 +12,21 @@ class AddBlockToPointerPos {
     factoryService: FactoryService,
     sceneService: SceneService,
     sceneStore: SceneStore,
+    update: TransactionService,
   ) {
     this.blockStore = blockStore;
     this.factoryService = factoryService;
     this.sceneService = sceneService;
     this.sceneStore = sceneStore;
+    this.update = update;
   }
 
-  perform(
-    edit: Edit,
-    targetBlockId: string,
-    targetPartIndex: string,
-    templateName: string,
-    clientX: number,
-    clientY: number,
-  ) {
+  perform(targetBlockId: string, targetPartIndex: string, templateName: string, clientX: number, clientY: number) {
+    const edit = this.update.getTransaction();
     const targetBlock = this.blockStore.getBlocks()[targetBlockId];
 
     const mesh = this.sceneStore.getObj3d(targetBlock.id);
     const targetPartMesh = MeshUtils.findByName(mesh, targetPartIndex);
-    const vec = new Vector3();
-    targetPartMesh.getWorldPosition(vec);
 
     const [intersections] = this.sceneService.intersection(targetPartMesh, clientX, clientY);
 
@@ -54,6 +48,8 @@ class AddBlockToPointerPos {
         children: [lastBlock.id],
       });
     }
+
+    edit.commit();
   }
 
   private blockStore: BlockStore;
@@ -63,6 +59,8 @@ class AddBlockToPointerPos {
   private sceneService: SceneService;
 
   private sceneStore: SceneStore;
+
+  private update: TransactionService;
 }
 
 export default AddBlockToPointerPos;

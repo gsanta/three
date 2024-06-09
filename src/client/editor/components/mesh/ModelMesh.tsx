@@ -1,97 +1,11 @@
 import { useGLTF } from '@react-three/drei';
-import { BufferGeometry, Material, MeshStandardMaterial, NormalBufferAttributes } from 'three';
-import WrappedMeshProps from '../../types/block/WrappedMeshProps';
-import { ModelPart } from '@/client/editor/types/BlockType';
 import useRegisterScene from '../hooks/useRegisterScene';
-import { GroupProps, ThreeEvent } from '@react-three/fiber';
+import { GroupProps } from '@react-three/fiber';
 import { addVector } from '@/client/editor/utils/vectorUtils';
-import Block from '../../types/Block';
-
-type ModelMeshProps = WrappedMeshProps<'model'>;
-
-type NodesType = {
-  [name: string]: BufferGeometry<NormalBufferAttributes> | NodesType;
-};
-
-type NodesOrObject3DType = NodesType | BufferGeometry<NormalBufferAttributes>;
-
-type ModelPartProps = {
-  block: Block;
-  materials: {
-    [name: string]: Material;
-  };
-  nodes: NodesType;
-  onPointerEnter?: (event: ThreeEvent<PointerEvent>, partIndex?: string) => void;
-  part: ModelPart;
-  selectedParts: ModelMeshProps['selectedParts'];
-};
-
-const ModelMeshPart = ({ block, materials, nodes, onPointerEnter, part, selectedParts }: ModelPartProps) => {
-  const color = selectedParts.includes(part.index) ? 'green' : undefined;
-
-  if (block.partDetails[part.index]?.isHidden) {
-    return null;
-  }
-
-  // if (!block.isHovered && !block.isSelected && block.partDetails[part.index]?.role === 'slot' && !color) {
-  //   return null;
-  // }
-
-  const geometryPaths = part.geometryPath?.split('.') || [];
-
-  const materialPaths = part.materialPath?.split('.') || [];
-
-  let material: Material;
-
-  if (materialPaths[0] === 'nodes') {
-    materialPaths.shift();
-
-    material = materialPaths.reduce(
-      (prev: NodesOrObject3DType, curr: string) => (prev as NodesType)[curr] as NodesOrObject3DType,
-      nodes,
-    ) as unknown as Material;
-  } else {
-    material = materials[materialPaths[0]];
-  }
-
-  const geometry = geometryPaths.reduce(
-    (prev: NodesOrObject3DType, curr: string) => (prev as NodesType)[curr] as NodesOrObject3DType,
-    nodes,
-  ) as BufferGeometry<NormalBufferAttributes>;
-
-  return (
-    <mesh
-      castShadow
-      receiveShadow
-      geometry={geometry}
-      material={color ? new MeshStandardMaterial({ color: 'green' }) : material}
-      onPointerEnter={onPointerEnter ? (e) => onPointerEnter(e, part.index) : undefined}
-      position={part.position}
-      rotation={part.rotation}
-      scale={part.scale}
-      name={part.index || ''}
-      userData={{ modelId: block.id }}
-    />
-  );
-};
-
-const ModelGroupPart = ({ part, block, ...rest }: ModelPartProps) => {
-  if (block.partDetails[part.index]?.isHidden) {
-    return null;
-  }
-
-  return (
-    <group position={part.position} rotation={part.rotation} scale={part.scale} name={part.name || ''}>
-      {part.parts.map((childPart) =>
-        childPart.parts ? (
-          <ModelGroupPart {...rest} block={block} part={childPart} />
-        ) : (
-          <ModelMeshPart {...rest} block={block} part={childPart} />
-        ),
-      )}
-    </group>
-  );
-};
+import { NodesType } from '../hooks/useGeometry';
+import ModelMeshProps from '../types/ModelMeshProps';
+import ModelGroupMesh from './ModelGroupMesh';
+import ModelPartMesh from './ModelPartMesh';
 
 export const ModelMesh = ({ additions, block, meshProps, overwrites, selectedParts = [] }: ModelMeshProps) => {
   const ref = useRegisterScene();
@@ -114,7 +28,7 @@ export const ModelMesh = ({ additions, block, meshProps, overwrites, selectedPar
     >
       {block.parts.map((childPart) =>
         childPart.parts ? (
-          <ModelGroupPart
+          <ModelGroupMesh
             block={block}
             key={childPart.name}
             materials={materials}
@@ -123,7 +37,7 @@ export const ModelMesh = ({ additions, block, meshProps, overwrites, selectedPar
             selectedParts={selectedParts}
           />
         ) : (
-          <ModelMeshPart
+          <ModelPartMesh
             block={block}
             key={childPart.name}
             materials={materials}
@@ -137,5 +51,3 @@ export const ModelMesh = ({ additions, block, meshProps, overwrites, selectedPar
     </group>
   );
 };
-
-useGLTF.preload('/tree.glb');

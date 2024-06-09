@@ -3,7 +3,7 @@ import BlockFactory from './creators/BlockFactory';
 import PoleFactory from './creators/PoleFactory';
 import CableFactory from './creators/CableFactory';
 import Block from '../../types/Block';
-import BlockCategory, { PartialBlockCategories } from '../../types/BlockCategory';
+import BlockDecoration, { PartialBlockCategories } from '../../types/BlockCategory';
 import Edit from '../update/Edit';
 import BlockStore from '../../stores/block/BlockStore';
 import DefaultBlockFactory from './creators/DefaultBlockFactory';
@@ -26,18 +26,18 @@ class FactoryService {
     blockOverrides: Partial<Block> = {},
     categoryOverrides: PartialBlockCategories = {},
   ) {
-    const template = this.blockStore.getTemplateByName(templateName);
+    const template = this.blockStore.getTemplateByType(templateName);
 
     if (!template) {
       throw new Error(`Template ${templateName} does not exist`);
     }
 
-    const factory = this.factories[template.type] || this.defaultBlockFactory;
+    const factory = this.factories[template.category] || this.defaultBlockFactory;
     const block = factory.create(template, blockOverrides);
 
     edit.create(block);
 
-    template.categories.forEach((categoryName: BlockCategory) => {
+    template.decorations.forEach((categoryName: BlockDecoration) => {
       const category = factory.createCategory(block, {
         ...categoryOverrides[categoryName],
         category: categoryName,
