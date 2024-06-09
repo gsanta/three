@@ -27,6 +27,10 @@ const ModelPartMesh = ({ block, materials, nodes, onPointerEnter, part }: ModelP
     return null;
   }
 
+  if (!block.isSelected && !block.isHovered && block.partDetails[part.index]?.type === 'placeholder') {
+    return null;
+  }
+
   return (
     <mesh
       castShadow

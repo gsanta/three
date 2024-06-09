@@ -77,19 +77,24 @@ const buildingTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | '
     partDetails: {
       '#2': {
         orientation: 90,
+        type: 'placeholder',
       },
       '#4': {
         orientation: 270,
+        type: 'placeholder',
       },
       '#5': {
         orientation: 180,
+        type: 'placeholder',
       },
       '#6': {
         axes: ['y'],
+        type: 'placeholder',
       },
       '#7': {
         orientation: 180,
         allowMovement: ['y'],
+        type: 'placeholder',
       },
     },
     type: 'building-base-1',

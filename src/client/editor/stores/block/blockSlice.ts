@@ -181,6 +181,9 @@ export const blockSlice = createSlice({
       state.blocks = action.payload.blocks || state.blocks;
       state.rootBlocksIds = action.payload.rootBlocksIds || state.rootBlocksIds;
       state.selectedRootBlockIds = action.payload.selectedRootBlockIds || state.selectedRootBlockIds;
+      if (action.payload.decorations) {
+        state.decorations = action.payload.decorations;
+      }
     },
   },
 });

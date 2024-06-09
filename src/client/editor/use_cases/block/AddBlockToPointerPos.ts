@@ -1,5 +1,4 @@
 import SceneStore from '../../components/scene/SceneStore';
-import Edit from '../../services/update/Edit';
 import FactoryService from '../../services/factory/FactoryService';
 import BlockStore from '../../stores/block/BlockStore';
 import SceneService from '../../components/scene/SceneService';
