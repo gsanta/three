@@ -1,14 +1,44 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Block from '@/client/editor/types/Block';
-import BlockDecoration from '@/client/editor/types/BlockCategory';
 import Edit from '../../../services/update/Edit';
 import BlockStore from '../../../stores/block/BlockStore';
 import BlockEraser from './BlockEraser';
+import { CableEnd } from '@/client/editor/types/block/Cable';
 
-class PoleEraser extends BlockEraser {
+class CableEraser extends BlockEraser {
   constructor(store: BlockStore) {
-    super('poles');
+    super('cables');
     this.store = store;
+  }
+
+  erase(edit: Edit, block: Block) {
+    const cable = this.store.getDecoration('cables', block.id);
+
+    const end1 = cable.end1;
+    const end2 = cable.end2;
+
+    if (end1) {
+      this.removePin(edit, cable.id, end1);
+    }
+
+    if (end2) {
+      this.removePin(edit, cable.id, end2);
+    }
+  }
+
+  private removePin(edit: Edit, cableId: string, end: CableEnd) {
+    edit.updateDecoration(
+      'poles',
+      end.device,
+      {
+        pins: {
+          [end.pin]: {
+            wires: [cableId],
+          },
+        },
+      },
+      { arrayMergeStrategy: 'exclude' },
+    );
   }
 
   eraseDependent(edit: Edit, poleBlock: Block, dependent: Block) {
@@ -41,4 +71,4 @@ class PoleEraser extends BlockEraser {
   private store: BlockStore;
 }
 
-export default PoleEraser;
+export default CableEraser;

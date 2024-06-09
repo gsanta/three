@@ -52,7 +52,7 @@ const MoveControl = ({ onPointerDown, onPointerEnter }: MoveControlProps) => {
         tool.onDrag(newTransform);
       }}
       onDragEnd={() => {
-        tool.onDragEnd(new Vector3(transform[0], transform[1], transform[2]));
+        tool.onDragEnd();
         setTransform([0, 0, 0]);
       }}
       userData={{ role: 'selection-pivot' }}

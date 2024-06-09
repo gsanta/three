@@ -2,14 +2,14 @@ import BlockStore from '../../stores/block/BlockStore';
 import Edit from '../../services/update/Edit';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockEraser from './erasers/BlockEraser';
-import PoleEraser from './erasers/PoleEraser';
+import CableEraser from './erasers/CableEraser';
 
 class EraseBlock {
   constructor(store: BlockStore, update: TransactionService) {
     this.store = store;
     this.update = update;
 
-    this.erasers.poles = new PoleEraser(store);
+    this.erasers.cables = new CableEraser(store);
   }
 
   erase(blockIds: string[]) {
@@ -44,6 +44,12 @@ class EraseBlock {
       edit.updateBlock(parent.id, { children: [blockId] }, { arrayMergeStrategy: 'exclude' });
     }
 
+    const eraser = this.erasers[block.category];
+
+    if (eraser) {
+      eraser.erase(edit, block);
+    }
+
     if (block.slotTarget) {
       edit.updateBlock(
         block.slotTarget.blockId,
@@ -60,13 +66,7 @@ class EraseBlock {
       const dependent = this.store.getBlocks()[dependentId];
 
       dependent.dependsOn.forEach((dependsOnId) => {
-        const dependsOn = this.store.getBlocks()[dependsOnId];
         edit.updateBlock(dependsOnId, { dependents: [dependentId] }, { arrayMergeStrategy: 'exclude' });
-
-        const eraser = this.erasers[block.category];
-        if (eraser) {
-          eraser.eraseDependent(edit, dependsOn, dependent);
-        }
       });
     });
   }

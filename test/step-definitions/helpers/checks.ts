@@ -2,6 +2,7 @@ import MeshUtils from '@/client/editor/utils/MeshUtils';
 import ExtendedWorld from '../ExtendedWorld';
 import Num3 from '@/client/editor/types/Num3';
 import { Vector3 } from 'three';
+import BlockDecoration from '@/client/editor/types/BlockCategory';
 
 export function checkBlockExists(this: ExtendedWorld, blockId: string) {
   const block = this.env.blockStore.getBlock(blockId);
@@ -11,6 +12,16 @@ export function checkBlockExists(this: ExtendedWorld, blockId: string) {
   }
 
   return block;
+}
+
+export function checkDecorationExists(this: ExtendedWorld, category: BlockDecoration, blockId: string) {
+  const decortion = this.env.blockStore.getDecoration(category, blockId);
+
+  if (!decortion) {
+    throw new Error(`Decoration of type ${category} with id ${blockId} not found.`);
+  }
+
+  return decortion;
 }
 
 export function checkBlockMeshExists(this: ExtendedWorld, blockId: string) {

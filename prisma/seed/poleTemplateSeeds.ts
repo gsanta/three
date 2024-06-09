@@ -95,6 +95,7 @@ const poleTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'part
     partDetails: {
       '#2': {
         role: 'slot',
+        type: 'pin',
       },
     },
     type: 'weather-head-1',

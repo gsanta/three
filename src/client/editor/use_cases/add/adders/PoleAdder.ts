@@ -10,7 +10,7 @@ class PoleAdder extends BlockAdder {
     super('poles');
 
     this.blockStore = blockStore;
-    this.joinPoles = new JoinPoles(scene, factory, update);
+    this.joinPoles = new JoinPoles(blockStore, scene, factory, update);
     this.update = update;
   }
 
@@ -25,7 +25,11 @@ class PoleAdder extends BlockAdder {
       return;
     }
 
-    this.joinPoles.join(this.blockStore.getBlock(selectedBlocks[0]), this.blockStore.getBlock(selectedBlocks[1]));
+    this.joinPoles.join(this.blockStore.getBlock(selectedBlocks[0]), this.blockStore.getBlock(selectedBlocks[1]), [
+      ['#2', '#2'],
+      ['#3', '#3'],
+      ['#4', '#4'],
+    ]);
 
     this.update.getTransaction().select(null).select(blockId).commit();
   }

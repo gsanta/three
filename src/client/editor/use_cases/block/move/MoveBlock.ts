@@ -34,7 +34,7 @@ class MoveBlock {
       const mover = this.movers[block.category];
 
       if (mover) {
-        mover.move(edit, block);
+        mover.move(edit, block, dragDelta);
       }
     });
 

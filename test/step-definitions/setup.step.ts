@@ -6,12 +6,13 @@ import { setSelectedGeometry } from '@/client/editor/stores/blockType/blockTypeS
 import { setSelectedTool, updateSelectTool } from '@/client/editor/stores/tool/toolSlice';
 import ToolName from '@/client/editor/types/ToolName';
 import ExtendedWorld from './ExtendedWorld';
-import findClosestBlock from './helpers/findClosestBlock';
+import findClosestBlock, { calculateDistance } from './helpers/findClosestBlock';
 import AddBlock from '@/client/editor/use_cases/add/AddBlock';
 import Num3 from '@/client/editor/types/Num3';
 import AddBlockToSlot from '@/client/editor/use_cases/block/AddBlockToSlot';
 import AddBlockToPointerPos from '@/client/editor/use_cases/block/AddBlockToPointerPos';
 import JoinPoles from '@/client/editor/use_cases/block/JoinPoles';
+import { checkBlockExists, checkPosition } from './helpers/checks';
 
 Given('I have an empty canvas', function (this: ExtendedWorld) {
   this.env.teardown();
@@ -42,7 +43,7 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
     this.env.update,
   );
 
-  const joinPoles = new JoinPoles(this.env.sceneStore, this.env.services.factory, this.env.update);
+  const joinPoles = new JoinPoles(this.env.blockStore, this.env.sceneStore, this.env.services.factory, this.env.update);
 
   const data = table.hashes() as SceneHash[];
 
@@ -58,14 +59,14 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
     }
 
     if (block.category === 'cables') {
-      const block1Id = row.POS.split(':')[0];
-      const block2Id = row.POS.split(':')[1];
-      const block1 = this.env.blockStore.getBlock(block1Id);
-      const block2 = this.env.blockStore.getBlock(block2Id);
-      joinPoles.join(block1, block2);
-    } else if (row.PARENT === '-') {
+      const block1IdAndPin = row.POS.split(':')[0];
+      const block2IdAndPin = row.POS.split(':')[1];
+      const block1 = this.env.blockStore.getBlock(block1IdAndPin.split('#')[0]);
+      const block2 = this.env.blockStore.getBlock(block2IdAndPin.split('#')[0]);
+      joinPoles.join(block1, block2, [[`#${block1IdAndPin.split('#')[1]}`, `#${block2IdAndPin.split('#')[1]}`]]);
+    } else if (row.PARENT === '-' || !row.PARENT) {
       addBlock.perform(new Vector3(...pos), row.TYPE);
-    } else if (row.PARENT.includes(':')) {
+    } else if (row.PARENT?.includes(':')) {
       const [parentId, partIndex] = row.PARENT.split(':');
       addBlockToSlot.perform(parentId, partIndex, row.TYPE);
     } else {
@@ -154,5 +155,19 @@ Then(
     }
 
     assert.equal(blockWithDistance[0].type, blockName);
+  },
+);
+
+Then(
+  'I have block {string} at estimated position {string}',
+  function (this: ExtendedWorld, blockId: string, posStr: string) {
+    const block = checkBlockExists.call(this, blockId);
+    const position = checkPosition.call(this, posStr);
+    const distance = calculateDistance(position, block.position);
+
+    assert.ok(
+      distance < 0.5,
+      `Block is not near position (${position.join(',')}), it is at postition ${block.position.join(',')}`,
+    );
   },
 );

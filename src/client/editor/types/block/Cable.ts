@@ -1,17 +1,16 @@
 import Num3 from '@/client/editor/types/Num3';
 
+export type CableEnd = {
+  pin: string;
+  device: string;
+  point: Num3;
+};
+
 type Cable = {
   id: string;
   category: 'cables';
-  points: Num3[];
-  end1: {
-    pin: string;
-    device: string;
-  } | null;
-  end2: {
-    pin: string;
-    device: string;
-  } | null;
+  end1: CableEnd | null;
+  end2: CableEnd | null;
 };
 
 export default Cable;

@@ -15,7 +15,7 @@ class CableFactory extends BlockFactory {
   }
 
   createCategory(block: Block, overrides: Partial<BlockCategoryType> & { category: BlockDecoration }): Cable {
-    const cable: Cable = { points: [], end1: null, end2: null, ...overrides, category: 'cables', id: block.id };
+    const cable: Cable = { end1: null, end2: null, ...overrides, category: 'cables', id: block.id };
     return cable;
   }
 

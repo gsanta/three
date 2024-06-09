@@ -88,3 +88,13 @@ When(
     this.env.toolHelper.pointerEnter({ blockId: block.id, partIndex: part.index });
   },
 );
+
+When('I drag pointer with delta {string}', function (this: ExtendedWorld, deltaStr: string) {
+  const delta = checkPosition.call(this, deltaStr);
+
+  this.env.tool.onDrag(new Vector3(...delta));
+});
+
+When('I end drag', function (this: ExtendedWorld) {
+  this.env.tool.onDragEnd();
+});
