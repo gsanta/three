@@ -2,7 +2,7 @@ import { EditorContext, EditorContextType } from '@/app/editor/EditorContext';
 import { store } from '../utils/store';
 import { ReactNode, useMemo } from 'react';
 import { Provider } from 'react-redux';
-import AddTool from '@/client/editor/controllers/tools/AddTool';
+import AddTool from '@/client/editor/controllers/tools/add/AddTool';
 import ToolService from '@/client/editor/services/ToolService';
 import SelectTool from '@/client/editor/controllers/tools/SelectTool';
 import KeyboardService from '@/client/editor/services/KeyboardService';
@@ -55,7 +55,7 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
       scene: sceneStore,
       tool: new ToolService(
         [
-          new AddTool(blockStore, factoryService, scene, sceneStore, toolStore, transaction),
+          new AddTool(blockStore, factoryService, scene, sceneStore, transaction),
           new SelectTool(blockStore, scene, sceneStore, toolStore, transaction),
           new GroupTool(blockStore, transaction, templates),
           new CableTool(blockStore, factoryService, scene, sceneStore, transaction),

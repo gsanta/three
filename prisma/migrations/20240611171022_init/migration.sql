@@ -12,6 +12,13 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
+CREATE TABLE "BlockCategory" (
+    "id" SERIAL NOT NULL,
+
+    CONSTRAINT "BlockCategory_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "BlockType" (
     "id" SERIAL NOT NULL,
     "category" TEXT NOT NULL,

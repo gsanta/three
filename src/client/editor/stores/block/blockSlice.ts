@@ -63,6 +63,7 @@ export const blockSlice = createSlice({
     clear(state: BlockState) {
       state.rootBlocksIds = [];
       state.blocks = {};
+      state.hovered = undefined;
       state.selectedRootBlockIds = [];
 
       state.selectedBlocks = {};

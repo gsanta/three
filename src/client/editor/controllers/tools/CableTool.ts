@@ -55,7 +55,7 @@ class CableTool extends HoverTool {
         const block1 = this.blockStore.getBlock(selectedBlockId);
         const block2 = this.blockStore.getBlock(info.eventObject?.userData.modelId);
 
-        if (targetBlock.partDetails[partName || '']?.type === 'pin') {
+        if (targetBlock.partDetails[partName || '']?.category === 'pin') {
           const pairs: [string, string][] = block1.category === 'weather-heads' ? [['#2', '#5']] : [['#5', '#2']];
           this.joinPoles.join(block1, block2, pairs);
         }

@@ -46,9 +46,9 @@ class SceneStore {
       throw new Error('ModelId is undefined');
     }
 
-    if (!this.meshes.get(modelId) && !this.groups.get(modelId)) {
-      throw new Error('Mesh not found by modelId: ' + modelId);
-    }
+    // if (!this.meshes.get(modelId) && !this.groups.get(modelId)) {
+    //   throw new Error('Mesh not found by modelId: ' + modelId);
+    // }
 
     this.objInstances.get(modelId)?.delete(instanceId);
 

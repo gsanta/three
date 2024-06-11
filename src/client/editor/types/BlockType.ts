@@ -18,13 +18,16 @@ export type ModelPart = {
   name?: string;
 };
 
-export type ModelPartDetail = {
+export type ModelPartCategory = 'pin' | 'wall-slot' | 'ceil-slot';
+
+export type ModelPartInfo = {
   allowMovement?: Axis[];
   isHidden?: boolean;
   isSelected?: boolean;
   orientation: number;
   role?: 'slot';
-  type?: string;
+  category: ModelPartCategory;
+  type: 'placeholder' | 'phisycal';
 };
 
 type BlockType<S extends ShapeType = ShapeType> = {
@@ -38,7 +41,7 @@ type BlockType<S extends ShapeType = ShapeType> = {
   moveAxis: [boolean, boolean, boolean];
   rotation: [number, number, number];
   parts: ModelPart[];
-  partDetails: Record<string, ModelPartDetail | undefined>;
+  partDetails: Record<string, ModelPartInfo | undefined>;
   path: string;
   type: string;
 };

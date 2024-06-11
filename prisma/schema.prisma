@@ -21,6 +21,10 @@ model User {
   snapshots Snapshot[]
 }
 
+model BlockCategory {
+  id          Int     @id @default(autoincrement())
+}
+
 model BlockType {
   id          Int     @id @default(autoincrement())
   category    String

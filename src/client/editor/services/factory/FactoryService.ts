@@ -26,7 +26,7 @@ class FactoryService {
     blockOverrides: Partial<Block> = {},
     categoryOverrides: PartialBlockCategories = {},
   ) {
-    const template = this.blockStore.getTemplateByType(templateName);
+    const template = this.blockStore.getBlockType(templateName);
 
     if (!template) {
       throw new Error(`Template ${templateName} does not exist`);
