@@ -18,7 +18,7 @@ export type ModelPart = {
   name?: string;
 };
 
-export type ModelPartCategory = 'pin' | 'wall';
+export type ModelPartCategory = 'pin' | 'wall-slot' | 'ceil-slot';
 
 export type ModelPartInfo = {
   allowMovement?: Axis[];

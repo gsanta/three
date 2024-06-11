@@ -10,7 +10,7 @@ import SceneService from '../../../components/scene/SceneService';
 import AddBlockToSlot from '../../../use_cases/block/AddBlockToSlot';
 import AddSlotToSlot from '../../../use_cases/block/AddSlotToSlot';
 import AddBlockToPointerPos from '../../../use_cases/block/AddBlockToPointerPos';
-import { AddStrategyType } from './AddStrategy';
+import GetAddBlockStrategy from './GetAddBlockStrategy';
 
 class AddTool extends HoverTool {
   constructor(
@@ -29,20 +29,25 @@ class AddTool extends HoverTool {
     this.addBlockToSlot = new AddBlockToSlot(blockStore, factoryService, sceneStore, update);
     this.addSlotToSlot = new AddSlotToSlot(blockStore, factoryService, sceneStore, update);
     this.addBlockToPointerPos = new AddBlockToPointerPos(blockStore, factoryService, sceneService, sceneStore, update);
+
+    this.getAddBlockStrategy = new GetAddBlockStrategy();
   }
 
   onPointerDown({ clientX, clientY, pos }: ToolInfo) {
     const { selectedBlockName } = this.store.getBlockSettings();
+    const blockType = this.store.getBlockType(selectedBlockName);
 
-    if (!selectedBlockName) {
+    if (!selectedBlockName || !blockType) {
       return;
     }
 
-    const blockType = this.store.getBlockType(selectedBlockName);
-
     const hovered = this.blockStore.getHovered();
 
-    const applyPosition = this.determineApplyPosition(hovered?.block);
+    const applyPosition = this.getAddBlockStrategy.getStrategy({
+      targetBlock: hovered?.block ? this.blockStore.getBlock(hovered?.block) : undefined,
+      targetPartIndex: hovered?.partIndex,
+      newBlockType: blockType,
+    });
 
     switch (applyPosition) {
       case 'source-origin-target-plane':
@@ -76,20 +81,6 @@ class AddTool extends HoverTool {
     }
   }
 
-  private determineApplyPosition(targetBlockId?: string): AddStrategyType {
-    if (!targetBlockId) {
-      return 'source-origin-target-plane';
-    }
-
-    const block = this.blockStore.getBlock(targetBlockId);
-    if (block.category === 'roads') {
-      return 'source-slot-target-slot';
-    } else if (block.category === 'roofs') {
-      return 'source-origin-target-pointer-pos';
-    }
-    return 'source-origin-target-slot';
-  }
-
   private blockStore: BlockStore;
 
   private addBlock: AddBlock;
@@ -101,6 +92,8 @@ class AddTool extends HoverTool {
   private addSlotToSlot: AddSlotToSlot;
 
   private addBlockToPointerPos: AddBlockToPointerPos;
+
+  private getAddBlockStrategy: GetAddBlockStrategy;
 }
 
 export default AddTool;

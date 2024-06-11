@@ -1,5 +1,4 @@
 Feature: Weather head
-  @important
   Scenario: Adding a weather head to a house
     Given I have a scene with:
       | TYPE            | ID        | PARENT       | POS   |

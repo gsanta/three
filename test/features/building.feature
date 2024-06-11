@@ -3,6 +3,7 @@ Feature: Building
     Given I have a building base with id 'base-1'
     When I select tool 'add'
     And I hover over block 'base-1' and part '#2'
+    And I select template 'wall-1'
     And I set next uuid to 'wall-1'
     And I press pointer
     Then parent for block 'wall-1' is 'base-1'
@@ -17,6 +18,7 @@ Feature: Building
     Given I have a building base with id 'base-1'
     When I select tool 'add'
     And I hover over block 'base-1' and part '#2'
+    And I select template 'wall-1'
     And I set next uuid to 'wall-1'
     And I press pointer
     And I select tool 'erase'
