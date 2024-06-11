@@ -44,10 +44,12 @@ const roadTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'part
     ],
     partDetails: {
       '#3': {
+        category: 'road-slot',
         role: 'slot',
         type: 'placeholder',
       },
       '#4': {
+        category: 'road-slot',
         role: 'slot',
         orientation: 180,
         type: 'placeholder',
@@ -116,21 +118,25 @@ const roadTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'part
     ],
     partDetails: {
       '#3': {
+        category: 'road-slot',
         role: 'slot',
         type: 'placeholder',
       },
       '#4': {
+        category: 'road-slot',
         role: 'slot',
         orientation: 180,
         type: 'placeholder',
       },
       '#5': {
+        category: 'road-slot',
         role: 'slot',
         orientation: 90,
 
         type: 'placeholder',
       },
       '#6': {
+        category: 'road-slot',
         role: 'slot',
         orientation: 270,
         type: 'placeholder',
@@ -180,11 +186,13 @@ const roadTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'part
     ],
     partDetails: {
       '#3': {
+        category: 'road-slot',
         role: 'slot',
         orientation: 180,
         type: 'placeholder',
       },
       '#4': {
+        category: 'road-slot',
         role: 'slot',
         orientation: 90,
         type: 'placeholder',

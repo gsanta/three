@@ -27,7 +27,7 @@ const ModelPartMesh = ({ block, materials, nodes, onPointerEnter, part }: ModelP
     return null;
   }
 
-  if (!block.isSelected && !block.isHovered && block.partDetails[part.index]?.type === 'placeholder') {
+  if (!block.isSelected && !block.isHovered && block.partDetails[part.index]?.category === 'placeholder') {
     return null;
   }
 

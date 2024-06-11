@@ -7,7 +7,7 @@ import { UpdateBlocks, clearBlockSlice, update, updateBlocks } from '@/client/ed
 import { Mesh } from 'three';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import ToolService from '@/client/editor/services/ToolService';
-import AddTool from '@/client/editor/controllers/tools/AddTool';
+import AddTool from '@/client/editor/controllers/tools/add/AddTool';
 import CableTool from '@/client/editor/controllers/tools/CableTool';
 import ColorTool from '@/client/editor/controllers/tools/ColorTool';
 import EraseTool from '@/client/editor/controllers/tools/EraseTool';

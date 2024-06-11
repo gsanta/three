@@ -7,7 +7,7 @@ class PoleFactory extends BlockFactory {
     const pins: Pole['pins'] = {};
 
     Object.keys(block.partDetails)
-      .filter((key) => block.partDetails[key]?.type === 'pin')
+      .filter((key) => block.partDetails[key]?.category === 'pin')
       .forEach((key) => (pins[key] = createPin('in-out', [])));
 
     const pole: Pole = { pins: pins, ...overrides, id: block.id, category: 'poles' };

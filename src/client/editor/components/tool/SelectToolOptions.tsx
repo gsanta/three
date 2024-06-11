@@ -1,13 +1,10 @@
 import useEditorContext from '@/app/editor/EditorContext';
-import { useAppDispatch, useAppSelector } from '@/client/common/hooks/hooks';
+import { useAppSelector } from '@/client/common/hooks/hooks';
 import { findNearestValue, toDegree } from '@/client/editor/utils/mathUtils';
-import { Box, Button, FormControl, FormLabel } from '@chakra-ui/react';
+import { Box, Button } from '@chakra-ui/react';
 import useSelectedBlocks from '../hooks/useSelectedBlocks';
 import RotationControl from './RotationControl';
 import SizeControl from './SizeControl';
-import RadioSwitchButton from '@/client/common/components/RadioSwitchButton';
-import RadioSwitchGroup from '@/client/common/components/RadioSwitchGroup';
-import { updateSelectTool } from '../../stores/tool/toolSlice';
 import DeviceControl from './DeviceControl';
 
 const SelectToolOptions = () => {
@@ -20,18 +17,8 @@ const SelectToolOptions = () => {
 
   const selectedTemplate = templates.find((b) => b.type === block?.type);
 
-  const {
-    select: { templateName },
-  } = useAppSelector((state) => state.tool);
-  const { selectedPartIndexes, decorations: categories } = useAppSelector((state) => state.block.present);
+  const { decorations: categories } = useAppSelector((state) => state.block.present);
   const blockSettings = settings[selectedTemplate?.category || ''];
-  const hasSelectedPart = Object.keys(selectedPartIndexes).length;
-
-  const dispatch = useAppDispatch();
-
-  const handleGeometryChange = (val: string) => {
-    dispatch(updateSelectTool({ templateName: val }));
-  };
 
   const handleRotationChange = (direction: 'x' | 'y' | 'z', val: number) => {
     if (block) {
@@ -45,34 +32,10 @@ const SelectToolOptions = () => {
     }
   };
 
-  const handleApplyGeometry = () => {
-    tool.getAddTool().addToSlot();
-  };
-
   const scaleX =
     selectedTemplate && blockSettings
       ? findNearestValue(blockSettings.scale.x, block.scale[0] / selectedTemplate.scale[0])
       : 0;
-
-  if (hasSelectedPart) {
-    return (
-      <Box padding="4" display="flex" flexDir="column" gap="4">
-        <FormControl>
-          <FormLabel display="flex" alignItems="center" gap="2" marginBottom="1">
-            Geometry type
-          </FormLabel>
-          <RadioSwitchGroup defaultValue={templateName} name="geometry-selector" onChange={handleGeometryChange}>
-            {templates.map((template) => (
-              <RadioSwitchButton key={template.type} value={template.type}>
-                {template.type}
-              </RadioSwitchButton>
-            ))}
-          </RadioSwitchGroup>
-        </FormControl>
-        <Button onClick={handleApplyGeometry}>Apply</Button>
-      </Box>
-    );
-  }
 
   return (
     <Box padding="4" display="flex" flexDir="column" gap="4">

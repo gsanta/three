@@ -76,23 +76,31 @@ const buildingTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | '
     ],
     partDetails: {
       '#2': {
+        category: 'wall-slot',
         orientation: 90,
         type: 'placeholder',
       },
+      '#3': {
+        category: 'wall-slot',
+        type: 'placeholder',
+      },
       '#4': {
+        category: 'wall-slot',
         orientation: 270,
         type: 'placeholder',
       },
       '#5': {
+        category: 'wall-slot',
         orientation: 180,
         type: 'placeholder',
       },
       '#6': {
+        category: 'ceil-slot',
         axes: ['y'],
         type: 'placeholder',
       },
       '#7': {
-        orientation: 180,
+        category: 'active-area',
         allowMovement: ['y'],
         type: 'placeholder',
       },
@@ -170,10 +178,14 @@ const buildingTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | '
     ],
     partDetails: {
       '#2': {
+        category: 'active-area',
         role: 'slot',
+        type: 'placeholder',
       },
       '#3': {
+        category: 'active-area',
         role: 'slot',
+        type: 'placeholder',
       },
     },
     type: 'roof-1',

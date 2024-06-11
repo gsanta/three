@@ -67,7 +67,7 @@ class BlockStore {
     return this.store.getState().blockType.blocks;
   }
 
-  getTemplateByType(type: string) {
+  getBlockType(type: string) {
     return this.store.getState().blockType.blocks.find((block) => block.type === type);
   }
 

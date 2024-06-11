@@ -4,7 +4,7 @@ import ToolName from '../types/ToolName';
 import { store } from '@/client/common/utils/store';
 import { Mesh, Vector3 } from 'three';
 import SelectTool from '@/client/editor/controllers/tools/SelectTool';
-import AddTool from '../controllers/tools/AddTool';
+import AddTool from '../controllers/tools/add/AddTool';
 import GroupTool from '@/client/group/GroupTool';
 import CableTool from '@/client/editor/controllers/tools/CableTool';
 import VectorUtils from '@/client/editor/utils/vectorUtils';
