@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Block from '@/client/editor/types/Block';
-import BlockDecoration, { BlockCategories } from '@/client/editor/types/BlockCategory';
 import Edit from '../../../services/update/Edit';
 import Num3 from '@/client/editor/types/Num3';
 
 abstract class BlockMover {
-  readonly category: BlockDecoration;
+  readonly category: string;
 
-  constructor(category: BlockDecoration) {
+  constructor(category: string) {
     this.category = category;
   }
 

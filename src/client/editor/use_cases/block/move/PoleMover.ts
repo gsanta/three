@@ -14,7 +14,7 @@ class PoleMover extends BlockMover {
   }
 
   move(edit: Edit, pole: Block, dragDelta: Num3) {
-    const decoration = this.store.getDecoration(pole.category as 'poles', pole.id);
+    const decoration = this.store.getDecoration('devices', pole.id);
 
     Object.keys(decoration.pins).forEach((key) => {
       const cables = decoration.pins[key];

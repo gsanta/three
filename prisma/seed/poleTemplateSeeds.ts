@@ -7,7 +7,7 @@ const poleTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'part
 })[] = [
   {
     category: 'poles',
-    decorations: ['poles'],
+    decorations: ['devices'],
     path: '/pole2.glb',
     parts: [
       {
@@ -77,7 +77,7 @@ const poleTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'part
   },
   {
     category: 'weather-heads',
-    decorations: ['poles'],
+    decorations: ['devices'],
     path: '/weather_head_1.glb',
     parts: [
       {

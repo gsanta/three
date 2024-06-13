@@ -24,8 +24,8 @@ class JoinPoles {
     const pinMesh1 = MeshUtils.findByName(mesh1, pinName1);
     const pinMesh2 = MeshUtils.findByName(mesh2, pinName2);
 
-    const pole1 = this.blockStore.getDecoration('poles', poleBlock1.id);
-    const pole2 = this.blockStore.getDecoration('poles', poleBlock2.id);
+    const pole1 = this.blockStore.getDecoration('devices', poleBlock1.id);
+    const pole2 = this.blockStore.getDecoration('devices', poleBlock2.id);
 
     const pos1 = new Vector3();
     pinMesh1.getWorldPosition(pos1);
@@ -48,12 +48,12 @@ class JoinPoles {
 
     const cable = edit.getLastBlock();
 
-    edit.update<'poles'>(
+    edit.update<'devices'>(
       poleBlock1.id,
       {
         dependents: [cable.id],
       },
-      'poles',
+      'devices',
       {
         pins: {
           // TODO: merging should preserve existing pins
@@ -65,12 +65,12 @@ class JoinPoles {
       },
     );
 
-    edit.update<'poles'>(
+    edit.update<'devices'>(
       poleBlock2.id,
       {
         dependents: [cable.id],
       },
-      'poles',
+      'devices',
       {
         pins: {
           ...pole2.pins,

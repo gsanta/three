@@ -4,7 +4,7 @@ import Device from '@/client/editor/types/block/Device';
 
 class LampFactory extends BlockFactory {
   createCategory(block: Block, overrides: Partial<Block> = {}): Device {
-    const device: Device = { isOn: false, ...overrides, id: block.id, category: 'devices' };
+    const device: Device = { isOn: false, pins: {}, ...overrides, id: block.id, category: 'devices' };
     return device;
   }
 }

@@ -28,7 +28,7 @@ class CableEraser extends BlockEraser {
 
   private removePin(edit: Edit, cableId: string, end: CableEnd) {
     edit.updateDecoration(
-      'poles',
+      'devices',
       end.device,
       {
         pins: {
@@ -42,7 +42,7 @@ class CableEraser extends BlockEraser {
   }
 
   eraseDependent(edit: Edit, poleBlock: Block, dependent: Block) {
-    const pole = this.store.getDecoration('poles', poleBlock.id);
+    const pole = this.store.getDecoration('devices', poleBlock.id);
 
     const cable = this.store.getDecoration('cables', dependent.id);
 
@@ -52,7 +52,7 @@ class CableEraser extends BlockEraser {
       const origPin = pole.pins[cableEnd.pin];
 
       edit.updateDecoration(
-        'poles',
+        'devices',
         pole.id,
         {
           pins: {

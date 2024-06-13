@@ -9,6 +9,7 @@ import BlockStore from '../../stores/block/BlockStore';
 import DefaultBlockFactory from './creators/DefaultBlockFactory';
 import LampFactory from './creators/LampFactory';
 import WeatherHeadFactory from './creators/WeatherHeadFactory';
+import HomeElectricsFactory from './creators/HomeElectricsFactory';
 
 class FactoryService {
   constructor(blockStore: BlockStore, sceneService: SceneService) {
@@ -17,6 +18,7 @@ class FactoryService {
     this.factories.cables = new CableFactory(sceneService);
     this.factories.lamps = new LampFactory(sceneService);
     this.factories['weather-heads'] = new WeatherHeadFactory(sceneService);
+    this.factories['home-electrics'] = new HomeElectricsFactory(sceneService);
     this.defaultBlockFactory = new DefaultBlockFactory(sceneService);
   }
 

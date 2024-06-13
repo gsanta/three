@@ -1,8 +1,8 @@
 import RadioSwitchButton from '@/client/common/components/RadioSwitchButton';
 import RadioSwitchGroup from '@/client/common/components/RadioSwitchGroup';
 import { FormControl, FormLabel } from '@chakra-ui/react';
-import Device from '../../types/block/Device';
 import useEditorContext from '@/app/editor/EditorContext';
+import Device from '../../types/block/Device';
 
 type SizeControlProps = {
   device: Device;

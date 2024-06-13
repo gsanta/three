@@ -17,7 +17,7 @@ const SelectToolOptions = () => {
 
   const selectedTemplate = templates.find((b) => b.type === block?.type);
 
-  const { decorations: categories } = useAppSelector((state) => state.block.present);
+  const { decorations } = useAppSelector((state) => state.block.present);
   const blockSettings = settings[selectedTemplate?.category || ''];
 
   const handleRotationChange = (direction: 'x' | 'y' | 'z', val: number) => {
@@ -52,9 +52,9 @@ const SelectToolOptions = () => {
       )}
       <Button onClick={() => tool.getGroupTool().group()}>Group</Button>
       <Button onClick={() => tool.getGroupTool().ungroup()}>Ungroup</Button>
-      {block?.decorations.map((category) => {
-        if (category === 'devices') {
-          return <DeviceControl device={categories.devices[block.id]} />;
+      {block?.decorations.map((decoration) => {
+        if (decoration === 'devices') {
+          return <DeviceControl device={decorations.devices[block.id]} />;
         }
 
         return undefined;

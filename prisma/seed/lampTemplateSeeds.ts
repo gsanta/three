@@ -50,7 +50,12 @@ const lampTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'part
       },
     ],
     partDetails: {
+      '#2': {
+        category: 'load-off',
+        isHidden: false,
+      },
       '#3': {
+        category: 'load-on',
         isHidden: true,
       },
     },

@@ -1,12 +1,10 @@
 import Cable from './block/Cable';
 import Device from './block/Device';
-import Pole from './block/Pole';
 
-export type BlockDecoration = 'cables' | 'decorations' | 'devices' | 'poles' | 'roads' | 'walls' | 'building-bases';
+export type BlockDecoration = 'cables' | 'decorations' | 'devices' | 'roads' | 'walls' | 'building-bases';
 
 export type BlockCategoryType =
   | Cable
-  | Pole
   | Device
   | EmptyBlockCategory<'decorations'>
   | EmptyBlockCategory<'roads'>
@@ -21,7 +19,6 @@ export type EmptyBlockCategory<T extends BlockDecoration> = {
 export type BlockCategories = {
   cables: Cable;
   decorations: EmptyBlockCategory<'decorations'>;
-  poles: Pole;
   devices: Device;
   roads: EmptyBlockCategory<'roads'>;
   walls: EmptyBlockCategory<'walls'>;
