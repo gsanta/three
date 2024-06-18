@@ -1,4 +1,4 @@
-import { useGLTF } from '@react-three/drei';
+import { useAnimations, useGLTF } from '@react-three/drei';
 import useRegisterScene from '../hooks/useRegisterScene';
 import { GroupProps } from '@react-three/fiber';
 import { addVector } from '@/client/editor/utils/vectorUtils';
@@ -6,6 +6,7 @@ import { NodesType } from '../hooks/useGeometry';
 import ModelMeshProps from '../types/ModelMeshProps';
 import ModelGroupMesh from './ModelGroupMesh';
 import ModelPartMesh from './ModelPartMesh';
+import useDevice from '../hooks/useDevice';
 
 export const ModelMesh = ({ additions, block, meshProps, overwrites, selectedParts = [] }: ModelMeshProps) => {
   const ref = useRegisterScene();
@@ -13,7 +14,10 @@ export const ModelMesh = ({ additions, block, meshProps, overwrites, selectedPar
   const position = additions?.position ? addVector(additions.position, blockPosition) : blockPosition;
   const blockRotation = overwrites?.rotation ? overwrites.rotation : block.rotation;
 
-  const { nodes, materials } = useGLTF(block.path);
+  const { animations, nodes, materials } = useGLTF(block.path);
+  const { actions, mixer } = useAnimations(animations, ref);
+
+  useDevice({ block, actions, mixer });
 
   const geometryNodes = nodes as unknown as NodesType;
 
@@ -25,25 +29,26 @@ export const ModelMesh = ({ additions, block, meshProps, overwrites, selectedPar
       position={position}
       ref={ref}
       userData={{ modelId: block.id }}
+      dispose={null}
     >
-      {block.parts.map((childPart) =>
-        childPart.parts ? (
+      {block.parts.map((part) =>
+        part.parts ? (
           <ModelGroupMesh
             block={block}
-            key={childPart.name}
+            key={`${block.id}-${part.index}`}
             materials={materials}
             nodes={geometryNodes}
-            part={childPart}
+            part={part}
             selectedParts={selectedParts}
           />
         ) : (
           <ModelPartMesh
             block={block}
-            key={childPart.name}
+            key={`${block.id}-${part.index}`}
             materials={materials}
             nodes={geometryNodes}
             onPointerEnter={meshProps?.onPointerEnter}
-            part={childPart}
+            part={part}
             selectedParts={selectedParts}
           />
         ),

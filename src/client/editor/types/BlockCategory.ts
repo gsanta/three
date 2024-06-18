@@ -3,7 +3,7 @@ import Device from './block/Device';
 
 export type BlockDecoration = 'cables' | 'decorations' | 'devices' | 'roads' | 'walls' | 'building-bases';
 
-export type BlockCategoryType =
+export type BlockDecorationType =
   | Cable
   | Device
   | EmptyBlockCategory<'decorations'>

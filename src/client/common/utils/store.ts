@@ -5,6 +5,7 @@ import settingsSlice, { SettingsState } from '../../editor/stores/settingsSlice'
 import toolSlice, { ToolState } from '../../editor/stores/tool/toolSlice';
 import { EnhancedStore, configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
 import temporarySlice, { TemporaryState } from '@/client/editor/stores/block/temporarySlice';
+import electricitySlice, { ElectricityState } from '@/client/editor/stores/electricity/electricitySlice';
 
 const sceneSliceUndoable = undoable(blockSlice, {
   filter: (action) => {
@@ -13,6 +14,7 @@ const sceneSliceUndoable = undoable(blockSlice, {
 });
 
 export type RootState = {
+  electricity: ElectricityState;
   settings: SettingsState;
   tool: ToolState;
   temporary: TemporaryState;
@@ -25,6 +27,7 @@ export const testMiddleware = createListenerMiddleware();
 export function setupStore(preloadedState?: RootState): EnhancedStore<RootState> {
   const store = configureStore({
     reducer: {
+      electricity: electricitySlice,
       settings: settingsSlice,
       tool: toolSlice,
       blockType: blockTypeSlice,

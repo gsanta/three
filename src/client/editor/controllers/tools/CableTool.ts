@@ -49,15 +49,20 @@ class CableTool extends HoverTool {
         const mesh = this.scene.getObj3d(blockId);
         const targetBlock = this.blockStore.getBlock(blockId);
 
-        const partName = this.checkPartIntersection(mesh, info.clientX, info.clientY);
+        const targetPartName = this.checkPartIntersection(mesh, info.clientX, info.clientY);
 
         const selectedBlockId = this.blockStore.getSelectedRootBlockIds()[0];
+        const sourcePartName = this.blockStore.getSelectedPartIndexes()[selectedBlockId]?.[0];
+
+        if (!sourcePartName || !targetPartName) {
+          return;
+        }
+
         const block1 = this.blockStore.getBlock(selectedBlockId);
         const block2 = this.blockStore.getBlock(info.eventObject?.userData.modelId);
 
-        if (targetBlock.partDetails[partName || '']?.category === 'pin') {
-          const pairs: [string, string][] = block1.category === 'weather-heads' ? [['#2', '#5']] : [['#5', '#2']];
-          this.joinPoles.join(block1, block2, pairs);
+        if (targetBlock.partDetails[targetPartName || '']?.category === 'pin') {
+          this.joinPoles.join(block1, block2, [[sourcePartName, targetPartName]]);
         }
       }
     } else {

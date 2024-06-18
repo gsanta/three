@@ -10,7 +10,14 @@ class WeatherHeadFactory extends BlockFactory {
       .filter((key) => block.partDetails[key]?.category === 'pin')
       .forEach((key) => (pins[key] = createPin('in-out', [])));
 
-    const pole: Device = { isOn: false, pins: pins, ...overrides, id: block.id, category: 'devices' };
+    const pole: Device = {
+      circuitComponent: 'consumer',
+      isOn: false,
+      pins: pins,
+      ...overrides,
+      id: block.id,
+      category: 'devices',
+    };
     return pole;
   }
 }

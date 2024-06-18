@@ -8,6 +8,9 @@ import BaseMover from './BaseMover';
 import ToolStore from '@/client/editor/stores/tool/ToolStore';
 import { store } from '@/client/common/utils/store';
 import { updateSelectTool } from '@/client/editor/stores/tool/toolSlice';
+import MoveDecoration from './MoveDecoration';
+import BlockDecoration from '@/client/editor/types/BlockCategory';
+import MoveDevice from './MoveDevice';
 
 class MoveBlock {
   constructor(blockStore: BlockStore, update: TransactionService, sceneStore: SceneStore, toolStore: ToolStore) {
@@ -15,6 +18,7 @@ class MoveBlock {
     this.baseMover = new BaseMover(update, sceneStore, toolStore);
     this.update = update;
     this.movers.poles = new PoleMover(blockStore, sceneStore);
+    this.moveDecorationMap.devices = new MoveDevice(blockStore);
     this.sceneStore = sceneStore;
   }
 
@@ -35,6 +39,12 @@ class MoveBlock {
 
       if (mover) {
         mover.move(edit, block, dragDelta);
+      } else {
+        block.decorations.forEach((decoration) => {
+          if (this.moveDecorationMap[decoration]) {
+            this.moveDecorationMap[decoration]?.move(edit, blockId, dragDelta);
+          }
+        });
       }
     });
 
@@ -46,6 +56,8 @@ class MoveBlock {
   private update: TransactionService;
 
   private movers: Partial<Record<string, BlockMover>> = {};
+
+  private moveDecorationMap: Partial<Record<BlockDecoration, MoveDecoration>> = {};
 
   private baseMover: BaseMover;
 

@@ -27,6 +27,7 @@ CREATE TABLE "BlockType" (
     "partDetails" JSONB,
     "path" TEXT,
     "type" TEXT NOT NULL,
+    "animations" JSONB,
 
     CONSTRAINT "BlockType_pkey" PRIMARY KEY ("id")
 );

@@ -2,7 +2,7 @@ import BlockFactory from './BlockFactory';
 import Block from '@/client/editor/types/Block';
 import Device, { createPin } from '@/client/editor/types/block/Device';
 
-class HomeElectricsFactory extends BlockFactory {
+class ElectricityProviderFactory extends BlockFactory {
   createCategory(block: Block, overrides: Partial<Block> = {}): Device {
     const pins: Device['pins'] = {};
 
@@ -11,7 +11,7 @@ class HomeElectricsFactory extends BlockFactory {
       .forEach((key) => (pins[key] = createPin('in-out', [])));
 
     const pole: Device = {
-      circuitComponent: 'consumer',
+      circuitComponent: 'provider',
       pins: pins,
       isOn: false,
       ...overrides,
@@ -22,4 +22,4 @@ class HomeElectricsFactory extends BlockFactory {
   }
 }
 
-export default HomeElectricsFactory;
+export default ElectricityProviderFactory;

@@ -59,6 +59,10 @@ class BlockStore {
     return this.store.getState().block.present.decorations[category];
   }
 
+  getDecorationsAsArray<T extends BlockDecoration>(decoration: T) {
+    return Object.values(this.store.getState().block.present.decorations[decoration]);
+  }
+
   getBlockSettings() {
     return this.store.getState().blockType;
   }

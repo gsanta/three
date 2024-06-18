@@ -18,14 +18,14 @@ class JoinPoles {
     pairs.forEach(([pinName1, pinName2]) => this.joinPins(pole1, pole2, pinName1, pinName2));
   }
 
-  private joinPins(poleBlock1: Block, poleBlock2: Block, pinName1: string, pinName2: string) {
-    const mesh1 = this.scene.getObj3d(poleBlock1.id);
-    const mesh2 = this.scene.getObj3d(poleBlock2.id);
+  private joinPins(deviceBlock1: Block, deviceBlock2: Block, pinName1: string, pinName2: string) {
+    const mesh1 = this.scene.getObj3d(deviceBlock1.id);
+    const mesh2 = this.scene.getObj3d(deviceBlock2.id);
     const pinMesh1 = MeshUtils.findByName(mesh1, pinName1);
     const pinMesh2 = MeshUtils.findByName(mesh2, pinName2);
 
-    const pole1 = this.blockStore.getDecoration('devices', poleBlock1.id);
-    const pole2 = this.blockStore.getDecoration('devices', poleBlock2.id);
+    const device1 = this.blockStore.getDecoration('devices', deviceBlock1.id);
+    const device2 = this.blockStore.getDecoration('devices', deviceBlock2.id);
 
     const pos1 = new Vector3();
     pinMesh1.getWorldPosition(pos1);
@@ -37,11 +37,11 @@ class JoinPoles {
     this.factory.create(
       edit,
       'cable-1',
-      { dependsOn: [poleBlock1.id, poleBlock2.id] },
+      { dependsOn: [deviceBlock1.id, deviceBlock2.id] },
       {
         cables: {
-          end1: { pin: pinName1, device: poleBlock1.id, point: pos1.toArray() },
-          end2: { pin: pinName2, device: poleBlock2.id, point: pos2.toArray() },
+          end1: { pin: pinName1, device: deviceBlock1.id, point: pos1.toArray() },
+          end2: { pin: pinName2, device: deviceBlock2.id, point: pos2.toArray() },
         },
       },
     );
@@ -49,7 +49,7 @@ class JoinPoles {
     const cable = edit.getLastBlock();
 
     edit.update<'devices'>(
-      poleBlock1.id,
+      deviceBlock1.id,
       {
         dependents: [cable.id],
       },
@@ -57,25 +57,27 @@ class JoinPoles {
       {
         pins: {
           // TODO: merging should preserve existing pins
-          ...pole1.pins,
+          ...device1.pins,
           [pinName1]: {
             wires: [cable.id],
+            connectedDevices: [device2.id],
           },
         },
       },
     );
 
     edit.update<'devices'>(
-      poleBlock2.id,
+      deviceBlock2.id,
       {
         dependents: [cable.id],
       },
       'devices',
       {
         pins: {
-          ...pole2.pins,
+          ...device2.pins,
           [pinName2]: {
             wires: [cable.id],
+            connectedDevices: [device1.id],
           },
         },
       },

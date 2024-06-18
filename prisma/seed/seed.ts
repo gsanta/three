@@ -5,6 +5,7 @@ import lampTempalteSeeds from './lampTemplateSeeds';
 import poleTempalteSeeds from './poleTemplateSeeds';
 import plantTempalteSeeds from './plantTemplateSeeds';
 import homeElectrics from './homeElectrics';
+import electricityProviders from './electricityProviders';
 
 const prisma = new PrismaClient();
 const main = async () => {
@@ -49,6 +50,14 @@ const main = async () => {
   }
 
   for (const template of homeElectrics) {
+    await prisma.blockType.upsert({
+      where: { type: template.type },
+      update: {},
+      create: template,
+    });
+  }
+
+  for (const template of electricityProviders) {
     await prisma.blockType.upsert({
       where: { type: template.type },
       update: {},

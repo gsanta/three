@@ -10,6 +10,7 @@ import DefaultBlockFactory from './creators/DefaultBlockFactory';
 import LampFactory from './creators/LampFactory';
 import WeatherHeadFactory from './creators/WeatherHeadFactory';
 import HomeElectricsFactory from './creators/HomeElectricsFactory';
+import ElectricityProviderFactory from './creators/ElectricityProviderFactory';
 
 class FactoryService {
   constructor(blockStore: BlockStore, sceneService: SceneService) {
@@ -19,6 +20,7 @@ class FactoryService {
     this.factories.lamps = new LampFactory(sceneService);
     this.factories['weather-heads'] = new WeatherHeadFactory(sceneService);
     this.factories['home-electrics'] = new HomeElectricsFactory(sceneService);
+    this.factories['electricity-providers'] = new ElectricityProviderFactory(sceneService);
     this.defaultBlockFactory = new DefaultBlockFactory(sceneService);
   }
 
@@ -39,13 +41,13 @@ class FactoryService {
 
     edit.create(block);
 
-    template.decorations.forEach((categoryName: BlockDecoration) => {
-      const category = factory.createCategory(block, {
-        ...categoryOverrides[categoryName],
-        category: categoryName,
+    template.decorations.forEach((decorationName: BlockDecoration) => {
+      const decoration = factory.createCategory(block, {
+        ...categoryOverrides[decorationName],
+        category: decorationName,
       });
 
-      edit.createDecoration(category);
+      edit.createDecoration(decoration);
     });
   }
 

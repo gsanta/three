@@ -1,4 +1,4 @@
-import BlockDecoration, { BlockCategories, BlockCategoryType } from '@/client/editor/types/BlockCategory';
+import BlockDecoration, { BlockCategories, BlockDecorationType } from '@/client/editor/types/BlockCategory';
 import { BlockUpdate, DecorationUpdate, UpdateBlocks, updateBlocks } from '@/client/editor/stores/block/blockSlice';
 import { PartialDeep } from 'type-fest';
 import Block, { BlockSlotSource } from '@/client/editor/types/Block';
@@ -7,6 +7,7 @@ import { Store } from '@/client/common/utils/store';
 import mergeDeep, { MergeStrategy, mergeArrays } from '../../utils/mergeDeep';
 import BlockUpdater from '../transaction/updaters/BlockUpdater';
 import LampUpdater from '../transaction/updaters/LampUpdater';
+import SystemHook from './SystemHook';
 
 const mergeSlotSources = (
   arr1: Block['slotSources'],
@@ -35,8 +36,9 @@ const mergeSlotSources = (
 };
 
 class Edit {
-  constructor(store: BlockStore, dispatchStore: Store) {
+  constructor(store: BlockStore, dispatchStore: Store, systemHooks: SystemHook[]) {
     this.store = store;
+    this.systemHooks = systemHooks;
     this.dispatchStore = dispatchStore;
 
     this.updaters.lamps = new LampUpdater(store);
@@ -51,6 +53,8 @@ class Edit {
     });
 
     this.dispatchStore.dispatch(updateBlocks(this.updates));
+
+    this.systemHooks.forEach((systemHook) => systemHook.onCommit(this.updates));
   }
 
   create(block: Block): this {
@@ -102,7 +106,7 @@ class Edit {
   updateDecoration<T extends BlockDecoration>(
     category: T,
     id: string,
-    partial: PartialDeep<BlockCategoryType>,
+    partial: PartialDeep<BlockDecorationType>,
     options: { arrayMergeStrategy: MergeStrategy } = { arrayMergeStrategy: 'merge' },
   ): this {
     if (this.isRemoved(id)) {
@@ -205,6 +209,8 @@ class Edit {
   private updates: UpdateBlocks = [];
 
   private updaters: Record<string, BlockUpdater> = {};
+
+  private systemHooks: SystemHook[];
 
   private store: BlockStore;
 

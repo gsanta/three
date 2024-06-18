@@ -113,6 +113,7 @@ const buildingTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | '
     path: '/wall_new.glb',
     parts: [
       {
+        index: '#1',
         geometryPath: 'Cube001.geometry',
         materialPath: 'Wall',
         rotation: [-3.14159, 0, -3.14159],
@@ -130,14 +131,17 @@ const buildingTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | '
         scale: [-3.718, -0.122, -3.718],
         parts: [
           {
+            index: '#1',
             geometryPath: 'Cube007.geometry',
             materialPath: 'Wall',
           },
           {
+            index: '#2',
             geometryPath: 'Cube007_1.geometry',
             materialPath: 'Wood1',
           },
           {
+            index: '#3',
             geometryPath: 'Cube007_2.geometry',
             materialPath: 'Wood2',
           },

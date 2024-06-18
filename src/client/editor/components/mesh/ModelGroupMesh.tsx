@@ -9,9 +9,9 @@ const ModelGroupMesh = ({ part, block, ...rest }: ModelPartProps) => {
     <group position={part.position} rotation={part.rotation} scale={part.scale} name={part.name || ''}>
       {part.parts.map((childPart) =>
         childPart.parts ? (
-          <ModelGroupMesh {...rest} block={block} part={childPart} />
+          <ModelGroupMesh key={`${block.id}-${childPart.index}`} {...rest} block={block} part={childPart} />
         ) : (
-          <ModelPartMesh {...rest} block={block} part={childPart} />
+          <ModelPartMesh key={`${block.id}-${childPart.index}`} {...rest} block={block} part={childPart} />
         ),
       )}
     </group>

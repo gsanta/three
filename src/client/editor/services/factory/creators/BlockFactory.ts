@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import BlockType from '@/client/editor/types/BlockType';
 import Block from '@/client/editor/types/Block';
-import BlockDecoration, { BlockCategoryType } from '@/client/editor/types/BlockCategory';
+import BlockDecoration, { BlockDecorationType } from '@/client/editor/types/BlockCategory';
 import SceneService from '@/client/editor/components/scene/SceneService';
 import BlockCreator from './BlockCreator';
 
@@ -18,8 +18,8 @@ abstract class BlockFactory {
 
   createCategory(
     _block: Block,
-    _overrides: Partial<BlockCategoryType> & { category: BlockDecoration },
-  ): BlockCategoryType {
+    _overrides: Partial<BlockDecorationType> & { category: BlockDecoration },
+  ): BlockDecorationType {
     throw new Error('Unimplemented method');
   }
 

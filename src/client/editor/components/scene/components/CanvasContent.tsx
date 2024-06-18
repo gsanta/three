@@ -7,6 +7,9 @@ import { useAppSelector } from '@/client/common/hooks/hooks';
 import MoveControl from './MoveControl';
 import MeshHierarchyRenderer from './MeshHierarchyRenderer';
 import TemporaryCableRenderer from './TemporaryCableRenderer';
+import { TestMesh } from '../../mesh/TestMesh';
+import MeshRenderer from './MeshRenderer';
+import Block from '@/client/editor/types/Block';
 
 const CanvasContent = () => {
   const { tool, scene: sceneService } = useEditorContext();
@@ -48,17 +51,25 @@ const CanvasContent = () => {
 
   return (
     <>
-      <MeshHierarchyRenderer
-        onPointerDown={handlePointerDown}
-        onPointerEnter={handlePointerEnter}
-        blocks={blocks}
-        selectedPartIndexes={selectedPartIndexes}
-      />
+      {blocks
+        .filter((block) => !block.parent)
+        .map((block) => (
+          <MeshRenderer
+            key={block.id}
+            block={block as Block<'model'>}
+            meshProps={{
+              onPointerDown: handlePointerDown,
+              onPointerEnter: handlePointerEnter,
+            }}
+            selectedParts={selectedPartIndexes[block.id]}
+          />
+        ))}
       <MoveControl onPointerDown={handlePointerDown} onPointerEnter={handlePointerEnter} />
       <mesh position={[5, 1, 0]} castShadow>
         <cylinderGeometry args={[0.02, 0.02, 2, 8]} />
         <meshStandardMaterial color="brown" />
       </mesh>
+      <TestMesh />
       <TemporaryCableRenderer />
       <Plane
         args={[100, 100]}

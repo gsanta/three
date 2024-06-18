@@ -26,13 +26,14 @@ model BlockCategory {
 }
 
 model BlockType {
-  id          Int     @id @default(autoincrement())
-  category    String
-  decorations Json    @default("[]")
-  parts       Json?
-  partDetails Json?
-  path        String?
-  type        String  @unique
+  id                   Int     @id @default(autoincrement())
+  category             String
+  decorations          Json    @default("[]")
+  parts                Json?
+  partDetails          Json?
+  path                 String?
+  type                 String  @unique
+  animations           Json?
 }
 
 model Snapshot {

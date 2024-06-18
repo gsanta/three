@@ -6,6 +6,9 @@ const homeElectrics: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'partDeta
   partDetails?: Prisma.JsonObject;
 })[] = [
   {
+    animations: {
+      'device-on': ['WashingMashine1.DoorOffAction', 'WashingMashine1.DoorOnAction'],
+    },
     category: 'home-electrics',
     decorations: ['devices'],
     path: '/washing_mashine1.glb',
@@ -30,6 +33,7 @@ const homeElectrics: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'partDeta
         index: '#3',
         geometryPath: 'WashingMashine1DoorOff.geometry',
         materialPath: 'Road',
+        name: 'WashingMashine1DoorOff',
         position: [-0.005, 0.63, -0.651],
         rotation: [Math.PI / 2, 0, 0],
         scale: [1, 0.248, 1],
@@ -38,14 +42,30 @@ const homeElectrics: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'partDeta
         index: '#4',
         geometryPath: 'WashingMashine1DoorOn.geometry',
         materialPath: 'Wood1',
-        position: [-0.005, 0.63, -0.651],
+        name: 'WashingMashine1DoorOn',
+        position: [-0.004, 0.626, -0.379],
+        rotation: [Math.PI / 2, 0, 0],
+        scale: [1, 0.248, 1],
+      },
+      {
+        index: '#5',
+        geometryPath: 'WashingMashine1Base001.geometry',
+        materialPath: 'White',
+        position: [0.273, 0.314, 0.506],
         rotation: [Math.PI / 2, 0, 0],
         scale: [1, 0.248, 1],
       },
     ],
     partDetails: {
+      '#3': {
+        name: 'WashingMashine1DoorOff',
+      },
       '#4': {
-        isHidden: true,
+        name: 'WashingMashine1DoorOn',
+      },
+      '#5': {
+        category: 'pin',
+        type: 'physical',
       },
     },
     type: 'washing-machine-1',

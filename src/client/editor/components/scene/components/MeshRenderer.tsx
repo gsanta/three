@@ -52,7 +52,7 @@ const MeshRenderer = (props: Omit<WrappedMeshProps, 'parent'>) => {
           selectedParts={selectedParts}
         />
         {block.children.map((child) => (
-          <MeshRenderer {...restProps} block={blocks[child]} />
+          <MeshRenderer key={blocks[child].id} {...restProps} block={blocks[child]} />
         ))}
       </group>
     ) : (
