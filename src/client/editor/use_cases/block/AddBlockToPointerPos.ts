@@ -26,7 +26,8 @@ class AddBlockToPointerPos {
     const targetBlock = this.blockStore.getBlocks()[targetBlockId];
 
     const mesh = this.sceneStore.getObj3d(targetBlock.id);
-    const targetPartMesh = MeshUtils.findByName(mesh, targetPartIndex);
+    const targetPart = targetBlock.partDetails[targetPartIndex];
+    const targetPartMesh = MeshUtils.findByName(mesh, targetPart?.name || '');
 
     const [intersections] = this.sceneService.intersection(targetPartMesh, clientX, clientY);
 

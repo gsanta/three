@@ -15,12 +15,16 @@ class JoinPoles {
   }
 
   join(pole1: Block, pole2: Block, pairs: [string, string][]) {
-    pairs.forEach(([pinName1, pinName2]) => this.joinPins(pole1, pole2, pinName1, pinName2));
+    pairs.forEach(([partIndex1, partIndex2]) => this.joinPins(pole1, pole2, partIndex1, partIndex2));
   }
 
-  private joinPins(deviceBlock1: Block, deviceBlock2: Block, pinName1: string, pinName2: string) {
+  private joinPins(deviceBlock1: Block, deviceBlock2: Block, partIndex1: string, partIndex2: string) {
     const mesh1 = this.scene.getObj3d(deviceBlock1.id);
     const mesh2 = this.scene.getObj3d(deviceBlock2.id);
+
+    const pinName1 = deviceBlock1.partDetails[partIndex1]?.name || '';
+    const pinName2 = deviceBlock2.partDetails[partIndex2]?.name || '';
+
     const pinMesh1 = MeshUtils.findByName(mesh1, pinName1);
     const pinMesh2 = MeshUtils.findByName(mesh2, pinName2);
 
@@ -40,8 +44,8 @@ class JoinPoles {
       { dependsOn: [deviceBlock1.id, deviceBlock2.id] },
       {
         cables: {
-          end1: { pin: pinName1, device: deviceBlock1.id, point: pos1.toArray() },
-          end2: { pin: pinName2, device: deviceBlock2.id, point: pos2.toArray() },
+          end1: { pin: partIndex1, device: deviceBlock1.id, point: pos1.toArray() },
+          end2: { pin: partIndex2, device: deviceBlock2.id, point: pos2.toArray() },
         },
       },
     );
@@ -58,7 +62,7 @@ class JoinPoles {
         pins: {
           // TODO: merging should preserve existing pins
           ...device1.pins,
-          [pinName1]: {
+          [partIndex1]: {
             wires: [cable.id],
             connectedDevices: [device2.id],
           },
@@ -75,7 +79,7 @@ class JoinPoles {
       {
         pins: {
           ...device2.pins,
-          [pinName2]: {
+          [partIndex2]: {
             wires: [cable.id],
             connectedDevices: [device1.id],
           },

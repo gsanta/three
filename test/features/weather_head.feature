@@ -21,7 +21,7 @@ Feature: Weather head
     And I select tool 'cable'
     And I store world position for part '#5' of block 'pole-1-id'
     And I move pointer to 'stored'
-    And I press pointer over block 'pole-1-id' and part '#5' at position 'stored'
+    And I press pointer over block 'pole-1-id' and part 'pin4' at position 'stored'
     Then cable for block 'pole-1-id' and pin '#5' ends at position 'stored'
     When I store world position for part '#2' of block 'wh-1-id'
     Then cable for block 'wh-1-id' and pin '#2' ends at position 'stored'
@@ -55,7 +55,7 @@ Feature: Weather head
     And pin '#2' of block 'wh-1-id' is empty
 
   @important
-  Scenario: Movign a pole connected to a weather head
+  Scenario: Moving a pole connected to a weather head
     Given I have a scene with:
       | TYPE            | ID         | PARENT       | POS                   |
       | building-base-1 | base-1-id  | -            | 1,0,3                 |

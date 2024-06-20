@@ -53,22 +53,29 @@ const poleTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
       },
     ],
     partDetails: {
+      '#1': {
+        name: 'root',
+      },
       '#2': {
         role: 'slot',
         category: 'pin',
+        name: 'pin1',
         type: 'physical',
       },
       '#3': {
-        role: 'slot',
         category: 'pin',
+        name: 'pin2',
+        role: 'slot',
         type: 'physical',
       },
       '#4': {
+        name: 'pin3',
         role: 'slot',
         category: 'pin',
         type: 'physical',
       },
       '#5': {
+        name: 'pin4',
         role: 'slot',
         category: 'pin',
         type: 'physical',
@@ -98,7 +105,11 @@ const poleTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
       },
     ],
     partDetails: {
+      '#1': {
+        name: 'root',
+      },
       '#2': {
+        name: 'pin',
         role: 'slot',
         category: 'pin',
         type: 'physical',

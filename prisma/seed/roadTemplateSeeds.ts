@@ -44,13 +44,21 @@ const roadTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
       },
     ],
     partDetails: {
+      '#1': {
+        name: 'root',
+      },
+      '#2': {
+        name: 'stripes',
+      },
       '#3': {
         category: 'road-slot',
+        name: 'end-north',
         role: 'slot',
         type: 'placeholder',
       },
       '#4': {
         category: 'road-slot',
+        name: 'end-south',
         role: 'slot',
         orientation: 180,
         type: 'placeholder',
@@ -118,26 +126,35 @@ const roadTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
       },
     ],
     partDetails: {
+      '#1': {
+        name: 'root',
+      },
+      '#2': {
+        name: 'stripes',
+      },
       '#3': {
         category: 'road-slot',
+        name: 'end-north',
         role: 'slot',
         type: 'placeholder',
       },
       '#4': {
         category: 'road-slot',
+        name: 'end-south',
         role: 'slot',
         orientation: 180,
         type: 'placeholder',
       },
       '#5': {
         category: 'road-slot',
+        name: 'end-east',
         role: 'slot',
         orientation: 90,
-
         type: 'placeholder',
       },
       '#6': {
         category: 'road-slot',
+        name: 'end-west',
         role: 'slot',
         orientation: 270,
         type: 'placeholder',
@@ -186,14 +203,22 @@ const roadTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
       },
     ],
     partDetails: {
+      '#1': {
+        name: 'root',
+      },
+      '#2': {
+        name: 'stripes',
+      },
       '#3': {
         category: 'road-slot',
+        name: 'end-south',
         role: 'slot',
         orientation: 180,
         type: 'placeholder',
       },
       '#4': {
         category: 'road-slot',
+        name: 'end-east',
         role: 'slot',
         orientation: 90,
         type: 'placeholder',
