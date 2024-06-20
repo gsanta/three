@@ -1,10 +1,10 @@
 import { addVector } from '@/client/editor/utils/vectorUtils';
 import WrappedMeshProps from '../../types/block/WrappedMeshProps';
-import { Color } from 'three';
+import { Color, Mesh } from 'three';
 import useRegisterScene from '../hooks/useRegisterScene';
 
 const BoxMesh = ({ block: meshInfo, meshProps, materialProps, parent }: WrappedMeshProps) => {
-  const ref = useRegisterScene();
+  const ref = useRegisterScene<Mesh>();
 
   return (
     <mesh

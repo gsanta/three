@@ -8,7 +8,7 @@ import { Vector3 } from 'three';
 import ExtendedWorld from './ExtendedWorld';
 import findClosestBlock from './helpers/findClosestBlock';
 
-function selectBlockAtPosition(this: ExtendedWorld, x: number, y: number, z: number, partName?: string) {
+function selectBlockAtPosition(this: ExtendedWorld, x: number, y: number, z: number, partIndex?: string) {
   store.dispatch(setSelectedTool(ToolName.Select));
 
   const blockWithDistance = findClosestBlock(this.env.blockStore.getBlocksAsArray(), [x, y, z]);
@@ -25,7 +25,8 @@ function selectBlockAtPosition(this: ExtendedWorld, x: number, y: number, z: num
 
   const mesh = this.env.sceneStore.getObj3d(block.id);
 
-  if (partName) {
+  if (partIndex) {
+    const partName = this.env.blockStore.getBlock(block.id).partDetails[partIndex]?.name;
     const partMesh = MeshUtils.findByName(mesh, partName);
     this.env.sceneService.setIntersection([{ object: partMesh, distance: 1, point: new Vector3() }]);
   }

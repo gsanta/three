@@ -1,8 +1,8 @@
-import Device, { createPin } from '@/client/editor/types/block/Device';
 import BlockFactory from './BlockFactory';
 import Block from '@/client/editor/types/Block';
+import Device, { createPin } from '@/client/editor/types/block/Device';
 
-class PoleFactory extends BlockFactory {
+class HomeElectricsFactory extends BlockFactory {
   createCategory(block: Block, overrides: Partial<Block> = {}): Device {
     const pins: Device['pins'] = {};
 
@@ -12,8 +12,8 @@ class PoleFactory extends BlockFactory {
 
     const pole: Device = {
       circuitComponent: 'consumer',
-      isOn: false,
       pins: pins,
+      isOn: false,
       ...overrides,
       id: block.id,
       category: 'devices',
@@ -22,4 +22,4 @@ class PoleFactory extends BlockFactory {
   }
 }
 
-export default PoleFactory;
+export default HomeElectricsFactory;

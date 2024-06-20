@@ -2,8 +2,8 @@ import { Then } from '@cucumber/cucumber';
 import ExtendedWorld from './ExtendedWorld';
 import assert from 'assert';
 import isPositionCloseTo from './helpers/isPositionCloseTo';
-import { Pins } from '@/client/editor/types/block/Pole';
-import { checkBlockExists, checkDecorationExists, checkPosition } from './helpers/checks';
+import { Pins } from '@/client/editor/types/block/Device';
+import { checkDecorationExists, checkPosition } from './helpers/checks';
 import Cable from '@/client/editor/types/block/Cable';
 
 Then(
@@ -16,8 +16,8 @@ Then(
 
     const cable = cables.find(
       (currCable) =>
-        (currCable.end1?.device === realBlockId && currCable.end1.pin === pin) ||
-        (currCable.end2?.device === realBlockId && currCable.end2.pin === pin),
+        (currCable?.end1?.device === realBlockId && currCable.end1.pin === pin) ||
+        (currCable?.end2?.device === realBlockId && currCable.end2.pin === pin),
     );
 
     if (!cable) {
@@ -52,7 +52,7 @@ Then('cable {string} ends at position {string}', function (this: ExtendedWorld, 
 Then('pin {string} of block {string} is empty', function (this: ExtendedWorld, pin: string, blockId: string) {
   const realBlockId = blockId === 'examined' ? this.env.testScene.storedBlockId || '' : blockId;
 
-  const pole = this.env.blockStore.getDecorations('poles')[realBlockId];
+  const pole = this.env.blockStore.getDecorations('devices')[realBlockId];
 
-  assert.equal(pole.pins[pin as Pins]?.wires.length, 0);
+  assert.equal(pole?.pins[pin as Pins]?.wires.length, 0);
 });

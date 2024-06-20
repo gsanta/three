@@ -1,10 +1,11 @@
-import { BlockCategoryType } from '@/client/editor/types/BlockCategory';
+import { BlockDecorationType } from '@/client/editor/types/BlockCategory';
 import BlockUpdater from './BlockUpdater';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import Edit from '../../update/Edit';
+import Block from '@/client/editor/types/Block';
 import Device from '@/client/editor/types/block/Device';
 
-const isDevice = (decoration: BlockCategoryType): decoration is Device => {
+const isDevice = (decoration: BlockDecorationType): decoration is Device => {
   return decoration.category === 'devices';
 };
 
@@ -15,15 +16,24 @@ class LampUpdater extends BlockUpdater {
     this.blockStore = blockStore;
   }
 
-  onUpdateDecorators(edit: Edit, newState: BlockCategoryType): void {
+  onUpdateDecorators(edit: Edit, block: Block, newState: BlockDecorationType): void {
     if (isDevice(newState)) {
-      edit.updateBlock(newState.id, {
+      const loadOnPartIndexes = Object.keys(block.partDetails).filter(
+        (key) => block.partDetails[key]?.category === 'load-on',
+      );
+      const loadOffPartIndexes = Object.keys(block.partDetails).filter(
+        (key) => block.partDetails[key]?.category === 'load-off',
+      );
+
+      edit.updateBlock(block.id, {
         partDetails: {
-          '#2': {
-            isHidden: newState.isOn,
-          },
-          '#3': {
+          [loadOnPartIndexes[0]]: {
+            ...block.partDetails[loadOnPartIndexes[0]],
             isHidden: !newState.isOn,
+          },
+          [loadOffPartIndexes[0]]: {
+            ...block.partDetails[loadOffPartIndexes[0]],
+            isHidden: newState.isOn,
           },
         },
       });

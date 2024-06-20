@@ -27,6 +27,8 @@ import poleTempalteSeeds from 'prisma/seed/poleTemplateSeeds';
 import roadTempalteSeeds from 'prisma/seed/roadTemplateSeeds';
 import { setTemplates } from '@/client/editor/stores/blockType/blockTypeSlice';
 import BlockType from '@/client/editor/types/BlockType';
+import ElectricitySystemHook from '@/client/editor/services/electricity/ElectricitySystemHook';
+import ElectricityStore from '@/client/editor/stores/electricity/ElectricityStore';
 
 type TestEnv = {
   controller: ControllerService;
@@ -52,7 +54,10 @@ export const setupTestEnv = (): TestEnv => {
   const scene = new TestSceneService();
   const factoryService = new FactoryService(blockStore, scene);
 
-  const updateService = new TransactionService(blockStore, store, scene);
+  const electricityStore = new ElectricityStore();
+  const electricitySystemHook = new ElectricitySystemHook(blockStore, electricityStore);
+
+  const updateService = new TransactionService(blockStore, store, scene, [electricitySystemHook]);
 
   const sceneStore = new SceneStore();
 

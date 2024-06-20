@@ -2,9 +2,9 @@
 import BlockDecoration from '@/client/editor/types/BlockCategory';
 
 abstract class BlockAdder {
-  category: BlockDecoration;
+  category: string;
 
-  constructor(category: BlockDecoration) {
+  constructor(category: string) {
     this.category = category;
   }
 

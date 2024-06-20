@@ -31,7 +31,7 @@ When('I press pointer over block {string}', function (this: ExtendedWorld, block
 
 When(
   'I press pointer over block {string} and part {string} at position {string}',
-  function (this: ExtendedWorld, blockId: string, partIndex: string, position: string) {
+  function (this: ExtendedWorld, blockId: string, partName: string, position: string) {
     const [x, y, z] = checkPosition.call(this, position);
     const block = this.env.blockStore.getBlock(blockId);
 
@@ -41,7 +41,7 @@ When(
 
     const mesh = this.env.sceneStore.getObj3d(block.id);
 
-    const partMesh = MeshUtils.findByName(mesh, partIndex);
+    const partMesh = MeshUtils.findByName(mesh, partName);
     this.env.sceneService.setIntersection([{ object: partMesh, distance: 1, point: new Vector3(x, y, z) }]);
 
     this.env.toolHelper.pointerDown({ blockId });

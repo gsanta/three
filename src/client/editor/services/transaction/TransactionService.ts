@@ -3,16 +3,18 @@ import BlockStore from '../../stores/block/BlockStore';
 import { Store } from '@/client/common/utils/store';
 import SceneService from '../../components/scene/SceneService';
 import Device from '../../types/block/Device';
+import SystemHook from '../update/SystemHook';
 
 class TransactionService {
-  constructor(blockStore: BlockStore, dispatchStore: Store, sceneService: SceneService) {
+  constructor(blockStore: BlockStore, dispatchStore: Store, sceneService: SceneService, systemHooks: SystemHook[]) {
     this.store = blockStore;
     this.dispatchStore = dispatchStore;
     this.sceneService = sceneService;
+    this.systemHooks = systemHooks;
   }
 
   getTransaction(): Edit {
-    return new Edit(this.store, this.dispatchStore);
+    return new Edit(this.store, this.dispatchStore, this.systemHooks);
   }
 
   updateDevice(id: string, device: Partial<Device>) {
@@ -22,6 +24,8 @@ class TransactionService {
   private store: BlockStore;
 
   private dispatchStore: Store;
+
+  private systemHooks: SystemHook[] = [];
 
   private sceneService: SceneService;
 }

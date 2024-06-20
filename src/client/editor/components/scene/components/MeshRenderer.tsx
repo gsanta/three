@@ -5,6 +5,7 @@ import WrappedMeshProps from '../../../types/block/WrappedMeshProps';
 import { ModelMesh } from '../../mesh/ModelMesh';
 import Block from '@/client/editor/types/Block';
 import { addVector } from '@/client/editor/utils/vectorUtils';
+import Cable from '@/client/editor/types/block/Cable';
 
 const isModelMesh = (block: Block): block is Block<'model'> => block.geometry === 'model';
 
@@ -25,7 +26,7 @@ const MeshRenderer = (props: Omit<WrappedMeshProps, 'parent'>) => {
     return (
       <CableMesh
         additions={additions}
-        cable={categories.cables[block.id]}
+        cable={categories.cables[block.id] as Cable}
         block={block}
         meshProps={{ ...meshProps }}
         materialProps={materialProps}
@@ -52,7 +53,7 @@ const MeshRenderer = (props: Omit<WrappedMeshProps, 'parent'>) => {
           selectedParts={selectedParts}
         />
         {block.children.map((child) => (
-          <MeshRenderer {...restProps} block={blocks[child]} />
+          <MeshRenderer key={blocks[child].id} {...restProps} block={blocks[child]} />
         ))}
       </group>
     ) : (

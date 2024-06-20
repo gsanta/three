@@ -36,7 +36,7 @@ class Selector {
 
     const edit = this.updateService.getTransaction();
 
-    const partName = this.checkPartIntersection(mesh, clientX, clientY);
+    const partName = this.checkPartIntersection(block, mesh, clientX, clientY);
     const isMovable = this.checkIsBlockMoveable(block);
 
     if (partName) {
@@ -56,11 +56,19 @@ class Selector {
     edit.commit();
   }
 
-  private checkPartIntersection(mesh: Object3D<Object3DEventMap>, clientX: number, clientY: number) {
+  private checkPartIntersection(block: Block, mesh: Object3D<Object3DEventMap>, clientX: number, clientY: number) {
     const [intersects] = this.scene.intersection(mesh, clientX, clientY);
 
     // TODO find a better solution to skip non-selectable parts
-    return intersects?.map((intersection) => intersection.object.name).find((name) => name && name !== '#1');
+    const partName = intersects
+      ?.map((intersection) => intersection.object.name)
+      .find((name) => name && name !== 'root');
+
+    if (partName) {
+      return Object.entries(block.partDetails).find(([, val]) => val?.name === partName)?.[0];
+    }
+
+    return undefined;
   }
 
   private checkIsBlockMoveable(block: Block) {

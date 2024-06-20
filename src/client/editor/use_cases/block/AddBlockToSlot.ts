@@ -23,11 +23,11 @@ class AddBlockToSlot {
     const targetBlock = this.blockStore.getBlocks()[targetBlockId];
 
     const mesh = this.sceneStore.getObj3d(targetBlock.id);
-    const sourcePartMesh = MeshUtils.findByName(mesh, targetPartIndex);
-    const sourcePart = targetBlock.parts.find((part) => part.index === targetPartIndex);
+    const targetPart = targetBlock.partDetails[targetPartIndex];
+    const targetPartMesh = MeshUtils.findByName(mesh, targetPart?.name || '');
 
-    const sourcePartPos = sourcePartMesh.position;
-    const sourcePartOrientation = targetBlock.partDetails[sourcePart?.index || '']?.orientation || 0;
+    const sourcePartPos = targetPartMesh.position;
+    const sourcePartOrientation = targetBlock.partDetails[targetPartIndex]?.orientation || 0;
     const finalRotation = MathUtils.normalizeAngle(toDegree(targetBlock.rotation[1]) + sourcePartOrientation);
 
     this.factoryService.create(edit, templateName, {

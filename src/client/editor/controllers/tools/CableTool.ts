@@ -49,15 +49,20 @@ class CableTool extends HoverTool {
         const mesh = this.scene.getObj3d(blockId);
         const targetBlock = this.blockStore.getBlock(blockId);
 
-        const partName = this.checkPartIntersection(mesh, info.clientX, info.clientY);
+        const targetPartIndex = this.checkPartIntersection(targetBlock, mesh, info.clientX, info.clientY);
 
         const selectedBlockId = this.blockStore.getSelectedRootBlockIds()[0];
+        const sourcePartIndex = this.blockStore.getSelectedPartIndexes()[selectedBlockId]?.[0];
+
+        if (!sourcePartIndex || !targetPartIndex) {
+          return;
+        }
+
         const block1 = this.blockStore.getBlock(selectedBlockId);
         const block2 = this.blockStore.getBlock(info.eventObject?.userData.modelId);
 
-        if (targetBlock.partDetails[partName || '']?.category === 'pin') {
-          const pairs: [string, string][] = block1.category === 'weather-heads' ? [['#2', '#5']] : [['#5', '#2']];
-          this.joinPoles.join(block1, block2, pairs);
+        if (targetBlock.partDetails[targetPartIndex || '']?.category === 'pin') {
+          this.joinPoles.join(block1, block2, [[sourcePartIndex, targetPartIndex]]);
         }
       }
     } else {
@@ -67,12 +72,13 @@ class CableTool extends HoverTool {
 
   onPointerMove({ pos }: ToolInfo) {
     const selectedBlockId = this.blockStore.getSelectedRootBlockIds()[0];
+    const block = this.blockStore.getBlock(selectedBlockId);
     const selectedPart = this.blockStore.getSelectedPart(selectedBlockId);
 
     if (selectedPart) {
       this.isDrawingCable = true;
       const mesh1 = this.scene.getObj3d(selectedBlockId);
-      const pinMesh1 = MeshUtils.findByName(mesh1, selectedPart);
+      const pinMesh1 = MeshUtils.findByName(mesh1, block.partDetails[selectedPart]?.name);
 
       const pos2 = new Vector3();
       pinMesh1.getWorldPosition(pos2);

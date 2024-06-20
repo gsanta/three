@@ -17,7 +17,11 @@ const findByNameRecursive = (mesh: Object3D, name: string): Object3D | undefined
 };
 
 class MeshUtils {
-  static findByName(mesh: Object3D, name: string): Object3D {
+  static findByName(mesh: Object3D, name?: string): Object3D {
+    if (!name) {
+      throw new Error(`Name is mandatory`);
+    }
+
     const found = findByNameRecursive(mesh, name);
 
     if (!found) {

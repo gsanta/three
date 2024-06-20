@@ -8,6 +8,7 @@ import { IconName } from '@/client/common/components/icon/Icon';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
 import ToolName from '../../types/ToolName';
+import Block from '../../types/Block';
 
 abstract class HoverTool extends Tool {
   constructor(
@@ -34,10 +35,18 @@ abstract class HoverTool extends Tool {
     }
   }
 
-  protected checkPartIntersection(mesh: Object3D<Object3DEventMap>, clientX: number, clientY: number) {
+  protected checkPartIntersection(block: Block, mesh: Object3D<Object3DEventMap>, clientX: number, clientY: number) {
     const [intersects] = this.sceneService.intersection(mesh, clientX, clientY);
 
-    return intersects?.map((intersection) => intersection.object.name).find((name) => name && name !== 'root');
+    const partName = intersects
+      ?.map((intersection) => intersection.object.name)
+      .find((name) => name && name !== 'root');
+
+    if (partName) {
+      return Object.entries(block.partDetails).find(([, val]) => val?.name === partName)?.[0];
+    }
+
+    return undefined;
   }
 
   protected sceneService: SceneService;

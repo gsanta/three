@@ -1,9 +1,10 @@
 import { BlockType, Prisma } from '@prisma/client';
 
-const roadTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+const roadTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+  animations?: Prisma.JsonObject;
   decorations: Prisma.JsonArray;
   parts: Prisma.JsonArray;
-  partDetails: Prisma.JsonObject;
+  partDetails?: Prisma.JsonObject;
 })[] = [
   {
     category: 'roads',
@@ -43,13 +44,21 @@ const roadTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'part
       },
     ],
     partDetails: {
+      '#1': {
+        name: 'root',
+      },
+      '#2': {
+        name: 'stripes',
+      },
       '#3': {
         category: 'road-slot',
+        name: 'end-north',
         role: 'slot',
         type: 'placeholder',
       },
       '#4': {
         category: 'road-slot',
+        name: 'end-south',
         role: 'slot',
         orientation: 180,
         type: 'placeholder',
@@ -117,26 +126,35 @@ const roadTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'part
       },
     ],
     partDetails: {
+      '#1': {
+        name: 'root',
+      },
+      '#2': {
+        name: 'stripes',
+      },
       '#3': {
         category: 'road-slot',
+        name: 'end-north',
         role: 'slot',
         type: 'placeholder',
       },
       '#4': {
         category: 'road-slot',
+        name: 'end-south',
         role: 'slot',
         orientation: 180,
         type: 'placeholder',
       },
       '#5': {
         category: 'road-slot',
+        name: 'end-east',
         role: 'slot',
         orientation: 90,
-
         type: 'placeholder',
       },
       '#6': {
         category: 'road-slot',
+        name: 'end-west',
         role: 'slot',
         orientation: 270,
         type: 'placeholder',
@@ -185,14 +203,22 @@ const roadTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'part
       },
     ],
     partDetails: {
+      '#1': {
+        name: 'root',
+      },
+      '#2': {
+        name: 'stripes',
+      },
       '#3': {
         category: 'road-slot',
+        name: 'end-south',
         role: 'slot',
         orientation: 180,
         type: 'placeholder',
       },
       '#4': {
         category: 'road-slot',
+        name: 'end-east',
         role: 'slot',
         orientation: 90,
         type: 'placeholder',

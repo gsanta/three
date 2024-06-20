@@ -18,6 +18,7 @@ export type ModelPartProps = {
 };
 
 const ModelPartMesh = ({ block, materials, nodes, onPointerEnter, part }: ModelPartProps) => {
+  const partInfo = block.partDetails[part.index];
   const color = block.partDetails[part.index]?.isSelected ? 'green' : undefined;
 
   const material = useMaterial({ block, materials, nodes, part });
@@ -34,6 +35,7 @@ const ModelPartMesh = ({ block, materials, nodes, onPointerEnter, part }: ModelP
   return (
     <mesh
       castShadow
+      key={`${block.id}-${part.index}`}
       receiveShadow
       geometry={geometry}
       material={color ? new MeshStandardMaterial({ color: 'green' }) : material}
@@ -41,7 +43,7 @@ const ModelPartMesh = ({ block, materials, nodes, onPointerEnter, part }: ModelP
       position={part.position}
       rotation={part.rotation}
       scale={part.scale}
-      name={part.index || ''}
+      name={partInfo?.name || ''}
       userData={{ modelId: block.id }}
     />
   );

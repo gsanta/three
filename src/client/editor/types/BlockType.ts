@@ -18,7 +18,7 @@ export type ModelPart = {
   name?: string;
 };
 
-export type ModelPartCategory = 'pin' | 'wall-slot' | 'ceil-slot';
+export type ModelPartCategory = 'pin' | 'wall-slot' | 'ceil-slot' | 'load-on' | 'load-off';
 
 export type ModelPartInfo = {
   allowMovement?: Axis[];
@@ -27,10 +27,14 @@ export type ModelPartInfo = {
   orientation: number;
   role?: 'slot';
   category: ModelPartCategory;
+  name: string;
   type: 'placeholder' | 'phisycal';
 };
 
+export type AnimationTriggerName = 'device-on';
+
 type BlockType<S extends ShapeType = ShapeType> = {
+  animations?: Partial<Record<AnimationTriggerName, string[]>>;
   category: string;
   color: [number, number, number];
   decorations: BlockDecoration[];

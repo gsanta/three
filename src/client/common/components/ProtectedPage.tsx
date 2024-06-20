@@ -22,6 +22,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
 import ControllerService from '@/client/editor/services/controller/ControllerService';
+import ElectricityStore from '@/client/editor/stores/electricity/ElectricityStore';
+import ElectricitySystemHook from '@/client/editor/services/electricity/ElectricitySystemHook';
 
 type ProtectedPageProps = {
   children: ReactNode;
@@ -44,7 +46,17 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
   const blockStore = useMemo(() => new BlockStore(store), []);
   const scene = useMemo(() => new SceneServiceImpl(sceneStore), [sceneStore]);
   const factoryService = useMemo(() => new FactoryService(blockStore, scene), [blockStore, scene]);
-  const transaction = useMemo(() => new TransactionService(blockStore, store, scene), [blockStore, scene]);
+
+  const electricityStore = useMemo(() => new ElectricityStore(), []);
+  const electricitySystemHook = useMemo(
+    () => new ElectricitySystemHook(blockStore, electricityStore),
+    [blockStore, electricityStore],
+  );
+
+  const transaction = useMemo(
+    () => new TransactionService(blockStore, store, scene, [electricitySystemHook]),
+    [blockStore, scene, electricitySystemHook],
+  );
 
   const editorContext = useMemo<EditorContextType>(
     () => ({

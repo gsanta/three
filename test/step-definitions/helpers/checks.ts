@@ -39,7 +39,8 @@ export function checkBlockMeshExists(this: ExtendedWorld, blockId: string) {
 export function checkPartMeshExists(this: ExtendedWorld, blockId: string, partIndex: string) {
   const mesh = checkBlockMeshExists.call(this, blockId);
 
-  const partMesh = MeshUtils.findByName(mesh, partIndex);
+  const partName = this.env.blockStore.getBlock(blockId).partDetails[partIndex]?.name;
+  const partMesh = MeshUtils.findByName(mesh, partName);
 
   if (!partMesh) {
     throw new Error(`Mesh for part ${partIndex} of block ${blockId} not found.`);

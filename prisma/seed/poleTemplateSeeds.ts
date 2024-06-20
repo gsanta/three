@@ -1,13 +1,14 @@
 import { BlockType, Prisma } from '@prisma/client';
 
-const poleTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+const poleTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+  animations?: Prisma.JsonObject;
   decorations: Prisma.JsonArray;
   parts?: Prisma.JsonArray;
   partDetails?: Prisma.JsonObject;
 })[] = [
   {
     category: 'poles',
-    decorations: ['poles'],
+    decorations: ['devices'],
     path: '/pole2.glb',
     parts: [
       {
@@ -52,22 +53,29 @@ const poleTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'part
       },
     ],
     partDetails: {
+      '#1': {
+        name: 'root',
+      },
       '#2': {
         role: 'slot',
         category: 'pin',
+        name: 'pin1',
         type: 'physical',
       },
       '#3': {
-        role: 'slot',
         category: 'pin',
+        name: 'pin2',
+        role: 'slot',
         type: 'physical',
       },
       '#4': {
+        name: 'pin3',
         role: 'slot',
         category: 'pin',
         type: 'physical',
       },
       '#5': {
+        name: 'pin4',
         role: 'slot',
         category: 'pin',
         type: 'physical',
@@ -77,7 +85,7 @@ const poleTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'part
   },
   {
     category: 'weather-heads',
-    decorations: ['poles'],
+    decorations: ['devices'],
     path: '/weather_head_1.glb',
     parts: [
       {
@@ -97,7 +105,11 @@ const poleTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'part
       },
     ],
     partDetails: {
+      '#1': {
+        name: 'root',
+      },
       '#2': {
+        name: 'pin',
         role: 'slot',
         category: 'pin',
         type: 'physical',

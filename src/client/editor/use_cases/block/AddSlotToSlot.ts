@@ -41,7 +41,8 @@ class AddSlotToSlot {
 
     const mesh = this.sceneStore.getObj3d(block.id);
 
-    const partMesh = MeshUtils.findByName(mesh, targetPartIndex);
+    const targetPartInfo = block.partDetails[targetPartIndex];
+    const partMesh = MeshUtils.findByName(mesh, targetPartInfo?.name);
     const pos = new Vector3();
     partMesh.getWorldPosition(pos);
 
