@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { CatmullRomCurve3, Vector3 } from 'three';
+import { CatmullRomCurve3, Mesh, Vector3 } from 'three';
 import WrappedMeshProps from '../../types/block/WrappedMeshProps';
 import Cable from '../../types/block/Cable';
 import useRegisterScene from '../hooks/useRegisterScene';
@@ -8,7 +8,7 @@ import Num3 from '../../types/Num3';
 type CableProps = WrappedMeshProps<'tube'> & { cable: Cable };
 
 const CableMesh = ({ cable, meshProps, block: meshInfo }: CableProps) => {
-  const ref = useRegisterScene();
+  const ref = useRegisterScene<Mesh>();
 
   const curve = useMemo(() => {
     return new CatmullRomCurve3(

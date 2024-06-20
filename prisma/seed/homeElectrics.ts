@@ -1,6 +1,7 @@
 import { BlockType, Prisma } from '@prisma/client';
 
-const homeElectrics: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+const homeElectrics: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+  animations?: Prisma.JsonObject;
   decorations: Prisma.JsonArray;
   parts: Prisma.JsonArray;
   partDetails?: Prisma.JsonObject;
@@ -65,6 +66,7 @@ const homeElectrics: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'partDeta
       },
       '#5': {
         category: 'pin',
+        name: '#5',
         type: 'physical',
       },
     },

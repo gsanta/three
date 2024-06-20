@@ -7,9 +7,10 @@ import ModelMeshProps from '../types/ModelMeshProps';
 import ModelGroupMesh from './ModelGroupMesh';
 import ModelPartMesh from './ModelPartMesh';
 import useDevice from '../hooks/useDevice';
+import { Group } from 'three';
 
 export const ModelMesh = ({ additions, block, meshProps, overwrites, selectedParts = [] }: ModelMeshProps) => {
-  const ref = useRegisterScene();
+  const ref = useRegisterScene<Group>();
   const blockPosition = overwrites?.position ? overwrites.position : block.position;
   const position = additions?.position ? addVector(additions.position, blockPosition) : blockPosition;
   const blockRotation = overwrites?.rotation ? overwrites.rotation : block.rotation;

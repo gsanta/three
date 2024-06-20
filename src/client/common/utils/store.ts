@@ -14,7 +14,7 @@ const sceneSliceUndoable = undoable(blockSlice, {
 });
 
 export type RootState = {
-  electricity: ElectricityState;
+  electricSystem: ElectricityState;
   settings: SettingsState;
   tool: ToolState;
   temporary: TemporaryState;
@@ -27,7 +27,7 @@ export const testMiddleware = createListenerMiddleware();
 export function setupStore(preloadedState?: RootState): EnhancedStore<RootState> {
   const store = configureStore({
     reducer: {
-      electricity: electricitySlice,
+      electricSystem: electricitySlice,
       settings: settingsSlice,
       tool: toolSlice,
       blockType: blockTypeSlice,

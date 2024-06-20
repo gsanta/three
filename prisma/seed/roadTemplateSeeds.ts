@@ -1,9 +1,10 @@
 import { BlockType, Prisma } from '@prisma/client';
 
-const roadTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+const roadTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+  animations?: Prisma.JsonObject;
   decorations: Prisma.JsonArray;
   parts: Prisma.JsonArray;
-  partDetails: Prisma.JsonObject;
+  partDetails?: Prisma.JsonObject;
 })[] = [
   {
     category: 'roads',

@@ -16,8 +16,8 @@ Then(
 
     const cable = cables.find(
       (currCable) =>
-        (currCable.end1?.device === realBlockId && currCable.end1.pin === pin) ||
-        (currCable.end2?.device === realBlockId && currCable.end2.pin === pin),
+        (currCable?.end1?.device === realBlockId && currCable.end1.pin === pin) ||
+        (currCable?.end2?.device === realBlockId && currCable.end2.pin === pin),
     );
 
     if (!cable) {
@@ -54,5 +54,5 @@ Then('pin {string} of block {string} is empty', function (this: ExtendedWorld, p
 
   const pole = this.env.blockStore.getDecorations('devices')[realBlockId];
 
-  assert.equal(pole.pins[pin as Pins]?.wires.length, 0);
+  assert.equal(pole?.pins[pin as Pins]?.wires.length, 0);
 });

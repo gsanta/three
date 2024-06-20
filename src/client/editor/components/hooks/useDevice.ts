@@ -1,6 +1,6 @@
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import { useAnimations } from '@react-three/drei';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { AnimationMixer } from 'three';
 import Block from '../../types/Block';
 
@@ -12,19 +12,19 @@ type UseDeviceProps = {
 
 const useDevice = ({ block, actions, mixer }: UseDeviceProps) => {
   const device = useAppSelector((state) => state.block.present.decorations.devices[block.id]);
+  const currentFlows = useAppSelector((state) => state.electricSystem.nodes[block.id]?.currentFlows);
 
   useEffect(() => {
-    console.log('block', block.animations);
-    if (device.isOn) {
-      block.animations?.['device-on'].forEach((animationName) => actions[animationName]?.play());
+    if (device?.isOn && currentFlows) {
+      block.animations?.['device-on']?.forEach((animationName) => actions[animationName]?.play());
     } else {
-      block.animations?.['device-on'].forEach((animationName) => actions[animationName]?.stop());
+      block.animations?.['device-on']?.forEach((animationName) => actions[animationName]?.stop());
     }
 
     return () => {
-      block.animations?.['device-on'].forEach((animationName) => actions[animationName]?.play());
+      block.animations?.['device-on']?.forEach((animationName) => actions[animationName]?.play());
     };
-  }, [actions, block.animations, device.isOn, mixer]);
+  }, [actions, block.animations, currentFlows, device?.isOn, mixer]);
 
   return;
 };

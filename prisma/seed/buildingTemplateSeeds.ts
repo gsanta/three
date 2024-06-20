@@ -1,6 +1,7 @@
 import { BlockType, Prisma } from '@prisma/client';
 
-const buildingTempalteSeeds: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+const buildingTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+  animations?: Prisma.JsonObject;
   decorations: Prisma.JsonArray;
   parts: Prisma.JsonArray;
   partDetails?: Prisma.JsonObject;

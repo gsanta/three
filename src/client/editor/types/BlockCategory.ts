@@ -30,7 +30,7 @@ export type PartialBlockCategories = {
 };
 
 export type BlockCategoryRecords = {
-  [K in keyof BlockCategories]: Record<string, BlockCategories[K]>;
+  [K in keyof BlockCategories]: Partial<Record<string, BlockCategories[K]>>;
 };
 
 export default BlockDecoration;

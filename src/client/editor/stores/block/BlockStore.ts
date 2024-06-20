@@ -1,5 +1,5 @@
 import { Store } from '@/client/common/utils/store';
-import BlockDecoration from '@/client/editor/types/BlockCategory';
+import BlockDecoration, { BlockCategories } from '@/client/editor/types/BlockCategory';
 
 class BlockStore {
   constructor(store: Store) {
@@ -52,7 +52,13 @@ class BlockStore {
       throw new Error('Id is not defined');
     }
 
-    return this.store.getState().block.present.decorations[category][id];
+    const decoration = this.store.getState().block.present.decorations[category][id];
+
+    if (!decoration) {
+      throw new Error(`Decoration '${category}' not found`);
+    }
+
+    return decoration;
   }
 
   getDecorations<T extends BlockDecoration>(category: T) {
@@ -60,7 +66,7 @@ class BlockStore {
   }
 
   getDecorationsAsArray<T extends BlockDecoration>(decoration: T) {
-    return Object.values(this.store.getState().block.present.decorations[decoration]);
+    return Object.values(this.store.getState().block.present.decorations[decoration]) as BlockCategories[T][];
   }
 
   getBlockSettings() {

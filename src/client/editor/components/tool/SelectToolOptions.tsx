@@ -6,6 +6,7 @@ import useSelectedBlocks from '../hooks/useSelectedBlocks';
 import RotationControl from './RotationControl';
 import SizeControl from './SizeControl';
 import DeviceControl from './DeviceControl';
+import Device from '../../types/block/Device';
 
 const SelectToolOptions = () => {
   const selectedBlocks = useSelectedBlocks();
@@ -54,7 +55,7 @@ const SelectToolOptions = () => {
       <Button onClick={() => tool.getGroupTool().ungroup()}>Ungroup</Button>
       {block?.decorations.map((decoration) => {
         if (decoration === 'devices') {
-          return <DeviceControl device={decorations.devices[block.id]} />;
+          return <DeviceControl device={decorations.devices[block.id] as Device} />;
         }
 
         return undefined;

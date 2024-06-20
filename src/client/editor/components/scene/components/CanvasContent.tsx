@@ -5,9 +5,7 @@ import { ThreeEvent, useThree } from '@react-three/fiber';
 import useNotSelectedBlocks from '../../hooks/useNotSelectedBlocks';
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import MoveControl from './MoveControl';
-import MeshHierarchyRenderer from './MeshHierarchyRenderer';
 import TemporaryCableRenderer from './TemporaryCableRenderer';
-import { TestMesh } from '../../mesh/TestMesh';
 import MeshRenderer from './MeshRenderer';
 import Block from '@/client/editor/types/Block';
 
@@ -69,7 +67,6 @@ const CanvasContent = () => {
         <cylinderGeometry args={[0.02, 0.02, 2, 8]} />
         <meshStandardMaterial color="brown" />
       </mesh>
-      <TestMesh />
       <TemporaryCableRenderer />
       <Plane
         args={[100, 100]}

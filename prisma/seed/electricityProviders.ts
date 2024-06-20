@@ -1,11 +1,13 @@
 import { BlockType, Prisma } from '@prisma/client';
 
-const electricityProviders: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+const electricityProviders: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+  animations?: Prisma.JsonObject;
   decorations: Prisma.JsonArray;
   parts: Prisma.JsonArray;
   partDetails?: Prisma.JsonObject;
 })[] = [
   {
+    animations: {},
     category: 'electricity-providers',
     decorations: ['devices'],
     path: '/generator1.glb',
@@ -36,8 +38,15 @@ const electricityProviders: (Omit<BlockType, 'decorations' | 'id' | 'parts' | 'p
       },
     ],
     partDetails: {
+      '#1': {
+        name: '#1',
+      },
+      '#2': {
+        name: '#2',
+      },
       '#3': {
         category: 'pin',
+        name: '#3',
         type: 'physical',
       },
     },

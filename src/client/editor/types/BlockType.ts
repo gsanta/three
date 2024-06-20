@@ -34,7 +34,7 @@ export type ModelPartInfo = {
 export type AnimationTriggerName = 'device-on';
 
 type BlockType<S extends ShapeType = ShapeType> = {
-  animations?: Record<AnimationTriggerName, string[]>;
+  animations?: Partial<Record<AnimationTriggerName, string[]>>;
   category: string;
   color: [number, number, number];
   decorations: BlockDecoration[];

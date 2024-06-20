@@ -46,9 +46,9 @@ class CableEraser extends BlockEraser {
 
     const cable = this.store.getDecoration('cables', dependent.id);
 
-    const cableEnd = cable.end1?.device === poleBlock.id ? cable.end1 : cable.end2;
+    const cableEnd = cable?.end1?.device === poleBlock.id ? cable.end1 : cable?.end2;
 
-    if (cableEnd) {
+    if (pole && cable && cableEnd) {
       const origPin = pole.pins[cableEnd.pin];
 
       edit.updateDecoration(
