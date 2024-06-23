@@ -38,7 +38,6 @@ const ToolControl = () => {
             onPointerDown: handlePointerDown,
             onPointerEnter: handlePointerEnter,
           }}
-          selectedParts={selectedPartIndexes[block.id]}
         />
       ))}
     </>

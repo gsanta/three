@@ -9,7 +9,7 @@ import ModelPartMesh from './ModelPartMesh';
 import useDevice from '../hooks/useDevice';
 import { Group } from 'three';
 
-export const ModelMesh = ({ additions, block, meshProps, overwrites, selectedParts = [] }: ModelMeshProps) => {
+export const ModelMesh = ({ additions, block, materialProps, meshProps, overwrites }: ModelMeshProps) => {
   const ref = useRegisterScene<Group>();
   const blockPosition = overwrites?.position ? overwrites.position : block.position;
   const position = additions?.position ? addVector(additions.position, blockPosition) : blockPosition;
@@ -40,17 +40,16 @@ export const ModelMesh = ({ additions, block, meshProps, overwrites, selectedPar
             materials={materials}
             nodes={geometryNodes}
             part={part}
-            selectedParts={selectedParts}
           />
         ) : (
           <ModelPartMesh
             block={block}
             key={`${block.id}-${part.index}`}
+            materialProps={materialProps}
             materials={materials}
             nodes={geometryNodes}
             onPointerEnter={meshProps?.onPointerEnter}
             part={part}
-            selectedParts={selectedParts}
           />
         ),
       )}

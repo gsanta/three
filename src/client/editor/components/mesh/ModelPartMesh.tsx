@@ -1,9 +1,8 @@
-import { ThreeEvent } from '@react-three/fiber';
+import { MeshStandardMaterialProps, ThreeEvent } from '@react-three/fiber';
 import { Material, MeshStandardMaterial } from 'three';
 import { ModelPart } from '../../types/BlockType';
 import useGeometry, { NodesType } from '../hooks/useGeometry';
 import useMaterial from '../hooks/useMaterial';
-import ModelMeshProps from '../types/ModelMeshProps';
 import Block from '../../types/Block';
 
 export type ModelPartProps = {
@@ -11,17 +10,17 @@ export type ModelPartProps = {
   materials: {
     [name: string]: Material;
   };
+  materialProps?: MeshStandardMaterialProps;
   nodes: NodesType;
   onPointerEnter?: (event: ThreeEvent<PointerEvent>, partIndex?: string) => void;
   part: ModelPart;
-  selectedParts: ModelMeshProps['selectedParts'];
 };
 
-const ModelPartMesh = ({ block, materials, nodes, onPointerEnter, part }: ModelPartProps) => {
+const ModelPartMesh = ({ block, materials, materialProps, nodes, onPointerEnter, part }: ModelPartProps) => {
   const partInfo = block.partDetails[part.index];
   const color = block.partDetails[part.index]?.isSelected ? 'green' : undefined;
 
-  const material = useMaterial({ block, materials, nodes, part });
+  const material = useMaterial({ materials, materialProps, nodes, part });
   const geometry = useGeometry(nodes, part);
 
   if (block.partDetails[part.index]?.isHidden) {

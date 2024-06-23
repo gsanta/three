@@ -11,7 +11,7 @@ type MeshHierarchyRendererProps = {
 };
 
 const MeshHierarchyRenderer = (props: MeshHierarchyRendererProps) => {
-  const { blocks, onPointerDown, onPointerEnter, selectedPartIndexes } = props;
+  const { blocks, onPointerDown, onPointerEnter } = props;
 
   return blocks
     .filter((block) => !block.parent)
@@ -23,7 +23,6 @@ const MeshHierarchyRenderer = (props: MeshHierarchyRendererProps) => {
           onPointerDown: onPointerDown,
           onPointerEnter: onPointerEnter,
         }}
-        selectedParts={selectedPartIndexes[block.id]}
       />
     ));
 };

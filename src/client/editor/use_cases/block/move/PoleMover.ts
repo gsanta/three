@@ -27,12 +27,11 @@ class PoleMover extends BlockMover {
   private moveCable(edit: Edit, cableId: string, pole: Block, dragDelta: Num3) {
     const cable = this.store.getDecoration('cables', cableId);
 
-    const endName = cable.end1?.device === pole.id ? 'end1' : 'end2';
-    const end = cable[endName];
+    const index = cable.end1?.device === pole.id ? 0 : cable.points.length - 1;
+    const newPoints = [...cable.points];
 
-    if (!end) {
-      return;
-    }
+    newPoints.splice(index, 1, addVector(newPoints[index], dragDelta));
+
     // const pole1Id = cable.end1?.device;
     // const pin1Index = cable.end1?.pin;
     // const pole2Id = cable.end2?.device;
@@ -54,9 +53,7 @@ class PoleMover extends BlockMover {
       'cables',
       cableId,
       {
-        [endName]: {
-          point: addVector(end.point, dragDelta),
-        },
+        points: newPoints,
       },
       { arrayMergeStrategy: 'replace' },
     );

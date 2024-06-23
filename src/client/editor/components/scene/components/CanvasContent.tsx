@@ -2,12 +2,10 @@ import { Grid, OrbitControls, Plane } from '@react-three/drei';
 import { useCallback, useEffect } from 'react';
 import useEditorContext from '@/app/editor/EditorContext';
 import { ThreeEvent, useThree } from '@react-three/fiber';
-import useNotSelectedBlocks from '../../hooks/useNotSelectedBlocks';
 import { useAppSelector } from '@/client/common/hooks/hooks';
-import MoveControl from './MoveControl';
 import TemporaryCableRenderer from './TemporaryCableRenderer';
-import MeshRenderer from './MeshRenderer';
-import Block from '@/client/editor/types/Block';
+import DefaultMeshRenderer from './DefaultMeshRenderer';
+import MoveControl from './MoveControl';
 
 const CanvasContent = () => {
   const { tool, scene: sceneService } = useEditorContext();
@@ -15,8 +13,11 @@ const CanvasContent = () => {
   const camera = useThree((state) => state.camera);
   const scene = useThree((state) => state.scene);
 
-  const blocks = useNotSelectedBlocks();
-  const { selectedPartIndexes } = useAppSelector((selector) => selector.block.present);
+  // const blocks = useNotSelectedBlocks();
+  // const { selectedPartIndexes } = useAppSelector((selector) => selector.block.present);
+  const blockIds = useAppSelector((selector) => selector.block.present.blockIds);
+  const hasSelection = useAppSelector((selector) => selector.block.present.hasSelection);
+  const editBlockId = useAppSelector((selector) => selector.block.present.edit?.blockId);
 
   useEffect(() => {
     sceneService.setCamera(camera);
@@ -49,20 +50,29 @@ const CanvasContent = () => {
 
   return (
     <>
-      {blocks
-        .filter((block) => !block.parent)
-        .map((block) => (
-          <MeshRenderer
-            key={block.id}
-            block={block as Block<'model'>}
-            meshProps={{
-              onPointerDown: handlePointerDown,
-              onPointerEnter: handlePointerEnter,
-            }}
-            selectedParts={selectedPartIndexes[block.id]}
-          />
-        ))}
-      <MoveControl onPointerDown={handlePointerDown} onPointerEnter={handlePointerEnter} />
+      {editBlockId && (
+        <DefaultMeshRenderer
+          key={editBlockId}
+          blockId={editBlockId}
+          meshProps={{
+            onPointerDown: handlePointerDown,
+            onPointerEnter: handlePointerEnter,
+          }}
+          materialProps={{ opacity: 0.5, transparent: true }}
+        />
+      )}
+      {blockIds.map((id) => (
+        <DefaultMeshRenderer
+          key={id}
+          blockId={id}
+          meshProps={{
+            onPointerDown: handlePointerDown,
+            onPointerEnter: handlePointerEnter,
+          }}
+          skip={editBlockId === id}
+        />
+      ))}
+      {hasSelection && <MoveControl onPointerDown={handlePointerDown} onPointerEnter={handlePointerEnter} />}
       <mesh position={[5, 1, 0]} castShadow>
         <cylinderGeometry args={[0.02, 0.02, 2, 8]} />
         <meshStandardMaterial color="brown" />

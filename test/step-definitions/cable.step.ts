@@ -24,15 +24,15 @@ Then(
       throw new Error(`Cable for block ${realBlockId} in pin ${pin} not found.`);
     }
 
-    const cableEnd = cable.end1?.device === realBlockId ? cable.end1 : cable.end2;
+    const point = cable.end1?.device === realBlockId ? cable.points[0] : cable.points[cable.points.length - 1];
 
-    if (!cableEnd) {
+    if (!point) {
       throw new Error("Shouldn't happen");
     }
 
-    const isClose = isPositionCloseTo([x, y, z], cableEnd.point);
+    const isClose = isPositionCloseTo([x, y, z], point);
 
-    assert.ok(isClose, `Expected (${x}, ${y}, ${z}) to be close to (${cableEnd.point.join(', ')})`);
+    assert.ok(isClose, `Expected (${x}, ${y}, ${z}) to be close to (${point.join(', ')})`);
   },
 );
 
@@ -40,12 +40,12 @@ Then('cable {string} ends at position {string}', function (this: ExtendedWorld, 
   const cable = checkDecorationExists.call(this, 'cables', blockId) as Cable;
   const [x, y, z] = checkPosition.call(this, posStr);
 
-  const isClose1 = cable.end1 ? isPositionCloseTo([x, y, z], cable.end1.point) : false;
-  const isClose2 = cable.end2 ? isPositionCloseTo([x, y, z], cable.end2.point) : false;
+  const isClose1 = cable.points[0] ? isPositionCloseTo([x, y, z], cable.points[0]) : false;
+  const isClose2 = cable.points[1] ? isPositionCloseTo([x, y, z], cable.points[1]) : false;
 
   assert.ok(
     isClose1 || isClose2,
-    `Expected cable to end at (${x}, ${y}, ${z}), but ends are end1: (${cable.end1?.point.join(',')}), end2: (${cable.end2?.point.join(',')})`,
+    `Expected cable to end at (${x}, ${y}, ${z}), but points are (${cable.points.join(',')})})`,
   );
 });
 

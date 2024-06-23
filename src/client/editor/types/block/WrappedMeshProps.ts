@@ -15,8 +15,6 @@ type WrappedMeshProps<S extends ShapeType = ShapeType> = {
     position?: Block['position'];
     rotation?: Block['rotation'];
   };
-  parent?: Block;
-  selectedParts: string[];
 };
 
 export default WrappedMeshProps;

@@ -55,6 +55,7 @@ Feature: Pole
       | cable-1         | cable-5-id | pole-3-id#3:pole-2-id#3 |
       | cable-1         | cable-6-id | pole-3-id#4:pole-2-id#4 |
     When I select tool 'select'
+    And I select a block at position 100,0,0
     And I select a block at position 6,0,0
     And I drag pointer with delta '0,0,3'
     And I end drag

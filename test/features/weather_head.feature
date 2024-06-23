@@ -54,7 +54,6 @@ Feature: Weather head
     And block 'cable-1-id' does not exist
     And pin '#2' of block 'wh-1-id' is empty
 
-  @important
   Scenario: Moving a pole connected to a weather head
     Given I have a scene with:
       | TYPE            | ID         | PARENT       | POS                   |

@@ -22,20 +22,16 @@ class MoveDevice extends MoveDecoration {
   private moveCable(edit: Edit, cableId: string, blockId: string, dragDelta: Num3) {
     const cable = this.blockStore.getDecoration('cables', cableId);
 
-    const endName = cable.end1?.device === blockId ? 'end1' : 'end2';
-    const end = cable[endName];
+    const index = cable.end1?.device === blockId ? 0 : cable.points.length - 1;
+    const newPoints = [...cable.points];
 
-    if (!end) {
-      return;
-    }
+    newPoints.splice(index, 1, addVector(newPoints[index], dragDelta));
 
     edit.updateDecoration(
       'cables',
       cableId,
       {
-        [endName]: {
-          point: addVector(end.point, dragDelta),
-        },
+        points: newPoints,
       },
       { arrayMergeStrategy: 'replace' },
     );
