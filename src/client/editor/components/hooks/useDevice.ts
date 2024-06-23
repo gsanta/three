@@ -1,6 +1,6 @@
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import { useAnimations } from '@react-three/drei';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { AnimationMixer } from 'three';
 import Block from '../../types/Block';
 
