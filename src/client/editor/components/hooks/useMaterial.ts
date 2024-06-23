@@ -1,16 +1,16 @@
 import { BufferGeometry, Material, NormalBufferAttributes } from 'three';
 import { ModelPart } from '../../types/BlockType';
 import { NodesType } from './useGeometry';
-import Block from '../../types/Block';
 import { useMemo, useRef } from 'react';
+import { MeshStandardMaterialProps } from '@react-three/fiber';
 
 export type NodesOrObject3DType = NodesType | BufferGeometry<NormalBufferAttributes>;
 
 type UseMaterialProps = {
-  block: Block;
   materials: {
     [name: string]: Material;
   };
+  materialProps?: MeshStandardMaterialProps;
   nodes: NodesType;
   part: ModelPart;
 };
@@ -34,16 +34,29 @@ const getMaterial = (materials: UseMaterialProps['materials'], nodes: NodesType,
   return material;
 };
 
-const useMaterial = ({ block, materials, nodes, part }: UseMaterialProps) => {
+const useMaterial = ({ materialProps, materials, nodes, part }: UseMaterialProps) => {
   const selectionMaterial = useRef<Material>();
 
   let material: Material | undefined = undefined;
 
   material = useMemo(() => {
-    if (block.isSelected) {
-      selectionMaterial.current = (material || getMaterial(materials, nodes, part)).clone();
-      selectionMaterial.current.transparent = true;
-      selectionMaterial.current.opacity = 0.2;
+    if (materialProps) {
+      const newMaterial = (material || getMaterial(materials, nodes, part)).clone();
+
+      for (const key in materialProps) {
+        if (materialProps.hasOwnProperty(key)) {
+          (newMaterial[key as keyof Omit<Material, 'isMaterial'>] as unknown) = materialProps[key as keyof Material];
+        }
+      }
+
+      selectionMaterial.current = newMaterial;
+
+      // Object.keys(materialProps).forEach((prop) => {
+      //   newMaterial[prop as Exclude<keyof Material, 'isMaterial'>] = materialProps[prop];
+      // });
+
+      // selectionMaterial.current.transparent = true;
+      // selectionMaterial.current.opacity = 0.2;
 
       return selectionMaterial.current;
     } else {
@@ -52,7 +65,7 @@ const useMaterial = ({ block, materials, nodes, part }: UseMaterialProps) => {
       }
       return getMaterial(materials, nodes, part);
     }
-  }, [block.isSelected, material, materials, nodes, part]);
+  }, [material, materialProps, materials, nodes, part]);
 
   return material;
 };

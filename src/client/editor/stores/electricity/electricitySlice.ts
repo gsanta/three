@@ -1,7 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-type ElectricSource = {};
-
 export type ElectricNodeInfo = {
   currentFlows: boolean;
   provider: string | null;
@@ -10,7 +8,7 @@ export type ElectricNodeInfo = {
 export type ElectricityState = {
   nodes: Partial<Record<string, ElectricNodeInfo>>;
 
-  sources: Record<string, ElectricSource>;
+  sources: Record<string, object>;
 };
 
 export const initialElectricityState: ElectricityState = {

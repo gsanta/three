@@ -49,6 +49,8 @@ class FactoryService {
 
       edit.createDecoration(decoration);
     });
+
+    return block;
   }
 
   private factories: Record<string, BlockFactory> = {};

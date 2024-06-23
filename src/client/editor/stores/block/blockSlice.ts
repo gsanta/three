@@ -4,7 +4,13 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export type BlockState = {
   blocks: Record<string, Block>;
+  blockIds: string[];
   decorations: BlockCategoryRecords;
+  edit: {
+    blockId: string;
+    mode: 'wiring';
+  } | null;
+  hasSelection: boolean;
   hovered?: {
     block: string;
     partIndex?: string;
@@ -18,6 +24,9 @@ export type BlockState = {
 export const initialBlockState: BlockState = {
   rootBlocksIds: [],
   blocks: {},
+  blockIds: [],
+  edit: null,
+  hasSelection: false,
   selectedBlocks: {},
   selectedRootBlockIds: [],
   selectedPartIndexes: {},
@@ -87,6 +96,9 @@ export const blockSlice = createSlice({
             state.rootBlocksIds.splice(rootIndex, 1);
           }
 
+          const blockIdIndex = state.blockIds.indexOf(update.remove.id);
+          state.blockIds.splice(blockIdIndex, 1);
+
           const selectedIndex = state.selectedRootBlockIds.indexOf(update.remove.id);
           if (selectedIndex !== -1) {
             state.selectedRootBlockIds.splice(selectedIndex, 1);
@@ -94,6 +106,10 @@ export const blockSlice = createSlice({
 
           if (state.selectedBlocks[update.remove.id]) {
             delete state.selectedBlocks[update.remove.id];
+
+            if (Object.keys(state.selectedBlocks).length === 0) {
+              state.hasSelection = false;
+            }
           }
 
           const block = state.blocks[update.remove.id];
@@ -117,6 +133,7 @@ export const blockSlice = createSlice({
             state.selectedRootBlockIds = [];
             state.selectedPartIndexes = {};
             state.selectedBlocks = {};
+            state.hasSelection = false;
           } else {
             if (update.partIndex) {
               if (!state.selectedPartIndexes[update.select]) {
@@ -133,11 +150,16 @@ export const blockSlice = createSlice({
               }
             }
             state.selectedBlocks[update.select] = true;
+            state.hasSelection = true;
             state.blocks[update.select].isSelected = true;
             state.selectedRootBlockIds = [...new Set([...state.selectedRootBlockIds, update.select])];
           }
         } else {
           if ('block' in update && update.block) {
+            if (!state.blocks[update.block.id]) {
+              state.blockIds.push(update.block.id);
+            }
+
             state.blocks[update.block.id] = update.block;
 
             if (update.block.parent) {
@@ -176,10 +198,22 @@ export const blockSlice = createSlice({
       }
     },
 
+    setEditMode(state, action: PayloadAction<{ blockId: string } | undefined>) {
+      if (action.payload?.blockId === undefined) {
+        state.edit = null;
+      } else {
+        state.edit = {
+          blockId: action.payload?.blockId,
+          mode: 'wiring',
+        };
+      }
+    },
+
     update(state, action: PayloadAction<Partial<BlockState>>) {
       state.blocks = action.payload.blocks || state.blocks;
       state.rootBlocksIds = action.payload.rootBlocksIds || state.rootBlocksIds;
       state.selectedRootBlockIds = action.payload.selectedRootBlockIds || state.selectedRootBlockIds;
+      state.blockIds = action.payload.blockIds || [];
       if (action.payload.decorations) {
         state.decorations = action.payload.decorations;
       }
@@ -187,6 +221,6 @@ export const blockSlice = createSlice({
   },
 });
 
-export const { clear: clearBlockSlice, hover, update, updateBlocks } = blockSlice.actions;
+export const { clear: clearBlockSlice, hover, setEditMode, update, updateBlocks } = blockSlice.actions;
 
 export default blockSlice.reducer;

@@ -12,14 +12,14 @@ const CableMesh = ({ cable, meshProps, block: meshInfo }: CableProps) => {
 
   const curve = useMemo(() => {
     return new CatmullRomCurve3(
-      [cable.end1?.point, cable.end2?.point].filter((p) => p).map((point) => new Vector3(...(point as Num3))),
+      cable.points.filter((p) => p).map((point) => new Vector3(...(point as Num3))),
       false,
       'catmullrom',
       0,
     );
-  }, [cable.end1, cable.end2]);
+  }, [cable.points]);
 
-  if (!cable.end1 || !cable.end2) {
+  if (cable.points.length < 2) {
     return null;
   }
 

@@ -3,14 +3,12 @@ import { useCallback } from 'react';
 import useEditorContext from '@/app/editor/EditorContext';
 import useNotSelectedBlocks from '../../hooks/useNotSelectedBlocks';
 import Block from '@/client/editor/types/Block';
-import { useAppSelector } from '@/client/common/hooks/hooks';
 import MeshRenderer from './MeshRenderer';
 
 const ToolControl = () => {
   const { tool } = useEditorContext();
 
   const blocks = useNotSelectedBlocks();
-  const { selectedPartIndexes } = useAppSelector((selector) => selector.block.present);
 
   const handlePointerDown = useCallback(
     (event: ThreeEvent<PointerEvent>) => {
@@ -38,7 +36,6 @@ const ToolControl = () => {
             onPointerDown: handlePointerDown,
             onPointerEnter: handlePointerEnter,
           }}
-          selectedParts={selectedPartIndexes[block.id]}
         />
       ))}
     </>

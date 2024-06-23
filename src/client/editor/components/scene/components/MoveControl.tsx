@@ -1,13 +1,12 @@
-import { snapTo, addVector } from '@/client/editor/utils/vectorUtils';
+import { snapTo } from '@/client/editor/utils/vectorUtils';
 import { PivotControls } from '@react-three/drei';
 import { Mesh, Quaternion, Vector3 } from 'three';
 import { useEffect, useRef, useState } from 'react';
 import useEditorContext from '@/app/editor/EditorContext';
-import useSelectedBlocks from '@/client/editor/components/hooks/useSelectedBlocks';
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import Num3 from '@/client/editor/types/Num3';
-import MeshRenderer from './MeshRenderer';
 import { ThreeEvent } from '@react-three/fiber';
+import SelectedMeshRenderer from './SelectedMeshRenderer';
 
 type MoveControlProps = {
   onPointerDown: (event: ThreeEvent<PointerEvent>) => void;
@@ -15,11 +14,12 @@ type MoveControlProps = {
 };
 
 const MoveControl = ({ onPointerDown, onPointerEnter }: MoveControlProps) => {
-  const selectedBlocks = useSelectedBlocks();
-  const movableBlocks = selectedBlocks.filter((block) => block.movable);
+  // const selectedBlocks = useSelectedBlocks();
 
-  const { selectedPartIndexes } = useAppSelector((selector) => selector.block.present);
-  const { drag, moveAxis } = useAppSelector((selector) => selector.tool.select);
+  const blockIds = useAppSelector((store) => store.block.present.blockIds);
+
+  const drag = useAppSelector((selector) => selector.tool.select.drag);
+  const moveAxis = useAppSelector((selector) => selector.tool.select.moveAxis);
 
   const [transform, setTransform] = useState<Num3>([0, 0, 0]);
   const selectedMeshRef = useRef<Mesh>(null);
@@ -29,9 +29,9 @@ const MoveControl = ({ onPointerDown, onPointerEnter }: MoveControlProps) => {
     tool.setSelectedMesh(selectedMeshRef.current || undefined);
   }, [tool]);
 
-  if (!movableBlocks.length) {
-    return null;
-  }
+  // if (!movableBlocks.length) {
+  //   return null;
+  // }
 
   return (
     <PivotControls
@@ -58,7 +58,23 @@ const MoveControl = ({ onPointerDown, onPointerEnter }: MoveControlProps) => {
       userData={{ role: 'selection-pivot' }}
     >
       <group name="selection-group">
-        {movableBlocks
+        {blockIds.map((id) => (
+          <SelectedMeshRenderer
+            additions={{
+              position: drag,
+            }}
+            key={id}
+            blockId={id}
+            meshProps={{
+              ref: selectedMeshRef,
+              onPointerDown,
+              onPointerEnter,
+            }}
+            transform={transform}
+            materialProps={{ opacity: 0.5, transparent: true }}
+          />
+        ))}
+        {/* {Object.keys(selectedBlocks)
           .filter((block) => !block.parent)
           .map((block) => (
             <MeshRenderer
@@ -74,9 +90,8 @@ const MoveControl = ({ onPointerDown, onPointerEnter }: MoveControlProps) => {
                 onPointerEnter,
               }}
               materialProps={{ color: 'pink', opacity: 0.5, transparent: true }}
-              selectedParts={selectedPartIndexes[block.id]}
             />
-          ))}
+          ))} */}
       </group>
     </PivotControls>
   );

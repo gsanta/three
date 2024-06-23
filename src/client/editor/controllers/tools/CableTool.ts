@@ -12,6 +12,8 @@ import { updateTemporaryCables } from '../../stores/block/temporarySlice';
 import { Vector3 } from 'three';
 import { store } from '@/client/common/utils/store';
 import HoverTool from './HoverTool';
+import DrawHouseWiring from '../../use_cases/wiring/DrawHouseWiring';
+import { setEditMode } from '../../stores/block/blockSlice';
 
 class CableTool extends HoverTool {
   constructor(
@@ -24,6 +26,10 @@ class CableTool extends HoverTool {
     super(blockStore, sceneService, sceneStore, update, ToolName.Cable);
 
     this.blockStore = blockStore;
+
+    this.currentCableId = null;
+
+    this.drawHouseWiring = new DrawHouseWiring(factoryService, sceneService, sceneStore, update);
 
     this.factoryService = factoryService;
 
@@ -39,12 +45,26 @@ class CableTool extends HoverTool {
 
   onDeselect() {
     store.dispatch(updateTemporaryCables(undefined));
+    store.dispatch(setEditMode(undefined));
+
     this.isDrawingCable = false;
   }
 
   onPointerDown(info: ToolInfo) {
     const blockId = info.eventObject?.userData.modelId;
-    if (this.isDrawingCable) {
+
+    if (!blockId) {
+      store.dispatch(setEditMode(undefined));
+      return;
+    }
+
+    const block = this.blockStore.getBlock(blockId);
+
+    if (block.category === 'building-bases') {
+      store.dispatch(setEditMode({ blockId }));
+    } else if (block.category === 'walls') {
+      this.currentCableId = this.drawHouseWiring.execute(blockId, this.currentCableId, info.clientX, info.clientY);
+    } else if (this.isDrawingCable) {
       if (blockId) {
         const mesh = this.scene.getObj3d(blockId);
         const targetBlock = this.blockStore.getBlock(blockId);
@@ -59,19 +79,24 @@ class CableTool extends HoverTool {
         }
 
         const block1 = this.blockStore.getBlock(selectedBlockId);
-        const block2 = this.blockStore.getBlock(info.eventObject?.userData.modelId);
+        const block2 = this.blockStore.getBlock(blockId);
 
         if (targetBlock.partDetails[targetPartIndex || '']?.category === 'pin') {
           this.joinPoles.join(block1, block2, [[sourcePartIndex, targetPartIndex]]);
         }
       }
     } else {
-      this.selector.select(info.eventObject?.userData.modelId, info.clientX, info.clientY);
+      this.selector.select(blockId, info.clientX, info.clientY);
     }
   }
 
   onPointerMove({ pos }: ToolInfo) {
     const selectedBlockId = this.blockStore.getSelectedRootBlockIds()[0];
+
+    if (!selectedBlockId) {
+      return;
+    }
+
     const block = this.blockStore.getBlock(selectedBlockId);
     const selectedPart = this.blockStore.getSelectedPart(selectedBlockId);
 
@@ -112,6 +137,10 @@ class CableTool extends HoverTool {
   }
 
   private blockStore: BlockStore;
+
+  private currentCableId: string | null;
+
+  private drawHouseWiring: DrawHouseWiring;
 
   private factoryService: FactoryService;
 
