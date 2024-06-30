@@ -24,7 +24,7 @@ class SelectTool extends HoverTool {
     toolStore: ToolStore,
     update: TransactionService,
   ) {
-    super(blockStore, scene, sceneStore, update, ToolName.Select, 'BiRectangle');
+    super(blockStore, scene, update, ToolName.Select, 'BiRectangle');
 
     this.move = new MoveBlock(blockStore, update, sceneStore, toolStore);
     this.moveBlockToSlot = new MoveBlockToSlot(blockStore, sceneStore);
@@ -32,12 +32,14 @@ class SelectTool extends HoverTool {
     this.toolStore = toolStore;
   }
 
-  onPointerDown(info: ToolInfo) {
-    this.selector.select(info.eventObject?.userData.modelId, info.clientX, info.clientY);
+  onPointerUp(info: ToolInfo) {
+    if (!info.isDragHappened && VectorUtils.size(info.drag) === 0) {
+      this.selector.select(info.eventObject?.userData.modelId, info.clientX, info.clientY);
+    }
   }
 
   onPointerLeave(info: ToolInfo) {
-    const block = this.store.getBlocks()[info.eventObject?.userData.modelId || ''];
+    const block = this.blockStore.getBlocks()[info.eventObject?.userData.modelId || ''];
 
     if (block) {
       this.update.getTransaction().updateBlock(block.id, { isHovered: false }).commit();
@@ -49,8 +51,8 @@ class SelectTool extends HoverTool {
   }
 
   onDragEnd() {
-    const selectedBlockIds = this.store.getSelectedRootBlockIds();
-    const blocks = this.store.getBlocks();
+    const selectedBlockIds = this.blockStore.getSelectedRootBlockIds();
+    const blocks = this.blockStore.getBlocks();
 
     const edit = this.update.getTransaction();
 
@@ -65,8 +67,12 @@ class SelectTool extends HoverTool {
     store.dispatch(updateSelectTool({ drag: [0, 0, 0] }));
   }
 
+  onDeselect() {
+    this.update.getTransaction().select(null).commit();
+  }
+
   scaleMesh(scale: number, block: Block) {
-    const { selectedSettings } = this.store.getBlockSettings();
+    const { selectedSettings } = this.blockStore.getBlockSettings();
     const settings = selectedSettings[block.category];
 
     const index = VectorUtils.getAxisIndex('x');
@@ -82,13 +88,13 @@ class SelectTool extends HoverTool {
   }
 
   rotateMesh(axis: 'x' | 'y' | 'z', rotation: number) {
-    const selectedBlockIds = this.store.getSelectedRootBlockIds();
+    const selectedBlockIds = this.blockStore.getSelectedRootBlockIds();
 
     if (selectedBlockIds.length === 0) {
       return;
     }
 
-    let block = this.store.getBlocks()[selectedBlockIds[0]];
+    let block = this.blockStore.getBlocks()[selectedBlockIds[0]];
 
     const index = VectorUtils.getAxisIndex(axis);
     const newRotation = [...block.rotation] as [number, number, number];
@@ -101,7 +107,7 @@ class SelectTool extends HoverTool {
       })
       .commit();
 
-    block = this.store.getBlocks()[selectedBlockIds[0]];
+    block = this.blockStore.getBlocks()[selectedBlockIds[0]];
   }
 
   private move: MoveBlock;

@@ -2,6 +2,10 @@ import GetAddBlockToCategoryStrategy, { AddStrategyType, GetStrategyParams } fro
 
 class GetAddBlockToBuildingStrategy extends GetAddBlockToCategoryStrategy {
   getStrategy({ targetBlock, targetPartIndex, newBlockType }: GetStrategyParams): AddStrategyType | undefined {
+    if (!targetPartIndex) {
+      return undefined;
+    }
+
     const targetPartCategory = targetBlock.partDetails[targetPartIndex]?.category;
     if (targetPartCategory === 'wall-slot' && newBlockType.category === 'walls') {
       return 'source-origin-target-slot';

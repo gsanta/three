@@ -72,6 +72,37 @@ const homeElectrics: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'par
     },
     type: 'washing-machine-1',
   },
+  {
+    category: 'home-electrics',
+    decorations: ['devices'],
+    path: '/socket1.glb',
+    parts: [
+      {
+        index: '#1',
+        geometryPath: 'Socket1Base.geometry',
+        materialPath: 'Road',
+        position: [0, 0, 0],
+        rotation: [0, 0, 0],
+        scale: [0.23, 0.23, 0.141],
+      },
+      {
+        index: '#2',
+        geometryPath: 'Socket1Base_1.geometry',
+        materialPath: 'DarkGray',
+        position: [0, 0, 0],
+        rotation: [0, 0, 0],
+        scale: [0.23, 0.23, 0.141],
+      },
+    ],
+    partDetails: {
+      '#1': {
+        category: 'pin',
+        name: '#5',
+        type: 'physical',
+      },
+    },
+    type: 'socket-1',
+  },
 ];
 
 export default homeElectrics;

@@ -20,7 +20,7 @@ class AddTool extends HoverTool {
     sceneStore: SceneStore,
     update: TransactionService,
   ) {
-    super(blockStore, sceneService, sceneStore, update, ToolName.Add, 'BiPlus');
+    super(blockStore, sceneService, update, ToolName.Add, 'BiPlus');
 
     this.blockStore = blockStore;
 
@@ -34,8 +34,8 @@ class AddTool extends HoverTool {
   }
 
   onPointerDown({ clientX, clientY, pos }: ToolInfo) {
-    const { selectedBlockName } = this.store.getBlockSettings();
-    const blockType = this.store.getBlockType(selectedBlockName);
+    const { selectedBlockName } = this.blockStore.getBlockSettings();
+    const blockType = this.blockStore.getBlockType(selectedBlockName);
 
     if (!selectedBlockName || !blockType) {
       return;
@@ -80,8 +80,6 @@ class AddTool extends HoverTool {
       this.executeAfterRender = false;
     }
   }
-
-  private blockStore: BlockStore;
 
   private addBlock: AddBlock;
 

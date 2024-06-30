@@ -81,9 +81,14 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
 
       this.env.sceneService.setIntersection([
         {
-          object: intersectingParentMesh,
-          distance: 1,
-          point: new Vector3(...intersectingParentPos).add(new Vector3(...relativePos)),
+          meshes: [
+            {
+              object: intersectingParentMesh,
+              distance: 1,
+              point: new Vector3(...intersectingParentPos).add(new Vector3(...relativePos)),
+            },
+          ],
+          blockId: intersectingParent,
         },
       ]);
       addBlockToPointerPos.perform(row.PARENT, '#1', row.TYPE, 0, 0);

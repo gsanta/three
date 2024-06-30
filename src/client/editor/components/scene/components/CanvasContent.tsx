@@ -17,7 +17,8 @@ const CanvasContent = () => {
   // const { selectedPartIndexes } = useAppSelector((selector) => selector.block.present);
   const blockIds = useAppSelector((selector) => selector.block.present.blockIds);
   const hasSelection = useAppSelector((selector) => selector.block.present.hasSelection);
-  const editBlockId = useAppSelector((selector) => selector.block.present.edit?.blockId);
+  const editMode = useAppSelector((selector) => selector.editor.editingMode);
+  const editTargetBlock = useAppSelector((selector) => selector.editor.editingTargetBlock);
 
   useEffect(() => {
     sceneService.setCamera(camera);
@@ -50,10 +51,10 @@ const CanvasContent = () => {
 
   return (
     <>
-      {editBlockId && (
+      {editMode === 'wiring' && (
         <DefaultMeshRenderer
-          key={editBlockId}
-          blockId={editBlockId}
+          key={editTargetBlock}
+          blockId={editTargetBlock || ''}
           meshProps={{
             onPointerDown: handlePointerDown,
             onPointerEnter: handlePointerEnter,
@@ -69,7 +70,7 @@ const CanvasContent = () => {
             onPointerDown: handlePointerDown,
             onPointerEnter: handlePointerEnter,
           }}
-          skip={editBlockId === id}
+          skip={editTargetBlock === id}
         />
       ))}
       {hasSelection && <MoveControl onPointerDown={handlePointerDown} onPointerEnter={handlePointerEnter} />}
@@ -85,6 +86,7 @@ const CanvasContent = () => {
         rotation={[-Math.PI / 2, 0, 0]}
         position={[2, -0.1, 0]}
         onPointerDown={(e) => tool.onPointerDown(e)}
+        onPointerUp={() => tool.onPointerUp()}
         onPointerMove={(e) => tool.onPointerMove(e)}
       >
         <meshStandardMaterial color="goldenrod" />

@@ -12,7 +12,7 @@ class ColorTool extends Tool {
   }
 
   onPointerDown({ eventObject }: ToolInfo) {
-    const block = this.store.getBlocks()[eventObject?.userData.modelId || ''];
+    const block = this.blockStore.getBlocks()[eventObject?.userData.modelId || ''];
 
     if (!block) {
       return;
@@ -21,7 +21,7 @@ class ColorTool extends Tool {
     this.update
       .getTransaction()
       .updateBlock(eventObject?.userData.modelId || '', {
-        color: colorToArray(this.store.getBlockSettings().color),
+        color: colorToArray(this.blockStore.getBlockSettings().color),
       })
       .commit();
   }

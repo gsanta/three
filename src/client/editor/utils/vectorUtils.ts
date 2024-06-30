@@ -37,6 +37,10 @@ class VectorUtils {
 
     return result;
   }
+
+  static size(vec: Num3) {
+    return Math.sqrt(vec[0] ** 2 + vec[1] ** 2 + vec[2] ** 2);
+  }
 }
 
 export default VectorUtils;
@@ -58,10 +62,10 @@ export const multiplyVector = (
 };
 
 export const addVector = (
-  vector1: [number, number, number],
-  vector2: [number, number, number],
+  vector1?: [number, number, number],
+  vector2?: [number, number, number],
 ): [number, number, number] => {
-  return vector1.map((val, index) => (val += vector2[index])) as Num3;
+  return vector1?.map((val, index) => (val += vector2?.[index] || 0)) as Num3;
 };
 
 export const snapTo = (num: number, snapVal = defaultSnap) => {

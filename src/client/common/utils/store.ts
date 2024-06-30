@@ -1,7 +1,7 @@
 import undoable, { StateWithHistory } from 'redux-undo';
 import blockTypeSlice, { BlockTypeState } from '../../editor/stores/blockType/blockTypeSlice';
 import blockSlice, { BlockState, hover } from '../../editor/stores/block/blockSlice';
-import settingsSlice, { SettingsState } from '../../editor/stores/settingsSlice';
+import editorSlice, { EditorState } from '../../editor/stores/editorSlice';
 import toolSlice, { ToolState } from '../../editor/stores/tool/toolSlice';
 import { EnhancedStore, configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
 import temporarySlice, { TemporaryState } from '@/client/editor/stores/block/temporarySlice';
@@ -15,7 +15,7 @@ const sceneSliceUndoable = undoable(blockSlice, {
 
 export type RootState = {
   electricSystem: ElectricityState;
-  settings: SettingsState;
+  editor: EditorState;
   tool: ToolState;
   temporary: TemporaryState;
   block: StateWithHistory<BlockState>;
@@ -28,7 +28,7 @@ export function setupStore(preloadedState?: RootState): EnhancedStore<RootState>
   const store = configureStore({
     reducer: {
       electricSystem: electricitySlice,
-      settings: settingsSlice,
+      editor: editorSlice,
       tool: toolSlice,
       blockType: blockTypeSlice,
       temporary: temporarySlice,

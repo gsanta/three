@@ -4,7 +4,7 @@ import ToolName from '@/client/editor/types/ToolName';
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { When, Then } from '@cucumber/cucumber';
 import assert from 'assert';
-import { Vector3 } from 'three';
+import { Intersection, Object3D, Vector3 } from 'three';
 import ExtendedWorld from './ExtendedWorld';
 import findClosestBlock from './helpers/findClosestBlock';
 import Block from '@/client/editor/types/Block';
@@ -24,11 +24,22 @@ function selectBlockAtPosition(this: ExtendedWorld, x: number, y: number, z: num
     const mesh = this.env.sceneStore.getObj3d(block.id);
     const partName = this.env.blockStore.getBlock(block.id).partDetails[partIndex]?.name;
     const partMesh = MeshUtils.findByName(mesh, partName);
-    this.env.sceneService.setIntersection([{ object: partMesh, distance: 1, point: new Vector3() }]);
+    this.env.sceneService.setIntersection([
+      {
+        blockId: block.id,
+        partIndex: partIndex,
+        meshes: [
+          {
+            object: partMesh,
+          } as Intersection<Object3D>,
+        ],
+      },
+    ]);
   }
 
   this.env.toolHelper.pointerMove({ point: new Vector3(x, y, z) });
   this.env.toolHelper.pointerDown({ blockId: block?.id });
+  this.env.toolHelper.pointerUp();
 }
 
 When('I select a block at position {float},{float},{float} with part {string}', selectBlockAtPosition);

@@ -12,17 +12,15 @@ class RayTool extends Tool {
     super(store, update, ToolName.RayHelper);
 
     this.scene = scene;
-    this.sceneService = new SceneServiceImpl(this.scene);
+    this.sceneService = new SceneServiceImpl(store, this.scene);
   }
 
   onPointerDown({ eventObject, clientX, clientY }: ToolInfo) {
-    const mesh = this.scene.getObj3d(eventObject?.userData.modelId || '');
-
-    if (!mesh) {
-      return;
-    }
-
-    const [intersection, ray] = this.sceneService.intersection(mesh, clientX, clientY);
+    const [intersection, ray] = this.sceneService.blockIntersection(
+      [eventObject?.userData.modelId || ''],
+      clientX,
+      clientY,
+    );
 
     if (!intersection) {
       return;
@@ -32,7 +30,7 @@ class RayTool extends Tool {
       this.scene.getScene().remove(this.arrow);
     }
 
-    const arrow = new ArrowHelper(ray.direction, ray.origin, intersection[0].distance, 0xff0000);
+    const arrow = new ArrowHelper(ray.direction, ray.origin, intersection[0].meshes[0].distance, 0xff0000);
 
     this.scene.getScene().add(arrow);
 

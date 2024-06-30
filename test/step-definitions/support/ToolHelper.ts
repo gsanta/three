@@ -38,6 +38,10 @@ class ToolHelper {
     } as ThreeEvent<PointerEvent>);
   }
 
+  pointerUp() {
+    this.tool.onPointerUp();
+  }
+
   private getEventObject(blockId?: string) {
     let eventObj = this.testScene.getPlane() as Object3D;
 

@@ -10,20 +10,14 @@ type DefaultMeshRendererProps = Omit<WrappedMeshProps, 'block' | 'parent'> & {
 };
 
 const SelectedMeshRenderer = (props: DefaultMeshRendererProps) => {
-  const { blockId, meshProps, transform, ...rest } = props;
+  const { blockId, transform, ...rest } = props;
   const block = useAppSelector((selector) => selector.block.present.blocks[blockId]);
 
   if (!block.isSelected || block.parent) {
     return;
   }
 
-  return (
-    <MeshRenderer
-      {...rest}
-      meshProps={{ ...meshProps, position: addVector(block.position, transform) }}
-      block={block}
-    />
-  );
+  return <MeshRenderer {...rest} block={block} />;
 };
 
 export default SelectedMeshRenderer;

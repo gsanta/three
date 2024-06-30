@@ -6,10 +6,6 @@ export type BlockState = {
   blocks: Record<string, Block>;
   blockIds: string[];
   decorations: BlockCategoryRecords;
-  edit: {
-    blockId: string;
-    mode: 'wiring';
-  } | null;
   hasSelection: boolean;
   hovered?: {
     block: string;
@@ -25,7 +21,6 @@ export const initialBlockState: BlockState = {
   rootBlocksIds: [],
   blocks: {},
   blockIds: [],
-  edit: null,
   hasSelection: false,
   selectedBlocks: {},
   selectedRootBlockIds: [],
@@ -198,17 +193,6 @@ export const blockSlice = createSlice({
       }
     },
 
-    setEditMode(state, action: PayloadAction<{ blockId: string } | undefined>) {
-      if (action.payload?.blockId === undefined) {
-        state.edit = null;
-      } else {
-        state.edit = {
-          blockId: action.payload?.blockId,
-          mode: 'wiring',
-        };
-      }
-    },
-
     update(state, action: PayloadAction<Partial<BlockState>>) {
       state.blocks = action.payload.blocks || state.blocks;
       state.rootBlocksIds = action.payload.rootBlocksIds || state.rootBlocksIds;
@@ -221,6 +205,6 @@ export const blockSlice = createSlice({
   },
 });
 
-export const { clear: clearBlockSlice, hover, setEditMode, update, updateBlocks } = blockSlice.actions;
+export const { clear: clearBlockSlice, hover, update, updateBlocks } = blockSlice.actions;
 
 export default blockSlice.reducer;

@@ -36,12 +36,12 @@ class Selector {
 
     const edit = this.updateService.getTransaction();
 
-    const partName = this.checkPartIntersection(block, mesh, clientX, clientY);
+    const partIndex = this.checkPartIntersection(block, clientX, clientY);
     const isMovable = this.checkIsBlockMoveable(block);
 
-    if (partName) {
+    if (partIndex) {
       edit.select(null);
-      edit.select(block.id, partName);
+      edit.select(block.id, partIndex);
       store.dispatch(updateSelectTool({ moveAxis: block.moveAxis }));
     } else if (isMovable) {
       edit.select(block.id);
@@ -56,16 +56,16 @@ class Selector {
     edit.commit();
   }
 
-  private checkPartIntersection(block: Block, mesh: Object3D<Object3DEventMap>, clientX: number, clientY: number) {
-    const [intersects] = this.scene.intersection(mesh, clientX, clientY);
+  private checkPartIntersection(block: Block, clientX: number, clientY: number) {
+    const [intersects] = this.scene.blockIntersection([block.id], clientX, clientY);
 
     // TODO find a better solution to skip non-selectable parts
-    const partName = intersects
-      ?.map((intersection) => intersection.object.name)
-      .find((name) => name && name !== 'root');
+    const blockIntersection = intersects.find(
+      (intersection) => intersection.partIndex && intersection.partName !== 'root',
+    );
 
-    if (partName) {
-      return Object.entries(block.partDetails).find(([, val]) => val?.name === partName)?.[0];
+    if (blockIntersection) {
+      return blockIntersection.partIndex;
     }
 
     return undefined;
