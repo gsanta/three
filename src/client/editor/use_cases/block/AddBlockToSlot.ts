@@ -34,17 +34,20 @@ class AddBlockToSlot {
       parent: targetBlock.id,
       position: [sourcePartPos.x, sourcePartPos.y, sourcePartPos.z],
       rotation: [0, finalRotation, 0],
-      slotTarget: {
-        blockId: targetBlock.id,
-        slotName: targetPartIndex,
-      },
+      place: targetPartIndex,
     });
 
-    const lastBlock = edit.getLastBlock();
+    const newBlock = edit.getLastBlock();
 
     edit.updateBlock(targetBlockId, {
-      children: [lastBlock.id],
-      slotSources: [{ slotName: targetPartIndex, blockId: lastBlock.id }],
+      children: [newBlock.id],
+      partDetails: {
+        [targetPartIndex]: {
+          connectedTo: {
+            blockId: newBlock.id,
+          },
+        },
+      },
     });
 
     edit.commit();

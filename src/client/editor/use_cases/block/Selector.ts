@@ -1,4 +1,4 @@
-import { Object3D, Object3DEventMap, Vector3 } from 'three';
+import { Vector3 } from 'three';
 import SceneService from '../../components/scene/SceneService';
 import SceneStore from '../../components/scene/SceneStore';
 import BlockStore from '../../stores/block/BlockStore';
@@ -72,13 +72,13 @@ class Selector {
   }
 
   private checkIsBlockMoveable(block: Block) {
-    const slotTarget = block.slotTarget;
-    if (slotTarget) {
-      const targetBlock = this.blockStore.getBlock(slotTarget.blockId);
+    const place = block.place;
+    if (place) {
+      const targetBlock = this.blockStore.getBlock(block.parent);
       const template = this.blockStore.getBlockType(targetBlock.type);
 
-      const slotTargetPart = template?.parts.find((part) => part.name === slotTarget.slotName);
-      if (block.partDetails[slotTargetPart?.index || '']?.allowMovement) {
+      const targetPart = template?.partDetails[place];
+      if (targetPart?.allowMovement) {
         return true;
       }
     }

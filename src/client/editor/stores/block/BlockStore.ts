@@ -1,5 +1,6 @@
 import { Store } from '@/client/common/utils/store';
 import BlockDecoration, { BlockCategories } from '@/client/editor/types/BlockCategory';
+import Block from '../../types/Block';
 
 class BlockStore {
   constructor(store: Store) {
@@ -83,6 +84,40 @@ class BlockStore {
 
   getRootBlockIds() {
     return this.store.getState().block.present.rootBlocksIds;
+  }
+
+  getDescendants(blockId: string, categoryFilter?: string): Block[] {
+    const block = this.getBlock(blockId);
+
+    if (block.children.length === 0) {
+      if (categoryFilter) {
+        return block.category === categoryFilter ? [block] : [];
+      } else {
+        return [block];
+      }
+    }
+
+    const descendants: Block[] = [];
+
+    for (const child of block.children) {
+      descendants.push(...this.getDescendants(child, categoryFilter));
+    }
+
+    return descendants;
+  }
+
+  getRoot(blockId: string, expectedCategory: string): Block {
+    const block = this.getBlock(blockId);
+
+    if (!block.parent) {
+      if (expectedCategory && expectedCategory !== block.category) {
+        throw new Error(`Expected category is ${expectedCategory}, but got ${block.category}`);
+      }
+
+      return block;
+    }
+
+    return this.getRoot(block.parent, expectedCategory);
   }
 
   private store: Store;

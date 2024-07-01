@@ -30,6 +30,8 @@ class DrawHouseWiring {
 
     const targetBlock = this.blockStore.getBlock(targetBlockId);
 
+    const buildingBlock = this.blockStore.getRoot(targetBlockId, 'building-bases');
+
     const targetRootBlock = targetBlock.parent ? this.blockStore.getBlock(targetBlock.parent) : targetBlock;
 
     const intersectionTargets = [targetRootBlock.id, ...targetRootBlock.children];
@@ -80,7 +82,7 @@ class DrawHouseWiring {
       block = this.factoryService.create(
         edit,
         'cable-1',
-        { dependsOn: [targetBlockId], parent: targetBlock.parent },
+        { dependsOn: [targetBlockId], parent: buildingBlock.id },
         {
           cables: {
             points: [point],
@@ -89,9 +91,7 @@ class DrawHouseWiring {
         },
       );
 
-      if (targetBlock.parent) {
-        edit.updateBlock(targetBlock.parent, { children: [block.id] });
-      }
+      edit.updateBlock(buildingBlock.id, { children: [block.id] });
     }
 
     edit.commit();
@@ -147,7 +147,7 @@ class DrawHouseWiring {
     const buildingBlock = this.blockStore.getBlock(wallJoin.blockId);
     const wallJoinBlock = buildingBlock.partDetails[wallJoin.partIndex || ''];
 
-    if (wallJoinBlock?.joins?.includes(wallBlock.slotTarget?.slotName || '')) {
+    if (wallJoinBlock?.joins?.includes(wallBlock.place || '')) {
       return wallJoin;
     }
 

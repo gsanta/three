@@ -22,6 +22,10 @@ export type ModelPartCategory = 'pin' | 'wall-slot' | 'ceil-slot' | 'load-on' | 
 
 export type ModelPartInfo = {
   allowMovement?: Axis[];
+  connectedTo?: {
+    blockId: string;
+    partIndex?: string;
+  };
   isHidden?: boolean;
   isSelected?: boolean;
   joins?: [string, string];

@@ -13,7 +13,6 @@ import { updateSelectTool } from '../../stores/tool/toolSlice';
 import SceneService from '../../components/scene/SceneService';
 import Selector from '../../use_cases/block/Selector';
 import ToolStore from '../../stores/tool/ToolStore';
-import MoveBlockToSlot from '../../use_cases/block/MoveBlockToSlot';
 import HoverTool from './HoverTool';
 
 class SelectTool extends HoverTool {
@@ -27,7 +26,6 @@ class SelectTool extends HoverTool {
     super(blockStore, scene, update, ToolName.Select, 'BiRectangle');
 
     this.move = new MoveBlock(blockStore, update, sceneStore, toolStore);
-    this.moveBlockToSlot = new MoveBlockToSlot(blockStore, sceneStore);
     this.selector = new Selector(blockStore, scene, sceneStore, update);
     this.toolStore = toolStore;
   }
@@ -115,8 +113,6 @@ class SelectTool extends HoverTool {
   private selector: Selector;
 
   private toolStore: ToolStore;
-
-  private moveBlockToSlot: MoveBlockToSlot;
 }
 
 export default SelectTool;

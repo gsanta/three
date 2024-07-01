@@ -50,11 +50,17 @@ class EraseBlock {
       eraser.erase(edit, block);
     }
 
-    if (block.slotTarget) {
+    if (block.place) {
       edit.updateBlock(
-        block.slotTarget.blockId,
-        { slotSources: [{ blockId: block.id, slotName: block.slotTarget.slotName }] },
-        { arrayMergeStrategy: 'exclude' },
+        block.parent || '',
+        {
+          partDetails: {
+            [block.place]: {
+              connectedTo: undefined,
+            },
+          },
+        },
+        { arrayMergeStrategy: 'replace' },
       );
     }
 

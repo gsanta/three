@@ -13,47 +13,25 @@ Then('parent for block {string} is {string}', function (this: ExtendedWorld, chi
   assert(childFoundInParent, `Parent did not have a child with id ${childId}`);
 });
 
-function objectMatches(target: Record<string, unknown>, source: Record<string, unknown>): boolean {
-  return Object.keys(source).every((key) => target[key] === source[key]);
-}
-
-function assertObjectInArray(objects: Record<string, unknown>[], target: Record<string, unknown>): void {
-  const found = objects.some((obj) => objectMatches(obj, target));
-  assert(found, `Object with specified key/value pairs not found: ${JSON.stringify(target)}`);
-}
-
-function assertObjectNotInArray(objects: Record<string, unknown>[], target: Record<string, unknown>): void {
-  const found = objects.some((obj) => objectMatches(obj, target));
-  assert(!found, `Object with specified key/value pairs found: ${JSON.stringify(target)}`);
-}
-
 Then(
   'block {string} is in slot {string} of block {string}',
   function (this: ExtendedWorld, childId: string, parentPart: string, parentId: string) {
     const child = this.env.blockStore.getBlock(childId);
     const parent = this.env.blockStore.getBlock(parentId);
 
-    assert.deepEqual(child.slotTarget, {
-      blockId: parentId,
-      slotName: parentPart,
-    });
+    assert.equal(child.place, parentPart);
+    assert.equal(child.parent, parentId);
 
-    assertObjectInArray(parent.slotSources, {
-      blockId: childId,
-      slotName: parentPart,
-    });
+    assert(parent.partDetails[parentPart]?.connectedTo?.blockId, child.id);
   },
 );
 
 Then(
-  'block {string} is not in slot {string} of block {string}',
-  function (this: ExtendedWorld, childId: string, parentPart: string, parentId: string) {
-    const parent = this.env.blockStore.getBlock(parentId);
+  'slot {string} of block {string} is not occupied',
+  function (this: ExtendedWorld, partIndex: string, blockId: string) {
+    const block = this.env.blockStore.getBlock(blockId);
 
-    assertObjectNotInArray(parent.slotSources, {
-      blockId: childId,
-      slotName: parentPart,
-    });
+    assert(block.partDetails[partIndex]?.connectedTo === undefined);
   },
 );
 
