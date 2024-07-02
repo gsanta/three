@@ -34,7 +34,7 @@ class AddBlockToSlot {
       parent: targetBlock.id,
       position: [sourcePartPos.x, sourcePartPos.y, sourcePartPos.z],
       rotation: [0, finalRotation, 0],
-      place: targetPartIndex,
+      connectedTo: targetPartIndex,
     });
 
     const newBlock = edit.getLastBlock();

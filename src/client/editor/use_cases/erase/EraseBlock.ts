@@ -50,12 +50,12 @@ class EraseBlock {
       eraser.erase(edit, block);
     }
 
-    if (block.place) {
+    if (block.connectedTo) {
       edit.updateBlock(
         block.parent || '',
         {
           partDetails: {
-            [block.place]: {
+            [block.connectedTo]: {
               connectedTo: undefined,
             },
           },

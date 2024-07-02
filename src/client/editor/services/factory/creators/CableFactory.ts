@@ -19,7 +19,6 @@ class CableFactory extends BlockFactory {
       end1: null,
       end2: null,
       points: [],
-      pointParents: [],
       ...overrides,
       category: 'cables',
       id: block.id,

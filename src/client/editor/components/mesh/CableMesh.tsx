@@ -20,7 +20,7 @@ const CableMesh = ({ cable, meshProps, block }: CableProps) => {
     }
 
     return new CatmullRomCurve3(
-      cable.points.filter((p) => p).map((point) => new Vector3(...(point as Num3))),
+      cable.points.filter((p) => p).map((point) => new Vector3(...(point.position as Num3))),
       false,
       'catmullrom',
       0,

@@ -61,7 +61,7 @@ class Selector {
 
     // TODO find a better solution to skip non-selectable parts
     const blockIntersection = intersects.find(
-      (intersection) => intersection.partIndex && intersection.partName !== 'root',
+      (intersection) => intersection.partIndex && intersection.partInfo !== 'root',
     );
 
     if (blockIntersection) {
@@ -72,7 +72,7 @@ class Selector {
   }
 
   private checkIsBlockMoveable(block: Block) {
-    const place = block.place;
+    const place = block.connectedTo;
     if (place) {
       const targetBlock = this.blockStore.getBlock(block.parent);
       const template = this.blockStore.getBlockType(targetBlock.type);

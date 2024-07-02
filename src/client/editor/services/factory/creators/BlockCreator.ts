@@ -33,7 +33,7 @@ class BlockCreator {
       isHovered: false,
       isSelected: false,
       parent: settings.parent,
-      place: settings.place,
+      connectedTo: settings.connectedTo,
       id: id,
       partDetails,
       position: [x, y, z],

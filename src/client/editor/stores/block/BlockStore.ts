@@ -106,7 +106,7 @@ class BlockStore {
     return descendants;
   }
 
-  getRoot(blockId: string, expectedCategory: string): Block {
+  getRoot(blockId: string, expectedCategory?: string): Block {
     const block = this.getBlock(blockId);
 
     if (!block.parent) {

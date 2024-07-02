@@ -19,7 +19,7 @@ Then(
     const child = this.env.blockStore.getBlock(childId);
     const parent = this.env.blockStore.getBlock(parentId);
 
-    assert.equal(child.place, parentPart);
+    assert.equal(child.connectedTo, parentPart);
     assert.equal(child.parent, parentId);
 
     assert(parent.partDetails[parentPart]?.connectedTo?.blockId, child.id);

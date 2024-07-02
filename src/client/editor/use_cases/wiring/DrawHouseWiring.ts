@@ -5,9 +5,9 @@ import FactoryService from '../../services/factory/FactoryService';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
 import Block from '../../types/Block';
-import Num3 from '../../types/Num3';
 import VectorUtils, { addVector, multiplyVector } from '../../utils/vectorUtils';
 import MeshUtils from '../../utils/MeshUtils';
+import GetNextWireIntersection from './GetNextWireIntersection';
 import { BlockIntersection } from '../IntersectMesh';
 
 class DrawHouseWiring {
@@ -23,75 +23,54 @@ class DrawHouseWiring {
     this.sceneService = sceneService;
     this.sceneStore = sceneStore;
     this.updateService = updateService;
+    this.getNextWirePoint = new GetNextWireIntersection(this.blockStore, this.sceneService);
   }
 
   execute(targetBlockId: string, existingCableId: string | null, clientX: number, clientY: number): string | null {
     const edit = this.updateService.getTransaction();
 
-    const targetBlock = this.blockStore.getBlock(targetBlockId);
+    const rootBlock = this.blockStore.getRoot(targetBlockId);
 
-    const buildingBlock = this.blockStore.getRoot(targetBlockId, 'building-bases');
+    const selectedIntersection = this.getSelectedIntersection(
+      rootBlock,
+      clientX,
+      clientY,
+      existingCableId || undefined,
+    );
 
-    const targetRootBlock = targetBlock.parent ? this.blockStore.getBlock(targetBlock.parent) : targetBlock;
-
-    const intersectionTargets = [targetRootBlock.id, ...targetRootBlock.children];
-
-    const targetRootMesh = this.sceneStore.getObj3d(targetRootBlock.id);
-    const rootMesh = MeshUtils.findByName(targetRootMesh, 'root');
-    const rootPos = new Vector3();
-    rootMesh.getWorldPosition(rootPos);
-
-    let point: Num3 | undefined = undefined;
-
-    const [intersections] = this.sceneService.blockIntersection(intersectionTargets, clientX, clientY);
-
-    const blockIntersection = this.getNextTarget(existingCableId, intersections);
-
-    if (!blockIntersection) {
+    if (!selectedIntersection) {
       return existingCableId;
     }
 
-    // if (targetBlock.type === 'socket-1') {
-    //   const worldPos = new Vector3();
-
-    //   point = mesh.getWorldPosition(worldPos).toArray();
-    // } else {
-
-    if (Number(blockIntersection.meshes?.length) >= 2) {
-      point = multiplyVector(
-        addVector(blockIntersection.meshes?.[0].point.toArray(), blockIntersection.meshes?.[1].point.toArray()),
-        0.5,
-      );
-    }
-    // }
+    const point = this.getNewWirePoint(rootBlock, selectedIntersection);
 
     if (!point) {
       return existingCableId;
     }
 
-    point = VectorUtils.sub(point, rootPos.toArray());
-
     let block: Block | null = null;
 
     if (existingCableId) {
       edit.updateDecoration('cables', existingCableId, {
-        points: [point],
-        pointParents: [blockIntersection],
+        points: [
+          { position: point, blockId: selectedIntersection.block.id, partIndex: selectedIntersection.partIndex },
+        ],
       });
     } else {
       block = this.factoryService.create(
         edit,
         'cable-1',
-        { dependsOn: [targetBlockId], parent: buildingBlock.id },
+        { dependsOn: [targetBlockId], parent: rootBlock.id },
         {
           cables: {
-            points: [point],
-            pointParents: [blockIntersection],
+            points: [
+              { position: point, blockId: selectedIntersection.block.id, partIndex: selectedIntersection.partIndex },
+            ],
           },
         },
       );
 
-      edit.updateBlock(buildingBlock.id, { children: [block.id] });
+      edit.updateBlock(rootBlock.id, { children: [block.id] });
     }
 
     edit.commit();
@@ -99,60 +78,39 @@ class DrawHouseWiring {
     return existingCableId || block?.id || null;
   }
 
-  private getNextTarget(
-    existingCableId: string | null,
-    blockIntersections: BlockIntersection[],
-  ): BlockIntersection | undefined {
-    const targetBlock = this.blockStore.getBlock(blockIntersections[0].blockId);
-
-    if (!existingCableId) {
-      if (targetBlock.category === 'walls') {
-        return blockIntersections[0];
-      }
-
-      return undefined;
-    }
-
-    const cable = this.blockStore.getDecoration('cables', existingCableId);
-    const lastPointParent = cable.pointParents[cable.pointParents.length - 1];
-    const lastBlock = this.blockStore.getBlock(lastPointParent.blockId);
-
-    if (lastBlock.category === 'walls') {
-      return this.getWallJoin(lastBlock, blockIntersections);
-      // return (
-      //   targetBlock.category === 'building-bases' &&
-      //   lastPointParent.partIndex &&
-      //   targetBlock.partDetails[lastPointParent.partIndex]?.category === 'wall-join'
-      // );
-    } else if (lastBlock.category === 'building-bases') {
-      if (targetBlock.category === 'walls') {
-        return blockIntersections[0];
-      }
+  private getSelectedIntersection(rootBlock: Block, clientX: number, clientY: number, existingCableId?: string) {
+    if (rootBlock.category === 'building-bases') {
+      return this.getNextWirePoint.execute(rootBlock, clientX, clientY, existingCableId);
     }
 
     return undefined;
   }
 
-  private getWallJoin(wallBlock: Block, blockIntersections: BlockIntersection[]) {
-    const wallJoin = blockIntersections.find((intersection) => {
-      const targetBlock = this.blockStore.getBlock(intersection.blockId);
+  private getNewWirePoint(rootBlock: Block, intersection: BlockIntersection) {
+    const rootMesh = this.sceneStore.getObj3d(rootBlock.id);
+    const baseMesh = MeshUtils.findByName(rootMesh, 'root');
+    const basePos = new Vector3();
+    baseMesh.getWorldPosition(basePos);
 
-      return targetBlock.partDetails[intersection.partIndex || '']?.category === 'wall-join';
-    });
+    // if (targetBlock.type === 'socket-1') {
+    //   const worldPos = new Vector3();
 
-    if (!wallJoin) {
-      return;
-    }
+    //   point = mesh.getWorldPosition(worldPos).toArray();
+    // } else {
 
-    const buildingBlock = this.blockStore.getBlock(wallJoin.blockId);
-    const wallJoinBlock = buildingBlock.partDetails[wallJoin.partIndex || ''];
+    if (Number(intersection.meshes?.length) >= 2) {
+      const point = multiplyVector(
+        addVector(intersection.meshes?.[0].point.toArray(), intersection.meshes?.[1].point.toArray()),
+        0.5,
+      );
 
-    if (wallJoinBlock?.joins?.includes(wallBlock.place || '')) {
-      return wallJoin;
+      return VectorUtils.sub(point, basePos.toArray());
     }
 
     return undefined;
   }
+
+  private getNextWirePoint: GetNextWireIntersection;
 
   private blockStore: BlockStore;
 

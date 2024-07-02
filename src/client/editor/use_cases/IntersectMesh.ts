@@ -3,12 +3,14 @@ import SceneStore from '../components/scene/SceneStore';
 import BlockStore from '../stores/block/BlockStore';
 import BlockUtils from '../utils/BlockUtils';
 import MeshUtils from '../utils/MeshUtils';
+import Block from '../types/Block';
+import { ModelPartInfo } from '../types/BlockType';
 
 export type BlockIntersection = {
   meshes: Intersection<Object3D>[];
-  blockId: string;
+  block: Block;
   partIndex?: string;
-  partName?: string;
+  partInfo?: ModelPartInfo;
 };
 
 class IntersectMesh {
@@ -35,18 +37,19 @@ class IntersectMesh {
 
     const blockIntersections = intersects.map((meshIntersect) => {
       const block = this.blockStore.getBlock(meshIntersect.object.userData.modelId);
+      const partIndex = BlockUtils.getPartIndexByName(block, meshIntersect.object.name);
       return {
         meshes: [meshIntersect],
-        blockId: block.id,
-        partIndex: BlockUtils.getPartIndexByName(block, meshIntersect.object.name),
-        partName: meshIntersect.object.name,
+        block: block,
+        partIndex,
+        partInfo: partIndex ? block.partDetails[partIndex] : undefined,
       };
     });
 
     const aggregatedBlockIntersections: Map<string, BlockIntersection> = new Map();
 
     blockIntersections.forEach((intersection) => {
-      const key = intersection.blockId + intersection.partIndex;
+      const key = intersection.block.id + intersection.partIndex;
 
       if (aggregatedBlockIntersections.get(key)) {
         aggregatedBlockIntersections.get(key)?.meshes.push(intersection.meshes[0]);
