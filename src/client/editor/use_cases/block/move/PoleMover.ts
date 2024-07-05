@@ -30,7 +30,9 @@ class PoleMover extends BlockMover {
     const index = cable.end1?.device === pole.id ? 0 : cable.points.length - 1;
     const newPoints = [...cable.points];
 
-    newPoints.splice(index, 1, addVector(newPoints[index], dragDelta));
+    const newPoint = { position: addVector(newPoints[index].position, dragDelta) };
+
+    newPoints.splice(index, 1, newPoint);
 
     // const pole1Id = cable.end1?.device;
     // const pin1Index = cable.end1?.pin;

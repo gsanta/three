@@ -50,13 +50,27 @@ class EraseBlock {
       eraser.erase(edit, block);
     }
 
-    if (block.slotTarget) {
+    if (block.connectedTo) {
       edit.updateBlock(
-        block.slotTarget.blockId,
-        { slotSources: [{ blockId: block.id, slotName: block.slotTarget.slotName }] },
-        { arrayMergeStrategy: 'exclude' },
+        block.parent || '',
+        {
+          partDetails: {
+            [block.connectedTo]: {
+              connectedTo: undefined,
+            },
+          },
+        },
+        { arrayMergeStrategy: 'replace' },
       );
     }
+
+    block.associations.forEach((association) => {
+      const associationBlock = this.store.getBlock(association);
+
+      associationBlock.decorations.forEach((decoration) => {
+        this.erasers[decoration]?.associationErased(edit, associationBlock, block);
+      });
+    });
 
     block.dependsOn.forEach((dependsOnId) => {
       edit.updateBlock(dependsOnId, { dependents: [block.id] }, { arrayMergeStrategy: 'exclude' });

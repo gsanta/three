@@ -1,39 +1,13 @@
-import BlockDecoration, { BlockCategories, BlockDecorationType } from '@/client/editor/types/BlockCategory';
+import BlockDecoration, { BlockCategories } from '@/client/editor/types/BlockCategory';
 import { BlockUpdate, DecorationUpdate, UpdateBlocks, updateBlocks } from '@/client/editor/stores/block/blockSlice';
 import { PartialDeep } from 'type-fest';
-import Block, { BlockSlotSource } from '@/client/editor/types/Block';
+import Block, { mergeBlocks } from '@/client/editor/types/Block';
 import BlockStore from '../../stores/block/BlockStore';
 import { Store } from '@/client/common/utils/store';
-import mergeDeep, { MergeStrategy, mergeArrays } from '../../utils/mergeDeep';
+import mergeDeep, { MergeStrategy } from '../../utils/mergeDeep';
 import BlockUpdater from '../transaction/updaters/BlockUpdater';
 import LampUpdater from '../transaction/updaters/LampUpdater';
 import SystemHook from './SystemHook';
-
-const mergeSlotSources = (
-  arr1: Block['slotSources'],
-  arr2: Block['slotSources'] | undefined,
-  mergeStrategy: MergeStrategy,
-) => {
-  const find = (arr: Block['slotSources'], source: BlockSlotSource) => {
-    return arr.find(
-      (existingSource) => existingSource.blockId === source.blockId && existingSource.slotName === source.slotName,
-    );
-  };
-
-  if (mergeStrategy === 'merge') {
-    const ret = [...(arr1 || [])];
-
-    arr2?.forEach((slotSource) => {
-      if (!find(arr1, slotSource)) {
-        ret.push(slotSource);
-      }
-    });
-
-    return ret;
-  }
-
-  return arr1.filter((slotSource) => !arr2 || !find(arr2, slotSource));
-};
 
 class Edit {
   constructor(store: BlockStore, dispatchStore: Store, systemHooks: SystemHook[]) {
@@ -106,7 +80,7 @@ class Edit {
   updateDecoration<T extends BlockDecoration>(
     category: T,
     id: string,
-    partial: PartialDeep<BlockDecorationType>,
+    partial: PartialDeep<BlockCategories[T], object>,
     options: { arrayMergeStrategy: MergeStrategy } = { arrayMergeStrategy: 'merge' },
   ): this {
     if (this.isRemoved(id)) {
@@ -172,14 +146,7 @@ class Edit {
   ) {
     const { arrayMergeStrategy } = options;
 
-    return {
-      ...orig,
-      ...update,
-      dependents: mergeArrays(orig.dependents, update.dependents, arrayMergeStrategy),
-      dependsOn: mergeArrays(orig.dependsOn, update.dependsOn, arrayMergeStrategy),
-      children: mergeArrays(orig.children, update.children, arrayMergeStrategy),
-      slotSources: mergeSlotSources(orig.slotSources || [], update.slotSources, arrayMergeStrategy),
-    } as Block;
+    return mergeBlocks(orig, update, arrayMergeStrategy);
   }
 
   private getBlockFromUpdates(id: string): [BlockUpdate | undefined, number] {

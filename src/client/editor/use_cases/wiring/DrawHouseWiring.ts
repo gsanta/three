@@ -1,58 +1,117 @@
+import { Vector3 } from 'three';
 import SceneService from '../../components/scene/SceneService';
 import SceneStore from '../../components/scene/SceneStore';
 import FactoryService from '../../services/factory/FactoryService';
 import TransactionService from '../../services/transaction/TransactionService';
+import BlockStore from '../../stores/block/BlockStore';
 import Block from '../../types/Block';
-import { addVector, multiplyVector } from '../../utils/vectorUtils';
+import VectorUtils, { addVector, multiplyVector } from '../../utils/vectorUtils';
+import MeshUtils from '../../utils/MeshUtils';
+import GetNextWireIntersection from './GetNextWireIntersection';
+import { BlockIntersection } from '../IntersectMesh';
+
 class DrawHouseWiring {
   constructor(
+    blockStore: BlockStore,
     factoryService: FactoryService,
     sceneService: SceneService,
     sceneStore: SceneStore,
     updateService: TransactionService,
   ) {
+    this.blockStore = blockStore;
     this.factoryService = factoryService;
     this.sceneService = sceneService;
     this.sceneStore = sceneStore;
     this.updateService = updateService;
+    this.getNextWirePoint = new GetNextWireIntersection(this.blockStore, this.sceneService);
   }
 
-  execute(targetBlockId: string, existingCableId: string | null, clientX: number, clientY: number): string | null {
+  execute(targetBlockId: string, clientX: number, clientY: number) {
     const edit = this.updateService.getTransaction();
 
-    const mesh = this.sceneStore.getObj3d(targetBlockId);
+    const rootBlock = this.blockStore.getRoot(targetBlockId);
 
-    const [intersections] = this.sceneService.intersection(mesh, clientX, clientY);
+    const cableId = rootBlock.children.find((child) => this.blockStore.getBlock(child).category === 'cables');
 
-    if (intersections?.length !== 2) {
-      return existingCableId;
+    const selectedIntersection = this.getSelectedIntersection(rootBlock, clientX, clientY, cableId);
+
+    if (!selectedIntersection) {
+      return;
     }
 
-    const point = multiplyVector(addVector(intersections[0].point.toArray(), intersections[1].point.toArray()), 0.5);
+    const point = this.getNewWirePoint(rootBlock, selectedIntersection);
+
+    if (!point) {
+      return;
+    }
 
     let block: Block | null = null;
 
-    if (existingCableId) {
-      edit.updateDecoration('cables', existingCableId, {
-        points: [point],
+    if (cableId) {
+      block = this.blockStore.getBlock(cableId);
+
+      edit.updateDecoration('cables', cableId, {
+        points: [
+          { position: point, blockId: selectedIntersection.block.id, partIndex: selectedIntersection.partIndex },
+        ],
       });
-      edit.commit();
     } else {
       block = this.factoryService.create(
         edit,
         'cable-1',
-        { dependsOn: [targetBlockId] },
+        { dependsOn: [targetBlockId], parent: rootBlock.id },
         {
           cables: {
-            points: [point],
+            points: [
+              { position: point, blockId: selectedIntersection.block.id, partIndex: selectedIntersection.partIndex },
+            ],
           },
         },
       );
-      edit.commit();
     }
 
-    return existingCableId || block?.id || null;
+    edit.updateBlock(selectedIntersection.block.id, { associations: [block.id] });
+
+    edit.updateBlock(rootBlock.id, { children: [block.id] });
+
+    edit.commit();
   }
+
+  private getSelectedIntersection(rootBlock: Block, clientX: number, clientY: number, cableId?: string) {
+    if (rootBlock.category === 'building-bases') {
+      return this.getNextWirePoint.execute(rootBlock, clientX, clientY, cableId);
+    }
+
+    return undefined;
+  }
+
+  private getNewWirePoint(rootBlock: Block, intersection: BlockIntersection) {
+    const rootMesh = this.sceneStore.getObj3d(rootBlock.id);
+    const baseMesh = MeshUtils.findByName(rootMesh, 'root');
+    const basePos = new Vector3();
+    baseMesh.getWorldPosition(basePos);
+
+    // if (targetBlock.type === 'socket-1') {
+    //   const worldPos = new Vector3();
+
+    //   point = mesh.getWorldPosition(worldPos).toArray();
+    // } else {
+
+    if (Number(intersection.meshes?.length) >= 2) {
+      const point = multiplyVector(
+        addVector(intersection.meshes?.[0].point.toArray(), intersection.meshes?.[1].point.toArray()),
+        0.5,
+      );
+
+      return VectorUtils.sub(point, basePos.toArray());
+    }
+
+    return undefined;
+  }
+
+  private getNextWirePoint: GetNextWireIntersection;
+
+  private blockStore: BlockStore;
 
   private factoryService: FactoryService;
 

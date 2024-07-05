@@ -26,6 +26,24 @@ class CableEraser extends BlockEraser {
     }
   }
 
+  associationErased(edit: Edit, cableBlock: Block, association: Block) {
+    const cable = this.store.getDecoration('cables', cableBlock.id);
+    const index = cable.points.findIndex((point) => point.blockId === association.id);
+
+    const remainingPoints = cable.points.slice(0, index);
+
+    if (index !== -1) {
+      edit.updateDecoration(
+        'cables',
+        cable.id,
+        {
+          points: remainingPoints,
+        },
+        { arrayMergeStrategy: 'replace' },
+      );
+    }
+  }
+
   private removePin(edit: Edit, cableId: string, end: CableEnd) {
     edit.updateDecoration(
       'devices',

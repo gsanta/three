@@ -5,12 +5,18 @@ export type CableEnd = {
   device: string;
 };
 
+export type CablePoint = {
+  position: Num3;
+  blockId?: string;
+  partIndex?: string;
+};
+
 type Cable = {
   id: string;
   category: 'cables';
   end1: CableEnd | null;
   end2: CableEnd | null;
-  points: Num3[];
+  points: CablePoint[];
 };
 
 export default Cable;

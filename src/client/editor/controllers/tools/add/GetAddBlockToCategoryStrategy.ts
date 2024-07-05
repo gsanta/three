@@ -3,7 +3,7 @@ import BlockType from '@/client/editor/types/BlockType';
 
 export type GetStrategyParams = {
   targetBlock: Block;
-  targetPartIndex: string;
+  targetPartIndex?: string;
   newBlockType: BlockType;
 };
 

@@ -12,7 +12,6 @@ const isModelMesh = (block: Block): block is Block<'model'> => block.geometry ==
 const isTubeMesh = (block: Block): block is Block<'tube'> => block.category === 'cables';
 
 const MeshRenderer = (props: WrappedMeshProps) => {
-  console.log('block id: ' + props.block.id);
   const { block, meshProps, materialProps } = props;
   const decorations = useAppSelector((selector) => selector.block.present.decorations);
 

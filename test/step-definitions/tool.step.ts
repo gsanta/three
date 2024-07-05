@@ -8,6 +8,7 @@ import { Vector3 } from 'three';
 import findClosestBlock from './helpers/findClosestBlock';
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { checkPosition } from './helpers/checks';
+import BlockUtils from '@/client/editor/utils/BlockUtils';
 
 When('I select tool {string}', function (this: ExtendedWorld, toolName: ToolName) {
   store.dispatch(setSelectedTool(toolName));
@@ -42,9 +43,17 @@ When(
     const mesh = this.env.sceneStore.getObj3d(block.id);
 
     const partMesh = MeshUtils.findByName(mesh, partName);
-    this.env.sceneService.setIntersection([{ object: partMesh, distance: 1, point: new Vector3(x, y, z) }]);
+    const partIndex = BlockUtils.getPartIndexByName(block, partName);
+    this.env.sceneService.setIntersection([
+      {
+        block,
+        partIndex: partIndex,
+        meshes: [{ object: partMesh, distance: 1, point: new Vector3(x, y, z) }],
+      },
+    ]);
 
     this.env.toolHelper.pointerDown({ blockId });
+    this.env.toolHelper.pointerUp();
   },
 );
 

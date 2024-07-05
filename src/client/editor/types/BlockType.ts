@@ -18,12 +18,17 @@ export type ModelPart = {
   name?: string;
 };
 
-export type ModelPartCategory = 'pin' | 'wall-slot' | 'ceil-slot' | 'load-on' | 'load-off';
+export type ModelPartCategory = 'pin' | 'wall-slot' | 'ceil-slot' | 'load-on' | 'load-off' | 'wall-join';
 
 export type ModelPartInfo = {
   allowMovement?: Axis[];
+  connectedTo?: {
+    blockId: string;
+    partIndex?: string;
+  };
   isHidden?: boolean;
   isSelected?: boolean;
+  joins?: [string, string];
   orientation: number;
   role?: 'slot';
   category: ModelPartCategory;

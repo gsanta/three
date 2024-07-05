@@ -16,6 +16,20 @@ const findByNameRecursive = (mesh: Object3D, name: string): Object3D | undefined
   return undefined;
 };
 
+const findLeafsRecursive = (obj: Object3D): Mesh[] => {
+  if (!obj.children.length) {
+    return [obj as Mesh];
+  }
+
+  const children: Mesh[] = [];
+
+  for (const childObj of obj.children) {
+    children.push(...findLeafsRecursive(childObj));
+  }
+
+  return children;
+};
+
 class MeshUtils {
   static findByName(mesh: Object3D, name?: string): Object3D {
     if (!name) {
@@ -29,6 +43,10 @@ class MeshUtils {
     }
 
     return found;
+  }
+
+  static getLeafs(mesh: Object3D): Mesh[] {
+    return findLeafsRecursive(mesh);
   }
 }
 

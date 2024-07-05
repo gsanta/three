@@ -44,7 +44,7 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
   const templates = useMemo(() => new TemplateStore(store), []);
   const toolStore = useMemo(() => new ToolStore(store), []);
   const blockStore = useMemo(() => new BlockStore(store), []);
-  const scene = useMemo(() => new SceneServiceImpl(sceneStore), [sceneStore]);
+  const scene = useMemo(() => new SceneServiceImpl(blockStore, sceneStore), [blockStore, sceneStore]);
   const factoryService = useMemo(() => new FactoryService(blockStore, scene), [blockStore, scene]);
 
   const electricityStore = useMemo(() => new ElectricityStore(), []);

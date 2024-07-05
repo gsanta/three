@@ -25,6 +25,10 @@ class BlockUtils {
     return block;
   }
 
+  static getPartIndexByName(block: Block, partName?: string) {
+    return Object.keys(block.partDetails).find((partIndex) => block.partDetails[partIndex]?.name === partName);
+  }
+
   static findMatchingSlot(sourceBlock: Block, sourcePartName: string, target: BlockType): RotatedPart | undefined {
     const sourcePart = sourceBlock.parts.find((part) => part.index === sourcePartName);
     const orientation = sourceBlock.partDetails[sourcePart?.index || '']?.orientation || 0;

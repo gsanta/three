@@ -33,6 +33,7 @@ class ToolService {
     this.info.pos = event.point;
     this.info.clientX = event.clientX;
     this.info.clientY = event.clientY;
+    this.info.downPos = event.point;
 
     this.setEventObject(event);
 
@@ -62,10 +63,25 @@ class ToolService {
     this.info.clientX = event.clientX;
     this.info.clientY = event.clientY;
 
+    if (
+      !this.info.isDragHappened &&
+      this.info.downPos &&
+      VectorUtils.size(VectorUtils.sub(this.info.pos.toArray(), this.info.downPos?.toArray())) > 0.1
+    ) {
+      this.info.isDragHappened = true;
+    }
+
     this.setEventObject(event);
 
     const { selectedTool } = store.getState().tool;
     this.getTool(selectedTool)?.onPointerMove(this.info);
+  }
+
+  onPointerUp() {
+    const { selectedTool } = store.getState().tool;
+    this.getTool(selectedTool)?.onPointerUp(this.info);
+    this.info.isDragHappened = false;
+    this.info.downPos = undefined;
   }
 
   onDrag(delta: Vector3) {

@@ -25,7 +25,9 @@ class MoveDevice extends MoveDecoration {
     const index = cable.end1?.device === blockId ? 0 : cable.points.length - 1;
     const newPoints = [...cable.points];
 
-    newPoints.splice(index, 1, addVector(newPoints[index], dragDelta));
+    const newPoint = { position: addVector(newPoints[index].position, dragDelta) };
+
+    newPoints.splice(index, 1, newPoint);
 
     edit.updateDecoration(
       'cables',

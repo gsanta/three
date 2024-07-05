@@ -13,7 +13,8 @@ import { Vector3 } from 'three';
 import { store } from '@/client/common/utils/store';
 import HoverTool from './HoverTool';
 import DrawHouseWiring from '../../use_cases/wiring/DrawHouseWiring';
-import { setEditMode } from '../../stores/block/blockSlice';
+import { setEditMode } from '../../stores/editorSlice';
+import Block from '../../types/Block';
 
 class CableTool extends HoverTool {
   constructor(
@@ -23,13 +24,11 @@ class CableTool extends HoverTool {
     sceneStore: SceneStore,
     update: TransactionService,
   ) {
-    super(blockStore, sceneService, sceneStore, update, ToolName.Cable);
+    super(blockStore, sceneService, update, ToolName.Cable);
 
     this.blockStore = blockStore;
 
-    this.currentCableId = null;
-
-    this.drawHouseWiring = new DrawHouseWiring(factoryService, sceneService, sceneStore, update);
+    this.drawHouseWiring = new DrawHouseWiring(blockStore, factoryService, sceneService, sceneStore, update);
 
     this.factoryService = factoryService;
 
@@ -45,48 +44,57 @@ class CableTool extends HoverTool {
 
   onDeselect() {
     store.dispatch(updateTemporaryCables(undefined));
-    store.dispatch(setEditMode(undefined));
+    store.dispatch(setEditMode({ editingMode: null, editingTargetBlock: null }));
 
     this.isDrawingCable = false;
   }
 
-  onPointerDown(info: ToolInfo) {
+  onPointerUp(info: ToolInfo) {
     const blockId = info.eventObject?.userData.modelId;
 
+    if (info.isDragHappened) {
+      return;
+    }
+
     if (!blockId) {
-      store.dispatch(setEditMode(undefined));
+      store.dispatch(setEditMode({ editingMode: null, editingTargetBlock: null }));
       return;
     }
 
     const block = this.blockStore.getBlock(blockId);
 
-    if (block.category === 'building-bases') {
-      store.dispatch(setEditMode({ blockId }));
-    } else if (block.category === 'walls') {
-      this.currentCableId = this.drawHouseWiring.execute(blockId, this.currentCableId, info.clientX, info.clientY);
-    } else if (this.isDrawingCable) {
-      if (blockId) {
-        const mesh = this.scene.getObj3d(blockId);
-        const targetBlock = this.blockStore.getBlock(blockId);
+    const isWiringMode = store.getState().editor.editingMode === 'wiring';
 
-        const targetPartIndex = this.checkPartIntersection(targetBlock, mesh, info.clientX, info.clientY);
+    const rootBlock = this.getRootBlock(block);
 
-        const selectedBlockId = this.blockStore.getSelectedRootBlockIds()[0];
-        const sourcePartIndex = this.blockStore.getSelectedPartIndexes()[selectedBlockId]?.[0];
-
-        if (!sourcePartIndex || !targetPartIndex) {
-          return;
-        }
-
-        const block1 = this.blockStore.getBlock(selectedBlockId);
-        const block2 = this.blockStore.getBlock(blockId);
-
-        if (targetBlock.partDetails[targetPartIndex || '']?.category === 'pin') {
-          this.joinPoles.join(block1, block2, [[sourcePartIndex, targetPartIndex]]);
-        }
-      }
+    if (isWiringMode) {
+      this.drawHouseWiring.execute(blockId, info.clientX, info.clientY);
     } else {
-      this.selector.select(blockId, info.clientX, info.clientY);
+      if (rootBlock) {
+        store.dispatch(setEditMode({ editingMode: 'wiring', editingTargetBlock: rootBlock.id }));
+      } else if (this.isDrawingCable) {
+        if (blockId) {
+          const targetBlock = this.blockStore.getBlock(blockId);
+
+          const partIndex = this.checkPartIntersection(blockId, info.clientX, info.clientY);
+
+          const selectedBlockId = this.blockStore.getSelectedRootBlockIds()[0];
+          const sourcePartIndex = this.blockStore.getSelectedPartIndexes()[selectedBlockId]?.[0];
+
+          if (!sourcePartIndex || !partIndex) {
+            return;
+          }
+
+          const block1 = this.blockStore.getBlock(selectedBlockId);
+          const block2 = this.blockStore.getBlock(blockId);
+
+          if (targetBlock.partDetails[partIndex || '']?.category === 'pin') {
+            this.joinPoles.join(block1, block2, [[sourcePartIndex, partIndex]]);
+          }
+        }
+      } else {
+        this.selector.select(blockId, info.clientX, info.clientY);
+      }
     }
   }
 
@@ -118,8 +126,8 @@ class CableTool extends HoverTool {
   }
 
   onExecute() {
-    const blocks = this.store.getBlocks();
-    const selectedBlockIds = this.store.getSelectedRootBlockIds();
+    const blocks = this.blockStore.getBlocks();
+    const selectedBlockIds = this.blockStore.getSelectedRootBlockIds();
 
     const polesIds = selectedBlockIds.filter((id) => blocks[id].category === 'poles');
 
@@ -136,9 +144,19 @@ class CableTool extends HoverTool {
     ]);
   }
 
-  private blockStore: BlockStore;
+  private getRootBlock(block: Block) {
+    if (block.category === 'building-bases') {
+      return block;
+    }
 
-  private currentCableId: string | null;
+    if (block.category === 'walls') {
+      const parentId = block.parent;
+
+      return this.blockStore.getBlock(parentId);
+    }
+
+    return undefined;
+  }
 
   private drawHouseWiring: DrawHouseWiring;
 

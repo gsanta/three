@@ -14,13 +14,11 @@ class BaseMover {
   }
 
   move(block: Block, drag: Num3, dragDelta: Num3): Num3 {
-    if (block.slotTarget) {
-      const { blockId: targetBlockId, slotName } = block.slotTarget;
-
+    if (block.connectedTo) {
       const sourceMesh = this.sceneStore.getObj3d(block.id);
 
-      const targetMesh = this.sceneStore.getObj3d(targetBlockId);
-      const targetPartMesh = MeshUtils.findByName(targetMesh, slotName);
+      const targetMesh = this.sceneStore.getObj3d(block.parent || '');
+      const targetPartMesh = MeshUtils.findByName(targetMesh, block.connectedTo);
 
       const sourceBoundingBox = new Box3().setFromObject(sourceMesh);
       const targetBoundingBox = new Box3().setFromObject(targetPartMesh);

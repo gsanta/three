@@ -3,6 +3,10 @@ import { PartialDeep } from 'type-fest';
 export type MergeStrategy = 'merge' | 'exclude' | 'replace';
 
 export const mergeArrays = <T>(arr1: T[], arr2: T[] | undefined, mergeStrategy: MergeStrategy) => {
+  if (!arr2) {
+    return arr1;
+  }
+
   if (mergeStrategy === 'merge') {
     return [...new Set([...arr1, ...(arr2 || [])])];
   }
@@ -48,9 +52,12 @@ const mergeDeepRecursive = <T extends Record<string, any>>(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mergeDeep = <T extends Record<string, any>>(
   target: T,
-  source: PartialDeep<T>,
-  mergeStrategy: MergeStrategy,
+  source?: PartialDeep<T>,
+  mergeStrategy: MergeStrategy = 'replace',
 ): T => {
+  if (!source) {
+    return target;
+  }
   const clone = JSON.parse(JSON.stringify(target));
   return mergeDeepRecursive(clone, source, mergeStrategy);
 };

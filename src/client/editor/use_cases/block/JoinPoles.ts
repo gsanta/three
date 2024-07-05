@@ -46,7 +46,7 @@ class JoinPoles {
         cables: {
           end1: { pin: partIndex1, device: deviceBlock1.id },
           end2: { pin: partIndex2, device: deviceBlock2.id },
-          points: [pos1.toArray(), pos2.toArray()],
+          points: [{ position: pos1.toArray() }, { position: pos2.toArray() }],
         },
       },
     );

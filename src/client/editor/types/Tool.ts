@@ -15,10 +15,12 @@ export type EventObject = {
 };
 
 export interface ToolInfo {
+  downPos?: Vector3;
   pos: Vector3;
   drag: Num3;
   dragDelta: Num3;
   eventObject?: EventObject;
+  isDragHappened?: boolean;
   selectedMesh?: Mesh;
   clientX: number;
   clientY: number;
@@ -33,14 +35,14 @@ abstract class Tool {
 
   showOnToolbar = true;
 
-  protected store: BlockStore;
+  protected blockStore: BlockStore;
 
   protected update: TransactionService;
 
   constructor(store: BlockStore, update: TransactionService, name: ToolName, iconName?: IconName) {
     this.name = name;
     this.iconName = iconName;
-    this.store = store;
+    this.blockStore = store;
     this.update = update;
   }
 
@@ -51,6 +53,8 @@ abstract class Tool {
   onPointerEnter(_info: ToolInfo) {}
 
   onPointerLeave(_info: ToolInfo) {}
+
+  onPointerUp(_info: ToolInfo) {}
 
   onDrag(_info: ToolInfo) {}
 

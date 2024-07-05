@@ -33,7 +33,7 @@ const AddToolOptions = () => {
         <FormLabel display="flex" alignItems="center" gap="2" marginBottom="1">
           Geometry type
         </FormLabel>
-        <RadioSwitchGroup defaultValue={selectedBlockName} name="geometry-selector" onChange={handleGeometryChange}>
+        <RadioSwitchGroup name="geometry-selector" onChange={handleGeometryChange} value={selectedBlockName}>
           {blocks.map((block) => (
             <RadioSwitchButton key={block.type} value={block.type}>
               {block.type}

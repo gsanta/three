@@ -1,4 +1,4 @@
-import { Object3D, Object3DEventMap, Vector3 } from 'three';
+import { Vector3 } from 'three';
 import SceneService from '../../components/scene/SceneService';
 import SceneStore from '../../components/scene/SceneStore';
 import BlockStore from '../../stores/block/BlockStore';
@@ -36,12 +36,12 @@ class Selector {
 
     const edit = this.updateService.getTransaction();
 
-    const partName = this.checkPartIntersection(block, mesh, clientX, clientY);
+    const partIndex = this.checkPartIntersection(block, clientX, clientY);
     const isMovable = this.checkIsBlockMoveable(block);
 
-    if (partName) {
+    if (partIndex) {
       edit.select(null);
-      edit.select(block.id, partName);
+      edit.select(block.id, partIndex);
       store.dispatch(updateSelectTool({ moveAxis: block.moveAxis }));
     } else if (isMovable) {
       edit.select(block.id);
@@ -56,29 +56,29 @@ class Selector {
     edit.commit();
   }
 
-  private checkPartIntersection(block: Block, mesh: Object3D<Object3DEventMap>, clientX: number, clientY: number) {
-    const [intersects] = this.scene.intersection(mesh, clientX, clientY);
+  private checkPartIntersection(block: Block, clientX: number, clientY: number) {
+    const [intersects] = this.scene.blockIntersection([block.id], clientX, clientY);
 
     // TODO find a better solution to skip non-selectable parts
-    const partName = intersects
-      ?.map((intersection) => intersection.object.name)
-      .find((name) => name && name !== 'root');
+    const blockIntersection = intersects.find(
+      (intersection) => intersection.partIndex && intersection.partInfo?.name !== 'root',
+    );
 
-    if (partName) {
-      return Object.entries(block.partDetails).find(([, val]) => val?.name === partName)?.[0];
+    if (blockIntersection) {
+      return blockIntersection.partIndex;
     }
 
     return undefined;
   }
 
   private checkIsBlockMoveable(block: Block) {
-    const slotTarget = block.slotTarget;
-    if (slotTarget) {
-      const targetBlock = this.blockStore.getBlock(slotTarget.blockId);
+    const place = block.connectedTo;
+    if (place) {
+      const targetBlock = this.blockStore.getBlock(block.parent);
       const template = this.blockStore.getBlockType(targetBlock.type);
 
-      const slotTargetPart = template?.parts.find((part) => part.name === slotTarget.slotName);
-      if (block.partDetails[slotTargetPart?.index || '']?.allowMovement) {
+      const targetPart = template?.partDetails[place];
+      if (targetPart?.allowMovement) {
         return true;
       }
     }
