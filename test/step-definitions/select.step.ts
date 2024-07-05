@@ -26,7 +26,7 @@ function selectBlockAtPosition(this: ExtendedWorld, x: number, y: number, z: num
     const partMesh = MeshUtils.findByName(mesh, partName);
     this.env.sceneService.setIntersection([
       {
-        blockId: block.id,
+        block,
         partIndex: partIndex,
         meshes: [
           {

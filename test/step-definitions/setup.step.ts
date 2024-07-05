@@ -74,7 +74,7 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
       const intersectingParentMesh = this.env.sceneStore.getObj3d(intersectingParent);
       const intersectingParentPos = new Vector3();
       intersectingParentMesh.getWorldPosition(intersectingParentPos);
-      // ; this.env.blockStore.getBlock(intersectingParent).position;
+      const parentBlock = this.env.blockStore.getBlock(intersectingParent);
       const relativePos = row.POS.split(':')[1]
         ?.split(',')
         .map((p) => Number(p)) as Num3;
@@ -88,7 +88,7 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
               point: new Vector3(...intersectingParentPos).add(new Vector3(...relativePos)),
             },
           ],
-          blockId: intersectingParent,
+          block: parentBlock,
         },
       ]);
       addBlockToPointerPos.perform(row.PARENT, '#1', row.TYPE, 0, 0);

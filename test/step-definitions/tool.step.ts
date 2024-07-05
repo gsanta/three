@@ -46,7 +46,7 @@ When(
     const partIndex = BlockUtils.getPartIndexByName(block, partName);
     this.env.sceneService.setIntersection([
       {
-        blockId: blockId,
+        block,
         partIndex: partIndex,
         meshes: [{ object: partMesh, distance: 1, point: new Vector3(x, y, z) }],
       },

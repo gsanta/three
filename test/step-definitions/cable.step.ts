@@ -30,9 +30,9 @@ Then(
       throw new Error("Shouldn't happen");
     }
 
-    const isClose = isPositionCloseTo([x, y, z], point);
+    const isClose = isPositionCloseTo([x, y, z], point.position);
 
-    assert.ok(isClose, `Expected (${x}, ${y}, ${z}) to be close to (${point.join(', ')})`);
+    assert.ok(isClose, `Expected (${x}, ${y}, ${z}) to be close to (${point.position.join(', ')})`);
   },
 );
 
@@ -40,8 +40,8 @@ Then('cable {string} ends at position {string}', function (this: ExtendedWorld, 
   const cable = checkDecorationExists.call(this, 'cables', blockId) as Cable;
   const [x, y, z] = checkPosition.call(this, posStr);
 
-  const isClose1 = cable.points[0] ? isPositionCloseTo([x, y, z], cable.points[0]) : false;
-  const isClose2 = cable.points[1] ? isPositionCloseTo([x, y, z], cable.points[1]) : false;
+  const isClose1 = cable.points[0] ? isPositionCloseTo([x, y, z], cable.points[0].position) : false;
+  const isClose2 = cable.points[1] ? isPositionCloseTo([x, y, z], cable.points[1].position) : false;
 
   assert.ok(
     isClose1 || isClose2,
