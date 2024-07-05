@@ -1,7 +1,6 @@
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import WrappedMeshProps from '@/client/editor/types/block/WrappedMeshProps';
 import MeshRenderer from './MeshRenderer';
-import { addVector } from '@/client/editor/utils/vectorUtils';
 import Num3 from '@/client/editor/types/Num3';
 
 type DefaultMeshRendererProps = Omit<WrappedMeshProps, 'block' | 'parent'> & {
