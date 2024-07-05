@@ -26,32 +26,31 @@ class DrawHouseWiring {
     this.getNextWirePoint = new GetNextWireIntersection(this.blockStore, this.sceneService);
   }
 
-  execute(targetBlockId: string, existingCableId: string | null, clientX: number, clientY: number): string | null {
+  execute(targetBlockId: string, clientX: number, clientY: number) {
     const edit = this.updateService.getTransaction();
 
     const rootBlock = this.blockStore.getRoot(targetBlockId);
 
-    const selectedIntersection = this.getSelectedIntersection(
-      rootBlock,
-      clientX,
-      clientY,
-      existingCableId || undefined,
-    );
+    const cableId = rootBlock.children.find((child) => this.blockStore.getBlock(child).category === 'cables');
+
+    const selectedIntersection = this.getSelectedIntersection(rootBlock, clientX, clientY, cableId);
 
     if (!selectedIntersection) {
-      return existingCableId;
+      return;
     }
 
     const point = this.getNewWirePoint(rootBlock, selectedIntersection);
 
     if (!point) {
-      return existingCableId;
+      return;
     }
 
     let block: Block | null = null;
 
-    if (existingCableId) {
-      edit.updateDecoration('cables', existingCableId, {
+    if (cableId) {
+      block = this.blockStore.getBlock(cableId);
+
+      edit.updateDecoration('cables', cableId, {
         points: [
           { position: point, blockId: selectedIntersection.block.id, partIndex: selectedIntersection.partIndex },
         ],
@@ -69,18 +68,18 @@ class DrawHouseWiring {
           },
         },
       );
-
-      edit.updateBlock(rootBlock.id, { children: [block.id] });
     }
 
-    edit.commit();
+    edit.updateBlock(selectedIntersection.block.id, { associations: [block.id] });
 
-    return existingCableId || block?.id || null;
+    edit.updateBlock(rootBlock.id, { children: [block.id] });
+
+    edit.commit();
   }
 
-  private getSelectedIntersection(rootBlock: Block, clientX: number, clientY: number, existingCableId?: string) {
+  private getSelectedIntersection(rootBlock: Block, clientX: number, clientY: number, cableId?: string) {
     if (rootBlock.category === 'building-bases') {
-      return this.getNextWirePoint.execute(rootBlock, clientX, clientY, existingCableId);
+      return this.getNextWirePoint.execute(rootBlock, clientX, clientY, cableId);
     }
 
     return undefined;

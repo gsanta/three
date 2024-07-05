@@ -28,8 +28,6 @@ class CableTool extends HoverTool {
 
     this.blockStore = blockStore;
 
-    this.currentCableId = null;
-
     this.drawHouseWiring = new DrawHouseWiring(blockStore, factoryService, sceneService, sceneStore, update);
 
     this.factoryService = factoryService;
@@ -70,7 +68,7 @@ class CableTool extends HoverTool {
     const rootBlock = this.getRootBlock(block);
 
     if (isWiringMode) {
-      this.currentCableId = this.drawHouseWiring.execute(blockId, this.currentCableId, info.clientX, info.clientY);
+      this.drawHouseWiring.execute(blockId, info.clientX, info.clientY);
     } else {
       if (rootBlock) {
         store.dispatch(setEditMode({ editingMode: 'wiring', editingTargetBlock: rootBlock.id }));
@@ -159,8 +157,6 @@ class CableTool extends HoverTool {
 
     return undefined;
   }
-
-  private currentCableId: string | null;
 
   private drawHouseWiring: DrawHouseWiring;
 

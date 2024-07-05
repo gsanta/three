@@ -61,7 +61,7 @@ class Selector {
 
     // TODO find a better solution to skip non-selectable parts
     const blockIntersection = intersects.find(
-      (intersection) => intersection.partIndex && intersection.partInfo !== 'root',
+      (intersection) => intersection.partIndex && intersection.partInfo?.name !== 'root',
     );
 
     if (blockIntersection) {

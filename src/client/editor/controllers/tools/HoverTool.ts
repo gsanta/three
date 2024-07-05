@@ -34,7 +34,7 @@ abstract class HoverTool extends Tool {
     const [intersects] = this.sceneService.blockIntersection([blockId], clientX, clientY);
 
     const blockIntersection = intersects.find(
-      (intersection) => intersection.partIndex && intersection.partInfo !== 'root',
+      (intersection) => intersection.partIndex && intersection.partInfo?.name !== 'root',
     );
 
     if (blockIntersection) {

@@ -14,6 +14,7 @@ type Block<S extends ShapeType = ShapeType> = {
   dependents: string[];
   isHovered: boolean;
   isSelected: boolean;
+  associations: string[];
   // the partIndex of it's parent if it is attached to a part
   connectedTo?: string;
   parent?: string;

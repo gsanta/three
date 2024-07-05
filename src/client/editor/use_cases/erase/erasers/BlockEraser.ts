@@ -12,6 +12,8 @@ abstract class BlockEraser {
 
   erase(_edit: Edit, _block: Block) {}
 
+  associationErased(_edit: Edit, _cableBlock: Block, _association: Block) {}
+
   eraseDependent(_edit: Edit, _block: Block, _dependent: Block) {}
 }
 

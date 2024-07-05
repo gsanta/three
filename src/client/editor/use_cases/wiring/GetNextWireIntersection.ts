@@ -10,7 +10,7 @@ class GetNextWireIntersection {
     this.sceneService = sceneService;
   }
 
-  execute(buildingBlock: Block, clientX: number, clientY: number, existingCableId?: string) {
+  execute(buildingBlock: Block, clientX: number, clientY: number, cableId?: string) {
     const intersectionTargets = [
       buildingBlock.id,
       ...this.blockStore.getDescendants(buildingBlock.id).map((descendant) => descendant.id),
@@ -18,7 +18,7 @@ class GetNextWireIntersection {
 
     const [intersections] = this.sceneService.blockIntersection(intersectionTargets, clientX, clientY);
 
-    const existingCable = existingCableId ? this.blockStore.getDecoration('cables', existingCableId) : undefined;
+    const existingCable = cableId ? this.blockStore.getDecoration('cables', cableId) : undefined;
     const lastPoint = existingCable?.points[existingCable?.points.length - 1];
 
     return this.getNextTarget(intersections, lastPoint);

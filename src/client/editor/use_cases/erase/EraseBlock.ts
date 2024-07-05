@@ -64,6 +64,14 @@ class EraseBlock {
       );
     }
 
+    block.associations.forEach((association) => {
+      const associationBlock = this.store.getBlock(association);
+
+      associationBlock.decorations.forEach((decoration) => {
+        this.erasers[decoration]?.associationErased(edit, associationBlock, block);
+      });
+    });
+
     block.dependsOn.forEach((dependsOnId) => {
       edit.updateBlock(dependsOnId, { dependents: [block.id] }, { arrayMergeStrategy: 'exclude' });
     });

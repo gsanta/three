@@ -28,6 +28,7 @@ class BlockCreator {
     return {
       ...block,
       children: settings.children || [],
+      associations: [],
       dependents: settings.dependents || [],
       dependsOn: settings.dependsOn || [],
       isHovered: false,

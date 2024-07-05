@@ -74,24 +74,6 @@ const MoveControl = ({ onPointerDown, onPointerEnter }: MoveControlProps) => {
             materialProps={{ opacity: 0.5, transparent: true }}
           />
         ))}
-        {/* {Object.keys(selectedBlocks)
-          .filter((block) => !block.parent)
-          .map((block) => (
-            <MeshRenderer
-              additions={{
-                position: drag,
-              }}
-              block={block}
-              key={block.id}
-              meshProps={{
-                ref: selectedMeshRef,
-                position: addVector(block.position, transform),
-                onPointerDown,
-                onPointerEnter,
-              }}
-              materialProps={{ color: 'pink', opacity: 0.5, transparent: true }}
-            />
-          ))} */}
       </group>
     </PivotControls>
   );

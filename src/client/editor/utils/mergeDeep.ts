@@ -3,6 +3,10 @@ import { PartialDeep } from 'type-fest';
 export type MergeStrategy = 'merge' | 'exclude' | 'replace';
 
 export const mergeArrays = <T>(arr1: T[], arr2: T[] | undefined, mergeStrategy: MergeStrategy) => {
+  if (!arr2) {
+    return arr1;
+  }
+
   if (mergeStrategy === 'merge') {
     return [...new Set([...arr1, ...(arr2 || [])])];
   }
