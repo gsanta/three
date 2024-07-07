@@ -1,10 +1,53 @@
-import { Then } from '@cucumber/cucumber';
+import { Given, Then } from '@cucumber/cucumber';
 import ExtendedWorld from './ExtendedWorld';
 import assert from 'assert';
 import isPositionCloseTo from './helpers/isPositionCloseTo';
 import { Pins } from '@/client/editor/types/block/Device';
-import { checkDecorationExists, checkPosition } from './helpers/checks';
-import Cable from '@/client/editor/types/block/Cable';
+import { checkBlockExists, checkDecorationExists, checkPartIndexExists, checkPosition } from './helpers/checks';
+import Cable, { CablePoint } from '@/client/editor/types/block/Cable';
+import MeshUtils from '@/client/editor/utils/MeshUtils';
+import { Vector3 } from 'three';
+import VectorUtils from '@/client/editor/utils/vectorUtils';
+import AddWirePoints from '@/client/editor/use_cases/wiring/AddWirePoints';
+
+type CablePointHash = {
+  WORLD_POS: string;
+  BLOCK: string;
+  PART: string;
+};
+
+Given(
+  'I have a cable for house {string} with cable id {string}:',
+  function (this: ExtendedWorld, houseId: string, cableId: string, table: any) {
+    const data = table.hashes() as CablePointHash[];
+    this.env.sceneService.setUuid(cableId);
+
+    const rootBlockId = houseId;
+    const rootMesh = this.env.sceneStore.getObj3d(rootBlockId || '');
+    const baseMesh = MeshUtils.findByName(rootMesh, 'root');
+    const basePos = new Vector3();
+    baseMesh.getWorldPosition(basePos);
+
+    const points: CablePoint[] = [];
+
+    data.forEach((row) => {
+      const absolutePos = checkPosition.call(this, row.WORLD_POS);
+
+      const pos = VectorUtils.sub(absolutePos, basePos.toArray());
+
+      const partIndex = checkPartIndexExists.call(this, row.BLOCK, row.PART);
+
+      points.push({
+        position: pos,
+        blockId: row.BLOCK,
+        partIndex,
+      });
+    });
+
+    const addWirePoints = new AddWirePoints(this.env.blockStore, this.env.services.factory, this.env.update);
+    addWirePoints.add(this.env.blockStore.getBlock(rootBlockId), points);
+  },
+);
 
 Then(
   'cable for block {string} and pin {string} ends at position {string}',
@@ -55,4 +98,34 @@ Then('pin {string} of block {string} is empty', function (this: ExtendedWorld, p
   const pole = this.env.blockStore.getDecorations('devices')[realBlockId];
 
   assert.equal(pole?.pins[pin as Pins]?.wires.length, 0);
+});
+
+Then('Points for cable {string} are:', function (this: ExtendedWorld, cableId: string, table: any) {
+  const data = table.hashes() as CablePointHash[];
+  const cable = checkDecorationExists.call(this, 'cables', cableId) as Cable;
+  const cableBlock = checkBlockExists.call(this, cableId);
+
+  const rootBlockId = cableBlock.parent;
+  const rootMesh = this.env.sceneStore.getObj3d(rootBlockId || '');
+  const baseMesh = MeshUtils.findByName(rootMesh, 'root');
+  const basePos = new Vector3();
+  baseMesh.getWorldPosition(basePos);
+
+  if (cable.points.length !== data.length) {
+    throw new Error(`Points lengths is ${cable.points.length}, table length is ${data.length}`);
+  }
+
+  data.forEach((row, index) => {
+    const absolutePos = checkPosition.call(this, row.WORLD_POS);
+
+    if (cable.points.length - 1 < index) {
+      throw new Error(`Points lengths is ${cable.points.length}, expected index is ${index}`);
+    }
+
+    const pos = VectorUtils.sub(absolutePos, basePos.toArray());
+    const isClose = isPositionCloseTo(pos, cable.points[index].position);
+
+    assert.ok(isClose);
+    assert(row.BLOCK === cable.points[index].blockId);
+  });
 });

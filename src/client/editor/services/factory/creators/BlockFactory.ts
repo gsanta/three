@@ -2,8 +2,8 @@
 import BlockType from '@/client/editor/types/BlockType';
 import Block from '@/client/editor/types/Block';
 import BlockDecoration, { BlockDecorationType } from '@/client/editor/types/BlockCategory';
-import SceneService from '@/client/editor/components/scene/SceneService';
 import BlockCreator from './BlockCreator';
+import SceneService from '@/client/editor/components/scene/service/SceneService';
 
 abstract class BlockFactory {
   constructor(sceneService: SceneService) {

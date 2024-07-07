@@ -12,7 +12,8 @@ import Num3 from '@/client/editor/types/Num3';
 import AddBlockToSlot from '@/client/editor/use_cases/block/AddBlockToSlot';
 import AddBlockToPointerPos from '@/client/editor/use_cases/block/AddBlockToPointerPos';
 import JoinPoles from '@/client/editor/use_cases/block/JoinPoles';
-import { checkBlockExists, checkPosition } from './helpers/checks';
+import { checkBlockExists, checkPartIndexExists, checkPosition } from './helpers/checks';
+import VectorUtils from '@/client/editor/utils/vectorUtils';
 
 Given('I have an empty canvas', function (this: ExtendedWorld) {
   this.env.teardown();
@@ -67,7 +68,13 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
     } else if (row.PARENT === '-' || !row.PARENT) {
       addBlock.perform(new Vector3(...pos), row.TYPE);
     } else if (row.PARENT?.includes(':')) {
-      const [parentId, partIndex] = row.PARENT.split(':');
+      const [parentId, partIndexOrName] = row.PARENT.split(':');
+
+      let partIndex = partIndexOrName;
+      if (!partIndexOrName.startsWith('#')) {
+        partIndex = checkPartIndexExists.call(this, parentId, partIndexOrName);
+      }
+
       addBlockToSlot.perform(parentId, partIndex, row.TYPE);
     } else {
       const intersectingParent = row.POS.split(':')[0];
@@ -83,9 +90,9 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
         {
           meshes: [
             {
-              object: intersectingParentMesh,
+              object: {},
               distance: 1,
-              point: new Vector3(...intersectingParentPos).add(new Vector3(...relativePos)),
+              point: VectorUtils.add(intersectingParentPos.toArray(), relativePos),
             },
           ],
           block: parentBlock,

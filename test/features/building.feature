@@ -14,7 +14,6 @@ Feature: Building
     Then parent for block 'wall-2' is 'base-1'
     And block 'wall-2' is in slot '#3' of block 'base-1'
 
-  @important
   Scenario: Removing walls from a building
     Given I have a building base with id 'base-1'
     When I select tool 'add'

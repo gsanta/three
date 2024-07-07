@@ -1,14 +1,15 @@
 import { Vector3 } from 'three';
-import SceneService from '../../components/scene/SceneService';
+import SceneService from '../../components/scene/service/SceneService';
 import SceneStore from '../../components/scene/SceneStore';
 import FactoryService from '../../services/factory/FactoryService';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
 import Block from '../../types/Block';
-import VectorUtils, { addVector, multiplyVector } from '../../utils/vectorUtils';
+import VectorUtils from '../../utils/vectorUtils';
 import MeshUtils from '../../utils/MeshUtils';
 import GetNextWireIntersection from './GetNextWireIntersection';
 import { BlockIntersection } from '../IntersectMesh';
+import AddWirePoints from './AddWirePoints';
 
 class DrawHouseWiring {
   constructor(
@@ -23,12 +24,11 @@ class DrawHouseWiring {
     this.sceneService = sceneService;
     this.sceneStore = sceneStore;
     this.updateService = updateService;
+    this.addWirePoint = new AddWirePoints(this.blockStore, this.factoryService, this.updateService);
     this.getNextWirePoint = new GetNextWireIntersection(this.blockStore, this.sceneService);
   }
 
   execute(targetBlockId: string, clientX: number, clientY: number) {
-    const edit = this.updateService.getTransaction();
-
     const rootBlock = this.blockStore.getRoot(targetBlockId);
 
     const cableId = rootBlock.children.find((child) => this.blockStore.getBlock(child).category === 'cables');
@@ -45,36 +45,9 @@ class DrawHouseWiring {
       return;
     }
 
-    let block: Block | null = null;
-
-    if (cableId) {
-      block = this.blockStore.getBlock(cableId);
-
-      edit.updateDecoration('cables', cableId, {
-        points: [
-          { position: point, blockId: selectedIntersection.block.id, partIndex: selectedIntersection.partIndex },
-        ],
-      });
-    } else {
-      block = this.factoryService.create(
-        edit,
-        'cable-1',
-        { dependsOn: [targetBlockId], parent: rootBlock.id },
-        {
-          cables: {
-            points: [
-              { position: point, blockId: selectedIntersection.block.id, partIndex: selectedIntersection.partIndex },
-            ],
-          },
-        },
-      );
-    }
-
-    edit.updateBlock(selectedIntersection.block.id, { associations: [block.id] });
-
-    edit.updateBlock(rootBlock.id, { children: [block.id] });
-
-    edit.commit();
+    this.addWirePoint.add(rootBlock, [
+      { position: point, blockId: selectedIntersection.block.id, partIndex: selectedIntersection.partIndex },
+    ]);
   }
 
   private getSelectedIntersection(rootBlock: Block, clientX: number, clientY: number, cableId?: string) {
@@ -97,17 +70,16 @@ class DrawHouseWiring {
     //   point = mesh.getWorldPosition(worldPos).toArray();
     // } else {
 
-    if (Number(intersection.meshes?.length) >= 2) {
-      const point = multiplyVector(
-        addVector(intersection.meshes?.[0].point.toArray(), intersection.meshes?.[1].point.toArray()),
-        0.5,
-      );
+    if (intersection.meshes[0]) {
+      const point = intersection.meshes[0].object.boungingBox?.center || [0, 0, 0];
 
       return VectorUtils.sub(point, basePos.toArray());
     }
 
     return undefined;
   }
+
+  private addWirePoint: AddWirePoints;
 
   private getNextWirePoint: GetNextWireIntersection;
 

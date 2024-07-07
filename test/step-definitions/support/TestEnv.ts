@@ -29,6 +29,7 @@ import { setTemplates } from '@/client/editor/stores/blockType/blockTypeSlice';
 import BlockType from '@/client/editor/types/BlockType';
 import ElectricitySystemHook from '@/client/editor/services/electricity/ElectricitySystemHook';
 import ElectricityStore from '@/client/editor/stores/electricity/ElectricityStore';
+import { clearEditorSlice } from '@/client/editor/stores/editorSlice';
 
 type TestEnv = {
   controller: ControllerService;
@@ -120,6 +121,7 @@ export const setupTestEnv = (): TestEnv => {
   const teardown = () => {
     // testMiddleware.clearListeners();
     store.dispatch(clearBlockSlice());
+    store.dispatch(clearEditorSlice());
     testStore.storedBlockId = undefined;
   };
 

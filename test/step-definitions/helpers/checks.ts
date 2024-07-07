@@ -5,7 +5,9 @@ import { Vector3 } from 'three';
 import BlockDecoration from '@/client/editor/types/BlockCategory';
 
 export function checkBlockExists(this: ExtendedWorld, blockId: string) {
-  const block = this.env.blockStore.getBlock(blockId);
+  const realBlockId = blockId === 'examined' ? this.env.testScene.storedBlockId || '' : blockId;
+
+  const block = this.env.blockStore.getBlock(realBlockId);
 
   if (!block) {
     throw new Error(`Block ${blockId} not found.`);
@@ -15,13 +17,31 @@ export function checkBlockExists(this: ExtendedWorld, blockId: string) {
 }
 
 export function checkDecorationExists(this: ExtendedWorld, category: BlockDecoration, blockId: string) {
-  const decortion = this.env.blockStore.getDecoration(category, blockId);
+  const realBlockId = blockId === 'examined' ? this.env.testScene.storedBlockId || '' : blockId;
+
+  const decortion = this.env.blockStore.getDecoration(category, realBlockId);
 
   if (!decortion) {
     throw new Error(`Decoration of type ${category} with id ${blockId} not found.`);
   }
 
   return decortion;
+}
+
+export function checkPartIndexExists(this: ExtendedWorld, blockId: string, partName: string) {
+  const block = checkBlockExists.call(this, blockId);
+
+  if (partName.startsWith('#')) {
+    return partName;
+  }
+
+  const entry = Object.entries(block.partDetails).find(([, val]) => val?.name === partName);
+
+  if (!entry?.[0]) {
+    throw new Error(`Part with name ${partName} not found for blokck ${blockId}`);
+  }
+
+  return entry?.[0];
 }
 
 export function checkBlockMeshExists(this: ExtendedWorld, blockId: string) {

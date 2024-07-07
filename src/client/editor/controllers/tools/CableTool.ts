@@ -6,7 +6,7 @@ import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
 import FactoryService from '../../services/factory/FactoryService';
 import Selector from '../../use_cases/block/Selector';
-import SceneService from '../../components/scene/SceneService';
+import SceneService from '../../components/scene/service/SceneService';
 import MeshUtils from '../../utils/MeshUtils';
 import { updateTemporaryCables } from '../../stores/block/temporarySlice';
 import { Vector3 } from 'three';

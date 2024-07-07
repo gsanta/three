@@ -1,7 +1,7 @@
 import Edit from '../update/Edit';
 import BlockStore from '../../stores/block/BlockStore';
 import { Store } from '@/client/common/utils/store';
-import SceneService from '../../components/scene/SceneService';
+import SceneService from '../../components/scene/service/SceneService';
 import Device from '../../types/block/Device';
 import SystemHook from '../update/SystemHook';
 

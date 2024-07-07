@@ -1,10 +1,9 @@
 import { store } from '@/client/common/utils/store';
 import { setSelectedTool } from '@/client/editor/stores/tool/toolSlice';
 import ToolName from '@/client/editor/types/ToolName';
-import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { When, Then } from '@cucumber/cucumber';
 import assert from 'assert';
-import { Intersection, Object3D, Vector3 } from 'three';
+import { Vector3 } from 'three';
 import ExtendedWorld from './ExtendedWorld';
 import findClosestBlock from './helpers/findClosestBlock';
 import Block from '@/client/editor/types/Block';
@@ -21,18 +20,11 @@ function selectBlockAtPosition(this: ExtendedWorld, x: number, y: number, z: num
   }
 
   if (partIndex && block) {
-    const mesh = this.env.sceneStore.getObj3d(block.id);
-    const partName = this.env.blockStore.getBlock(block.id).partDetails[partIndex]?.name;
-    const partMesh = MeshUtils.findByName(mesh, partName);
     this.env.sceneService.setIntersection([
       {
         block,
         partIndex: partIndex,
-        meshes: [
-          {
-            object: partMesh,
-          } as Intersection<Object3D>,
-        ],
+        meshes: [{ object: {}, distance: 1, point: [0, 0, 0] }],
       },
     ]);
   }

@@ -1,13 +1,25 @@
-import { Intersection, Object3D, Ray, Raycaster, Vector2 } from 'three';
+import { Box3, Object3D, Ray, Raycaster, Vector2, Vector3 } from 'three';
 import SceneStore from '../components/scene/SceneStore';
 import BlockStore from '../stores/block/BlockStore';
 import BlockUtils from '../utils/BlockUtils';
 import MeshUtils from '../utils/MeshUtils';
 import Block from '../types/Block';
 import { ModelPartInfo } from '../types/BlockType';
+import IntersectionOptions from '../components/scene/service/IntersectionOptions';
+import Num3 from '../types/Num3';
+
+export type MeshIntersection = {
+  distance: number;
+  point: Num3;
+  object: {
+    boungingBox?: {
+      center: Num3;
+    };
+  };
+};
 
 export type BlockIntersection = {
-  meshes: Intersection<Object3D>[];
+  meshes: MeshIntersection[];
   block: Block;
   partIndex?: string;
   partInfo?: ModelPartInfo;
@@ -19,7 +31,12 @@ class IntersectMesh {
     this.sceneStore = sceneStore;
   }
 
-  calculateForMesh(meshes: Object3D[], clientX: number, clientY: number): [BlockIntersection[], Ray] {
+  calculateForMesh(
+    meshes: Object3D[],
+    clientX: number,
+    clientY: number,
+    options?: IntersectionOptions,
+  ): [BlockIntersection[], Ray] {
     const raycaster = new Raycaster();
 
     const realMeshes: Object3D[] = [];
@@ -35,11 +52,33 @@ class IntersectMesh {
 
     const intersects = raycaster.intersectObjects(realMeshes, false);
 
-    const blockIntersections = intersects.map((meshIntersect) => {
+    const blockIntersections = intersects.map((meshIntersect): BlockIntersection => {
       const block = this.blockStore.getBlock(meshIntersect.object.userData.modelId);
       const partIndex = BlockUtils.getPartIndexByName(block, meshIntersect.object.name);
+
+      const meshIntersection: MeshIntersection = {
+        distance: meshIntersect.distance,
+        point: meshIntersect.point.toArray(),
+        object: {},
+      };
+
+      if (options?.withBoundingBox) {
+        const bbox = new Box3().setFromObject(meshIntersect.object);
+        const center = new Vector3();
+        bbox.getCenter(center);
+
+        const worldPos = new Vector3();
+
+        meshIntersect.object.getWorldPosition(worldPos);
+        console.log(worldPos.toArray());
+
+        meshIntersection.object.boungingBox = {
+          center: center.toArray(),
+        };
+      }
+
       return {
-        meshes: [meshIntersect],
+        meshes: [meshIntersection],
         block: block,
         partIndex,
         partInfo: partIndex ? block.partDetails[partIndex] : undefined,
@@ -61,10 +100,15 @@ class IntersectMesh {
     return [Array.from(aggregatedBlockIntersections.values()), raycaster.ray];
   }
 
-  calculateForBlock(blocks: string[], clientX: number, clientY: number): [BlockIntersection[], Ray] {
+  calculateForBlock(
+    blocks: string[],
+    clientX: number,
+    clientY: number,
+    options?: IntersectionOptions,
+  ): [BlockIntersection[], Ray] {
     const meshes = blocks.map((blockId) => this.sceneStore.getObj3d(blockId));
 
-    return this.calculateForMesh(meshes, clientX, clientY);
+    return this.calculateForMesh(meshes, clientX, clientY, options);
   }
 
   private blockStore: BlockStore;

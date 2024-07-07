@@ -10,7 +10,7 @@ import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
 import { store } from '@/client/common/utils/store';
 import { updateSelectTool } from '../../stores/tool/toolSlice';
-import SceneService from '../../components/scene/SceneService';
+import SceneService from '../../components/scene/service/SceneService';
 import Selector from '../../use_cases/block/Selector';
 import ToolStore from '../../stores/tool/ToolStore';
 import HoverTool from './HoverTool';

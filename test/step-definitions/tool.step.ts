@@ -6,9 +6,10 @@ import { store } from '@/client/common/utils/store';
 import { setSelectedGeometry } from '@/client/editor/stores/blockType/blockTypeSlice';
 import { Vector3 } from 'three';
 import findClosestBlock from './helpers/findClosestBlock';
-import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { checkPosition } from './helpers/checks';
 import BlockUtils from '@/client/editor/utils/BlockUtils';
+import { BlockIntersection } from '@/client/editor/use_cases/IntersectMesh';
+import Num3 from '@/client/editor/types/Num3';
 
 When('I select tool {string}', function (this: ExtendedWorld, toolName: ToolName) {
   store.dispatch(setSelectedTool(toolName));
@@ -24,10 +25,57 @@ When('I select template {string}', function (this: ExtendedWorld, templateName: 
 
 When('I press pointer', function (this: ExtendedWorld) {
   this.env.toolHelper.pointerDown();
+  this.env.toolHelper.pointerUp();
 });
 
 When('I press pointer over block {string}', function (this: ExtendedWorld, blockId: string) {
   this.env.toolHelper.pointerDown({ blockId });
+  this.env.toolHelper.pointerUp();
+});
+
+type IntersectionHash = {
+  BLOCK: string;
+  PART: string;
+  POSITION: string;
+  B_BOX_CENTER: string;
+};
+
+When('I have an intersection with:', function (this: ExtendedWorld, table: any) {
+  const data = table.hashes() as IntersectionHash[];
+
+  const intersections: BlockIntersection[] = [];
+  data.forEach((row) => {
+    const block = this.env.blockStore.getBlock(row.BLOCK);
+    const entry = Object.entries(block.partDetails).find(([, val]) => val?.name === row.PART);
+
+    if (!entry?.[0]) {
+      throw new Error(`Part with name ${row.PART} not found for block ${block.id}`);
+    }
+
+    const point = row.POSITION ? checkPosition.call(this, row.POSITION) : ([0, 0, 0] as Num3);
+    const boungingBoxCenter = checkPosition.call(this, row.B_BOX_CENTER);
+
+    const partIndex = entry?.[0];
+
+    intersections.push({
+      block,
+      partIndex,
+      partInfo: block.partDetails[partIndex],
+      meshes: [
+        {
+          distance: 1,
+          point,
+          object: {
+            boungingBox: {
+              center: boungingBoxCenter,
+            },
+          },
+        },
+      ],
+    });
+  });
+
+  this.env.sceneService.setIntersection(intersections);
 });
 
 When(
@@ -40,15 +88,12 @@ When(
       throw new Error(`Block not found at position (${x},${y},${z})`);
     }
 
-    const mesh = this.env.sceneStore.getObj3d(block.id);
-
-    const partMesh = MeshUtils.findByName(mesh, partName);
     const partIndex = BlockUtils.getPartIndexByName(block, partName);
     this.env.sceneService.setIntersection([
       {
         block,
         partIndex: partIndex,
-        meshes: [{ object: partMesh, distance: 1, point: new Vector3(x, y, z) }],
+        meshes: [{ object: {}, distance: 1, point: [x, y, z] }],
       },
     ]);
 
