@@ -1,11 +1,12 @@
 import SceneStore from '../../components/scene/SceneStore';
 import FactoryService from '../../services/factory/FactoryService';
 import BlockStore from '../../stores/block/BlockStore';
-import SceneService from '../../components/scene/SceneService';
+import SceneService from '../../components/scene/service/SceneService';
 import MeshUtils from '../../utils/MeshUtils';
-import { MathUtils, Vector3 } from 'three';
+import { MathUtils } from 'three';
 import TransactionService from '../../services/transaction/TransactionService';
 import Num3 from '../../types/Num3';
+import VectorUtils from '../../utils/vectorUtils';
 
 class AddBlockToPointerPos {
   constructor(
@@ -30,18 +31,18 @@ class AddBlockToPointerPos {
     const targetPart = targetBlock.partDetails[targetPartIndex];
     const targetPartMesh = MeshUtils.findByName(mesh, targetPart?.name || 'root');
 
-    const [intersections] = this.sceneService.meshIntersection([targetPartMesh], clientX, clientY);
+    const [intersections] = this.sceneService.intersection([targetPartMesh], clientX, clientY);
 
     if (intersections?.length) {
       const intersection = intersections[0];
 
       const rootBlock = this.blockStore.getRootBlock(targetBlockId);
 
-      const targetPos = intersection.meshes[0].point.sub(new Vector3(...rootBlock.position));
+      const targetPos = VectorUtils.sub(intersection.meshes[0].point, rootBlock.position);
 
       this.factoryService.create(edit, templateName, {
         parent: targetBlock.id,
-        position: [targetPos.x, targetPos.y, targetPos.z],
+        position: targetPos,
         rotation: targetBlock.rotation.map((rot) => MathUtils.radToDeg(rot)) as Num3,
       });
 

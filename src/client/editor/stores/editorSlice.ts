@@ -21,9 +21,14 @@ export const editorSlice = createSlice({
       state.editingMode = action.payload?.editingMode;
       state.editingTargetBlock = action.payload?.editingTargetBlock;
     },
+
+    clear(state) {
+      state.editingMode = null;
+      state.editingTargetBlock = null;
+    },
   },
 });
 
-export const { setEditMode } = editorSlice.actions;
+export const { clear: clearEditorSlice, setEditMode } = editorSlice.actions;
 
 export default editorSlice.reducer;

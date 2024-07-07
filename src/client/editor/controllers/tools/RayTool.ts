@@ -4,8 +4,8 @@ import { ArrowHelper } from 'three';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import BlockStore from '../../stores/block/BlockStore';
 import TransactionService from '../../services/transaction/TransactionService';
-import SceneService from '../../components/scene/SceneService';
-import SceneServiceImpl from '../../components/scene/SceneServiceImpl';
+import SceneService from '../../components/scene/service/SceneService';
+import SceneServiceImpl from '../../components/scene/service/SceneServiceImpl';
 
 class RayTool extends Tool {
   constructor(store: BlockStore, update: TransactionService, scene: SceneStore) {
@@ -16,11 +16,7 @@ class RayTool extends Tool {
   }
 
   onPointerDown({ eventObject, clientX, clientY }: ToolInfo) {
-    const [intersection, ray] = this.sceneService.blockIntersection(
-      [eventObject?.userData.modelId || ''],
-      clientX,
-      clientY,
-    );
+    const [intersection, ray] = this.sceneService.intersection([eventObject?.userData.modelId || ''], clientX, clientY);
 
     if (!intersection) {
       return;

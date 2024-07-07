@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import SceneService from '@/client/editor/components/scene/SceneService';
+import IntersectionOptions from '@/client/editor/components/scene/service/IntersectionOptions';
+import SceneService from '@/client/editor/components/scene/service/SceneService';
 import { BlockIntersection } from '@/client/editor/use_cases/IntersectMesh';
 import { Object3D, Ray } from 'three';
 import { v4 as uuidv4 } from 'uuid';
@@ -11,11 +12,24 @@ class TestSceneService implements SceneService {
     return id || uuidv4();
   }
 
-  blockIntersection(_blocks: string[], _clientX: number, _clientY: number): [BlockIntersection[], Ray] {
-    return [this.intersect, new Ray()];
-  }
-
-  meshIntersection(_meshes: Object3D[], _clientX: number, _clientY: number): [BlockIntersection[], Ray] {
+  intersection(
+    _blocks: string[],
+    _clientX: number,
+    _clientY: number,
+    _options?: IntersectionOptions,
+  ): [BlockIntersection[], Ray];
+  intersection(
+    _objects: Object3D[],
+    _clientX: number,
+    _clientY: number,
+    _options?: IntersectionOptions,
+  ): [BlockIntersection[], Ray];
+  intersection(
+    _blocks: string[] | Object3D[],
+    _clientX: number,
+    _clientY: number,
+    _options?: IntersectionOptions,
+  ): [BlockIntersection[], Ray] {
     return [this.intersect, new Ray()];
   }
 

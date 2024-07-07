@@ -1,7 +1,7 @@
 import { store } from '@/client/common/utils/store';
 import { hover } from '../../stores/block/blockSlice';
 import Tool, { ToolInfo } from '../../types/Tool';
-import SceneService from '../../components/scene/SceneService';
+import SceneService from '../../components/scene/service/SceneService';
 import { IconName } from '@/client/common/components/icon/Icon';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
@@ -31,7 +31,7 @@ abstract class HoverTool extends Tool {
   }
 
   protected checkPartIntersection(blockId: string, clientX: number, clientY: number) {
-    const [intersects] = this.sceneService.blockIntersection([blockId], clientX, clientY);
+    const [intersects] = this.sceneService.intersection([blockId], clientX, clientY);
 
     const blockIntersection = intersects.find(
       (intersection) => intersection.partIndex && intersection.partInfo?.name !== 'root',

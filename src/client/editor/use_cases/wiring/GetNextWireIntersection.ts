@@ -1,4 +1,4 @@
-import SceneService from '../../components/scene/SceneService';
+import SceneService from '../../components/scene/service/SceneService';
 import BlockStore from '../../stores/block/BlockStore';
 import Block from '../../types/Block';
 import { CablePoint } from '../../types/block/Cable';
@@ -16,7 +16,9 @@ class GetNextWireIntersection {
       ...this.blockStore.getDescendants(buildingBlock.id).map((descendant) => descendant.id),
     ];
 
-    const [intersections] = this.sceneService.blockIntersection(intersectionTargets, clientX, clientY);
+    const [intersections] = this.sceneService.intersection(intersectionTargets, clientX, clientY, {
+      withBoundingBox: true,
+    });
 
     const existingCable = cableId ? this.blockStore.getDecoration('cables', cableId) : undefined;
     const lastPoint = existingCable?.points[existingCable?.points.length - 1];

@@ -17,13 +17,13 @@ import ColorTool from '@/client/editor/controllers/tools/ColorTool';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import TemplateStore from '@/client/editor/stores/blockType/TemplateStore';
 import ToolStore from '@/client/editor/stores/tool/ToolStore';
-import SceneServiceImpl from '@/client/editor/components/scene/SceneServiceImpl';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
 import ControllerService from '@/client/editor/services/controller/ControllerService';
 import ElectricityStore from '@/client/editor/stores/electricity/ElectricityStore';
 import ElectricitySystemHook from '@/client/editor/services/electricity/ElectricitySystemHook';
+import SceneServiceImpl from '@/client/editor/components/scene/service/SceneServiceImpl';
 
 type ProtectedPageProps = {
   children: ReactNode;

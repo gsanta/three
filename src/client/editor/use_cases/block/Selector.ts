@@ -1,5 +1,5 @@
 import { Vector3 } from 'three';
-import SceneService from '../../components/scene/SceneService';
+import SceneService from '../../components/scene/service/SceneService';
 import SceneStore from '../../components/scene/SceneStore';
 import BlockStore from '../../stores/block/BlockStore';
 import Block from '@/client/editor/types/Block';
@@ -57,7 +57,7 @@ class Selector {
   }
 
   private checkPartIntersection(block: Block, clientX: number, clientY: number) {
-    const [intersects] = this.scene.blockIntersection([block.id], clientX, clientY);
+    const [intersects] = this.scene.intersection([block.id], clientX, clientY);
 
     // TODO find a better solution to skip non-selectable parts
     const blockIntersection = intersects.find(

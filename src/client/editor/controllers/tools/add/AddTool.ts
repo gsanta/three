@@ -6,7 +6,7 @@ import SceneStore from '../../../components/scene/SceneStore';
 import AddBlock from '../../../use_cases/add/AddBlock';
 import FactoryService from '../../../services/factory/FactoryService';
 import HoverTool from '../HoverTool';
-import SceneService from '../../../components/scene/SceneService';
+import SceneService from '../../../components/scene/service/SceneService';
 import AddBlockToSlot from '../../../use_cases/block/AddBlockToSlot';
 import AddSlotToSlot from '../../../use_cases/block/AddSlotToSlot';
 import AddBlockToPointerPos from '../../../use_cases/block/AddBlockToPointerPos';

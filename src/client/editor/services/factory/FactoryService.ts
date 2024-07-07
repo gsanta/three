@@ -1,4 +1,4 @@
-import SceneService from '../../components/scene/SceneService';
+import SceneService from '../../components/scene/service/SceneService';
 import BlockFactory from './creators/BlockFactory';
 import PoleFactory from './creators/PoleFactory';
 import CableFactory from './creators/CableFactory';
