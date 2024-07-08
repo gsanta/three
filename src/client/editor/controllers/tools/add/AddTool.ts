@@ -33,7 +33,7 @@ class AddTool extends HoverTool {
     this.getAddBlockStrategy = new GetAddBlockStrategy();
   }
 
-  onPointerDown({ clientX, clientY, pos }: ToolInfo) {
+  onPointerUp({ clientX, clientY, pos }: ToolInfo) {
     const { selectedBlockName } = this.blockStore.getBlockSettings();
     const blockType = this.blockStore.getBlockType(selectedBlockName);
 

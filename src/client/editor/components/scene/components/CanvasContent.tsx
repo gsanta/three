@@ -16,7 +16,7 @@ const CanvasContent = () => {
   // const blocks = useNotSelectedBlocks();
   // const { selectedPartIndexes } = useAppSelector((selector) => selector.block.present);
   const blockIds = useAppSelector((selector) => selector.block.present.blockIds);
-  const hasSelection = useAppSelector((selector) => selector.block.present.hasSelection);
+  const selectedRootBlockIds = useAppSelector((selector) => selector.block.present.selectedRootBlockIds);
   const editMode = useAppSelector((selector) => selector.editor.editingMode);
   const editTargetBlock = useAppSelector((selector) => selector.editor.editingTargetBlock);
 
@@ -62,18 +62,44 @@ const CanvasContent = () => {
           materialProps={{ opacity: 0.5, transparent: true }}
         />
       )}
-      {blockIds.map((id) => (
-        <DefaultMeshRenderer
-          key={id}
-          blockId={id}
-          meshProps={{
-            onPointerDown: handlePointerDown,
-            onPointerEnter: handlePointerEnter,
-          }}
-          skip={editTargetBlock === id}
-        />
-      ))}
-      {hasSelection && <MoveControl onPointerDown={handlePointerDown} onPointerEnter={handlePointerEnter} />}
+      {blockIds.map((id) => {
+        if (editTargetBlock === id) {
+          return;
+        }
+
+        return (
+          <DefaultMeshRenderer
+            key={id}
+            blockId={id}
+            meshProps={{
+              onPointerDown: handlePointerDown,
+              onPointerEnter: handlePointerEnter,
+            }}
+          />
+        );
+      })}
+      {/* {selectedRootBlockIds.map((id) => (
+        <MoveControl onPointerDown={handlePointerDown} onPointerEnter={handlePointerEnter}>
+          {({ drag }) => (
+            <DefaultMeshRenderer
+              additions={{
+                position: drag,
+              }}
+              key={id}
+              blockId={id}
+              meshProps={{
+                onPointerDown: handlePointerDown,
+                onPointerEnter: handlePointerEnter,
+              }}
+              materialProps={{ opacity: 0.5, transparent: true }}
+            />
+          )}
+        </MoveControl>
+      ))} */}
+
+      {/* {hasSelection && (
+        <MoveControl onPointerDown={handlePointerDown} onPointerEnter={handlePointerEnter}></MoveControl>
+      )} */}
       <mesh position={[5, 1, 0]} castShadow>
         <cylinderGeometry args={[0.02, 0.02, 2, 8]} />
         <meshStandardMaterial color="brown" />

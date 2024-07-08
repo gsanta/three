@@ -1,19 +1,20 @@
 import { snapTo } from '@/client/editor/utils/vectorUtils';
 import { PivotControls } from '@react-three/drei';
-import { Mesh, Quaternion, Vector3 } from 'three';
-import { useEffect, useRef, useState } from 'react';
+import { Quaternion, Vector3 } from 'three';
 import useEditorContext from '@/app/editor/EditorContext';
 import { useAppSelector } from '@/client/common/hooks/hooks';
-import Num3 from '@/client/editor/types/Num3';
 import { ThreeEvent } from '@react-three/fiber';
 import SelectedMeshRenderer from './SelectedMeshRenderer';
+import Num3 from '@/client/editor/types/Num3';
+import { ReactNode } from 'react';
 
 type MoveControlProps = {
-  onPointerDown: (event: ThreeEvent<PointerEvent>) => void;
-  onPointerEnter: (event: ThreeEvent<PointerEvent>) => void;
+  onPointerDown?: (event: ThreeEvent<PointerEvent>) => void;
+  onPointerEnter?: (event: ThreeEvent<PointerEvent>) => void;
+  children(props: { drag: Num3 }): ReactNode;
 };
 
-const MoveControl = ({ onPointerDown, onPointerEnter }: MoveControlProps) => {
+const MoveControl = ({ children, onPointerDown, onPointerEnter }: MoveControlProps) => {
   // const selectedBlocks = useSelectedBlocks();
 
   const blockIds = useAppSelector((store) => store.block.present.blockIds);
@@ -21,13 +22,7 @@ const MoveControl = ({ onPointerDown, onPointerEnter }: MoveControlProps) => {
   const drag = useAppSelector((selector) => selector.tool.select.drag);
   const moveAxis = useAppSelector((selector) => selector.tool.select.moveAxis);
 
-  const [transform, setTransform] = useState<Num3>([0, 0, 0]);
-  const selectedMeshRef = useRef<Mesh>(null);
   const { tool } = useEditorContext();
-
-  useEffect(() => {
-    tool.setSelectedMesh(selectedMeshRef.current || undefined);
-  }, [tool]);
 
   // if (!movableBlocks.length) {
   //   return null;
@@ -48,17 +43,16 @@ const MoveControl = ({ onPointerDown, onPointerEnter }: MoveControlProps) => {
         newTransform.x = snapTo(newTransform.x);
         newTransform.y = snapTo(newTransform.y);
         newTransform.z = snapTo(newTransform.z);
-        setTransform(newTransform.toArray());
         tool.onDrag(newTransform);
       }}
       onDragEnd={() => {
         tool.onDragEnd();
-        setTransform([0, 0, 0]);
       }}
       userData={{ role: 'selection-pivot' }}
     >
       <group name="selection-group">
-        {blockIds.map((id) => (
+        {children({ drag })}
+        {/* {blockIds.map((id) => (
           <SelectedMeshRenderer
             additions={{
               position: drag,
@@ -66,14 +60,12 @@ const MoveControl = ({ onPointerDown, onPointerEnter }: MoveControlProps) => {
             key={id}
             blockId={id}
             meshProps={{
-              ref: selectedMeshRef,
               onPointerDown,
               onPointerEnter,
             }}
-            transform={transform}
             materialProps={{ opacity: 0.5, transparent: true }}
           />
-        ))}
+        ))} */}
       </group>
     </PivotControls>
   );

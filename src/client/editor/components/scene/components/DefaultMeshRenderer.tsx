@@ -11,7 +11,7 @@ const DefaultMeshRenderer = (props: DefaultMeshRendererProps) => {
   const { blockId, skip, ...rest } = props;
   const block = useAppSelector((selector) => selector.block.present.blocks[blockId]);
 
-  if (block.isSelected || block.parent || skip) {
+  if (block.parent || skip) {
     return;
   }
 
