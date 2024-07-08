@@ -45,7 +45,7 @@
         "args": [
             "${workspaceRoot}/test/**/*.feature",
             "--tags",
-            "@important"
+            "@only"
         ]
     }
   ]

@@ -22,7 +22,13 @@ class BlockCreator {
     const partDetails: Record<string, ModelPartInfo | undefined> = {};
 
     Object.entries(block.partDetails).forEach(([key, val]) => {
-      partDetails[key] = { ...val, isSelected: val?.isSelected || false } as ModelPartInfo;
+      const info = { ...val, isSelected: val?.isSelected || false } as ModelPartInfo;
+
+      if (info.type === 'placeholder') {
+        info.hide = true;
+      }
+
+      partDetails[key] = info;
     });
 
     return {

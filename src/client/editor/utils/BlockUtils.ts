@@ -5,16 +5,6 @@ import MathUtils, { toDegree } from './mathUtils';
 type RotatedPart = { part: ModelPart; rotation: number };
 
 class BlockUtils {
-  static iterateDescendents(blocks: Record<string, Block>, block: Block, doWork: (descendantId: Block) => void) {
-    doWork(block);
-
-    block.children.forEach((childId) => {
-      doWork(blocks[childId]);
-
-      BlockUtils.iterateDescendents(blocks, blocks[childId], doWork);
-    });
-  }
-
   static getBlock(blocks: BlockType[], blockName: string) {
     const block = blocks.find((b) => b.type === blockName);
 

@@ -1,5 +1,6 @@
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
+import BlockStore from '@/client/editor/stores/block/BlockStore';
 import ToolStore from '@/client/editor/stores/tool/ToolStore';
 import Block from '@/client/editor/types/Block';
 import Num3 from '@/client/editor/types/Num3';
@@ -7,7 +8,8 @@ import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { Box3 } from 'three';
 
 class BaseMover {
-  constructor(updateService: TransactionService, sceneStore: SceneStore, toolStore: ToolStore) {
+  constructor(blockStore: BlockStore, updateService: TransactionService, sceneStore: SceneStore, toolStore: ToolStore) {
+    this.blockStore = blockStore;
     this.updateService = updateService;
     this.sceneStore = sceneStore;
     this.toolStore = toolStore;
@@ -17,8 +19,10 @@ class BaseMover {
     if (block.connectedTo) {
       const sourceMesh = this.sceneStore.getObj3d(block.id);
 
+      const targetBlock = this.blockStore.getBlock(block.parent);
+      const targetPartName = targetBlock.partDetails[block.connectedTo]?.name;
       const targetMesh = this.sceneStore.getObj3d(block.parent || '');
-      const targetPartMesh = MeshUtils.findByName(targetMesh, block.connectedTo);
+      const targetPartMesh = MeshUtils.findByName(targetMesh, targetPartName);
 
       const sourceBoundingBox = new Box3().setFromObject(sourceMesh);
       const targetBoundingBox = new Box3().setFromObject(targetPartMesh);
@@ -53,6 +57,8 @@ class BaseMover {
 
     return drag;
   }
+
+  private blockStore: BlockStore;
 
   private sceneStore: SceneStore;
 

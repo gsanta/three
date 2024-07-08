@@ -70,10 +70,7 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
     } else if (row.PARENT?.includes(':')) {
       const [parentId, partIndexOrName] = row.PARENT.split(':');
 
-      let partIndex = partIndexOrName;
-      if (!partIndexOrName.startsWith('#')) {
-        partIndex = checkPartIndexExists.call(this, parentId, partIndexOrName);
-      }
+      const partIndex = checkPartIndexExists.call(this, parentId, partIndexOrName);
 
       addBlockToSlot.perform(parentId, partIndex, row.TYPE);
     } else {
@@ -109,6 +106,7 @@ export function addTemplateToPosition(this: ExtendedWorld, template: string, x: 
 
   this.env.toolHelper.pointerMove({ point: new Vector3(x, y, z) });
   this.env.toolHelper.pointerDown();
+  this.env.toolHelper.pointerUp();
 }
 
 Given('I have canvas with a block {string}', function (this: ExtendedWorld, template: string) {

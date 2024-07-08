@@ -29,11 +29,11 @@ class LampUpdater extends BlockUpdater {
         partDetails: {
           [loadOnPartIndexes[0]]: {
             ...block.partDetails[loadOnPartIndexes[0]],
-            isHidden: !newState.isOn,
+            hide: !newState.isOn,
           },
           [loadOffPartIndexes[0]]: {
             ...block.partDetails[loadOffPartIndexes[0]],
-            isHidden: newState.isOn,
+            hide: newState.isOn,
           },
         },
       });

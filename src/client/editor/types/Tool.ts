@@ -21,7 +21,6 @@ export interface ToolInfo {
   dragDelta: Num3;
   eventObject?: EventObject;
   isDragHappened?: boolean;
-  selectedMesh?: Mesh;
   clientX: number;
   clientY: number;
   draggedMesh?: Block;

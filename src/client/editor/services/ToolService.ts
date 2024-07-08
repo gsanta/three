@@ -135,10 +135,6 @@ class ToolService {
     return this.info;
   }
 
-  setSelectedMesh(mesh?: Mesh) {
-    this.info.selectedMesh = mesh;
-  }
-
   setSelectedTool(toolName: ToolName) {
     this.getTool(store.getState().tool.selectedTool)?.onDeselect();
     store.dispatch(setSelectedTool(toolName));

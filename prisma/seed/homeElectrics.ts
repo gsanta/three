@@ -52,7 +52,7 @@ const homeElectrics: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'par
         index: '#5',
         geometryPath: 'WashingMashine1Base001.geometry',
         materialPath: 'White',
-        position: [0.273, 0.314, 0.506],
+        position: [0.273, 0.314, 0.454],
         rotation: [Math.PI / 2, 0, 0],
         scale: [1, 0.248, 1],
       },

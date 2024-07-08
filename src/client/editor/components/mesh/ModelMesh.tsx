@@ -8,26 +8,28 @@ import ModelGroupMesh from './ModelGroupMesh';
 import ModelPartMesh from './ModelPartMesh';
 import useDevice from '../hooks/useDevice';
 import { Group } from 'three';
+import ChildMeshRenderer from '../scene/components/ChildMeshRenderer';
 
 export const ModelMesh = ({ additions, block, materialProps, meshProps, overwrites }: ModelMeshProps) => {
   const ref = useRegisterScene<Group>();
   const blockPosition = overwrites?.position ? overwrites.position : block.position;
-  const position = additions?.position ? addVector(additions.position, blockPosition) : blockPosition;
   const blockRotation = overwrites?.rotation ? overwrites.rotation : block.rotation;
 
   const { animations, nodes, materials } = useGLTF(block.path);
   const { actions, mixer } = useAnimations(animations, ref);
 
+  const position = additions?.position ? addVector(additions.position, blockPosition) : blockPosition;
+
   useDevice({ block, actions, mixer });
 
   const geometryNodes = nodes as unknown as NodesType;
 
-  return (
+  const component = (
     <group
-      rotation={blockRotation}
+      rotation={[0, 0, 0]}
       scale={block.scale}
       {...(meshProps as GroupProps)}
-      position={position}
+      position={[0, 0, 0]}
       ref={ref}
       userData={{ modelId: block.id }}
       dispose={null}
@@ -55,4 +57,29 @@ export const ModelMesh = ({ additions, block, materialProps, meshProps, overwrit
       )}
     </group>
   );
+
+  return (
+    <group position={position} rotation={blockRotation}>
+      {/* <ModelMesh
+        // additions={additions}
+        block={block}
+        meshProps={{ ...restMeshProps }}
+        materialProps={materialProps}
+        overwrites={{ rotation: [0, 0, 0], position: [0, 0, 0] }}
+      /> */}
+      {component}
+      {block.children.map((child) => (
+        <ChildMeshRenderer
+          key={child}
+          blockId={child}
+          // additions={additions}
+          meshProps={{ ...meshProps }}
+          materialProps={materialProps}
+        />
+      ))}
+    </group>
+  );
+  // ) : (
+  //   component
+  // );
 };

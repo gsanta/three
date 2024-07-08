@@ -3,6 +3,8 @@ import ExtendedWorld from '../ExtendedWorld';
 import Num3 from '@/client/editor/types/Num3';
 import { Vector3 } from 'three';
 import BlockDecoration from '@/client/editor/types/BlockCategory';
+import assert from 'assert';
+import VectorUtils from '@/client/editor/utils/vectorUtils';
 
 export function checkBlockExists(this: ExtendedWorld, blockId: string) {
   const realBlockId = blockId === 'examined' ? this.env.testScene.storedBlockId || '' : blockId;
@@ -28,17 +30,17 @@ export function checkDecorationExists(this: ExtendedWorld, category: BlockDecora
   return decortion;
 }
 
-export function checkPartIndexExists(this: ExtendedWorld, blockId: string, partName: string) {
+export function checkPartIndexExists(this: ExtendedWorld, blockId: string, partIndexOrName: string) {
   const block = checkBlockExists.call(this, blockId);
 
-  if (partName.startsWith('#')) {
-    return partName;
+  if (partIndexOrName.startsWith('#')) {
+    return partIndexOrName;
   }
 
-  const entry = Object.entries(block.partDetails).find(([, val]) => val?.name === partName);
+  const entry = Object.entries(block.partDetails).find(([, val]) => val?.name === partIndexOrName);
 
   if (!entry?.[0]) {
-    throw new Error(`Part with name ${partName} not found for blokck ${blockId}`);
+    throw new Error(`Part with name ${partIndexOrName} not found for block ${blockId}`);
   }
 
   return entry?.[0];
@@ -81,4 +83,12 @@ export function checkPosition(this: ExtendedWorld, position: string): Num3 {
   }
 
   return position.split(',').map((coord) => Number(coord.trim())) as Num3;
+}
+
+export function checkPositionCloseTo(this: ExtendedWorld, position: string, actual: Num3) {
+  const expected = checkPosition.call(this, position);
+
+  const diff = VectorUtils.size(VectorUtils.sub(expected, actual));
+
+  assert.ok(diff < 0.1);
 }

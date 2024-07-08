@@ -6,7 +6,7 @@ import { store } from '@/client/common/utils/store';
 import { setSelectedGeometry } from '@/client/editor/stores/blockType/blockTypeSlice';
 import { Vector3 } from 'three';
 import findClosestBlock from './helpers/findClosestBlock';
-import { checkPosition } from './helpers/checks';
+import { checkPartIndexExists, checkPosition } from './helpers/checks';
 import BlockUtils from '@/client/editor/utils/BlockUtils';
 import { BlockIntersection } from '@/client/editor/use_cases/IntersectMesh';
 import Num3 from '@/client/editor/types/Num3';
@@ -88,7 +88,7 @@ When(
       throw new Error(`Block not found at position (${x},${y},${z})`);
     }
 
-    const partIndex = BlockUtils.getPartIndexByName(block, partName);
+    const partIndex = checkPartIndexExists.call(this, block.id, partName);
     this.env.sceneService.setIntersection([
       {
         block,
@@ -97,6 +97,7 @@ When(
       },
     ]);
 
+    this.env.toolHelper.pointerEnter({ blockId: block.id, partIndex: partIndex });
     this.env.toolHelper.pointerDown({ blockId });
     this.env.toolHelper.pointerUp();
   },
@@ -126,20 +127,16 @@ When('I examine block at {float},{float},{float}', function (this: ExtendedWorld
 
 When(
   'I hover over block {string} and part {string}',
-  function (this: ExtendedWorld, blockId: string, partIndex: string) {
+  function (this: ExtendedWorld, blockId: string, partIndexOrName: string) {
+    const partIndex = checkPartIndexExists.call(this, blockId, partIndexOrName);
+
     const block = this.env.blockStore.getBlock(blockId);
 
     if (!block) {
       throw new Error(`Could not find block with id ${blockId}`);
     }
 
-    const part = block.parts.find((p) => p.index === partIndex);
-
-    if (!part) {
-      throw new Error(`Could not find part with index ${partIndex}`);
-    }
-
-    this.env.toolHelper.pointerEnter({ blockId: block.id, partIndex: part.index });
+    this.env.toolHelper.pointerEnter({ blockId: block.id, partIndex: partIndex });
   },
 );
 
