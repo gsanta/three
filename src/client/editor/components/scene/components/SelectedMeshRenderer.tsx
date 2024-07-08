@@ -10,7 +10,7 @@ const SelectedMeshRenderer = (props: DefaultMeshRendererProps) => {
   const { blockId, ...rest } = props;
   const block = useAppSelector((selector) => selector.block.present.blocks[blockId]);
 
-  if (!block.isSelected || block.parent) {
+  if (!block.isSelected) {
     return;
   }
 

@@ -59,13 +59,14 @@ const buildingTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id
         rotation: [-Math.PI, 0, -Math.PI],
         scale: [-3.718, -0.122, -3.718],
       },
-      // {
-      //   index: '#7',
-      //   geometryPath: 'floor.geometry',
-      //   materialPath: 'wall-placeholder',
-      //   position: [-0.092, 0.257, 0.049],
-      //   scale: [-3.628, -0.122, -79.359],
-      // },
+      {
+        index: '#7',
+        geometryPath: 'Platform1Floor.geometry',
+        materialPath: 'wall-placeholder',
+        position: [-0.092, 0.264, 0.054],
+        rotation: [-Math.PI, 0, -Math.PI],
+        scale: [-3.718, -0.122, -3.718],
+      },
       {
         index: '#8',
         geometryPath: 'Platform1Column1.geometry',
@@ -132,12 +133,12 @@ const buildingTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id
         name: 'ceil',
         type: 'placeholder',
       },
-      // '#7': {
-      //   category: 'active-area',
-      //   allowMovement: ['y'],
-      //   name: 'floor',
-      //   type: 'placeholder',
-      // },
+      '#7': {
+        category: 'floor-slot',
+        allowMovement: ['y'],
+        name: 'floor',
+        type: 'placeholder',
+      },
       '#8': {
         category: 'wall-join',
         name: 'wall-join-1',

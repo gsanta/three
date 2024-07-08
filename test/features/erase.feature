@@ -1,4 +1,5 @@
 Feature: Erase
+  @only
   Scenario: Erasing a selected block
     Given I have canvas with a block 'road-1'
     When I select a block at position 0,0,0

@@ -23,11 +23,7 @@ const ModelPartMesh = ({ block, materials, materialProps, nodes, onPointerEnter,
   const material = useMaterial({ materials, materialProps, nodes, part });
   const geometry = useGeometry(nodes, part);
 
-  if (block.partDetails[part.index]?.isHidden) {
-    return null;
-  }
-
-  if (!block.isSelected && !block.isHovered && block.partDetails[part.index]?.type === 'placeholder') {
+  if (block.partDetails[part.index]?.hide) {
     return null;
   }
 

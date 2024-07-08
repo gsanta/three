@@ -19,11 +19,11 @@ function getPartDetail(this: ExtendedWorld, partRef: string, blockId: string) {
 Then('part {string} of block {string} is visible', function (this: ExtendedWorld, partRef: string, blockId: string) {
   const partDetail = getPartDetail.call(this, partRef, blockId);
 
-  assert.ok(Boolean(partDetail?.isHidden) === false, 'Part is not visible');
+  assert.ok(Boolean(partDetail?.hide) === false, 'Part is not visible');
 });
 
 Then('part {string} of block {string} is hidden', function (this: ExtendedWorld, partRef: string, blockId: string) {
   const partDetail = getPartDetail.call(this, partRef, blockId);
 
-  assert.ok(partDetail?.isHidden, 'Part is not hidden');
+  assert.ok(partDetail?.hide, 'Part is not hidden');
 });

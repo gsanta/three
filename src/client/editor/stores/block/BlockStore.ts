@@ -1,6 +1,7 @@
 import { Store } from '@/client/common/utils/store';
 import BlockDecoration, { BlockCategories } from '@/client/editor/types/BlockCategory';
 import Block from '../../types/Block';
+import BlockUtils from '../../utils/BlockUtils';
 
 class BlockStore {
   constructor(store: Store) {
@@ -118,6 +119,45 @@ class BlockStore {
     }
 
     return this.getRoot(block.parent, expectedCategory);
+  }
+
+  isDescendentSelected(block: Block, checkSelf: boolean) {
+    const terminate = this.iterateDescendents(block, checkSelf, (descendant: Block) => {
+      return descendant.isSelected;
+    });
+
+    return terminate;
+  }
+
+  iterateDescendents(
+    block: Block,
+    iterateSelf: boolean,
+    doWork: (descendant: Block) => boolean | undefined,
+  ): boolean | undefined {
+    if (iterateSelf) {
+      const terminate = doWork(block);
+
+      if (terminate) {
+        return terminate;
+      }
+    }
+
+    for (const childId of block.children) {
+      const child = this.getBlock(childId);
+      let terminate = doWork(child);
+
+      if (terminate) {
+        return terminate;
+      }
+
+      terminate = this.iterateDescendents(child, iterateSelf, doWork);
+
+      if (terminate) {
+        return terminate;
+      }
+    }
+
+    return false;
   }
 
   private store: Store;

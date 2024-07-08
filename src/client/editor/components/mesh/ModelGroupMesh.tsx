@@ -1,7 +1,7 @@
 import ModelPartMesh, { ModelPartProps } from './ModelPartMesh';
 
 const ModelGroupMesh = ({ part, block, ...rest }: ModelPartProps) => {
-  if (block.partDetails[part.index]?.isHidden) {
+  if (block.partDetails[part.index]?.hide) {
     return null;
   }
 

@@ -6,6 +6,7 @@ import { IconName } from '@/client/common/components/icon/Icon';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
 import ToolName from '../../types/ToolName';
+import Hover from '../../use_cases/select/Hover';
 
 abstract class HoverTool extends Tool {
   constructor(
@@ -17,6 +18,7 @@ abstract class HoverTool extends Tool {
   ) {
     super(blockStore, update, name, iconName);
 
+    this.hover = new Hover(blockStore, update);
     this.sceneService = sceneService;
   }
 
@@ -24,9 +26,9 @@ abstract class HoverTool extends Tool {
     const block = this.blockStore.getBlocks()[info.eventObject?.userData.modelId || ''];
 
     if (info.eventObject?.name === 'plane') {
-      store.dispatch(hover(undefined));
+      this.hover.unhover();
     } else if (block) {
-      store.dispatch(hover({ block: block.id, partIndex: info.partIndex }));
+      this.hover.hover(block.id, info.partIndex);
     }
   }
 
@@ -43,6 +45,8 @@ abstract class HoverTool extends Tool {
 
     return undefined;
   }
+
+  private hover: Hover;
 
   protected sceneService: SceneService;
 }

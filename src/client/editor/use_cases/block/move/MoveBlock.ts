@@ -15,7 +15,7 @@ import MoveDevice from './MoveDevice';
 class MoveBlock {
   constructor(blockStore: BlockStore, update: TransactionService, sceneStore: SceneStore, toolStore: ToolStore) {
     this.blockStore = blockStore;
-    this.baseMover = new BaseMover(update, sceneStore, toolStore);
+    this.baseMover = new BaseMover(blockStore, update, sceneStore, toolStore);
     this.update = update;
     this.movers.poles = new PoleMover(blockStore, sceneStore);
     this.moveDecorationMap.devices = new MoveDevice(blockStore);

@@ -10,7 +10,6 @@ Feature: Weather head
     And I press pointer over block 'roof-1-id' and part '#2' at position '5,2,1'
     Then I have a block 'weather-head-1' at estimated position 4,-1,1
 
-  @important
   Scenario: Connecting a weather head to a pole
     Given I have a scene with:
       | TYPE            | ID        | PARENT       | POS             |

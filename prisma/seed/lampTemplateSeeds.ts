@@ -53,11 +53,11 @@ const lampTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
     partDetails: {
       '#2': {
         category: 'load-off',
-        isHidden: false,
+        hide: false,
       },
       '#3': {
         category: 'load-on',
-        isHidden: true,
+        hide: true,
       },
     },
     type: 'lamp-1',

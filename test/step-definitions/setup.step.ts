@@ -109,6 +109,7 @@ export function addTemplateToPosition(this: ExtendedWorld, template: string, x: 
 
   this.env.toolHelper.pointerMove({ point: new Vector3(x, y, z) });
   this.env.toolHelper.pointerDown();
+  this.env.toolHelper.pointerUp();
 }
 
 Given('I have canvas with a block {string}', function (this: ExtendedWorld, template: string) {
