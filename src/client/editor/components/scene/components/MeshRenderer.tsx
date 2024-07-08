@@ -14,8 +14,6 @@ const MeshRenderer = (props: WrappedMeshProps) => {
   const { block, meshProps, materialProps } = props;
   const decorations = useAppSelector((selector) => selector.block.present.decorations);
 
-  // const parent = block.parent ? blocks[block.parent] : undefined;
-
   const { additions } = props;
 
   if (isTubeMesh(block)) {
@@ -54,26 +52,6 @@ const MeshRenderer = (props: WrappedMeshProps) => {
         materialProps={materialProps}
       />
     );
-    // return block.children?.length ? (
-    //   <group
-    //     key={block.id}
-    //     position={addVector(additions?.position || [0, 0, 0], block.position)}
-    //     rotation={block.rotation}
-    //   >
-    //     <ModelMesh
-    //       // additions={additions}
-    //       block={block}
-    //       meshProps={{ ...restMeshProps }}
-    //       materialProps={materialProps}
-    //       overwrites={{ rotation: [0, 0, 0], position: [0, 0, 0] }}
-    //     />
-    //     {block.children.map((child) => (
-    //       <ChildMeshRenderer {...restProps} key={child} blockId={child} />
-    //     ))}
-    //   </group>
-    // ) : (
-    //   <ModelMesh additions={additions} block={block} meshProps={{ ...meshProps }} materialProps={materialProps} />
-    // );
   }
 
   return undefined;

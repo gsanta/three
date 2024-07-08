@@ -1,7 +1,6 @@
 import { Store } from '@/client/common/utils/store';
 import BlockDecoration, { BlockCategories } from '@/client/editor/types/BlockCategory';
 import Block from '../../types/Block';
-import BlockUtils from '../../utils/BlockUtils';
 
 class BlockStore {
   constructor(store: Store) {

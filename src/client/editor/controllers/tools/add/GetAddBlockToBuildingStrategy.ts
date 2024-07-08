@@ -16,7 +16,7 @@ class GetAddBlockToBuildingStrategy extends GetAddBlockToCategoryStrategy {
     }
 
     if (targetPartCategory === 'floor-slot' && newBlockType.category === 'home-electrics') {
-      return 'source-origin-target-slot';
+      return 'source-origin-target-pointer-pos';
     }
 
     return undefined;

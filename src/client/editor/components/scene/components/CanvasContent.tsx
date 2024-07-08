@@ -4,8 +4,7 @@ import useEditorContext from '@/app/editor/EditorContext';
 import { ThreeEvent, useThree } from '@react-three/fiber';
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import TemporaryCableRenderer from './TemporaryCableRenderer';
-import DefaultMeshRenderer from './DefaultMeshRenderer';
-import MoveControl from './MoveControl';
+import RootMeshRenderer from './RootMeshRenderer';
 
 const CanvasContent = () => {
   const { tool, scene: sceneService } = useEditorContext();
@@ -13,10 +12,7 @@ const CanvasContent = () => {
   const camera = useThree((state) => state.camera);
   const scene = useThree((state) => state.scene);
 
-  // const blocks = useNotSelectedBlocks();
-  // const { selectedPartIndexes } = useAppSelector((selector) => selector.block.present);
   const blockIds = useAppSelector((selector) => selector.block.present.blockIds);
-  const selectedRootBlockIds = useAppSelector((selector) => selector.block.present.selectedRootBlockIds);
   const editMode = useAppSelector((selector) => selector.editor.editingMode);
   const editTargetBlock = useAppSelector((selector) => selector.editor.editingTargetBlock);
 
@@ -28,7 +24,6 @@ const CanvasContent = () => {
   const handleDefaultPointerEnter = useCallback(
     (event: ThreeEvent<PointerEvent>) => {
       tool.onPointerEnter(event);
-      // event.stopPropagation();
     },
     [tool],
   );
@@ -52,7 +47,7 @@ const CanvasContent = () => {
   return (
     <>
       {editMode === 'wiring' && (
-        <DefaultMeshRenderer
+        <RootMeshRenderer
           key={editTargetBlock}
           blockId={editTargetBlock || ''}
           meshProps={{
@@ -68,7 +63,7 @@ const CanvasContent = () => {
         }
 
         return (
-          <DefaultMeshRenderer
+          <RootMeshRenderer
             key={id}
             blockId={id}
             meshProps={{
@@ -78,28 +73,6 @@ const CanvasContent = () => {
           />
         );
       })}
-      {/* {selectedRootBlockIds.map((id) => (
-        <MoveControl onPointerDown={handlePointerDown} onPointerEnter={handlePointerEnter}>
-          {({ drag }) => (
-            <DefaultMeshRenderer
-              additions={{
-                position: drag,
-              }}
-              key={id}
-              blockId={id}
-              meshProps={{
-                onPointerDown: handlePointerDown,
-                onPointerEnter: handlePointerEnter,
-              }}
-              materialProps={{ opacity: 0.5, transparent: true }}
-            />
-          )}
-        </MoveControl>
-      ))} */}
-
-      {/* {hasSelection && (
-        <MoveControl onPointerDown={handlePointerDown} onPointerEnter={handlePointerEnter}></MoveControl>
-      )} */}
       <mesh position={[5, 1, 0]} castShadow>
         <cylinderGeometry args={[0.02, 0.02, 2, 8]} />
         <meshStandardMaterial color="brown" />

@@ -2,6 +2,7 @@ import { Then } from '@cucumber/cucumber';
 import ExtendedWorld from './ExtendedWorld';
 import assert from 'assert';
 import findClosestBlock from './helpers/findClosestBlock';
+import { checkBlockExists, checkPositionCloseTo } from './helpers/checks';
 
 Then('parent for block {string} is {string}', function (this: ExtendedWorld, childId: string, parentId: string) {
   const child = this.env.blockStore.getBlock(childId);
@@ -58,6 +59,35 @@ Then(
 
     if (blockWithDistance && blockWithDistance[1] < 0.5) {
       throw new Error(`Block was found near position (${x},${y},${z})`);
+    }
+  },
+);
+
+type BlockHash = {
+  PARENT?: string;
+  POSITION?: string;
+};
+
+Then(
+  'I have a block {string} with properties',
+  function (this: ExtendedWorld, blockId: string, table: { hashes(): BlockHash[] }) {
+    const block = checkBlockExists.call(this, blockId);
+
+    if (table.hashes().length !== 1) {
+      throw new Error(`Table expected to have 1 row, but it has ${table.hashes().length}`);
+    }
+
+    const row = table.hashes()[0];
+
+    if (row.PARENT) {
+      assert.ok(row.PARENT === block.parent, `Parent does not match, it was ${block.parent}`);
+
+      const parent = checkBlockExists.call(this, block.parent);
+      assert.ok(parent.children.includes(blockId), `Parent does not include ${blockId} as a child`);
+    }
+
+    if (row.POSITION) {
+      checkPositionCloseTo.call(this, row.POSITION, block.position);
     }
   },
 );

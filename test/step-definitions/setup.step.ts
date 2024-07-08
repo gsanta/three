@@ -70,10 +70,7 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
     } else if (row.PARENT?.includes(':')) {
       const [parentId, partIndexOrName] = row.PARENT.split(':');
 
-      let partIndex = partIndexOrName;
-      if (!partIndexOrName.startsWith('#')) {
-        partIndex = checkPartIndexExists.call(this, parentId, partIndexOrName);
-      }
+      const partIndex = checkPartIndexExists.call(this, parentId, partIndexOrName);
 
       addBlockToSlot.perform(parentId, partIndex, row.TYPE);
     } else {

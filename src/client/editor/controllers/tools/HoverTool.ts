@@ -1,5 +1,3 @@
-import { store } from '@/client/common/utils/store';
-import { hover } from '../../stores/block/blockSlice';
 import Tool, { ToolInfo } from '../../types/Tool';
 import SceneService from '../../components/scene/service/SceneService';
 import { IconName } from '@/client/common/components/icon/Icon';

@@ -30,6 +30,7 @@ import BlockType from '@/client/editor/types/BlockType';
 import ElectricitySystemHook from '@/client/editor/services/electricity/ElectricitySystemHook';
 import ElectricityStore from '@/client/editor/stores/electricity/ElectricityStore';
 import { clearEditorSlice } from '@/client/editor/stores/editorSlice';
+import homeElectrics from 'prisma/seed/homeElectrics';
 
 type TestEnv = {
   controller: ControllerService;
@@ -114,6 +115,7 @@ export const setupTestEnv = (): TestEnv => {
     ...plantTempalteSeeds,
     ...poleTempalteSeeds,
     ...roadTempalteSeeds,
+    ...homeElectrics,
   ];
 
   store.dispatch(setTemplates(seeds as BlockType[]));

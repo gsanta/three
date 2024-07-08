@@ -3,30 +3,18 @@ import { PivotControls } from '@react-three/drei';
 import { Quaternion, Vector3 } from 'three';
 import useEditorContext from '@/app/editor/EditorContext';
 import { useAppSelector } from '@/client/common/hooks/hooks';
-import { ThreeEvent } from '@react-three/fiber';
-import SelectedMeshRenderer from './SelectedMeshRenderer';
 import Num3 from '@/client/editor/types/Num3';
 import { ReactNode } from 'react';
 
 type MoveControlProps = {
-  onPointerDown?: (event: ThreeEvent<PointerEvent>) => void;
-  onPointerEnter?: (event: ThreeEvent<PointerEvent>) => void;
   children(props: { drag: Num3 }): ReactNode;
 };
 
-const MoveControl = ({ children, onPointerDown, onPointerEnter }: MoveControlProps) => {
-  // const selectedBlocks = useSelectedBlocks();
-
-  const blockIds = useAppSelector((store) => store.block.present.blockIds);
-
+const MoveControl = ({ children }: MoveControlProps) => {
   const drag = useAppSelector((selector) => selector.tool.select.drag);
   const moveAxis = useAppSelector((selector) => selector.tool.select.moveAxis);
 
   const { tool } = useEditorContext();
-
-  // if (!movableBlocks.length) {
-  //   return null;
-  // }
 
   return (
     <PivotControls
@@ -50,23 +38,7 @@ const MoveControl = ({ children, onPointerDown, onPointerEnter }: MoveControlPro
       }}
       userData={{ role: 'selection-pivot' }}
     >
-      <group name="selection-group">
-        {children({ drag })}
-        {/* {blockIds.map((id) => (
-          <SelectedMeshRenderer
-            additions={{
-              position: drag,
-            }}
-            key={id}
-            blockId={id}
-            meshProps={{
-              onPointerDown,
-              onPointerEnter,
-            }}
-            materialProps={{ opacity: 0.5, transparent: true }}
-          />
-        ))} */}
-      </group>
+      <group name="selection-group">{children({ drag })}</group>
     </PivotControls>
   );
 };
