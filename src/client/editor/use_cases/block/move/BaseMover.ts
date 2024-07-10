@@ -16,11 +16,12 @@ class BaseMover {
   }
 
   move(block: Block, drag: Num3, dragDelta: Num3): Num3 {
-    if (block.connectedTo) {
+    if (block.stationedOn) {
+      const { blockId: stationBlockId, partIndex: stationPartIndex } = block.stationedOn;
       const sourceMesh = this.sceneStore.getObj3d(block.id);
 
-      const targetBlock = this.blockStore.getBlock(block.parent);
-      const targetPartName = targetBlock.partDetails[block.connectedTo]?.name;
+      const targetBlock = this.blockStore.getBlock(stationBlockId);
+      const targetPartName = targetBlock.partDetails[stationPartIndex || '#1']?.name;
       const targetMesh = this.sceneStore.getObj3d(block.parent || '');
       const targetPartMesh = MeshUtils.findByName(targetMesh, targetPartName);
 

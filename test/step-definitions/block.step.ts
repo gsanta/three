@@ -2,7 +2,7 @@ import { Then } from '@cucumber/cucumber';
 import ExtendedWorld from './ExtendedWorld';
 import assert from 'assert';
 import findClosestBlock from './helpers/findClosestBlock';
-import { checkBlockExists, checkPositionCloseTo } from './helpers/checks';
+import { checkBlockExists, checkPartIndexExists, checkPositionCloseTo } from './helpers/checks';
 
 Then('parent for block {string} is {string}', function (this: ExtendedWorld, childId: string, parentId: string) {
   const child = this.env.blockStore.getBlock(childId);
@@ -16,14 +16,15 @@ Then('parent for block {string} is {string}', function (this: ExtendedWorld, chi
 
 Then(
   'block {string} is in slot {string} of block {string}',
-  function (this: ExtendedWorld, childId: string, parentPart: string, parentId: string) {
+  function (this: ExtendedWorld, childId: string, partIndexOrName: string, parentId: string) {
+    const partIndex = checkPartIndexExists.call(this, parentId, partIndexOrName);
     const child = this.env.blockStore.getBlock(childId);
     const parent = this.env.blockStore.getBlock(parentId);
 
-    assert.equal(child.connectedTo, parentPart);
-    assert.equal(child.parent, parentId);
+    assert.equal(child.stationedOn?.partIndex, partIndex);
+    assert.equal(child.stationedOn?.blockId, parentId);
 
-    assert(parent.partDetails[parentPart]?.connectedTo?.blockId, child.id);
+    assert.ok(parent.stationFor.find((dependent) => dependent.blockId === child.id));
   },
 );
 
@@ -32,7 +33,7 @@ Then(
   function (this: ExtendedWorld, partIndex: string, blockId: string) {
     const block = this.env.blockStore.getBlock(blockId);
 
-    assert(block.partDetails[partIndex]?.connectedTo === undefined);
+    assert.ok(!block.stationFor.find((connection) => connection.thisPartIndex === partIndex));
   },
 );
 

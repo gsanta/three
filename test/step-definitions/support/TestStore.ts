@@ -8,6 +8,7 @@ class TestStore {
     const geometry = new PlaneGeometry(1, 1);
     const material = new MeshBasicMaterial({ color: 0xffff00, side: DoubleSide });
     this.plane = new Mesh(geometry, material);
+    this.plane.name = 'plane';
   }
 
   getPlane(): Mesh {

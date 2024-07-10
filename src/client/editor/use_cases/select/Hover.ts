@@ -18,12 +18,6 @@ class Hover {
       return;
     }
 
-    const block = this.blockStore.getBlock(blockId);
-
-    if (this.blockStore.isDescendentSelected(block, true)) {
-      return;
-    }
-
     store.dispatch(hover(undefined));
     const edit = this.updateService.getTransaction();
 

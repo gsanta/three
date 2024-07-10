@@ -25,7 +25,7 @@ class DrawHouseWiring {
     this.sceneStore = sceneStore;
     this.updateService = updateService;
     this.addWirePoint = new AddWirePoints(this.blockStore, this.factoryService, this.updateService);
-    this.getNextWirePoint = new GetNextWireIntersection(this.blockStore, this.sceneService);
+    this.getNextWireIntersection = new GetNextWireIntersection(this.blockStore, this.sceneService);
   }
 
   execute(targetBlockId: string, clientX: number, clientY: number) {
@@ -52,7 +52,7 @@ class DrawHouseWiring {
 
   private getSelectedIntersection(rootBlock: Block, clientX: number, clientY: number, cableId?: string) {
     if (rootBlock.category === 'building-bases') {
-      return this.getNextWirePoint.execute(rootBlock, clientX, clientY, cableId);
+      return this.getNextWireIntersection.execute(rootBlock, clientX, clientY, cableId);
     }
 
     return undefined;
@@ -81,7 +81,7 @@ class DrawHouseWiring {
 
   private addWirePoint: AddWirePoints;
 
-  private getNextWirePoint: GetNextWireIntersection;
+  private getNextWireIntersection: GetNextWireIntersection;
 
   private blockStore: BlockStore;
 

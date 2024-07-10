@@ -37,16 +37,11 @@ class Selector {
     const edit = this.updateService.getTransaction();
 
     const partIndex = this.checkPartIntersection(block, clientX, clientY);
-    const isMovable = this.checkIsBlockMoveable(block);
 
     if (partIndex) {
       edit.select(null);
       edit.select(block.id, partIndex);
       store.dispatch(updateSelectTool({ moveAxis: block.moveAxis }));
-    } else if (isMovable) {
-      edit.select(block.id);
-      store.dispatch(updateSelectTool({ moveAxis: block.moveAxis }));
-      return;
     } else {
       edit.select(block.id);
 
@@ -69,21 +64,6 @@ class Selector {
     }
 
     return undefined;
-  }
-
-  private checkIsBlockMoveable(block: Block) {
-    const place = block.connectedTo;
-    if (place) {
-      const targetBlock = this.blockStore.getBlock(block.parent);
-      const template = this.blockStore.getBlockType(targetBlock.type);
-
-      const targetPart = template?.partDetails[place];
-      if (targetPart?.allowMovement) {
-        return true;
-      }
-    }
-
-    return false;
   }
 
   private blockStore: BlockStore;

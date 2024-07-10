@@ -15,8 +15,23 @@ type Block<S extends ShapeType = ShapeType> = {
   isHovered: boolean;
   isSelected: boolean;
   associations: string[];
-  // the partIndex of it's parent if it is attached to a part
-  connectedTo?: string;
+
+  neighbourTo: {
+    blockId: string;
+    otherPartIndex?: string;
+    thisPartIndex?: string;
+  }[];
+
+  stationedOn?: {
+    blockId: string;
+    partIndex?: string;
+  };
+
+  stationFor: {
+    blockId: string;
+    thisPartIndex?: string;
+  }[];
+
   parent?: string;
 } & BlockType<S>;
 
@@ -37,19 +52,22 @@ export const mergeBlocks = (
     children: mergeArrays(block.children, partial?.children, mergeStrategy),
     dependsOn: mergeArrays(block.dependsOn, partial?.dependsOn, mergeStrategy),
     dependents: mergeArrays(block.dependents, partial?.dependents, mergeStrategy),
+    neighbourTo: mergeArrays(block.neighbourTo, partial?.neighbourTo, mergeStrategy),
+    stationFor: mergeArrays(block.stationFor, partial?.stationFor, mergeStrategy),
     partDetails: {
       ...block.partDetails,
     },
-  };
+  } as Block;
 
   if (partial.partDetails) {
-    Object.keys(partial.partDetails).forEach(
-      (key) =>
-        (newBlock.partDetails[key] = {
-          ...newBlock.partDetails[key],
-          ...partial.partDetails?.[key],
-        } as ModelPartInfo),
-    );
+    Object.keys(partial.partDetails).forEach((key) => {
+      const newPartInfo = {
+        ...newBlock.partDetails[key],
+        ...partial.partDetails?.[key],
+      } as ModelPartInfo;
+
+      newBlock.partDetails[key] = newPartInfo;
+    });
   }
 
   return newBlock;

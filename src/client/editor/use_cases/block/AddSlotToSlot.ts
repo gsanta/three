@@ -7,6 +7,7 @@ import MathUtils from '../../utils/mathUtils';
 import BlockStore from '../../stores/block/BlockStore';
 import { Vector3 } from 'three';
 import TransactionService from '../../services/transaction/TransactionService';
+import Edit from '../../services/update/Edit';
 
 class AddSlotToSlot {
   constructor(
@@ -21,8 +22,7 @@ class AddSlotToSlot {
     this.updateService = updateService;
   }
 
-  perform(targetBlockId: string, targetPartIndex: string, templateName: string) {
-    const edit = this.updateService.getTransaction();
+  perform(edit: Edit, targetBlockId: string, targetPartIndex: string, templateName: string) {
     const block = this.blockStore.getBlocks()[targetBlockId];
 
     const template = this.blockStore.getBlockType(templateName);
@@ -72,7 +72,6 @@ class AddSlotToSlot {
     });
 
     edit.select(edit.getLastBlock().id, idealNextSelectedPart?.index);
-    edit.commit();
   }
 
   private blockStore: BlockStore;
