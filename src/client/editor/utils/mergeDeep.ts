@@ -2,6 +2,10 @@ import { PartialDeep } from 'type-fest';
 
 export type MergeStrategy = 'merge' | 'exclude' | 'replace';
 
+const isObject = (item: unknown): item is Record<string, unknown> => {
+  return Boolean(item && typeof item === 'object' && !Array.isArray(item));
+};
+
 export const mergeArrays = <T>(arr1: T[], arr2: T[] | undefined, mergeStrategy: MergeStrategy) => {
   if (!arr2) {
     return arr1;
@@ -15,11 +19,21 @@ export const mergeArrays = <T>(arr1: T[], arr2: T[] | undefined, mergeStrategy: 
     return arr2 || [];
   }
 
-  return arr1.filter((id) => !arr2?.includes(id));
-};
+  return arr1.filter((element) => {
+    if (isObject(element)) {
+      return !arr2.find((arr2Element) => {
+        if (isObject(arr2Element)) {
+          return Object.keys(arr2Element).every((key) => {
+            return arr2Element[key] === undefined || element[key] === arr2Element[key];
+          });
+        }
 
-const isObject = (item: unknown) => {
-  return item && typeof item === 'object' && !Array.isArray(item);
+        return false;
+      });
+    } else {
+      return !arr2?.includes(element);
+    }
+  });
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

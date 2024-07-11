@@ -109,23 +109,27 @@ const buildingTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id
         orientation: 90,
         name: 'wall1',
         type: 'placeholder',
+        joins: ['#8', '#11'],
       },
       '#3': {
         category: 'wall-slot',
         name: 'wall2',
         type: 'placeholder',
+        joins: ['#10', '#11'],
       },
       '#4': {
         category: 'wall-slot',
         orientation: 270,
         name: 'wall3',
         type: 'placeholder',
+        joins: ['#9', '#10'],
       },
       '#5': {
         category: 'wall-slot',
         orientation: 180,
         name: 'wall4',
         type: 'placeholder',
+        joins: ['#8', '#9'],
       },
       '#6': {
         category: 'ceil-slot',

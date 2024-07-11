@@ -4,9 +4,9 @@ import BlockStore from '../../stores/block/BlockStore';
 import SceneService from '../../components/scene/service/SceneService';
 import MeshUtils from '../../utils/MeshUtils';
 import { MathUtils } from 'three';
-import TransactionService from '../../services/transaction/TransactionService';
 import Num3 from '../../types/Num3';
 import VectorUtils from '../../utils/vectorUtils';
+import Edit from '../../services/update/Edit';
 
 class AddBlockToPointerPos {
   constructor(
@@ -14,17 +14,21 @@ class AddBlockToPointerPos {
     factoryService: FactoryService,
     sceneService: SceneService,
     sceneStore: SceneStore,
-    update: TransactionService,
   ) {
     this.blockStore = blockStore;
     this.factoryService = factoryService;
     this.sceneService = sceneService;
     this.sceneStore = sceneStore;
-    this.update = update;
   }
 
-  perform(targetBlockId: string, targetPartIndex: string, templateName: string, clientX: number, clientY: number) {
-    const edit = this.update.getTransaction();
+  perform(
+    edit: Edit,
+    targetBlockId: string,
+    targetPartIndex: string,
+    templateName: string,
+    clientX: number,
+    clientY: number,
+  ) {
     const targetBlock = this.blockStore.getBlocks()[targetBlockId];
 
     const mesh = this.sceneStore.getObj3d(targetBlock.id);
@@ -52,8 +56,6 @@ class AddBlockToPointerPos {
         children: [lastBlock.id],
       });
     }
-
-    edit.commit();
   }
 
   private blockStore: BlockStore;
@@ -63,8 +65,6 @@ class AddBlockToPointerPos {
   private sceneService: SceneService;
 
   private sceneStore: SceneStore;
-
-  private update: TransactionService;
 }
 
 export default AddBlockToPointerPos;

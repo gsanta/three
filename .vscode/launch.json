@@ -37,7 +37,7 @@
         ]
     },
     {
-        "name": "Cucumber @important",
+        "name": "Cucumber @only",
         "type": "node",
         "request": "launch",
         "console": "integratedTerminal",

@@ -27,7 +27,6 @@ Feature: House
     And block 'wall-1' does not exist
     And slot '#2' of block 'base-1' is not occupied
 
-  @only 
   Scenario: Adding a device to floor
     Given I have a scene with:
       | TYPE            | ID        | PARENT          | POS   |
@@ -36,12 +35,23 @@ Feature: House
       | wall-1          | wall-3-id | base-1-id:wall3 | -     |
     When I select tool 'add'
     And I select template 'washing-machine-1'
-    # And I hover over block 'base-1-id' and part 'floor'
     And I set next uuid to 'washing-machine-id-1'
     And I press pointer over block 'base-1-id' and part 'floor' at position '1.5,3,0'
     Then I have a block 'washing-machine-id-1' with properties
       | PARENT    | POSITION |
       | base-1-id | 0.5,0,0  |
+
+  Scenario: Removing a device from floor
+    Given I have a scene with:
+      | TYPE              | ID        | PARENT          | POS     |
+      | building-base-1   | base-1-id | -               | 1,3,0   |
+      | wall-1            | wall-4-id | base-1-id:wall4 | -       |
+      | wall-1            | wall-3-id | base-1-id:wall3 | -       |
+      | washing-machine-1 | wm-1-id   | base-1-id:floor  | 1.5,3,0 |
+    And I select tool 'erase'
+    And I press pointer over block 'wm-1-id'
+    Then block 'base-1-id' does not have a child 'wm-1-id'
+    Then block 'wm-1-id' does not exist
 
 
 

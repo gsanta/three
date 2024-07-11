@@ -7,13 +7,12 @@ import { setSelectedTool } from '@/client/editor/stores/tool/toolSlice';
 import ToolName from '@/client/editor/types/ToolName';
 import ExtendedWorld from './ExtendedWorld';
 import findClosestBlock, { calculateDistance } from './helpers/findClosestBlock';
-import AddBlock from '@/client/editor/use_cases/add/AddBlock';
 import Num3 from '@/client/editor/types/Num3';
-import AddBlockToSlot from '@/client/editor/use_cases/block/AddBlockToSlot';
-import AddBlockToPointerPos from '@/client/editor/use_cases/block/AddBlockToPointerPos';
 import JoinPoles from '@/client/editor/use_cases/block/JoinPoles';
 import { checkBlockExists, checkPartIndexExists, checkPosition } from './helpers/checks';
 import VectorUtils from '@/client/editor/utils/vectorUtils';
+import AddTool from '@/client/editor/controllers/tools/add/AddTool';
+import { ToolInfo } from '@/client/editor/types/Tool';
 
 Given('I have an empty canvas', function (this: ExtendedWorld) {
   this.env.teardown();
@@ -29,20 +28,25 @@ type SceneHash = {
 Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
   this.env.teardown();
 
-  const addBlock = new AddBlock(this.env.blockStore, this.env.services.factory, this.env.sceneStore, this.env.update);
-  const addBlockToSlot = new AddBlockToSlot(
-    this.env.blockStore,
-    this.env.services.factory,
-    this.env.sceneStore,
-    this.env.update,
-  );
-  const addBlockToPointerPos = new AddBlockToPointerPos(
+  const addTool = new AddTool(
     this.env.blockStore,
     this.env.services.factory,
     this.env.sceneService,
     this.env.sceneStore,
     this.env.update,
   );
+  // const addBlock = new AddBlockToPlain(
+  //   this.env.blockStore,
+  //   this.env.services.factory,
+  //   this.env.sceneStore,
+  //   this.env.update,
+  // );
+  // const addBlockToPointerPos = new AddBlockToPointerPos(
+  //   this.env.blockStore,
+  //   this.env.services.factory,
+  //   this.env.sceneService,
+  //   this.env.sceneStore,
+  // );
 
   const joinPoles = new JoinPoles(this.env.blockStore, this.env.sceneStore, this.env.services.factory, this.env.update);
 
@@ -65,38 +69,75 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
       const block1 = this.env.blockStore.getBlock(block1IdAndPin.split('#')[0]);
       const block2 = this.env.blockStore.getBlock(block2IdAndPin.split('#')[0]);
       joinPoles.join(block1, block2, [[`#${block1IdAndPin.split('#')[1]}`, `#${block2IdAndPin.split('#')[1]}`]]);
-    } else if (row.PARENT === '-' || !row.PARENT) {
-      addBlock.perform(new Vector3(...pos), row.TYPE);
-    } else if (row.PARENT?.includes(':')) {
-      const [parentId, partIndexOrName] = row.PARENT.split(':');
-
-      const partIndex = checkPartIndexExists.call(this, parentId, partIndexOrName);
-
-      addBlockToSlot.perform(parentId, partIndex, row.TYPE);
     } else {
-      const intersectingParent = row.POS.split(':')[0];
-      const intersectingParentMesh = this.env.sceneStore.getObj3d(intersectingParent);
-      const intersectingParentPos = new Vector3();
-      intersectingParentMesh.getWorldPosition(intersectingParentPos);
-      const parentBlock = this.env.blockStore.getBlock(intersectingParent);
-      const relativePos = row.POS.split(':')[1]
-        ?.split(',')
-        .map((p) => Number(p)) as Num3;
+      let parentBlockId: string | undefined;
+      let partIndexOrName: string | undefined;
 
-      this.env.sceneService.setIntersection([
-        {
-          meshes: [
-            {
-              object: {},
-              distance: 1,
-              point: VectorUtils.add(intersectingParentPos.toArray(), relativePos),
-            },
-          ],
-          block: parentBlock,
-        },
-      ]);
-      addBlockToPointerPos.perform(row.PARENT, '#1', row.TYPE, 0, 0);
+      if (row.PARENT && row.PARENT.includes(':')) {
+        [parentBlockId, partIndexOrName] = row.PARENT.split(':');
+      } else if (row.PARENT && row.PARENT !== '-') {
+        parentBlockId = row.PARENT;
+      }
+
+      let partIndex: string | undefined = undefined;
+
+      if (parentBlockId && partIndexOrName) {
+        partIndex = checkPartIndexExists.call(this, parentBlockId, partIndexOrName);
+      }
+
+      const targetBlock = parentBlockId;
+
+      // let position = [0, 0, 0];
+
+      // if (row.POS) {
+      //   position = checkPosition.call(this, row.POS);
+      // }
+
+      if (parentBlockId) {
+        const intersectingParentMesh = this.env.sceneStore.getObj3d(parentBlockId);
+        const intersectingParentPos = new Vector3();
+        intersectingParentMesh.getWorldPosition(intersectingParentPos);
+        const parentBlock = this.env.blockStore.getBlock(parentBlockId);
+        const relativePos = row.POS.split(':')[1]
+          ?.split(',')
+          .map((p) => Number(p)) as Num3;
+
+        this.env.sceneService.setIntersection([
+          {
+            meshes: [
+              {
+                object: {},
+                distance: 1,
+                point: VectorUtils.add(intersectingParentPos.toArray(), relativePos || [0, 0, 0]),
+              },
+            ],
+            block: parentBlock,
+          },
+        ]);
+      }
+
+      store.dispatch(setSelectedTool(ToolName.Add));
+      this.env.toolHelper.pointerEnter({ blockId: targetBlock, partIndex });
+      store.dispatch(setSelectedGeometry(block.type));
+      addTool.onPointerUp({ clientX: 0, clientY: 0, pos: new Vector3(...pos) } as ToolInfo);
+
+      // const edit = this.env.update.getTransaction();
+      // addBlock.perform(edit, new Vector3(...pos), row.TYPE);
+      // edit.commit();
     }
+
+    // else if (row.PARENT?.includes(':')) {
+    //   const [parentId, partIndexOrName] = row.PARENT.split(':');
+
+    //   store.dispatch(setSelectedTool(ToolName.Add));
+    //   this.env.toolHelper.pointerEnter({ blockId: parentId, partIndex });
+    //   store.dispatch(setSelectedGeometry(block.type));
+    //   addTool.onPointerUp({ clientX: 0, clientY: 0, pos: new Vector3(...pos) } as ToolInfo);
+    // } else {
+    //   const edit = this.env.update.getTransaction();
+    //   addBlockToPointerPos.perform(edit, row.PARENT, '#1', row.TYPE, 0, 0);
+    //   edit.commit();
+    // }
   });
 });
 

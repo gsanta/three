@@ -5,8 +5,9 @@ import BlockAdder from './adders/BlockAdder';
 import PoleAdder from './adders/PoleAdder';
 import SceneStore from '../../components/scene/SceneStore';
 import FactoryService from '../../services/factory/FactoryService';
+import Edit from '../../services/update/Edit';
 
-class AddBlock {
+class AddBlockToPlain {
   constructor(
     blockStore: BlockStore,
     factoryService: FactoryService,
@@ -15,18 +16,16 @@ class AddBlock {
   ) {
     this.blockStore = blockStore;
     this.factoryService = factoryService;
-    this.updateService = updateService;
 
     this.adders = {
       ['poles']: new PoleAdder(blockStore, factoryService, sceneStore, updateService),
     };
   }
 
-  perform(pos: Vector3, blockType: string) {
-    const edit = this.updateService.getTransaction();
+  perform(edit: Edit, pos: Vector3, blockType: string) {
     this.factoryService.create(edit, blockType, { position: [pos.x, pos.y, pos.z] });
     const blockId = edit.getLastBlock().id;
-    edit.select(blockId).commit();
+    edit.select(blockId);
 
     this.blockId = blockId;
   }
@@ -47,11 +46,9 @@ class AddBlock {
 
   private factoryService: FactoryService;
 
-  private updateService: TransactionService;
-
   private adders: Partial<Record<string, BlockAdder>>;
 
   private blockId?: string;
 }
 
-export default AddBlock;
+export default AddBlockToPlain;

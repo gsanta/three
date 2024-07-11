@@ -47,18 +47,17 @@ class GetNextWireIntersection {
   }
 
   private getNextWirePointForWall(wallBlock: Block, blockIntersections: BlockIntersection[]) {
-    const column = blockIntersections.find((intersection) => intersection.partInfo?.category === 'wall-join');
+    const target = blockIntersections.find((intersection) =>
+      ['wall-join', 'home-electrics'].includes(intersection.partInfo?.category || ''),
+    );
 
-    if (!column) {
+    if (!target) {
       return;
     }
 
-    const columnPartInfo = column.partInfo;
-
-    if (columnPartInfo?.joins?.includes(wallBlock.connectedTo || '')) {
-      return column;
+    if (target.block.neighbourTo.find((neighbour) => neighbour.blockId === wallBlock.id)) {
+      return target;
     }
-
     return undefined;
   }
 
@@ -68,10 +67,11 @@ class GetNextWireIntersection {
         return false;
       }
 
-      const buildingBlock = this.blockStore.getBlock(cablePoint.blockId);
-      const column = buildingBlock.partDetails[cablePoint.partIndex || ''];
+      const found = intersection.block.neighbourTo.find(
+        (neighbour) => neighbour.otherPartIndex === cablePoint.partIndex,
+      );
 
-      if (column?.joins?.includes(intersection.block.connectedTo || '')) {
+      if (found) {
         return intersection;
       }
 

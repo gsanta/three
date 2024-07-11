@@ -3,23 +3,16 @@ import MeshUtils from '../../utils/MeshUtils';
 import MathUtils, { toDegree } from '../../utils/mathUtils';
 import FactoryService from '../../services/factory/FactoryService';
 import BlockStore from '../../stores/block/BlockStore';
-import TransactionService from '../../services/transaction/TransactionService';
+import Edit from '../../services/update/Edit';
 
 class AddBlockToSlot {
-  constructor(
-    blockStore: BlockStore,
-    factoryService: FactoryService,
-    sceneStore: SceneStore,
-    updateService: TransactionService,
-  ) {
+  constructor(blockStore: BlockStore, factoryService: FactoryService, sceneStore: SceneStore) {
     this.blockStore = blockStore;
     this.factoryService = factoryService;
     this.sceneStore = sceneStore;
-    this.updateService = updateService;
   }
 
-  perform(targetBlockId: string, targetPartIndex: string, templateName: string) {
-    const edit = this.updateService.getTransaction();
+  perform(edit: Edit, targetBlockId: string, targetPartIndex: string, templateName: string) {
     const targetBlock = this.blockStore.getBlocks()[targetBlockId];
 
     const mesh = this.sceneStore.getObj3d(targetBlock.id);
@@ -33,24 +26,29 @@ class AddBlockToSlot {
     this.factoryService.create(edit, templateName, {
       parent: targetBlock.id,
       position: [sourcePartPos.x, sourcePartPos.y, sourcePartPos.z],
+      stationedOn: {
+        blockId: targetBlock.id,
+        partIndex: targetPartIndex,
+      },
       rotation: [0, finalRotation, 0],
-      connectedTo: targetPartIndex,
     });
 
     const newBlock = edit.getLastBlock();
 
-    edit.updateBlock(targetBlockId, {
-      children: [newBlock.id],
-      partDetails: {
-        [targetPartIndex]: {
-          connectedTo: {
+    edit.updateBlock(
+      targetBlockId,
+      {
+        children: [newBlock.id],
+        stationFor: [
+          {
             blockId: newBlock.id,
           },
-        },
+        ],
       },
-    });
+      { arrayMergeStrategy: 'merge' },
+    );
 
-    edit.commit();
+    return newBlock;
   }
 
   private blockStore: BlockStore;
@@ -58,8 +56,6 @@ class AddBlockToSlot {
   private factoryService: FactoryService;
 
   private sceneStore: SceneStore;
-
-  private updateService: TransactionService;
 }
 
 export default AddBlockToSlot;

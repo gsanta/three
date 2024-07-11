@@ -50,19 +50,15 @@ class EraseBlock {
       eraser.erase(edit, block);
     }
 
-    if (block.connectedTo) {
+    block.neighbourTo.forEach((neighbour) => {
       edit.updateBlock(
-        block.parent || '',
+        neighbour.blockId,
         {
-          partDetails: {
-            [block.connectedTo]: {
-              connectedTo: undefined,
-            },
-          },
+          neighbourTo: [{ blockId: block.id }],
         },
-        { arrayMergeStrategy: 'replace' },
+        { arrayMergeStrategy: 'exclude' },
       );
-    }
+    });
 
     block.associations.forEach((association) => {
       const associationBlock = this.store.getBlock(association);

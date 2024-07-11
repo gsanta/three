@@ -15,7 +15,7 @@ Feature: Weather head
       | TYPE            | ID        | PARENT       | POS             |
       | building-base-1 | base-1-id | -            | 1,0,3           |
       | roof-1          | roof-1-id | base-1-id:#6 | -               |
-      | weather-head-1  | wh-1-id   | base-1-id    | roof-1-id:1,0,0 |
+      | weather-head-1  | wh-1-id   | roof-1-id:#2 | 1,0,0           |
       | pole-1          | pole-1-id | -            | 5,0,0           |
     When I select a block at position 0.9,3.4,0.04 with part '#2'
     And I select tool 'cable'
@@ -31,7 +31,7 @@ Feature: Weather head
       | TYPE            | ID         | PARENT       | POS                   |
       | building-base-1 | base-1-id  | -            | 1,0,3                 |
       | roof-1          | roof-1-id  | base-1-id:#6 | -                     |
-      | weather-head-1  | wh-1-id    | base-1-id    | roof-1-id:1,0,0       |
+      | weather-head-1  | wh-1-id    | roof-1-id:#2 | 1,0,0                 |
       | pole-1          | pole-1-id  | -            | 5,0,0                 |
       | cable-1         | cable-1-id | -            | wh-1-id#2:pole-1-id#5 |
     When I select tool 'erase'
@@ -45,7 +45,7 @@ Feature: Weather head
       | TYPE            | ID         | PARENT       | POS                   |
       | building-base-1 | base-1-id  | -            | 1,0,3                 |
       | roof-1          | roof-1-id  | base-1-id:#6 | -                     |
-      | weather-head-1  | wh-1-id    | base-1-id    | roof-1-id:1,0,0       |
+      | weather-head-1  | wh-1-id    | roof-1-id:#2  | 1,0,0                 |
       | pole-1          | pole-1-id  | -            | 5,0,0                 |
       | cable-1         | cable-1-id | -            | pole-1-id#5:wh-1-id#2 |
     When I select tool 'erase'
@@ -59,7 +59,7 @@ Feature: Weather head
       | TYPE            | ID         | PARENT       | POS                   |
       | building-base-1 | base-1-id  | -            | 1,0,3                 |
       | roof-1          | roof-1-id  | base-1-id:#6 | -                     |
-      | weather-head-1  | wh-1-id    | base-1-id    | roof-1-id:1,0,0       |
+      | weather-head-1  | wh-1-id    | roof-1-id:#2 | 1,0,0                 |
       | pole-1          | pole-1-id  | -            | 5,0,0                 |
       | cable-1         | cable-1-id | -            | pole-1-id#5:wh-1-id#2 |
     When I select tool 'select'
