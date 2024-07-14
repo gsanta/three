@@ -1,5 +1,6 @@
 
 
+Run migrations: npx prisma migrate deploy
 Seed db: npx prisma db seed
 
 

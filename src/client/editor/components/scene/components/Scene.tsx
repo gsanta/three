@@ -1,12 +1,16 @@
-import { Grid, OrbitControls, Plane } from '@react-three/drei';
+import { Environment, OrbitControls } from '@react-three/drei';
 import { useCallback, useEffect } from 'react';
 import useEditorContext from '@/app/editor/EditorContext';
 import { ThreeEvent, useThree } from '@react-three/fiber';
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import TemporaryCableRenderer from './TemporaryCableRenderer';
 import RootMeshRenderer from './RootMeshRenderer';
+import { Physics } from '@react-three/cannon';
+import Car from './Car';
+import Ground from './Ground';
+import Track from './Track';
 
-const CanvasContent = () => {
+const Scene = () => {
   const { tool, scene: sceneService } = useEditorContext();
 
   const camera = useThree((state) => state.camera);
@@ -20,13 +24,6 @@ const CanvasContent = () => {
     sceneService.setCamera(camera);
     sceneService.setScene(scene);
   }, [camera, scene, sceneService]);
-
-  const handleDefaultPointerEnter = useCallback(
-    (event: ThreeEvent<PointerEvent>) => {
-      tool.onPointerEnter(event);
-    },
-    [tool],
-  );
 
   const handlePointerDown = useCallback(
     (event: ThreeEvent<PointerEvent>) => {
@@ -78,22 +75,16 @@ const CanvasContent = () => {
         <meshStandardMaterial color="brown" />
       </mesh>
       <TemporaryCableRenderer />
-      <Plane
-        args={[100, 100]}
-        name="plane"
-        onPointerEnter={handleDefaultPointerEnter}
-        rotation={[-Math.PI / 2, 0, 0]}
-        position={[2, -0.1, 0]}
-        onPointerDown={(e) => tool.onPointerDown(e)}
-        onPointerUp={() => tool.onPointerUp()}
-        onPointerMove={(e) => tool.onPointerMove(e)}
-      >
-        <meshStandardMaterial color="goldenrod" />
-      </Plane>
-      <Grid infiniteGrid />
       <OrbitControls makeDefault />
+      <Environment files="envmap.hdr" background={true} />
+
+      <Physics broadphase="SAP" gravity={[0, -2.6, 0]}>
+        <Track />
+        <Ground />
+        <Car />
+      </Physics>
     </>
   );
 };
 
-export default CanvasContent;
+export default Scene;
