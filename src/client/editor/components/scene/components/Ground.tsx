@@ -37,7 +37,7 @@ const Ground = () => {
     }
 
     const uvs2 = groundMesh.current?.geometry.attributes.uv.array;
-    if (uvs) {
+    if (uvs2) {
       groundMesh.current?.geometry.setAttribute('uv2', new BufferAttribute(uvs2, 2));
     }
   }, []);

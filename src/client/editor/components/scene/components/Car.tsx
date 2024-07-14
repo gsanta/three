@@ -1,8 +1,8 @@
 import Num3 from '@/client/editor/types/Num3';
 import { useBox, useRaycastVehicle } from '@react-three/cannon';
 import { useGLTF } from '@react-three/drei';
-import { useEffect, useRef } from 'react';
-import { Mesh, BufferGeometry } from 'three';
+import { RefObject, useEffect, useRef } from 'react';
+import { Mesh, BufferGeometry, Group, Object3DEventMap } from 'three';
 import { useWheels } from '../../hooks/useWheels';
 import { WheelDebug } from './WheelDebug';
 import { useControls } from '../../hooks/useControls';
@@ -45,7 +45,7 @@ const Car = () => {
   useControls(vehicleApi, chassisApi);
 
   return (
-    <group ref={vehicle} name="vehicle">
+    <group ref={vehicle as RefObject<Group<Object3DEventMap>>} name="vehicle">
       <mesh ref={chassisBody}>
         <meshBasicMaterial transparent={true} opacity={0.3} />
         <boxGeometry args={chassisBodyArgs} />

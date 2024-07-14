@@ -12,14 +12,14 @@ export const useControls = (vehicleApi: RaycastVehiclePublicApi, chassisApi: Pub
   });
 
   useEffect(() => {
-    const keyDownPressHandler = (e) => {
+    const keyDownPressHandler = (e: KeyboardEvent) => {
       setControls((origControls) => ({
         ...origControls,
         [e.key.toLowerCase()]: true,
       }));
     };
 
-    const keyUpPressHandler = (e) => {
+    const keyUpPressHandler = (e: KeyboardEvent) => {
       setControls((origControls) => ({
         ...origControls,
         [e.key.toLowerCase()]: false,
