@@ -1,9 +1,7 @@
 import { Canvas as ThreeCanvas } from '@react-three/fiber';
-import { Environment } from './Environment';
 import useEditorContext from '@/app/editor/EditorContext';
-import CanvasContent from './CanvasContent';
+import Scene from './Scene';
 import { useCallback, useEffect } from 'react';
-import SkyBox from './TheSkyBox';
 import api from '@/client/common/utils/api';
 import { useQuery } from '@tanstack/react-query';
 import { setTemplates } from '@/client/editor/stores/blockType/blockTypeSlice';
@@ -37,13 +35,12 @@ const Canvas = () => {
       onKeyDown={(e) => keyboard.onKeyDown(e.nativeEvent)}
       style={{ backgroundColor: 'goldenrod' }}
       shadows
-      camera={{ position: [0, 50, 75], fov: 25 }}
+      // camera={{ position: [0, 50, 75], fov: 25 }}
+      camera={{ position: [-6, 3.9, 6.21], fov: 25 }}
       tabIndex={0}
       ref={canvasRef}
     >
-      {data && <CanvasContent />}
-      <Environment />
-      <SkyBox />
+      {data && <Scene />}
     </ThreeCanvas>
   );
 };
