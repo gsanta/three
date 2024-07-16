@@ -35,8 +35,7 @@ const Canvas = () => {
       onKeyDown={(e) => keyboard.onKeyDown(e.nativeEvent)}
       style={{ backgroundColor: 'goldenrod' }}
       shadows
-      // camera={{ position: [0, 50, 75], fov: 25 }}
-      camera={{ position: [-6, 3.9, 6.21], fov: 25 }}
+      camera={{ position: [0, 50, 75], fov: 25 }}
       tabIndex={0}
       ref={canvasRef}
     >
