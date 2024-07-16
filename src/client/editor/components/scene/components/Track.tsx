@@ -1,26 +1,26 @@
 import { useGLTF, useTexture } from '@react-three/drei';
 import { useEffect } from 'react';
-import { ColliderBox } from './ColliderBox';
 import { Mesh } from 'three';
 
 const Track = () => {
-  const { nodes } = useGLTF('track.glb');
+  const track = useGLTF('track.glb');
 
-  const colorMap = useTexture('track.png');
+  const colorMap = useTexture('color_map.png');
+  colorMap.flipY = false;
 
   useEffect(() => {
     colorMap.anisotropy = 16;
   }, [colorMap]);
 
-  const geometry = (nodes[1] as Mesh).geometry;
+  const geometry = (track.scene.children[0] as Mesh).geometry;
 
   return (
     <>
       <mesh geometry={geometry}>
-        <meshBasicMaterial toneMapped={false} map={colorMap} />
+        <meshBasicMaterial map={colorMap} />
       </mesh>
 
-      <ColliderBox position={[1.75, 0, 0.5]} scale={[0.3, 1, 0.3]} />
+      {/* <ColliderBox position={[1.75, 0, 0.5]} scale={[0.3, 1, 0.3]} />
       <ColliderBox position={[2.5, 0, -1.4]} scale={[0.3, 1, 0.3]} />
       <ColliderBox position={[0.6, 0, -3.8]} scale={[0.3, 1, 0.3]} />
       <ColliderBox position={[-1.95, 0, -5.18]} scale={[0.3, 1, 0.3]} />
@@ -50,7 +50,7 @@ const Track = () => {
       <ColliderBox position={[-4.53, 0, -0.65]} scale={[0.1, 0.5, 0.1]} />
       <ColliderBox position={[-4.15, 0, -0.67]} scale={[0.1, 0.5, 0.1]} />
       <ColliderBox position={[-4.9, 0, -0.58]} scale={[0.1, 0.5, 0.1]} />
-      <ColliderBox position={[-0.3, 0, 1]} scale={[0.1, 0.5, 0.1]} />
+      <ColliderBox position={[-0.3, 0, 1]} scale={[0.1, 0.5, 0.1]} /> */}
     </>
   );
 };

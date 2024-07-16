@@ -36,11 +36,11 @@ export const useControls = (vehicleApi: RaycastVehiclePublicApi, chassisApi: Pub
 
   useEffect(() => {
     if (controls.w) {
-      vehicleApi.applyEngineForce(150, 2);
-      vehicleApi.applyEngineForce(150, 3);
+      vehicleApi.applyEngineForce(1500, 2);
+      vehicleApi.applyEngineForce(1500, 3);
     } else if (controls.s) {
-      vehicleApi.applyEngineForce(-150, 2);
-      vehicleApi.applyEngineForce(-150, 3);
+      vehicleApi.applyEngineForce(-500, 2);
+      vehicleApi.applyEngineForce(-500, 3);
     } else {
       vehicleApi.applyEngineForce(0, 2);
       vehicleApi.applyEngineForce(0, 3);

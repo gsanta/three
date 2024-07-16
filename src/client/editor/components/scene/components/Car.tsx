@@ -11,15 +11,15 @@ const Car = () => {
   const car = useGLTF('car.glb').scene;
 
   useEffect(() => {
-    car.scale.set(0.0012, 0.0012, 0.0012);
+    car.scale.set(0.012, 0.012, 0.012);
     car.children[0].position.set(-365, -18, -67);
   }, [car]);
 
   const position = [-1.5, 0.5, 3] as Num3;
-  const width = 0.15;
-  const height = 0.07;
-  const front = 0.15;
-  const wheelRadius = 0.05;
+  const width = 1.5;
+  const height = 0.7;
+  const front = 1.5;
+  const wheelRadius = 0.5;
 
   const chassisBodyArgs = [width, height, front * 2] as Num3;
   const [chassisBody, chassisApi] = useBox<Mesh<BufferGeometry>>(

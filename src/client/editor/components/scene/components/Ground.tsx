@@ -4,6 +4,7 @@ import { MeshReflectorMaterial, useTexture } from '@react-three/drei';
 import { ThreeEvent } from '@react-three/fiber';
 import { useCallback, useEffect, useRef } from 'react';
 import { BufferAttribute, BufferGeometry, Mesh } from 'three';
+import Grid from './Grid';
 
 const Ground = () => {
   const { tool } = useEditorContext();
@@ -53,6 +54,7 @@ const Ground = () => {
     <>
       <mesh
         ref={groundMesh}
+        name="plane"
         position={[-2.285, -0.01, -1.325]}
         rotation-x={-Math.PI * 0.5}
         onPointerEnter={handleDefaultPointerEnter}
@@ -63,6 +65,8 @@ const Ground = () => {
         <planeGeometry args={[100, 100]} />
         <meshBasicMaterial opacity={0.325} alphaMap={gridMap} transparent={true} color={'white'} />
       </mesh>
+
+      <Grid />
 
       <mesh ref={meshRef} position={[-2.285, -0.015, -1.325]} rotation-x={-Math.PI * 0.5} rotation-z={-0.079}>
         <circleGeometry args={[70, 50]} />
