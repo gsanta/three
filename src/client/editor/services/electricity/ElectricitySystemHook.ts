@@ -11,7 +11,7 @@ class ElectricitySystemHook extends SystemHook {
     this.updateElectricSystem = new UpdateElectricSystem(blockStore, electricityStore);
   }
 
-  onCommit(updates: UpdateBlocks) {
+  onCommit(updates: UpdateBlocks['blockUpdates']) {
     this.updateElectricSystem.update(updates);
   }
 
