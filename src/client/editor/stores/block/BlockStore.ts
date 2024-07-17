@@ -79,7 +79,13 @@ class BlockStore {
   }
 
   getBlockType(type: string) {
-    return this.store.getState().blockType.blocks.find((block) => block.type === type);
+    const blockType = this.store.getState().blockType.blocks.find((block) => block.type === type);
+
+    if (!blockType) {
+      throw new Error(`Block type ${type} not found`);
+    }
+
+    return blockType;
   }
 
   getRootBlockIds() {

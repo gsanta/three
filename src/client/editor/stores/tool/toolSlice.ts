@@ -12,7 +12,7 @@ export type ToolState = {
 };
 
 export const initialToolState: ToolState = {
-  selectedTool: ToolName.Add,
+  selectedTool: ToolName.Select,
   select: {
     moveAxis: [true, true, true],
     templateName: 'box',

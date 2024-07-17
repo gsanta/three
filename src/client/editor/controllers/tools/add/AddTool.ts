@@ -6,15 +6,8 @@ import SceneStore from '../../../components/scene/SceneStore';
 import FactoryService from '../../../services/factory/FactoryService';
 import HoverTool from '../HoverTool';
 import SceneService from '../../../components/scene/service/SceneService';
-import AddWallBlock from './AddWallBlock';
 import AddBlock from './AddBlock';
-import AddRoofBlock from './AddRoofBlock';
-import AddHomeElectricsBlock from './AddHomeElectricsBlock';
-import AddRoadBlock from './AddRoadBlock';
-import AddSocketBlock from './AddSocketBlock';
-import AddWeatherHeadBlock from './AddWeatherHeadBlock';
-import AddBlockToPlain from './AddBlockToPlain';
-import AddPoleBlock from './AddPoleBlock';
+import AddHouse from '@/client/editor/use_cases/add/AddHouse';
 
 class AddTool extends HoverTool {
   constructor(
@@ -30,16 +23,9 @@ class AddTool extends HoverTool {
 
     // this.addBlockToPlain = new AddBlockToPlain(blockStore, factoryService, sceneStore, update);
 
-    this.addBlock = [
-      new AddBlockToPlain(factoryService, update),
-      new AddHomeElectricsBlock(blockStore, factoryService, sceneService, sceneStore, update),
-      new AddPoleBlock(blockStore, factoryService, sceneStore, update),
-      new AddRoadBlock(blockStore, factoryService, sceneStore, update),
-      new AddRoofBlock(blockStore, factoryService, sceneStore, update),
-      new AddSocketBlock(blockStore, factoryService, sceneService, sceneStore, update),
-      new AddWallBlock(blockStore, factoryService, sceneStore, update),
-      new AddWeatherHeadBlock(blockStore, factoryService, sceneService, sceneStore, update),
-    ];
+    this.addBlock = new AddBlock(blockStore, factoryService, sceneService, sceneStore, update);
+
+    this.addHouse = new AddHouse(this.blockStore, this.update, this.addBlock);
   }
 
   onPointerUp({ clientX, clientY, pos }: ToolInfo) {
@@ -56,22 +42,35 @@ class AddTool extends HoverTool {
 
     const targetBlock = targetBlockId ? this.blockStore.getBlock(targetBlockId) : undefined;
 
-    const selectedAddBlock = this.addBlock.find(
-      (addBlock) =>
-        addBlock.sourceCategories.includes(newBlockType.category) &&
-        addBlock.targetCategories.includes(targetBlock?.category || 'plain'),
-    );
+    if (newBlockType.category === 'building-bases') {
+      this.addHouse.add({
+        clientX,
+        clientY,
+        targetBlock,
+        targetPartIndex,
+        newBlockType,
+        position: pos.toArray(),
+      });
+    } else {
+      const selectedAddBlock = this.addBlock.getAddBlock(newBlockType.category, targetBlock?.category || 'plain');
 
-    selectedAddBlock?.perform({
-      clientX,
-      clientY,
-      targetBlock,
-      targetPartIndex,
-      newBlockType,
-      position: pos.toArray(),
-    });
+      const edit = this.update.getTransaction();
 
-    this.lastAddblock = selectedAddBlock;
+      selectedAddBlock?.perform({
+        edit,
+        clientX,
+        clientY,
+        targetBlock,
+        targetPartIndex,
+        newBlockType,
+        position: pos.toArray(),
+      });
+
+      edit.commit();
+    }
+
+    this.newBlockCategory = newBlockType.category;
+    this.targetBlockCategory = targetBlock?.category || 'plain';
 
     // if (!targetBlockId || !this.addToBlock[this.blockStore.getBlock(targetBlockId).category]) {
     //   const applyPosition = this.getAddBlockStrategy.getStrategy({
@@ -113,17 +112,27 @@ class AddTool extends HoverTool {
 
   onRendered() {
     try {
-      if (this.lastAddblock) {
-        this.lastAddblock.performAfterRender();
+      if (this.newBlockCategory && this.targetBlockCategory) {
+        if (this.newBlockCategory === 'building-bases') {
+          this.addHouse.performAfterRender();
+        } else {
+          const selectedAddBlock = this.addBlock.getAddBlock(this.newBlockCategory, this.targetBlockCategory);
+          selectedAddBlock?.performAfterRender();
+        }
       }
     } finally {
-      this.lastAddblock = undefined;
+      this.newBlockCategory = undefined;
+      this.targetBlockCategory = undefined;
     }
   }
 
-  private lastAddblock?: AddBlock;
+  private newBlockCategory: string | undefined;
 
-  private addBlock: AddBlock[] = [];
+  private targetBlockCategory: string | undefined;
+
+  private addHouse: AddHouse;
+
+  private addBlock: AddBlock;
 }
 
 export default AddTool;

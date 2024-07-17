@@ -1,8 +1,8 @@
-import AddBlock from './AddBlock';
+import AddBlockType from './AddBlockType';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 
-class AddBlockToPlain extends AddBlock {
+class AddBlockToPlain extends AddBlockType {
   constructor(factoryService: FactoryService, updateService: TransactionService) {
     super();
 
@@ -14,13 +14,10 @@ class AddBlockToPlain extends AddBlock {
     this.targetCategories = ['plain'];
   }
 
-  perform({ newBlockType, position }: Parameters<AddBlock['perform']>[0]) {
-    const edit = this.updateService.getTransaction();
+  perform({ edit, newBlockType, position }: Parameters<AddBlockType['perform']>[0]) {
     this.factoryService.create(edit, newBlockType.type, { position });
     const blockId = edit.getLastBlock().id;
-    edit.select(blockId).commit();
-
-    // this.blockId = blockId;
+    edit.select(blockId);
   }
 
   private factoryService: FactoryService;

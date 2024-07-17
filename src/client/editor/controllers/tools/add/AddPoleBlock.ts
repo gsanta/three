@@ -1,11 +1,11 @@
-import AddBlock from './AddBlock';
+import AddBlockType from './AddBlockType';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import JoinPoles from '@/client/editor/use_cases/block/JoinPoles';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 
-class AddPoleBlock extends AddBlock {
+class AddPoleBlock extends AddBlockType {
   constructor(
     blockStore: BlockStore,
     factoryService: FactoryService,
@@ -26,13 +26,13 @@ class AddPoleBlock extends AddBlock {
     this.targetCategories = ['plain'];
   }
 
-  perform({ newBlockType, position }: Parameters<AddBlock['perform']>[0]) {
-    const edit = this.updateService.getTransaction();
+  perform({ edit, newBlockType, position }: Parameters<AddBlockType['perform']>[0]) {
     this.factoryService.create(edit, newBlockType.type, { position });
     const blockId = edit.getLastBlock().id;
     edit.select(blockId).commit();
 
     this.blockId = blockId;
+    return edit.getLastBlock();
   }
 
   performAfterRender() {
@@ -56,7 +56,7 @@ class AddPoleBlock extends AddBlock {
       ['#4', '#4'],
     ]);
 
-    this.updateService.getTransaction().select(null).select(this.blockId).commit();
+    this.updateService.getTransaction().select(null).select(this.blockId);
   }
 
   private blockId?: string;

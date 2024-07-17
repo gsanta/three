@@ -1,4 +1,4 @@
-import AddBlock from './AddBlock';
+import AddBlockType from './AddBlockType';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
@@ -6,7 +6,7 @@ import BlockStore from '@/client/editor/stores/block/BlockStore';
 import AddBlockToPointerPos from '@/client/editor/use_cases/block/AddBlockToPointerPos';
 import SceneService from '@/client/editor/components/scene/service/SceneService';
 
-class AddHomeElectricsBlock extends AddBlock {
+class AddHomeElectricsBlock extends AddBlockType {
   constructor(
     blockStore: BlockStore,
     factoryService: FactoryService,
@@ -24,22 +24,23 @@ class AddHomeElectricsBlock extends AddBlock {
     this.targetCategories = ['building-bases'];
   }
 
-  perform({ clientX, clientY, targetBlock, targetPartIndex, newBlockType }: Parameters<AddBlock['perform']>[0]) {
+  perform({
+    edit,
+    clientX,
+    clientY,
+    targetBlock,
+    targetPartIndex,
+    newBlockType,
+  }: Parameters<AddBlockType['perform']>[0]) {
     if (!targetPartIndex || !targetBlock) {
       return undefined;
     }
-
-    const edit = this.updateService.getTransaction();
 
     const targetPartCategory = targetBlock.partDetails[targetPartIndex]?.category;
 
     if (targetPartCategory === 'floor-slot') {
       this.addBlockToPointerPos.perform(edit, targetBlock.id, targetPartIndex, newBlockType.type, clientX, clientY);
     }
-
-    edit.commit();
-
-    return undefined;
   }
 
   private addBlockToPointerPos: AddBlockToPointerPos;

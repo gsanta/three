@@ -60,13 +60,13 @@ class SelectTool extends HoverTool {
       edit.updateBlock(blockId, { position: addVector(blocks[blockId].position, drag) }),
     );
 
-    edit.commit();
+    edit.commit(false);
 
     store.dispatch(updateSelectTool({ drag: [0, 0, 0] }));
   }
 
   onDeselect() {
-    this.update.getTransaction().select(null).commit();
+    this.update.getTransaction().select(null).commit(false);
   }
 
   scaleMesh(scale: number, block: Block) {

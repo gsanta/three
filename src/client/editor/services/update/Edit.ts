@@ -18,7 +18,11 @@ class Edit {
     this.updaters.lamps = new LampUpdater(store);
   }
 
-  commit() {
+  commit(history?: boolean) {
+    if (!this.updates.length) {
+      return;
+    }
+
     this.updates.forEach((update) => {
       if ('type' in update && update.type === 'update' && 'decoration' in update) {
         const block = this.store.getBlock(update.decoration.id);
@@ -26,7 +30,7 @@ class Edit {
       }
     });
 
-    this.dispatchStore.dispatch(updateBlocks(this.updates));
+    this.dispatchStore.dispatch(updateBlocks({ blockUpdates: this.updates, history }));
 
     this.systemHooks.forEach((systemHook) => systemHook.onCommit(this.updates));
   }
@@ -173,7 +177,7 @@ class Edit {
     return this.updates.find((update) => ('remove' in update ? update.remove.id === id : false));
   }
 
-  private updates: UpdateBlocks = [];
+  private updates: UpdateBlocks['blockUpdates'] = [];
 
   private updaters: Record<string, BlockUpdater> = {};
 

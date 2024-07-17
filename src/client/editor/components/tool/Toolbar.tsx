@@ -21,7 +21,7 @@ const Toolbar = () => {
       paddingBlockEnd="1"
       display="flex"
       flexDirection="column"
-      gap="1"
+      gap="3"
       alignItems="center"
     >
       {tool.getTools().map(({ iconName, name, showOnToolbar }) => {
@@ -34,6 +34,7 @@ const Toolbar = () => {
           <Tooltip key={name} label={name} placement="right">
             <ToggleButton
               className="iconOnly"
+              colorScheme="red"
               toggle={toggle}
               onToggle={() => handleSelectTool(name)}
               variant="outline"
