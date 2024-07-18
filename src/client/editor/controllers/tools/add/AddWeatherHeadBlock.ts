@@ -24,12 +24,17 @@ class AddWeatherHeadBlock extends AddBlockType {
     this.targetCategories = ['roofs'];
   }
 
-  perform({ clientX, clientY, targetBlock, targetPartIndex, newBlockType }: Parameters<AddBlockType['perform']>[0]) {
+  perform({
+    clientX,
+    clientY,
+    edit,
+    targetBlock,
+    targetPartIndex,
+    newBlockType,
+  }: Parameters<AddBlockType['perform']>[0]) {
     if (!targetPartIndex || !targetBlock) {
       return undefined;
     }
-
-    const edit = this.updateService.getTransaction();
 
     this.addBlockToPointerPos.perform(edit, targetBlock.id, targetPartIndex, newBlockType.type, clientX, clientY);
   }
