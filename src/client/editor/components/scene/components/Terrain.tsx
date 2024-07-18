@@ -2,7 +2,7 @@ import useEditorContext from '@/app/editor/EditorContext';
 import { Plane } from '@react-three/drei';
 import { ThreeEvent, useLoader } from '@react-three/fiber';
 import { useCallback } from 'react';
-import { RepeatWrapping, TextureLoader } from 'three';
+import { TextureLoader } from 'three';
 
 const Terrain = () => {
   const { tool } = useEditorContext();

@@ -6,14 +6,6 @@ const variantOutline = defineStyle((props) => {
 
   const bg = `${colorScheme}.500`;
 
-  const getBackgroundColor = () => {
-    if (colorScheme === 'orange') {
-      return mode(`${colorScheme}.200`, `${colorScheme}.500`)(props);
-    } else {
-      return mode(`${colorScheme}.200`, `whiteAlpha.200`)(props);
-    }
-  };
-
   const getBorderColor = () => {
     if (colorScheme === 'gray') {
       return mode(`gray.200`, `whiteAlpha.400`)(props);
