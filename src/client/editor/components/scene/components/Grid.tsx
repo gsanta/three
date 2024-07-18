@@ -50,11 +50,18 @@ const Grid = () => {
   const gridSize = useAppSelector((state) => state.editor.gridSize);
   const carGridPos = useAppSelector((state) => state.editor.carGridPos);
 
-  const hightlightRows = [carGridPos[1], carGridPos[1] + 1];
-  const hightlightCols = [carGridPos[0], carGridPos[0] + 1];
+  const hightlightRows = [carGridPos[1] - 1, carGridPos[1], carGridPos[1] + 1];
+  const hightlightCols = [carGridPos[0] - 1, carGridPos[0], carGridPos[0] + 1];
+
+  const px = carGridPos[0] * gridSize + gridOffset[0];
+  const pz = carGridPos[1] * gridSize + gridOffset[1];
 
   return (
     <>
+      <mesh position={[px, 5, pz]}>
+        <boxGeometry />
+        <meshBasicMaterial transparent={true} opacity={0.25} />
+      </mesh>
       {Array.from({ length: 16 }).map((_, i) => (
         <Row
           count={20}

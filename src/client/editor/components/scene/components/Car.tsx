@@ -61,8 +61,8 @@ const Car = () => {
 
     const distanceToOrigin = Math.sqrt(vec.x ** 2 + vec.z ** 2);
 
-    const gridPosX = Math.floor((vec.x - gridOffset[0]) / gridSize);
-    const gridPosZ = Math.floor((vec.z - gridOffset[1]) / gridSize);
+    const gridPosX = Math.floor((vec.x - gridOffset[0] + gridSize / 2) / gridSize);
+    const gridPosZ = Math.floor((vec.z - gridOffset[1] + gridSize / 2) / gridSize);
 
     if (carGridPos[0] !== gridPosX || carGridPos[1] !== gridPosZ) {
       dispatch(setCarGridPos([gridPosX, gridPosZ]));
