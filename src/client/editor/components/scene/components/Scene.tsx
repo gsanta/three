@@ -54,22 +54,7 @@ const Scene = () => {
           materialProps={{ opacity: 0.5, transparent: true }}
         />
       )}
-      {blockIds.map((id) => {
-        if (editTargetBlock === id) {
-          return;
-        }
 
-        return (
-          <RootMeshRenderer
-            key={id}
-            blockId={id}
-            meshProps={{
-              onPointerDown: handlePointerDown,
-              onPointerEnter: handlePointerEnter,
-            }}
-          />
-        );
-      })}
       <mesh position={[5, 1, 0]} castShadow>
         <cylinderGeometry args={[0.02, 0.02, 2, 8]} />
         <meshStandardMaterial color="brown" />
@@ -79,6 +64,22 @@ const Scene = () => {
       <Environment files="envmap.hdr" background={true} />
 
       <Physics broadphase="SAP" gravity={[0, -2.6, 0]}>
+        {blockIds.map((id) => {
+          if (editTargetBlock === id) {
+            return;
+          }
+
+          return (
+            <RootMeshRenderer
+              key={id}
+              blockId={id}
+              meshProps={{
+                onPointerDown: handlePointerDown,
+                onPointerEnter: handlePointerEnter,
+              }}
+            />
+          );
+        })}
         <Track />
         <Ground />
         <Car />

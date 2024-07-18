@@ -5,12 +5,15 @@ import { ThreeEvent } from '@react-three/fiber';
 import { useCallback, useEffect, useRef } from 'react';
 import { BufferAttribute, BufferGeometry, Mesh } from 'three';
 import Grid from './Grid';
+import { useAppSelector } from '@/client/common/hooks/hooks';
 
 const Ground = () => {
   const { tool } = useEditorContext();
 
   const gridMap = useTexture('grid.png');
   const alphaMap = useTexture('alpha-map.png');
+
+  const groundRadius = useAppSelector((state) => state.editor.groundRadius);
 
   useEffect(() => {
     gridMap.anisotropy = 16;
@@ -55,7 +58,7 @@ const Ground = () => {
       <mesh
         ref={groundMesh}
         name="plane"
-        position={[-2.285, -0.01, -1.325]}
+        position={[0, -0.01, 0]}
         rotation-x={-Math.PI * 0.5}
         onPointerEnter={handleDefaultPointerEnter}
         onPointerDown={(e) => tool.onPointerDown(e)}
@@ -68,8 +71,8 @@ const Ground = () => {
 
       <Grid />
 
-      <mesh ref={meshRef} position={[-2.285, -0.015, -1.325]} rotation-x={-Math.PI * 0.5} rotation-z={-0.079}>
-        <circleGeometry args={[70, 50]} />
+      <mesh ref={meshRef} position={[0, -0.015, 0]} rotation-x={-Math.PI * 0.5}>
+        <circleGeometry args={[groundRadius, 50]} />
         <MeshReflectorMaterial
           //   aoMap={aoMap}
           alphaMap={alphaMap}

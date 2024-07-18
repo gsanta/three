@@ -1,22 +1,23 @@
+import { useAppSelector } from '@/client/common/hooks/hooks';
 import { useState } from 'react';
 
 type RowProps = {
   count: number;
   rowIndex: number;
+  offsetX: number;
+  offsetZ: number;
   x: number;
   z: number;
-  width: number;
-  height: number;
+  gridSize: number;
+  highlightRows: number[];
+  highlightCols: number[];
 };
 
-const Row = ({ count, rowIndex, x, z, height, width }: RowProps) => {
+const Row = ({ count, highlightRows, highlightCols, rowIndex, x, z, offsetX, offsetZ, gridSize }: RowProps) => {
   const [currentGridItem, setCurrentGridItem] = useState<number>();
-  const zPos = z * height;
+  const zPos = z * gridSize;
 
-  const getX = (index: number) => x * width + index * width;
-
-  const offsetX = 4;
-  const offsetZ = 5;
+  const getX = (index: number) => x * gridSize + index * gridSize;
 
   return (
     <>
@@ -28,12 +29,15 @@ const Row = ({ count, rowIndex, x, z, height, width }: RowProps) => {
           position={[getX(i) + offsetX, 0.1, zPos + offsetZ]}
           rotation-x={-Math.PI * 0.5}
         >
-          <planeGeometry args={[7.5, 7.5]} />
+          <planeGeometry args={[gridSize - 0.1, gridSize - 0.1]} />
           <meshBasicMaterial
-            opacity={0.3}
+            opacity={0.2}
             color="blue"
             transparent
-            visible={currentGridItem === rowIndex * count + i}
+            visible={
+              currentGridItem === rowIndex * count + i ||
+              (highlightRows.includes(rowIndex) && highlightCols.includes(i))
+            }
           />
         </mesh>
       ))}
@@ -42,10 +46,27 @@ const Row = ({ count, rowIndex, x, z, height, width }: RowProps) => {
 };
 
 const Grid = () => {
+  const gridOffset = useAppSelector((state) => state.editor.gridOffset);
+  const gridSize = useAppSelector((state) => state.editor.gridSize);
+  const carGridPos = useAppSelector((state) => state.editor.carGridPos);
+
+  const hightlightRows = [carGridPos[1], carGridPos[1] + 1];
+  const hightlightCols = [carGridPos[0], carGridPos[0] + 1];
+
   return (
     <>
       {Array.from({ length: 16 }).map((_, i) => (
-        <Row count={10} rowIndex={i} x={-5} z={-9 + i} width={7.5} height={7.5} />
+        <Row
+          count={20}
+          highlightRows={hightlightRows}
+          highlightCols={hightlightCols}
+          rowIndex={i}
+          x={0}
+          z={i}
+          offsetX={gridOffset[0]}
+          offsetZ={gridOffset[1]}
+          gridSize={gridSize}
+        />
       ))}
     </>
   );
