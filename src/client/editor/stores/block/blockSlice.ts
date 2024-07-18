@@ -57,7 +57,7 @@ export type UpdateBlock<K extends BlockDecoration> =
   | { remove: Block }
   | BlockSelect;
 
-export type UpdateBlocks = Array<UpdateBlock<BlockDecoration>>;
+export type UpdateBlocks = { blockUpdates: Array<UpdateBlock<BlockDecoration>>; history?: boolean };
 
 export const blockSlice = createSlice({
   name: 'block',
@@ -84,7 +84,7 @@ export const blockSlice = createSlice({
     updateBlocks(state: BlockState, action: PayloadAction<UpdateBlocks>) {
       const updates = action.payload;
 
-      updates.forEach((update) => {
+      updates.blockUpdates.forEach((update) => {
         if ('remove' in update) {
           const rootIndex = state.rootBlocksIds.indexOf(update.remove.id);
           if (rootIndex !== -1) {

@@ -1,4 +1,4 @@
-import AddBlock from './AddBlock';
+import AddBlockType from './AddBlockType';
 import Block from '@/client/editor/types/Block';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
 import AddBlockToSlot from '@/client/editor/use_cases/block/AddBlockToSlot';
@@ -6,7 +6,7 @@ import SceneStore from '@/client/editor/components/scene/SceneStore';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 
-class AddWallBlock extends AddBlock {
+class AddWallBlock extends AddBlockType {
   constructor(
     blockStore: BlockStore,
     factoryService: FactoryService,
@@ -23,7 +23,7 @@ class AddWallBlock extends AddBlock {
     this.targetCategories = ['building-bases'];
   }
 
-  perform({ targetBlock, targetPartIndex, newBlockType }: Parameters<AddBlock['perform']>[0]) {
+  perform({ edit, targetBlock, targetPartIndex, newBlockType }: Parameters<AddBlockType['perform']>[0]) {
     if (!targetPartIndex || !targetBlock) {
       return undefined;
     }
@@ -33,8 +33,6 @@ class AddWallBlock extends AddBlock {
     if (targetPartCategory !== 'wall-slot') {
       return;
     }
-
-    const edit = this.updateService.getTransaction();
 
     const targetPart = targetBlock.partDetails[targetPartIndex];
     const wallBlock = this.addBlockToSlot.perform(edit, targetBlock.id, targetPartIndex, newBlockType.type);
@@ -64,10 +62,6 @@ class AddWallBlock extends AddBlock {
     // if (targetPartCategory === 'floor-slot' && newBlockType.category === 'home-electrics') {
     //   this.addBlockToPointerPos.perform(edit, targetBlock.id, targetPartIndex, newBlockType.type, clientX, clientY);
     // }
-
-    edit.commit();
-
-    return undefined;
   }
 
   private addBlockToSlot: AddBlockToSlot;

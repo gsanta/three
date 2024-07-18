@@ -43,7 +43,7 @@ class UpdateElectricSystem {
     this.electricSystemStore = electricSystemStore;
   }
 
-  update(updates: UpdateBlocks) {
+  update(updates: UpdateBlocks['blockUpdates']) {
     // updates.forEach((update) => {
     //   if ('remove' in update && update.remove.decorations.includes('devices')) {
     //     nodeUpdates.push({
@@ -63,7 +63,7 @@ class UpdateElectricSystem {
     }
   }
 
-  private shouldUpdate(updates: UpdateBlocks) {
+  private shouldUpdate(updates: UpdateBlocks['blockUpdates']) {
     return updates.find(
       (update) => 'type' in update && 'decoration' in update && update.decoration.category === 'devices',
     );

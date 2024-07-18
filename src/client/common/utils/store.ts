@@ -8,8 +8,9 @@ import temporarySlice, { TemporaryState } from '@/client/editor/stores/block/tem
 import electricitySlice, { ElectricityState } from '@/client/editor/stores/electricity/electricitySlice';
 
 const sceneSliceUndoable = undoable(blockSlice, {
-  filter: (action) => {
-    return action.type !== hover.type;
+  filter: (action: { payload: { history?: boolean }; type: string }) => {
+    console.log(action.type);
+    return action.type !== hover.type && action.payload?.history !== false;
   },
 });
 

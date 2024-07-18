@@ -2,13 +2,22 @@ import Num3 from '@/client/editor/types/Num3';
 import { useBox, useRaycastVehicle } from '@react-three/cannon';
 import { useGLTF } from '@react-three/drei';
 import { RefObject, useEffect, useRef } from 'react';
-import { Mesh, BufferGeometry, Group, Object3DEventMap } from 'three';
+import { Mesh, BufferGeometry, Group, Object3DEventMap, Vector3 } from 'three';
 import { useWheels } from '../../hooks/useWheels';
 import { WheelDebug } from './WheelDebug';
 import { useControls } from '../../hooks/useControls';
+import { useFrame } from '@react-three/fiber';
+import { useAppDispatch, useAppSelector } from '@/client/common/hooks/hooks';
+import { setCarGridPos } from '@/client/editor/stores/editorSlice';
 
 const Car = () => {
   const car = useGLTF('car.glb').scene;
+  const groundRadius = useAppSelector((state) => state.editor.groundRadius);
+  const gridOffset = useAppSelector((state) => state.editor.gridOffset);
+  const gridSize = useAppSelector((state) => state.editor.gridSize);
+  const carGridPos = useAppSelector((state) => state.editor.carGridPos);
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     car.scale.set(0.012, 0.012, 0.012);
@@ -43,6 +52,29 @@ const Car = () => {
   );
 
   useControls(vehicleApi, chassisApi);
+
+  useFrame(() => {
+    const vec = new Vector3();
+    chassisBody.current?.getWorldPosition(vec);
+
+    const radiusLimit = groundRadius - 5;
+
+    const distanceToOrigin = Math.sqrt(vec.x ** 2 + vec.z ** 2);
+
+    const gridPosX = Math.floor((vec.x - gridOffset[0]) / gridSize);
+    const gridPosZ = Math.floor((vec.z - gridOffset[1]) / gridSize);
+
+    if (carGridPos[0] !== gridPosX || carGridPos[1] !== gridPosZ) {
+      dispatch(setCarGridPos([gridPosX, gridPosZ]));
+    }
+
+    if (distanceToOrigin > radiusLimit) {
+      chassisApi.velocity.set(0, 0, 0);
+      chassisApi.angularVelocity.set(0, 0, 0);
+
+      chassisApi.position.set(0, 5, 0);
+    }
+  });
 
   return (
     <group ref={vehicle as RefObject<Group<Object3DEventMap>>} name="vehicle">

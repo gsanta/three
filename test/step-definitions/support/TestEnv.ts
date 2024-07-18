@@ -86,7 +86,7 @@ export const setupTestEnv = (): TestEnv => {
     effect: async (action) => {
       const payload = action.payload as UpdateBlocks;
 
-      payload.forEach((u) => {
+      payload.blockUpdates.forEach((u) => {
         if ('type' in u && 'block' in u && u.type === 'update') {
           testStore.setLastCreatedBlock(u.block);
         }

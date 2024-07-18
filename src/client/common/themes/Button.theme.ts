@@ -4,13 +4,7 @@ import { mode } from '@chakra-ui/theme-tools';
 const variantOutline = defineStyle((props) => {
   const { colorScheme } = props;
 
-  const getBackgroundColor = () => {
-    if (colorScheme === 'orange') {
-      return mode(`${colorScheme}.200`, `${colorScheme}.500`)(props);
-    } else {
-      return mode(`${colorScheme}.200`, `whiteAlpha.200`)(props);
-    }
-  };
+  const bg = `${colorScheme}.500`;
 
   const getBorderColor = () => {
     if (colorScheme === 'gray') {
@@ -41,7 +35,7 @@ const variantOutline = defineStyle((props) => {
   return {
     ...defaultTheme,
     borderRadius: 'sm',
-    bg: getBackgroundColor(),
+    bg,
     color: 'white',
     border: '1px solid',
     borderColor: getBorderColor(),
@@ -51,6 +45,7 @@ const variantOutline = defineStyle((props) => {
     _active: {
       bg: getActiveBackgroundColor(),
     },
+    boxShadow: `0px 5px 5px 1px rgba(197,48,48,1)`,
   };
 });
 

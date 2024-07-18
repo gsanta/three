@@ -1,7 +1,7 @@
 import Num3 from '@/client/editor/types/Num3';
 import { useBox } from '@react-three/cannon';
 
-const debug = true;
+const debug = false;
 
 type ColliderBoxProps = {
   position: Num3;
@@ -17,7 +17,7 @@ export const ColliderBox = ({ position, scale }: ColliderBoxProps) => {
 
   return (
     debug && (
-      <mesh position={position}>
+      <mesh>
         <boxGeometry args={scale} />
         <meshBasicMaterial transparent={true} opacity={0.25} />
       </mesh>

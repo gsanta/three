@@ -7,13 +7,11 @@ export type ButtonProps = _ButtonProps & {
 };
 
 const ToggleButton = forwardRef<ButtonProps, 'input'>((props, ref) => {
-  const { children, toggle, onClick, onToggle, ...rest } = props;
+  const { children, colorScheme = 'gray', toggle, onClick, onToggle, ...rest } = props;
 
-  let colorScheme: _ButtonProps['colorScheme'] = 'gray';
-
-  if (toggle) {
-    colorScheme = 'orange';
-  }
+  // if (toggle) {
+  //   colorScheme = 'orange';
+  // }
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     onToggle(toggle);

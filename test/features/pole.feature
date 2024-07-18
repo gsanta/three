@@ -42,7 +42,6 @@ Feature: Pole
     Then pin '#3' of block 'examined' is empty
     Then pin '#4' of block 'examined' is empty
 
-  @only
   Scenario: Moving a pole joined to two other poles
     Given I have a scene with:
       | TYPE            | ID         | POS                     |

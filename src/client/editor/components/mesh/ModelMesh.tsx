@@ -7,8 +7,11 @@ import ModelMeshProps from '../types/ModelMeshProps';
 import ModelGroupMesh from './ModelGroupMesh';
 import ModelPartMesh from './ModelPartMesh';
 import useDevice from '../hooks/useDevice';
-import { Group } from 'three';
+import { Box3, Group, Mesh, Vector3 } from 'three';
 import ChildMeshRenderer from '../scene/components/ChildMeshRenderer';
+import { useEffect, useState } from 'react';
+import { ColliderBox } from '../scene/components/ColliderBox';
+import Num3 from '../../types/Num3';
 
 export const ModelMesh = ({ additions, block, materialProps, meshProps, overwrites }: ModelMeshProps) => {
   const ref = useRegisterScene<Group>();
@@ -24,6 +27,32 @@ export const ModelMesh = ({ additions, block, materialProps, meshProps, overwrit
 
   const geometryNodes = nodes as unknown as NodesType;
 
+  const [boundingBoxScale, setBoundingBoxScale] = useState<Num3>();
+  const [boundingBoxCenter, setBoundingBoxCenter] = useState<Num3>();
+
+  useEffect(() => {
+    if (!block.parent && ref.current?.children[0].name === 'root') {
+      const mesh = ref.current?.children[0] as Mesh;
+      const box = new Box3();
+
+      // ensure the bounding box is computed for its geometry
+      // this should be done only once (assuming static geometries)
+      mesh.geometry.computeBoundingBox();
+
+      box.copy(mesh.geometry.boundingBox!).applyMatrix4(mesh.matrixWorld);
+
+      setBoundingBoxScale(box.max.sub(box.min).toArray());
+
+      const center = new Vector3();
+      box.getCenter(center);
+
+      box.max.sub(box.min);
+
+      setBoundingBoxCenter([box.max.x - (box.max.x - box.min.x) / 2.0, 0, box.max.z - (box.max.z - box.min.z) / 2.0]);
+      // setBoundingBoxCenter([0, 0, 0]);
+    }
+  }, [block.parent, ref]);
+
   const component = (
     <group
       rotation={[0, 0, 0]}
@@ -34,6 +63,9 @@ export const ModelMesh = ({ additions, block, materialProps, meshProps, overwrit
       userData={{ modelId: block.id }}
       dispose={null}
     >
+      {boundingBoxScale && boundingBoxCenter && (
+        <ColliderBox position={block.position} scale={[boundingBoxScale[0], 10, boundingBoxScale[2]]} />
+      )}
       {block.parts.map((part) =>
         part.parts ? (
           <ModelGroupMesh
