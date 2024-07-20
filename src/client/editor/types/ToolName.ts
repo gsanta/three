@@ -5,6 +5,7 @@ enum ToolName {
   Erase = 'erase',
   Group = 'group',
   RayHelper = 'ray-helper',
+  RoomModel = 'room-model',
   Select = 'select',
 }
 

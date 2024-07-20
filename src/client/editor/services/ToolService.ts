@@ -11,6 +11,12 @@ import VectorUtils from '@/client/editor/utils/vectorUtils';
 import ToolStore from '../stores/tool/ToolStore';
 import { setSelectedTool } from '../stores/tool/toolSlice';
 
+export type ScenePointerEvent = ThreeEvent<PointerEvent> & {
+  gridIndex?: number;
+  gridX?: number;
+  gridY?: number;
+};
+
 class ToolService {
   constructor(tools: Tool[], toolStore: ToolStore) {
     this.tools = tools;
@@ -29,11 +35,14 @@ class ToolService {
     this.getTool(selectedTool)?.onExecute(this.info);
   }
 
-  onPointerDown(event: ThreeEvent<PointerEvent>) {
+  onPointerDown(event: ScenePointerEvent) {
     this.info.pos = event.point;
     this.info.clientX = event.clientX;
     this.info.clientY = event.clientY;
     this.info.downPos = event.point;
+    this.info.gridX = event.gridX;
+    this.info.gridY = event.gridY;
+    this.info.gridIndex = event.gridIndex;
 
     this.setEventObject(event);
 

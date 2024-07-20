@@ -126,6 +126,22 @@ class BlockStore {
     return this.getRoot(block.parent, expectedCategory);
   }
 
+  filterDescendants(blockId: string, filter: { category: string }): Block[] {
+    const block = this.getBlock(blockId);
+
+    const result: Block[] = [];
+
+    this.iterateDescendents(block, true, (descendant) => {
+      if (descendant.category === filter.category) {
+        result.push(descendant);
+      }
+
+      return false;
+    });
+
+    return result;
+  }
+
   isDescendentSelected(block: Block, checkSelf: boolean) {
     const terminate = this.iterateDescendents(block, checkSelf, (descendant: Block) => {
       return descendant.isSelected;

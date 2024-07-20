@@ -39,6 +39,7 @@ class BlockCreator {
       dependsOn: settings.dependsOn || [],
       isHovered: false,
       isSelected: false,
+      isVisible: true,
       parent: settings.parent,
       neighbourTo: [],
       id: id,

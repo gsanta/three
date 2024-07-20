@@ -99,7 +99,8 @@ export const ModelMesh = ({ additions, block, materialProps, meshProps, overwrit
         materialProps={materialProps}
         overwrites={{ rotation: [0, 0, 0], position: [0, 0, 0] }}
       /> */}
-      {component}
+
+      {block.isVisible && component}
       {block.children.map((child) => (
         <ChildMeshRenderer
           key={child}

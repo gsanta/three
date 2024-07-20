@@ -8,6 +8,7 @@ import HoverTool from '../HoverTool';
 import SceneService from '../../../components/scene/service/SceneService';
 import AddBlock from './AddBlock';
 import AddHouse from '@/client/editor/use_cases/add/AddHouse';
+import { store } from '@/client/common/utils/store';
 
 class AddTool extends HoverTool {
   constructor(
@@ -28,9 +29,15 @@ class AddTool extends HoverTool {
     this.addHouse = new AddHouse(this.blockStore, this.update, this.addBlock);
   }
 
-  onPointerUp({ clientX, clientY, pos }: ToolInfo) {
+  onPointerUp({ clientX, clientY, gridIndex, pos }: ToolInfo) {
     const { selectedBlockName } = this.blockStore.getBlockSettings();
     const newBlockType = this.blockStore.getBlockType(selectedBlockName);
+
+    const activeGridIndexes = store.getState().editor.activeGridIndexes;
+
+    if (gridIndex && !activeGridIndexes.includes(gridIndex)) {
+      return;
+    }
 
     if (!selectedBlockName || !newBlockType) {
       return;

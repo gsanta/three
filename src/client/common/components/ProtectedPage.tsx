@@ -24,6 +24,7 @@ import ControllerService from '@/client/editor/services/controller/ControllerSer
 import ElectricityStore from '@/client/editor/stores/electricity/ElectricityStore';
 import ElectricitySystemHook from '@/client/editor/services/electricity/ElectricitySystemHook';
 import SceneServiceImpl from '@/client/editor/components/scene/service/SceneServiceImpl';
+import RoomModeTool from '@/client/editor/controllers/tools/add/RoomModeTool';
 
 type ProtectedPageProps = {
   children: ReactNode;
@@ -74,6 +75,7 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
           new EraseTool(blockStore, transaction),
           new RayTool(blockStore, transaction, sceneStore),
           new ColorTool(blockStore, transaction),
+          new RoomModeTool(blockStore, scene, transaction),
         ],
         toolStore,
       ),

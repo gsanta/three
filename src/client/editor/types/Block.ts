@@ -14,6 +14,7 @@ type Block<S extends ShapeType = ShapeType> = {
   dependents: string[];
   isHovered: boolean;
   isSelected: boolean;
+  isVisible: boolean;
   associations: string[];
 
   neighbourTo: {

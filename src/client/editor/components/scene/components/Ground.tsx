@@ -61,8 +61,8 @@ const Ground = () => {
         position={[0, -0.01, 0]}
         rotation-x={-Math.PI * 0.5}
         onPointerEnter={handleDefaultPointerEnter}
-        onPointerDown={(e) => tool.onPointerDown(e)}
-        onPointerUp={() => tool.onPointerUp()}
+        // onPointerDown={(e) => tool.onPointerDown(e)}
+        // onPointerUp={() => tool.onPointerUp()}
         onPointerMove={(e) => tool.onPointerMove(e)}
       >
         <planeGeometry args={[100, 100]} />
