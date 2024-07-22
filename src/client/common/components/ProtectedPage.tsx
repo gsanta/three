@@ -24,7 +24,7 @@ import ControllerService from '@/client/editor/services/controller/ControllerSer
 import ElectricityStore from '@/client/editor/stores/electricity/ElectricityStore';
 import ElectricitySystemHook from '@/client/editor/services/electricity/ElectricitySystemHook';
 import SceneServiceImpl from '@/client/editor/components/scene/service/SceneServiceImpl';
-import RoomModeTool from '@/client/editor/controllers/tools/add/RoomModeTool';
+import RoomModeTool from '@/client/editor/controllers/tools/RoomModeTool';
 
 type ProtectedPageProps = {
   children: ReactNode;

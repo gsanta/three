@@ -5,6 +5,7 @@ import AddBlockToSlot from '@/client/editor/use_cases/block/AddBlockToSlot';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
+import { v4 as uuidv4 } from 'uuid';
 
 class AddWallBlock extends AddBlockType {
   constructor(
@@ -37,23 +38,27 @@ class AddWallBlock extends AddBlockType {
     const targetPart = targetBlock.partDetails[targetPartIndex];
     const wallBlock = this.addBlockToSlot.perform(edit, targetBlock.id, targetPartIndex, newBlockType.type);
 
-    const wallNeighbours: Block['neighbourTo'] = [];
-    const buildingNeighbours: Block['neighbourTo'] = [];
+    const wallNeighbours: Block['neighbourConnections'] = [];
+    const buildingNeighbours: Block['neighbourConnections'] = [];
+
+    const connectionId = uuidv4();
 
     targetPart?.joins?.forEach((join) => {
       wallNeighbours.push({
-        blockId: targetBlock.id,
-        otherPartIndex: join,
+        id: connectionId,
+        neighbourBlock: targetBlock.id,
+        neighbourPart: join,
       });
 
       buildingNeighbours.push({
-        blockId: wallBlock.id,
-        thisPartIndex: join,
+        id: connectionId,
+        part: join,
+        neighbourBlock: wallBlock.id,
       });
     });
 
-    edit.updateBlock(wallBlock.id, { neighbourTo: wallNeighbours }, { arrayMergeStrategy: 'merge' });
-    edit.updateBlock(targetBlock.id, { neighbourTo: buildingNeighbours }, { arrayMergeStrategy: 'merge' });
+    edit.updateBlock(wallBlock.id, { neighbourConnections: wallNeighbours }, { arrayMergeStrategy: 'merge' });
+    edit.updateBlock(targetBlock.id, { neighbourConnections: buildingNeighbours }, { arrayMergeStrategy: 'merge' });
 
     // if (targetPartCategory === 'ceil-slot' && newBlockType.category === 'roofs') {
     //   this.addBlockToSlot.perform(edit, targetBlock.id, targetPartIndex, newBlockType.type);

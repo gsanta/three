@@ -14,7 +14,9 @@ class AddWirePoints {
   add(buildingBlock: Block, points: CablePoint[]) {
     const edit = this.updateService.getTransaction();
 
-    const cableId = buildingBlock.children.find((child) => this.blockStore.getBlock(child).category === 'cables');
+    const cableId = buildingBlock.conduitConnections.find(
+      ({ block }) => this.blockStore.getBlock(block).category === 'cables',
+    )?.block;
 
     let block: Block | null = null;
 
@@ -28,7 +30,7 @@ class AddWirePoints {
       block = this.factoryService.create(
         edit,
         'cable-1',
-        { parent: buildingBlock.id },
+        { parentConnection: { block: buildingBlock.id } },
         {
           cables: {
             points,
@@ -38,10 +40,11 @@ class AddWirePoints {
     }
 
     points.forEach((point) => {
-      edit.updateBlock(point.blockId || '', { associations: [block.id] });
+      const blockId = point.blockId || '';
+      edit.updateBlock(blockId, { conduitConnections: [{ block: blockId }] });
     });
 
-    edit.updateBlock(buildingBlock.id, { children: [block?.id] });
+    edit.updateBlock(buildingBlock.id, { conduitConnections: [{ block: block?.id || '' }] });
 
     edit.commit();
   }

@@ -6,6 +6,7 @@ import { useFrame } from '@react-three/fiber';
 import { useRef } from 'react';
 import { Vector3 } from 'three';
 import { addVector } from '@/client/editor/utils/vectorUtils';
+import Ground from './Ground';
 
 const BuildingScene = () => {
   const editedBuildingId = useAppSelector((selector) => selector.editor.editedBuilding);
@@ -30,12 +31,13 @@ const BuildingScene = () => {
     <>
       <Physics broadphase="SAP" gravity={[0, -2.6, 0]}>
         <RootMeshRenderer key={editedBuildingId} blockId={editedBuildingId} />
+        <Ground />
       </Physics>
       {/* <PerspectiveCamera makeDefault position={editedBuilding.position} fov={25} /> */}
       <directionalLight
         position={[editedBuilding.position[0], 50, editedBuilding.position[2] + 50]}
         // castShadow
-        intensity={Math.PI}
+        intensity={1}
       />
       {/* <perspectiveCamera ref={cameraRef} position={addVector(editedBuilding.position, [0, 5, 0])} />; */}
       <PerspectiveCamera

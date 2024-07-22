@@ -1,6 +1,7 @@
 import { Store } from '@/client/common/utils/store';
 import BlockDecoration, { BlockCategories } from '@/client/editor/types/BlockCategory';
 import Block from '../../types/Block';
+import { ModelPartInfo } from '../../types/BlockType';
 
 class BlockStore {
   constructor(store: Store) {
@@ -29,8 +30,8 @@ class BlockStore {
 
   getRootBlock(blockId: string) {
     let block = this.getBlock(blockId);
-    while (block.parent) {
-      block = this.getBlock(block.parent);
+    while (block.parentConnection) {
+      block = this.getBlock(block.parentConnection.block);
     }
 
     return block;
@@ -95,7 +96,7 @@ class BlockStore {
   getDescendants(blockId: string, categoryFilter?: string): Block[] {
     const block = this.getBlock(blockId);
 
-    if (block.children.length === 0) {
+    if (block.childConnections.length === 0) {
       if (categoryFilter) {
         return block.category === categoryFilter ? [block] : [];
       } else {
@@ -105,8 +106,8 @@ class BlockStore {
 
     const descendants: Block[] = [];
 
-    for (const child of block.children) {
-      descendants.push(...this.getDescendants(child, categoryFilter));
+    for (const child of block.childConnections) {
+      descendants.push(...this.getDescendants(child.childBlock, categoryFilter));
     }
 
     return descendants;
@@ -115,7 +116,7 @@ class BlockStore {
   getRoot(blockId: string, expectedCategory?: string): Block {
     const block = this.getBlock(blockId);
 
-    if (!block.parent) {
+    if (!block.parentConnection) {
       if (expectedCategory && expectedCategory !== block.category) {
         throw new Error(`Expected category is ${expectedCategory}, but got ${block.category}`);
       }
@@ -123,7 +124,17 @@ class BlockStore {
       return block;
     }
 
-    return this.getRoot(block.parent, expectedCategory);
+    return this.getRoot(block.parentConnection.block, expectedCategory);
+  }
+
+  filterParts(blockId: string, filter: { orientation: number }): string[] {
+    const block = this.getBlock(blockId);
+
+    const keys = Object.keys(block.partDetails).filter(
+      (key) => block.partDetails[key]?.orientation === filter.orientation,
+    );
+
+    return keys;
   }
 
   filterDescendants(blockId: string, filter: { category: string }): Block[] {
@@ -163,8 +174,8 @@ class BlockStore {
       }
     }
 
-    for (const childId of block.children) {
-      const child = this.getBlock(childId);
+    for (const connection of block.childConnections) {
+      const child = this.getBlock(connection.childBlock);
       let terminate = doWork(child);
 
       if (terminate) {

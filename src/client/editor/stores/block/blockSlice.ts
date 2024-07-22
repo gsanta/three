@@ -157,7 +157,7 @@ export const blockSlice = createSlice({
 
             state.blocks[update.block.id] = update.block;
 
-            if (update.block.parent) {
+            if (update.block.parentConnection) {
               const rootIndex = state.rootBlocksIds.indexOf(update.block.id);
               if (rootIndex !== -1) {
                 state.rootBlocksIds.splice(rootIndex, 1);

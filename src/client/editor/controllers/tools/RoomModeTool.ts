@@ -1,16 +1,19 @@
-import ToolName from '../../../types/ToolName';
-import BlockStore from '../../../stores/block/BlockStore';
-import TransactionService from '../../../services/transaction/TransactionService';
-import HoverTool from '../HoverTool';
-import SceneService from '../../../components/scene/service/SceneService';
+import ToolName from '../../types/ToolName';
+import BlockStore from '../../stores/block/BlockStore';
+import TransactionService from '../../services/transaction/TransactionService';
+import HoverTool from './HoverTool';
+import SceneService from '../../components/scene/service/SceneService';
 import { store } from '@/client/common/utils/store';
 import { setBuildingMode } from '@/client/editor/stores/editorSlice';
+import SetupBuildingMode from '../../use_cases/building_mode/SetupBuildingMode';
 
 class RoomModeTool extends HoverTool {
   constructor(blockStore: BlockStore, sceneService: SceneService, update: TransactionService) {
     super(blockStore, sceneService, update, ToolName.RoomModel, 'BiPlus');
 
     this.blockStore = blockStore;
+
+    this.setupBuildingMode = new SetupBuildingMode(blockStore, update);
   }
 
   onPointerUp() {
@@ -23,17 +26,12 @@ class RoomModeTool extends HoverTool {
         const root = this.blockStore.getRootBlock(block.id);
         store.dispatch(setBuildingMode({ editedBuilding: root.id }));
 
-        const edit = this.update.getTransaction();
-        const roofs = this.blockStore.filterDescendants(root.id, { category: 'roofs' });
-
-        roofs.forEach((roof) => {
-          edit.updateBlock(roof.id, { isVisible: false });
-        });
-
-        edit.commit();
+        this.setupBuildingMode.setup(root);
       }
     }
   }
+
+  private setupBuildingMode: SetupBuildingMode;
 }
 
 export default RoomModeTool;

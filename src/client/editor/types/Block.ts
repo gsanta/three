@@ -7,33 +7,35 @@ export type BlockSlotSource = {
   blockId: string;
 };
 
+export type NeigbourConnection = {
+  id: string;
+  neighbourBlock: string;
+  neighbourPart?: string;
+  part?: string;
+};
+
 type Block<S extends ShapeType = ShapeType> = {
   id: string;
-  children: string[];
-  dependsOn: string[];
-  dependents: string[];
   isHovered: boolean;
   isSelected: boolean;
   isVisible: boolean;
-  associations: string[];
 
-  neighbourTo: {
-    blockId: string;
-    otherPartIndex?: string;
-    thisPartIndex?: string;
+  neighbourConnections: NeigbourConnection[];
+
+  conduitConnections: {
+    block: string;
   }[];
 
-  stationedOn?: {
-    blockId: string;
-    partIndex?: string;
+  childConnections: {
+    childBlock: string;
+    childPart?: string;
+    parentPart?: string;
+  }[];
+
+  parentConnection?: {
+    block: string;
+    part?: string;
   };
-
-  stationFor: {
-    blockId: string;
-    thisPartIndex?: string;
-  }[];
-
-  parent?: string;
 } & BlockType<S>;
 
 export type PartialMeshData = Partial<Block> & { id: string };
@@ -50,11 +52,8 @@ export const mergeBlocks = (
   const newBlock = {
     ...block,
     ...partial,
-    children: mergeArrays(block.children, partial?.children, mergeStrategy),
-    dependsOn: mergeArrays(block.dependsOn, partial?.dependsOn, mergeStrategy),
-    dependents: mergeArrays(block.dependents, partial?.dependents, mergeStrategy),
-    neighbourTo: mergeArrays(block.neighbourTo, partial?.neighbourTo, mergeStrategy),
-    stationFor: mergeArrays(block.stationFor, partial?.stationFor, mergeStrategy),
+    neighbourConnections: mergeArrays(block.neighbourConnections, partial?.neighbourConnections, mergeStrategy),
+    childConnections: mergeArrays(block.childConnections, partial?.childConnections, mergeStrategy),
     partDetails: {
       ...block.partDetails,
     },

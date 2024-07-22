@@ -23,10 +23,6 @@ const ModelPartMesh = ({ block, materials, materialProps, nodes, onPointerEnter,
   const material = useMaterial({ materials, materialProps, nodes, part });
   const geometry = useGeometry(nodes, part);
 
-  // if (block.partDetails[part.index]?.hide) {
-  //   return null;
-  // }
-
   return (
     <mesh
       castShadow
@@ -34,6 +30,7 @@ const ModelPartMesh = ({ block, materials, materialProps, nodes, onPointerEnter,
       receiveShadow
       geometry={geometry}
       material={color ? new MeshStandardMaterial({ color: 'green' }) : material}
+      visible={!block.partDetails[part.index]?.hide}
       onPointerEnter={onPointerEnter ? (e) => onPointerEnter(e, part.index) : undefined}
       position={part.position}
       rotation={part.rotation}

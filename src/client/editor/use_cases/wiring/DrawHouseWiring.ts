@@ -31,7 +31,9 @@ class DrawHouseWiring {
   execute(targetBlockId: string, clientX: number, clientY: number) {
     const rootBlock = this.blockStore.getRoot(targetBlockId);
 
-    const cableId = rootBlock.children.find((child) => this.blockStore.getBlock(child).category === 'cables');
+    const cableId = rootBlock.conduitConnections.find(
+      ({ block }) => this.blockStore.getBlock(block).category === 'cables',
+    )?.block;
 
     const selectedIntersection = this.getSelectedIntersection(rootBlock, clientX, clientY, cableId);
 

@@ -14,7 +14,7 @@ const MeshHierarchyRenderer = (props: MeshHierarchyRendererProps) => {
   const { blocks, onPointerDown, onPointerEnter } = props;
 
   return blocks
-    .filter((block) => !block.parent)
+    .filter((block) => !block.parentConnection)
     .map((block) => (
       <MeshRenderer
         key={block.id}

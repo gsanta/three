@@ -33,22 +33,17 @@ class BlockCreator {
 
     return {
       ...block,
-      children: settings.children || [],
-      associations: [],
-      dependents: settings.dependents || [],
-      dependsOn: settings.dependsOn || [],
+      childConnections: [],
+      conduitConnections: [],
+      neighbourConnections: [],
       isHovered: false,
       isSelected: false,
       isVisible: true,
-      parent: settings.parent,
-      neighbourTo: [],
+      parentConnection: settings.parentConnection,
       id: id,
       partDetails,
       position: [x, y, z],
       rotation: rotation as Num3,
-
-      stationedOn: settings.stationedOn,
-      stationFor: [],
       scale: scale,
     };
   }

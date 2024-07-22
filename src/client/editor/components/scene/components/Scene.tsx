@@ -1,4 +1,4 @@
-import { Environment, OrbitControls, OrthographicCamera, PerspectiveCamera } from '@react-three/drei';
+import { Environment, OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { useCallback, useEffect } from 'react';
 import useEditorContext from '@/app/editor/EditorContext';
 import { ThreeEvent, useThree } from '@react-three/fiber';

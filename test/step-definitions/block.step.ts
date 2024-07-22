@@ -8,9 +8,9 @@ Then('parent for block {string} is {string}', function (this: ExtendedWorld, chi
   const child = this.env.blockStore.getBlock(childId);
   const parent = this.env.blockStore.getBlock(parentId);
 
-  assert.equal(child.parent, parent.id);
+  assert.equal(child.parentConnection?.block, parent.id);
 
-  const childFoundInParent = Boolean(parent.children.find((currChildId) => currChildId === childId));
+  const childFoundInParent = Boolean(parent.childConnections.find((currChild) => currChild.childBlock === childId));
   assert(childFoundInParent, `Parent did not have a child with id ${childId}`);
 });
 
@@ -21,10 +21,10 @@ Then(
     const child = this.env.blockStore.getBlock(childId);
     const parent = this.env.blockStore.getBlock(parentId);
 
-    assert.equal(child.stationedOn?.partIndex, partIndex);
-    assert.equal(child.stationedOn?.blockId, parentId);
+    assert.equal(child.parentConnection?.part, partIndex);
+    assert.equal(child.parentConnection?.block, parentId);
 
-    assert.ok(parent.stationFor.find((dependent) => dependent.blockId === child.id));
+    assert.ok(parent.childConnections.find((connection) => connection.childBlock === child.id));
   },
 );
 
@@ -33,7 +33,7 @@ Then(
   function (this: ExtendedWorld, partIndex: string, blockId: string) {
     const block = this.env.blockStore.getBlock(blockId);
 
-    assert.ok(!block.stationFor.find((connection) => connection.thisPartIndex === partIndex));
+    assert.ok(!block.childConnections.find((connection) => connection.parentPart === partIndex));
   },
 );
 
@@ -42,7 +42,7 @@ Then(
   function (this: ExtendedWorld, parentId: string, childId: string) {
     const parent = this.env.blockStore.getBlock(parentId);
 
-    const hasChild = parent.children.find((currChildId) => currChildId === childId);
+    const hasChild = parent.childConnections.find((currChild) => currChild.childBlock === childId);
     assert.ok(!hasChild);
   },
 );
@@ -81,10 +81,16 @@ Then(
     const row = table.hashes()[0];
 
     if (row.PARENT) {
-      assert.ok(row.PARENT === block.parent, `Parent does not match, it was ${block.parent}`);
+      assert.ok(
+        row.PARENT === block.parentConnection?.block,
+        `Parent does not match, it was ${block.parentConnection}`,
+      );
 
-      const parent = checkBlockExists.call(this, block.parent);
-      assert.ok(parent.children.includes(blockId), `Parent does not include ${blockId} as a child`);
+      const parent = checkBlockExists.call(this, block.parentConnection.block);
+      assert.ok(
+        parent.childConnections.find((child) => child.childBlock === blockId),
+        `Parent does not include ${blockId} as a child`,
+      );
     }
 
     if (row.POSITION) {

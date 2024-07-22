@@ -15,8 +15,8 @@ class BaseMesh extends AbstractMesh {
   }
 
   getWorldPosition(vec3: Vector3) {
-    if (this.block.parent) {
-      this.sceneStore.getObj3d(this.block.parent).getWorldPosition(vec3);
+    if (this.block.parentConnection) {
+      this.sceneStore.getObj3d(this.block.parentConnection.block).getWorldPosition(vec3);
     }
     vec3.x += this.block.position[0];
     vec3.y += this.block.position[1];
