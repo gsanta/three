@@ -25,6 +25,7 @@ class EraseBlock {
       if (next) {
         const block = this.store.getBlocks()[next];
         queue.push(...block.childConnections.map((child) => child.childBlock));
+        queue.push(...block.conduitConnections.map((child) => child.block));
         blocksToRemove.push(next);
         edit.remove(next);
       }
@@ -60,13 +61,13 @@ class EraseBlock {
       );
     });
 
-    block.conduitConnections.forEach((connection) => {
-      const connectedBlock = this.store.getBlock(connection.block);
+    // block.conduitConnections.forEach((connection) => {
+    //   const connectedBlock = this.store.getBlock(connection.block);
 
-      connectedBlock.decorations.forEach((decoration) => {
-        this.erasers[decoration]?.associationErased(edit, connectedBlock, block);
-      });
-    });
+    //   connectedBlock.decorations.forEach((decoration) => {
+    //     this.erasers[decoration]?.associationErased(edit, connectedBlock, block);
+    //   });
+    // });
   }
 
   private store: BlockStore;

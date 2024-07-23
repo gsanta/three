@@ -1,6 +1,5 @@
 import useEditorContext from '@/app/editor/EditorContext';
 import { useAppSelector } from '@/client/common/hooks/hooks';
-import { useState } from 'react';
 
 type RowProps = {
   activeGridIndexes: number[];

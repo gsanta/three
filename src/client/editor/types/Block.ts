@@ -54,6 +54,7 @@ export const mergeBlocks = (
     ...partial,
     neighbourConnections: mergeArrays(block.neighbourConnections, partial?.neighbourConnections, mergeStrategy),
     childConnections: mergeArrays(block.childConnections, partial?.childConnections, mergeStrategy),
+    conduitConnections: mergeArrays(block.conduitConnections, partial?.conduitConnections, mergeStrategy),
     partDetails: {
       ...block.partDetails,
     },

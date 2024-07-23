@@ -1,7 +1,7 @@
 import useEditorContext from '@/app/editor/EditorContext';
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import { findNearestValue, toDegree } from '@/client/editor/utils/mathUtils';
-import { Box, Button } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import useSelectedBlocks from '../hooks/useSelectedBlocks';
 import RotationControl from './RotationControl';
 import SizeControl from './SizeControl';
@@ -51,8 +51,6 @@ const SelectToolOptions = () => {
           />
         </>
       )}
-      <Button onClick={() => tool.getGroupTool().group()}>Group</Button>
-      <Button onClick={() => tool.getGroupTool().ungroup()}>Ungroup</Button>
       {block?.decorations.map((decoration) => {
         if (decoration === 'devices') {
           return <DeviceControl device={decorations.devices[block.id] as Device} />;

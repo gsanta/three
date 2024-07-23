@@ -6,7 +6,6 @@ import AddTool from '@/client/editor/controllers/tools/add/AddTool';
 import ToolService from '@/client/editor/services/ToolService';
 import SelectTool from '@/client/editor/controllers/tools/SelectTool';
 import KeyboardService from '@/client/editor/services/KeyboardService';
-import GroupTool from '@/client/group/GroupTool';
 import ExportJson from '@/client/editor/controllers/io/ExportJson';
 import ImportJson from '@/client/editor/controllers/io/ImportJson';
 import EraseTool from '@/client/editor/controllers/tools/EraseTool';
@@ -15,7 +14,6 @@ import SceneStore from '@/client/editor/components/scene/SceneStore';
 import RayTool from '@/client/editor/controllers/tools/RayTool';
 import ColorTool from '@/client/editor/controllers/tools/ColorTool';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
-import TemplateStore from '@/client/editor/stores/blockType/TemplateStore';
 import ToolStore from '@/client/editor/stores/tool/ToolStore';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
@@ -42,7 +40,6 @@ const queryClient = new QueryClient({
 
 const ProtectedPage = ({ children }: ProtectedPageProps) => {
   const sceneStore = useMemo(() => new SceneStore(), []);
-  const templates = useMemo(() => new TemplateStore(store), []);
   const toolStore = useMemo(() => new ToolStore(store), []);
   const blockStore = useMemo(() => new BlockStore(store), []);
   const scene = useMemo(() => new SceneServiceImpl(blockStore, sceneStore), [blockStore, sceneStore]);
@@ -70,7 +67,6 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
         [
           new AddTool(blockStore, factoryService, scene, sceneStore, transaction),
           new SelectTool(blockStore, scene, sceneStore, toolStore, transaction),
-          new GroupTool(blockStore, transaction, templates),
           new CableTool(blockStore, factoryService, scene, sceneStore, transaction),
           new EraseTool(blockStore, transaction),
           new RayTool(blockStore, transaction, sceneStore),
@@ -81,7 +77,7 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
       ),
       transaction,
     }),
-    [blockStore, factoryService, sceneStore, toolStore, transaction, scene, templates],
+    [blockStore, factoryService, sceneStore, toolStore, transaction, scene],
   );
 
   editorContext.scene.setToolService(editorContext.tool);

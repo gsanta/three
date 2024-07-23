@@ -41,7 +41,7 @@ class AddWirePoints {
 
     points.forEach((point) => {
       const blockId = point.blockId || '';
-      edit.updateBlock(blockId, { conduitConnections: [{ block: blockId }] });
+      edit.updateBlock(blockId, { conduitConnections: [{ block: block.id }] });
     });
 
     edit.updateBlock(buildingBlock.id, { conduitConnections: [{ block: block?.id || '' }] });

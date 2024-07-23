@@ -1,18 +1,17 @@
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import RootMeshRenderer from './RootMeshRenderer';
 import { Physics } from '@react-three/cannon';
-import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
+import { PerspectiveCamera as PerspectiveCameraComp } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { useRef } from 'react';
-import { Vector3 } from 'three';
-import { addVector } from '@/client/editor/utils/vectorUtils';
+import { PerspectiveCamera, Vector3 } from 'three';
 import Ground from './Ground';
 
 const BuildingScene = () => {
   const editedBuildingId = useAppSelector((selector) => selector.editor.editedBuilding);
   const editedBuilding = useAppSelector((selector) => selector.block.present.blocks[editedBuildingId || '']);
 
-  const cameraRef = useRef<any>();
+  const cameraRef = useRef<PerspectiveCamera>(null);
 
   useFrame(() => {
     if (cameraRef.current && editedBuilding) {
@@ -40,7 +39,7 @@ const BuildingScene = () => {
         intensity={1}
       />
       {/* <perspectiveCamera ref={cameraRef} position={addVector(editedBuilding.position, [0, 5, 0])} />; */}
-      <PerspectiveCamera
+      <PerspectiveCameraComp
         ref={cameraRef}
         makeDefault
         position={[editedBuilding.position[0], 50, editedBuilding.position[2] + 50]}

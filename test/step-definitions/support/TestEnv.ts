@@ -11,11 +11,9 @@ import AddTool from '@/client/editor/controllers/tools/add/AddTool';
 import CableTool from '@/client/editor/controllers/tools/CableTool';
 import ColorTool from '@/client/editor/controllers/tools/ColorTool';
 import EraseTool from '@/client/editor/controllers/tools/EraseTool';
-import GroupTool from '@/client/group/GroupTool';
 import RayTool from '@/client/editor/controllers/tools/RayTool';
 import SelectTool from '@/client/editor/controllers/tools/SelectTool';
 import ToolStore from '@/client/editor/stores/tool/ToolStore';
-import TemplateStore from '@/client/editor/stores/blockType/TemplateStore';
 import TestSceneService from './TestSceneService';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
@@ -63,14 +61,12 @@ export const setupTestEnv = (): TestEnv => {
 
   const sceneStore = new SceneStore();
 
-  const templates = new TemplateStore(store);
   const toolStore = new ToolStore(store);
 
   const tool = new ToolService(
     [
       new AddTool(blockStore, factoryService, scene, sceneStore, updateService),
       new SelectTool(blockStore, scene, sceneStore, toolStore, updateService),
-      new GroupTool(blockStore, updateService, templates),
       new CableTool(blockStore, factoryService, scene, sceneStore, updateService),
       new EraseTool(blockStore, updateService),
       new RayTool(blockStore, updateService, sceneStore),
