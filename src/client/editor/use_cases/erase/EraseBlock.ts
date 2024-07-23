@@ -3,6 +3,7 @@ import Edit from '../../services/update/Edit';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockEraser from './erasers/BlockEraser';
 import CableEraser from './erasers/CableEraser';
+import { NeigbourConnection } from '../../types/Block';
 
 class EraseBlock {
   constructor(store: BlockStore, update: TransactionService) {
@@ -23,8 +24,8 @@ class EraseBlock {
       const next = queue.shift();
       if (next) {
         const block = this.store.getBlocks()[next];
-        queue.push(...block.children);
-        queue.push(...block.dependents);
+        queue.push(...block.childConnections.map((child) => child.childBlock));
+        queue.push(...block.conduitConnections.map((child) => child.block));
         blocksToRemove.push(next);
         edit.remove(next);
       }
@@ -38,10 +39,10 @@ class EraseBlock {
   private removeBlock(blockId: string, edit: Edit) {
     const block = this.store.getBlocks()[blockId];
 
-    const parent = this.store.getBlocks()[block.parent || ''];
+    const parent = this.store.getBlocks()[block.parentConnection?.block || ''];
 
     if (parent) {
-      edit.updateBlock(parent.id, { children: [blockId] }, { arrayMergeStrategy: 'exclude' });
+      edit.updateBlock(parent.id, { childConnections: [{ childBlock: blockId }] }, { arrayMergeStrategy: 'exclude' });
     }
 
     const eraser = this.erasers[block.category];
@@ -50,35 +51,23 @@ class EraseBlock {
       eraser.erase(edit, block);
     }
 
-    block.neighbourTo.forEach((neighbour) => {
+    block.neighbourConnections.forEach((connection) => {
       edit.updateBlock(
-        neighbour.blockId,
+        connection.neighbourBlock,
         {
-          neighbourTo: [{ blockId: block.id }],
+          neighbourConnections: [{ id: connection.id } as NeigbourConnection],
         },
         { arrayMergeStrategy: 'exclude' },
       );
     });
 
-    block.associations.forEach((association) => {
-      const associationBlock = this.store.getBlock(association);
+    // block.conduitConnections.forEach((connection) => {
+    //   const connectedBlock = this.store.getBlock(connection.block);
 
-      associationBlock.decorations.forEach((decoration) => {
-        this.erasers[decoration]?.associationErased(edit, associationBlock, block);
-      });
-    });
-
-    block.dependsOn.forEach((dependsOnId) => {
-      edit.updateBlock(dependsOnId, { dependents: [block.id] }, { arrayMergeStrategy: 'exclude' });
-    });
-
-    block.dependents.forEach((dependentId) => {
-      const dependent = this.store.getBlocks()[dependentId];
-
-      dependent.dependsOn.forEach((dependsOnId) => {
-        edit.updateBlock(dependsOnId, { dependents: [dependentId] }, { arrayMergeStrategy: 'exclude' });
-      });
-    });
+    //   connectedBlock.decorations.forEach((decoration) => {
+    //     this.erasers[decoration]?.associationErased(edit, connectedBlock, block);
+    //   });
+    // });
   }
 
   private store: BlockStore;

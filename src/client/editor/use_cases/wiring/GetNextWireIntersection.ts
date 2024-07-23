@@ -55,7 +55,7 @@ class GetNextWireIntersection {
       return;
     }
 
-    if (target.block.neighbourTo.find((neighbour) => neighbour.blockId === wallBlock.id)) {
+    if (target.block.neighbourConnections.find((neighbour) => neighbour.neighbourBlock === wallBlock.id)) {
       return target;
     }
     return undefined;
@@ -67,8 +67,8 @@ class GetNextWireIntersection {
         return false;
       }
 
-      const found = intersection.block.neighbourTo.find(
-        (neighbour) => neighbour.otherPartIndex === cablePoint.partIndex,
+      const found = intersection.block.neighbourConnections.find(
+        (neighbour) => neighbour.neighbourPart === cablePoint.partIndex,
       );
 
       if (found) {

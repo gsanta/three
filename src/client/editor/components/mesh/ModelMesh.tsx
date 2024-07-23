@@ -31,7 +31,7 @@ export const ModelMesh = ({ additions, block, materialProps, meshProps, overwrit
   const [boundingBoxCenter, setBoundingBoxCenter] = useState<Num3>();
 
   useEffect(() => {
-    if (!block.parent && ref.current?.children[0].name === 'root') {
+    if (!block.parentConnection && ref.current?.children[0].name === 'root') {
       const mesh = ref.current?.children[0] as Mesh;
       const box = new Box3();
 
@@ -51,7 +51,7 @@ export const ModelMesh = ({ additions, block, materialProps, meshProps, overwrit
       setBoundingBoxCenter([box.max.x - (box.max.x - box.min.x) / 2.0, 0, box.max.z - (box.max.z - box.min.z) / 2.0]);
       // setBoundingBoxCenter([0, 0, 0]);
     }
-  }, [block.parent, ref]);
+  }, [block.parentConnection, ref]);
 
   const component = (
     <group
@@ -99,11 +99,12 @@ export const ModelMesh = ({ additions, block, materialProps, meshProps, overwrit
         materialProps={materialProps}
         overwrites={{ rotation: [0, 0, 0], position: [0, 0, 0] }}
       /> */}
-      {component}
-      {block.children.map((child) => (
+
+      {block.isVisible && component}
+      {block.childConnections.map(({ childBlock }) => (
         <ChildMeshRenderer
-          key={child}
-          blockId={child}
+          key={childBlock}
+          blockId={childBlock}
           // additions={additions}
           meshProps={{ ...meshProps }}
           materialProps={materialProps}

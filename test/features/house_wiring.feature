@@ -41,10 +41,7 @@ Feature: House wiring
       | 5,1.7,1     | base-1-id | wall-join-3 |
     When I select tool 'erase'
     And I press pointer over block 'wall-3-id'
-    Then Points for cable 'cable-1-id' are:
-      | WORLD_POS   | BLOCK     |
-      | 1.5,1.7,3.5 | wall-4-id |
-      | 5,1.7,3.5   | base-1-id |
+    Then block 'cable-1-id' does not exist
 
   Scenario: Deleting house with wire
     Given I have a scene with:

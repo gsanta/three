@@ -44,6 +44,18 @@ const Toolbar = () => {
           </Tooltip>
         );
       })}
+
+      <Tooltip key="room-tool" label="Room" placement="right">
+        <ToggleButton
+          className="iconOnly"
+          colorScheme="red"
+          toggle={selectedTool === ToolName.RoomModel}
+          onToggle={() => handleSelectTool(ToolName.RoomModel)}
+          variant="outline"
+        >
+          <Icon src="/icons/room_icon.png" />
+        </ToggleButton>
+      </Tooltip>
     </Box>
   );
 };

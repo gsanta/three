@@ -105,7 +105,7 @@ Then('Points for cable {string} are:', function (this: ExtendedWorld, cableId: s
   const cable = checkDecorationExists.call(this, 'cables', cableId) as Cable;
   const cableBlock = checkBlockExists.call(this, cableId);
 
-  const rootBlockId = cableBlock.parent;
+  const rootBlockId = cableBlock.parentConnection?.block;
   const rootMesh = this.env.sceneStore.getObj3d(rootBlockId || '');
   const baseMesh = MeshUtils.findByName(rootMesh, 'root');
   const basePos = new Vector3();

@@ -19,9 +19,16 @@ const ToggleButton = forwardRef<ButtonProps, 'input'>((props, ref) => {
   };
 
   return (
-    // TODO: fix union type is too complex to represent error
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    <_Button {...(rest as any)} colorScheme={colorScheme} onClick={handleClick} ref={ref}>
+    <_Button
+      // TODO: fix union type is too complex to represent error
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      {...(rest as any)}
+      colorScheme={colorScheme}
+      onClick={handleClick}
+      ref={ref}
+      width="2.5rem"
+      height="2.5rem"
+    >
       {props.children}
     </_Button>
   );

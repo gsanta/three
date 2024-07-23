@@ -1,7 +1,8 @@
+import useEditorContext from '@/app/editor/EditorContext';
 import { useAppSelector } from '@/client/common/hooks/hooks';
-import { useState } from 'react';
 
 type RowProps = {
+  activeGridIndexes: number[];
   count: number;
   rowIndex: number;
   offsetX: number;
@@ -13,8 +14,9 @@ type RowProps = {
   highlightCols: number[];
 };
 
-const Row = ({ count, highlightRows, highlightCols, rowIndex, x, z, offsetX, offsetZ, gridSize }: RowProps) => {
-  const [currentGridItem, setCurrentGridItem] = useState<number>();
+const Row = ({ activeGridIndexes, count, rowIndex, x, z, offsetX, offsetZ, gridSize }: RowProps) => {
+  const { tool } = useEditorContext();
+
   const zPos = z * gridSize;
 
   const getX = (index: number) => x * gridSize + index * gridSize;
@@ -24,8 +26,11 @@ const Row = ({ count, highlightRows, highlightCols, rowIndex, x, z, offsetX, off
       {Array.from({ length: count }).map((_, i) => (
         <mesh
           name="selection"
-          onPointerEnter={() => setCurrentGridItem(rowIndex * count + i)}
-          onPointerLeave={() => setCurrentGridItem(undefined)}
+          onPointerDown={(e) =>
+            tool.onPointerDown({ ...e, gridX: i, gridY: rowIndex, gridIndex: rowIndex * count + i })
+          }
+          onPointerUp={() => tool.onPointerUp()}
+          onClick={() => console.log('onclick grid')}
           position={[getX(i) + offsetX, 0.1, zPos + offsetZ]}
           rotation-x={-Math.PI * 0.5}
         >
@@ -34,10 +39,7 @@ const Row = ({ count, highlightRows, highlightCols, rowIndex, x, z, offsetX, off
             opacity={0.2}
             color="blue"
             transparent
-            visible={
-              currentGridItem === rowIndex * count + i ||
-              (highlightRows.includes(rowIndex) && highlightCols.includes(i))
-            }
+            visible={activeGridIndexes.includes(rowIndex * count + i)}
           />
         </mesh>
       ))}
@@ -49,15 +51,26 @@ const Grid = () => {
   const gridOffset = useAppSelector((state) => state.editor.gridOffset);
   const gridSize = useAppSelector((state) => state.editor.gridSize);
   const carGridPos = useAppSelector((state) => state.editor.carGridPos);
+  const gridRows = useAppSelector((state) => state.editor.gridRows);
+  const gridCols = useAppSelector((state) => state.editor.gridCols);
+  const activeGridIndexes = useAppSelector((state) => state.editor.activeGridIndexes);
 
-  const hightlightRows = [carGridPos[1], carGridPos[1] + 1];
-  const hightlightCols = [carGridPos[0], carGridPos[0] + 1];
+  const hightlightRows = [carGridPos[1] - 1, carGridPos[1], carGridPos[1] + 1];
+  const hightlightCols = [carGridPos[0] - 1, carGridPos[0], carGridPos[0] + 1];
+
+  const px = carGridPos[0] * gridSize + gridOffset[0];
+  const pz = carGridPos[1] * gridSize + gridOffset[1];
 
   return (
     <>
-      {Array.from({ length: 16 }).map((_, i) => (
+      <mesh position={[px, 5, pz]}>
+        <boxGeometry />
+        <meshBasicMaterial transparent={true} opacity={0.25} />
+      </mesh>
+      {Array.from({ length: gridRows }).map((_, i) => (
         <Row
-          count={20}
+          activeGridIndexes={activeGridIndexes}
+          count={gridCols}
           highlightRows={hightlightRows}
           highlightCols={hightlightCols}
           rowIndex={i}

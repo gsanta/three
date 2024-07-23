@@ -150,7 +150,7 @@ class CableTool extends HoverTool {
     }
 
     if (block.category === 'walls') {
-      const parentId = block.parent;
+      const parentId = block.parentConnection?.block;
 
       return this.blockStore.getBlock(parentId);
     }

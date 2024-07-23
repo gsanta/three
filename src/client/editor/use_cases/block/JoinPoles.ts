@@ -41,7 +41,7 @@ class JoinPoles {
     this.factory.create(
       edit,
       'cable-1',
-      { dependsOn: [deviceBlock1.id, deviceBlock2.id] },
+      {},
       {
         cables: {
           end1: { pin: partIndex1, device: deviceBlock1.id },
@@ -56,7 +56,7 @@ class JoinPoles {
     edit.update<'devices'>(
       deviceBlock1.id,
       {
-        dependents: [cable.id],
+        conduitConnections: [{ block: cable.id }],
       },
       'devices',
       {
@@ -74,7 +74,7 @@ class JoinPoles {
     edit.update<'devices'>(
       deviceBlock2.id,
       {
-        dependents: [cable.id],
+        conduitConnections: [{ block: cable.id }],
       },
       'devices',
       {

@@ -25,7 +25,7 @@ class MoveBlock {
   perform(drag: Num3, dragDelta: Num3) {
     const selectedBlockIds = this.blockStore.getSelectedRootBlockIds();
     const rootBlockId =
-      selectedBlockIds.find((blockId) => !this.blockStore.getBlock(blockId).parent) || selectedBlockIds[0];
+      selectedBlockIds.find((blockId) => !this.blockStore.getBlock(blockId).parentConnection) || selectedBlockIds[0];
 
     const finalDrag = this.baseMover.move(this.blockStore.getBlock(rootBlockId), drag, dragDelta);
 

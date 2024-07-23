@@ -23,6 +23,9 @@ export interface ToolInfo {
   isDragHappened?: boolean;
   clientX: number;
   clientY: number;
+  gridIndex?: number;
+  gridX?: number;
+  gridY?: number;
   draggedMesh?: Block;
   partIndex?: string;
 }

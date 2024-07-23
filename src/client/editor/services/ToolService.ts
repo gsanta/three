@@ -5,11 +5,16 @@ import { store } from '@/client/common/utils/store';
 import { Mesh, Vector3 } from 'three';
 import SelectTool from '@/client/editor/controllers/tools/SelectTool';
 import AddTool from '../controllers/tools/add/AddTool';
-import GroupTool from '@/client/group/GroupTool';
 import CableTool from '@/client/editor/controllers/tools/CableTool';
 import VectorUtils from '@/client/editor/utils/vectorUtils';
 import ToolStore from '../stores/tool/ToolStore';
 import { setSelectedTool } from '../stores/tool/toolSlice';
+
+export type ScenePointerEvent = ThreeEvent<PointerEvent> & {
+  gridIndex?: number;
+  gridX?: number;
+  gridY?: number;
+};
 
 class ToolService {
   constructor(tools: Tool[], toolStore: ToolStore) {
@@ -29,11 +34,14 @@ class ToolService {
     this.getTool(selectedTool)?.onExecute(this.info);
   }
 
-  onPointerDown(event: ThreeEvent<PointerEvent>) {
+  onPointerDown(event: ScenePointerEvent) {
     this.info.pos = event.point;
     this.info.clientX = event.clientX;
     this.info.clientY = event.clientY;
     this.info.downPos = event.point;
+    this.info.gridX = event.gridX;
+    this.info.gridY = event.gridY;
+    this.info.gridIndex = event.gridIndex;
 
     this.setEventObject(event);
 
@@ -121,10 +129,6 @@ class ToolService {
 
   getAddTool() {
     return this.tools.find((tool) => tool.name === ToolName.Add) as AddTool;
-  }
-
-  getGroupTool() {
-    return this.tools.find((tool) => tool.name === ToolName.Group) as GroupTool;
   }
 
   getCableTool() {
