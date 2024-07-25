@@ -1,5 +1,5 @@
-import Block from '@/client/editor/types/Block';
-import { BlockCategoryRecords } from '@/client/editor/types/BlockCategory';
+import Block from '../../types/Block';
+import { BlockCategoryRecords } from '../../types/BlockCategory';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { updateBlocks } from './blockActions';
 
@@ -18,7 +18,7 @@ export type BlockState = {
   selectedPartIndexes: Record<string, string[]>;
 };
 
-export const initialBlockState: BlockState = {
+export const initialRoomState: BlockState = {
   rootBlocksIds: [],
   blocks: {},
   blockIds: [],
@@ -36,9 +36,9 @@ export const initialBlockState: BlockState = {
   },
 };
 
-export const blockSlice = createSlice({
-  name: 'block',
-  initialState: initialBlockState,
+export const buildingSlice = createSlice({
+  name: 'building',
+  initialState: initialRoomState,
   reducers: {
     clear(state: BlockState) {
       state.rootBlocksIds = [];
@@ -182,100 +182,26 @@ export const blockSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(updateBlocks, (state, action) => {
-      const updates = action.payload.blockUpdates.filter((update) => update.slice === 'city');
+      const updates = action.payload.blockUpdates.filter((update) => update.slice === 'building');
 
       updates.forEach((update) => {
-        if ('remove' in update) {
-          const rootIndex = state.rootBlocksIds.indexOf(update.remove.id);
-          if (rootIndex !== -1) {
-            state.rootBlocksIds.splice(rootIndex, 1);
+        if ('block' in update && update.block) {
+          if (!state.blocks[update.block.id]) {
+            state.blockIds.push(update.block.id);
           }
 
-          const blockIdIndex = state.blockIds.indexOf(update.remove.id);
-          state.blockIds.splice(blockIdIndex, 1);
+          state.blocks[update.block.id] = update.block;
 
-          const selectedIndex = state.selectedRootBlockIds.indexOf(update.remove.id);
-          if (selectedIndex !== -1) {
-            state.selectedRootBlockIds.splice(selectedIndex, 1);
-          }
-
-          if (state.selectedBlocks[update.remove.id]) {
-            delete state.selectedBlocks[update.remove.id];
-
-            if (Object.keys(state.selectedBlocks).length === 0) {
-              state.hasSelection = false;
+          if (update.block.parentConnection) {
+            const rootIndex = state.rootBlocksIds.indexOf(update.block.id);
+            if (rootIndex !== -1) {
+              state.rootBlocksIds.splice(rootIndex, 1);
             }
-          }
-
-          const block = state.blocks[update.remove.id];
-
-          if (block) {
-            delete state.blocks[update.remove.id];
-            block.decorations.forEach((category) => {
-              delete state.decorations[category][update.remove.id];
-            });
-          }
-        } else if ('select' in update) {
-          if (update.select === null) {
-            Object.keys(state.selectedBlocks).forEach((selectedBlock) => {
-              state.blocks[selectedBlock].isSelected = false;
-              Object.values(state.blocks[selectedBlock].partDetails).forEach((val) => {
-                if (val) {
-                  val.isSelected = false;
-                }
-              });
-            });
-            state.selectedRootBlockIds = [];
-            state.selectedPartIndexes = {};
-            state.selectedBlocks = {};
-            state.hasSelection = false;
           } else {
-            if (update.partIndex) {
-              if (!state.selectedPartIndexes[update.select]) {
-                state.selectedPartIndexes[update.select] = [];
-              }
+            const rootIndex = state.rootBlocksIds.indexOf(update.block.id);
 
-              state.selectedPartIndexes[update.select] = [
-                ...new Set([...state.selectedPartIndexes[update.select], update.partIndex]),
-              ];
-
-              const partDetail = state.blocks[update.select].partDetails[update.partIndex];
-              if (partDetail) {
-                partDetail.isSelected = true;
-              }
-            }
-            state.selectedBlocks[update.select] = true;
-            state.hasSelection = true;
-            state.blocks[update.select].isSelected = true;
-            state.selectedRootBlockIds = [...new Set([...state.selectedRootBlockIds, update.select])];
-          }
-        } else {
-          if ('block' in update && update.block) {
-            if (!state.blocks[update.block.id]) {
-              state.blockIds.push(update.block.id);
-            }
-
-            state.blocks[update.block.id] = update.block;
-
-            if (update.block.parentConnection) {
-              const rootIndex = state.rootBlocksIds.indexOf(update.block.id);
-              if (rootIndex !== -1) {
-                state.rootBlocksIds.splice(rootIndex, 1);
-              }
-            } else {
-              const rootIndex = state.rootBlocksIds.indexOf(update.block.id);
-
-              if (rootIndex === -1) {
-                state.rootBlocksIds.push(update.block.id);
-              }
-            }
-          }
-
-          if ('decoration' in update) {
-            const { decoration } = update;
-
-            if (decoration) {
-              state.decorations[decoration.category][decoration.id] = decoration;
+            if (rootIndex === -1) {
+              state.rootBlocksIds.push(update.block.id);
             }
           }
         }
@@ -284,6 +210,6 @@ export const blockSlice = createSlice({
   },
 });
 
-export const { clear: clearBlockSlice, hover, update } = blockSlice.actions;
+export const { clear: clearBlockSlice, hover, update } = buildingSlice.actions;
 
-export default blockSlice.reducer;
+export default buildingSlice.reducer;

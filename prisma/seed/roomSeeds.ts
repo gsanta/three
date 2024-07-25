@@ -9,7 +9,7 @@ const roomSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'parts' 
   {
     category: 'rooms',
     decorations: [],
-    path: '/building_base_1.glb',
+    path: '/room.glb',
     parts: [
       {
         index: '#1',

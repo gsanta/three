@@ -20,19 +20,19 @@ const Scene = () => {
   useEffect(() => {
     if (orbitControlRef.current) {
       sceneService.setOrbitControls(orbitControlRef.current);
-      const controls = orbitControlRef.current;
+      // const controls = orbitControlRef.current;
 
-      const onChange = () => {
-        console.log('Camera position:', controls.object.position);
-        console.log('Target position:', controls.target);
-      };
+      // const onChange = () => {
+      //   console.log('Camera position:', controls.object.position);
+      //   console.log('Target position:', controls.target);
+      // };
 
-      controls.addEventListener('end', onChange);
+      // controls.addEventListener('end', onChange);
 
-      // Cleanup event listener on unmount
-      return () => {
-        controls.removeEventListener('end', onChange);
-      };
+      // // Cleanup event listener on unmount
+      // return () => {
+      //   controls.removeEventListener('end', onChange);
+      // };
     }
   }, [orbitControlRef, sceneService]);
 
@@ -76,6 +76,7 @@ const Scene = () => {
             onPointerEnter: handlePointerEnter,
           }}
           materialProps={{ opacity: 0.5, transparent: true }}
+          slice="city"
         />
       )}
 
@@ -104,6 +105,7 @@ const Scene = () => {
                   onPointerDown: handlePointerDown,
                   onPointerEnter: handlePointerEnter,
                 }}
+                slice="city"
               />
             );
           })}

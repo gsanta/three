@@ -1,5 +1,4 @@
 import BlockDecoration, { BlockCategories } from '@/client/editor/types/BlockCategory';
-import { BlockUpdate, DecorationUpdate, UpdateBlocks, updateBlocks } from '@/client/editor/stores/block/blockSlice';
 import { PartialDeep } from 'type-fest';
 import Block, { mergeBlocks } from '@/client/editor/types/Block';
 import BlockStore from '../../stores/block/BlockStore';
@@ -8,6 +7,8 @@ import mergeDeep, { MergeStrategy } from '../../utils/mergeDeep';
 import BlockUpdater from '../transaction/updaters/BlockUpdater';
 import LampUpdater from '../transaction/updaters/LampUpdater';
 import SystemHook from './SystemHook';
+import { updateBlocks } from '../../stores/block/blockActions';
+import { BlockUpdate, DecorationUpdate, UpdateBlocks } from '../../stores/block/blockSlice.types';
 
 class Edit {
   constructor(store: BlockStore, dispatchStore: Store, systemHooks: SystemHook[]) {
@@ -36,13 +37,13 @@ class Edit {
   }
 
   create(block: Block): this {
-    this.updates.push({ type: 'update', block });
+    this.updates.push({ type: 'update', slice: this.targetSlice, block });
 
     return this;
   }
 
   createDecoration<T extends BlockDecoration>(data: BlockCategories[T]): this {
-    this.updates.push({ type: 'update', decoration: data });
+    this.updates.push({ type: 'update', slice: 'city', decoration: data });
 
     return this;
   }
@@ -76,7 +77,7 @@ class Edit {
       this.updates.splice(index, 1);
     }
 
-    this.updates.push({ type: 'update', block: newBlock });
+    this.updates.push({ type: 'update', slice: 'city', block: newBlock });
 
     return this;
   }
@@ -101,7 +102,7 @@ class Edit {
       this.updates.splice(index, 1);
     }
 
-    this.updates.push({ type: 'update', decoration: updated });
+    this.updates.push({ type: 'update', slice: 'city', decoration: updated });
 
     return this;
   }
@@ -118,29 +119,38 @@ class Edit {
       this.updates.splice(decorationIndex, 1);
     }
 
-    this.updates.push({ remove: this.store.getBlocks()[id] });
+    this.updates.push({ remove: this.store.getBlocks()[id], slice: 'city' });
 
     return this;
   }
 
   select(id: string | null, partIndex?: string): this {
-    this.updates.push({ select: id, partIndex });
+    this.updates.push({ select: id, slice: 'city', partIndex });
 
     return this;
   }
 
   getLastBlock() {
-    const lastUpdateWithBlock = this.updates.reverse().find((update) => Boolean('block' in update)) as {
-      block: Block;
-    };
+    let lastUpdateWithBlock: { block: Block } | undefined = undefined;
 
-    const block = lastUpdateWithBlock.block;
+    for (let i = this.updates.length - 1; i >= 0; i--) {
+      if ('block' in this.updates[i]) {
+        lastUpdateWithBlock = this.updates[i] as { block: Block };
+        break;
+      }
+    }
+
+    const block = lastUpdateWithBlock?.block;
 
     if (!block) {
       throw new Error('Block not found in updates');
     }
 
     return block;
+  }
+
+  setTargetSlice(slice: 'city' | 'building') {
+    this.targetSlice = slice;
   }
 
   private mergeBlocks(
@@ -186,6 +196,8 @@ class Edit {
   private store: BlockStore;
 
   private dispatchStore: Store;
+
+  private targetSlice: 'city' | 'building' = 'city';
 }
 
 export default Edit;

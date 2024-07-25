@@ -1,6 +1,8 @@
 import useEditorContext from '@/app/editor/EditorContext';
-import { useGLTF } from '@react-three/drei';
+import { useAppSelector } from '@/client/common/hooks/hooks';
+import { Physics } from '@react-three/cannon';
 import { useEffect } from 'react';
+import RootMeshRenderer from './RootMeshRenderer';
 
 const BuildingScene = () => {
   const { scene: sceneService } = useEditorContext();
@@ -50,44 +52,63 @@ const BuildingScene = () => {
   //     {/* <OrbitControls makeDefault target={new Vector3(...editedBuilding.position)} /> */}
   //   </>
 
-  const scene = useGLTF('/room.glb');
+  // const scene = useGLTF('/room.glb');
+  const blockIds = useAppSelector((selector) => selector.building.present.blockIds);
 
-  const { nodes, materials } = useGLTF('/room.glb');
   return (
-    <group>
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Cube.geometry}
-        material={materials['Material.001']}
-        position={[0, 4, 0]}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Cube001.geometry}
-        material={materials['Material.002']}
-        position={[0, 1, 0]}
-        scale={[6.282, 1, 6.282]}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.wall1.geometry}
-        material={materials['Material.002']}
-        position={[0, 1, 0]}
-        scale={[6.282, 1, 6.282]}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.wall2.geometry}
-        material={materials['Material.002']}
-        position={[0, 1, 0]}
-        scale={[6.282, 1, 6.282]}
-      />
-    </group>
+    <Physics broadphase="SAP" gravity={[0, -2.6, 0]}>
+      {blockIds.map((id) => {
+        return (
+          <RootMeshRenderer
+            key={id}
+            blockId={id}
+            slice="building"
+            // meshProps={{
+            //   onPointerDown: handlePointerDown,
+            //   onPointerEnter: handlePointerEnter,
+            // }}
+          />
+        );
+      })}
+    </Physics>
   );
+
+  // const { nodes, materials } = useGLTF('/room.glb');
+  // return (
+  //   <group>
+  //     <mesh
+  //       castShadow
+  //       receiveShadow
+  //       geometry={(nodes.Cube as Mesh).geometry}
+  //       material={materials['Material.001']}
+  //       position={[0, 4, 0]}
+  //     />
+  //     <mesh
+  //       castShadow
+  //       receiveShadow
+  //       geometry={(nodes.Cube001 as Mesh).geometry}
+  //       material={materials['Material.002']}
+  //       position={[0, 1, 0]}
+  //       scale={[6.282, 1, 6.282]}
+  //     />
+  //     <mesh
+  //       castShadow
+  //       receiveShadow
+  //       geometry={(nodes.wall1 as Mesh).geometry}
+  //       material={materials['Material.002']}
+  //       position={[0, 1, 0]}
+  //       scale={[6.282, 1, 6.282]}
+  //     />
+  //     <mesh
+  //       castShadow
+  //       receiveShadow
+  //       geometry={(nodes.wall2 as Mesh).geometry}
+  //       material={materials['Material.002']}
+  //       position={[0, 1, 0]}
+  //       scale={[6.282, 1, 6.282]}
+  //     />
+  //   </group>
+  // );
 };
 
 export default BuildingScene;

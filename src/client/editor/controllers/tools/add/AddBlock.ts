@@ -4,6 +4,7 @@ import AddHomeElectricsBlock from './AddHomeElectricsBlock';
 import AddPoleBlock from './AddPoleBlock';
 import AddRoadBlock from './AddRoadBlock';
 import AddRoofBlock from './AddRoofBlock';
+import AddRoomBlock from './AddRoomBlock';
 import AddSocketBlock from './AddSocketBlock';
 import AddWallBlock from './AddWallBlock';
 import AddWeatherHeadBlock from './AddWeatherHeadBlock';
@@ -27,6 +28,7 @@ class AddBlock {
       new AddPoleBlock(blockStore, factoryService, sceneStore, update),
       new AddRoadBlock(blockStore, factoryService, sceneStore, update),
       new AddRoofBlock(blockStore, factoryService, sceneStore, update),
+      new AddRoomBlock(factoryService),
       new AddSocketBlock(blockStore, factoryService, sceneService, sceneStore, update),
       new AddWallBlock(blockStore, factoryService, sceneStore, update),
       new AddWeatherHeadBlock(blockStore, factoryService, sceneService, sceneStore, update),

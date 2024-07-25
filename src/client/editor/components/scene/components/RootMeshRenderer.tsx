@@ -4,11 +4,14 @@ import MeshRenderer from './MeshRenderer';
 
 type RootMeshRendererProps = Omit<WrappedMeshProps, 'block' | 'parent'> & {
   blockId: string;
+  slice: 'city' | 'building';
 };
 
 const RootMeshRenderer = (props: RootMeshRendererProps) => {
-  const { blockId, ...rest } = props;
-  const block = useAppSelector((selector) => selector.block.present.blocks[blockId]);
+  const { blockId, slice, ...rest } = props;
+  const block = useAppSelector((selector) =>
+    slice === 'city' ? selector.block.present.blocks[blockId] : selector.building.present.blocks[blockId],
+  );
 
   if (block.parentConnection) {
     return;
