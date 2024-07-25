@@ -77,7 +77,7 @@ class Edit {
       this.updates.splice(index, 1);
     }
 
-    this.updates.push({ type: 'update', slice: 'city', block: newBlock });
+    this.updates.push({ type: 'update', slice: this.targetSlice, block: newBlock });
 
     return this;
   }

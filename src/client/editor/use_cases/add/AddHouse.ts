@@ -102,6 +102,22 @@ class AddHouse {
       newBlockType: room,
       position: [0, 0, 0],
     });
+
+    const addFurnitureBlock = this.addBlock.getAddBlock('furnitures', 'rooms');
+
+    const roomBlock = edit.getLastBlock();
+
+    const rug = this.blockStore.getBlockType('rug-1');
+
+    addFurnitureBlock?.perform({
+      edit,
+      clientX: 0,
+      clientY: 0,
+      targetBlock: roomBlock,
+      targetPartIndex: undefined,
+      newBlockType: rug,
+      position: [0, 0.5, 0],
+    });
   }
 
   private buildingBaseId?: string;

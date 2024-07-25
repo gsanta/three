@@ -1,5 +1,6 @@
 import AddBlockToPlain from './AddBlockToPlain';
 import AddBlockType from './AddBlockType';
+import AddFurnitureBlock from './AddFurnitureBlock';
 import AddHomeElectricsBlock from './AddHomeElectricsBlock';
 import AddPoleBlock from './AddPoleBlock';
 import AddRoadBlock from './AddRoadBlock';
@@ -24,6 +25,7 @@ class AddBlock {
   ) {
     this.addBlock = [
       new AddBlockToPlain(factoryService, update),
+      new AddFurnitureBlock(factoryService),
       new AddHomeElectricsBlock(blockStore, factoryService, sceneService, sceneStore, update),
       new AddPoleBlock(blockStore, factoryService, sceneStore, update),
       new AddRoadBlock(blockStore, factoryService, sceneStore, update),
