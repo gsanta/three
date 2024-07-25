@@ -47,6 +47,10 @@ export const editorSlice = createSlice({
       state.editedBuilding = action.payload.editedBuilding;
     },
 
+    setCityMode(state) {
+      state.mode = 'city';
+    },
+
     setCarGridPos(state, action: PayloadAction<[number, number]>) {
       state.carGridPos = action.payload;
 
@@ -78,6 +82,12 @@ export const editorSlice = createSlice({
   },
 });
 
-export const { clear: clearEditorSlice, setCarGridPos, setEditMode, setBuildingMode } = editorSlice.actions;
+export const {
+  clear: clearEditorSlice,
+  setCarGridPos,
+  setEditMode,
+  setBuildingMode,
+  setCityMode,
+} = editorSlice.actions;
 
 export default editorSlice.reducer;
