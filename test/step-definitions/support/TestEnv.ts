@@ -54,7 +54,6 @@ export const setupTestEnv = (): TestEnv => {
   const testStore = new TestStore();
   testStore.setup();
   const blockStore = new BlockStore(store);
-  const meshFactory = new TestMeshFactory();
   const scene = new TestSceneService();
   const factoryService = new FactoryService(blockStore, scene);
 
@@ -64,6 +63,8 @@ export const setupTestEnv = (): TestEnv => {
   const updateService = new TransactionService(blockStore, store, scene, [electricitySystemHook]);
 
   const sceneStore = new SceneStore();
+
+  const meshFactory = new TestMeshFactory(blockStore, sceneStore);
 
   const toolStore = new ToolStore(store);
 
@@ -79,6 +80,8 @@ export const setupTestEnv = (): TestEnv => {
     toolStore,
   );
 
+  sceneStore.setToolService(tool);
+
   const toolHelper = new ToolHelper(sceneStore, tool, testStore);
 
   testMiddleware.startListening({
@@ -92,8 +95,10 @@ export const setupTestEnv = (): TestEnv => {
         }
 
         if ('block' in u && u.block) {
-          sceneStore.addMesh(meshFactory.create(u.block, sceneStore) as unknown as Mesh, u.block.id);
-          testStore.setLastModifiedBlock(u.block);
+          setTimeout(() => {
+            sceneStore.addMesh(meshFactory.create(u.block) as unknown as Mesh, u.block.id);
+            testStore.setLastModifiedBlock(u.block);
+          }, 0);
         }
       });
     },
@@ -103,7 +108,7 @@ export const setupTestEnv = (): TestEnv => {
     actionCreator: update,
     effect: async (action) => {
       Object.values(action.payload.blocks || {}).forEach((block) => {
-        sceneStore.addMesh(meshFactory.create(block, sceneStore) as unknown as Mesh, block.id);
+        sceneStore.addMesh(meshFactory.create(block) as unknown as Mesh, block.id);
       });
     },
   });
@@ -127,6 +132,7 @@ export const setupTestEnv = (): TestEnv => {
     store.dispatch(clearBlockSlice());
     store.dispatch(clearEditorSlice());
     testStore.storedBlockId = undefined;
+    sceneStore.clear();
   };
 
   return {

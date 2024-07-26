@@ -7,8 +7,8 @@ Given('I have a building base', function (this: ExtendedWorld) {
   addTemplateToPosition.call(this, 'building-base-1', 0, 0, 0);
 });
 
-Given('I have a building base with id {string}', function (this: ExtendedWorld, id: string) {
+Given('I have a building base with id {string}', async function (this: ExtendedWorld, id: string) {
   this.env.teardown();
   this.env.sceneService.setUuid(id);
-  addTemplateToPosition.call(this, 'building-base-1', 0, 0, 0);
+  await addTemplateToPosition.call(this, 'building-base-1', 0, 0, 0);
 });

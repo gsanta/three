@@ -13,6 +13,7 @@ Feature: House wiring
       | BLOCK     | PART  | B_BOX_CENTER |
       | wall-4-id | root  | 1.5,1.7,3.5  |
     And I press pointer over block 'base-1-id'
+    And I wait block count to increase by 1
     And I have an intersection with:
       | BLOCK     | PART        | B_BOX_CENTER |
       | base-1-id | wall-join-2 | 5,1.7,3.5    |

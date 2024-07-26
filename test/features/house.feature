@@ -6,11 +6,13 @@ Feature: House
     And I select template 'wall-1'
     And I set next uuid to 'wall-1'
     And I press pointer
+    And I wait block count to increase by 1
     Then parent for block 'wall-1' is 'base-1'
     And block 'wall-1' is in slot '#2' of block 'base-1'
     When I hover over block 'base-1' and part '#3'
     And I set next uuid to 'wall-2'
     And I press pointer
+    And I wait block count to increase by 1
     Then parent for block 'wall-2' is 'base-1'
     And block 'wall-2' is in slot '#3' of block 'base-1'
 
@@ -21,6 +23,7 @@ Feature: House
     And I select template 'wall-1'
     And I set next uuid to 'wall-1'
     And I press pointer
+    And I wait block count to increase by 1
     And I select tool 'erase'
     And I press pointer over block 'wall-1'
     Then block 'base-1' does not have a child 'wall-1'
@@ -37,6 +40,7 @@ Feature: House
     And I select template 'washing-machine-1'
     And I set next uuid to 'washing-machine-id-1'
     And I press pointer over block 'base-1-id' and part 'floor' at position '1.5,3,0'
+    And I wait block count to increase by 1
     Then I have a block 'washing-machine-id-1' with properties
       | PARENT    | POSITION |
       | base-1-id | 0.5,0,0  |
