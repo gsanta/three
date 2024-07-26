@@ -103,6 +103,24 @@ const homeElectrics: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'par
     },
     type: 'socket-1',
   },
+  {
+    category: 'home-electrics',
+    decorations: ['devices'],
+    path: '/television1.glb',
+    parts: [
+      {
+        index: '#1',
+        geometryPath: 'Television1Base.geometry',
+        materialPath: 'Rug1_Material',
+      },
+    ],
+    partDetails: {
+      '#1': {
+        name: 'root',
+      },
+    },
+    type: 'television-1',
+  },
 ];
 
 export default homeElectrics;

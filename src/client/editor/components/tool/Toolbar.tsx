@@ -2,16 +2,27 @@ import React from 'react';
 import { Box, Text, Tooltip } from '@chakra-ui/react';
 import ToggleButton from '../../../common/components/ToggleButton';
 import Icon from '../../../common/components/icon/Icon';
-import { useAppSelector } from '../../../common/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '../../../common/hooks/hooks';
 import useEditorContext from '@/app/editor/EditorContext';
 import ToolName from '../../types/ToolName';
+import { setCityMode } from '../../stores/editorSlice';
 
 const Toolbar = () => {
   const { tool } = useEditorContext();
-  const { selectedTool } = useAppSelector((state) => state.tool);
+  const selectedTool = useAppSelector((state) => state.tool.selectedTool);
+  const mode = useAppSelector((state) => state.editor.mode);
+  const dispatch = useAppDispatch();
 
   const handleSelectTool = (name: ToolName) => {
     tool.setSelectedTool(name as ToolName);
+  };
+
+  const handleModeChange = () => {
+    if (mode === 'city') {
+      handleSelectTool(ToolName.RoomModel);
+    } else {
+      dispatch(setCityMode());
+    }
   };
 
   return (
@@ -50,7 +61,7 @@ const Toolbar = () => {
           className="iconOnly"
           colorScheme="red"
           toggle={selectedTool === ToolName.RoomModel}
-          onToggle={() => handleSelectTool(ToolName.RoomModel)}
+          onToggle={handleModeChange}
           variant="outline"
         >
           <Icon src="/icons/room_icon.png" />

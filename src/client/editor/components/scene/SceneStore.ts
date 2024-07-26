@@ -1,5 +1,6 @@
 import { Camera, Group, Mesh, Object3D, Scene } from 'three';
 import ToolService from '../../services/ToolService';
+import { OrbitControls } from 'three-stdlib';
 
 class SceneStore {
   constructor() {
@@ -84,6 +85,17 @@ class SceneStore {
     return mesh;
   }
 
+  setOrbitControls(orbitControls: OrbitControls) {
+    this.orbitControls = orbitControls;
+  }
+
+  getOrbitControls() {
+    if (!this.orbitControls) {
+      throw new Error('OrbitControls is not defined');
+    }
+    return this.orbitControls;
+  }
+
   setCamera(camera: Camera) {
     this.camera = camera;
   }
@@ -129,6 +141,8 @@ class SceneStore {
   private objInstances: Map<string, Set<string>>;
 
   private camera: Camera | undefined;
+
+  private orbitControls: OrbitControls | undefined;
 
   private canvasElement: HTMLCanvasElement | undefined;
 

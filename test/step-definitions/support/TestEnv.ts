@@ -3,7 +3,7 @@ import ToolHelper from './ToolHelper';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import { store, testMiddleware } from '@/client/common/utils/store';
 import TestMeshFactory from './TestMeshFactory';
-import { UpdateBlocks, clearBlockSlice, update, updateBlocks } from '@/client/editor/stores/block/blockSlice';
+import { clearBlockSlice, update } from '@/client/editor/stores/block/blockSlice';
 import { Mesh } from 'three';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import ToolService from '@/client/editor/services/ToolService';
@@ -29,6 +29,10 @@ import ElectricitySystemHook from '@/client/editor/services/electricity/Electric
 import ElectricityStore from '@/client/editor/stores/electricity/ElectricityStore';
 import { clearEditorSlice } from '@/client/editor/stores/editorSlice';
 import homeElectrics from 'prisma/seed/homeElectrics';
+import { updateBlocks } from '@/client/editor/stores/block/blockActions';
+import { UpdateBlocks } from '@/client/editor/stores/block/blockSlice.types';
+import furnitureSeeds from 'prisma/seed/furnitureSeeds';
+import roomSeeds from 'prisma/seed/roomSeeds';
 
 type TestEnv = {
   controller: ControllerService;
@@ -112,6 +116,8 @@ export const setupTestEnv = (): TestEnv => {
     ...poleTempalteSeeds,
     ...roadTempalteSeeds,
     ...homeElectrics,
+    ...roomSeeds,
+    ...furnitureSeeds,
   ];
 
   store.dispatch(setTemplates(seeds as BlockType[]));

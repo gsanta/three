@@ -1,5 +1,5 @@
 import { Environment, OrbitControls, PerspectiveCamera } from '@react-three/drei';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import useEditorContext from '@/app/editor/EditorContext';
 import { ThreeEvent, useThree } from '@react-three/fiber';
 import { useAppSelector } from '@/client/common/hooks/hooks';
@@ -10,9 +10,31 @@ import Car from './Car';
 import Ground from './Ground';
 import Track from './Track';
 import BuildingScene from './BuildingScene';
+import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 
 const Scene = () => {
   const { tool, scene: sceneService } = useEditorContext();
+
+  const orbitControlRef = useRef<OrbitControlsImpl>(null);
+
+  useEffect(() => {
+    if (orbitControlRef.current) {
+      sceneService.setOrbitControls(orbitControlRef.current);
+      // const controls = orbitControlRef.current;
+
+      // const onChange = () => {
+      //   console.log('Camera position:', controls.object.position);
+      //   console.log('Target position:', controls.target);
+      // };
+
+      // controls.addEventListener('end', onChange);
+
+      // // Cleanup event listener on unmount
+      // return () => {
+      //   controls.removeEventListener('end', onChange);
+      // };
+    }
+  }, [orbitControlRef, sceneService]);
 
   const camera = useThree((state) => state.camera);
   const scene = useThree((state) => state.scene);
@@ -43,10 +65,6 @@ const Scene = () => {
     [tool],
   );
 
-  if (sceneMode === 'building') {
-    return <BuildingScene />;
-  }
-
   return (
     <>
       {editMode === 'wiring' && (
@@ -58,6 +76,7 @@ const Scene = () => {
             onPointerEnter: handlePointerEnter,
           }}
           materialProps={{ opacity: 0.5, transparent: true }}
+          slice="city"
         />
       )}
 
@@ -66,32 +85,37 @@ const Scene = () => {
         <meshStandardMaterial color="brown" />
       </mesh>
       <TemporaryCableRenderer />
-      <OrbitControls makeDefault />
+      <OrbitControls makeDefault ref={orbitControlRef} />
       <Environment files="envmap.hdr" background={true} />
 
-      <Physics broadphase="SAP" gravity={[0, -2.6, 0]}>
-        {blockIds.map((id) => {
-          if (editTargetBlock === id) {
-            return;
-          }
+      {sceneMode === 'building' ? (
+        <BuildingScene />
+      ) : (
+        <Physics broadphase="SAP" gravity={[0, -2.6, 0]}>
+          {blockIds.map((id) => {
+            if (editTargetBlock === id) {
+              return;
+            }
 
-          return (
-            <RootMeshRenderer
-              key={id}
-              blockId={id}
-              meshProps={{
-                onPointerDown: handlePointerDown,
-                onPointerEnter: handlePointerEnter,
-              }}
-            />
-          );
-        })}
-        <Track />
-        <Ground />
-        <Car />
-        <PerspectiveCamera makeDefault position={[0, 50, 75]} fov={25} />
-        {/* <OrthographicCamera makeDefault position={[0, 1, 0]} /> */}
-      </Physics>
+            return (
+              <RootMeshRenderer
+                key={id}
+                blockId={id}
+                meshProps={{
+                  onPointerDown: handlePointerDown,
+                  onPointerEnter: handlePointerEnter,
+                }}
+                slice="city"
+              />
+            );
+          })}
+          <Track />
+          <Ground />
+          <Car />
+        </Physics>
+      )}
+
+      <PerspectiveCamera makeDefault position={[0, 50, 75]} fov={25} />
     </>
   );
 };

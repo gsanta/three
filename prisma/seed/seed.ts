@@ -6,6 +6,8 @@ import poleTempalteSeeds from './poleTemplateSeeds';
 import plantTempalteSeeds from './plantTemplateSeeds';
 import homeElectrics from './homeElectrics';
 import electricityProviders from './electricityProviders';
+import roomSeeds from './roomSeeds';
+import furnitureSeeds from './furnitureSeeds';
 
 const prisma = new PrismaClient();
 const main = async () => {
@@ -62,6 +64,22 @@ const main = async () => {
       where: { type: template.type },
       update: {},
       create: template,
+    });
+  }
+
+  for (const seed of roomSeeds) {
+    await prisma.blockType.upsert({
+      where: { type: seed.type },
+      update: {},
+      create: seed,
+    });
+  }
+
+  for (const seed of furnitureSeeds) {
+    await prisma.blockType.upsert({
+      where: { type: seed.type },
+      update: {},
+      create: seed,
     });
   }
 };

@@ -1,4 +1,4 @@
-import { UpdateBlocks } from '../../stores/block/blockSlice';
+import { UpdateBlocks } from '../../stores/block/blockSlice.types';
 
 abstract class SystemHook {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

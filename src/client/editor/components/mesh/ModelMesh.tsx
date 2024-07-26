@@ -108,6 +108,7 @@ export const ModelMesh = ({ additions, block, materialProps, meshProps, overwrit
           // additions={additions}
           meshProps={{ ...meshProps }}
           materialProps={materialProps}
+          slice={block.category === 'rooms' ? 'building' : 'city'}
         />
       ))}
     </group>

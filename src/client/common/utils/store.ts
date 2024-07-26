@@ -6,14 +6,22 @@ import toolSlice, { ToolState } from '../../editor/stores/tool/toolSlice';
 import { EnhancedStore, configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
 import temporarySlice, { TemporaryState } from '@/client/editor/stores/block/temporarySlice';
 import electricitySlice, { ElectricityState } from '@/client/editor/stores/electricity/electricitySlice';
+import buildingSlice from '@/client/editor/stores/block/buildingSlice';
 
-const sceneSliceUndoable = undoable(blockSlice, {
+const blockSliceUndoable = undoable(blockSlice, {
+  filter: (action: { payload: { history?: boolean }; type: string }) => {
+    return action.type !== hover.type && action.payload?.history !== false;
+  },
+});
+
+const buildingSliceUndoable = undoable(buildingSlice, {
   filter: (action: { payload: { history?: boolean }; type: string }) => {
     return action.type !== hover.type && action.payload?.history !== false;
   },
 });
 
 export type RootState = {
+  building: StateWithHistory<BlockState>;
   electricSystem: ElectricityState;
   editor: EditorState;
   tool: ToolState;
@@ -32,7 +40,8 @@ export function setupStore(preloadedState?: RootState): EnhancedStore<RootState>
       tool: toolSlice,
       blockType: blockTypeSlice,
       temporary: temporarySlice,
-      block: sceneSliceUndoable,
+      block: blockSliceUndoable,
+      building: buildingSliceUndoable,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(testMiddleware.middleware),
 

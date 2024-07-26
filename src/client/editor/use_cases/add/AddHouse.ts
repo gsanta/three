@@ -1,5 +1,6 @@
 import AddBlock from '../../controllers/tools/add/AddBlock';
 import TransactionService from '../../services/transaction/TransactionService';
+import Edit from '../../services/update/Edit';
 import BlockStore from '../../stores/block/BlockStore';
 import Block from '../../types/Block';
 import BlockType from '../../types/BlockType';
@@ -41,9 +42,12 @@ class AddHouse {
       position,
     });
 
-    edit.commit(false);
-
     this.buildingBaseId = edit.getLastBlock()?.id;
+
+    edit.setTargetSlice('building');
+    this.addRoom(edit);
+
+    edit.commit(false);
   }
 
   performAfterRender() {
@@ -82,6 +86,62 @@ class AddHouse {
     }
 
     this.buildingBaseId = undefined;
+  }
+
+  private addRoom(edit: Edit) {
+    const addBlock = this.addBlock.getAddBlock('rooms', 'plain');
+
+    const room = this.blockStore.getBlockType('room-1');
+
+    addBlock?.perform({
+      edit,
+      clientX: 0,
+      clientY: 0,
+      targetBlock: undefined,
+      targetPartIndex: undefined,
+      newBlockType: room,
+      position: [0, 0, 0],
+    });
+
+    const addFurnitureBlock = this.addBlock.getAddBlock('furnitures', 'rooms');
+
+    const roomBlock = edit.getLastBlock();
+
+    const rug = this.blockStore.getBlockType('rug-1');
+
+    addFurnitureBlock?.perform({
+      edit,
+      clientX: 0,
+      clientY: 0,
+      targetBlock: roomBlock,
+      targetPartIndex: undefined,
+      newBlockType: rug,
+      position: [0, 0.5, 0],
+    });
+
+    const shelf = this.blockStore.getBlockType('shelf-1');
+
+    addFurnitureBlock?.perform({
+      edit,
+      clientX: 0,
+      clientY: 0,
+      targetBlock: roomBlock,
+      targetPartIndex: undefined,
+      newBlockType: shelf,
+      position: [-5.5, 0.5, 0],
+    });
+
+    const television = this.blockStore.getBlockType('television-1');
+
+    addFurnitureBlock?.perform({
+      edit,
+      clientX: 0,
+      clientY: 0,
+      targetBlock: roomBlock,
+      targetPartIndex: undefined,
+      newBlockType: television,
+      position: [-5.5, 1.7, 0],
+    });
   }
 
   private buildingBaseId?: string;
