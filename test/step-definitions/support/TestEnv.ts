@@ -31,6 +31,8 @@ import { clearEditorSlice } from '@/client/editor/stores/editorSlice';
 import homeElectrics from 'prisma/seed/homeElectrics';
 import { updateBlocks } from '@/client/editor/stores/block/blockActions';
 import { UpdateBlocks } from '@/client/editor/stores/block/blockSlice.types';
+import furnitureSeeds from 'prisma/seed/furnitureSeeds';
+import roomSeeds from 'prisma/seed/roomSeeds';
 
 type TestEnv = {
   controller: ControllerService;
@@ -114,6 +116,8 @@ export const setupTestEnv = (): TestEnv => {
     ...poleTempalteSeeds,
     ...roadTempalteSeeds,
     ...homeElectrics,
+    ...roomSeeds,
+    ...furnitureSeeds,
   ];
 
   store.dispatch(setTemplates(seeds as BlockType[]));
