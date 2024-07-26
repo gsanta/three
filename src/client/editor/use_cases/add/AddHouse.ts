@@ -118,6 +118,30 @@ class AddHouse {
       newBlockType: rug,
       position: [0, 0.5, 0],
     });
+
+    const shelf = this.blockStore.getBlockType('shelf-1');
+
+    addFurnitureBlock?.perform({
+      edit,
+      clientX: 0,
+      clientY: 0,
+      targetBlock: roomBlock,
+      targetPartIndex: undefined,
+      newBlockType: shelf,
+      position: [-5.5, 0.5, 0],
+    });
+
+    const television = this.blockStore.getBlockType('television-1');
+
+    addFurnitureBlock?.perform({
+      edit,
+      clientX: 0,
+      clientY: 0,
+      targetBlock: roomBlock,
+      targetPartIndex: undefined,
+      newBlockType: television,
+      position: [-5.5, 1.7, 0],
+    });
   }
 
   private buildingBaseId?: string;

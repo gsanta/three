@@ -8,7 +8,7 @@ class AddFurnitureBlock extends AddBlockType {
 
     this.addBlockToPos = new AddBlockToPos(factoryService);
 
-    this.sourceCategories = ['furnitures'];
+    this.sourceCategories = ['furnitures', 'home-electrics'];
     this.targetCategories = ['rooms'];
   }
 

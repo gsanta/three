@@ -24,6 +24,24 @@ const furnitureSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'pa
     },
     type: 'rug-1',
   },
+  {
+    category: 'furnitures',
+    decorations: [],
+    path: '/shelf1.glb',
+    parts: [
+      {
+        index: '#1',
+        geometryPath: 'Shelf1Base.geometry',
+        materialPath: 'Rug1_Material',
+      },
+    ],
+    partDetails: {
+      '#1': {
+        name: 'root',
+      },
+    },
+    type: 'shelf-1',
+  },
 ];
 
 export default furnitureSeeds;
