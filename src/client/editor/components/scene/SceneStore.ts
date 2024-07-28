@@ -6,6 +6,7 @@ class SceneStore {
   constructor() {
     this.meshes = new Map();
     this.groups = new Map();
+    this.obj3ds = new Map();
     this.objInstances = new Map();
   }
 
@@ -20,6 +21,7 @@ class SceneStore {
     }
 
     this.meshes.set(mesh.userData.modelId, mesh);
+    this.obj3ds.set(mesh.userData.modelId, mesh);
     this.objInstances.get(mesh.userData.modelId)?.add(instanceId);
 
     this.toolService?.onRendered();
@@ -37,6 +39,7 @@ class SceneStore {
     }
 
     this.groups.set(group.userData.modelId, group);
+    this.obj3ds.set(group.userData.modelId, group);
     this.objInstances.get(group.userData.modelId)?.add(instanceId);
 
     this.toolService?.onRendered();
@@ -58,6 +61,7 @@ class SceneStore {
 
       this.meshes.delete(modelId);
       this.groups.delete(modelId);
+      this.obj3ds.delete(modelId);
     }
   }
 
@@ -83,6 +87,10 @@ class SceneStore {
     }
 
     return mesh;
+  }
+
+  getAllObj3d() {
+    return this.obj3ds;
   }
 
   setOrbitControls(orbitControls: OrbitControls) {
@@ -129,6 +137,13 @@ class SceneStore {
     return this.scene;
   }
 
+  clear() {
+    this.meshes = new Map();
+    this.groups = new Map();
+    this.obj3ds = new Map();
+    this.objInstances = new Map();
+  }
+
   // TODO: this should be added in the constructor, but causes circular dep
   setToolService(toolService: ToolService) {
     this.toolService = toolService;
@@ -137,6 +152,8 @@ class SceneStore {
   private meshes: Map<string, Mesh>;
 
   private groups: Map<string, Group>;
+
+  private obj3ds: Map<string, Object3D>;
 
   private objInstances: Map<string, Set<string>>;
 

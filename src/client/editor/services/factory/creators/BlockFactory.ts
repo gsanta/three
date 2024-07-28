@@ -11,7 +11,7 @@ abstract class BlockFactory {
   }
 
   create(blockType: BlockType, overrides: Partial<Block> = {}): Block {
-    const block = BlockCreator.create(this.sceneService.uuid(), blockType, overrides);
+    const block = BlockCreator.create(this.sceneService.uuid(blockType), blockType, overrides);
 
     return block;
   }

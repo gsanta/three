@@ -3,7 +3,7 @@ import ToolHelper from './ToolHelper';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import { store, testMiddleware } from '@/client/common/utils/store';
 import TestMeshFactory from './TestMeshFactory';
-import { clearBlockSlice, update } from '@/client/editor/stores/block/blockSlice';
+import { BlockState, clearBlockSlice, update } from '@/client/editor/stores/block/blockSlice';
 import { Mesh } from 'three';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import ToolService from '@/client/editor/services/ToolService';
@@ -33,6 +33,7 @@ import { updateBlocks } from '@/client/editor/stores/block/blockActions';
 import { UpdateBlocks } from '@/client/editor/stores/block/blockSlice.types';
 import furnitureSeeds from 'prisma/seed/furnitureSeeds';
 import roomSeeds from 'prisma/seed/roomSeeds';
+import { PayloadAction } from '@reduxjs/toolkit';
 
 type TestEnv = {
   controller: ControllerService;
@@ -54,7 +55,6 @@ export const setupTestEnv = (): TestEnv => {
   const testStore = new TestStore();
   testStore.setup();
   const blockStore = new BlockStore(store);
-  const meshFactory = new TestMeshFactory();
   const scene = new TestSceneService();
   const factoryService = new FactoryService(blockStore, scene);
 
@@ -64,6 +64,8 @@ export const setupTestEnv = (): TestEnv => {
   const updateService = new TransactionService(blockStore, store, scene, [electricitySystemHook]);
 
   const sceneStore = new SceneStore();
+
+  const meshFactory = new TestMeshFactory(blockStore, sceneStore);
 
   const toolStore = new ToolStore(store);
 
@@ -79,11 +81,13 @@ export const setupTestEnv = (): TestEnv => {
     toolStore,
   );
 
+  sceneStore.setToolService(tool);
+
   const toolHelper = new ToolHelper(sceneStore, tool, testStore);
 
-  testMiddleware.startListening({
+  const updateBlocksListener = {
     actionCreator: updateBlocks,
-    effect: async (action) => {
+    effect: async (action: { payload: UpdateBlocks; type: string }) => {
       const payload = action.payload as UpdateBlocks;
 
       payload.blockUpdates.forEach((u) => {
@@ -92,21 +96,27 @@ export const setupTestEnv = (): TestEnv => {
         }
 
         if ('block' in u && u.block) {
-          sceneStore.addMesh(meshFactory.create(u.block, sceneStore) as unknown as Mesh, u.block.id);
-          testStore.setLastModifiedBlock(u.block);
+          setTimeout(() => {
+            sceneStore.addMesh(meshFactory.create(u.block) as unknown as Mesh, u.block.id);
+            testStore.setLastModifiedBlock(u.block);
+          }, 0);
         }
       });
     },
-  });
+  };
 
-  testMiddleware.startListening({
+  const unsubscribeUpdateBlockListener = testMiddleware.startListening(updateBlocksListener);
+
+  const updateListener = {
     actionCreator: update,
-    effect: async (action) => {
+    effect: async (action: PayloadAction<Partial<BlockState>>) => {
       Object.values(action.payload.blocks || {}).forEach((block) => {
-        sceneStore.addMesh(meshFactory.create(block, sceneStore) as unknown as Mesh, block.id);
+        sceneStore.addMesh(meshFactory.create(block) as unknown as Mesh, block.id);
       });
     },
-  });
+  };
+
+  const unsubscribeUpdateListener = testMiddleware.startListening(updateListener);
 
   // TODO: used for tests right now, later it should come from db
   const seeds = [
@@ -127,6 +137,9 @@ export const setupTestEnv = (): TestEnv => {
     store.dispatch(clearBlockSlice());
     store.dispatch(clearEditorSlice());
     testStore.storedBlockId = undefined;
+    sceneStore.clear();
+    unsubscribeUpdateListener();
+    unsubscribeUpdateBlockListener();
   };
 
   return {

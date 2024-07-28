@@ -1,8 +1,13 @@
-import { Then } from '@cucumber/cucumber';
+import { Then, When } from '@cucumber/cucumber';
 import ExtendedWorld from './ExtendedWorld';
 import assert from 'assert';
 import findClosestBlock from './helpers/findClosestBlock';
 import { checkBlockExists, checkPartIndexExists, checkPositionCloseTo } from './helpers/checks';
+import { waitForMeshCountChange } from './helpers/waitFor';
+
+When('I wait block count to increase by {int}', async function (this: ExtendedWorld, delta: number) {
+  await waitForMeshCountChange(delta, this);
+});
 
 Then('parent for block {string} is {string}', function (this: ExtendedWorld, childId: string, parentId: string) {
   const child = this.env.blockStore.getBlock(childId);

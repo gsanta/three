@@ -9,6 +9,7 @@ import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { Vector3 } from 'three';
 import VectorUtils from '@/client/editor/utils/vectorUtils';
 import AddWirePoints from '@/client/editor/use_cases/wiring/AddWirePoints';
+import { waitForMeshCountChange } from './helpers/waitFor';
 
 type CablePointHash = {
   WORLD_POS: string;
@@ -18,7 +19,7 @@ type CablePointHash = {
 
 Given(
   'I have a cable for house {string} with cable id {string}:',
-  function (this: ExtendedWorld, houseId: string, cableId: string, table: any) {
+  async function (this: ExtendedWorld, houseId: string, cableId: string, table: any) {
     const data = table.hashes() as CablePointHash[];
     this.env.sceneService.setUuid(cableId);
 
@@ -46,6 +47,7 @@ Given(
 
     const addWirePoints = new AddWirePoints(this.env.blockStore, this.env.services.factory, this.env.update);
     addWirePoints.add(this.env.blockStore.getBlock(rootBlockId), points);
+    await waitForMeshCountChange(1, this);
   },
 );
 

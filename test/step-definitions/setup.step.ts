@@ -13,9 +13,10 @@ import { checkBlockExists, checkPartIndexExists, checkPosition } from './helpers
 import VectorUtils from '@/client/editor/utils/vectorUtils';
 import AddTool from '@/client/editor/controllers/tools/add/AddTool';
 import { ToolInfo } from '@/client/editor/types/Tool';
+import { waitForMeshCountChange } from './helpers/waitFor';
 
 Given('I have an empty canvas', function (this: ExtendedWorld) {
-  this.env.teardown();
+  this.setup();
 });
 
 type SceneHash = {
@@ -26,7 +27,7 @@ type SceneHash = {
 };
 
 Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
-  this.env.teardown();
+  this.setup();
 
   const addTool = new AddTool(
     this.env.blockStore,
@@ -52,7 +53,7 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
 
   const data = table.hashes() as SceneHash[];
 
-  data.forEach((row) => {
+  for (const row of data) {
     const pos = row.POS.split(',').map((num) => Number(num)) as Num3;
 
     this.env.sceneService.setUuid(row.ID);
@@ -121,6 +122,8 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
       store.dispatch(setSelectedGeometry(block.type));
       addTool.onPointerUp({ clientX: 0, clientY: 0, pos: new Vector3(...pos) } as ToolInfo);
 
+      await waitForMeshCountChange(1, this);
+
       // const edit = this.env.update.getTransaction();
       // addBlock.perform(edit, new Vector3(...pos), row.TYPE);
       // edit.commit();
@@ -138,22 +141,24 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
     //   addBlockToPointerPos.perform(edit, row.PARENT, '#1', row.TYPE, 0, 0);
     //   edit.commit();
     // }
-  });
+  }
 });
 
-export function addTemplateToPosition(this: ExtendedWorld, template: string, x: number, y: number, z: number) {
+export async function addTemplateToPosition(this: ExtendedWorld, template: string, x: number, y: number, z: number) {
   store.dispatch(setSelectedTool(ToolName.Add));
   store.dispatch(setSelectedGeometry(template));
 
   this.env.toolHelper.pointerMove({ point: new Vector3(x, y, z) });
   this.env.toolHelper.pointerDown();
   this.env.toolHelper.pointerUp();
+
+  await waitForMeshCountChange(1, this);
 }
 
-Given('I have canvas with a block {string}', function (this: ExtendedWorld, template: string) {
-  this.env.teardown();
+Given('I have canvas with a block {string}', async function (this: ExtendedWorld, template: string) {
+  this.setup();
 
-  addTemplateToPosition.call(this, template, 0, 0, 0);
+  await addTemplateToPosition.call(this, template, 0, 0, 0);
 });
 
 When('I set next uuid to {string}', function (this: ExtendedWorld, id: string) {

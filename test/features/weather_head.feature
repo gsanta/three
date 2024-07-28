@@ -54,7 +54,6 @@ Feature: Weather head
     And block 'cable-1-id' does not exist
     And pin '#2' of block 'wh-1-id' is empty
 
-  @only
   Scenario: Moving a pole connected to a weather head
     Given I have a scene with:
       | TYPE            | ID         | PARENT       | POS                   |
@@ -64,6 +63,7 @@ Feature: Weather head
       | pole-1          | pole-1-id  | -            | 5,0,0                 |
       | cable-1         | cable-1-id | -            | pole-1-id#5:wh-1-id#2 |
     When I select tool 'select'
+    And I select a block at position 100,0,0
     And I select a block at position 5,0,0
     And I drag pointer with delta '1,0,0'
     And I end drag

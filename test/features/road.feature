@@ -6,6 +6,8 @@ Feature: Road
     And I select template 'road-1'
     And I move pointer to '5,0,0'
     And I press pointer
+    And I wait block count to increase by 1
     And I hover over block 'road-1-id' and part '#4'
     And I press pointer
+    And I wait block count to increase by 1
     Then I have a block 'road-1' at estimated position 5,0.005,4

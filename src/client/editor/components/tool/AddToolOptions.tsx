@@ -31,7 +31,7 @@ const AddToolOptions = () => {
     <Box padding="4" display="flex" flexDir="column" gap="4">
       <FormControl>
         <FormLabel display="flex" alignItems="center" gap="2" marginBottom="1">
-          Geometry type
+          Blocks
         </FormLabel>
         <RadioSwitchGroup name="geometry-selector" onChange={handleGeometryChange} value={selectedBlockName}>
           {blocks.map((block) => (
@@ -39,6 +39,9 @@ const AddToolOptions = () => {
               {block.type}
             </RadioSwitchButton>
           ))}
+          <RadioSwitchButton key="house" value="house">
+            House
+          </RadioSwitchButton>
         </RadioSwitchGroup>
       </FormControl>
       {blockSettings && selectedValues && (

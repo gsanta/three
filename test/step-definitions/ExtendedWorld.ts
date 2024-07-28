@@ -9,6 +9,11 @@ class ExtendedWorld extends World {
 
     this.env = setupTestEnv();
   }
+
+  setup() {
+    this.env.teardown();
+    this.env = setupTestEnv();
+  }
 }
 
 setWorldConstructor(ExtendedWorld);

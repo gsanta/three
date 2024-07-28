@@ -7,7 +7,6 @@ import { setSelectedGeometry } from '@/client/editor/stores/blockType/blockTypeS
 import { Vector3 } from 'three';
 import findClosestBlock from './helpers/findClosestBlock';
 import { checkPartIndexExists, checkPosition } from './helpers/checks';
-import BlockUtils from '@/client/editor/utils/BlockUtils';
 import { BlockIntersection } from '@/client/editor/use_cases/IntersectMesh';
 import Num3 from '@/client/editor/types/Num3';
 

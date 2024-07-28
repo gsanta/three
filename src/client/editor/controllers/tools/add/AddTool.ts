@@ -31,7 +31,6 @@ class AddTool extends HoverTool {
 
   onPointerUp({ clientX, clientY, gridIndex, pos }: ToolInfo) {
     const { selectedBlockName } = this.blockStore.getBlockSettings();
-    const newBlockType = this.blockStore.getBlockType(selectedBlockName);
 
     const activeGridIndexes = store.getState().editor.activeGridIndexes;
 
@@ -39,7 +38,7 @@ class AddTool extends HoverTool {
       return;
     }
 
-    if (!selectedBlockName || !newBlockType) {
+    if (!selectedBlockName) {
       return;
     }
 
@@ -49,7 +48,9 @@ class AddTool extends HoverTool {
 
     const targetBlock = targetBlockId ? this.blockStore.getBlock(targetBlockId) : undefined;
 
-    if (newBlockType.category === 'building-bases') {
+    if (selectedBlockName === 'house') {
+      const newBlockType = this.blockStore.getBlockType('building-base-1');
+
       this.addHouse.add({
         clientX,
         clientY,
@@ -58,7 +59,10 @@ class AddTool extends HoverTool {
         newBlockType,
         position: pos.toArray(),
       });
+      this.newBlockCategory = newBlockType.category;
     } else {
+      const newBlockType = this.blockStore.getBlockType(selectedBlockName);
+
       const selectedAddBlock = this.addBlock.getAddBlock(newBlockType.category, targetBlock?.category || 'plain');
 
       const edit = this.update.getTransaction();
@@ -74,9 +78,9 @@ class AddTool extends HoverTool {
       });
 
       edit.commit();
+      this.newBlockCategory = newBlockType.category;
     }
 
-    this.newBlockCategory = newBlockType.category;
     this.targetBlockCategory = targetBlock?.category || 'plain';
 
     // if (!targetBlockId || !this.addToBlock[this.blockStore.getBlock(targetBlockId).category]) {
