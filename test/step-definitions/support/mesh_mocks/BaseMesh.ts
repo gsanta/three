@@ -2,15 +2,16 @@ import { Vector3 } from 'three';
 import AbstractMesh from './AbstractMesh';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
+import Block from '@/client/editor/types/Block';
 
 class BaseMesh extends AbstractMesh {
-  constructor(blockId: string, blockStore: BlockStore, sceneStore: SceneStore, name?: string) {
+  constructor(block: Block, blockStore: BlockStore, sceneStore: SceneStore, name?: string) {
     super(name);
     this.blockStore = blockStore;
-    this.blockId = blockId;
+    this.blockId = block.id;
     this.name = name;
     this.userData = {
-      modelId: blockId,
+      modelId: block.id,
     };
     this.sceneStore = sceneStore;
   }

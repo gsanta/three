@@ -25,7 +25,6 @@ Feature: Pole
     And cable for block 'examined' and pin '#3' ends at position '-0.378,7.254,10.011'
     And cable for block 'examined' and pin '#4' ends at position '0.865,7.254,10.011'
 
-  @only
   Scenario: Removing a pole
     Given I have an empty canvas
     When I select tool 'add'

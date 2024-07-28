@@ -9,7 +9,7 @@ import BlockDecoration, { BlockDecorationType } from '@/client/editor/types/Bloc
 
 class CableFactory extends BlockFactory {
   create(blockType: BlockType, overrides: Partial<Block> = {}) {
-    const block = BlockCreator.create(this.sceneService.uuid(), blockType, overrides);
+    const block = BlockCreator.create(this.sceneService.uuid(blockType), blockType, overrides);
 
     return block;
   }

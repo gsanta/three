@@ -12,9 +12,9 @@ class TestMeshFactory {
 
   create(block: Block): BaseMesh {
     if (block.parts) {
-      return new ModelMesh(block.id, this.blockStore, this.sceneStore);
+      return new ModelMesh(block, this.blockStore, this.sceneStore);
     }
-    return new BaseMesh(block.id, this.blockStore, this.sceneStore);
+    return new BaseMesh(block, this.blockStore, this.sceneStore);
   }
 
   private blockStore: BlockStore;

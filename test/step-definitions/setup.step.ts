@@ -16,7 +16,7 @@ import { ToolInfo } from '@/client/editor/types/Tool';
 import { waitForMeshCountChange } from './helpers/waitFor';
 
 Given('I have an empty canvas', function (this: ExtendedWorld) {
-  this.env.teardown();
+  this.setup();
 });
 
 type SceneHash = {
@@ -27,7 +27,7 @@ type SceneHash = {
 };
 
 Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
-  this.env.teardown();
+  this.setup();
 
   const addTool = new AddTool(
     this.env.blockStore,
@@ -156,7 +156,7 @@ export async function addTemplateToPosition(this: ExtendedWorld, template: strin
 }
 
 Given('I have canvas with a block {string}', async function (this: ExtendedWorld, template: string) {
-  this.env.teardown();
+  this.setup();
 
   await addTemplateToPosition.call(this, template, 0, 0, 0);
 });

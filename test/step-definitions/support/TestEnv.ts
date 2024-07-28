@@ -3,7 +3,7 @@ import ToolHelper from './ToolHelper';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import { store, testMiddleware } from '@/client/common/utils/store';
 import TestMeshFactory from './TestMeshFactory';
-import { clearBlockSlice, update } from '@/client/editor/stores/block/blockSlice';
+import { BlockState, clearBlockSlice, update } from '@/client/editor/stores/block/blockSlice';
 import { Mesh } from 'three';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import ToolService from '@/client/editor/services/ToolService';
@@ -33,6 +33,7 @@ import { updateBlocks } from '@/client/editor/stores/block/blockActions';
 import { UpdateBlocks } from '@/client/editor/stores/block/blockSlice.types';
 import furnitureSeeds from 'prisma/seed/furnitureSeeds';
 import roomSeeds from 'prisma/seed/roomSeeds';
+import { PayloadAction } from '@reduxjs/toolkit';
 
 type TestEnv = {
   controller: ControllerService;
@@ -84,9 +85,9 @@ export const setupTestEnv = (): TestEnv => {
 
   const toolHelper = new ToolHelper(sceneStore, tool, testStore);
 
-  testMiddleware.startListening({
+  const updateBlocksListener = {
     actionCreator: updateBlocks,
-    effect: async (action) => {
+    effect: async (action: { payload: UpdateBlocks; type: string }) => {
       const payload = action.payload as UpdateBlocks;
 
       payload.blockUpdates.forEach((u) => {
@@ -102,16 +103,20 @@ export const setupTestEnv = (): TestEnv => {
         }
       });
     },
-  });
+  };
 
-  testMiddleware.startListening({
+  const unsubscribeUpdateBlockListener = testMiddleware.startListening(updateBlocksListener);
+
+  const updateListener = {
     actionCreator: update,
-    effect: async (action) => {
+    effect: async (action: PayloadAction<Partial<BlockState>>) => {
       Object.values(action.payload.blocks || {}).forEach((block) => {
         sceneStore.addMesh(meshFactory.create(block) as unknown as Mesh, block.id);
       });
     },
-  });
+  };
+
+  const unsubscribeUpdateListener = testMiddleware.startListening(updateListener);
 
   // TODO: used for tests right now, later it should come from db
   const seeds = [
@@ -133,6 +138,8 @@ export const setupTestEnv = (): TestEnv => {
     store.dispatch(clearEditorSlice());
     testStore.storedBlockId = undefined;
     sceneStore.clear();
+    unsubscribeUpdateListener();
+    unsubscribeUpdateBlockListener();
   };
 
   return {

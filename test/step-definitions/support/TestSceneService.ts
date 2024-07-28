@@ -1,15 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import IntersectionOptions from '@/client/editor/components/scene/service/IntersectionOptions';
 import SceneService from '@/client/editor/components/scene/service/SceneService';
+import BlockType from '@/client/editor/types/BlockType';
 import { BlockIntersection } from '@/client/editor/use_cases/IntersectMesh';
 import { Object3D, Ray } from 'three';
-import { v4 as uuidv4 } from 'uuid';
 
 class TestSceneService implements SceneService {
-  uuid() {
+  uuid(blockType: BlockType) {
     const id = this.nextUuid;
     this.nextUuid = '';
-    return id || uuidv4();
+
+    if (id) {
+      return id;
+    }
+
+    let count = this.blockTypeCounter.get(blockType.type) || 0;
+    count += 1;
+    this.blockTypeCounter.set(blockType.type, count);
+
+    return `${blockType.type}-${count}`;
   }
 
   intersection(
@@ -44,6 +53,8 @@ class TestSceneService implements SceneService {
   private intersect: BlockIntersection[] = [];
 
   private nextUuid: string = '';
+
+  private blockTypeCounter: Map<string, number> = new Map();
 }
 
 export default TestSceneService;

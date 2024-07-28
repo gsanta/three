@@ -5,7 +5,7 @@ import BlockType from '@/client/editor/types/BlockType';
 
 class DefaultBlockFactory extends BlockFactory {
   create(blockType: BlockType, overrides: Partial<Block> = {}) {
-    const block = BlockCreator.create(this.sceneService.uuid(), blockType, overrides);
+    const block = BlockCreator.create(this.sceneService.uuid(blockType), blockType, overrides);
 
     return block;
   }
