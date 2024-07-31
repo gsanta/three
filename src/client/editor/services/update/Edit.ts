@@ -207,7 +207,7 @@ class Edit {
     Object.keys(options).forEach((optionKey) => {
       const val = options[optionKey as keyof EditOptions];
       if (val) {
-        (mergedOptions[optionKey as keyof EditOptions] as any) = val;
+        (mergedOptions[optionKey as keyof EditOptions] as unknown) = val;
       }
     });
 

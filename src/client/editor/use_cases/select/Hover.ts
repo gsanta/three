@@ -1,5 +1,3 @@
-import { store } from '@/client/common/utils/store';
-import { hover } from '../../stores/block/blockSlice';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
 import { ModelPartInfo } from '../../types/BlockType';

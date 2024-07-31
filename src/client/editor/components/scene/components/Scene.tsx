@@ -18,13 +18,6 @@ const Scene = () => {
 
   const orbitControlRef = useRef<OrbitControlsImpl>(null);
 
-  const hovered = useAppSelector((selector) => selector.block.present.hovered);
-
-  const hoveredMesh = useMemo(
-    () => (hovered?.block ? sceneService.getRootMesh(hovered.block) : null),
-    [hovered?.block, sceneService],
-  );
-
   useEffect(() => {
     if (orbitControlRef.current) {
       sceneService.setOrbitControls(orbitControlRef.current);
