@@ -6,7 +6,7 @@ class AddRoomBlock extends AddBlockType {
   constructor(factoryService: FactoryService) {
     super();
 
-    this.addBlockToPos = new AddBlockToPos(factoryService);
+    this.addBlockToPos = new AddBlockToPos(factoryService, 'building');
 
     this.sourceCategories = ['rooms'];
     this.targetCategories = ['plain'];

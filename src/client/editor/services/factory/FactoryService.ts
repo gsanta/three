@@ -11,6 +11,7 @@ import LampFactory from './creators/LampFactory';
 import WeatherHeadFactory from './creators/WeatherHeadFactory';
 import HomeElectricsFactory from './creators/HomeElectricsFactory';
 import ElectricityProviderFactory from './creators/ElectricityProviderFactory';
+import { BlockSlices } from '../../stores/block/blockSlice.types';
 
 class FactoryService {
   constructor(blockStore: BlockStore, sceneService: SceneService) {
@@ -27,8 +28,11 @@ class FactoryService {
   create(
     edit: Edit,
     templateName: string,
-    blockOverrides: Partial<Block> = {},
-    categoryOverrides: PartialBlockCategories = {},
+    initialData: {
+      block?: Partial<Block>;
+      decorations?: PartialBlockCategories;
+    },
+    targetSlice?: BlockSlices,
   ) {
     const template = this.blockStore.getBlockType(templateName);
 
@@ -36,14 +40,16 @@ class FactoryService {
       throw new Error(`Template ${templateName} does not exist`);
     }
 
-    const factory = this.factories[template.category] || this.defaultBlockFactory;
-    const block = factory.create(template, blockOverrides);
+    const { block: initialBlock = {}, decorations: initialDecorations = {} } = initialData;
 
-    edit.create(block);
+    const factory = this.factories[template.category] || this.defaultBlockFactory;
+    const block = factory.create(template, initialBlock);
+
+    edit.create(block, { slice: targetSlice });
 
     template.decorations.forEach((decorationName: BlockDecoration) => {
       const decoration = factory.createCategory(block, {
-        ...categoryOverrides[decorationName],
+        ...initialDecorations[decorationName],
         category: decorationName,
       });
 

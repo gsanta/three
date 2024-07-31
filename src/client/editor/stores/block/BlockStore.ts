@@ -5,10 +5,12 @@ import Block from '../../types/Block';
 class BlockStore {
   constructor(store: Store) {
     this.store = store;
+
+    this.mode = 'city';
   }
 
   getHovered() {
-    return this.store.getState().block.present.hovered;
+    return this.getState().hovered;
   }
 
   getBlock(id?: string) {
@@ -16,15 +18,15 @@ class BlockStore {
       throw new Error('Id is not defined');
     }
 
-    return this.store.getState().block.present.blocks[id];
+    return this.getState().blocks[id];
   }
 
   getBlocks() {
-    return this.store.getState().block.present.blocks;
+    return this.getState().blocks;
   }
 
   getBlocksAsArray() {
-    return Object.values(this.store.getState().block.present.blocks);
+    return Object.values(this.getState().blocks);
   }
 
   getRootBlock(blockId: string) {
@@ -37,7 +39,7 @@ class BlockStore {
   }
 
   getSelectedRootBlockIds() {
-    return this.store.getState().block.present.selectedRootBlockIds;
+    return this.getState().selectedRootBlockIds;
   }
 
   getSelectedPart(blockId?: string) {
@@ -45,7 +47,7 @@ class BlockStore {
   }
 
   getSelectedPartIndexes() {
-    return this.store.getState().block.present.selectedPartIndexes;
+    return this.getState().selectedPartIndexes;
   }
 
   getDecoration<T extends BlockDecoration>(category: T, id?: string) {
@@ -53,7 +55,7 @@ class BlockStore {
       throw new Error('Id is not defined');
     }
 
-    const decoration = this.store.getState().block.present.decorations[category][id];
+    const decoration = this.getState().decorations[category][id];
 
     if (!decoration) {
       throw new Error(`Decoration '${category}' not found`);
@@ -63,11 +65,11 @@ class BlockStore {
   }
 
   getDecorations<T extends BlockDecoration>(category: T) {
-    return this.store.getState().block.present.decorations[category];
+    return this.getState().decorations[category];
   }
 
   getDecorationsAsArray<T extends BlockDecoration>(decoration: T) {
-    return Object.values(this.store.getState().block.present.decorations[decoration]) as BlockCategories[T][];
+    return Object.values(this.getState().decorations[decoration]) as BlockCategories[T][];
   }
 
   getBlockSettings() {
@@ -89,7 +91,7 @@ class BlockStore {
   }
 
   getRootBlockIds() {
-    return this.store.getState().block.present.rootBlocksIds;
+    return this.getState().rootBlocksIds;
   }
 
   getDescendants(blockId: string, categoryFilter?: string): Block[] {
@@ -190,6 +192,21 @@ class BlockStore {
 
     return false;
   }
+
+  setCurrentMode(mode: 'city' | 'building') {
+    this.mode = mode;
+  }
+
+  private getState() {
+    const mode = this.store.getState().editor.mode;
+    if (mode === 'city') {
+      return this.store.getState().block.present;
+    } else {
+      return this.store.getState().building.present;
+    }
+  }
+
+  private mode: 'city' | 'building';
 
   private store: Store;
 }

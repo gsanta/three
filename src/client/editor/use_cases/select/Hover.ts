@@ -1,5 +1,3 @@
-import { store } from '@/client/common/utils/store';
-import { hover } from '../../stores/block/blockSlice';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
 import { ModelPartInfo } from '../../types/BlockType';
@@ -18,23 +16,26 @@ class Hover {
       return;
     }
 
-    store.dispatch(hover(undefined));
     const edit = this.updateService.getTransaction();
 
-    edit.updateBlock(hovered.block, {
-      partDetails: this.changePlaceholderVisibility(hovered.block, true),
-    });
+    edit.hover(null);
+
+    // edit.updateBlock(hovered.block, {
+    //   partDetails: this.changePlaceholderVisibility(hovered.block, true),
+    // });
 
     edit.commit(false);
   }
 
   hover(blockId: string, partIndex?: string) {
-    store.dispatch(hover({ block: blockId, partIndex: partIndex }));
-    const edit = this.updateService.getTransaction();
+    // store.dispatch(hover({ block: blockId, partIndex: partIndex }));
 
-    edit.updateBlock(blockId, {
-      partDetails: this.changePlaceholderVisibility(blockId, false),
-    });
+    const edit = this.updateService.getTransaction();
+    edit.hover(blockId, partIndex);
+
+    // edit.updateBlock(blockId, {
+    //   partDetails: this.changePlaceholderVisibility(blockId, false),
+    // });
 
     edit.commit(false);
   }

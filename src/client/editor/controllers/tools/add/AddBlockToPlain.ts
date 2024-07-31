@@ -15,7 +15,7 @@ class AddBlockToPlain extends AddBlockType {
   }
 
   perform({ edit, newBlockType, position }: Parameters<AddBlockType['perform']>[0]) {
-    this.factoryService.create(edit, newBlockType.type, { position });
+    this.factoryService.create(edit, newBlockType.type, { block: { position } });
     const blockId = edit.getLastBlock().id;
     edit.select(blockId);
   }

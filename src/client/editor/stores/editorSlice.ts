@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { BlockSlices } from './block/blockSlice.types';
 
 export type EditorState = {
   activeGridIndexes: number[];
@@ -10,7 +11,7 @@ export type EditorState = {
   gridCols: number;
   gridSize: number;
   gridOffset: [number, number];
-  mode: 'city' | 'building';
+  mode: BlockSlices;
   editedBuilding?: string;
 };
 

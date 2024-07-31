@@ -27,16 +27,14 @@ class AddWirePoints {
         points,
       });
     } else {
-      block = this.factoryService.create(
-        edit,
-        'cable-1',
-        { parentConnection: { block: buildingBlock.id } },
-        {
+      block = this.factoryService.create(edit, 'cable-1', {
+        block: { parentConnection: { block: buildingBlock.id } },
+        decorations: {
           cables: {
             points,
           },
         },
-      );
+      });
     }
 
     points.forEach((point) => {

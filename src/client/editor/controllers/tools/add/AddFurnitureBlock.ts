@@ -6,7 +6,7 @@ class AddFurnitureBlock extends AddBlockType {
   constructor(factoryService: FactoryService) {
     super();
 
-    this.addBlockToPos = new AddBlockToPos(factoryService);
+    this.addBlockToPos = new AddBlockToPos(factoryService, 'building');
 
     this.sourceCategories = ['furnitures', 'home-electrics'];
     this.targetCategories = ['rooms'];
@@ -21,11 +21,15 @@ class AddFurnitureBlock extends AddBlockType {
 
     const newBlock = edit.getLastBlock();
 
-    edit.updateBlock(newBlock.id, {
-      parentConnection: {
-        block: targetBlock.id,
+    edit.updateBlock(
+      newBlock.id,
+      {
+        parentConnection: {
+          block: targetBlock.id,
+        },
       },
-    });
+      { slice: 'building' },
+    );
 
     edit.updateBlock(
       targetBlock.id,
@@ -36,7 +40,7 @@ class AddFurnitureBlock extends AddBlockType {
           },
         ],
       },
-      { arrayMergeStrategy: 'merge' },
+      { arrayMergeStrategy: 'merge', slice: 'building' },
     );
   }
 

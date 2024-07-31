@@ -1,11 +1,12 @@
 import useEditorContext from '@/app/editor/EditorContext';
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import { Physics } from '@react-three/cannon';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import RootMeshRenderer from './RootMeshRenderer';
+import { ThreeEvent } from '@react-three/fiber';
 
 const BuildingScene = () => {
-  const { scene: sceneService } = useEditorContext();
+  const { scene: sceneService, tool } = useEditorContext();
 
   useEffect(() => {
     sceneService.getCamera().position.set(21, 23, 33);
@@ -55,6 +56,14 @@ const BuildingScene = () => {
   // const scene = useGLTF('/room.glb');
   const blockIds = useAppSelector((selector) => selector.building.present.blockIds);
 
+  const handlePointerEnter = useCallback(
+    (event: ThreeEvent<PointerEvent>, partIndex?: string) => {
+      tool.onPointerEnter(event, partIndex);
+      event.stopPropagation();
+    },
+    [tool],
+  );
+
   return (
     <Physics broadphase="SAP" gravity={[0, -2.6, 0]}>
       {blockIds.map((id) => {
@@ -63,10 +72,10 @@ const BuildingScene = () => {
             key={id}
             blockId={id}
             slice="building"
-            // meshProps={{
-            //   onPointerDown: handlePointerDown,
-            //   onPointerEnter: handlePointerEnter,
-            // }}
+            meshProps={{
+              // onPointerDown: handlePointerDown,
+              onPointerEnter: handlePointerEnter,
+            }}
           />
         );
       })}

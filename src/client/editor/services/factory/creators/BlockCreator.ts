@@ -35,6 +35,7 @@ class BlockCreator {
       ...block,
       childConnections: [],
       conduitConnections: [],
+      materialProps: {},
       neighbourConnections: [],
       isHovered: false,
       isSelected: false,

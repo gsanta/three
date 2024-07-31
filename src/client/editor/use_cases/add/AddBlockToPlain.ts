@@ -23,7 +23,7 @@ class AddBlockToPlain {
   }
 
   perform(edit: Edit, pos: Vector3, blockType: string) {
-    this.factoryService.create(edit, blockType, { position: [pos.x, pos.y, pos.z] });
+    this.factoryService.create(edit, blockType, { block: { position: [pos.x, pos.y, pos.z] } });
     const blockId = edit.getLastBlock().id;
     edit.select(blockId);
 

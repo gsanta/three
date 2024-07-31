@@ -1,6 +1,7 @@
 import { PartialDeep } from 'type-fest';
 import BlockType, { ModelPartInfo, ShapeType } from './BlockType';
 import { MergeStrategy, mergeArrays } from '../utils/mergeDeep';
+import { MeshStandardMaterialProps } from '@react-three/fiber';
 
 export type BlockSlotSource = {
   slotName: string;
@@ -19,6 +20,8 @@ type Block<S extends ShapeType = ShapeType> = {
   isHovered: boolean;
   isSelected: boolean;
   isVisible: boolean;
+
+  materialProps: MeshStandardMaterialProps;
 
   neighbourConnections: NeigbourConnection[];
 

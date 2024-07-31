@@ -67,8 +67,10 @@ class AddSlotToSlot {
     edit.select(null);
 
     this.factoryService.create(edit, templateName, {
-      position: VectorUtils.add([pos.x, pos.y, pos.z], [targetX, targetY, targetZ] || [0, 0, 0]),
-      rotation: [0, targetRotation, 0],
+      block: {
+        position: VectorUtils.add([pos.x, pos.y, pos.z], [targetX, targetY, targetZ] || [0, 0, 0]),
+        rotation: [0, targetRotation, 0],
+      },
     });
 
     edit.select(edit.getLastBlock().id, idealNextSelectedPart?.index);
