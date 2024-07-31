@@ -198,7 +198,8 @@ class BlockStore {
   }
 
   private getState() {
-    if (this.mode === 'city') {
+    const mode = this.store.getState().editor.mode;
+    if (mode === 'city') {
       return this.store.getState().block.present;
     } else {
       return this.store.getState().building.present;

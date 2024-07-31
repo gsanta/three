@@ -44,7 +44,6 @@ class AddHouse {
 
     this.buildingBaseId = edit.getLastBlock()?.id;
 
-    edit.setTargetSlice('building');
     this.addRoom(edit);
 
     edit.commit(false);

@@ -1,5 +1,5 @@
 import { Environment, OrbitControls, PerspectiveCamera } from '@react-three/drei';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import useEditorContext from '@/app/editor/EditorContext';
 import { ThreeEvent, useThree } from '@react-three/fiber';
 import { useAppSelector } from '@/client/common/hooks/hooks';
@@ -11,11 +11,19 @@ import Ground from './Ground';
 import Track from './Track';
 import BuildingScene from './BuildingScene';
 import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
+import { EffectComposer, Outline, Selection } from '@react-three/postprocessing';
 
 const Scene = () => {
   const { tool, scene: sceneService } = useEditorContext();
 
   const orbitControlRef = useRef<OrbitControlsImpl>(null);
+
+  const hovered = useAppSelector((selector) => selector.block.present.hovered);
+
+  const hoveredMesh = useMemo(
+    () => (hovered?.block ? sceneService.getRootMesh(hovered.block) : null),
+    [hovered?.block, sceneService],
+  );
 
   useEffect(() => {
     if (orbitControlRef.current) {
@@ -88,34 +96,41 @@ const Scene = () => {
       <OrbitControls makeDefault ref={orbitControlRef} />
       <Environment files="envmap.hdr" background={true} />
 
-      {sceneMode === 'building' ? (
-        <BuildingScene />
-      ) : (
-        <Physics broadphase="SAP" gravity={[0, -2.6, 0]}>
-          {blockIds.map((id) => {
-            if (editTargetBlock === id) {
-              return;
-            }
-
-            return (
-              <RootMeshRenderer
-                key={id}
-                blockId={id}
-                meshProps={{
-                  onPointerDown: handlePointerDown,
-                  onPointerEnter: handlePointerEnter,
-                }}
-                slice="city"
-              />
-            );
-          })}
-          <Track />
-          <Ground />
-          <Car />
-        </Physics>
-      )}
-
       <PerspectiveCamera makeDefault position={[0, 50, 75]} fov={25} />
+      <Selection>
+        <EffectComposer multisampling={8} autoClear={false}>
+          <Outline blur edgeStrength={100} width={1000} />
+        </EffectComposer>
+
+        <>
+          {sceneMode === 'building' ? (
+            <BuildingScene />
+          ) : (
+            <Physics broadphase="SAP" gravity={[0, -2.6, 0]}>
+              {blockIds.map((id) => {
+                if (editTargetBlock === id) {
+                  return;
+                }
+
+                return (
+                  <RootMeshRenderer
+                    key={id}
+                    blockId={id}
+                    meshProps={{
+                      onPointerDown: handlePointerDown,
+                      onPointerEnter: handlePointerEnter,
+                    }}
+                    slice="city"
+                  />
+                );
+              })}
+              <Track />
+              <Ground />
+              <Car />
+            </Physics>
+          )}
+        </>
+      </Selection>
     </>
   );
 };

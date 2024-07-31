@@ -45,11 +45,13 @@ class AddBlockToPointerPos {
       const targetPos = VectorUtils.sub(intersection.meshes[0].point, rootBlock.position);
 
       this.factoryService.create(edit, templateName, {
-        parentConnection: {
-          block: targetBlock.id,
+        block: {
+          parentConnection: {
+            block: targetBlock.id,
+          },
+          position: targetPos,
+          rotation: targetBlock.rotation.map((rot) => MathUtils.radToDeg(rot)) as Num3,
         },
-        position: targetPos,
-        rotation: targetBlock.rotation.map((rot) => MathUtils.radToDeg(rot)) as Num3,
       });
 
       const lastBlock = edit.getLastBlock();

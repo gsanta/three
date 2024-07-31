@@ -2,7 +2,7 @@ import BlockDecoration, { BlockCategories } from '@/client/editor/types/BlockCat
 import { PartialDeep } from 'type-fest';
 import Block, { mergeBlocks } from '@/client/editor/types/Block';
 import BlockStore from '../../stores/block/BlockStore';
-import { Store } from '@/client/common/utils/store';
+import { store, Store } from '@/client/common/utils/store';
 import mergeDeep, { MergeStrategy } from '../../utils/mergeDeep';
 import BlockUpdater from '../transaction/updaters/BlockUpdater';
 import LampUpdater from '../transaction/updaters/LampUpdater';
@@ -10,13 +10,20 @@ import SystemHook from './SystemHook';
 import { updateBlocks } from '../../stores/block/blockActions';
 import { BlockUpdate, DecorationUpdate, UpdateBlocks } from '../../stores/block/blockSlice.types';
 
+type EditOptions = {
+  arrayMergeStrategy?: MergeStrategy;
+  slice?: 'city' | 'building';
+};
+
+const getDefaultEditOptions = () => ({ arrayMergeStrategy: 'merge' as const, slice: store.getState().editor.mode });
+
 class Edit {
-  constructor(store: BlockStore, dispatchStore: Store, systemHooks: SystemHook[]) {
-    this.store = store;
+  constructor(blockStore: BlockStore, dispatchStore: Store, systemHooks: SystemHook[]) {
+    this.store = blockStore;
     this.systemHooks = systemHooks;
     this.dispatchStore = dispatchStore;
 
-    this.updaters.lamps = new LampUpdater(store);
+    this.updaters.lamps = new LampUpdater(blockStore);
   }
 
   commit(history?: boolean) {
@@ -36,14 +43,17 @@ class Edit {
     this.systemHooks.forEach((systemHook) => systemHook.onCommit(this.updates));
   }
 
-  create(block: Block): this {
-    this.updates.push({ type: 'update', slice: this.targetSlice, block });
+  create(block: Block, options?: EditOptions): this {
+    const mergedOptions = this.getMergedOptions(options);
+    this.updates.push({ type: 'update', slice: mergedOptions.slice, block });
 
     return this;
   }
 
-  createDecoration<T extends BlockDecoration>(data: BlockCategories[T]): this {
-    this.updates.push({ type: 'update', slice: 'city', decoration: data });
+  createDecoration<T extends BlockDecoration>(data: BlockCategories[T], options?: EditOptions): this {
+    const mergedOptions = this.getMergedOptions(options);
+
+    this.updates.push({ type: 'update', slice: mergedOptions.slice, decoration: data });
 
     return this;
   }
@@ -60,14 +70,12 @@ class Edit {
     return this;
   }
 
-  updateBlock(
-    id: string,
-    update: PartialDeep<Block>,
-    options: { arrayMergeStrategy: MergeStrategy } = { arrayMergeStrategy: 'merge' },
-  ): this {
+  updateBlock(id: string, update: PartialDeep<Block>, options?: EditOptions): this {
     if (this.isRemoved(id)) {
       return this;
     }
+    const mergedOptions = this.getMergedOptions(options);
+
     const origBlock = this.store.getBlocks()[id];
     const [prevUpdate, index] = this.getBlockFromUpdates(id);
 
@@ -77,7 +85,7 @@ class Edit {
       this.updates.splice(index, 1);
     }
 
-    this.updates.push({ type: 'update', slice: this.targetSlice, block: newBlock });
+    this.updates.push({ type: 'update', slice: mergedOptions.slice, block: newBlock });
 
     return this;
   }
@@ -86,28 +94,32 @@ class Edit {
     category: T,
     id: string,
     partial: PartialDeep<BlockCategories[T], object>,
-    options: { arrayMergeStrategy: MergeStrategy } = { arrayMergeStrategy: 'merge' },
+    options?: EditOptions,
   ): this {
     if (this.isRemoved(id)) {
       return this;
     }
 
+    const mergedOptions = this.getMergedOptions(options);
+
     const origDecoration = this.store.getDecoration(category, id);
     const [prevUpdate, index] = this.getDecorationFromUpdates(id);
     const prevDecoration = prevUpdate?.decoration as BlockCategories[T];
 
-    const updated = mergeDeep(prevDecoration || origDecoration, partial, options.arrayMergeStrategy);
+    const updated = mergeDeep(prevDecoration || origDecoration, partial, mergedOptions.arrayMergeStrategy);
 
     if (index !== -1) {
       this.updates.splice(index, 1);
     }
 
-    this.updates.push({ type: 'update', slice: 'city', decoration: updated });
+    this.updates.push({ type: 'update', slice: mergedOptions.slice, decoration: updated });
 
     return this;
   }
 
-  remove(id: string): this {
+  remove(id: string, options?: EditOptions): this {
+    const mergedOptions = this.getMergedOptions(options);
+
     const [prevBlock, blockIndex] = this.getBlockFromUpdates(id);
     const [prevDecoration, decorationIndex] = this.getDecorationFromUpdates(id);
 
@@ -119,13 +131,23 @@ class Edit {
       this.updates.splice(decorationIndex, 1);
     }
 
-    this.updates.push({ remove: this.store.getBlocks()[id], slice: 'city' });
+    this.updates.push({ remove: this.store.getBlocks()[id], slice: mergedOptions.slice });
 
     return this;
   }
 
-  select(id: string | null, partIndex?: string): this {
-    this.updates.push({ select: id, slice: 'city', partIndex });
+  select(id: string | null, partIndex?: string, options?: EditOptions): this {
+    const mergedOptions = this.getMergedOptions(options);
+
+    this.updates.push({ select: id, slice: mergedOptions.slice, partIndex });
+
+    return this;
+  }
+
+  hover(id: string | null, partIndex?: string, options?: EditOptions): this {
+    const mergedOptions = this.getMergedOptions(options);
+
+    this.updates.push({ hover: id, slice: mergedOptions.slice, partIndex });
 
     return this;
   }
@@ -149,15 +171,7 @@ class Edit {
     return block;
   }
 
-  setTargetSlice(slice: 'city' | 'building') {
-    this.targetSlice = slice;
-  }
-
-  private mergeBlocks(
-    orig: Block,
-    update: PartialDeep<Block>,
-    options: { arrayMergeStrategy: MergeStrategy } = { arrayMergeStrategy: 'merge' },
-  ) {
+  private mergeBlocks(orig: Block, update: PartialDeep<Block>, options: EditOptions = getDefaultEditOptions()) {
     const { arrayMergeStrategy } = options;
 
     return mergeBlocks(orig, update, arrayMergeStrategy);
@@ -187,6 +201,19 @@ class Edit {
     return this.updates.find((update) => ('remove' in update ? update.remove.id === id : false));
   }
 
+  private getMergedOptions(options: EditOptions = {}) {
+    const mergedOptions: EditOptions = { ...getDefaultEditOptions() };
+
+    Object.keys(options).forEach((optionKey) => {
+      const val = options[optionKey as keyof EditOptions];
+      if (val) {
+        (mergedOptions[optionKey as keyof EditOptions] as any) = val;
+      }
+    });
+
+    return mergedOptions as Required<EditOptions>;
+  }
+
   private updates: UpdateBlocks['blockUpdates'] = [];
 
   private updaters: Record<string, BlockUpdater> = {};
@@ -196,8 +223,6 @@ class Edit {
   private store: BlockStore;
 
   private dispatchStore: Store;
-
-  private targetSlice: 'city' | 'building' = 'city';
 }
 
 export default Edit;

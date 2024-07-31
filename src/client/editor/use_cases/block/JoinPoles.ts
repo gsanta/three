@@ -38,18 +38,15 @@ class JoinPoles {
 
     const edit = this.update.getTransaction();
 
-    this.factory.create(
-      edit,
-      'cable-1',
-      {},
-      {
+    this.factory.create(edit, 'cable-1', {
+      decorations: {
         cables: {
           end1: { pin: partIndex1, device: deviceBlock1.id },
           end2: { pin: partIndex2, device: deviceBlock2.id },
           points: [{ position: pos1.toArray() }, { position: pos2.toArray() }],
         },
       },
-    );
+    });
 
     const cable = edit.getLastBlock();
 

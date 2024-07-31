@@ -24,12 +24,14 @@ class AddBlockToSlot {
     const finalRotation = MathUtils.normalizeAngle(toDegree(targetBlock.rotation[1]) + sourcePartOrientation);
 
     this.factoryService.create(edit, templateName, {
-      parentConnection: {
-        block: targetBlock.id,
-        part: targetPartIndex,
+      block: {
+        parentConnection: {
+          block: targetBlock.id,
+          part: targetPartIndex,
+        },
+        position: [sourcePartPos.x, sourcePartPos.y, sourcePartPos.z],
+        rotation: [0, finalRotation, 0],
       },
-      position: [sourcePartPos.x, sourcePartPos.y, sourcePartPos.z],
-      rotation: [0, finalRotation, 0],
     });
 
     const newBlock = edit.getLastBlock();
