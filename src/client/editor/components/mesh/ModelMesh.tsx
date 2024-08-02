@@ -55,43 +55,43 @@ export const ModelMesh = ({ additions, block, materialProps, meshProps, overwrit
   }, [block.parentConnection, ref]);
 
   const component = (
-    <Select enabled={block.isHovered || block.isSelected}>
-      <group
-        rotation={[0, 0, 0]}
-        scale={block.scale}
-        {...(meshProps as GroupProps)}
-        position={[0, 0, 0]}
-        ref={ref}
-        userData={{ modelId: block.id }}
-        dispose={null}
-      >
-        {boundingBoxScale && boundingBoxCenter && (
-          <ColliderBox position={block.position} scale={[boundingBoxScale[0], 10, boundingBoxScale[2]]} />
-        )}
-        {block.parts.map((part) =>
-          part.parts ? (
-            <ModelGroupMesh
-              block={block}
-              key={`${block.id}-${part.index}`}
-              materials={materials}
-              materialProps={materialProps}
-              nodes={geometryNodes}
-              part={part}
-            />
-          ) : (
-            <ModelPartMesh
-              block={block}
-              key={`${block.id}-${part.index}`}
-              materialProps={materialProps}
-              materials={materials}
-              nodes={geometryNodes}
-              onPointerEnter={meshProps?.onPointerEnter}
-              part={part}
-            />
-          ),
-        )}
-      </group>
-    </Select>
+    // <Select enabled={block.isHovered || block.isSelected}>
+    <group
+      rotation={[0, 0, 0]}
+      scale={block.scale}
+      {...(meshProps as GroupProps)}
+      position={[0, 0, 0]}
+      ref={ref}
+      userData={{ modelId: block.id }}
+      dispose={null}
+    >
+      {boundingBoxScale && boundingBoxCenter && (
+        <ColliderBox position={block.position} scale={[boundingBoxScale[0], 10, boundingBoxScale[2]]} />
+      )}
+      {block.parts.map((part) =>
+        part.parts ? (
+          <ModelGroupMesh
+            block={block}
+            key={`${block.id}-${part.index}`}
+            materials={materials}
+            materialProps={materialProps}
+            nodes={geometryNodes}
+            part={part}
+          />
+        ) : (
+          <ModelPartMesh
+            block={block}
+            key={`${block.id}-${part.index}`}
+            materialProps={materialProps}
+            materials={materials}
+            nodes={geometryNodes}
+            onPointerEnter={meshProps?.onPointerEnter}
+            part={part}
+          />
+        ),
+      )}
+    </group>
+    // </Select>
   );
 
   return (

@@ -1,6 +1,5 @@
 import BlockDecoration from '../../types/BlockCategory';
-import { BlockState } from './blockSlice';
-import { UpdateBlock } from './blockSlice.types';
+import { BlockState, UpdateBlock } from './blockSlice.types';
 
 class BlocksUpdater {
   constructor(slice: 'city' | 'building') {
@@ -14,6 +13,7 @@ class BlocksUpdater {
         if ('hover' in update) {
           if (state.hovered) {
             state.blocks[state.hovered.block].isHovered = false;
+            state.blocks[state.hovered.block].hoveredPart = undefined;
           }
 
           if (update.hover) {
@@ -24,6 +24,7 @@ class BlocksUpdater {
 
           if (state.hovered) {
             state.blocks[state.hovered.block].isHovered = true;
+            state.blocks[state.hovered.block].hoveredPart = update.partIndex;
           }
         } else if ('remove' in update) {
           const rootIndex = state.rootBlocksIds.indexOf(update.remove.id);
@@ -41,10 +42,6 @@ class BlocksUpdater {
 
           if (state.selectedBlocks[update.remove.id]) {
             delete state.selectedBlocks[update.remove.id];
-
-            if (Object.keys(state.selectedBlocks).length === 0) {
-              state.hasSelection = false;
-            }
           }
 
           const block = state.blocks[update.remove.id];
@@ -68,7 +65,6 @@ class BlocksUpdater {
             state.selectedRootBlockIds = [];
             state.selectedPartIndexes = {};
             state.selectedBlocks = {};
-            state.hasSelection = false;
           } else {
             if (update.partIndex) {
               if (!state.selectedPartIndexes[update.select]) {
@@ -85,7 +81,6 @@ class BlocksUpdater {
               }
             }
             state.selectedBlocks[update.select] = true;
-            state.hasSelection = true;
             state.blocks[update.select].isSelected = true;
             state.selectedRootBlockIds = [...new Set([...state.selectedRootBlockIds, update.select])];
           }

@@ -1,17 +1,16 @@
 import { ServerError } from '@/client/common/components/ErrorMessage';
-import { useAppDispatch } from '@/client/common/hooks/hooks';
 import api from '@/client/common/utils/api';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useEffect } from 'react';
-import { update } from '../../stores/block/blockSlice';
+import useEditorContext from '@/app/editor/EditorContext';
 
 type LoadSnapshotResponse = {
   state: string;
 };
 
 const useLoadSnapshot = () => {
-  const dispatch = useAppDispatch();
+  const { importer } = useEditorContext();
 
   const { data, error, isPending, refetch } = useQuery<AxiosResponse<LoadSnapshotResponse>, AxiosError<ServerError>>({
     queryKey: ['snapshot'],
@@ -23,9 +22,9 @@ const useLoadSnapshot = () => {
 
   useEffect(() => {
     if (data?.data.state) {
-      dispatch(update(JSON.parse(data.data.state)));
+      importer.import(data.data.state);
     }
-  }, [data, dispatch]);
+  }, [data, importer]);
 
   return {
     refetchSnapshot: refetch,

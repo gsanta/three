@@ -18,7 +18,9 @@ export type NeigbourConnection = {
 type Block<S extends ShapeType = ShapeType> = {
   id: string;
   isHovered: boolean;
+  hoveredPart?: string;
   isSelected: boolean;
+  selectedPart?: string;
   isVisible: boolean;
 
   materialProps: MeshStandardMaterialProps;

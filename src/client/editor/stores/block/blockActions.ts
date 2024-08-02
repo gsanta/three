@@ -1,4 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
-import { UpdateBlocks } from './blockSlice.types';
+import { BlockState, UpdateBlocks } from './blockSlice.types';
 
 export const updateBlocks = createAction<UpdateBlocks>('updateBlocks');
+
+export const updateState = createAction<{ city: BlockState; building: BlockState }>('updateState');

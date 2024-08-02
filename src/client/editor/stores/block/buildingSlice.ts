@@ -1,14 +1,13 @@
 import Block from '../../types/Block';
 import { BlockCategoryRecords } from '../../types/BlockCategory';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { updateBlocks } from './blockActions';
+import { updateBlocks, updateState } from './blockActions';
 import BlocksUpdater from './BlocksUpdater';
 
 export type BlockState = {
   blocks: Record<string, Block>;
   blockIds: string[];
   decorations: BlockCategoryRecords;
-  hasSelection: boolean;
   hovered?: {
     block: string;
     partIndex?: string;
@@ -23,7 +22,6 @@ export const initialRoomState: BlockState = {
   rootBlocksIds: [],
   blocks: {},
   blockIds: [],
-  hasSelection: false,
   selectedBlocks: {},
   selectedRootBlockIds: [],
   selectedPartIndexes: {},
@@ -85,6 +83,14 @@ export const buildingSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(updateBlocks, (state, action) => {
       blockUpdater.update(state, action.payload.blockUpdates);
+    });
+
+    builder.addCase(updateState, (state, action) => {
+      const buildingState = action.payload.building;
+      state.blocks = buildingState.blocks || state.blocks;
+      state.rootBlocksIds = buildingState.rootBlocksIds || state.rootBlocksIds;
+      state.blockIds = buildingState.blockIds || [];
+      state.decorations = buildingState.decorations || {};
     });
   },
 });

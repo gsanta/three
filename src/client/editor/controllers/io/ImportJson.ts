@@ -1,5 +1,6 @@
 import { Store } from '@/client/common/utils/store';
-import { BlockState, update } from '../../stores/block/blockSlice';
+import { BlockState } from '../../stores/block/blockSlice.types';
+import { updateState } from '../../stores/block/blockActions';
 
 class ImportJson {
   constructor(store: Store) {
@@ -7,8 +8,11 @@ class ImportJson {
   }
 
   import(json: string) {
-    const sceneState: Partial<BlockState> = JSON.parse(json);
-    this.store.dispatch(update(sceneState));
+    const data: { city: BlockState; building: BlockState } = JSON.parse(json);
+
+    this.store.dispatch(updateState(data));
+
+    return data;
   }
 
   private store: Store;

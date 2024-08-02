@@ -1,5 +1,19 @@
 import Block from '../../types/Block';
-import BlockDecoration, { BlockCategories } from '../../types/BlockCategory';
+import BlockDecoration, { BlockCategories, BlockCategoryRecords } from '../../types/BlockCategory';
+
+export type BlockState = {
+  blocks: Record<string, Block>;
+  blockIds: string[];
+  decorations: BlockCategoryRecords;
+  hovered?: {
+    block: string;
+    partIndex?: string;
+  };
+  rootBlocksIds: string[];
+  selectedRootBlockIds: string[];
+  selectedBlocks: Record<string, boolean>;
+  selectedPartIndexes: Record<string, string[]>;
+};
 
 export type BlockSlices = 'city' | 'building';
 
