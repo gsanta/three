@@ -80,7 +80,9 @@ export const blockSlice = createSlice({
 
     builder.addCase(resetNotifyOnRendered, (state, action) => {
       const blockId = action.payload.block;
-      state.blocks[blockId].notifyOnRender = false;
+      if (state.blocks[blockId]) {
+        state.blocks[blockId].notifyOnRender = false;
+      }
     });
   },
 });

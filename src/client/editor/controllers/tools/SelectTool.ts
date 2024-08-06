@@ -50,6 +50,17 @@ class SelectTool extends HoverTool {
 
   onDrag(info: ToolInfo) {
     this.move.perform(info.drag, info.dragDelta);
+    this.isMoved = true;
+
+    const edit = this.update.getTransaction();
+
+    const selectedBlock = this.blockStore.getSelectedRootBlockIds()[0];
+
+    if (selectedBlock) {
+      edit.updateBlock(selectedBlock, { notifyOnRender: true });
+
+      edit.commit(false);
+    }
   }
 
   onDragEnd() {
@@ -114,8 +125,9 @@ class SelectTool extends HoverTool {
   }
 
   onRendered() {
-    if (this.isRotated) {
+    if (this.isRotated || this.isMoved) {
       this.isRotated = false;
+      this.isMoved = false;
 
       const selectedBlockIds = this.blockStore.getSelectedRootBlockIds();
 
@@ -142,6 +154,8 @@ class SelectTool extends HoverTool {
   private movers: Partial<Record<string, BlockMover>> = {};
 
   private isRotated = false;
+
+  private isMoved = false;
 }
 
 export default SelectTool;

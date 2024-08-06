@@ -29,7 +29,7 @@ import ElectricitySystemHook from '@/client/editor/services/electricity/Electric
 import ElectricityStore from '@/client/editor/stores/electricity/ElectricityStore';
 import { clearEditorSlice } from '@/client/editor/stores/editorSlice';
 import homeElectrics from 'prisma/seed/homeElectrics';
-import { updateBlocks } from '@/client/editor/stores/block/blockActions';
+import { resetNotifyOnRendered, updateBlocks } from '@/client/editor/stores/block/blockActions';
 import { BlockState, UpdateBlocks } from '@/client/editor/stores/block/blockSlice.types';
 import furnitureSeeds from 'prisma/seed/furnitureSeeds';
 import roomSeeds from 'prisma/seed/roomSeeds';
@@ -98,7 +98,17 @@ export const setupTestEnv = (): TestEnv => {
         if ('block' in u && u.block) {
           setTimeout(() => {
             sceneStore.addMesh(meshFactory.create(u.block) as unknown as Mesh, u.block.id);
-            testStore.setLastModifiedBlock(u.block);
+            tool.onRendered(u.block.id);
+
+            store.dispatch(resetNotifyOnRendered({ block: u.block.id }));
+          }, 0);
+        }
+
+        if ('block' in u && u.block && u.block.notifyOnRender) {
+          setTimeout(() => {
+            tool.onRendered(u.block.id);
+
+            store.dispatch(resetNotifyOnRendered({ block: u.block.id }));
           }, 0);
         }
       });

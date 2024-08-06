@@ -90,7 +90,7 @@ Then('cable {string} ends at position {string}', function (this: ExtendedWorld, 
 
   assert.ok(
     isClose1 || isClose2,
-    `Expected cable to end at (${x}, ${y}, ${z}), but points are (${cable.points.join(',')})})`,
+    `Expected cable to end at (${x}, ${y}, ${z}), but points are (${cable.points.map((point) => point.position).join(',')})})`,
   );
 });
 

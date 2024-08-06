@@ -67,5 +67,6 @@ Feature: Weather head
     And I select a block at position 5,0,0
     And I drag pointer with delta '1,0,0'
     And I end drag
+    And I wait block 'pole-1-id' to notify on render
     And I store world position for part '#5' of block 'pole-1-id'
     Then cable for block 'pole-1-id' and pin '#5' ends at position 'stored'
