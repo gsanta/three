@@ -5,7 +5,7 @@ import { ModelMesh } from '../../mesh/ModelMesh';
 import Block from '@/client/editor/types/Block';
 import Cable from '@/client/editor/types/block/Cable';
 import MoveControl from './MoveControl';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import useEditorContext from '@/app/editor/EditorContext';
 import { resetNotifyOnRendered } from '@/client/editor/stores/block/blockActions';
 
@@ -20,9 +20,13 @@ const MeshRenderer = (props: WrappedMeshProps) => {
 
   const { tool } = useEditorContext();
 
+  const isFirstRender = useRef(true);
+
   useEffect(() => {
-    if (block.notifyOnRender) {
+    if (block.notifyOnRender || isFirstRender.current) {
       tool.onRendered(block.id);
+
+      isFirstRender.current = false;
 
       dispatch(resetNotifyOnRendered({ block: block.id }));
     }

@@ -24,8 +24,6 @@ class SceneStore {
     this.meshes.set(mesh.userData.modelId, mesh);
     this.obj3ds.set(mesh.userData.modelId, mesh);
     this.objInstances.get(mesh.userData.modelId)?.add(instanceId);
-
-    this.toolService?.onRendered();
   }
 
   addGroup(group: Group | null, instanceId: string) {
@@ -42,8 +40,6 @@ class SceneStore {
     this.groups.set(group.userData.modelId, group);
     this.obj3ds.set(group.userData.modelId, group);
     this.objInstances.get(group.userData.modelId)?.add(instanceId);
-
-    this.toolService?.onRendered();
   }
 
   removeMeshOrGroup(modelId: string, instanceId: string) {

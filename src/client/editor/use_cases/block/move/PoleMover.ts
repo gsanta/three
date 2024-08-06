@@ -1,11 +1,9 @@
-import Num3 from '@/client/editor/types/Num3';
 import BlockMover from './BlockMover';
 import Block from '@/client/editor/types/Block';
 import Edit from '../../../services/update/Edit';
 import SceneStore from '../../../components/scene/SceneStore';
 import BlockStore from '../../../stores/block/BlockStore';
-import { addVector } from '@/client/editor/utils/vectorUtils';
-import Cable, { CableEnd } from '@/client/editor/types/block/Cable';
+import Cable from '@/client/editor/types/block/Cable';
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { Vector3 } from 'three';
 
@@ -16,18 +14,18 @@ class PoleMover extends BlockMover {
     this.store = store;
   }
 
-  move(edit: Edit, pole: Block, dragDelta: Num3) {
+  move(edit: Edit, pole: Block) {
     const decoration = this.store.getDecoration('devices', pole.id);
 
     Object.keys(decoration.pins).forEach((key) => {
       const cables = decoration.pins[key];
       cables?.wires.forEach((cable) => {
-        this.moveCable(edit, cable, pole, dragDelta);
+        this.moveCable(edit, cable, pole);
       });
     });
   }
 
-  private moveCable(edit: Edit, cableId: string, pole: Block, dragDelta: Num3) {
+  private moveCable(edit: Edit, cableId: string, pole: Block) {
     const cable = this.store.getDecoration('cables', cableId) as Cable;
 
     let index = 0;

@@ -104,6 +104,7 @@ class SelectTool extends HoverTool {
 
     const edit = this.update.getTransaction().updateBlock(block.id, {
       rotation: newRotation,
+      notifyOnRender: true,
     });
 
     block = this.blockStore.getBlocks()[selectedBlockIds[0]];
@@ -125,7 +126,7 @@ class SelectTool extends HoverTool {
       const mover = this.movers[block.category];
 
       if (mover) {
-        mover.move(edit, block, [0, 0, 0]);
+        mover.move(edit, block);
       }
 
       edit.commit();

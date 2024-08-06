@@ -38,7 +38,7 @@ class MoveBlock {
       const mover = this.movers[block.category];
 
       if (mover) {
-        mover.move(edit, block, dragDelta);
+        mover.move(edit, block);
       } else {
         block.decorations.forEach((decoration) => {
           if (this.moveDecorationMap[decoration]) {
