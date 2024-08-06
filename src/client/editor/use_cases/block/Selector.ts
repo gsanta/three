@@ -43,7 +43,7 @@ class Selector {
       edit.select(block.id, partIndex);
       store.dispatch(updateSelectTool({ moveAxis: block.moveAxis }));
     } else {
-      edit.select(block.id);
+      edit.select(block.id, '#1');
 
       store.dispatch(updateSelectTool({ moveAxis: block.moveAxis }));
     }

@@ -3,7 +3,7 @@ import ToolHelper from './ToolHelper';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import { store, testMiddleware } from '@/client/common/utils/store';
 import TestMeshFactory from './TestMeshFactory';
-import { BlockState, clearBlockSlice, update } from '@/client/editor/stores/block/blockSlice';
+import { clearBlockSlice, update } from '@/client/editor/stores/block/blockSlice';
 import { Mesh } from 'three';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import ToolService from '@/client/editor/services/ToolService';
@@ -30,7 +30,7 @@ import ElectricityStore from '@/client/editor/stores/electricity/ElectricityStor
 import { clearEditorSlice } from '@/client/editor/stores/editorSlice';
 import homeElectrics from 'prisma/seed/homeElectrics';
 import { updateBlocks } from '@/client/editor/stores/block/blockActions';
-import { UpdateBlocks } from '@/client/editor/stores/block/blockSlice.types';
+import { BlockState, UpdateBlocks } from '@/client/editor/stores/block/blockSlice.types';
 import furnitureSeeds from 'prisma/seed/furnitureSeeds';
 import roomSeeds from 'prisma/seed/roomSeeds';
 import { PayloadAction } from '@reduxjs/toolkit';

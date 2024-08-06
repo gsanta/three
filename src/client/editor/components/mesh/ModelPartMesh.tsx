@@ -4,6 +4,7 @@ import { ModelPart } from '../../types/BlockType';
 import useGeometry, { NodesType } from '../hooks/useGeometry';
 import useMaterial from '../hooks/useMaterial';
 import Block from '../../types/Block';
+import { Select } from '@react-three/postprocessing';
 
 export type ModelPartProps = {
   block: Block;
@@ -24,20 +25,24 @@ const ModelPartMesh = ({ block, materials, materialProps, nodes, onPointerEnter,
   const geometry = useGeometry(nodes, part);
 
   return (
-    <mesh
-      castShadow
-      key={`${block.id}-${part.index}`}
-      receiveShadow
-      geometry={geometry}
-      material={color ? new MeshStandardMaterial({ color: 'green' }) : material}
-      visible={!block.partDetails[part.index]?.hide}
-      onPointerEnter={onPointerEnter ? (e) => onPointerEnter(e, part.index) : undefined}
-      position={part.position}
-      rotation={part.rotation}
-      scale={part.scale}
-      name={partInfo?.name || ''}
-      userData={{ modelId: block.id }}
-    />
+    <Select
+      enabled={(block.isHovered && part.index === block.hoveredPart) || (block.isSelected && partInfo?.isSelected)}
+    >
+      <mesh
+        castShadow
+        key={`${block.id}-${part.index}`}
+        receiveShadow
+        geometry={geometry}
+        material={color ? new MeshStandardMaterial({ color: 'green' }) : material}
+        visible={!block.partDetails[part.index]?.hide}
+        onPointerEnter={onPointerEnter ? (e) => onPointerEnter(e, part.index) : undefined}
+        position={part.position}
+        rotation={part.rotation}
+        scale={part.scale}
+        name={partInfo?.name || ''}
+        userData={{ modelId: block.id }}
+      />
+    </Select>
   );
 };
 

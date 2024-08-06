@@ -11,7 +11,7 @@ const ExportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children
   const { exporter } = useEditorContext();
 
   const exportDocument = () => {
-    downloadString(exporter.export(), 'data.json');
+    downloadString(JSON.stringify(exporter.export()), 'data.json');
 
     onClose();
   };

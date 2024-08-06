@@ -1,29 +1,12 @@
-import Block from '@/client/editor/types/Block';
-import { BlockCategoryRecords } from '@/client/editor/types/BlockCategory';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { updateBlocks } from './blockActions';
+import { updateBlocks, updateState } from './blockActions';
 import BlocksUpdater from './BlocksUpdater';
-
-export type BlockState = {
-  blocks: Record<string, Block>;
-  blockIds: string[];
-  decorations: BlockCategoryRecords;
-  hasSelection: boolean;
-  hovered?: {
-    block: string;
-    partIndex?: string;
-  };
-  rootBlocksIds: string[];
-  selectedRootBlockIds: string[];
-  selectedBlocks: Record<string, boolean>;
-  selectedPartIndexes: Record<string, string[]>;
-};
+import { BlockState } from './blockSlice.types';
 
 export const initialBlockState: BlockState = {
   rootBlocksIds: [],
   blocks: {},
   blockIds: [],
-  hasSelection: false,
   selectedBlocks: {},
   selectedRootBlockIds: [],
   selectedPartIndexes: {},
@@ -85,6 +68,14 @@ export const blockSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(updateBlocks, (state, action) => {
       blockUpdater.update(state, action.payload.blockUpdates);
+    });
+
+    builder.addCase(updateState, (state, action) => {
+      const cityState = action.payload.city;
+      state.blocks = cityState.blocks || state.blocks;
+      state.rootBlocksIds = cityState.rootBlocksIds || state.rootBlocksIds;
+      state.blockIds = cityState.blockIds || [];
+      state.decorations = cityState.decorations || {};
     });
   },
 });
