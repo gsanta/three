@@ -1,12 +1,13 @@
 import undoable, { StateWithHistory } from 'redux-undo';
 import blockTypeSlice, { BlockTypeState } from '../../editor/stores/blockType/blockTypeSlice';
-import blockSlice, { BlockState, hover } from '../../editor/stores/block/blockSlice';
+import blockSlice, { hover } from '../../editor/stores/block/blockSlice';
 import editorSlice, { EditorState } from '../../editor/stores/editorSlice';
 import toolSlice, { ToolState } from '../../editor/stores/tool/toolSlice';
 import { EnhancedStore, configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
 import temporarySlice, { TemporaryState } from '@/client/editor/stores/block/temporarySlice';
 import electricitySlice, { ElectricityState } from '@/client/editor/stores/electricity/electricitySlice';
 import buildingSlice from '@/client/editor/stores/block/buildingSlice';
+import { BlockState } from '@/client/editor/stores/block/blockSlice.types';
 
 const blockSliceUndoable = undoable(blockSlice, {
   filter: (action: { payload: { history?: boolean }; type: string }) => {
