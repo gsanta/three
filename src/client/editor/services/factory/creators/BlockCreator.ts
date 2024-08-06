@@ -40,6 +40,7 @@ class BlockCreator {
       isHovered: false,
       isSelected: false,
       isVisible: true,
+      notifyOnRender: false,
       parentConnection: settings.parentConnection,
       id: id,
       partDetails,

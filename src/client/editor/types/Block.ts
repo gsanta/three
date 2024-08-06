@@ -27,6 +27,8 @@ type Block<S extends ShapeType = ShapeType> = {
 
   neighbourConnections: NeigbourConnection[];
 
+  notifyOnRender: boolean;
+
   conduitConnections: {
     block: string;
   }[];

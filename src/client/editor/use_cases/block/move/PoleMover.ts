@@ -5,6 +5,9 @@ import Edit from '../../../services/update/Edit';
 import SceneStore from '../../../components/scene/SceneStore';
 import BlockStore from '../../../stores/block/BlockStore';
 import { addVector } from '@/client/editor/utils/vectorUtils';
+import Cable, { CableEnd } from '@/client/editor/types/block/Cable';
+import MeshUtils from '@/client/editor/utils/MeshUtils';
+import { Vector3 } from 'three';
 
 class PoleMover extends BlockMover {
   constructor(store: BlockStore, scene: SceneStore) {
@@ -25,14 +28,38 @@ class PoleMover extends BlockMover {
   }
 
   private moveCable(edit: Edit, cableId: string, pole: Block, dragDelta: Num3) {
-    const cable = this.store.getDecoration('cables', cableId);
+    const cable = this.store.getDecoration('cables', cableId) as Cable;
 
-    const index = cable.end1?.device === pole.id ? 0 : cable.points.length - 1;
+    let index = 0;
+    let cableEnd = cable.end1;
+    if (cable.end2?.device === pole.id) {
+      index = 1;
+      cableEnd = cable.end2;
+    }
+
+    if (!cableEnd?.pin) {
+      return;
+    }
+
+    const poleMesh = this.scene.getObj3d(pole.id);
+    const partName = pole.partDetails[cableEnd?.pin]?.name;
+    const mesh = MeshUtils.findByName(poleMesh, partName);
+
+    const pos = new Vector3();
+    mesh.getWorldPosition(pos);
+
     const newPoints = [...cable.points];
 
-    const newPoint = { position: addVector(newPoints[index].position, dragDelta) };
+    const newPoint = { position: pos.toArray() };
 
     newPoints.splice(index, 1, newPoint);
+
+    // const index = cable.end1?.device === pole.id ? 0 : cable.points.length - 1;
+    // const newPoints = [...cable.points];
+
+    // const newPoint = { position: addVector(newPoints[index].position, dragDelta) };
+
+    // newPoints.splice(index, 1, newPoint);
 
     // const pole1Id = cable.end1?.device;
     // const pin1Index = cable.end1?.pin;

@@ -14,6 +14,8 @@ import SceneService from '../../components/scene/service/SceneService';
 import Selector from '../../use_cases/block/Selector';
 import ToolStore from '../../stores/tool/ToolStore';
 import HoverTool from './HoverTool';
+import BlockMover from '../../use_cases/block/move/BlockMover';
+import PoleMover from '../../use_cases/block/move/PoleMover';
 
 class SelectTool extends HoverTool {
   constructor(
@@ -28,6 +30,8 @@ class SelectTool extends HoverTool {
     this.move = new MoveBlock(blockStore, update, sceneStore, toolStore);
     this.selector = new Selector(blockStore, scene, sceneStore, update);
     this.toolStore = toolStore;
+
+    this.movers.poles = new PoleMover(blockStore, sceneStore);
   }
 
   onPointerUp(info: ToolInfo) {
@@ -96,16 +100,36 @@ class SelectTool extends HoverTool {
 
     const index = VectorUtils.getAxisIndex(axis);
     const newRotation = [...block.rotation] as [number, number, number];
-    newRotation[index] = toRadian(rotation);
+    newRotation[index] += toRadian(rotation);
 
-    this.update
-      .getTransaction()
-      .updateBlock(block.id, {
-        rotation: newRotation,
-      })
-      .commit();
+    const edit = this.update.getTransaction().updateBlock(block.id, {
+      rotation: newRotation,
+    });
 
     block = this.blockStore.getBlocks()[selectedBlockIds[0]];
+
+    this.isRotated = true;
+    edit.commit();
+  }
+
+  onRendered() {
+    if (this.isRotated) {
+      this.isRotated = false;
+
+      const selectedBlockIds = this.blockStore.getSelectedRootBlockIds();
+
+      const edit = this.update.getTransaction();
+
+      const block = this.blockStore.getBlocks()[selectedBlockIds[0]];
+
+      const mover = this.movers[block.category];
+
+      if (mover) {
+        mover.move(edit, block, [0, 0, 0]);
+      }
+
+      edit.commit();
+    }
   }
 
   private move: MoveBlock;
@@ -113,6 +137,10 @@ class SelectTool extends HoverTool {
   private selector: Selector;
 
   private toolStore: ToolStore;
+
+  private movers: Partial<Record<string, BlockMover>> = {};
+
+  private isRotated = false;
 }
 
 export default SelectTool;
