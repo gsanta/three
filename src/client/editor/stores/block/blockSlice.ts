@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { updateBlocks, updateState } from './blockActions';
+import { resetNotifyOnRendered, updateBlocks, updateState } from './blockActions';
 import BlocksUpdater from './BlocksUpdater';
 import { BlockState } from './blockSlice.types';
 
@@ -76,6 +76,13 @@ export const blockSlice = createSlice({
       state.rootBlocksIds = cityState.rootBlocksIds || state.rootBlocksIds;
       state.blockIds = cityState.blockIds || [];
       state.decorations = cityState.decorations || {};
+    });
+
+    builder.addCase(resetNotifyOnRendered, (state, action) => {
+      const blockId = action.payload.block;
+      if (state.blocks[blockId]) {
+        state.blocks[blockId].notifyOnRender = false;
+      }
     });
   },
 });

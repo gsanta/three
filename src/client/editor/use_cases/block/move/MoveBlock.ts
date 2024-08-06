@@ -30,21 +30,25 @@ class MoveBlock {
     const finalDrag = this.baseMover.move(this.blockStore.getBlock(rootBlockId), drag, dragDelta);
 
     store.dispatch(updateSelectTool({ drag: finalDrag }));
+  }
 
+  performAfterRender() {
     const edit = this.update.getTransaction();
+
+    const selectedBlockIds = this.blockStore.getSelectedRootBlockIds();
 
     selectedBlockIds.forEach((blockId) => {
       const block = this.blockStore.getBlock(blockId);
       const mover = this.movers[block.category];
 
       if (mover) {
-        mover.move(edit, block, dragDelta);
+        mover.move(edit, block);
       } else {
-        block.decorations.forEach((decoration) => {
-          if (this.moveDecorationMap[decoration]) {
-            this.moveDecorationMap[decoration]?.move(edit, blockId, dragDelta);
-          }
-        });
+        // block.decorations.forEach((decoration) => {
+        //   if (this.moveDecorationMap[decoration]) {
+        //     this.moveDecorationMap[decoration]?.move(edit, blockId, dragDelta);
+        //   }
+        // });
       }
     });
 

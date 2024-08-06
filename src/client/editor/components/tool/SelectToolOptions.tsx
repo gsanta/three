@@ -1,12 +1,13 @@
 import useEditorContext from '@/app/editor/EditorContext';
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import { findNearestValue, toDegree } from '@/client/editor/utils/mathUtils';
-import { Box } from '@chakra-ui/react';
+import { Box, Tooltip } from '@chakra-ui/react';
 import useSelectedBlocks from '../hooks/useSelectedBlocks';
 import RotationControl from './RotationControl';
 import SizeControl from './SizeControl';
 import DeviceControl from './DeviceControl';
 import Device from '../../types/block/Device';
+import IconButton from '@/client/common/components/IconButton';
 
 const SelectToolOptions = () => {
   const selectedBlocks = useSelectedBlocks();
@@ -58,6 +59,23 @@ const SelectToolOptions = () => {
 
         return undefined;
       })}
+
+      <Box display="flex" gap="1rem">
+        <Tooltip label="Rotate left" placement="right">
+          <IconButton
+            src="/icons/arrow_left_rotate_icon.png"
+            variant="outline"
+            onClick={() => handleRotationChange('y', 30)}
+          />
+        </Tooltip>
+        <Tooltip label="Rotate right" placement="right">
+          <IconButton
+            src="/icons/arrow_right_rotate_icon.png"
+            variant="outline"
+            onClick={() => handleRotationChange('y', -30)}
+          />
+        </Tooltip>
+      </Box>
     </Box>
   );
 };

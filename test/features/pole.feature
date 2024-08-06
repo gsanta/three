@@ -1,4 +1,5 @@
 Feature: Pole
+  @only
   Scenario: Joining poles with cables
     Given I have an empty canvas
     When I select tool 'add'
@@ -65,6 +66,7 @@ Feature: Pole
     And I select a block at position 6,0,0
     And I drag pointer with delta '0,0,3'
     And I end drag
+    And I wait block 'pole-2-id' to notify on render
     Then I have block 'pole-2-id' at estimated position '6,0,3'
     When I store world position for part '#2' of block 'pole-2-id'
     Then cable 'cable-1-id' ends at position 'stored'

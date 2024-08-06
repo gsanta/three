@@ -21,3 +21,22 @@ export const waitForMeshCountChange = async (delta: number, world: ExtendedWorld
     }, 1);
   });
 };
+
+export const waitForRenderNotification = async (blockId: string, world: ExtendedWorld) => {
+  let iter = 0;
+
+  return new Promise<void>((resolve, reject) => {
+    setInterval(() => {
+      const block = world.env.blockStore.getBlock(blockId);
+
+      if (block?.notifyOnRender === false) {
+        resolve();
+      }
+      iter += 1;
+
+      if (iter === MAX_WAIT_ITERATION) {
+        reject('Mesh notifyOnRender was never set to false');
+      }
+    }, 1);
+  });
+};

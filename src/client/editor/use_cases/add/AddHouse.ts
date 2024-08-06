@@ -44,6 +44,8 @@ class AddHouse {
 
     this.buildingBaseId = edit.getLastBlock()?.id;
 
+    // edit.updateBlock(this.buildingBaseId, { notifyOnRender: true });
+
     this.addRoom(edit);
 
     edit.commit(false);

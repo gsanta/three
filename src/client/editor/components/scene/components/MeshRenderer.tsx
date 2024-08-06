@@ -1,10 +1,13 @@
-import { useAppSelector } from '@/client/common/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '@/client/common/hooks/hooks';
 import CableMesh from '../../mesh/CableMesh';
 import WrappedMeshProps from '../../../types/block/WrappedMeshProps';
 import { ModelMesh } from '../../mesh/ModelMesh';
 import Block from '@/client/editor/types/Block';
 import Cable from '@/client/editor/types/block/Cable';
 import MoveControl from './MoveControl';
+import { useEffect, useRef } from 'react';
+import useEditorContext from '@/app/editor/EditorContext';
+import { resetNotifyOnRendered } from '@/client/editor/stores/block/blockActions';
 
 const isModelMesh = (block: Block): block is Block<'model'> => block.geometry === 'model';
 
@@ -13,6 +16,21 @@ const isTubeMesh = (block: Block): block is Block<'tube'> => block.category === 
 const MeshRenderer = (props: WrappedMeshProps) => {
   const { block, meshProps, materialProps = {} } = props;
   const decorations = useAppSelector((selector) => selector.block.present.decorations);
+  const dispatch = useAppDispatch();
+
+  const { tool } = useEditorContext();
+
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (block.notifyOnRender || isFirstRender.current) {
+      tool.onRendered(block.id);
+
+      isFirstRender.current = false;
+
+      dispatch(resetNotifyOnRendered({ block: block.id }));
+    }
+  });
 
   const { additions } = props;
 

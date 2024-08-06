@@ -66,7 +66,7 @@ abstract class Tool {
 
   onDeselect() {}
 
-  onRendered() {}
+  onRendered(_blockId: string) {}
 }
 
 export default Tool;
