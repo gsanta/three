@@ -37,6 +37,7 @@ class BlockCreator {
       conduitConnections: [],
       materialProps: {},
       neighbourConnections: [],
+      isDirty: settings.isDirty || false,
       isHovered: false,
       isSelected: false,
       isVisible: true,

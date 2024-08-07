@@ -6,6 +6,7 @@ import ToolService from '@/client/editor/services/ToolService';
 import { createContext, useContext } from 'react';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
 import ControllerService from '@/client/editor/services/controller/ControllerService';
+import UpdateService from '@/client/editor/services/update/UpdateService';
 
 export type EditorContextType = {
   controller: ControllerService;
@@ -15,6 +16,7 @@ export type EditorContextType = {
   importer: ImportJson;
   scene: SceneStore;
   transaction: TransactionService;
+  update: UpdateService;
 };
 
 export const EditorContext = createContext<EditorContextType | undefined>(undefined);

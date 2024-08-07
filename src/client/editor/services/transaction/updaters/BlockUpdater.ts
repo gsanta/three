@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { BlockDecorationType } from '@/client/editor/types/BlockCategory';
-import Edit from '../../update/Edit';
+import Edit from '../Edit';
 import Block from '@/client/editor/types/Block';
 
 abstract class BlockUpdater {

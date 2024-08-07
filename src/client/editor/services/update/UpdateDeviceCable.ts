@@ -1,28 +1,31 @@
-import BlockMover from './BlockMover';
 import Block from '@/client/editor/types/Block';
-import Edit from '../../../services/transaction/Edit';
-import SceneStore from '../../../components/scene/SceneStore';
-import BlockStore from '../../../stores/block/BlockStore';
 import Cable from '@/client/editor/types/block/Cable';
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { Vector3 } from 'three';
+import BlockStore from '../../stores/block/BlockStore';
+import SceneStore from '../../components/scene/SceneStore';
+import TransactionService from '../transaction/TransactionService';
+import Edit from '../transaction/Edit';
 
-class PoleMover extends BlockMover {
-  constructor(store: BlockStore, scene: SceneStore) {
-    super('poles');
+class UpdateDeviceCable {
+  constructor(store: BlockStore, scene: SceneStore, transactionService: TransactionService) {
     this.scene = scene;
     this.store = store;
+    this.transactionService = transactionService;
   }
 
-  move(edit: Edit, pole: Block) {
-    const decoration = this.store.getDecoration('devices', pole.id);
+  update(block: Block) {
+    const edit = this.transactionService.getTransaction();
+    const decoration = this.store.getDecoration('devices', block.id);
 
     Object.keys(decoration.pins).forEach((key) => {
       const cables = decoration.pins[key];
       cables?.wires.forEach((cable) => {
-        this.moveCable(edit, cable, pole);
+        this.moveCable(edit, cable, block);
       });
     });
+
+    edit.commit(false);
   }
 
   private moveCable(edit: Edit, cableId: string, pole: Block) {
@@ -65,6 +68,8 @@ class PoleMover extends BlockMover {
   private store: BlockStore;
 
   private scene: SceneStore;
+
+  private transactionService: TransactionService;
 }
 
-export default PoleMover;
+export default UpdateDeviceCable;

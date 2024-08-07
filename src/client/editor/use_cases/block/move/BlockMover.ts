@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Block from '@/client/editor/types/Block';
-import Edit from '../../../services/update/Edit';
+import Edit from '../../../services/transaction/Edit';
 
 abstract class BlockMover {
   readonly category: string;

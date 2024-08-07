@@ -7,7 +7,7 @@ import MathUtils from '../../utils/mathUtils';
 import BlockStore from '../../stores/block/BlockStore';
 import { Vector3 } from 'three';
 import TransactionService from '../../services/transaction/TransactionService';
-import Edit from '../../services/update/Edit';
+import Edit from '../../services/transaction/Edit';
 
 class AddSlotToSlot {
   constructor(

@@ -4,6 +4,7 @@ import { Physics } from '@react-three/cannon';
 import { useCallback, useEffect } from 'react';
 import RootMeshRenderer from './RootMeshRenderer';
 import { ThreeEvent } from '@react-three/fiber';
+import { Plane } from '@react-three/drei';
 
 const BuildingScene = () => {
   const { scene: sceneService, tool } = useEditorContext();
@@ -64,22 +65,41 @@ const BuildingScene = () => {
     [tool],
   );
 
+  const handlePointerDown = useCallback(
+    (event: ThreeEvent<PointerEvent>) => {
+      tool.onPointerDown(event);
+      event.stopPropagation();
+    },
+    [tool],
+  );
+
   return (
-    <Physics broadphase="SAP" gravity={[0, -2.6, 0]}>
-      {blockIds.map((id) => {
-        return (
-          <RootMeshRenderer
-            key={id}
-            blockId={id}
-            slice="building"
-            meshProps={{
-              // onPointerDown: handlePointerDown,
-              onPointerEnter: handlePointerEnter,
-            }}
-          />
-        );
-      })}
-    </Physics>
+    <>
+      <Physics broadphase="SAP" gravity={[0, -2.6, 0]}>
+        {blockIds.map((id) => {
+          return (
+            <RootMeshRenderer
+              key={id}
+              blockId={id}
+              slice="building"
+              meshProps={{
+                onPointerDown: handlePointerDown,
+                onPointerEnter: handlePointerEnter,
+                onPointerUp: () => tool.onPointerUp(),
+              }}
+            />
+          );
+        })}
+      </Physics>
+      <Plane
+        args={[40, 40]}
+        rotation-x={-Math.PI * 0.5}
+        onPointerUp={() => tool.onPointerUp()}
+        onPointerDown={handlePointerDown}
+      >
+        <meshBasicMaterial color="black" />
+      </Plane>
+    </>
   );
 
   // const { nodes, materials } = useGLTF('/room.glb');

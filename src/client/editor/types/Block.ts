@@ -19,6 +19,7 @@ type Block<S extends ShapeType = ShapeType> = {
   id: string;
   isHovered: boolean;
   hoveredPart?: string;
+  isDirty: boolean;
   isSelected: boolean;
   selectedPart?: string;
   isVisible: boolean;

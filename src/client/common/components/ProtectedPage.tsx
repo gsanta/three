@@ -23,6 +23,7 @@ import ElectricityStore from '@/client/editor/stores/electricity/ElectricityStor
 import ElectricitySystemHook from '@/client/editor/services/electricity/ElectricitySystemHook';
 import SceneServiceImpl from '@/client/editor/components/scene/service/SceneServiceImpl';
 import RoomModeTool from '@/client/editor/controllers/tools/RoomModeTool';
+import UpdateService from '@/client/editor/services/update/UpdateService';
 
 type ProtectedPageProps = {
   children: ReactNode;
@@ -56,6 +57,11 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
     [blockStore, scene, electricitySystemHook],
   );
 
+  const updateService = useMemo(
+    () => new UpdateService(blockStore, transaction, sceneStore),
+    [blockStore, sceneStore, transaction],
+  );
+
   const editorContext = useMemo<EditorContextType>(
     () => ({
       controller: new ControllerService(transaction),
@@ -76,8 +82,9 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
         toolStore,
       ),
       transaction,
+      update: updateService,
     }),
-    [blockStore, factoryService, sceneStore, toolStore, transaction, scene],
+    [transaction, sceneStore, blockStore, factoryService, scene, toolStore, updateService],
   );
 
   editorContext.scene.setToolService(editorContext.tool);

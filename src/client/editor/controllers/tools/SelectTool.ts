@@ -120,12 +120,16 @@ class SelectTool extends HoverTool {
 
     block = this.blockStore.getBlocks()[selectedBlockIds[0]];
 
+    block.conduitConnections.forEach((child) => {
+      edit.updateBlock(child.block, { isDirty: true });
+    });
+
     this.isRotated = true;
     edit.commit();
   }
 
   onRendered() {
-    if (this.isRotated || this.isMoved) {
+    if (this.isMoved) {
       this.isRotated = false;
       this.isMoved = false;
 

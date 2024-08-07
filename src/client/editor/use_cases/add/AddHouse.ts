@@ -1,14 +1,21 @@
 import AddBlock from '../../controllers/tools/add/AddBlock';
 import TransactionService from '../../services/transaction/TransactionService';
-import Edit from '../../services/update/Edit';
+import Edit from '../../services/transaction/Edit';
 import BlockStore from '../../stores/block/BlockStore';
 import Block from '../../types/Block';
 import BlockType from '../../types/BlockType';
 import Num3 from '../../types/Num3';
+import FactoryService from '../../services/factory/FactoryService';
 
 class AddHouse {
-  constructor(blockStore: BlockStore, updateService: TransactionService, addBlock: AddBlock) {
+  constructor(
+    blockStore: BlockStore,
+    factoryService: FactoryService,
+    updateService: TransactionService,
+    addBlock: AddBlock,
+  ) {
     this.blockStore = blockStore;
+    this.factoryService = factoryService;
     this.updateService = updateService;
     this.addBlock = addBlock;
   }
@@ -51,7 +58,7 @@ class AddHouse {
     edit.commit(false);
   }
 
-  performAfterRender() {
+  performAfterRender(id: string): boolean {
     if (this.buildingBaseId) {
       const block = this.blockStore.getBlock(this.buildingBaseId);
 
@@ -87,6 +94,7 @@ class AddHouse {
     }
 
     this.buildingBaseId = undefined;
+    return true;
   }
 
   private addRoom(edit: Edit) {
@@ -120,6 +128,58 @@ class AddHouse {
       position: [0, 0.5, 0],
     });
 
+    this.factoryService.create(
+      edit,
+      'cable-1',
+      {
+        block: { parentConnection: { block: roomBlock.id, part: '#2' }, isDirty: true },
+        decorations: {
+          cables: {
+            points: [
+              {
+                position: [0, 0, 0],
+                blockId: roomBlock.id,
+              },
+            ],
+          },
+        },
+      },
+      'building',
+    );
+
+    edit.updateBlock(
+      roomBlock.id,
+      { childConnections: [{ childBlock: edit.getLastBlock().id }] },
+      { arrayMergeStrategy: 'merge', slice: 'building' },
+    );
+
+    this.factoryService.create(
+      edit,
+      'cable-1',
+      {
+        block: { parentConnection: { block: roomBlock.id, part: '#3' }, isDirty: true },
+        decorations: {
+          cables: {
+            points: [
+              {
+                position: [0, 0, 0],
+                blockId: roomBlock.id,
+              },
+            ],
+          },
+        },
+      },
+      'building',
+    );
+
+    edit.updateBlock(
+      roomBlock.id,
+      { childConnections: [{ childBlock: edit.getLastBlock().id }] },
+      { arrayMergeStrategy: 'merge', slice: 'building' },
+    );
+
+    // roomBlock.childConnections.push({ childBlock: edit.getLastBlock().id });
+
     const shelf = this.blockStore.getBlockType('shelf-1');
 
     addFurnitureBlock?.perform({
@@ -152,6 +212,8 @@ class AddHouse {
   private updateService: TransactionService;
 
   private addBlock: AddBlock;
+
+  private factoryService: FactoryService;
 }
 
 export default AddHouse;

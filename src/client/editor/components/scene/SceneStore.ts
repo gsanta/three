@@ -86,6 +86,16 @@ class SceneStore {
     return mesh;
   }
 
+  hasObj3d(modelId: string) {
+    let mesh: Object3D | undefined = this.meshes.get(modelId);
+
+    if (!mesh) {
+      mesh = this.groups.get(modelId);
+    }
+
+    return Boolean(mesh);
+  }
+
   getRootMesh(modelId: string): Mesh | null {
     let mesh: Object3D | undefined = this.meshes.get(modelId);
 
