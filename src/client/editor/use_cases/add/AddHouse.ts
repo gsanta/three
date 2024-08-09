@@ -37,7 +37,7 @@ class AddHouse {
   }) {
     const addBlock = this.addBlock.getAddBlock(newBlockType.category, 'plain');
 
-    const edit = this.updateService.getTransaction();
+    const edit = this.updateService.createTransaction();
 
     addBlock?.perform({
       edit,
@@ -58,13 +58,13 @@ class AddHouse {
     edit.commit(false);
   }
 
-  performAfterRender(id: string): boolean {
+  performAfterRender(): boolean {
     if (this.buildingBaseId) {
       const block = this.blockStore.getBlock(this.buildingBaseId);
 
       const addWall = this.addBlock.getAddBlock('walls', block.category);
 
-      const edit = this.updateService.getTransaction();
+      const edit = this.updateService.createTransaction();
 
       ['#2', '#3', '#4', '#5'].forEach((index) => {
         addWall?.perform({

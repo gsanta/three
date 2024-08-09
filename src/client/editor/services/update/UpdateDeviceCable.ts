@@ -1,11 +1,10 @@
 import Block from '@/client/editor/types/Block';
-import Cable from '@/client/editor/types/block/Cable';
+import Cable, { CablePoint } from '@/client/editor/types/block/Cable';
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { Vector3 } from 'three';
 import BlockStore from '../../stores/block/BlockStore';
 import SceneStore from '../../components/scene/SceneStore';
 import TransactionService from '../transaction/TransactionService';
-import Edit from '../transaction/Edit';
 
 class UpdateDeviceCable {
   constructor(store: BlockStore, scene: SceneStore, transactionService: TransactionService) {
@@ -14,21 +13,34 @@ class UpdateDeviceCable {
     this.transactionService = transactionService;
   }
 
-  update(block: Block) {
-    const edit = this.transactionService.getTransaction();
-    const decoration = this.store.getDecoration('devices', block.id);
+  update(cable: Block) {
+    const edit = this.transactionService.createTransaction();
+    // const decoration = this.store.getDecoration('devices', cable.id);
 
-    Object.keys(decoration.pins).forEach((key) => {
-      const cables = decoration.pins[key];
-      cables?.wires.forEach((cable) => {
-        this.moveCable(edit, cable, block);
-      });
-    });
+    // Object.keys(decoration.pins).forEach((key) => {
+    //   const cables = decoration.pins[key];
+    //   cables?.wires.forEach((cable) => {
+    //     this.moveCable(edit, cable, cable);
+    //   });
+    // });
+
+    const newPoints = cable.conduitParentConnections.map((connection) =>
+      this.moveCable(cable.id, this.store.getBlock(connection.block)),
+    );
+
+    edit.updateDecoration(
+      'cables',
+      cable.id,
+      {
+        points: newPoints,
+      },
+      { arrayMergeStrategy: 'replace' },
+    );
 
     edit.commit(false);
   }
 
-  private moveCable(edit: Edit, cableId: string, pole: Block) {
+  private moveCable(cableId: string, pole: Block): CablePoint {
     const cable = this.store.getDecoration('cables', cableId) as Cable;
 
     let index = 0;
@@ -39,7 +51,7 @@ class UpdateDeviceCable {
     }
 
     if (!cableEnd?.pin) {
-      return;
+      return { ...cable.points[index] };
     }
 
     const poleMesh = this.scene.getObj3d(pole.id);
@@ -49,20 +61,9 @@ class UpdateDeviceCable {
     const pos = new Vector3();
     mesh.getWorldPosition(pos);
 
-    const newPoints = [...cable.points];
-
     const newPoint = { position: pos.toArray() };
 
-    newPoints.splice(index, 1, newPoint);
-
-    edit.updateDecoration(
-      'cables',
-      cableId,
-      {
-        points: newPoints,
-      },
-      { arrayMergeStrategy: 'replace' },
-    );
+    return newPoint;
   }
 
   private store: BlockStore;

@@ -1,5 +1,4 @@
 Feature: Pole
-  @only
   Scenario: Joining poles with cables
     Given I have an empty canvas
     When I select tool 'add'
@@ -15,8 +14,7 @@ Feature: Pole
     And I press pointer at 0,0.1,10
     And I select tool 'cable'
     And I execute tool
-    #TODO: why 6?
-    And I wait block count to increase by 6
+    And I wait block count to increase by 3
     And I examine block at 0,0.1,5
     Then cable for block 'examined' and pin '#2' ends at position '-0.913,7.254,5.011'
     And cable for block 'examined' and pin '#3' ends at position '-0.378,7.254,5.011'
@@ -36,11 +34,6 @@ Feature: Pole
     And I move pointer to '0,0.1,10'
     And I press pointer
     And I wait block count to increase by 4
-    And I select tool 'select'
-    And I press pointer at 0,0.1,5
-    And I press pointer at 0,0.1,10
-    And I select tool 'cable'
-    And I execute tool
     When I select tool 'erase'
     And I press pointer at 0,0.1,5
     Then block at 0,0.1,5 does not exist
@@ -49,6 +42,7 @@ Feature: Pole
     Then pin '#3' of block 'examined' is empty
     Then pin '#4' of block 'examined' is empty
 
+  @only
   Scenario: Moving a pole joined to two other poles
     Given I have a scene with:
       | TYPE            | ID         | POS                     |

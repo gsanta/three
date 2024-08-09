@@ -33,7 +33,7 @@ class MoveBlock {
   }
 
   performAfterRender() {
-    const edit = this.update.getTransaction();
+    const edit = this.update.createTransaction();
 
     const selectedBlockIds = this.blockStore.getSelectedRootBlockIds();
 

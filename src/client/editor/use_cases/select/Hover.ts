@@ -16,7 +16,7 @@ class Hover {
       return;
     }
 
-    const edit = this.updateService.getTransaction();
+    const edit = this.updateService.createTransaction();
 
     edit.hover(null);
 
@@ -30,7 +30,7 @@ class Hover {
   hover(blockId: string, partIndex?: string) {
     // store.dispatch(hover({ block: blockId, partIndex: partIndex }));
 
-    const edit = this.updateService.getTransaction();
+    const edit = this.updateService.createTransaction();
     edit.hover(blockId, partIndex);
 
     // edit.updateBlock(blockId, {

@@ -66,7 +66,7 @@ class AddTool extends HoverTool {
 
       const selectedAddBlock = this.addBlock.getAddBlock(newBlockType.category, targetBlock?.category || 'plain');
 
-      const edit = this.update.getTransaction();
+      const edit = this.update.createTransaction();
 
       selectedAddBlock?.perform({
         edit,
@@ -122,28 +122,28 @@ class AddTool extends HoverTool {
     // }
   }
 
-  onRendered(id: string) {
-    // try {
-    if (this.current) {
-      const stay = this.current.performAfterRender(id);
+  onRendered() {
+    try {
+      // if (this.current) {
+      //   const stay = this.current.performAfterRender(id);
 
-      if (!stay) {
-        this.current = undefined;
+      //   if (!stay) {
+      //     this.current = undefined;
+      //   }
+      // }
+
+      if (this.newBlockCategory && this.targetBlockCategory) {
+        if (this.newBlockCategory === 'building-bases') {
+          this.addHouse.performAfterRender();
+        } else {
+          // const selectedAddBlock = this.addBlock.getAddBlock(this.newBlockCategory, this.targetBlockCategory);
+          // selectedAddBlock?.performAfterRender();
+        }
       }
+    } finally {
+      this.newBlockCategory = undefined;
+      this.targetBlockCategory = undefined;
     }
-
-    //   if (this.newBlockCategory && this.targetBlockCategory) {
-    //     if (this.newBlockCategory === 'building-bases') {
-    //       this.addHouse.performAfterRender(id);
-    //     } else {
-    //       const selectedAddBlock = this.addBlock.getAddBlock(this.newBlockCategory, this.targetBlockCategory);
-    //       selectedAddBlock?.performAfterRender();
-    //     }
-    //   }
-    // } finally {
-    //   this.newBlockCategory = undefined;
-    //   this.targetBlockCategory = undefined;
-    // }
   }
 
   private current?: { performAfterRender(id: string): boolean };

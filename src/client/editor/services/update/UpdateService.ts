@@ -16,13 +16,13 @@ class UpdateService {
   updateDirtyBlock(blockId: string) {
     const block = this.blockStore.getBlock(blockId);
 
-    this.updaters[block.category]?.updateDirtyBlock(block);
+    if (this.updaters[block.category]?.updateDirtyBlock(block)) {
+      const edit = this.transactionService.createTransaction();
 
-    const edit = this.transactionService.getTransaction();
+      edit.updateBlock(blockId, { isDirty: false });
 
-    edit.updateBlock(blockId, { isDirty: false });
-
-    edit.commit();
+      edit.commit(false);
+    }
   }
 
   private blockStore: BlockStore;

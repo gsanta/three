@@ -11,15 +11,30 @@ class TransactionService {
     this.dispatchStore = dispatchStore;
     this.sceneService = sceneService;
     this.systemHooks = systemHooks;
+
+    this.close = this.close.bind(this);
   }
 
-  getTransaction(): Edit {
-    return new Edit(this.store, this.dispatchStore, this.systemHooks);
+  getOrCreateActiveTransaction(): Edit {
+    return this.activeTransaction ? this.activeTransaction : this.createTransaction();
+  }
+
+  createTransaction(): Edit {
+    const edit = new Edit(this.store, this.dispatchStore, this.systemHooks, this.close);
+    this.activeTransaction = edit;
+
+    return edit;
   }
 
   updateDevice(id: string, device: Partial<Device>) {
-    this.getTransaction().updateDecoration('devices', id, device).commit();
+    this.createTransaction().updateDecoration('devices', id, device).commit();
   }
+
+  private close() {
+    this.activeTransaction = undefined;
+  }
+
+  private activeTransaction: Edit | undefined;
 
   private store: BlockStore;
 

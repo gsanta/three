@@ -44,7 +44,7 @@ class SelectTool extends HoverTool {
     const block = this.blockStore.getBlocks()[info.eventObject?.userData.modelId || ''];
 
     if (block) {
-      this.update.getTransaction().updateBlock(block.id, { isHovered: false }).commit();
+      this.update.createTransaction().updateBlock(block.id, { isHovered: false }).commit();
     }
   }
 
@@ -52,7 +52,7 @@ class SelectTool extends HoverTool {
     this.move.perform(info.drag, info.dragDelta);
     this.isMoved = true;
 
-    const edit = this.update.getTransaction();
+    const edit = this.update.createTransaction();
 
     const selectedBlock = this.blockStore.getSelectedRootBlockIds()[0];
 
@@ -67,7 +67,7 @@ class SelectTool extends HoverTool {
     const selectedBlockIds = this.blockStore.getSelectedRootBlockIds();
     const blocks = this.blockStore.getBlocks();
 
-    const edit = this.update.getTransaction();
+    const edit = this.update.createTransaction();
 
     const drag = this.toolStore.getSelectOptions().drag;
 
@@ -81,7 +81,7 @@ class SelectTool extends HoverTool {
   }
 
   onDeselect() {
-    this.update.getTransaction().select(null).commit(false);
+    this.update.createTransaction().select(null).commit(false);
   }
 
   scaleMesh(scale: number, block: Block) {
@@ -93,7 +93,7 @@ class SelectTool extends HoverTool {
     newScale[index] = settings.scale[index] * scale;
 
     this.update
-      .getTransaction()
+      .createTransaction()
       .updateBlock(block.id, {
         scale: newScale,
       })
@@ -113,7 +113,7 @@ class SelectTool extends HoverTool {
     const newRotation = [...block.rotation] as [number, number, number];
     newRotation[index] += toRadian(rotation);
 
-    const edit = this.update.getTransaction().updateBlock(block.id, {
+    const edit = this.update.createTransaction().updateBlock(block.id, {
       rotation: newRotation,
       notifyOnRender: true,
     });
@@ -135,7 +135,7 @@ class SelectTool extends HoverTool {
 
       const selectedBlockIds = this.blockStore.getSelectedRootBlockIds();
 
-      const edit = this.update.getTransaction();
+      const edit = this.update.createTransaction();
 
       const block = this.blockStore.getBlocks()[selectedBlockIds[0]];
 

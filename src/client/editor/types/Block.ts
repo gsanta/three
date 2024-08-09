@@ -34,6 +34,10 @@ type Block<S extends ShapeType = ShapeType> = {
     block: string;
   }[];
 
+  conduitParentConnections: {
+    block: string;
+  }[];
+
   childConnections: {
     childBlock: string;
     childPart?: string;

@@ -18,29 +18,24 @@ type EditOptions = {
 const getDefaultEditOptions = () => ({ arrayMergeStrategy: 'merge' as const, slice: store.getState().editor.mode });
 
 class Edit {
-  constructor(blockStore: BlockStore, dispatchStore: Store, systemHooks: SystemHook[]) {
+  constructor(blockStore: BlockStore, dispatchStore: Store, systemHooks: SystemHook[], close: () => void) {
     this.store = blockStore;
     this.systemHooks = systemHooks;
     this.dispatchStore = dispatchStore;
 
     this.updaters.lamps = new LampUpdater(blockStore);
+
+    this.close = close;
+  }
+
+  flush() {
+    this.commitOrFlush(false);
   }
 
   commit(history?: boolean) {
-    if (!this.updates.length) {
-      return;
-    }
+    this.close();
 
-    this.updates.forEach((update) => {
-      if ('type' in update && update.type === 'update' && 'decoration' in update) {
-        const block = this.store.getBlock(update.decoration.id);
-        this.updaters[block?.category]?.onUpdateDecorators(this, block, update.decoration);
-      }
-    });
-
-    this.dispatchStore.dispatch(updateBlocks({ blockUpdates: this.updates, history }));
-
-    this.systemHooks.forEach((systemHook) => systemHook.onCommit(this.updates));
+    this.commitOrFlush(history === false ? false : true);
   }
 
   create(block: Block, options?: EditOptions): this {
@@ -214,6 +209,25 @@ class Edit {
     return mergedOptions as Required<EditOptions>;
   }
 
+  private commitOrFlush(updateHistory: boolean) {
+    if (!this.updates.length) {
+      return;
+    }
+
+    this.updates.forEach((update) => {
+      if ('type' in update && update.type === 'update' && 'decoration' in update) {
+        const block = this.store.getBlock(update.decoration.id);
+        this.updaters[block?.category]?.onUpdateDecorators(this, block, update.decoration);
+      }
+    });
+
+    this.dispatchStore.dispatch(updateBlocks({ blockUpdates: this.updates, history: updateHistory }));
+
+    this.systemHooks.forEach((systemHook) => systemHook.onCommit(this.updates));
+
+    this.updates = [];
+  }
+
   private updates: UpdateBlocks['blockUpdates'] = [];
 
   private updaters: Record<string, BlockUpdater> = {};
@@ -223,6 +237,8 @@ class Edit {
   private store: BlockStore;
 
   private dispatchStore: Store;
+
+  private close: () => void;
 }
 
 export default Edit;

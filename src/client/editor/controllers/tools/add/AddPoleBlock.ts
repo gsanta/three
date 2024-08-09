@@ -29,10 +29,17 @@ class AddPoleBlock extends AddBlockType {
   perform({ edit, newBlockType, position }: Parameters<AddBlockType['perform']>[0]) {
     this.factoryService.create(edit, newBlockType.type, { block: { position } });
     const blockId = edit.getLastBlock().id;
-    edit.select(blockId).commit();
+    edit.select(blockId);
 
     this.blockId = blockId;
-    return edit.getLastBlock();
+
+    const lastBlock = edit.getLastBlock();
+
+    edit.flush();
+
+    this.performAfterRender();
+
+    return lastBlock;
   }
 
   performAfterRender() {
@@ -56,7 +63,7 @@ class AddPoleBlock extends AddBlockType {
       ['#4', '#4'],
     ]);
 
-    this.updateService.getTransaction().select(null).select(this.blockId);
+    this.updateService.createTransaction().select(null).select(this.blockId);
   }
 
   private blockId?: string;

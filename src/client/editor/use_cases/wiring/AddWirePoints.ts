@@ -12,7 +12,7 @@ class AddWirePoints {
   }
 
   add(buildingBlock: Block, points: CablePoint[]) {
-    const edit = this.updateService.getTransaction();
+    const edit = this.updateService.createTransaction();
 
     const cableId = buildingBlock.conduitConnections.find(
       ({ block }) => this.blockStore.getBlock(block).category === 'cables',

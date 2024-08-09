@@ -10,9 +10,9 @@ class UpdateWallCable {
     this.transactionService = transactionService;
   }
 
-  update(cable: Block, room: Block, wallIndex?: string) {
-    if (!wallIndex) {
-      return;
+  update(cable: Block, room: Block, wallIndex: string) {
+    if (!this.sceneStore.hasObj3d(room.id)) {
+      return false;
     }
 
     const obj = this.sceneStore.getObj3d(room.id);
@@ -26,7 +26,7 @@ class UpdateWallCable {
     const center = new Vector3();
     bbox.getCenter(center);
 
-    const edit = this.transactionService.getTransaction();
+    const edit = this.transactionService.createTransaction();
 
     if (size.x > size.z) {
       edit.updateDecoration(
@@ -63,6 +63,8 @@ class UpdateWallCable {
     }
 
     edit.commit(false);
+
+    return true;
   }
 
   private sceneStore: SceneStore;

@@ -34,7 +34,8 @@ class BlockCreator {
     return {
       ...block,
       childConnections: [],
-      conduitConnections: [],
+      conduitParentConnections: settings.conduitParentConnections || [],
+      conduitConnections: settings.conduitConnections || [],
       materialProps: {},
       neighbourConnections: [],
       isDirty: settings.isDirty || false,
