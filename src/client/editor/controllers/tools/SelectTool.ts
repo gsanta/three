@@ -54,10 +54,15 @@ class SelectTool extends HoverTool {
 
     const edit = this.update.createTransaction();
 
-    const selectedBlock = this.blockStore.getSelectedRootBlockIds()[0];
+    const selectedBlockId = this.blockStore.getSelectedRootBlockIds()[0];
 
-    if (selectedBlock) {
-      edit.updateBlock(selectedBlock, { notifyOnRender: true });
+    if (selectedBlockId) {
+      // edit.updateBlock(selectedBlock, { notifyOnRender: true });
+      const selectedBlock = this.blockStore.getBlock(selectedBlockId);
+
+      selectedBlock.conduitConnections.forEach((connection) => {
+        edit.updateBlock(connection.block, { isDirty: true });
+      });
 
       edit.commit(false);
     }
@@ -74,6 +79,19 @@ class SelectTool extends HoverTool {
     selectedBlockIds.forEach((blockId) =>
       edit.updateBlock(blockId, { position: addVector(blocks[blockId].position, drag) }),
     );
+
+    const selectedBlockId = this.blockStore.getSelectedRootBlockIds()[0];
+
+    if (selectedBlockId) {
+      // edit.updateBlock(selectedBlock, { notifyOnRender: true });
+      const selectedBlock = this.blockStore.getBlock(selectedBlockId);
+
+      selectedBlock.conduitConnections.forEach((connection) => {
+        edit.updateBlock(connection.block, { isDirty: true });
+      });
+
+      edit.commit(false);
+    }
 
     edit.commit(false);
 
@@ -130,22 +148,16 @@ class SelectTool extends HoverTool {
 
   onRendered() {
     if (this.isMoved) {
-      this.isRotated = false;
-      this.isMoved = false;
-
-      const selectedBlockIds = this.blockStore.getSelectedRootBlockIds();
-
-      const edit = this.update.createTransaction();
-
-      const block = this.blockStore.getBlocks()[selectedBlockIds[0]];
-
-      const mover = this.movers[block.category];
-
-      if (mover) {
-        mover.move(edit, block);
-      }
-
-      edit.commit();
+      // this.isRotated = false;
+      // this.isMoved = false;
+      // const selectedBlockIds = this.blockStore.getSelectedRootBlockIds();
+      // const edit = this.update.createTransaction();
+      // const block = this.blockStore.getBlocks()[selectedBlockIds[0]];
+      // const mover = this.movers[block.category];
+      // // if (mover) {
+      // //   mover.move(edit, block);
+      // // }
+      // edit.commit();
     }
   }
 

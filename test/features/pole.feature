@@ -5,16 +5,13 @@ Feature: Pole
     And I select template 'pole-1'
     And I move pointer to '0,0.1,5'
     And I press pointer
-    And I wait block count to increase by 1
     And I move pointer to '0,0.1,10'
     And I press pointer
-    And I wait block count to increase by 1
     And I select tool 'select'
     And I press pointer at 0,0.1,5
     And I press pointer at 0,0.1,10
     And I select tool 'cable'
     And I execute tool
-    And I wait block count to increase by 3
     And I examine block at 0,0.1,5
     Then cable for block 'examined' and pin '#2' ends at position '-0.913,7.254,5.011'
     And cable for block 'examined' and pin '#3' ends at position '-0.378,7.254,5.011'
@@ -30,10 +27,8 @@ Feature: Pole
     And I select template 'pole-1'
     And I move pointer to '0,0.1,5'
     And I press pointer
-    And I wait block count to increase by 1
     And I move pointer to '0,0.1,10'
     And I press pointer
-    And I wait block count to increase by 4
     When I select tool 'erase'
     And I press pointer at 0,0.1,5
     Then block at 0,0.1,5 does not exist
@@ -42,7 +37,6 @@ Feature: Pole
     Then pin '#3' of block 'examined' is empty
     Then pin '#4' of block 'examined' is empty
 
-  @only
   Scenario: Moving a pole joined to two other poles
     Given I have a scene with:
       | TYPE            | ID         | POS                     |
@@ -60,7 +54,7 @@ Feature: Pole
     And I select a block at position 6,0,0
     And I drag pointer with delta '0,0,3'
     And I end drag
-    And I wait block 'pole-2-id' to notify on render
+    And I wait for dirty blocks to update
     Then I have block 'pole-2-id' at estimated position '6,0,3'
     When I store world position for part '#2' of block 'pole-2-id'
     Then cable 'cable-1-id' ends at position 'stored'

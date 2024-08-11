@@ -34,6 +34,8 @@ import { BlockState, UpdateBlocks } from '@/client/editor/stores/block/blockSlic
 import furnitureSeeds from 'prisma/seed/furnitureSeeds';
 import roomSeeds from 'prisma/seed/roomSeeds';
 import { PayloadAction } from '@reduxjs/toolkit';
+import UpdateService from '@/client/editor/services/update/UpdateService';
+import ModelMesh from './mesh_mocks/ModelMesh';
 
 type TestEnv = {
   controller: ControllerService;
@@ -61,22 +63,24 @@ export const setupTestEnv = (): TestEnv => {
   const electricityStore = new ElectricityStore();
   const electricitySystemHook = new ElectricitySystemHook(blockStore, electricityStore);
 
-  const updateService = new TransactionService(blockStore, store, scene, [electricitySystemHook]);
+  const transactionService = new TransactionService(blockStore, store, scene, [electricitySystemHook]);
 
   const sceneStore = new SceneStore();
 
-  const meshFactory = new TestMeshFactory(blockStore, sceneStore);
+  const updateService = new UpdateService(blockStore, transactionService, sceneStore);
+
+  const meshFactory = new TestMeshFactory(blockStore, sceneStore, updateService);
 
   const toolStore = new ToolStore(store);
 
   const tool = new ToolService(
     [
-      new AddTool(blockStore, factoryService, scene, sceneStore, updateService),
-      new SelectTool(blockStore, scene, sceneStore, toolStore, updateService),
-      new CableTool(blockStore, factoryService, scene, sceneStore, updateService),
-      new EraseTool(blockStore, updateService),
-      new RayTool(blockStore, updateService, sceneStore),
-      new ColorTool(blockStore, updateService),
+      new AddTool(blockStore, factoryService, scene, sceneStore, transactionService),
+      new SelectTool(blockStore, scene, sceneStore, toolStore, transactionService),
+      new CableTool(blockStore, factoryService, scene, sceneStore, transactionService),
+      new EraseTool(blockStore, transactionService),
+      new RayTool(blockStore, transactionService, sceneStore),
+      new ColorTool(blockStore, transactionService),
     ],
     toolStore,
   );
@@ -96,21 +100,19 @@ export const setupTestEnv = (): TestEnv => {
         }
 
         if ('block' in u && u.block) {
-          setTimeout(() => {
-            sceneStore.addMesh(meshFactory.create(u.block) as unknown as Mesh, u.block.id);
-            tool.onRendered(u.block.id);
-
-            store.dispatch(resetNotifyOnRendered({ block: u.block.id }));
-          }, 0);
+          sceneStore.addMesh(meshFactory.create(u.block) as unknown as Mesh, u.block.id);
+          tool.onRendered(u.block.id);
         }
 
-        if ('block' in u && u.block && u.block.notifyOnRender) {
-          setTimeout(() => {
-            tool.onRendered(u.block.id);
+        // if ('block' in u && u.block && u.block.isDirty) {
+        //   setTimeout(() => {
+        //     const mesh = sceneStore.getObj3d(u.block.id) as unknown as ModelMesh;
+        //     mesh.render();
+        //   }, 0);
+        //   // tool.onRendered(u.block.id);
 
-            store.dispatch(resetNotifyOnRendered({ block: u.block.id }));
-          }, 0);
-        }
+        //   // store.dispatch(resetNotifyOnRendered({ block: u.block.id }));
+        // }
       });
     },
   };
@@ -154,7 +156,7 @@ export const setupTestEnv = (): TestEnv => {
 
   return {
     blockStore,
-    controller: new ControllerService(updateService),
+    controller: new ControllerService(transactionService),
     meshFactory,
     sceneService: scene,
     sceneStore,
@@ -164,7 +166,7 @@ export const setupTestEnv = (): TestEnv => {
     testScene: testStore,
     tool,
     toolHelper,
-    update: updateService,
+    update: transactionService,
     teardown,
   };
 };

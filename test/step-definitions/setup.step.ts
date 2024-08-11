@@ -14,6 +14,7 @@ import VectorUtils from '@/client/editor/utils/vectorUtils';
 import AddTool from '@/client/editor/controllers/tools/add/AddTool';
 import { ToolInfo } from '@/client/editor/types/Tool';
 import { waitForMeshCountChange } from './helpers/waitFor';
+import { updateBlocks } from '@/client/editor/stores/block/blockActions';
 
 Given('I have an empty canvas', function (this: ExtendedWorld) {
   this.setup();
@@ -49,8 +50,6 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
   //   this.env.sceneStore,
   // );
 
-  const joinPoles = new JoinPoles(this.env.blockStore, this.env.sceneStore, this.env.services.factory, this.env.update);
-
   const data = table.hashes() as SceneHash[];
 
   for (const row of data) {
@@ -69,7 +68,34 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
       const block2IdAndPin = row.POS.split(':')[1];
       const block1 = this.env.blockStore.getBlock(block1IdAndPin.split('#')[0]);
       const block2 = this.env.blockStore.getBlock(block2IdAndPin.split('#')[0]);
-      joinPoles.join(block1, block2, [[`#${block1IdAndPin.split('#')[1]}`, `#${block2IdAndPin.split('#')[1]}`]]);
+      const part1 = `#${block1IdAndPin.split('#')[1]}`;
+      const part2 = `#${block2IdAndPin.split('#')[1]}`;
+
+      this.env.sceneService.setIntersection([
+        {
+          block: block1,
+          partIndex: part1,
+          meshes: [{ object: {}, distance: 1, point: [0, 0, 0] }],
+        },
+      ]);
+
+      store.dispatch(setSelectedTool(ToolName.Cable));
+      this.env.toolHelper.pointerDown({ blockId: block1.id });
+      this.env.toolHelper.pointerUp();
+      this.env.toolHelper.pointerMove({ point: new Vector3(0, 0, 0) });
+
+      this.env.sceneService.setIntersection([
+        {
+          block: block2,
+          partIndex: part2,
+          meshes: [{ object: {}, distance: 1, point: [0, 0, 0] }],
+        },
+      ]);
+
+      this.env.toolHelper.pointerDown({ blockId: block2.id });
+      this.env.toolHelper.pointerUp();
+
+      // joinPoles.join(block1, block2, [[`#${block1IdAndPin.split('#')[1]}`, `#${block2IdAndPin.split('#')[1]}`]]);
     } else {
       let parentBlockId: string | undefined;
       let partIndexOrName: string | undefined;
@@ -87,12 +113,6 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
       }
 
       const targetBlock = parentBlockId;
-
-      // let position = [0, 0, 0];
-
-      // if (row.POS) {
-      //   position = checkPosition.call(this, row.POS);
-      // }
 
       if (parentBlockId) {
         const intersectingParentMesh = this.env.sceneStore.getObj3d(parentBlockId);
@@ -122,7 +142,7 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
       store.dispatch(setSelectedGeometry(block.type));
       addTool.onPointerUp({ clientX: 0, clientY: 0, pos: new Vector3(...pos) } as ToolInfo);
 
-      await waitForMeshCountChange(1, this);
+      store.dispatch(updateBlocks({ blockUpdates: [{ select: null, slice: 'city' }] }));
 
       // const edit = this.env.update.getTransaction();
       // addBlock.perform(edit, new Vector3(...pos), row.TYPE);
@@ -151,8 +171,6 @@ export async function addTemplateToPosition(this: ExtendedWorld, template: strin
   this.env.toolHelper.pointerMove({ point: new Vector3(x, y, z) });
   this.env.toolHelper.pointerDown();
   this.env.toolHelper.pointerUp();
-
-  await waitForMeshCountChange(1, this);
 }
 
 Given('I have canvas with a block {string}', async function (this: ExtendedWorld, template: string) {

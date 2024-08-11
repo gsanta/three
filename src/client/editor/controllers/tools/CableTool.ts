@@ -61,40 +61,32 @@ class CableTool extends HoverTool {
       return;
     }
 
-    const block = this.blockStore.getBlock(blockId);
+    if (this.isDrawingCable) {
+      if (blockId) {
+        const targetBlock = this.blockStore.getBlock(blockId);
 
-    const isWiringMode = store.getState().editor.editingMode === 'wiring';
+        const partIndex = this.checkPartIntersection(blockId, info.clientX, info.clientY);
 
-    const rootBlock = this.getRootBlock(block);
+        const selectedBlockId = this.blockStore.getSelectedRootBlockIds()[0];
+        const sourcePartIndex = this.blockStore.getSelectedPartIndexes()[selectedBlockId]?.[0];
 
-    if (isWiringMode) {
-      this.drawHouseWiring.execute(blockId, info.clientX, info.clientY);
-    } else {
-      if (rootBlock) {
-        store.dispatch(setEditMode({ editingMode: 'wiring', editingTargetBlock: rootBlock.id }));
-      } else if (this.isDrawingCable) {
-        if (blockId) {
-          const targetBlock = this.blockStore.getBlock(blockId);
-
-          const partIndex = this.checkPartIntersection(blockId, info.clientX, info.clientY);
-
-          const selectedBlockId = this.blockStore.getSelectedRootBlockIds()[0];
-          const sourcePartIndex = this.blockStore.getSelectedPartIndexes()[selectedBlockId]?.[0];
-
-          if (!sourcePartIndex || !partIndex) {
-            return;
-          }
-
-          const block1 = this.blockStore.getBlock(selectedBlockId);
-          const block2 = this.blockStore.getBlock(blockId);
-
-          if (targetBlock.partDetails[partIndex || '']?.category === 'pin') {
-            this.joinPoles.join(block1, block2, [[sourcePartIndex, partIndex]]);
-          }
+        if (!sourcePartIndex || !partIndex) {
+          return;
         }
-      } else {
-        this.selector.select(blockId, info.clientX, info.clientY);
+
+        const block1 = this.blockStore.getBlock(selectedBlockId);
+        const block2 = this.blockStore.getBlock(blockId);
+
+        const edit = this.update.createTransaction();
+
+        if (targetBlock.partDetails[partIndex || '']?.category === 'pin') {
+          this.joinPoles.join(block1, block2, [[sourcePartIndex, partIndex]]);
+        }
+
+        edit.commit();
       }
+    } else {
+      this.selector.select(blockId, info.clientX, info.clientY);
     }
   }
 

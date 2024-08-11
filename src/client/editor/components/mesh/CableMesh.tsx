@@ -12,10 +12,6 @@ const CableMesh = ({ cable, meshProps, block }: CableProps) => {
   const ref = useRegisterScene<Mesh>();
   const { update } = useEditorContext();
 
-  // const blockPosition = overwrites?.position ? overwrites.position : block.position;
-  // const position = additions?.position ? addVector(additions.position, blockPosition) : blockPosition;
-  // const blockRotation = overwrites?.rotation ? overwrites.rotation : block.rotation;
-
   useEffect(() => {
     if (block.isDirty) {
       update.updateDirtyBlock(block.id);
