@@ -1,4 +1,4 @@
-import Edit from '@/client/editor/services/update/Edit';
+import Edit from '@/client/editor/services/transaction/Edit';
 import MoveDecoration from './MoveDecoration';
 import Num3 from '@/client/editor/types/Num3';
 import { addVector } from '@/client/editor/utils/vectorUtils';

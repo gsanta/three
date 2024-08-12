@@ -8,7 +8,7 @@ import { Object3D, Ray } from 'three';
 class TestSceneService implements SceneService {
   uuid(blockType: BlockType) {
     const id = this.nextUuid;
-    this.nextUuid = '';
+    // this.nextUuid = '';
 
     if (id) {
       return id;

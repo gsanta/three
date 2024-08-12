@@ -30,7 +30,6 @@ const Row = ({ activeGridIndexes, count, rowIndex, x, z, offsetX, offsetZ, gridS
             tool.onPointerDown({ ...e, gridX: i, gridY: rowIndex, gridIndex: rowIndex * count + i })
           }
           onPointerUp={() => tool.onPointerUp()}
-          onClick={() => console.log('onclick grid')}
           position={[getX(i) + offsetX, 0.1, zPos + offsetZ]}
           rotation-x={-Math.PI * 0.5}
         >

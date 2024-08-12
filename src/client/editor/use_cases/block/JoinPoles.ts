@@ -5,87 +5,101 @@ import SceneStore from '@/client/editor/components/scene/SceneStore';
 import TransactionService from '../../services/transaction/TransactionService';
 import FactoryService from '../../services/factory/FactoryService';
 import BlockStore from '../../stores/block/BlockStore';
+import Num3 from '../../types/Num3';
+import Edit from '../../services/transaction/Edit';
 
 class JoinPoles {
-  constructor(blockStore: BlockStore, scene: SceneStore, factory: FactoryService, update: TransactionService) {
+  constructor(
+    blockStore: BlockStore,
+    scene: SceneStore,
+    factory: FactoryService,
+    transactionService: TransactionService,
+  ) {
     this.blockStore = blockStore;
     this.factory = factory;
     this.scene = scene;
-    this.update = update;
+    this.transactionService = transactionService;
   }
 
   join(pole1: Block, pole2: Block, pairs: [string, string][]) {
     pairs.forEach(([partIndex1, partIndex2]) => this.joinPins(pole1, pole2, partIndex1, partIndex2));
   }
 
-  private joinPins(deviceBlock1: Block, deviceBlock2: Block, partIndex1: string, partIndex2: string) {
-    const mesh1 = this.scene.getObj3d(deviceBlock1.id);
-    const mesh2 = this.scene.getObj3d(deviceBlock2.id);
+  private joinPins(pole1: Block, pole2: Block, partIndex1: string, partIndex2: string) {
+    let positions: Num3[] = [
+      [0, 0, 0],
+      [0, 0, 0],
+    ];
 
-    const pinName1 = deviceBlock1.partDetails[partIndex1]?.name || '';
-    const pinName2 = deviceBlock2.partDetails[partIndex2]?.name || '';
+    let isDirty = false;
 
-    const pinMesh1 = MeshUtils.findByName(mesh1, pinName1);
-    const pinMesh2 = MeshUtils.findByName(mesh2, pinName2);
+    if (this.scene.hasObj3d(pole1.id) && this.scene.hasObj3d(pole2.id)) {
+      positions = this.getPositions(pole1, pole2, partIndex1, partIndex2);
+    } else {
+      isDirty = true;
+    }
 
-    const device1 = this.blockStore.getDecoration('devices', deviceBlock1.id);
-    const device2 = this.blockStore.getDecoration('devices', deviceBlock2.id);
-
-    const pos1 = new Vector3();
-    pinMesh1.getWorldPosition(pos1);
-    const pos2 = new Vector3();
-    pinMesh2.getWorldPosition(pos2);
-
-    const edit = this.update.getTransaction();
+    const edit = this.transactionService.getOrCreateActiveTransaction();
 
     this.factory.create(edit, 'cable-1', {
+      block: {
+        conduitParentConnections: [{ block: pole1.id }, { block: pole2.id }],
+        isDirty,
+      },
       decorations: {
         cables: {
-          end1: { pin: partIndex1, device: deviceBlock1.id },
-          end2: { pin: partIndex2, device: deviceBlock2.id },
-          points: [{ position: pos1.toArray() }, { position: pos2.toArray() }],
+          end1: { pin: partIndex1, device: pole1.id },
+          end2: { pin: partIndex2, device: pole2.id },
+          points: [{ position: positions[0] }, { position: positions[1] }],
         },
       },
     });
 
     const cable = edit.getLastBlock();
 
+    this.updatePole(edit, cable, pole1, partIndex1);
+    this.updatePole(edit, cable, pole2, partIndex2);
+
+    // edit.commit();
+  }
+
+  private updatePole(edit: Edit, cable: Block, pole: Block, partIndex: string) {
+    const device = this.blockStore.getDecoration('devices', pole.id);
+
     edit.update<'devices'>(
-      deviceBlock1.id,
+      pole.id,
       {
         conduitConnections: [{ block: cable.id }],
       },
       'devices',
       {
         pins: {
-          // TODO: merging should preserve existing pins
-          ...device1.pins,
-          [partIndex1]: {
+          ...device.pins,
+          [partIndex]: {
             wires: [cable.id],
-            connectedDevices: [device2.id],
+            connectedDevices: [device.id],
           },
         },
       },
     );
+  }
 
-    edit.update<'devices'>(
-      deviceBlock2.id,
-      {
-        conduitConnections: [{ block: cable.id }],
-      },
-      'devices',
-      {
-        pins: {
-          ...device2.pins,
-          [partIndex2]: {
-            wires: [cable.id],
-            connectedDevices: [device1.id],
-          },
-        },
-      },
-    );
+  private getPositions(pole1: Block, pole2: Block, partIndex1: string, partIndex2: string) {
+    const mesh1 = this.scene.getObj3d(pole1.id);
+    const mesh2 = this.scene.getObj3d(pole2.id);
 
-    edit.commit();
+    const pinName1 = pole1.partDetails[partIndex1]?.name || '';
+    const pinName2 = pole2.partDetails[partIndex2]?.name || '';
+
+    const pinMesh1 = MeshUtils.findByName(mesh1, pinName1);
+    const pinMesh2 = MeshUtils.findByName(mesh2, pinName2);
+
+    const pos1 = new Vector3();
+    pinMesh1.getWorldPosition(pos1);
+    const pos2 = new Vector3();
+    pinMesh2.getWorldPosition(pos2);
+
+    return [pos1.toArray(), pos2.toArray()];
   }
 
   private blockStore: BlockStore;
@@ -94,7 +108,7 @@ class JoinPoles {
 
   private scene: SceneStore;
 
-  private update: TransactionService;
+  private transactionService: TransactionService;
 }
 
 export default JoinPoles;

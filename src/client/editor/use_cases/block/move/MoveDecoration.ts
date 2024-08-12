@@ -1,4 +1,4 @@
-import Edit from '@/client/editor/services/update/Edit';
+import Edit from '@/client/editor/services/transaction/Edit';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import Num3 from '@/client/editor/types/Num3';
 

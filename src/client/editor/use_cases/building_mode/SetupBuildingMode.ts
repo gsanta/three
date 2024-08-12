@@ -16,7 +16,7 @@ class SetupBuildingMode {
   }
 
   setup(building: Block) {
-    const edit = this.update.getTransaction();
+    const edit = this.update.createTransaction();
     const roofs = this.blockStore.filterDescendants(building.id, { category: 'roofs' });
 
     [Orientation.SOUTH, Orientation.EAST].forEach((orientation) => {

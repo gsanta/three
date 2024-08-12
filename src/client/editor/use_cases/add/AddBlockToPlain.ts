@@ -5,7 +5,7 @@ import BlockAdder from './adders/BlockAdder';
 import PoleAdder from './adders/PoleAdder';
 import SceneStore from '../../components/scene/SceneStore';
 import FactoryService from '../../services/factory/FactoryService';
-import Edit from '../../services/update/Edit';
+import Edit from '../../services/transaction/Edit';
 
 class AddBlockToPlain {
   constructor(

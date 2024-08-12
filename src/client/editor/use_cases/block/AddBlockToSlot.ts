@@ -3,7 +3,7 @@ import MeshUtils from '../../utils/MeshUtils';
 import MathUtils, { toDegree } from '../../utils/mathUtils';
 import FactoryService from '../../services/factory/FactoryService';
 import BlockStore from '../../stores/block/BlockStore';
-import Edit from '../../services/update/Edit';
+import Edit from '../../services/transaction/Edit';
 
 class AddBlockToSlot {
   constructor(blockStore: BlockStore, factoryService: FactoryService, sceneStore: SceneStore) {

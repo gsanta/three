@@ -44,7 +44,7 @@ class SelectTool extends HoverTool {
     const block = this.blockStore.getBlocks()[info.eventObject?.userData.modelId || ''];
 
     if (block) {
-      this.update.getTransaction().updateBlock(block.id, { isHovered: false }).commit();
+      this.update.createTransaction().updateBlock(block.id, { isHovered: false }).commit();
     }
   }
 
@@ -52,12 +52,17 @@ class SelectTool extends HoverTool {
     this.move.perform(info.drag, info.dragDelta);
     this.isMoved = true;
 
-    const edit = this.update.getTransaction();
+    const edit = this.update.createTransaction();
 
-    const selectedBlock = this.blockStore.getSelectedRootBlockIds()[0];
+    const selectedBlockId = this.blockStore.getSelectedRootBlockIds()[0];
 
-    if (selectedBlock) {
-      edit.updateBlock(selectedBlock, { notifyOnRender: true });
+    if (selectedBlockId) {
+      // edit.updateBlock(selectedBlock, { notifyOnRender: true });
+      const selectedBlock = this.blockStore.getBlock(selectedBlockId);
+
+      selectedBlock.conduitConnections.forEach((connection) => {
+        edit.updateBlock(connection.block, { isDirty: true });
+      });
 
       edit.commit(false);
     }
@@ -67,7 +72,7 @@ class SelectTool extends HoverTool {
     const selectedBlockIds = this.blockStore.getSelectedRootBlockIds();
     const blocks = this.blockStore.getBlocks();
 
-    const edit = this.update.getTransaction();
+    const edit = this.update.createTransaction();
 
     const drag = this.toolStore.getSelectOptions().drag;
 
@@ -75,13 +80,26 @@ class SelectTool extends HoverTool {
       edit.updateBlock(blockId, { position: addVector(blocks[blockId].position, drag) }),
     );
 
+    const selectedBlockId = this.blockStore.getSelectedRootBlockIds()[0];
+
+    if (selectedBlockId) {
+      // edit.updateBlock(selectedBlock, { notifyOnRender: true });
+      const selectedBlock = this.blockStore.getBlock(selectedBlockId);
+
+      selectedBlock.conduitConnections.forEach((connection) => {
+        edit.updateBlock(connection.block, { isDirty: true });
+      });
+
+      edit.commit(false);
+    }
+
     edit.commit(false);
 
     store.dispatch(updateSelectTool({ drag: [0, 0, 0] }));
   }
 
   onDeselect() {
-    this.update.getTransaction().select(null).commit(false);
+    this.update.createTransaction().select(null).commit(false);
   }
 
   scaleMesh(scale: number, block: Block) {
@@ -93,7 +111,7 @@ class SelectTool extends HoverTool {
     newScale[index] = settings.scale[index] * scale;
 
     this.update
-      .getTransaction()
+      .createTransaction()
       .updateBlock(block.id, {
         scale: newScale,
       })
@@ -113,35 +131,33 @@ class SelectTool extends HoverTool {
     const newRotation = [...block.rotation] as [number, number, number];
     newRotation[index] += toRadian(rotation);
 
-    const edit = this.update.getTransaction().updateBlock(block.id, {
+    const edit = this.update.createTransaction().updateBlock(block.id, {
       rotation: newRotation,
       notifyOnRender: true,
     });
 
     block = this.blockStore.getBlocks()[selectedBlockIds[0]];
 
+    block.conduitConnections.forEach((child) => {
+      edit.updateBlock(child.block, { isDirty: true });
+    });
+
     this.isRotated = true;
     edit.commit();
   }
 
   onRendered() {
-    if (this.isRotated || this.isMoved) {
-      this.isRotated = false;
-      this.isMoved = false;
-
-      const selectedBlockIds = this.blockStore.getSelectedRootBlockIds();
-
-      const edit = this.update.getTransaction();
-
-      const block = this.blockStore.getBlocks()[selectedBlockIds[0]];
-
-      const mover = this.movers[block.category];
-
-      if (mover) {
-        mover.move(edit, block);
-      }
-
-      edit.commit();
+    if (this.isMoved) {
+      // this.isRotated = false;
+      // this.isMoved = false;
+      // const selectedBlockIds = this.blockStore.getSelectedRootBlockIds();
+      // const edit = this.update.createTransaction();
+      // const block = this.blockStore.getBlocks()[selectedBlockIds[0]];
+      // const mover = this.movers[block.category];
+      // // if (mover) {
+      // //   mover.move(edit, block);
+      // // }
+      // edit.commit();
     }
   }
 

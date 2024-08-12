@@ -9,13 +9,16 @@ import { useEffect, useRef } from 'react';
 import useEditorContext from '@/app/editor/EditorContext';
 import { resetNotifyOnRendered } from '@/client/editor/stores/block/blockActions';
 
-const isModelMesh = (block: Block): block is Block<'model'> => block.geometry === 'model';
+const isModelMesh = (block: Block): block is Block<'model'> => block.category !== 'cables';
 
 const isTubeMesh = (block: Block): block is Block<'tube'> => block.category === 'cables';
 
 const MeshRenderer = (props: WrappedMeshProps) => {
   const { block, meshProps, materialProps = {} } = props;
-  const decorations = useAppSelector((selector) => selector.block.present.decorations);
+  const slice = useAppSelector((selector) => selector.editor.mode);
+  const decorations = useAppSelector((selector) =>
+    slice === 'city' ? selector.block.present.decorations : selector.building.present.decorations,
+  );
   const dispatch = useAppDispatch();
 
   const { tool } = useEditorContext();
@@ -33,18 +36,6 @@ const MeshRenderer = (props: WrappedMeshProps) => {
   });
 
   const { additions } = props;
-
-  if (isTubeMesh(block)) {
-    return (
-      <CableMesh
-        additions={additions}
-        cable={decorations.cables[block.id] as Cable}
-        block={block}
-        meshProps={{ ...meshProps }}
-        materialProps={materialProps}
-      />
-    );
-  }
 
   if (isModelMesh(block)) {
     return block.isSelected ? (
@@ -67,6 +58,18 @@ const MeshRenderer = (props: WrappedMeshProps) => {
         additions={additions}
         block={block}
         meshProps={meshProps}
+        materialProps={materialProps}
+      />
+    );
+  }
+
+  if (isTubeMesh(block)) {
+    return (
+      <CableMesh
+        additions={additions}
+        cable={decorations.cables[block.id] as Cable}
+        block={block}
+        meshProps={{ ...meshProps }}
         materialProps={materialProps}
       />
     );

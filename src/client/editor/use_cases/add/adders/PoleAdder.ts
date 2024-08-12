@@ -31,7 +31,7 @@ class PoleAdder extends BlockAdder {
       ['#4', '#4'],
     ]);
 
-    this.update.getTransaction().select(null).select(blockId).commit();
+    this.update.createTransaction().select(null).select(blockId).commit();
   }
 
   private blockStore: BlockStore;

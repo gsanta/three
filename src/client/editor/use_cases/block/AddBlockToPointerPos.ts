@@ -6,7 +6,7 @@ import MeshUtils from '../../utils/MeshUtils';
 import { MathUtils } from 'three';
 import Num3 from '../../types/Num3';
 import VectorUtils from '../../utils/vectorUtils';
-import Edit from '../../services/update/Edit';
+import Edit from '../../services/transaction/Edit';
 
 class AddBlockToPointerPos {
   constructor(

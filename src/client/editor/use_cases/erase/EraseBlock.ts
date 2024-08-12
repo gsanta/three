@@ -1,5 +1,5 @@
 import BlockStore from '../../stores/block/BlockStore';
-import Edit from '../../services/update/Edit';
+import Edit from '../../services/transaction/Edit';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockEraser from './erasers/BlockEraser';
 import CableEraser from './erasers/CableEraser';
@@ -18,7 +18,7 @@ class EraseBlock {
 
     const blocksToRemove: string[] = [];
 
-    const edit = this.update.getTransaction();
+    const edit = this.update.createTransaction();
 
     while (queue.length) {
       const next = queue.shift();

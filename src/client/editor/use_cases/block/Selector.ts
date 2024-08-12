@@ -20,7 +20,7 @@ class Selector {
       const block = this.blockStore.getBlocks()[blockId];
       this.selectBlock(block, clientX, clientY);
     } else {
-      this.updateService.getTransaction().select(null).commit();
+      this.updateService.createTransaction().select(null).commit();
     }
   }
 
@@ -34,7 +34,7 @@ class Selector {
     const pos = new Vector3();
     mesh.getWorldPosition(pos);
 
-    const edit = this.updateService.getTransaction();
+    const edit = this.updateService.createTransaction();
 
     const partIndex = this.checkPartIntersection(block, clientX, clientY);
 

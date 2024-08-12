@@ -7,6 +7,7 @@ import { MeshStandardMaterialProps } from '@react-three/fiber';
 export type NodesOrObject3DType = NodesType | BufferGeometry<NormalBufferAttributes>;
 
 type UseMaterialProps = {
+  isSelected: boolean;
   materials: {
     [name: string]: Material;
   };
@@ -34,7 +35,7 @@ const getMaterial = (materials: UseMaterialProps['materials'], nodes: NodesType,
   return material;
 };
 
-const useMaterial = ({ materialProps, materials, nodes, part }: UseMaterialProps) => {
+const useMaterial = ({ isSelected, materialProps, materials, nodes, part }: UseMaterialProps) => {
   const selectionMaterial = useRef<Material>();
 
   let material: Material | undefined = undefined;
@@ -55,8 +56,10 @@ const useMaterial = ({ materialProps, materials, nodes, part }: UseMaterialProps
       //   newMaterial[prop as Exclude<keyof Material, 'isMaterial'>] = materialProps[prop];
       // });
 
-      // selectionMaterial.current.transparent = true;
-      // selectionMaterial.current.opacity = 0.2;
+      if (isSelected) {
+        selectionMaterial.current.transparent = true;
+        selectionMaterial.current.opacity = 0.2;
+      }
 
       return selectionMaterial.current;
     } else {
@@ -65,7 +68,7 @@ const useMaterial = ({ materialProps, materials, nodes, part }: UseMaterialProps
       }
       return getMaterial(materials, nodes, part);
     }
-  }, [material, materialProps, materials, nodes, part]);
+  }, [isSelected, material, materialProps, materials, nodes, part]);
 
   return material;
 };

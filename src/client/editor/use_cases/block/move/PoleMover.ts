@@ -1,6 +1,6 @@
 import BlockMover from './BlockMover';
 import Block from '@/client/editor/types/Block';
-import Edit from '../../../services/update/Edit';
+import Edit from '../../../services/transaction/Edit';
 import SceneStore from '../../../components/scene/SceneStore';
 import BlockStore from '../../../stores/block/BlockStore';
 import Cable from '@/client/editor/types/block/Cable';

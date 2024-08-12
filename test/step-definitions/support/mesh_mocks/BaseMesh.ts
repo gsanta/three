@@ -3,9 +3,16 @@ import AbstractMesh from './AbstractMesh';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import Block from '@/client/editor/types/Block';
+import UpdateService from '@/client/editor/services/update/UpdateService';
 
 class BaseMesh extends AbstractMesh {
-  constructor(block: Block, blockStore: BlockStore, sceneStore: SceneStore, name?: string) {
+  constructor(
+    block: Block,
+    blockStore: BlockStore,
+    sceneStore: SceneStore,
+    updateService: UpdateService,
+    name?: string,
+  ) {
     super(name);
     this.blockStore = blockStore;
     this.blockId = block.id;
@@ -14,6 +21,7 @@ class BaseMesh extends AbstractMesh {
       modelId: block.id,
     };
     this.sceneStore = sceneStore;
+    this.updateService = updateService;
   }
 
   getWorldPosition(vec3: Vector3) {
@@ -30,11 +38,20 @@ class BaseMesh extends AbstractMesh {
     modelId: string;
   };
 
-  private blockId: string;
+  render() {
+    const block = this.blockStore.getBlock(this.blockId);
+    if (block.isDirty) {
+      this.updateService.updateDirtyBlock(block.id);
+    }
+  }
+
+  protected blockId: string;
 
   private sceneStore: SceneStore;
 
-  private blockStore: BlockStore;
+  protected blockStore: BlockStore;
+
+  private updateService: UpdateService;
 }
 
 export default BaseMesh;

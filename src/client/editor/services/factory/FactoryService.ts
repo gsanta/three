@@ -4,7 +4,7 @@ import PoleFactory from './creators/PoleFactory';
 import CableFactory from './creators/CableFactory';
 import Block from '../../types/Block';
 import BlockDecoration, { PartialBlockCategories } from '../../types/BlockCategory';
-import Edit from '../update/Edit';
+import Edit from '../transaction/Edit';
 import BlockStore from '../../stores/block/BlockStore';
 import DefaultBlockFactory from './creators/DefaultBlockFactory';
 import LampFactory from './creators/LampFactory';
@@ -53,7 +53,7 @@ class FactoryService {
         category: decorationName,
       });
 
-      edit.createDecoration(decoration);
+      edit.createDecoration(decoration, { slice: targetSlice });
     });
 
     return block;

@@ -1,6 +1,6 @@
 import FactoryService from '../../services/factory/FactoryService';
 import Num3 from '../../types/Num3';
-import Edit from '../../services/update/Edit';
+import Edit from '../../services/transaction/Edit';
 import { BlockSlices } from '../../stores/block/blockSlice.types';
 
 class AddBlockToPos {

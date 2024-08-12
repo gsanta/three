@@ -1,18 +1,22 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { CatmullRomCurve3, Mesh, Vector3 } from 'three';
 import WrappedMeshProps from '../../types/block/WrappedMeshProps';
 import Cable from '../../types/block/Cable';
 import useRegisterScene from '../hooks/useRegisterScene';
 import Num3 from '../../types/Num3';
+import useEditorContext from '@/app/editor/EditorContext';
 
 type CableProps = WrappedMeshProps<'tube'> & { cable: Cable };
 
 const CableMesh = ({ cable, meshProps, block }: CableProps) => {
   const ref = useRegisterScene<Mesh>();
+  const { update } = useEditorContext();
 
-  // const blockPosition = overwrites?.position ? overwrites.position : block.position;
-  // const position = additions?.position ? addVector(additions.position, blockPosition) : blockPosition;
-  // const blockRotation = overwrites?.rotation ? overwrites.rotation : block.rotation;
+  useEffect(() => {
+    if (block.isDirty) {
+      update.updateDirtyBlock(block.id);
+    }
+  });
 
   const curve = useMemo(() => {
     if (cable.points.length < 2) {

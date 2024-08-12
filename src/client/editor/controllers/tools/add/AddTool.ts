@@ -26,7 +26,7 @@ class AddTool extends HoverTool {
 
     this.addBlock = new AddBlock(blockStore, factoryService, sceneService, sceneStore, update);
 
-    this.addHouse = new AddHouse(this.blockStore, this.update, this.addBlock);
+    this.addHouse = new AddHouse(this.blockStore, factoryService, this.update, this.addBlock);
   }
 
   onPointerUp({ clientX, clientY, gridIndex, pos }: ToolInfo) {
@@ -60,12 +60,13 @@ class AddTool extends HoverTool {
         position: pos.toArray(),
       });
       this.newBlockCategory = newBlockType.category;
+      this.current = this.addHouse;
     } else {
       const newBlockType = this.blockStore.getBlockType(selectedBlockName);
 
       const selectedAddBlock = this.addBlock.getAddBlock(newBlockType.category, targetBlock?.category || 'plain');
 
-      const edit = this.update.getTransaction();
+      const edit = this.update.createTransaction();
 
       selectedAddBlock?.perform({
         edit,
@@ -123,12 +124,20 @@ class AddTool extends HoverTool {
 
   onRendered() {
     try {
+      // if (this.current) {
+      //   const stay = this.current.performAfterRender(id);
+
+      //   if (!stay) {
+      //     this.current = undefined;
+      //   }
+      // }
+
       if (this.newBlockCategory && this.targetBlockCategory) {
         if (this.newBlockCategory === 'building-bases') {
           this.addHouse.performAfterRender();
         } else {
-          const selectedAddBlock = this.addBlock.getAddBlock(this.newBlockCategory, this.targetBlockCategory);
-          selectedAddBlock?.performAfterRender();
+          // const selectedAddBlock = this.addBlock.getAddBlock(this.newBlockCategory, this.targetBlockCategory);
+          // selectedAddBlock?.performAfterRender();
         }
       }
     } finally {
@@ -136,6 +145,8 @@ class AddTool extends HoverTool {
       this.targetBlockCategory = undefined;
     }
   }
+
+  private current?: { performAfterRender(id: string): boolean };
 
   private newBlockCategory: string | undefined;
 

@@ -19,6 +19,7 @@ type Block<S extends ShapeType = ShapeType> = {
   id: string;
   isHovered: boolean;
   hoveredPart?: string;
+  isDirty: boolean;
   isSelected: boolean;
   selectedPart?: string;
   isVisible: boolean;
@@ -30,6 +31,10 @@ type Block<S extends ShapeType = ShapeType> = {
   notifyOnRender: boolean;
 
   conduitConnections: {
+    block: string;
+  }[];
+
+  conduitParentConnections: {
     block: string;
   }[];
 

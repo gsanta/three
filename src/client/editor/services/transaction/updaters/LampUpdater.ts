@@ -1,7 +1,7 @@
 import { BlockDecorationType } from '@/client/editor/types/BlockCategory';
 import BlockUpdater from './BlockUpdater';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
-import Edit from '../../update/Edit';
+import Edit from '../Edit';
 import Block from '@/client/editor/types/Block';
 import Device from '@/client/editor/types/block/Device';
 
