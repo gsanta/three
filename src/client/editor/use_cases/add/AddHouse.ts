@@ -55,6 +55,8 @@ class AddHouse {
 
     this.addRoom(edit);
 
+    this.addElectricity();
+
     edit.commit(false);
   }
 
@@ -203,6 +205,19 @@ class AddHouse {
       newBlockType: television,
       position: [-5.5, 1.7, 0],
     });
+  }
+
+  private addElectricity() {
+    const edit = this.updateService.getOrCreateActiveTransaction();
+
+    const node = this.factoryService.getElectricityFactory().createElectricNode();
+
+    edit.getElectricityEdit().updateNode(node);
+    edit
+      .getElectricityEdit()
+      .updateConnection(
+        this.factoryService.getElectricityFactory().createElectricConnection({ node1: node.id, node2: node.id }),
+      );
   }
 
   private buildingBaseId?: string;

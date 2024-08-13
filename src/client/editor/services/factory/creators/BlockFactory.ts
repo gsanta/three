@@ -4,6 +4,7 @@ import Block from '@/client/editor/types/Block';
 import BlockDecoration, { BlockDecorationType } from '@/client/editor/types/BlockCategory';
 import BlockCreator from './BlockCreator';
 import SceneService from '@/client/editor/components/scene/service/SceneService';
+import ElectricNode from '../../electricity/types/ElectricNode';
 
 abstract class BlockFactory {
   constructor(sceneService: SceneService) {
@@ -11,7 +12,7 @@ abstract class BlockFactory {
   }
 
   create(blockType: BlockType, overrides: Partial<Block> = {}): Block {
-    const block = BlockCreator.create(this.sceneService.uuid(blockType), blockType, overrides);
+    const block = BlockCreator.create(this.sceneService.uuid(blockType.type), blockType, overrides);
 
     return block;
   }
