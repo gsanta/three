@@ -1,4 +1,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import ElectricNode from '../../services/electricity/types/ElectricNode';
+import { updateBlocks } from '../block/blockActions';
+import ElectricityUpdater from './ElectricityUpdater';
+import ElectricConnection from '../../services/electricity/types/ElectricConnection';
 
 export type ElectricNodeInfo = {
   currentFlows: boolean;
@@ -6,14 +10,13 @@ export type ElectricNodeInfo = {
 };
 
 export type ElectricityState = {
-  nodes: Partial<Record<string, ElectricNodeInfo>>;
-
-  sources: Record<string, object>;
+  nodes: Record<string, ElectricNode>;
+  connections: Record<string, ElectricConnection>;
 };
 
 export const initialElectricityState: ElectricityState = {
   nodes: {},
-  sources: {},
+  connections: {},
 };
 
 export type ElectricNodeUpdate = {
@@ -29,24 +32,32 @@ export type ElectricNodeUpdate = {
     }
 );
 
+const electricityUpdater = new ElectricityUpdater();
+
 export const electricitySlice = createSlice({
-  name: 'settings',
+  name: 'electricity',
   initialState: initialElectricityState,
   reducers: {
     updateElectricSystem(state: ElectricityState, action: PayloadAction<ElectricNodeUpdate[]>) {
-      const updates = action.payload;
-
-      updates.forEach((update) => {
-        if (update.type === 'remove') {
-          delete state.nodes[update.id];
-        } else {
-          const current = state.nodes[update.id];
-
-          if (current?.currentFlows !== update.info.currentFlows || current.provider !== update.info.provider)
-            state.nodes[update.id] = update.info;
-        }
-      });
+      // const updates = action.payload;
+      // updates.forEach((update) => {
+      //   if (update.type === 'remove') {
+      //     delete state.nodes[update.id];
+      //   } else {
+      //     const current = state.nodes[update.id];
+      //     if (current?.currentFlows !== update.info.currentFlows || current.provider !== update.info.provider)
+      //       state.nodes[update.id] = update.info;
+      //   }
+      // });
     },
+  },
+
+  extraReducers: (builder) => {
+    builder.addCase(updateBlocks, (state, action) => {
+      const electricityUpdates = action.payload.blockUpdates.filter((update) => update.store === 'electricity');
+
+      electricityUpdater.update(state, electricityUpdates);
+    });
   },
 });
 

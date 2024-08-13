@@ -9,6 +9,7 @@ import LampUpdater from './updaters/LampUpdater';
 import SystemHook from './SystemHook';
 import { updateBlocks } from '../../stores/block/blockActions';
 import { BlockUpdate, DecorationUpdate, UpdateBlocks } from '../../stores/block/blockSlice.types';
+import ElectricityEdit from './ElectricityEdit';
 
 type EditOptions = {
   arrayMergeStrategy?: MergeStrategy;
@@ -26,6 +27,8 @@ class Edit {
     this.updaters.lamps = new LampUpdater(blockStore);
 
     this.close = close;
+
+    this.electricityEdit = new ElectricityEdit();
   }
 
   flush() {
@@ -40,7 +43,7 @@ class Edit {
 
   create(block: Block, options?: EditOptions): this {
     const mergedOptions = this.getMergedOptions(options);
-    this.updates.push({ type: 'update', slice: mergedOptions.slice, block });
+    this.updates.push({ type: 'update', store: mergedOptions.slice, block });
 
     return this;
   }
@@ -48,7 +51,7 @@ class Edit {
   createDecoration<T extends BlockDecoration>(data: BlockCategories[T], options?: EditOptions): this {
     const mergedOptions = this.getMergedOptions(options);
 
-    this.updates.push({ type: 'update', slice: mergedOptions.slice, decoration: data });
+    this.updates.push({ type: 'update', store: mergedOptions.slice, decoration: data });
 
     return this;
   }
@@ -80,7 +83,7 @@ class Edit {
       this.updates.splice(index, 1);
     }
 
-    this.updates.push({ type: 'update', slice: mergedOptions.slice, block: newBlock });
+    this.updates.push({ type: 'update', store: mergedOptions.slice, block: newBlock });
 
     return this;
   }
@@ -107,7 +110,7 @@ class Edit {
       this.updates.splice(index, 1);
     }
 
-    this.updates.push({ type: 'update', slice: mergedOptions.slice, decoration: updated });
+    this.updates.push({ type: 'update', store: mergedOptions.slice, decoration: updated });
 
     return this;
   }
@@ -126,7 +129,7 @@ class Edit {
       this.updates.splice(decorationIndex, 1);
     }
 
-    this.updates.push({ remove: this.store.getBlocks()[id], slice: mergedOptions.slice });
+    this.updates.push({ remove: this.store.getBlocks()[id], store: mergedOptions.slice });
 
     return this;
   }
@@ -134,7 +137,7 @@ class Edit {
   select(id: string | null, partIndex?: string, options?: EditOptions): this {
     const mergedOptions = this.getMergedOptions(options);
 
-    this.updates.push({ select: id, slice: mergedOptions.slice, partIndex });
+    this.updates.push({ select: id, store: mergedOptions.slice, partIndex });
 
     return this;
   }
@@ -142,7 +145,7 @@ class Edit {
   hover(id: string | null, partIndex?: string, options?: EditOptions): this {
     const mergedOptions = this.getMergedOptions(options);
 
-    this.updates.push({ hover: id, slice: mergedOptions.slice, partIndex });
+    this.updates.push({ hover: id, store: mergedOptions.slice, partIndex });
 
     return this;
   }
@@ -164,6 +167,10 @@ class Edit {
     }
 
     return block;
+  }
+
+  getElectricityEdit() {
+    return this.electricityEdit;
   }
 
   private mergeBlocks(orig: Block, update: PartialDeep<Block>, options: EditOptions = getDefaultEditOptions()) {
@@ -210,22 +217,24 @@ class Edit {
   }
 
   private commitOrFlush(updateHistory: boolean) {
-    if (!this.updates.length) {
+    const updates = [...this.updates, ...this.electricityEdit.getUpdates()];
+    if (!updates.length) {
       return;
     }
 
-    this.updates.forEach((update) => {
+    updates.forEach((update) => {
       if ('type' in update && update.type === 'update' && 'decoration' in update) {
         const block = this.store.getBlock(update.decoration.id);
         this.updaters[block?.category]?.onUpdateDecorators(this, block, update.decoration);
       }
     });
 
-    this.dispatchStore.dispatch(updateBlocks({ blockUpdates: this.updates, history: updateHistory }));
+    this.dispatchStore.dispatch(updateBlocks({ blockUpdates: updates, history: updateHistory }));
 
-    this.systemHooks.forEach((systemHook) => systemHook.onCommit(this.updates));
+    this.systemHooks.forEach((systemHook) => systemHook.onCommit(updates));
 
     this.updates = [];
+    this.electricityEdit.clear();
   }
 
   private updates: UpdateBlocks['blockUpdates'] = [];
@@ -237,6 +246,8 @@ class Edit {
   private store: BlockStore;
 
   private dispatchStore: Store;
+
+  private electricityEdit: ElectricityEdit;
 
   private close: () => void;
 }

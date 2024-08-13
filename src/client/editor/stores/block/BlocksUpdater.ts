@@ -8,7 +8,7 @@ class BlocksUpdater {
 
   update(state: BlockState, updates: UpdateBlock<BlockDecoration>[]) {
     updates
-      .filter((update) => update.slice === this.slice)
+      .filter((update) => update.store === this.slice)
       .forEach((update) => {
         if ('hover' in update) {
           if (state.hovered) {

@@ -142,7 +142,7 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
       store.dispatch(setSelectedGeometry(block.type));
       addTool.onPointerUp({ clientX: 0, clientY: 0, pos: new Vector3(...pos) } as ToolInfo);
 
-      store.dispatch(updateBlocks({ blockUpdates: [{ select: null, slice: 'city' }] }));
+      store.dispatch(updateBlocks({ blockUpdates: [{ select: null, store: 'city' }] }));
 
       // const edit = this.env.update.getTransaction();
       // addBlock.perform(edit, new Vector3(...pos), row.TYPE);

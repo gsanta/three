@@ -6,7 +6,7 @@ import { BlockIntersection } from '@/client/editor/use_cases/IntersectMesh';
 import { Object3D, Ray } from 'three';
 
 class TestSceneService implements SceneService {
-  uuid(blockType: BlockType) {
+  uuid(type: string) {
     const id = this.nextUuid;
     // this.nextUuid = '';
 
@@ -14,11 +14,11 @@ class TestSceneService implements SceneService {
       return id;
     }
 
-    let count = this.blockTypeCounter.get(blockType.type) || 0;
+    let count = this.blockTypeCounter.get(type) || 0;
     count += 1;
-    this.blockTypeCounter.set(blockType.type, count);
+    this.blockTypeCounter.set(type, count);
 
-    return `${blockType.type}-${count}`;
+    return `${type}-${count}`;
   }
 
   intersection(
