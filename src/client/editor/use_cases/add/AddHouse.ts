@@ -35,6 +35,9 @@ class AddHouse {
     clientY: number;
     position: Num3;
   }) {
+    this.cableIds = [];
+    this.roomId = '';
+
     const addBlock = this.addBlock.getAddBlock(newBlockType.category, 'plain');
 
     const edit = this.updateService.createTransaction();
@@ -114,6 +117,8 @@ class AddHouse {
       position: [0, 0, 0],
     });
 
+    this.roomId = edit.getLastBlock().id;
+
     const addFurnitureBlock = this.addBlock.getAddBlock('furnitures', 'rooms');
 
     const roomBlock = edit.getLastBlock();
@@ -134,9 +139,14 @@ class AddHouse {
       edit,
       'cable-1',
       {
-        block: { parentConnection: { block: roomBlock.id, part: '#2' }, isDirty: true },
+        block: {
+          conduitParentConnections: [{ block: roomBlock.id }, { block: roomBlock.id }],
+          isDirty: true,
+        },
         decorations: {
           cables: {
+            end1: { pin: '#4', device: roomBlock.id },
+            end2: { pin: '#6', device: roomBlock.id },
             points: [
               {
                 position: [0, 0, 0],
@@ -148,6 +158,8 @@ class AddHouse {
       },
       'building',
     );
+
+    this.cableIds.push(edit.getLastBlock().id);
 
     edit.updateBlock(
       roomBlock.id,
@@ -159,9 +171,14 @@ class AddHouse {
       edit,
       'cable-1',
       {
-        block: { parentConnection: { block: roomBlock.id, part: '#3' }, isDirty: true },
+        block: {
+          conduitParentConnections: [{ block: roomBlock.id }, { block: roomBlock.id }],
+          isDirty: true,
+        },
         decorations: {
           cables: {
+            end1: { pin: '#5', device: roomBlock.id },
+            end2: { pin: '#6', device: roomBlock.id },
             points: [
               {
                 position: [0, 0, 0],
@@ -173,6 +190,8 @@ class AddHouse {
       },
       'building',
     );
+
+    this.cableIds.push(edit.getLastBlock().id);
 
     edit.updateBlock(
       roomBlock.id,
@@ -210,15 +229,32 @@ class AddHouse {
   private addElectricity() {
     const edit = this.updateService.getOrCreateActiveTransaction();
 
-    const node = this.factoryService.getElectricityFactory().createElectricNode();
+    const electricMeter = this.factoryService.getElectricityFactory().createElectricMeter(this.roomId, {});
 
-    edit.getElectricityEdit().updateNode(node);
-    edit
-      .getElectricityEdit()
-      .updateConnection(
-        this.factoryService.getElectricityFactory().createElectricConnection({ node1: node.id, node2: node.id }),
-      );
+    edit.getElectricityEdit().updateNode(electricMeter);
+
+    const fakeNodeIds: string[] = [];
+
+    Array.from({ length: this.cableIds.length - 1 }).forEach(() => {
+      const node = this.factoryService.getElectricityFactory().createFakeNode(this.roomId);
+      fakeNodeIds.push(node.id);
+      edit.getElectricityEdit().updateNode(node);
+    });
+
+    const nodeIds = [electricMeter.id, ...fakeNodeIds, electricMeter.id];
+
+    for (let i: number = 0; i < 2; i++) {
+      const connection = this.factoryService
+        .getElectricityFactory()
+        .createElectricConnection(this.roomId, { node1: nodeIds[i], node2: nodeIds[i + 1] });
+
+      edit.getElectricityEdit().updateConnection(connection);
+    }
   }
+
+  private roomId: string = '';
+
+  private cableIds: string[] = [];
 
   private buildingBaseId?: string;
 

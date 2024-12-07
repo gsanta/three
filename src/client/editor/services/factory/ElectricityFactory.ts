@@ -1,24 +1,39 @@
 import SceneService from '../../components/scene/service/SceneService';
 import ElectricConnection from '../electricity/types/ElectricConnection';
-import ElectricNode from '../electricity/types/ElectricNode';
+import ElectricMeter from '../electricity/types/ElectricMeter';
+import FakeNode from '../electricity/types/FakeNode';
 
 class ElectricityFactory {
   constructor(sceneService: SceneService) {
     this.sceneService = sceneService;
   }
 
-  createElectricNode(): ElectricNode {
+  createElectricMeter(blockId: string, node: Partial<ElectricMeter>): ElectricMeter {
     return {
-      id: this.sceneService.uuid('electric-node'),
+      isOn: true,
       hotTerminals: [],
       neutralTerminals: [],
+      ...node,
+      blockId,
+      id: this.sceneService.uuid('electric-node'),
     };
   }
 
-  createElectricConnection(connection: Partial<ElectricConnection>): ElectricConnection {
+  createFakeNode(blockId: string): FakeNode {
+    return {
+      id: this.sceneService.uuid('electric-node'),
+      blockId,
+      hotTerminals: [],
+      neutralTerminals: [],
+      type: 'fake-node',
+    };
+  }
+
+  createElectricConnection(blockId: string, connection: Partial<ElectricConnection>): ElectricConnection {
     return {
       type: 'hot',
       ...connection,
+      blockId,
       id: this.sceneService.uuid('electric-node'),
     };
   }

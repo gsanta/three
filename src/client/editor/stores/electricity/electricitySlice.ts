@@ -12,11 +12,13 @@ export type ElectricNodeInfo = {
 export type ElectricityState = {
   nodes: Record<string, ElectricNode>;
   connections: Record<string, ElectricConnection>;
+  blockIdToItems: Record<string, string[]>;
 };
 
 export const initialElectricityState: ElectricityState = {
   nodes: {},
   connections: {},
+  blockIdToItems: {},
 };
 
 export type ElectricNodeUpdate = {
@@ -56,7 +58,9 @@ export const electricitySlice = createSlice({
     builder.addCase(updateBlocks, (state, action) => {
       const electricityUpdates = action.payload.blockUpdates.filter((update) => update.store === 'electricity');
 
-      electricityUpdater.update(state, electricityUpdates);
+      if (electricityUpdates.length > 0) {
+        electricityUpdater.update(state, electricityUpdates);
+      }
     });
   },
 });

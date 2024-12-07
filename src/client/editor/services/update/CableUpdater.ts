@@ -18,18 +18,16 @@ class CableUpdater implements Updater {
   category = 'cable';
 
   updateDirtyBlock(block: Block): boolean {
-    if (block.parentConnection?.block) {
-      const parent = this.blockStore.getBlock(block.parentConnection?.block);
+    // if (block.parentConnection?.block) {
+    //   const parent = this.blockStore.getBlock(block.parentConnection?.block);
 
-      if (parent.category === 'rooms') {
-        return this.updateWallCable.update(block, parent, block.parentConnection?.part || '');
-      }
-    } else {
-      this.updateDeviceCable.update(block);
-      return true;
-    }
-
-    return true;
+    //   if (parent.category === 'rooms') {
+    //     return this.updateWallCable.update(block, parent, block.parentConnection?.part || '');
+    //   }
+    // } else {
+    return this.updateDeviceCable.update(block);
+    //   return true;
+    // }
   }
 
   private updateWallCable: UpdateWallCable;

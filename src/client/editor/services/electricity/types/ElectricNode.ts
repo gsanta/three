@@ -8,6 +8,7 @@ type ElectricTerminal = {
 type ElectricNode = {
   id: string;
 
+  blockId?: string;
   hotTerminals: ElectricTerminal[];
   neutralTerminals: ElectricTerminal[];
 };

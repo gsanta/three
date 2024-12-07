@@ -1,5 +1,5 @@
 import Block from '@/client/editor/types/Block';
-import Cable, { CablePoint } from '@/client/editor/types/block/Cable';
+import Cable, { CableEnd, CablePoint } from '@/client/editor/types/block/Cable';
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { Vector3 } from 'three';
 import BlockStore from '../../stores/block/BlockStore';
@@ -13,7 +13,7 @@ class UpdateDeviceCable {
     this.transactionService = transactionService;
   }
 
-  update(cable: Block) {
+  update(cableBlock: Block): boolean {
     const edit = this.transactionService.createTransaction();
     // const decoration = this.store.getDecoration('devices', cable.id);
 
@@ -24,13 +24,23 @@ class UpdateDeviceCable {
     //   });
     // });
 
-    const newPoints = cable.conduitParentConnections.map((connection) =>
-      this.moveCable(cable.id, this.store.getBlock(connection.block)),
-    );
+    const parentNotAvailable = cableBlock.conduitParentConnections.find((parent) => this.scene.hasObj3d(parent.block));
+
+    if (!parentNotAvailable) {
+      return false;
+    }
+
+    const cable = this.store.getDecoration('cables', cableBlock.id) as Cable;
+
+    const newPoints = [cable.end1, cable.end2].map((end, index) => this.moveCable(cableBlock.id, end, index));
+
+    // const newPoints = cableBlock.conduitParentConnections.map((connection) =>
+    //   this.moveCable(cableBlock.id, this.store.getBlock(connection.block)),
+    // );
 
     edit.updateDecoration(
       'cables',
-      cable.id,
+      cableBlock.id,
       {
         points: newPoints,
       },
@@ -38,24 +48,27 @@ class UpdateDeviceCable {
     );
 
     edit.commit(false);
+    return true;
   }
 
-  private moveCable(cableId: string, pole: Block): CablePoint {
+  private moveCable(cableId: string, cableEnd: CableEnd | null, index: number): CablePoint {
     const cable = this.store.getDecoration('cables', cableId) as Cable;
 
-    let index = 0;
-    let cableEnd = cable.end1;
-    if (cable.end2?.device === pole.id) {
-      index = 1;
-      cableEnd = cable.end2;
-    }
+    const parentBlock = this.store.getBlock(cableEnd?.device);
+
+    // let index = 0;
+    // let cableEnd = cable.end1;
+    // if (cable.end2?.device === pole.id) {
+    //   index = 1;
+    //   cableEnd = cable.end2;
+    // }
 
     if (!cableEnd?.pin) {
       return { ...cable.points[index] };
     }
 
-    const poleMesh = this.scene.getObj3d(pole.id);
-    const partName = pole.partDetails[cableEnd?.pin]?.name;
+    const poleMesh = this.scene.getObj3d(parentBlock.id);
+    const partName = parentBlock.partDetails[cableEnd?.pin]?.name;
     const mesh = MeshUtils.findByName(poleMesh, partName);
 
     const pos = new Vector3();
