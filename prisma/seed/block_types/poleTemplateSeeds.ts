@@ -7,7 +7,7 @@ const poleTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
   partDetails?: Prisma.JsonObject;
 })[] = [
   {
-    category: 'poles',
+    categoryName: 'poles',
     decorations: ['devices'],
     path: '/pole2.glb',
     parts: [
@@ -83,46 +83,46 @@ const poleTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
     },
     type: 'pole-1',
   },
-  {
-    category: 'weather-heads',
-    decorations: ['devices'],
-    path: '/weather_head_1.glb',
-    parts: [
-      {
-        index: '#1',
-        geometryPath: 'WeatherHead1Body.geometry',
-        materialPath: 'DarkGray',
-        position: [-0.003, 0.013, -0.003],
-        scale: [0.06, 1, 0.06],
-      },
-      {
-        index: '#2',
-        geometryPath: 'WeatherHead1Pin.geometry',
-        materialPath: 'Wall',
-        position: [-0.003, 1.433, -0.003],
-        scale: [0.06, 1, 0.06],
-        name: 'pin1',
-      },
-    ],
-    partDetails: {
-      '#1': {
-        name: 'root',
-      },
-      '#2': {
-        name: 'pin',
-        role: 'slot',
-        category: 'pin',
-        type: 'physical',
-      },
-    },
-    type: 'weather-head-1',
-  },
-  {
-    category: 'cables',
-    decorations: ['cables'],
-    path: null,
-    type: 'cable-1',
-  },
+  // {
+  //   categoryName: 'weather-heads',
+  //   decorations: ['devices'],
+  //   path: '/weather_head_1.glb',
+  //   parts: [
+  //     {
+  //       index: '#1',
+  //       geometryPath: 'WeatherHead1Body.geometry',
+  //       materialPath: 'DarkGray',
+  //       position: [-0.003, 0.013, -0.003],
+  //       scale: [0.06, 1, 0.06],
+  //     },
+  //     {
+  //       index: '#2',
+  //       geometryPath: 'WeatherHead1Pin.geometry',
+  //       materialPath: 'Wall',
+  //       position: [-0.003, 1.433, -0.003],
+  //       scale: [0.06, 1, 0.06],
+  //       name: 'pin1',
+  //     },
+  //   ],
+  //   partDetails: {
+  //     '#1': {
+  //       name: 'root',
+  //     },
+  //     '#2': {
+  //       name: 'pin',
+  //       role: 'slot',
+  //       category: 'pin',
+  //       type: 'physical',
+  //     },
+  //   },
+  //   type: 'weather-head-1',
+  // },
+  // {
+  //   categoryName: 'cables',
+  //   decorations: ['cables'],
+  //   path: null,
+  //   type: 'cable-1',
+  // },
 ];
 
 export default poleTempalteSeeds;

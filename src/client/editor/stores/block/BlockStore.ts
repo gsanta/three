@@ -42,6 +42,20 @@ class BlockStore {
     return this.getState().selectedRootBlockIds;
   }
 
+  getSelectedBlock({ category }: { category?: string } = {}) {
+    let selectedBlocks = this.getSelectedRootBlockIds();
+
+    if (category) {
+      selectedBlocks = selectedBlocks.filter((currBlockId) => this.getBlock(currBlockId).category === category);
+    }
+
+    if (selectedBlocks.length === 1) {
+      return selectedBlocks[0];
+    }
+
+    return null;
+  }
+
   getSelectedPart(blockId?: string) {
     return this.getSelectedPartIndexes()[blockId || '']?.[0];
   }

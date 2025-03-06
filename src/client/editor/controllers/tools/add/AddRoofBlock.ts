@@ -1,11 +1,11 @@
-import AddBlockType from './AddBlockType';
+import AddBlock from './AddBlock';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import AddBlockToSlot from '@/client/editor/use_cases/block/AddBlockToSlot';
 
-class AddRoofBlock extends AddBlockType {
+class AddRoofBlock extends AddBlock {
   constructor(
     blockStore: BlockStore,
     factoryService: FactoryService,
@@ -22,7 +22,7 @@ class AddRoofBlock extends AddBlockType {
     this.targetCategories = ['building-bases'];
   }
 
-  perform({ edit, targetBlock, targetPartIndex, newBlockType }: Parameters<AddBlockType['perform']>[0]) {
+  perform({ edit, targetBlock, targetPartIndex, newBlockType }: Parameters<AddBlock['perform']>[0]) {
     if (!targetPartIndex || !targetBlock) {
       return undefined;
     }

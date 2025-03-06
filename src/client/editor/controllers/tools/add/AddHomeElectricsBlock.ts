@@ -1,4 +1,4 @@
-import AddBlockType from './AddBlockType';
+import AddBlock from './AddBlock';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
@@ -6,7 +6,7 @@ import BlockStore from '@/client/editor/stores/block/BlockStore';
 import AddBlockToPointerPos from '@/client/editor/use_cases/block/AddBlockToPointerPos';
 import SceneService from '@/client/editor/components/scene/service/SceneService';
 
-class AddHomeElectricsBlock extends AddBlockType {
+class AddHomeElectricsBlock extends AddBlock {
   constructor(
     blockStore: BlockStore,
     factoryService: FactoryService,
@@ -31,7 +31,7 @@ class AddHomeElectricsBlock extends AddBlockType {
     targetBlock,
     targetPartIndex,
     newBlockType,
-  }: Parameters<AddBlockType['perform']>[0]) {
+  }: Parameters<AddBlock['perform']>[0]) {
     if (!targetPartIndex || !targetBlock) {
       return undefined;
     }

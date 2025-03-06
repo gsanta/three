@@ -6,7 +6,7 @@ import SceneStore from '../../../components/scene/SceneStore';
 import FactoryService from '../../../services/factory/FactoryService';
 import HoverTool from '../HoverTool';
 import SceneService from '../../../components/scene/service/SceneService';
-import AddBlock from './AddBlock';
+import AddService from './AddService';
 import AddHouse from '@/client/editor/use_cases/add/AddHouse';
 import { store } from '@/client/common/utils/store';
 
@@ -24,7 +24,7 @@ class AddTool extends HoverTool {
 
     // this.addBlockToPlain = new AddBlockToPlain(blockStore, factoryService, sceneStore, update);
 
-    this.addBlock = new AddBlock(blockStore, factoryService, sceneService, sceneStore, update);
+    this.addBlock = new AddService(blockStore, factoryService, sceneService, sceneStore, update);
 
     this.addHouse = new AddHouse(this.blockStore, factoryService, this.update, this.addBlock);
   }
@@ -154,7 +154,7 @@ class AddTool extends HoverTool {
 
   private addHouse: AddHouse;
 
-  private addBlock: AddBlock;
+  private addBlock: AddService;
 }
 
 export default AddTool;

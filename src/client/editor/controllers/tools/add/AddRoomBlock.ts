@@ -1,8 +1,8 @@
-import AddBlockType from './AddBlockType';
+import AddBlock from './AddBlock';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import AddBlockToPos from '@/client/editor/use_cases/block/AddBlockToPos';
 
-class AddRoomBlock extends AddBlockType {
+class AddRoomBlock extends AddBlock {
   constructor(factoryService: FactoryService) {
     super();
 
@@ -12,7 +12,7 @@ class AddRoomBlock extends AddBlockType {
     this.targetCategories = ['plain'];
   }
 
-  perform({ edit, newBlockType, position }: Parameters<AddBlockType['perform']>[0]) {
+  perform({ edit, newBlockType, position }: Parameters<AddBlock['perform']>[0]) {
     this.addBlockToPos.perform(edit, newBlockType.type, position);
   }
 

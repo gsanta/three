@@ -1,4 +1,4 @@
-import AddBlock from '../../controllers/tools/add/AddBlock';
+import AddService from '../../controllers/tools/add/AddService';
 import TransactionService from '../../services/transaction/TransactionService';
 import Edit from '../../services/transaction/Edit';
 import BlockStore from '../../stores/block/BlockStore';
@@ -12,7 +12,7 @@ class AddHouse {
     blockStore: BlockStore,
     factoryService: FactoryService,
     updateService: TransactionService,
-    addBlock: AddBlock,
+    addBlock: AddService,
   ) {
     this.blockStore = blockStore;
     this.factoryService = factoryService;
@@ -211,7 +211,7 @@ class AddHouse {
 
   private updateService: TransactionService;
 
-  private addBlock: AddBlock;
+  private addBlock: AddService;
 
   private factoryService: FactoryService;
 }

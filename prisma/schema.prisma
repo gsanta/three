@@ -22,18 +22,38 @@ model User {
 }
 
 model BlockCategory {
-  id          Int     @id @default(autoincrement())
+  id              Int         @id @default(autoincrement())
+  name            String      @unique
+  BlockType       BlockType[]
+  addMethods      BlockAddMethodsOnCategories[]
 }
 
 model BlockType {
-  id                   Int     @id @default(autoincrement())
-  category             String
-  decorations          Json    @default("[]")
-  parts                Json?
-  partDetails          Json?
-  path                 String?
-  type                 String  @unique
-  animations           Json?
+  id             Int           @id @default(autoincrement())
+  categoryName   String
+  category       BlockCategory @relation(fields: [categoryName], references: [name])
+  decorations    Json          @default("[]")
+  parts          Json?
+  partDetails    Json?
+  path           String?
+  type           String        @unique
+  animations     Json?
+}
+
+model BlockAddMethod {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique
+  categories BlockAddMethodsOnCategories[]
+}
+
+model BlockAddMethodsOnCategories {
+  addMethod           BlockAddMethod @relation(fields: [addMethodName], references: [name])
+  addMethodName       String 
+  category            BlockCategory  @relation(fields: [categoryName], references: [name])
+  categoryName        String
+  executeAfterRender  Boolean       @default(false)
+
+  @@id([addMethodName, categoryName])
 }
 
 model Snapshot {

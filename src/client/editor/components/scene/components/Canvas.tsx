@@ -6,6 +6,7 @@ import api from '@/client/common/utils/api';
 import { useQuery } from '@tanstack/react-query';
 import { setTemplates } from '@/client/editor/stores/blockType/blockTypeSlice';
 import { useAppDispatch } from '@/client/common/hooks/hooks';
+import useBlockCategories from '../../hooks/queries/useBlockCategories';
 
 const Canvas = () => {
   const { data, isSuccess } = useQuery({ queryKey: ['blocks'], queryFn: () => api.get('/api/block') });
@@ -16,6 +17,8 @@ const Canvas = () => {
       dispatch(setTemplates(data.data.items));
     }
   }, [data, dispatch, isSuccess]);
+
+  useBlockCategories();
 
   const { keyboard, scene } = useEditorContext();
 
