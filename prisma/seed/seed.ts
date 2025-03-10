@@ -10,8 +10,8 @@ import roomSeeds from './block_types/roomSeeds';
 import furnitureSeeds from './block_types/furnitureSeeds';
 import transformerSeeds from './block_types/transformerSeeds';
 import blockCategories from './blockCategories';
-import blockAddMethods from './blockAddMethods';
-import blockAddMethodsOnCategories from './blockAddMethodsOnCategories';
+import blockAddMethodsSeeds from './blockAddMethodsSeeds';
+import blockAddMethodsOnCategoriesSeeds from './blockAddMethodsOnCategoriesSeeds';
 
 const prisma = new PrismaClient();
 const main = async () => {
@@ -87,7 +87,7 @@ const main = async () => {
     });
   }
 
-  for (const seed of blockAddMethods) {
+  for (const seed of blockAddMethodsSeeds) {
     await prisma.blockAddMethod.upsert({
       where: { name: seed.name },
       update: {},
@@ -95,7 +95,7 @@ const main = async () => {
     });
   }
 
-  for (const seed of blockAddMethodsOnCategories) {
+  for (const seed of blockAddMethodsOnCategoriesSeeds) {
     await prisma.blockAddMethodsOnCategories.upsert({
       where: {
         addMethodName_categoryName: {

@@ -18,3 +18,9 @@ https://gltf.pmnd.rs/
 Start a migration from scratch
  - delete old migration files
  - create a new initial migration: npx prisma migrate dev --name init
+
+Run migrations on an empty db
+ - npx prisma migrate deploy
+
+Drop and reseed db:
+ - npx prisma migrate reset

@@ -9,22 +9,25 @@ import SceneService from '../../../components/scene/service/SceneService';
 import AddService from './AddService';
 import AddHouse from '@/client/editor/use_cases/add/AddHouse';
 import { store } from '@/client/common/utils/store';
+import DataContext from '@/client/editor/contexts/DataContext';
+import Block from '@/client/editor/types/Block';
+import BlockType from '@/client/editor/types/BlockType';
+import Num3 from '@/client/editor/types/Num3';
+import ExecuteAddParams from './ExecuteAddParams';
 
 class AddTool extends HoverTool {
   constructor(
-    blockStore: BlockStore,
+    data: DataContext,
     factoryService: FactoryService,
     sceneService: SceneService,
     sceneStore: SceneStore,
     update: TransactionService,
   ) {
-    super(blockStore, sceneService, update, ToolName.Add, 'BiPlus');
-
-    this.blockStore = blockStore;
+    super(data.block, sceneService, update, ToolName.Add, 'BiPlus');
 
     // this.addBlockToPlain = new AddBlockToPlain(blockStore, factoryService, sceneStore, update);
 
-    this.addBlock = new AddService(blockStore, factoryService, sceneService, sceneStore, update);
+    this.addBlock = new AddService(data, factoryService, sceneService, sceneStore, update);
 
     this.addHouse = new AddHouse(this.blockStore, factoryService, this.update, this.addBlock);
   }
@@ -48,39 +51,37 @@ class AddTool extends HoverTool {
 
     const targetBlock = targetBlockId ? this.blockStore.getBlock(targetBlockId) : undefined;
 
-    if (selectedBlockName === 'house') {
-      const newBlockType = this.blockStore.getBlockType('building-base-1');
+    const newBlockType = this.blockStore.getBlockType(selectedBlockName);
 
-      this.addHouse.add({
-        clientX,
-        clientY,
-        targetBlock,
-        targetPartIndex,
-        newBlockType,
-        position: pos.toArray(),
-      });
-      this.newBlockCategory = newBlockType.category;
-      this.current = this.addHouse;
-    } else {
-      const newBlockType = this.blockStore.getBlockType(selectedBlockName);
+    this.clientX = clientX;
+    this.clientY = clientY;
+    this.targetBlock = targetBlock;
+    this.targetPartIndex = targetPartIndex;
+    this.newBlockType = newBlockType;
+    this.position = pos.toArray();
 
-      const selectedAddBlock = this.addBlock.getAddBlock(newBlockType.category, targetBlock?.category || 'plain');
+    // edit.commit();
+    this.newBlockCategory = newBlockType.category;
 
-      const edit = this.update.createTransaction();
+    this.executeAdd('render');
 
-      selectedAddBlock?.perform({
-        edit,
-        clientX,
-        clientY,
-        targetBlock,
-        targetPartIndex,
-        newBlockType,
-        position: pos.toArray(),
-      });
+    this.runAfterRender = true;
 
-      edit.commit();
-      this.newBlockCategory = newBlockType.category;
-    }
+    // if (selectedBlockName === 'house') {
+    //   const newBlockType = this.blockStore.getBlockType('building-base-1');
+
+    //   this.addHouse.add({
+    //     clientX,
+    //     clientY,
+    //     targetBlock,
+    //     targetPartIndex,
+    //     newBlockType,
+    //     position: pos.toArray(),
+    //   });
+    //   this.newBlockCategory = newBlockType.category;
+    //   this.current = this.addHouse;
+    // } else {
+    // }
 
     this.targetBlockCategory = targetBlock?.category || 'plain';
 
@@ -132,6 +133,10 @@ class AddTool extends HoverTool {
       //   }
       // }
 
+      if (this.runAfterRender) {
+        this.executeAdd('afterRender');
+      }
+
       if (this.newBlockCategory && this.targetBlockCategory) {
         if (this.newBlockCategory === 'building-bases') {
           this.addHouse.performAfterRender();
@@ -143,8 +148,38 @@ class AddTool extends HoverTool {
     } finally {
       this.newBlockCategory = undefined;
       this.targetBlockCategory = undefined;
+
+      this.runAfterRender = false;
     }
   }
+
+  private executeAdd(phase: ExecuteAddParams['executionPhase']) {
+    if (this.newBlockType && this.position) {
+      this.addBlock.execute({
+        executionPhase: phase,
+        clientX: this.clientX,
+        clientY: this.clientY,
+        targetBlock: this.targetBlock,
+        targetPartIndex: this.targetPartIndex,
+        newBlockType: this.newBlockType,
+        position: this.position,
+      });
+    }
+  }
+
+  private runAfterRender = false;
+
+  private clientX = 0;
+
+  private clientY = 0;
+
+  private targetBlock?: Block;
+
+  private targetPartIndex?: string;
+
+  private newBlockType?: BlockType;
+
+  private position?: Num3;
 
   private current?: { performAfterRender(id: string): boolean };
 

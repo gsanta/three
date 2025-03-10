@@ -1,9 +1,9 @@
-import BlockCategory from '@/client/editor/types/block/BlockCategory';
+import { BlockCategoryName } from '@/client/editor/types/block/BlockCategory';
 
 type BlockCategoriesResponse = {
   items: {
     id: number;
-    name: BlockCategory;
+    name: BlockCategoryName;
   }[];
 };
 

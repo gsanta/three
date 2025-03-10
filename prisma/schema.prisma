@@ -21,13 +21,6 @@ model User {
   snapshots Snapshot[]
 }
 
-model BlockCategory {
-  id              Int         @id @default(autoincrement())
-  name            String      @unique
-  BlockType       BlockType[]
-  addMethods      BlockAddMethodsOnCategories[]
-}
-
 model BlockType {
   id             Int           @id @default(autoincrement())
   categoryName   String
@@ -40,9 +33,17 @@ model BlockType {
   animations     Json?
 }
 
+model BlockCategory {
+  id              Int         @id @default(autoincrement())
+  name            String      @unique
+  BlockType       BlockType[]
+  addMethods      BlockAddMethodsOnCategories[]
+}
+
 model BlockAddMethod {
   id         Int         @id @default(autoincrement())
   name       String      @unique
+  executeAfterRender  Boolean       @default(false)
   categories BlockAddMethodsOnCategories[]
 }
 
@@ -51,7 +52,8 @@ model BlockAddMethodsOnCategories {
   addMethodName       String 
   category            BlockCategory  @relation(fields: [categoryName], references: [name])
   categoryName        String
-  executeAfterRender  Boolean       @default(false)
+  targetPartName      String?
+  sourcePartName      String?
 
   @@id([addMethodName, categoryName])
 }

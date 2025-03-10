@@ -1,5 +1,6 @@
 import * as blocks from '../utils/blocks.json';
 import Axis from './Axis';
+import { BlockCategoryName } from './block/BlockCategory';
 import BlockDecoration from './BlockCategory';
 import Num3 from './Num3';
 
@@ -11,7 +12,7 @@ export type ModelPart = {
   geometryPath?: string;
   index: string;
   materialPath?: string;
-  position?: Num3;
+  position: Num3;
   rotation?: Num3;
   scale?: Num3 | number;
   parts: ModelPart[];
@@ -44,7 +45,7 @@ export type AnimationTriggerName = 'device-on';
 
 type BlockType<S extends ShapeType = ShapeType> = {
   animations?: Partial<Record<AnimationTriggerName, string[]>>;
-  category: string;
+  category: BlockCategoryName;
   color: [number, number, number];
   decorations: BlockDecoration[];
   geometry: S;

@@ -117,12 +117,12 @@ const poleTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
   //   },
   //   type: 'weather-head-1',
   // },
-  // {
-  //   categoryName: 'cables',
-  //   decorations: ['cables'],
-  //   path: null,
-  //   type: 'cable-1',
-  // },
+  {
+    categoryName: 'cables',
+    decorations: ['cables'],
+    path: null,
+    type: 'cable-1',
+  },
 ];
 
 export default poleTempalteSeeds;

@@ -24,6 +24,9 @@ import ElectricitySystemHook from '@/client/editor/services/electricity/Electric
 import SceneServiceImpl from '@/client/editor/components/scene/service/SceneServiceImpl';
 import RoomModeTool from '@/client/editor/controllers/tools/RoomModeTool';
 import UpdateService from '@/client/editor/services/update/UpdateService';
+import DataContext from '@/client/editor/contexts/DataContext';
+import BlockTypeStore from '@/client/editor/stores/blockType/BlockTypeStore';
+import BlockCategoryStore from '@/client/editor/stores/blockCategory/BlockCategoryStore';
 
 type ProtectedPageProps = {
   children: ReactNode;
@@ -43,6 +46,8 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
   const sceneStore = useMemo(() => new SceneStore(), []);
   const toolStore = useMemo(() => new ToolStore(store), []);
   const blockStore = useMemo(() => new BlockStore(store), []);
+  const blockTypeStore = useMemo(() => new BlockTypeStore(store), []);
+  const blockCategoryStore = useMemo(() => new BlockCategoryStore(store), []);
   const scene = useMemo(() => new SceneServiceImpl(blockStore, sceneStore), [blockStore, sceneStore]);
   const factoryService = useMemo(() => new FactoryService(blockStore, scene), [blockStore, scene]);
 
@@ -62,6 +67,11 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
     [blockStore, sceneStore, transaction],
   );
 
+  const dataContext = useMemo(
+    () => new DataContext(blockStore, blockCategoryStore, blockTypeStore),
+    [blockCategoryStore, blockStore, blockTypeStore],
+  );
+
   const editorContext = useMemo<EditorContextType>(
     () => ({
       controller: new ControllerService(transaction),
@@ -71,7 +81,7 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
       scene: sceneStore,
       tool: new ToolService(
         [
-          new AddTool(blockStore, factoryService, scene, sceneStore, transaction),
+          new AddTool(dataContext, factoryService, scene, sceneStore, transaction),
           new SelectTool(blockStore, scene, sceneStore, toolStore, transaction),
           new CableTool(blockStore, factoryService, scene, sceneStore, transaction),
           new EraseTool(blockStore, transaction),
@@ -84,7 +94,7 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
       transaction,
       update: updateService,
     }),
-    [transaction, sceneStore, blockStore, factoryService, scene, toolStore, updateService],
+    [transaction, sceneStore, dataContext, factoryService, scene, blockStore, toolStore, updateService],
   );
 
   editorContext.scene.setToolService(editorContext.tool);
@@ -92,9 +102,7 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
   return (
     <QueryClientProvider client={queryClient}>
       <EditorContext.Provider value={editorContext}>
-        <Provider store={store}>
-          <StoreSetup>{children}</StoreSetup>
-        </Provider>
+        <StoreSetup>{children}</StoreSetup>
       </EditorContext.Provider>
     </QueryClientProvider>
   );

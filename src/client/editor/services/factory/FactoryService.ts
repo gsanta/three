@@ -12,6 +12,7 @@ import WeatherHeadFactory from './creators/WeatherHeadFactory';
 import HomeElectricsFactory from './creators/HomeElectricsFactory';
 import ElectricityProviderFactory from './creators/ElectricityProviderFactory';
 import { BlockSlices } from '../../stores/block/blockSlice.types';
+import TransformerFactory from './creators/TransformerFactory';
 
 class FactoryService {
   constructor(blockStore: BlockStore, sceneService: SceneService) {
@@ -22,6 +23,7 @@ class FactoryService {
     this.factories['weather-heads'] = new WeatherHeadFactory(sceneService);
     this.factories['home-electrics'] = new HomeElectricsFactory(sceneService);
     this.factories['electricity-providers'] = new ElectricityProviderFactory(sceneService);
+    this.factories.transformers = new TransformerFactory(sceneService);
     this.defaultBlockFactory = new DefaultBlockFactory(sceneService);
   }
 

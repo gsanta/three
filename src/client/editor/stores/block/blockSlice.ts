@@ -17,6 +17,7 @@ export const initialBlockState: BlockState = {
     roads: {},
     walls: {},
     'building-bases': {},
+    transformers: {},
   },
 };
 
@@ -41,6 +42,7 @@ export const blockSlice = createSlice({
         walls: {},
         'building-bases': {},
         roads: {},
+        transformers: {},
       };
     },
 

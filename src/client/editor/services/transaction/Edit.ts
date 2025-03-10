@@ -147,6 +147,19 @@ class Edit {
     return this;
   }
 
+  hasLastBlock() {
+    let lastUpdateWithBlock: { block: Block } | undefined = undefined;
+
+    for (let i = this.updates.length - 1; i >= 0; i--) {
+      if ('block' in this.updates[i]) {
+        lastUpdateWithBlock = this.updates[i] as { block: Block };
+        break;
+      }
+    }
+
+    return Boolean(lastUpdateWithBlock?.block);
+  }
+
   getLastBlock() {
     let lastUpdateWithBlock: { block: Block } | undefined = undefined;
 

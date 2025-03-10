@@ -5,6 +5,9 @@ const blockCategories = [
   {
     name: 'poles',
   },
+  {
+    name: 'cables',
+  },
 ];
 
 export default blockCategories;

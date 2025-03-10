@@ -28,7 +28,7 @@ export const initialBlockTypeState: BlockTypeState = {
 };
 
 export const blockTypeSlice = createSlice({
-  name: 'frame',
+  name: 'block-type',
   initialState: initialBlockTypeState,
   reducers: {
     setBlockRotation(state, action: PayloadAction<{ axis: Axis; blockName: string; rotation: number }>) {

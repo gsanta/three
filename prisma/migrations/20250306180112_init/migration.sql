@@ -12,14 +12,6 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
-CREATE TABLE "BlockCategory" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-
-    CONSTRAINT "BlockCategory_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "BlockType" (
     "id" SERIAL NOT NULL,
     "categoryName" TEXT NOT NULL,
@@ -34,9 +26,18 @@ CREATE TABLE "BlockType" (
 );
 
 -- CreateTable
+CREATE TABLE "BlockCategory" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "BlockCategory_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "BlockAddMethod" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "executeAfterRender" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "BlockAddMethod_pkey" PRIMARY KEY ("id")
 );
@@ -45,7 +46,6 @@ CREATE TABLE "BlockAddMethod" (
 CREATE TABLE "BlockAddMethodsOnCategories" (
     "addMethodName" TEXT NOT NULL,
     "categoryName" TEXT NOT NULL,
-    "executeAfterRender" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "BlockAddMethodsOnCategories_pkey" PRIMARY KEY ("addMethodName","categoryName")
 );
@@ -65,10 +65,10 @@ CREATE TABLE "Snapshot" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "BlockCategory_name_key" ON "BlockCategory"("name");
+CREATE UNIQUE INDEX "BlockType_type_key" ON "BlockType"("type");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "BlockType_type_key" ON "BlockType"("type");
+CREATE UNIQUE INDEX "BlockCategory_name_key" ON "BlockCategory"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "BlockAddMethod_name_key" ON "BlockAddMethod"("name");

@@ -13,13 +13,25 @@ import ProtectedPage from '../../client/common/components/ProtectedPage';
 import theme from '@/client/common/themes/theme';
 import BlockCategoriesResponse from '@/common/response_types/BlockCategoriesResponse';
 import BlockAddMethodsResponse from '@/common/response_types/BlockAddMethodsResponse';
+import { useEffect } from 'react';
+import { useAppDispatch } from '@/client/common/hooks/hooks';
+import { setBlockAddMethods, setBlockCategories } from '@/client/editor/stores/blockCategory/blockCategorySlice';
+import { Provider } from 'react-redux';
+import { store } from '@/client/common/utils/store';
 
-type EditorContentProps = {
+type EditorPageProps = {
   blockAddMethods: BlockAddMethodsResponse;
   blockCategories: BlockCategoriesResponse;
 };
 
-const EditorContent = async ({}: EditorContentProps) => {
+const EditorPageContent = ({ blockAddMethods, blockCategories }: EditorPageProps) => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setBlockCategories(blockCategories.items));
+    dispatch(setBlockAddMethods(blockAddMethods.items));
+  }, [blockAddMethods.items, blockCategories.items, dispatch]);
+
   return (
     <ProtectedPage>
       <ChakraProvider theme={theme} cssVarsRoot="body">
@@ -55,4 +67,12 @@ const EditorContent = async ({}: EditorContentProps) => {
   );
 };
 
-export default EditorContent;
+const EditorPage = async (props: EditorPageProps) => {
+  return (
+    <Provider store={store}>
+      <EditorPageContent {...props} />
+    </Provider>
+  );
+};
+
+export default EditorPage;

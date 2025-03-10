@@ -8,7 +8,7 @@ import temporarySlice, { TemporaryState } from '@/client/editor/stores/block/tem
 import electricitySlice, { ElectricityState } from '@/client/editor/stores/electricity/electricitySlice';
 import buildingSlice from '@/client/editor/stores/block/buildingSlice';
 import { BlockState } from '@/client/editor/stores/block/blockSlice.types';
-import blockCategorySlice from '@/client/editor/stores/blockCategory/blockCategorySlice';
+import blockCategorySlice, { BlockCategoyState } from '@/client/editor/stores/blockCategory/blockCategorySlice';
 
 const blockSliceUndoable = undoable(blockSlice, {
   filter: (action: { payload: { history?: boolean }; type: string }) => {
@@ -29,6 +29,7 @@ export type RootState = {
   tool: ToolState;
   temporary: TemporaryState;
   block: StateWithHistory<BlockState>;
+  blockCategory: BlockCategoyState;
   blockType: BlockTypeState;
 };
 

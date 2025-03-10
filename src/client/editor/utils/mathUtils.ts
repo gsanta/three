@@ -1,6 +1,12 @@
+import Num3 from '../types/Num3';
+
 class MathUtils {
   static normalizeAngle(angle: number) {
     return ((angle % 360) + 360) % 360;
+  }
+
+  static distance(pos1: Num3, pos2: Num3) {
+    return Math.sqrt(Math.pow(pos1[0] - pos2[0], 2) + Math.pow(pos1[1] - pos2[1], 2) + Math.pow(pos1[2] - pos2[2], 2));
   }
 }
 

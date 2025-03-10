@@ -1,4 +1,5 @@
 import Cable from './block/Cable';
+import Transformer from './block/Transformer';
 import Device from './block/Device';
 
 export type BlockDecoration = 'cables' | 'decorations' | 'devices' | 'roads' | 'walls' | 'building-bases';
@@ -6,6 +7,7 @@ export type BlockDecoration = 'cables' | 'decorations' | 'devices' | 'roads' | '
 export type BlockDecorationType =
   | Cable
   | Device
+  | Transformer
   | EmptyBlockCategory<'decorations'>
   | EmptyBlockCategory<'roads'>
   | EmptyBlockCategory<'walls'>
@@ -23,6 +25,7 @@ export type BlockCategories = {
   roads: EmptyBlockCategory<'roads'>;
   walls: EmptyBlockCategory<'walls'>;
   ['building-bases']: EmptyBlockCategory<'building-bases'>;
+  transformers: Transformer;
 };
 
 export type PartialBlockCategories = {

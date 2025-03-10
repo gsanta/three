@@ -14,44 +14,64 @@ import SceneStore from '@/client/editor/components/scene/SceneStore';
 import SceneService from '@/client/editor/components/scene/service/SceneService';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
-import BlockStore from '@/client/editor/stores/block/BlockStore';
+import DataContext from '@/client/editor/contexts/DataContext';
+import ExecuteAddParams from './ExecuteAddParams';
+import AddBlockToSlot from './AddBlockToSlot';
+import AddSlotToSlot from './AddSlotToSlot';
 
 class AddService {
   constructor(
-    blockStore: BlockStore,
+    data: DataContext,
     factoryService: FactoryService,
     sceneService: SceneService,
     sceneStore: SceneStore,
     update: TransactionService,
   ) {
-    this.blockStore = blockStore;
+    this.data = data;
+    this.update = update;
     this.addBlock = [
-      new AddBlockToPlain(factoryService, update),
-      new AddFurnitureBlock(factoryService),
-      new AddHomeElectricsBlock(blockStore, factoryService, sceneService, sceneStore, update),
-      new AddPoles(blockStore, factoryService, sceneStore, update),
-      new AddRoadBlock(blockStore, factoryService, sceneStore, update),
-      new AddRoofBlock(blockStore, factoryService, sceneStore, update),
-      new AddRoomBlock(factoryService),
-      new AddSocketBlock(blockStore, factoryService, sceneService, sceneStore, update),
-      new AddWallBlock(blockStore, factoryService, sceneStore, update),
-      new AddWeatherHeadBlock(blockStore, factoryService, sceneService, sceneStore, update),
+      new AddBlockToPlain(factoryService),
+      // new AddFurnitureBlock(factoryService),
+      // new AddHomeElectricsBlock(blockStore, factoryService, sceneService, sceneStore, update),
+      new AddPoles(data.block, factoryService, sceneStore, update),
+      new AddBlockToSlot(factoryService, sceneStore),
+      new AddSlotToSlot(data.block, factoryService, sceneStore, update),
+      // new AddRoofBlock(blockStore, factoryService, sceneStore, update),
+      // new AddRoomBlock(factoryService),
+      // new AddSocketBlock(blockStore, factoryService, sceneService, sceneStore, update),
+      // new AddWallBlock(blockStore, factoryService, sceneStore, update),
+      // new AddWeatherHeadBlock(blockStore, factoryService, sceneService, sceneStore, update),
     ];
   }
 
-  execute(props: Parameters<AddBlock['perform']>[0]) {
-    props.newBlockType.this.blockStore.getBlockType(props.newBlockType.type);
-    return this.addBlock.find(
-      (addBlock) =>
-        addBlock.sourceCategories.includes(newBlockCategory) && addBlock.targetCategories.includes(targetBlockCategory),
-    );
+  execute(params: ExecuteAddParams) {
+    const { executionPhase } = params;
+    const edit = this.update.createTransaction();
+
+    this.data.blockCategory
+      .getAddMethodsByCategory(params.newBlockType.category)
+      .filter((addMethod) =>
+        executionPhase === 'afterRender' ? addMethod.executeAfterRender : !addMethod.executeAfterRender,
+      )
+      .forEach((addMethod) => {
+        const addMethodHandler = this.addBlock.find((addBlock) => addMethod.name === addBlock.name);
+        addMethodHandler?.perform({ ...params, addMethod, edit, addContext: this.addContext });
+      });
+
+    if (edit.hasLastBlock()) {
+      this.addContext.addedBlockId = edit.getLastBlock().id;
+    }
+
+    edit.commit();
   }
 
   private addBlock: AddBlock[] = [];
 
   private addContext: AddContext = {};
 
-  private blockStore: BlockStore;
+  private data: DataContext;
+
+  private update: TransactionService;
 }
 
 export default AddService;
