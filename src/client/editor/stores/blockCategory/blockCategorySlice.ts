@@ -3,6 +3,7 @@ import BlockCategory from '../../types/block/BlockCategory';
 import BlockCategoriesResponse from '@/common/response_types/BlockCategoriesResponse';
 import BlockAddMethod from '@/common/model_types/BlockAddMethod';
 import BlockAddMethodsResponse from '@/common/response_types/BlockAddMethodsResponse';
+import { ModelPartRole } from '../../types/BlockType';
 
 export type BlockCategoyState = {
   addMethods: BlockAddMethod[];
@@ -25,8 +26,10 @@ export const blockCategorySlice = createSlice({
         item.categories.forEach((category) => {
           state.addMethods.push({
             ...item,
-            category: category.categoryName,
-            sourcePartName: category.sourcePartName,
+            sourceCategory: category.sourceCategoryName,
+            sourcePartRole: category.sourcePartRole as ModelPartRole,
+            targetPartRole: category.targetPartRole as ModelPartRole,
+            targetCategory: category.targetCategoryName,
           });
         });
       });

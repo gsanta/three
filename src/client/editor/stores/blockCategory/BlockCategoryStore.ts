@@ -11,7 +11,7 @@ class BlockCategoryStore {
   }
 
   getAddMethodsByCategory(category: BlockCategoryName) {
-    return this.getState().addMethods.filter((addMethod) => addMethod.category === category);
+    return this.getState().addMethods.filter((addMethod) => addMethod.sourceCategory === category);
   }
 
   getCategories() {

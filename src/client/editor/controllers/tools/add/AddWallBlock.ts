@@ -29,7 +29,7 @@ class AddWallBlock extends AddBlock {
       return undefined;
     }
 
-    const targetPartCategory = targetBlock.partDetails[targetPartIndex]?.category;
+    const targetPartCategory = targetBlock.partDetails[targetPartIndex]?.roles;
 
     if (targetPartCategory !== 'wall-slot') {
       return;

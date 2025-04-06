@@ -45,9 +45,12 @@ CREATE TABLE "BlockAddMethod" (
 -- CreateTable
 CREATE TABLE "BlockAddMethodsOnCategories" (
     "addMethodName" TEXT NOT NULL,
-    "categoryName" TEXT NOT NULL,
+    "sourceCategoryName" TEXT NOT NULL,
+    "targetCategoryName" TEXT,
+    "targetPartRole" TEXT,
+    "sourcePartRole" TEXT,
 
-    CONSTRAINT "BlockAddMethodsOnCategories_pkey" PRIMARY KEY ("addMethodName","categoryName")
+    CONSTRAINT "BlockAddMethodsOnCategories_pkey" PRIMARY KEY ("addMethodName","sourceCategoryName")
 );
 
 -- CreateTable
@@ -80,7 +83,7 @@ ALTER TABLE "BlockType" ADD CONSTRAINT "BlockType_categoryName_fkey" FOREIGN KEY
 ALTER TABLE "BlockAddMethodsOnCategories" ADD CONSTRAINT "BlockAddMethodsOnCategories_addMethodName_fkey" FOREIGN KEY ("addMethodName") REFERENCES "BlockAddMethod"("name") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "BlockAddMethodsOnCategories" ADD CONSTRAINT "BlockAddMethodsOnCategories_categoryName_fkey" FOREIGN KEY ("categoryName") REFERENCES "BlockCategory"("name") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "BlockAddMethodsOnCategories" ADD CONSTRAINT "BlockAddMethodsOnCategories_sourceCategoryName_fkey" FOREIGN KEY ("sourceCategoryName") REFERENCES "BlockCategory"("name") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Snapshot" ADD CONSTRAINT "Snapshot_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;

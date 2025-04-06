@@ -1,9 +1,9 @@
 import AddBlock from './AddBlock';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 
-class AddBlockToPlain extends AddBlock {
+class AddBlockToBlock extends AddBlock {
   constructor(factoryService: FactoryService) {
-    super('add-to-plain');
+    super('add-block-to-block');
 
     this.factoryService = factoryService;
   }
@@ -19,4 +19,4 @@ class AddBlockToPlain extends AddBlock {
   private factoryService: FactoryService;
 }
 
-export default AddBlockToPlain;
+export default AddBlockToBlock;

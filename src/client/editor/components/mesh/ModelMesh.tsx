@@ -71,7 +71,7 @@ export const ModelMesh = ({ additions, block, materialProps, meshProps, overwrit
         part.parts ? (
           <ModelGroupMesh
             block={block}
-            key={`${block.id}-${part.index}`}
+            key={`${block.id}-${part.name}`}
             materials={materials}
             materialProps={materialProps}
             nodes={geometryNodes}
@@ -80,7 +80,7 @@ export const ModelMesh = ({ additions, block, materialProps, meshProps, overwrit
         ) : (
           <ModelPartMesh
             block={block}
-            key={`${block.id}-${part.index}`}
+            key={`${block.id}-${part.name}`}
             materialProps={materialProps}
             materials={materials}
             nodes={geometryNodes}

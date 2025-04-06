@@ -53,9 +53,9 @@ const SelectToolOptions = () => {
         </>
       )}
       {block?.decorations.map((decoration) => {
-        if (decoration === 'devices') {
-          return <DeviceControl device={decorations.devices[block.id] as Device} />;
-        }
+        // if (decoration === 'devices') {
+        //   return <DeviceControl device={decorations.devices[block.id] as Device} />;
+        // }
 
         return undefined;
       })}

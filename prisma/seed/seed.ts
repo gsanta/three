@@ -15,14 +15,6 @@ import blockAddMethodsOnCategoriesSeeds from './blockAddMethodsOnCategoriesSeeds
 
 const prisma = new PrismaClient();
 const main = async () => {
-  // for (const template of roadTemplateSeeds) {
-  //   await prisma.blockType.upsert({
-  //     where: { type: template.type },
-  //     update: {},
-  //     create: template,
-  //   });
-  // }
-
   // for (const template of buildingTempalteSeeds) {
   //   await prisma.blockType.upsert({
   //     where: { type: template.type },
@@ -98,13 +90,21 @@ const main = async () => {
   for (const seed of blockAddMethodsOnCategoriesSeeds) {
     await prisma.blockAddMethodsOnCategories.upsert({
       where: {
-        addMethodName_categoryName: {
+        addMethodName_sourceCategoryName: {
           addMethodName: seed.addMethodName,
-          categoryName: seed.categoryName,
+          sourceCategoryName: seed.sourceCategoryName,
         },
       },
       update: {},
       create: seed,
+    });
+  }
+
+  for (const template of roadTemplateSeeds) {
+    await prisma.blockType.upsert({
+      where: { type: template.type },
+      update: {},
+      create: template,
     });
   }
 

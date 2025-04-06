@@ -52,15 +52,15 @@ class AddSlotToSlot {
     const targetZ = -targetPos[2];
     const targetY = -targetPos[1];
 
-    const targetPartOrientation = template.partDetails[targetPart.index]?.orientation || 0;
+    const targetPartOrientation = template.partDetails[targetPart.name]?.orientation || 0;
     const idealNextPartOrientation = MathUtils.normalizeAngle(targetPartOrientation + 180);
     let idealNextSelectedPart = template.parts.find(
-      (part) => template.partDetails[part.index]?.orientation === idealNextPartOrientation,
+      (part) => template.partDetails[part.name]?.orientation === idealNextPartOrientation,
     );
 
     if (!idealNextSelectedPart) {
       idealNextSelectedPart = template.parts
-        .filter((part) => template.partDetails[part.index]?.role === 'slot')
+        .filter((part) => template.partDetails[part.name]?.role === 'slot')
         .find((part) => part.name !== targetPart.name);
     }
 
@@ -73,7 +73,7 @@ class AddSlotToSlot {
       },
     });
 
-    edit.select(edit.getLastBlock().id, idealNextSelectedPart?.index);
+    edit.select(edit.getLastBlock().id, idealNextSelectedPart?.name);
   }
 
   private blockStore: BlockStore;

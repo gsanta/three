@@ -12,88 +12,77 @@ const buildingTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id
     path: '/building_base_1.glb',
     parts: [
       {
-        index: '#1',
-        geometryPath: 'base.geometry',
+        name: 'base',
         materialPath: 'Wall',
         position: [-0.092, 0.007, 0.054],
         rotation: [-Math.PI, 0, -Math.PI],
         scale: [-3.718, -0.122, -3.718],
       },
       {
-        index: '#2',
-        geometryPath: 'wall1.geometry',
+        name: 'wall1',
         materialPath: 'wall-placeholder',
         position: [-3.603, 0.264, 0.054],
         rotation: [-Math.PI, 0, -Math.PI],
         scale: [-3.718, -0.122, -3.718],
       },
       {
-        index: '#3',
-        geometryPath: 'wall2.geometry',
+        name: 'wall2',
         materialPath: 'wall-placeholder',
         position: [-0.092, 0.264, -3.522],
         rotation: [-Math.PI, 0, -Math.PI],
         scale: [-3.718, -0.122, -3.718],
       },
       {
-        index: '#4',
-        geometryPath: 'wall3.geometry',
+        name: 'wall3',
         materialPath: 'wall-placeholder',
         position: [3.465, 0.264, 0.054],
         rotation: [-Math.PI, 0, -Math.PI],
         scale: [-3.718, -0.122, -3.718],
       },
       {
-        index: '#5',
-        geometryPath: 'wall4.geometry',
+        name: 'wall4',
         materialPath: 'wall-placeholder',
         position: [-0.092, 0.264, 3.595],
         rotation: [-Math.PI, 0, -Math.PI],
         scale: [-3.718, -0.122, -3.718],
       },
       {
-        index: '#6',
-        geometryPath: 'ceil.geometry',
+        name: 'ceil',
         materialPath: 'wall-placeholder',
         position: [-0.069, 3.434, 0.037],
         rotation: [-Math.PI, 0, -Math.PI],
         scale: [-3.718, -0.122, -3.718],
       },
       {
-        index: '#7',
-        geometryPath: 'Platform1Floor.geometry',
+        name: 'Platform1Floor',
         materialPath: 'wall-placeholder',
         position: [-0.092, 0.264, 0.054],
         rotation: [-Math.PI, 0, -Math.PI],
         scale: [-3.718, -0.122, -3.718],
       },
       {
-        index: '#8',
-        geometryPath: 'Platform1Column1.geometry',
+        name: 'Platform1Column1',
         materialPath: 'Wall',
         position: [-3.603, 1.843, 3.595],
         rotation: [-Math.PI, 0, -Math.PI],
         scale: [-3.718, -0.122, -3.718],
       },
       {
-        index: '#9',
-        geometryPath: 'Platform1Column2.geometry',
+        name: 'Platform1Column2',
         materialPath: 'Wall',
         position: [3.465, 1.843, 3.595],
         rotation: [-Math.PI, 0, -Math.PI],
         scale: [-3.718, -0.122, -3.718],
       },
       {
-        index: '#10',
-        geometryPath: 'Platform1Column3.geometry',
+        name: 'Platform1Column3',
         materialPath: 'Wall',
         position: [3.409, 1.843, -3.522],
         rotation: [-Math.PI, 0, -Math.PI],
         scale: [-3.718, -0.122, -3.718],
       },
       {
-        index: '#11',
-        geometryPath: 'Platform1Column3.geometry',
+        name: 'Platform1Column4',
         materialPath: 'Wall',
         position: [-3.562, 1.843, -3.522],
         rotation: [-Math.PI, 0, -Math.PI],
@@ -101,65 +90,65 @@ const buildingTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id
       },
     ],
     partDetails: {
-      '#1': {
+      base: {
         name: 'root',
       },
-      '#2': {
-        category: 'wall-slot',
+      wall1: {
+        roles: ['wall-slot'],
         orientation: 90,
         name: 'wall1',
         type: 'placeholder',
         joins: ['#8', '#11'],
       },
-      '#3': {
-        category: 'wall-slot',
+      wall2: {
+        roles: ['wall-slot'],
         name: 'wall2',
         type: 'placeholder',
         joins: ['#10', '#11'],
       },
-      '#4': {
-        category: 'wall-slot',
+      wall3: {
+        roles: ['wall-slot'],
         orientation: 270,
         name: 'wall3',
         type: 'placeholder',
         joins: ['#9', '#10'],
       },
-      '#5': {
-        category: 'wall-slot',
+      wall4: {
+        roles: ['wall-slot'],
         orientation: 180,
         name: 'wall4',
         type: 'placeholder',
         joins: ['#8', '#9'],
       },
-      '#6': {
-        category: 'ceil-slot',
+      ceil: {
+        roles: ['ceil-slot'],
         axes: ['y'],
         name: 'ceil',
         type: 'placeholder',
       },
-      '#7': {
-        category: 'floor-slot',
+      Platform1Floor: {
+        roles: ['floor-slot'],
         allowMovement: ['y'],
         name: 'floor',
         type: 'placeholder',
       },
-      '#8': {
-        category: 'wall-join',
+      Platform1Column1: {
+        roles: ['wall-join'],
         name: 'wall-join-1',
         joins: ['#2', '#5'],
       },
-      '#9': {
-        category: 'wall-join',
+      Platform1Column2: {
+        roles: ['wall-join'],
         name: 'wall-join-2',
         joins: ['#5', '#4'],
       },
-      '#10': {
-        category: 'wall-join',
+      Platform1Column3: {
+        roles: ['wall-join'],
         name: 'wall-join-3',
         joins: ['#4', '#3'],
       },
-      '#11': {
-        category: 'wall-join',
+      Platform1Column4: {
+        roles: ['wall-join'],
         name: 'wall-join-4',
         joins: ['#2', '#3'],
       },
@@ -172,15 +161,14 @@ const buildingTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id
     path: '/wall_new.glb',
     parts: [
       {
-        index: '#1',
-        geometryPath: 'Cube001.geometry',
+        name: 'Cube001',
         materialPath: 'Wall',
         rotation: [-3.14159, 0, -3.14159],
         scale: [-3.718, -0.122, -3.718],
       },
     ],
     partDetails: {
-      '#1': {
+      Cube001: {
         name: 'root',
       },
     },
@@ -195,31 +183,30 @@ const buildingTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id
         scale: [-3.718, -0.122, -3.718],
         parts: [
           {
-            index: '#1',
-            geometryPath: 'Cube007.geometry',
+            name: 'Cube007',
             materialPath: 'Wall',
           },
           {
             index: '#2',
-            geometryPath: 'Cube007_1.geometry',
+            name: 'Cube007_1',
             materialPath: 'Wood1',
           },
           {
             index: '#3',
-            geometryPath: 'Cube007_2.geometry',
+            name: 'Cube007_2',
             materialPath: 'Wood2',
           },
         ],
       },
     ],
     partDetails: {
-      '#1': {
+      Cube007: {
         name: 'root',
       },
-      '#2': {
+      Cube007_1: {
         name: '#2',
       },
-      '#3': {
+      Cube007_2: {
         name: '#3',
       },
     },
@@ -231,24 +218,21 @@ const buildingTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id
     path: '/roof1.glb',
     parts: [
       {
-        index: '#1',
-        geometryPath: 'Roof1Roof.geometry',
+        name: 'Roof1Roof',
         materialPath: 'Roog',
         position: [-0.069, 0.088, 0.037],
         rotation: [-3.14159, 0, -3.14159],
         scale: [-3.922, -0.064, -3.922],
       },
       {
-        index: '#2',
-        geometryPath: 'Roof1Area1.geometry',
+        name: 'Roof1Area1',
         materialPath: 'wall-placeholder',
         position: [-0.069, 0.088, 0.037],
         rotation: [-3.14159, 0, -3.14159],
         scale: [-3.922, -0.064, -3.922],
       },
       {
-        index: '#3',
-        geometryPath: 'Roof1Area2.geometry',
+        name: 'Roof1Area2',
         materialPath: 'wall-placeholder',
         position: [-0.069, 0.088, 0.037],
         rotation: [-3.14159, 0, -3.14159],
@@ -256,17 +240,17 @@ const buildingTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id
       },
     ],
     partDetails: {
-      '#1': {
+      Roof1Roof: {
         name: 'root',
       },
-      '#2': {
-        category: 'active-area',
+      Roof1Area1: {
+        roles: ['active-area'],
         name: '#2',
         role: 'slot',
         type: 'placeholder',
       },
-      '#3': {
-        category: 'active-area',
+      Roof1Area2: {
+        roles: ['active-area'],
         name: '#3',
         role: 'slot',
         type: 'placeholder',

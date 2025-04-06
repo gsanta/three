@@ -88,8 +88,8 @@ class JoinPoles {
     const mesh1 = this.scene.getObj3d(pole1.id);
     const mesh2 = this.scene.getObj3d(pole2.id);
 
-    const pinName1 = pole1.partDetails[partIndex1]?.name || '';
-    const pinName2 = pole2.partDetails[partIndex2]?.name || '';
+    const pinName1 = partIndex1;
+    const pinName2 = partIndex2;
 
     const pinMesh1 = MeshUtils.findByName(mesh1, pinName1);
     const pinMesh2 = MeshUtils.findByName(mesh2, pinName2);

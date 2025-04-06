@@ -36,7 +36,7 @@ class AddHomeElectricsBlock extends AddBlock {
       return undefined;
     }
 
-    const targetPartCategory = targetBlock.partDetails[targetPartIndex]?.category;
+    const targetPartCategory = targetBlock.partDetails[targetPartIndex]?.roles;
 
     if (targetPartCategory === 'floor-slot') {
       this.addBlockToPointerPos.perform(edit, targetBlock.id, targetPartIndex, newBlockType.type, clientX, clientY);

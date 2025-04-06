@@ -79,7 +79,7 @@ class CableTool extends HoverTool {
 
         const edit = this.update.createTransaction();
 
-        if (targetBlock.partDetails[partIndex || '']?.category === 'pin') {
+        if (targetBlock.partDetails[partIndex || '']?.roles === 'pin') {
           this.joinPoles.join(block1, block2, [[sourcePartIndex, partIndex]]);
         }
 
@@ -130,9 +130,9 @@ class CableTool extends HoverTool {
     const joinPoles = new JoinPoles(this.blockStore, this.scene, this.factoryService, this.updateService);
 
     joinPoles.join(blocks[polesIds[0]], blocks[polesIds[1]], [
-      ['#2', '#2'],
-      ['#3', '#3'],
-      ['#4', '#4'],
+      ['Pole1Pin1', 'Pole1Pin1'],
+      ['Pole1Pin2', 'Pole1Pin2'],
+      ['Pole1Pin3', 'Pole1Pin3'],
     ]);
   }
 

@@ -19,10 +19,10 @@ class LampUpdater extends BlockUpdater {
   onUpdateDecorators(edit: Edit, block: Block, newState: BlockDecorationType): void {
     if (isDevice(newState)) {
       const loadOnPartIndexes = Object.keys(block.partDetails).filter(
-        (key) => block.partDetails[key]?.category === 'load-on',
+        (key) => block.partDetails[key]?.roles === 'load-on',
       );
       const loadOffPartIndexes = Object.keys(block.partDetails).filter(
-        (key) => block.partDetails[key]?.category === 'load-off',
+        (key) => block.partDetails[key]?.roles === 'load-off',
       );
 
       edit.updateBlock(block.id, {

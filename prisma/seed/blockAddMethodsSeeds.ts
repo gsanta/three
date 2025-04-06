@@ -1,6 +1,6 @@
 const blockAddMethodsSeeds = [
   {
-    name: 'add-to-plain',
+    name: 'add-block-to-block',
   },
   {
     name: 'add-block-to-slot',

@@ -7,7 +7,7 @@ class PoleFactory extends BlockFactory {
     const pins: Device['pins'] = {};
 
     Object.keys(block.partDetails)
-      .filter((key) => block.partDetails[key]?.category === 'pin')
+      .filter((key) => block.partDetails[key]?.roles === 'pin')
       .forEach((key) => (pins[key] = createPin('in-out', [])));
 
     const pole: Device = {

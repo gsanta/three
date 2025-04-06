@@ -9,7 +9,7 @@ class ModelMesh extends BaseMesh {
   constructor(block: Block, blockStore: BlockStore, sceneStore: SceneStore, updateService: UpdateService) {
     super(block, blockStore, sceneStore, updateService);
 
-    this.children = block.parts.map((part) => new ChildMesh(this, block, part.index || ''));
+    this.children = block.parts.map((part) => new ChildMesh(this, block, part.name));
   }
 }
 

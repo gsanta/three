@@ -18,27 +18,27 @@ export type ModelPartProps = {
 };
 
 const ModelPartMesh = ({ block, materials, materialProps, nodes, onPointerEnter, part }: ModelPartProps) => {
-  const partInfo = block.partDetails[part.index];
+  const partInfo = block.partDetails[part.name];
 
   const material = useMaterial({ materials, materialProps, nodes, part, isSelected: block.isSelected });
   const geometry = useGeometry(nodes, part);
 
   return (
     <Select
-      enabled={(block.isHovered && part.index === block.hoveredPart) || (block.isSelected && partInfo?.isSelected)}
+      enabled={(block.isHovered && part.name === block.hoveredPart) || (block.isSelected && partInfo?.isSelected)}
     >
       <mesh
         castShadow
-        key={`${block.id}-${part.index}`}
+        key={`${block.id}-${part.name}`}
         receiveShadow
         geometry={geometry}
         material={material}
-        visible={!block.partDetails[part.index]?.hide}
-        onPointerEnter={onPointerEnter ? (e) => onPointerEnter(e, part.index) : undefined}
+        visible={!block.partDetails[part.name]?.hide}
+        onPointerEnter={onPointerEnter ? (e) => onPointerEnter(e, part.name) : undefined}
         position={part.position}
         rotation={part.rotation}
         scale={part.scale}
-        name={partInfo?.name || ''}
+        name={part.name || ''}
         userData={{ modelId: block.id }}
       />
     </Select>

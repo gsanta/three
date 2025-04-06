@@ -8,6 +8,9 @@ const blockCategories = [
   {
     name: 'cables',
   },
+  {
+    name: 'roads',
+  },
 ];
 
 export default blockCategories;

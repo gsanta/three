@@ -13,24 +13,21 @@ const electricityProviders: (Omit<BlockType, 'animations' | 'decorations' | 'id'
     path: '/generator1.glb',
     parts: [
       {
-        index: '#1',
-        geometryPath: 'Cube028.geometry',
+        name: 'Cube028',
         materialPath: 'White',
         position: [0, 0, 0],
         rotation: [0, 0, 0],
         scale: [0.481, 0.581, 0.74],
       },
       {
-        index: '#2',
-        geometryPath: 'Cube028_1.geometry',
+        name: 'Cube028_1',
         materialPath: 'DarkGray',
         position: [0, 0, 0],
         rotation: [0, 0, 0],
         scale: [0.481, 0.581, 0.74],
       },
       {
-        index: '#3',
-        geometryPath: 'Cube.geometry',
+        name: 'Cube',
         materialPath: 'DarkGray',
         position: [0.467, 0.918, 0.38],
         rotation: [0, 0, 0],
@@ -38,14 +35,14 @@ const electricityProviders: (Omit<BlockType, 'animations' | 'decorations' | 'id'
       },
     ],
     partDetails: {
-      '#1': {
+      Cube028: {
         name: '#1',
       },
-      '#2': {
+      Cube028_1: {
         name: '#2',
       },
-      '#3': {
-        category: 'pin',
+      Cube: {
+        roles: ['pin'],
         name: '#3',
         type: 'physical',
       },

@@ -6,11 +6,11 @@ import Block from '@/client/editor/types/Block';
 class ChildMesh extends AbstractMesh {
   position: Vector3;
 
-  constructor(parent: BaseMesh, block: Block, index: string) {
-    super(block.partDetails[index]?.name);
+  constructor(parent: BaseMesh, block: Block, name: string) {
+    super(block.partDetails[name]?.name);
     this.parent = parent;
 
-    const pos = block.parts.find((part) => part.index === index)?.position || [0, 0, 0];
+    const pos = block.parts.find((part) => part.name === name)?.position || [0, 0, 0];
     this.position = new Vector3(pos[0], pos[1], pos[2]);
   }
 

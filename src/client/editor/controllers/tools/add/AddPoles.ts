@@ -52,9 +52,9 @@ class AddPoles extends AddBlock {
 
       if (toPole.poleId) {
         this.joinPoles.join(fromPole, this.blockStore.getBlock(toPole.poleId), [
-          ['#2', '#2'],
-          ['#3', '#3'],
-          ['#4', '#4'],
+          ['Pole1Pin1', 'Pole1Pin1'],
+          ['Pole1Pin2', 'Pole1Pin2'],
+          ['Pole1Pin3', 'Pole1Pin3'],
         ]);
       }
     }

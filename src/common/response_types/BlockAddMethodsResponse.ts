@@ -3,7 +3,13 @@ import { BlockAddMethodName } from '../model_types/BlockAddMethod';
 
 type BlockAddMethodsResponse = {
   items: {
-    categories: { addMethodName: string; categoryName: BlockCategoryName; sourcePartName: string }[];
+    categories: {
+      addMethodName: string;
+      sourceCategoryName: BlockCategoryName;
+      targetCategoryName?: BlockCategoryName;
+      sourcePartRole: string;
+      targetPartRole: string;
+    }[];
     executeAfterRender: boolean;
     id: number;
     name: BlockAddMethodName;

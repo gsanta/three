@@ -12,39 +12,36 @@ const lampTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
     path: '/lamp1.glb',
     parts: [
       {
-        index: '#1',
-        geometryPath: 'Lamp1Body.geometry',
+        name: 'Lamp1Body',
         materialPath: 'DarkGray',
         position: [0.003, 0.017, -0.003],
         scale: [0.102, 1.563, 0.102],
-        name: 'root',
       },
       {
-        index: '#2',
         position: [0.003, 2.737, -0.003],
         scale: [0.102, 1.563, 0.102],
         parts: [
           {
-            geometryPath: 'Cube022.geometry',
+            name: 'Cube022',
             materialPath: 'DarkGray',
           },
           {
-            geometryPath: 'Cube022_1.geometry',
+            name: 'Cube022_1',
             materialPath: 'Road',
           },
         ],
       },
       {
-        index: '#3',
+        name: '#3',
         position: [0.003, 2.737, -0.003],
         scale: [0.102, 1.563, 0.102],
         parts: [
           {
-            geometryPath: 'Cube023.geometry',
+            name: 'Cube023',
             materialPath: 'DarkGray',
           },
           {
-            geometryPath: 'Cube023_1.geometry',
+            name: 'Cube023_1',
             materialPath: 'Wood1',
           },
         ],
@@ -52,11 +49,11 @@ const lampTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
     ],
     partDetails: {
       '#2': {
-        category: 'load-off',
+        roles: ['load-off'],
         hide: false,
       },
       '#3': {
-        category: 'load-on',
+        roles: ['load-on'],
         hide: true,
       },
     },

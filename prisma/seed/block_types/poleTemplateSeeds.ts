@@ -12,72 +12,57 @@ const poleTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
     path: '/pole2.glb',
     parts: [
       {
-        index: '#1',
-        geometryPath: 'Pole1Body.geometry',
+        name: 'Pole1Body',
         materialPath: 'Main',
         position: [-0.008, -0.002, 0.01],
         rotation: [-3.14159, 0, -3.14159],
         scale: [-0.113, -4.042, -0.113],
       },
       {
-        index: '#2',
-        geometryPath: 'Pole1Pin1.geometry',
+        name: 'Pole1Pin1',
         materialPath: 'DarkGray',
         position: [-0.913, 7.154, 0.011],
         scale: 0.081,
-        name: 'pin1',
       },
       {
-        index: '#3',
-        geometryPath: 'Pole1Pin2.geometry',
+        name: 'Pole1Pin2',
         materialPath: 'DarkGray',
         position: [-0.378, 7.154, 0.011],
         scale: 0.081,
-        name: 'pin2',
       },
       {
-        index: '#4',
-        geometryPath: 'Pole1Pin3.geometry',
+        name: 'Pole1Pin3',
         materialPath: 'DarkGray',
         position: [0.865, 7.154, 0.011],
         scale: 0.081,
-        name: 'pin3',
       },
       {
-        index: '#5',
-        geometryPath: 'Pole1Pin4.geometry',
+        name: 'Pole1Pin4',
         materialPath: 'DarkGray',
         position: [0.006, 6.336, 0.216],
         scale: 0.081,
-        name: 'pin4',
       },
     ],
     partDetails: {
-      '#1': {
-        name: 'root',
-      },
-      '#2': {
+      Pole1Body: {},
+      Pole1Pin1: {
         role: 'slot',
-        category: 'pin',
-        name: 'pin1',
+        roles: ['pin'],
         type: 'physical',
       },
-      '#3': {
-        category: 'pin',
-        name: 'pin2',
+      Pole1Pin2: {
+        roles: ['pin'],
         role: 'slot',
         type: 'physical',
       },
-      '#4': {
-        name: 'pin3',
+      Pole1Pin3: {
         role: 'slot',
-        category: 'pin',
+        roles: ['pin'],
         type: 'physical',
       },
-      '#5': {
-        name: 'pin4',
+      Pole1Pin4: {
         role: 'slot',
-        category: 'pin',
+        roles: ['pin'],
         type: 'physical',
       },
     },

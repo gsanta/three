@@ -48,7 +48,7 @@ class GetNextWireIntersection {
 
   private getNextWirePointForWall(wallBlock: Block, blockIntersections: BlockIntersection[]) {
     const target = blockIntersections.find((intersection) =>
-      ['wall-join', 'home-electrics'].includes(intersection.partInfo?.category || ''),
+      ['wall-join', 'home-electrics'].includes(intersection.partInfo?.roles || ''),
     );
 
     if (!target) {
@@ -83,7 +83,7 @@ class GetNextWireIntersection {
     const selectedIntersection = blockIntersections.find((intersection) => {
       if (intersection.block.category === 'walls') {
         return true;
-      } else if (intersection.partInfo?.category === 'wall-join') {
+      } else if (intersection.partInfo?.roles === 'wall-join') {
         return true;
       }
       return false;

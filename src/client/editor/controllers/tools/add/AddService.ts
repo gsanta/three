@@ -1,4 +1,4 @@
-import AddBlockToPlain from './AddBlockToPlain';
+import AddBlockToBlock from './AddBlockToBlock';
 import AddBlock from './AddBlock';
 import AddContext from './AddContext';
 import AddFurnitureBlock from './AddFurnitureBlock';
@@ -18,6 +18,7 @@ import DataContext from '@/client/editor/contexts/DataContext';
 import ExecuteAddParams from './ExecuteAddParams';
 import AddBlockToSlot from './AddBlockToSlot';
 import AddSlotToSlot from './AddSlotToSlot';
+import BlockAddMethod from '@/common/model_types/BlockAddMethod';
 
 class AddService {
   constructor(
@@ -30,7 +31,7 @@ class AddService {
     this.data = data;
     this.update = update;
     this.addBlock = [
-      new AddBlockToPlain(factoryService),
+      new AddBlockToBlock(factoryService),
       // new AddFurnitureBlock(factoryService),
       // new AddHomeElectricsBlock(blockStore, factoryService, sceneService, sceneStore, update),
       new AddPoles(data.block, factoryService, sceneStore, update),
@@ -53,6 +54,7 @@ class AddService {
       .filter((addMethod) =>
         executionPhase === 'afterRender' ? addMethod.executeAfterRender : !addMethod.executeAfterRender,
       )
+      .filter((addMethod) => this.filterAddMethod(addMethod, params))
       .forEach((addMethod) => {
         const addMethodHandler = this.addBlock.find((addBlock) => addMethod.name === addBlock.name);
         addMethodHandler?.perform({ ...params, addMethod, edit, addContext: this.addContext });
@@ -63,6 +65,22 @@ class AddService {
     }
 
     edit.commit();
+  }
+
+  private filterAddMethod(addMethod: BlockAddMethod, params: ExecuteAddParams) {
+    if (params.executionPhase === 'afterRender' && addMethod.executeAfterRender) {
+      return true;
+    }
+
+    switch (addMethod.name) {
+      case 'add-slot-to-slot':
+      case 'add-block-to-slot':
+        return params.targetPartIndex;
+      case 'add-block-to-block':
+        return !params.targetPartIndex;
+    }
+
+    throw new Error(`addMethod '${addMethod.name}' not handled`);
   }
 
   private addBlock: AddBlock[] = [];

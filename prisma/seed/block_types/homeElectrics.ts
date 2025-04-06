@@ -15,42 +15,35 @@ const homeElectrics: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'par
     path: '/washing_mashine1.glb',
     parts: [
       {
-        index: '#1',
-        geometryPath: 'Cylinder.geometry',
+        name: 'Cylinder',
         materialPath: 'DarkGray',
         position: [0, 0, 0],
         rotation: [Math.PI / 2, 0, 0],
         scale: [1, 0.248, 1],
       },
       {
-        index: '#2',
-        geometryPath: 'Cylinder_1.geometry',
+        name: 'Cylinder_1',
         materialPath: 'White',
         position: [0, 0, 0],
         rotation: [Math.PI / 2, 0, 0],
         scale: [1, 0.248, 1],
       },
       {
-        index: '#3',
-        geometryPath: 'WashingMashine1DoorOff.geometry',
-        materialPath: 'Road',
         name: 'WashingMashine1DoorOff',
+        materialPath: 'Road',
         position: [-0.005, 0.63, -0.651],
         rotation: [Math.PI / 2, 0, 0],
         scale: [1, 0.248, 1],
       },
       {
-        index: '#4',
-        geometryPath: 'WashingMashine1DoorOn.geometry',
-        materialPath: 'Wood1',
         name: 'WashingMashine1DoorOn',
+        materialPath: 'Wood1',
         position: [-0.004, 0.626, -0.379],
         rotation: [Math.PI / 2, 0, 0],
         scale: [1, 0.248, 1],
       },
       {
-        index: '#5',
-        geometryPath: 'WashingMashine1Base001.geometry',
+        name: 'WashingMashine1Base001',
         materialPath: 'White',
         position: [0.273, 0.314, 0.454],
         rotation: [Math.PI / 2, 0, 0],
@@ -58,14 +51,14 @@ const homeElectrics: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'par
       },
     ],
     partDetails: {
-      '#3': {
+      WashingMashine1DoorOff: {
         name: 'WashingMashine1DoorOff',
       },
-      '#4': {
+      WashingMashine1DoorOn: {
         name: 'WashingMashine1DoorOn',
       },
-      '#5': {
-        category: 'pin',
+      WashingMashine1Base001: {
+        roles: ['pin'],
         name: '#5',
         type: 'physical',
       },
@@ -78,16 +71,14 @@ const homeElectrics: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'par
     path: '/socket1.glb',
     parts: [
       {
-        index: '#1',
-        geometryPath: 'Socket1Base.geometry',
+        name: 'Socket1Base',
         materialPath: 'Road',
         position: [0, 0, 0],
         rotation: [0, 0, 0],
         scale: [0.23, 0.23, 0.141],
       },
       {
-        index: '#2',
-        geometryPath: 'Socket1Base_1.geometry',
+        name: 'Socket1Base_1',
         materialPath: 'DarkGray',
         position: [0, 0, 0],
         rotation: [0, 0, 0],
@@ -95,8 +86,8 @@ const homeElectrics: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'par
       },
     ],
     partDetails: {
-      '#1': {
-        category: 'pin',
+      Socket1Base: {
+        roles: ['pin'],
         name: '#5',
         type: 'physical',
       },
@@ -109,13 +100,12 @@ const homeElectrics: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'par
     path: '/television1.glb',
     parts: [
       {
-        index: '#1',
-        geometryPath: 'Television1Base.geometry',
+        name: 'Television1Base',
         materialPath: 'Rug1_Material',
       },
     ],
     partDetails: {
-      '#1': {
+      Television1Base: {
         name: 'root',
       },
     },

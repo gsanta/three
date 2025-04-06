@@ -1,4 +1,4 @@
-export type BlockCategoryName = 'cables' | 'poles' | 'transformers';
+export type BlockCategoryName = 'cables' | 'poles' | 'transformers' | 'roads';
 
 type BlockCategory = {
   name: BlockCategoryName;

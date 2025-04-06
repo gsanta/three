@@ -9,17 +9,15 @@ export type BlockName = keyof typeof blocks.blocks;
 export type ShapeType = 'box' | 'cone' | 'model' | 'tube';
 
 export type ModelPart = {
-  geometryPath?: string;
-  index: string;
   materialPath?: string;
   position: Num3;
   rotation?: Num3;
   scale?: Num3 | number;
   parts: ModelPart[];
-  name?: string;
+  name: string;
 };
 
-export type ModelPartCategory =
+export type ModelPartRole =
   | 'pin'
   | 'wall-slot'
   | 'ceil-slot'
@@ -27,7 +25,8 @@ export type ModelPartCategory =
   | 'load-on'
   | 'road-slot'
   | 'load-off'
-  | 'wall-join';
+  | 'wall-join'
+  | 'transformer-holder';
 
 export type ModelPartInfo = {
   allowMovement?: Axis[];
@@ -36,8 +35,7 @@ export type ModelPartInfo = {
   joins?: [string, string];
   orientation: number;
   role?: 'slot';
-  category: ModelPartCategory;
-  name: string;
+  roles?: ModelPartRole[];
   type: 'placeholder' | 'phisycal';
 };
 

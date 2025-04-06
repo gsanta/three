@@ -48,14 +48,15 @@ model BlockAddMethod {
 }
 
 model BlockAddMethodsOnCategories {
-  addMethod           BlockAddMethod @relation(fields: [addMethodName], references: [name])
-  addMethodName       String 
-  category            BlockCategory  @relation(fields: [categoryName], references: [name])
-  categoryName        String
-  targetPartName      String?
-  sourcePartName      String?
+  addMethod                 BlockAddMethod @relation(fields: [addMethodName], references: [name])
+  addMethodName             String 
+  category                  BlockCategory  @relation(fields: [sourceCategoryName], references: [name])
+  sourceCategoryName        String
+  targetCategoryName        String?
+  targetPartRole            String?
+  sourcePartRole            String?
 
-  @@id([addMethodName, categoryName])
+  @@id([addMethodName, sourceCategoryName])
 }
 
 model Snapshot {
