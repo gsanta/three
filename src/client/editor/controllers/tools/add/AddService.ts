@@ -1,17 +1,8 @@
 import AddBlockToBlock from './AddBlockToBlock';
 import AddBlock from './AddBlock';
 import AddContext from './AddContext';
-import AddFurnitureBlock from './AddFurnitureBlock';
-import AddHomeElectricsBlock from './AddHomeElectricsBlock';
 import AddPoles from './AddPoles';
-import AddRoadBlock from './AddRoadBlock';
-import AddRoofBlock from './AddRoofBlock';
-import AddRoomBlock from './AddRoomBlock';
-import AddSocketBlock from './AddSocketBlock';
-import AddWallBlock from './AddWallBlock';
-import AddWeatherHeadBlock from './AddWeatherHeadBlock';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
-import SceneService from '@/client/editor/components/scene/service/SceneService';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
 import DataContext from '@/client/editor/contexts/DataContext';
@@ -21,31 +12,18 @@ import AddSlotToSlot from './AddSlotToSlot';
 import BlockAddMethod from '@/common/model_types/BlockAddMethod';
 
 class AddService {
-  constructor(
-    data: DataContext,
-    factoryService: FactoryService,
-    sceneService: SceneService,
-    sceneStore: SceneStore,
-    update: TransactionService,
-  ) {
+  constructor(data: DataContext, factoryService: FactoryService, sceneStore: SceneStore, update: TransactionService) {
     this.data = data;
     this.update = update;
     this.addBlock = [
       new AddBlockToBlock(factoryService),
-      // new AddFurnitureBlock(factoryService),
-      // new AddHomeElectricsBlock(blockStore, factoryService, sceneService, sceneStore, update),
       new AddPoles(data.block, factoryService, sceneStore, update),
       new AddBlockToSlot(factoryService, sceneStore),
       new AddSlotToSlot(data.block, factoryService, sceneStore, update),
-      // new AddRoofBlock(blockStore, factoryService, sceneStore, update),
-      // new AddRoomBlock(factoryService),
-      // new AddSocketBlock(blockStore, factoryService, sceneService, sceneStore, update),
-      // new AddWallBlock(blockStore, factoryService, sceneStore, update),
-      // new AddWeatherHeadBlock(blockStore, factoryService, sceneService, sceneStore, update),
     ];
   }
 
-  execute(params: ExecuteAddParams) {
+  execute(params: Omit<ExecuteAddParams, 'addMethod'>) {
     const { executionPhase } = params;
     const edit = this.update.createTransaction();
 
@@ -67,7 +45,7 @@ class AddService {
     edit.commit();
   }
 
-  private filterAddMethod(addMethod: BlockAddMethod, params: ExecuteAddParams) {
+  private filterAddMethod(addMethod: BlockAddMethod, params: Omit<ExecuteAddParams, 'addMethod'>) {
     if (params.executionPhase === 'afterRender' && addMethod.executeAfterRender) {
       return true;
     }

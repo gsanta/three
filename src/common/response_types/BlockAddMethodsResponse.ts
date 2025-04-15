@@ -1,14 +1,15 @@
 import { BlockCategoryName } from '@/client/editor/types/block/BlockCategory';
-import { BlockAddMethodName } from '../model_types/BlockAddMethod';
+import BlockAddMethod, { BlockAddMethodName } from '../model_types/BlockAddMethod';
 
 type BlockAddMethodsResponse = {
   items: {
     categories: {
-      addMethodName: string;
+      addMethodName: BlockAddMethodName;
       sourceCategoryName: BlockCategoryName;
       targetCategoryName?: BlockCategoryName;
       sourcePartRole: string;
       targetPartRole: string;
+      connectionType: BlockAddMethod['connectionType'];
     }[];
     executeAfterRender: boolean;
     id: number;

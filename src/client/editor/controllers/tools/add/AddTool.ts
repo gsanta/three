@@ -1,13 +1,11 @@
 import { ToolInfo } from '../../../types/Tool';
 import ToolName from '../../../types/ToolName';
-import BlockStore from '../../../stores/block/BlockStore';
 import TransactionService from '../../../services/transaction/TransactionService';
 import SceneStore from '../../../components/scene/SceneStore';
 import FactoryService from '../../../services/factory/FactoryService';
 import HoverTool from '../HoverTool';
 import SceneService from '../../../components/scene/service/SceneService';
 import AddService from './AddService';
-import AddHouse from '@/client/editor/use_cases/add/AddHouse';
 import { store } from '@/client/common/utils/store';
 import DataContext from '@/client/editor/contexts/DataContext';
 import Block from '@/client/editor/types/Block';
@@ -27,9 +25,7 @@ class AddTool extends HoverTool {
 
     // this.addBlockToPlain = new AddBlockToPlain(blockStore, factoryService, sceneStore, update);
 
-    this.addBlock = new AddService(data, factoryService, sceneService, sceneStore, update);
-
-    this.addHouse = new AddHouse(this.blockStore, factoryService, this.update, this.addBlock);
+    this.addService = new AddService(data, factoryService, sceneStore, update);
   }
 
   onPointerUp({ clientX, clientY, gridIndex, pos }: ToolInfo) {
@@ -136,15 +132,6 @@ class AddTool extends HoverTool {
       if (this.runAfterRender) {
         this.executeAdd('afterRender');
       }
-
-      if (this.newBlockCategory && this.targetBlockCategory) {
-        if (this.newBlockCategory === 'building-bases') {
-          this.addHouse.performAfterRender();
-        } else {
-          // const selectedAddBlock = this.addBlock.getAddBlock(this.newBlockCategory, this.targetBlockCategory);
-          // selectedAddBlock?.performAfterRender();
-        }
-      }
     } finally {
       this.newBlockCategory = undefined;
       this.targetBlockCategory = undefined;
@@ -155,7 +142,7 @@ class AddTool extends HoverTool {
 
   private executeAdd(phase: ExecuteAddParams['executionPhase']) {
     if (this.newBlockType && this.position) {
-      this.addBlock.execute({
+      this.addService.execute({
         executionPhase: phase,
         clientX: this.clientX,
         clientY: this.clientY,
@@ -187,9 +174,7 @@ class AddTool extends HoverTool {
 
   private targetBlockCategory: string | undefined;
 
-  private addHouse: AddHouse;
-
-  private addBlock: AddService;
+  private addService: AddService;
 }
 
 export default AddTool;

@@ -4,6 +4,7 @@ import TransactionService from '../../services/transaction/TransactionService';
 import BlockEraser from './erasers/BlockEraser';
 import CableEraser from './erasers/CableEraser';
 import { NeigbourConnection } from '../../types/Block';
+import { ModelPartInfo } from '../../types/BlockType';
 
 class EraseBlock {
   constructor(store: BlockStore, update: TransactionService) {
@@ -61,13 +62,18 @@ class EraseBlock {
       );
     });
 
-    // block.conduitConnections.forEach((connection) => {
-    //   const connectedBlock = this.store.getBlock(connection.block);
-
-    //   connectedBlock.decorations.forEach((decoration) => {
-    //     this.erasers[decoration]?.associationErased(edit, connectedBlock, block);
-    //   });
-    // });
+    block.conduitConnections.forEach((connection) => {
+      if (connection.thisPart) {
+        edit.updateBlock(block.id, {
+          partDetails: {
+            [connection.thisPart]: {
+              ...block.partDetails[connection.thisPart],
+              isConnected: false,
+            } as ModelPartInfo,
+          },
+        });
+      }
+    });
   }
 
   private store: BlockStore;

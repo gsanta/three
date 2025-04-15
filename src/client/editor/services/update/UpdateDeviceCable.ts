@@ -15,14 +15,6 @@ class UpdateDeviceCable {
 
   update(cable: Block) {
     const edit = this.transactionService.createTransaction();
-    // const decoration = this.store.getDecoration('devices', cable.id);
-
-    // Object.keys(decoration.pins).forEach((key) => {
-    //   const cables = decoration.pins[key];
-    //   cables?.wires.forEach((cable) => {
-    //     this.moveCable(edit, cable, cable);
-    //   });
-    // });
 
     const newPoints = cable.conduitParentConnections.map((connection) =>
       this.moveCable(cable.id, this.store.getBlock(connection.block)),
@@ -55,8 +47,7 @@ class UpdateDeviceCable {
     }
 
     const poleMesh = this.scene.getObj3d(pole.id);
-    const partName = pole.partDetails[cableEnd?.pin]?.name;
-    const mesh = MeshUtils.findByName(poleMesh, partName);
+    const mesh = MeshUtils.findByName(poleMesh, cableEnd?.pin);
 
     const pos = new Vector3();
     mesh.getWorldPosition(pos);

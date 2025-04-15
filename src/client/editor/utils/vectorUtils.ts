@@ -28,6 +28,10 @@ class VectorUtils {
     return vec1.map((val, index) => val + vec2[index]) as Num3;
   }
 
+  static negate(vec: Num3): Num3 {
+    return vec.map((val) => -val) as Num3;
+  }
+
   static rotate(vec: Num3, angle: number) {
     const result = [0, vec[1], 0] as Num3;
     const rad = toRadian(angle);

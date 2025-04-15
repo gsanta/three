@@ -12,61 +12,184 @@ const poleTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
     path: '/pole2.glb',
     parts: [
       {
-        name: 'Pole1Body',
+        name: 'Body',
         materialPath: 'Main',
         position: [-0.008, -0.002, 0.01],
         rotation: [-3.14159, 0, -3.14159],
         scale: [-0.113, -4.042, -0.113],
       },
       {
-        name: 'Pole1Pin1',
+        name: 'Pin1',
         materialPath: 'DarkGray',
         position: [-0.913, 7.154, 0.011],
         scale: 0.081,
       },
       {
-        name: 'Pole1Pin2',
+        name: 'Pin1b',
+        materialPath: 'DarkGray',
+        position: [-0.913, 7.154, 0.011],
+        scale: 0.081,
+      },
+      {
+        name: 'Pin2',
         materialPath: 'DarkGray',
         position: [-0.378, 7.154, 0.011],
         scale: 0.081,
       },
       {
-        name: 'Pole1Pin3',
+        name: 'Pin2b',
+        materialPath: 'DarkGray',
+        position: [-0.378, 7.154, 0.011],
+        scale: 0.081,
+      },
+      {
+        name: 'Pin3',
         materialPath: 'DarkGray',
         position: [0.865, 7.154, 0.011],
         scale: 0.081,
       },
       {
-        name: 'Pole1Pin4',
+        name: 'Pin3b',
+        materialPath: 'DarkGray',
+        position: [0.865, 7.154, 0.011],
+        scale: 0.081,
+      },
+      {
+        name: 'Pin4',
         materialPath: 'DarkGray',
         position: [0.006, 6.336, 0.216],
         scale: 0.081,
       },
     ],
     partDetails: {
-      Pole1Body: {},
-      Pole1Pin1: {
+      Body: {},
+      Pin1: {
         role: 'slot',
         roles: ['pin'],
         type: 'physical',
       },
-      Pole1Pin2: {
+      Pin1b: {
+        role: 'slot',
+        roles: ['pin'],
+        type: 'placeholder',
+      },
+      Pin2: {
         roles: ['pin'],
         role: 'slot',
         type: 'physical',
       },
-      Pole1Pin3: {
+      Pin2b: {
+        roles: ['pin'],
+        role: 'slot',
+        type: 'placeholder',
+      },
+      Pin3: {
         role: 'slot',
         roles: ['pin'],
         type: 'physical',
       },
-      Pole1Pin4: {
+      Pin3b: {
+        role: 'slot',
+        roles: ['pin'],
+        type: 'placeholder',
+      },
+      Pin4: {
         role: 'slot',
         roles: ['pin'],
         type: 'physical',
       },
     },
     type: 'pole-1',
+  },
+  {
+    categoryName: 'poles',
+    decorations: ['devices'],
+    path: '/pole_2.glb',
+    parts: [
+      {
+        name: 'Body',
+        materialPath: 'Pole2Palette',
+        position: [0.128, 0.017, -0.123],
+        rotation: [0.065, 0, 0.064],
+        scale: [0.065, 2.446, 0.065],
+      },
+      {
+        name: 'Pin1',
+        materialPath: 'Pole2Palette',
+        position: [0.926, 6.745, -0.43],
+        rotation: [0.065, 0, 0.064],
+        scale: [0.065, 2.446, 0.065],
+      },
+      {
+        name: 'Pin1b',
+        materialPath: 'Pole2Palette',
+        position: [0.926, 6.745, -0.43],
+        rotation: [0.065, 0, 0.064],
+        scale: [0.065, 2.446, 0.065],
+      },
+      {
+        name: 'Pin2',
+        materialPath: 'Pole2Palette',
+        position: [0.926, 5.37, -0.43],
+        rotation: [0.065, 0, 0.064],
+        scale: [0.065, 2.446, 0.065],
+      },
+      {
+        name: 'Pin2b',
+        materialPath: 'Pole2Palette',
+        position: [0.926, 5.37, -0.43],
+        rotation: [0.065, 0, 0.064],
+        scale: [0.065, 2.446, 0.065],
+      },
+      {
+        name: 'Pin3',
+        materialPath: 'Pole2Palette',
+        position: [-0.637, 5.942, -0.43],
+        rotation: [0.065, 0, 0.064],
+        scale: [0.065, 2.446, 0.065],
+      },
+      {
+        name: 'Pin3b',
+        materialPath: 'Pole2Palette',
+        position: [-0.637, 5.942, -0.43],
+        rotation: [0.065, 0, 0.064],
+        scale: [0.065, 2.446, 0.065],
+      },
+    ],
+    partDetails: {
+      Body: {},
+      Pin1: {
+        role: 'slot',
+        roles: ['pin'],
+        type: 'physical',
+      },
+      Pin1b: {
+        role: 'slot',
+        roles: ['pin'],
+        type: 'placeholder',
+      },
+      Pin2: {
+        roles: ['pin'],
+        role: 'slot',
+        type: 'physical',
+      },
+      Pin2b: {
+        roles: ['pin'],
+        role: 'slot',
+        type: 'placeholder',
+      },
+      Pin3: {
+        role: 'slot',
+        roles: ['pin'],
+        type: 'physical',
+      },
+      Pin3b: {
+        role: 'slot',
+        roles: ['pin'],
+        type: 'placeholder',
+      },
+    },
+    type: 'pole-2',
   },
   // {
   //   categoryName: 'weather-heads',

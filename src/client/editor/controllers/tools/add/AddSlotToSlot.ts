@@ -6,7 +6,11 @@ import MeshUtils from '@/client/editor/utils/MeshUtils';
 import VectorUtils from '@/client/editor/utils/vectorUtils';
 import { Vector3 } from 'three';
 import AddBlock from './AddBlock';
-import MathUtils from '@/client/editor/utils/mathUtils';
+import BlockUtils from '@/client/editor/utils/BlockUtils';
+import Block from '@/client/editor/types/Block';
+import BlockAddMethod from '@/common/model_types/BlockAddMethod';
+import BlockType, { ModelPart, ModelPartRole } from '@/client/editor/types/BlockType';
+import Num3 from '@/client/editor/types/Num3';
 
 class AddSlotToSlot extends AddBlock {
   constructor(
@@ -48,25 +52,9 @@ class AddSlotToSlot extends AddBlock {
 
     const targetPart = targetBlock.parts.find((part) => part.name === targetPartName);
 
-    // const rotatedPart = BlockUtils.findMatchingSlot(targetBlock, targetPartIndex, newBlockType);
-
     if (!targetPart) {
       return edit;
     }
-
-    // const { part: targetPart, rotation: targetRotation } = rotatedPart;
-
-    const mesh = this.sceneStore.getObj3d(targetBlock.id);
-
-    const partMesh = MeshUtils.findByName(mesh, targetPart?.name);
-    const pos = new Vector3();
-    partMesh.getWorldPosition(pos);
-
-    // const finalRotation = rotation + toDegree(block.rotation[1]);
-    const targetPos = targetPart.position; //VectorUtils.rotate(targetPart.position || [0, 0, 0], targetRotation) || [0, 0, 0];
-    const targetX = -targetPos[0];
-    const targetZ = -targetPos[2];
-    const targetY = -targetPos[1];
 
     const sourcePartName = Object.entries(newBlockType.partDetails)?.find(([, part]) =>
       part?.roles?.includes(addMethod.sourcePartRole!),
@@ -78,30 +66,21 @@ class AddSlotToSlot extends AddBlock {
       );
     }
 
-    const sourcePartPos = newBlockType.parts.find((part) => part.name === sourcePartName)?.position || [0, 0, 0];
-
-    // const targetPartOrientation = newBlockType.partDetails[targetPart.index]?.orientation || 0;
-    // const idealNextPartOrientation = MathUtils.normalizeAngle(targetPartOrientation + 180);
-    // const idealNextSelectedPart = newBlockType.parts.find(
-    //   (part) => newBlockType.partDetails[part.index]?.orientation === idealNextPartOrientation,
-    // );
-
-    // if (!idealNextSelectedPart) {
-    //   idealNextSelectedPart = newBlockType.parts
-    //     .filter((part) => newBlockType.partDetails[part.index]?.role === 'slot')
-    //     .find((part) => part.name !== targetPart.name);
-    // }
-
     edit.select(null);
+
+    const [sourcePart, rotation] = this.calculateSourcePartWithRotation(
+      addMethod.connectionType,
+      addMethod.sourcePartRole,
+      targetBlock,
+      targetPart,
+      newBlockType,
+    );
 
     this.factoryService.create(edit, newBlockType.type, {
       block: {
-        parentConnection: {
-          block: targetBlock.id,
-          part: targetPartName,
-        },
-        position: VectorUtils.add(targetPos, MathUtils.negate(sourcePartPos)),
-        // rotation: [0, targetRotation, 0],
+        ...this.calculateSourceConnection(addMethod, targetBlock, targetPart),
+        position: this.calculatePosition(addMethod, targetBlock, targetPart, sourcePart, rotation[1]),
+        rotation: rotation,
       },
     });
 
@@ -110,18 +89,103 @@ class AddSlotToSlot extends AddBlock {
     edit.updateBlock(
       targetBlock.id,
       {
-        childConnections: [
-          {
-            childBlock: newBlock.id,
-          },
-        ],
+        ...this.calculateTargetConnection(addMethod, newBlock),
       },
       { arrayMergeStrategy: 'merge' },
     );
 
-    // edit.select(edit.getLastBlock().id, sourcePartInfo?.index);
+    edit.select(edit.getLastBlock().id);
 
     return edit;
+  }
+
+  private calculatePosition(
+    addMethod: BlockAddMethod,
+    targetBlock: Block,
+    targetPart: ModelPart,
+    sourcePart: ModelPart,
+    sourceRotation: number,
+  ) {
+    let targetPartPos: Num3 = [0, 0, 0];
+    let sourcePartPos: Num3 = [0, 0, 0];
+    switch (addMethod.connectionType) {
+      case 'sibling':
+        const mesh = this.sceneStore.getObj3d(targetBlock.id);
+        const partMesh = MeshUtils.findByName(mesh, targetPart?.name);
+        const pos = new Vector3();
+        partMesh.getWorldPosition(pos);
+        targetPartPos = [pos.x, pos.y, pos.z];
+        const sourcePos = VectorUtils.rotate(sourcePart.position || [0, 0, 0], sourceRotation) || [0, 0, 0];
+        sourcePartPos = [-sourcePos[0], -sourcePos[1], -sourcePos[2]];
+        break;
+      case 'parent-child':
+        targetPartPos = targetPart.position;
+        sourcePartPos = VectorUtils.negate(sourcePart.position);
+        break;
+    }
+
+    return VectorUtils.add(targetPartPos, sourcePartPos);
+  }
+
+  private calculateSourcePartWithRotation(
+    connectionType: BlockAddMethod['connectionType'],
+    sourcePartRole: ModelPartRole,
+    targetBlock: Block,
+    targetPart: ModelPart,
+    newBlockType: BlockType,
+  ): [ModelPart, Num3] {
+    const sourceParts = newBlockType?.parts?.filter((part) =>
+      newBlockType.partDetails[part.name]?.roles?.includes(sourcePartRole),
+    );
+
+    switch (connectionType) {
+      case 'parent-child':
+        return [sourceParts[0], [0, 0, 0]];
+      case 'sibling':
+      default:
+        const rotatedPart = BlockUtils.findMatchingSlot(targetBlock, targetPart.name, newBlockType, sourceParts);
+
+        if (!rotatedPart?.part) {
+          throw new Error(`Source part with role ${sourcePartRole} not found on block type ${newBlockType}`);
+        }
+
+        return [rotatedPart.part, [0, rotatedPart?.rotation || 0, 0]];
+    }
+  }
+
+  private calculateSourceConnection(
+    addMethod: BlockAddMethod,
+    targetBlock: Block,
+    targetPart: ModelPart,
+  ): Partial<Block> {
+    switch (addMethod.connectionType) {
+      case 'parent-child':
+        return {
+          parentConnection: {
+            block: targetBlock.id,
+            part: targetPart.name,
+          },
+        };
+      case 'sibling':
+      default:
+        return {};
+    }
+  }
+
+  private calculateTargetConnection(addMethod: BlockAddMethod, newBlock: Block): Partial<Block> {
+    switch (addMethod.connectionType) {
+      case 'parent-child':
+        return {
+          childConnections: [
+            {
+              childBlock: newBlock.id,
+            },
+          ],
+        };
+      case 'sibling':
+      default:
+        return {};
+    }
   }
 
   private blockStore: BlockStore;

@@ -10,6 +10,7 @@ type BlockAddMethod = {
   targetCategory?: BlockCategoryName;
   sourcePartRole?: ModelPartRole;
   targetPartRole?: ModelPartRole;
+  connectionType?: 'parent-child' | 'sibling';
 };
 
 export default BlockAddMethod;

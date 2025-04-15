@@ -9,37 +9,37 @@ const transformerSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | '
   {
     categoryName: 'transformers',
     decorations: ['devices'],
-    path: '/distribution_transformer.glb',
+    path: '/distribution_transformer_single_1.glb',
     parts: [
       {
-        name: 'Distribution_transformer1Body',
+        name: 'Body',
         materialPath: 'Material',
         rotation: [0, 0.588, 0],
         scale: [0.526, 0.689, 0.526],
       },
       {
-        name: 'Distribution_transformer1Pin3',
+        name: 'Pin3',
         materialPath: 'Material',
         position: [0.233, 0.957, 0.634],
         rotation: [0, 0.588, 0],
         scale: [0.526, 0.689, 0.526],
       },
       {
-        name: 'Distribution_transformer1Pin2',
+        name: 'Pin2',
         materialPath: 'Material',
         position: [-0.05, 0.957, 0.68],
         rotation: [0, 0.588, 0],
         scale: [0.526, 0.689, 0.526],
       },
       {
-        name: 'Distribution_transformer1Pin1',
+        name: 'Pin1',
         materialPath: 'Material',
         position: [-0.327, 0.957, 0.596],
         rotation: [0, 0.588, 0],
         scale: [0.526, 0.689, 0.526],
       },
       {
-        name: 'Distribution_transformer1Join',
+        name: 'Join',
         materialPath: 'Material',
         position: [0.058, 0.958, -0.501],
         rotation: [0, 0.588, 0],
@@ -47,11 +47,11 @@ const transformerSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | '
       },
     ],
     partDetails: {
-      Distribution_transformer1Join: {
+      Join: {
         roles: ['transformer-holder'],
       },
     },
-    type: 'distribution-transformer-single-phased',
+    type: 'distribution-transformer-single-1',
   },
 ];
 

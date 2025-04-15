@@ -1,6 +1,10 @@
 import Num3 from '../types/Num3';
 
 class MathUtils {
+  constructor(vector: Num3) {
+    this.vector = vector;
+  }
+
   static normalizeAngle(angle: number) {
     return ((angle % 360) + 360) % 360;
   }
@@ -12,6 +16,34 @@ class MathUtils {
   static negate(pos: Num3): Num3 {
     return pos.map((coord) => -coord) as Num3;
   }
+
+  add(other: Num3) {
+    return this.vector.map((val, i) => val + other[i]);
+  }
+
+  // returns -180 to 180 deg
+  angle2(other: Num3) {
+    const [x1, , z1] = this.vector;
+    const [x2, , z2] = other;
+
+    const dot = x1 * x2 + z1 * z2;
+    const det = x1 * z2 - z1 * x2; // This is the 2D cross product
+
+    const angleRad = Math.atan2(det, dot);
+    const angleDeg = angleRad * (180 / Math.PI);
+
+    return angleDeg;
+  }
+
+  dot2(other: Num3) {
+    return this.vector[0] * other[0] + this.vector[2] * other[2];
+  }
+
+  sub2(other: Num3): Num3 {
+    return [this.vector[0] - other[0], this.vector[1], this.vector[2] - other[2]];
+  }
+
+  private vector: Num3;
 }
 
 export default MathUtils;

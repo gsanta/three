@@ -49,6 +49,7 @@ CREATE TABLE "BlockAddMethodsOnCategories" (
     "targetCategoryName" TEXT,
     "targetPartRole" TEXT,
     "sourcePartRole" TEXT,
+    "connectionType" TEXT,
 
     CONSTRAINT "BlockAddMethodsOnCategories_pkey" PRIMARY KEY ("addMethodName","sourceCategoryName")
 );

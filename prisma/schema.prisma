@@ -55,6 +55,7 @@ model BlockAddMethodsOnCategories {
   targetCategoryName        String?
   targetPartRole            String?
   sourcePartRole            String?
+  connectionType            String?
 
   @@id([addMethodName, sourceCategoryName])
 }

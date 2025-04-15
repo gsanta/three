@@ -30,6 +30,7 @@ export const blockCategorySlice = createSlice({
             sourcePartRole: category.sourcePartRole as ModelPartRole,
             targetPartRole: category.targetPartRole as ModelPartRole,
             targetCategory: category.targetCategoryName,
+            connectionType: category.connectionType,
           });
         });
       });

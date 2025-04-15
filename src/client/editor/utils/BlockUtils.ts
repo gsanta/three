@@ -1,5 +1,5 @@
 import Block from '../types/Block';
-import BlockType, { ModelPart } from '../types/BlockType';
+import BlockType, { ModelPart, ModelPartRole } from '../types/BlockType';
 import MathUtils, { toDegree } from './mathUtils';
 
 type RotatedPart = { part: ModelPart; rotation: number };
@@ -19,28 +19,32 @@ class BlockUtils {
     return Object.keys(block.partDetails).find((partIndex) => block.partDetails[partIndex]?.name === partName);
   }
 
-  static findMatchingSlot(sourceBlock: Block, sourcePartName: string, target: BlockType): RotatedPart | undefined {
-    const sourcePart = sourceBlock.parts.find((part) => part.name === sourcePartName);
-    const orientation = sourceBlock.partDetails[sourcePart?.name || '']?.orientation || 0;
-    const rotation = toDegree(sourceBlock.rotation[1]);
-    const realRotation = MathUtils.normalizeAngle(orientation - rotation);
+  static findMatchingSlot(
+    targetBlock: Block,
+    targetPartName: string,
+    source: BlockType,
+    sourcePartCandidates: ModelPart[],
+  ): RotatedPart | undefined {
+    const targetPart = targetBlock.parts.find((part) => part.name === targetPartName);
+    const initialRotation = targetBlock.partDetails[targetPart?.name || '']?.orientation || 0;
+    const rotation = toDegree(targetBlock.rotation[1]);
+
+    const realRotation = MathUtils.normalizeAngle(initialRotation - rotation);
     const bestMatch = MathUtils.normalizeAngle(realRotation + 180);
 
-    const slots = target?.parts?.filter((part) => target.partDetails[part.name]?.role === 'slot');
+    const result = sourcePartCandidates.reduce((rotatedPart: RotatedPart | undefined, slot) => {
+      let sourceRotation = 0;
 
-    const result = slots.reduce((rotatedPart: RotatedPart | undefined, slot) => {
-      let targetRotation = 0;
+      const sourceInitialRotation = source.partDetails[slot?.name || '']?.orientation || 0;
 
-      const targetOrientation = target.partDetails[slot?.name || '']?.orientation || 0;
-
-      if (targetOrientation > bestMatch) {
-        targetRotation = targetOrientation - bestMatch;
+      if (sourceInitialRotation > bestMatch) {
+        sourceRotation = sourceInitialRotation - bestMatch;
       } else {
-        targetRotation = targetOrientation + (360 - bestMatch);
+        sourceRotation = sourceInitialRotation + (360 - bestMatch);
       }
 
-      if (!rotatedPart || rotatedPart.rotation > targetRotation) {
-        return { part: slot, rotation: targetRotation };
+      if (!rotatedPart || rotatedPart.rotation > sourceRotation) {
+        return { part: slot, rotation: sourceRotation };
       }
 
       return rotatedPart;

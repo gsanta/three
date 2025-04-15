@@ -12,6 +12,7 @@ const blockAddMethodsOnCategoriesSeeds = [
     sourceCategoryName: 'transformers',
     sourcePartRole: 'transformer-holder',
     targetPartRole: 'transformer-holder',
+    connectionType: 'parent-child',
   },
   {
     addMethodName: 'add-block-to-block',
@@ -23,6 +24,15 @@ const blockAddMethodsOnCategoriesSeeds = [
     sourceCategoryName: 'roads',
     sourcePartRole: 'road-slot',
     targetPartRole: 'road-slot',
+    connectionType: 'sibling',
+  },
+  {
+    addMethodName: 'add-block-to-block',
+    sourceCategoryName: 'houses',
+  },
+  {
+    addMethodName: 'add-block-to-block',
+    sourceCategoryName: 'plants',
   },
 ];
 

@@ -11,6 +11,12 @@ const blockCategories = [
   {
     name: 'roads',
   },
+  {
+    name: 'houses',
+  },
+  {
+    name: 'plants',
+  },
 ];
 
 export default blockCategories;

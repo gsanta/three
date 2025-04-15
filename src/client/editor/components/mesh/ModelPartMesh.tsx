@@ -21,7 +21,7 @@ const ModelPartMesh = ({ block, materials, materialProps, nodes, onPointerEnter,
   const partInfo = block.partDetails[part.name];
 
   const material = useMaterial({ materials, materialProps, nodes, part, isSelected: block.isSelected });
-  const geometry = useGeometry(nodes, part);
+  const geometry = useGeometry(nodes, part, block);
 
   return (
     <Select

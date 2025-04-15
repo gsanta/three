@@ -32,6 +32,7 @@ type Block<S extends ShapeType = ShapeType> = {
 
   conduitConnections: {
     block: string;
+    thisPart?: string;
   }[];
 
   conduitParentConnections: {

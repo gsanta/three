@@ -1,17 +1,12 @@
 import { PrismaClient } from '@prisma/client';
 import roadTemplateSeeds from './block_types/roadTemplateSeeds';
-import buildingTempalteSeeds from './block_types/buildingTemplateSeeds';
-import lampTempalteSeeds from './block_types/lampTemplateSeeds';
 import poleTempalteSeeds from './block_types/poleTemplateSeeds';
-import plantTempalteSeeds from './block_types/plantTemplateSeeds';
-import homeElectrics from './block_types/homeElectrics';
-import electricityProviders from './block_types/electricityProviders';
-import roomSeeds from './block_types/roomSeeds';
-import furnitureSeeds from './block_types/furnitureSeeds';
 import transformerSeeds from './block_types/transformerSeeds';
 import blockCategories from './blockCategories';
 import blockAddMethodsSeeds from './blockAddMethodsSeeds';
 import blockAddMethodsOnCategoriesSeeds from './blockAddMethodsOnCategoriesSeeds';
+import houseSeeds from './block_types/houseSeeds';
+import plantSeeds from './block_types/plantSeeds';
 
 const prisma = new PrismaClient();
 const main = async () => {
@@ -117,6 +112,22 @@ const main = async () => {
   }
 
   for (const seed of transformerSeeds) {
+    await prisma.blockType.upsert({
+      where: { type: seed.type },
+      update: {},
+      create: seed,
+    });
+  }
+
+  for (const seed of houseSeeds) {
+    await prisma.blockType.upsert({
+      where: { type: seed.type },
+      update: {},
+      create: seed,
+    });
+  }
+
+  for (const seed of plantSeeds) {
     await prisma.blockType.upsert({
       where: { type: seed.type },
       update: {},

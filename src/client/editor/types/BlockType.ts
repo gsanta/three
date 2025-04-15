@@ -32,6 +32,7 @@ export type ModelPartInfo = {
   allowMovement?: Axis[];
   hide?: boolean;
   isSelected?: boolean;
+  isConnected?: boolean;
   joins?: [string, string];
   orientation: number;
   role?: 'slot';
