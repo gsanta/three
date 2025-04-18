@@ -1,5 +1,5 @@
 import Icon from '../../../../common/components/icon/Icon';
-import { Box, Button, ButtonGroup, IconButton, Menu, MenuButton, MenuItem, MenuList, Tooltip } from '@chakra-ui/react';
+import { Box, ButtonGroup, IconButton, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import ExportDialog from './ExportDialog';
 import ImportDialog from './import/ImportDialog';
@@ -27,7 +27,7 @@ const SettingsPanel = () => {
   };
 
   return (
-    <Box display="flex" gap="4">
+    <Box alignItems="center" display="flex" gap="4">
       <Menu>
         <MenuButton
           paddingInline="4"
@@ -42,51 +42,50 @@ const SettingsPanel = () => {
           <MenuItem onClick={() => setExportDialogOpen(true)}>Export</MenuItem>
         </MenuList>
       </Menu>
+      <div className="divider divider-horizontal" />
       <ButtonGroup>
-        <Tooltip label="Save to server">
-          <Button variant="outline" size="sm" onClick={() => saveSnapshot({})}>
+        <div className="tooltip tooltip-bottom" data-tip="Save to server">
+          <button className="btn btn-square btn-secondary" onClick={() => saveSnapshot({})}>
             <Icon name="BiCloudUpload" />
-          </Button>
-        </Tooltip>
-        <Tooltip label="Download from server">
-          <Button variant="outline" size="sm" onClick={() => refetchSnapshot({})}>
+          </button>
+        </div>
+        <div className="tooltip tooltip-bottom" data-tip="Download from server">
+          <button className="btn btn-square btn-secondary" onClick={() => refetchSnapshot({})}>
             <Icon name="BiCloudDownload" />
-          </Button>
-        </Tooltip>
+          </button>
+        </div>
       </ButtonGroup>
+      <div className="divider divider-horizontal" />
       <ButtonGroup>
-        <Tooltip label="Undo">
-          <Button variant="outline" size="sm" onClick={handleUndo}>
+        <div className="tooltip tooltip-bottom" data-tip="Undo">
+          <button className="btn btn-square btn-secondary" onClick={handleUndo}>
             <Icon name="BiUndo" />
-          </Button>
-        </Tooltip>
-        <Tooltip label="Redo">
-          <Button variant="outline" size="sm" onClick={handleRedo}>
+          </button>
+        </div>
+        <div className="tooltip tooltip-bottom" data-tip="Redo">
+          <button className="btn btn-square btn-secondary" onClick={handleRedo}>
             <Icon name="BiRedo" />
-          </Button>
-        </Tooltip>
+          </button>
+        </div>
       </ButtonGroup>
+      <div className="divider divider-horizontal" />
       <ButtonGroup>
-        <Tooltip label="Zoom in">
-          <Button variant="outline" size="sm" onClick={() => {}}>
+        <div className="tooltip tooltip-bottom" data-tip="Zoom in">
+          <button className="btn btn-square btn-secondary">
             <Icon name="BiZoomIn" />
-          </Button>
-        </Tooltip>
-        <Tooltip label="Reset zoom to 1">
-          <Button variant="outline" size="sm" onClick={() => {}}>
-            Reset
-          </Button>
-        </Tooltip>
-        <Tooltip label="Fit drawing to viewport">
-          <Button variant="outline" size="sm" onClick={() => {}}>
-            Fit
-          </Button>
-        </Tooltip>
-        <Tooltip label="Zoom out">
-          <Button variant="outline" size="sm" onClick={() => {}}>
+          </button>
+        </div>
+        <div className="tooltip tooltip-bottom" data-tip="Reset zoom to 1">
+          <button className="btn btn-secondary">Reset</button>
+        </div>
+        <div className="tooltip tooltip-bottom" data-tip="Fit drawing to viewport">
+          <button className="btn btn-secondary">Fit</button>
+        </div>
+        <div className="tooltip tooltip-bottom" data-tip="Zoom out">
+          <button className="btn btn-square btn-secondary">
             <Icon name="BiZoomOut" />
-          </Button>
-        </Tooltip>
+          </button>
+        </div>
       </ButtonGroup>
       <ImportDialog isOpen={isImportDialogOpen} onClose={closeImportDialog} />
       <ExportDialog isOpen={isExportDialogOpen} onClose={() => setExportDialogOpen(false)} />

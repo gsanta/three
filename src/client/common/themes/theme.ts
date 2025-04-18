@@ -16,8 +16,8 @@ import { inputTheme } from './Input.theme';
 
 const theme = extendTheme({
   config: {
-    initialColorMode: 'dark',
-    useSystemColorMode: false,
+    initialColorMode: 'light',
+    useSystemColorMode: true,
   },
   styles: {
     global: {

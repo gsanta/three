@@ -12,6 +12,21 @@ type UseEmailLoginProps = {
 };
 
 const useEmailLogin = ({ onClose }: UseEmailLoginProps) => {
+  const {
+    clearErrors,
+    register,
+    handleSubmit,
+    formState: { errors: formErrors },
+    reset,
+  } = useForm<LoginSchema>({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+    resolver: zodResolver(loginSchema),
+    mode: 'onSubmit',
+  });
+
   const { mutate, error, isPending } = useMutation<unknown, AxiosError<ServerError>, LoginSchema>({
     mutationFn: async ({ email, password }) => {
       const resp = await signIn('credentials', {
@@ -23,17 +38,11 @@ const useEmailLogin = ({ onClose }: UseEmailLoginProps) => {
     },
     onSuccess() {
       onClose();
+      reset({
+        email: '',
+        password: '',
+      });
     },
-  });
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors: formErrors },
-    reset,
-  } = useForm<LoginSchema>({
-    resolver: zodResolver(loginSchema),
-    mode: 'onBlur',
   });
 
   const loginEmail = useCallback(
@@ -42,6 +51,11 @@ const useEmailLogin = ({ onClose }: UseEmailLoginProps) => {
     },
     [mutate],
   );
+
+  const handleReset = useCallback(() => {
+    reset();
+    clearErrors();
+  }, [clearErrors, reset]);
 
   return {
     query: {
@@ -52,7 +66,7 @@ const useEmailLogin = ({ onClose }: UseEmailLoginProps) => {
     form: {
       register,
       handleSubmit,
-      reset,
+      reset: handleReset,
       formErrors,
     },
   };

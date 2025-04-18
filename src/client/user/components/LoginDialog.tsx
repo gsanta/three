@@ -1,44 +1,49 @@
-import Dialog, { DialogBody, DialogButtons, DialogFooter } from '../../common/components/Dialog';
-import { FormControl, FormLabel, Input, FormErrorMessage, Button, Box } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import React from 'react';
 import ErrorMessage from '../../common/components/ErrorMessage';
 import useEmailLogin from '../hooks/useEmailLogin';
 import { signIn } from 'next-auth/react';
 
-type LoginDialogProps = {
-  isOpen: boolean;
-  onClose(): void;
-};
+const LoginDialog = () => {
+  const closeDialog = () => {
+    const dialog = document.getElementById('login-dialog') as HTMLDialogElement;
+    dialog.close();
+  };
 
-const LoginDialog = ({ isOpen, onClose }: LoginDialogProps) => {
   const {
     form: { handleSubmit, formErrors, register, reset: resetForm },
     query: { loginEmail, loginEmailError, isLoginEmailLoding },
   } = useEmailLogin({
-    onClose,
+    onClose: closeDialog,
   });
 
   const handleClose = () => {
     resetForm();
-    onClose();
+    closeDialog();
   };
 
   return (
-    <Dialog isOpen={isOpen} onClose={handleClose} title="Log in">
-      <form onSubmit={handleSubmit(loginEmail)}>
-        <DialogBody display="flex" flexDir="column" gap="1rem">
-          <FormControl isInvalid={Boolean(formErrors.email)}>
-            <FormLabel>Email</FormLabel>
-            <Input {...register('email')} />
-            <FormErrorMessage>{formErrors.email?.message}</FormErrorMessage>
-          </FormControl>
-          <FormControl isInvalid={Boolean(formErrors.password)}>
-            <FormLabel>Password</FormLabel>
-            <Input type="password" {...register('password')} />
-            <FormErrorMessage>{formErrors.password?.message}</FormErrorMessage>
-          </FormControl>
+    <dialog id="login-dialog" className="modal">
+      <div className="modal-box bg-base-200" onSubmit={handleSubmit(loginEmail)}>
+        <h3 className="text-lg font-bold">Log in</h3>
+        <div className="divider" />
+        <div className="flex flex-col gap-4">
+          <fieldset className="fieldset">
+            <legend className="fieldset-legend">Email</legend>
+            <input type="text" className="input" placeholder="Type here" {...register('email')} />
+            {formErrors.email?.message && <p className="fieldset-label text-error">{formErrors.email?.message}</p>}
+          </fieldset>
+          <fieldset className="fieldset">
+            <legend className="fieldset-legend">Password</legend>
+            <input type="text" className="input" placeholder="Type here" {...register('password')} />
+            {formErrors.password?.message && (
+              <p className="fieldset-label text-error">{formErrors.password?.message}</p>
+            )}
+          </fieldset>
           <Box display="flex" marginTop="4" justifyContent="space-around">
-            <Button onClick={() => signIn('google')}>Log in with google</Button>
+            <button className="btn btn-accent" onClick={() => signIn('google')}>
+              Log in with google
+            </button>
           </Box>
           {loginEmailError && (
             <ErrorMessage
@@ -48,19 +53,19 @@ const LoginDialog = ({ isOpen, onClose }: LoginDialogProps) => {
               }
             />
           )}
-        </DialogBody>
-        <DialogFooter>
-          <DialogButtons>
-            <Button size="sm" onClick={handleClose} isDisabled={isLoginEmailLoding}>
-              Close
-            </Button>
-            <Button size="sm" colorScheme="orange" type="submit" isLoading={isLoginEmailLoding}>
-              Log in
-            </Button>
-          </DialogButtons>
-        </DialogFooter>
-      </form>
-    </Dialog>
+        </div>
+        <div className="modal-action">
+          <button className={`btn ${isLoginEmailLoding ? 'btn-disabled' : ''}`} onClick={handleClose}>
+            Close
+          </button>
+          <form>
+            <button className={`btn btn-primary`} type="submit">
+              {isLoginEmailLoding ? <span className="loading loading-spinner" /> : `Log in`}
+            </button>
+          </form>
+        </div>
+      </div>
+    </dialog>
   );
 };
 

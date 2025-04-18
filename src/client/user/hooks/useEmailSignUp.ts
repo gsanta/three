@@ -26,7 +26,7 @@ const useEmailSignUp = ({ onClose }: UseEmailSignUpProps) => {
       password: '',
       passwordConfirmation: '',
     },
-    mode: 'onTouched',
+    mode: 'onSubmit',
   });
 
   const { mutate, isPending, error } = useMutation<unknown, AxiosError<ServerError>, RegisterSchema>({
@@ -37,6 +37,7 @@ const useEmailSignUp = ({ onClose }: UseEmailSignUpProps) => {
     },
     onSuccess() {
       onClose();
+      reset();
     },
   });
 

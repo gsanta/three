@@ -1,5 +1,6 @@
 import BlockCategoriesResponse from '@/common/response_types/BlockCategoriesResponse';
 import './app.scss';
+import '../globals.css';
 import EditorPage from './EditorPage';
 import db from '@/bff/config/db';
 import BlockAddMethodsResponse from '@/common/response_types/BlockAddMethodsResponse';

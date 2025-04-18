@@ -1,58 +1,73 @@
-import { Avatar, Button, ButtonGroup, useDisclosure, useToast } from '@chakra-ui/react';
 import SignUpDialog from './SignUpDialog';
 import LoginDialog from './LoginDialog';
 import UserDialog from './UserDialog';
 import { signOut, useSession } from 'next-auth/react';
+import { useRef } from 'react';
+import Toast, { ToastRef } from '@/client/common/components/Toast';
 
 const UserSettings = () => {
-  const toast = useToast();
   const { data: session } = useSession();
 
   const isLoggedIn = session?.user?.email;
 
-  const { isOpen: isSignInDialogOpen, onOpen: onSignInDialogOpen, onClose: onSignInDialogClose } = useDisclosure();
-  const { isOpen: isSignUpDialogOpen, onOpen: onSignUpDialogOpen, onClose: onSignUpDialogClose } = useDisclosure();
-  const { isOpen: isUserDialogOpen, onOpen: onUserDialogOpen, onClose: onUserDialogClose } = useDisclosure();
+  const toastRef = useRef<ToastRef>();
 
   const handleLogout = async () => {
     try {
       await signOut({ redirect: false });
-      toast({
-        title: 'Logged out successfully',
-        position: 'top',
-      });
+      toastRef.current?.execute('Logged out successfully');
     } catch {
-      toast({
-        title: 'Failed to log out',
-        position: 'top',
-      });
+      toastRef.current?.execute('Logged out successfully');
     }
   };
 
   return (
     <>
       {isLoggedIn ? (
-        <ButtonGroup>
-          <Button size="sm" variant="ghost" onClick={onUserDialogOpen}>
-            <Avatar name="Dan Abrahmov" size="sm" />
-          </Button>
-          <Button size="sm" onClick={handleLogout}>
+        <div className="flex items-center gap-3">
+          <button
+            className="btn btn-square btn-ghost"
+            onClick={() => {
+              const dialog = document.getElementById('user-dialog') as HTMLDialogElement;
+              dialog.showModal();
+            }}
+          >
+            <div className="avatar avatar-placeholder">
+              <div className="bg-neutral text-neutral-content w-10 rounded-full">
+                <span>SY</span>
+              </div>
+            </div>
+          </button>
+          <button className="btn" onClick={handleLogout}>
             Log out
-          </Button>
-        </ButtonGroup>
+          </button>
+        </div>
       ) : (
-        <ButtonGroup>
-          <Button size="sm" onClick={onSignInDialogOpen}>
+        <div className="flex items-center gap-3">
+          <button
+            className="btn"
+            onClick={() => {
+              const dialog = document.getElementById('login-dialog') as HTMLDialogElement;
+              dialog.showModal();
+            }}
+          >
             Log in
-          </Button>
-          <Button size="sm" onClick={onSignUpDialogOpen}>
+          </button>
+          <button
+            className="btn"
+            onClick={() => {
+              const dialog = document.getElementById('signup-dialog') as HTMLDialogElement;
+              dialog.showModal();
+            }}
+          >
             Sign up
-          </Button>
-        </ButtonGroup>
+          </button>
+        </div>
       )}
-      <LoginDialog isOpen={isSignInDialogOpen} onClose={onSignInDialogClose} />
-      <SignUpDialog isOpen={isSignUpDialogOpen} onClose={onSignUpDialogClose} />
-      <UserDialog isOpen={isUserDialogOpen} onClose={onUserDialogClose} />
+      <LoginDialog />
+      <SignUpDialog />
+      <UserDialog />
+      <Toast ref={toastRef} />
     </>
   );
 };

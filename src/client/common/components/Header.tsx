@@ -10,9 +10,10 @@ const Header = () => {
       borderColor="gray.600"
       display="flex"
       justifyContent="space-between"
-      height="40px"
+      height="50px"
       paddingInline="1"
       paddingBlock="1"
+      className="bg-base-300"
     >
       <SettingsPanel />
       <UserSettings />

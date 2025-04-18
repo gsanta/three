@@ -1,44 +1,49 @@
-import Dialog, { DialogBody, DialogButtons, DialogFooter } from '../../common/components/Dialog';
-import { FormControl, FormLabel, Input, FormErrorMessage, Button, Box } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import React from 'react';
 import useEmailSignUp from '../hooks/useEmailSignUp';
 import ErrorMessage from '../../common/components/ErrorMessage';
 
-type SignUpDialogProps = {
-  isOpen: boolean;
-  onClose(): void;
-};
+const SignUpDialog = () => {
+  const closeDialog = () => {
+    const dialog = document.getElementById('signup-dialog') as HTMLDialogElement;
+    dialog.close();
+  };
 
-const SignUpDialog = ({ isOpen, onClose }: SignUpDialogProps) => {
   const {
     form: { handleSubmit, formErrors, register, reset },
     query: { registerEmail, registerEmailError, isRegisterEmailLoading },
-  } = useEmailSignUp({ onClose });
+  } = useEmailSignUp({ onClose: closeDialog });
 
   const handleClose = () => {
     reset();
-    onClose();
+    closeDialog();
   };
 
   return (
-    <Dialog isOpen={isOpen} onClose={handleClose} title="Sign up">
-      <form onSubmit={handleSubmit(registerEmail)}>
-        <DialogBody display="flex" flexDirection="column" gap="1rem">
-          <FormControl isInvalid={Boolean(formErrors.email)}>
-            <FormLabel>Email</FormLabel>
-            <Input {...register('email')} />
-            <FormErrorMessage>{formErrors.email?.message}</FormErrorMessage>
-          </FormControl>
-          <FormControl isInvalid={Boolean(formErrors.password)}>
-            <FormLabel>Password</FormLabel>
-            <Input type="password" {...register('password')} />
-            <FormErrorMessage>{formErrors.password?.message}</FormErrorMessage>
-          </FormControl>
-          <FormControl isInvalid={Boolean(formErrors.passwordConfirmation)}>
-            <FormLabel>Password Confirmation</FormLabel>
-            <Input type="password" {...register('passwordConfirmation')} />
-            <FormErrorMessage>{formErrors.passwordConfirmation?.message}</FormErrorMessage>
-          </FormControl>
+    <dialog id="signup-dialog" className="modal">
+      <div className="modal-box bg-base-200">
+        <h3 className="text-lg font-bold">Sign up</h3>
+        <div className="divider" />
+        <div className="flex flex-col gap-4">
+          <fieldset className="fieldset">
+            <legend className="fieldset-legend">Email</legend>
+            <input type="text" className="input" placeholder="Type here" {...register('email')} />
+            {formErrors.email?.message && <p className="fieldset-label text-error">{formErrors.email?.message}</p>}
+          </fieldset>
+          <fieldset className="fieldset">
+            <legend className="fieldset-legend">Password</legend>
+            <input type="text" className="input" placeholder="Type here" {...register('password')} />
+            {formErrors.password?.message && (
+              <p className="fieldset-label text-error">{formErrors.password?.message}</p>
+            )}
+          </fieldset>
+          <fieldset className="fieldset">
+            <legend className="fieldset-legend">Password Confirmation</legend>
+            <input type="text" className="input" placeholder="Type here" {...register('passwordConfirmation')} />
+            {formErrors.passwordConfirmation?.message && (
+              <p className="fieldset-label text-error">{formErrors.passwordConfirmation?.message}</p>
+            )}
+          </fieldset>
           <Box display="flex" marginTop="4" justifyContent="space-around">
             {/* <GoogleLogin onLogin={loginGoogle} /> */}
           </Box>
@@ -50,19 +55,19 @@ const SignUpDialog = ({ isOpen, onClose }: SignUpDialogProps) => {
               }
             />
           )}
-        </DialogBody>
-        <DialogFooter>
-          <DialogButtons>
-            <Button size="sm" onClick={handleClose} isDisabled={isRegisterEmailLoading}>
-              Close
-            </Button>
-            <Button size="sm" colorScheme="orange" type="submit" isLoading={isRegisterEmailLoading}>
-              Sign Up
-            </Button>
-          </DialogButtons>
-        </DialogFooter>
-      </form>
-    </Dialog>
+        </div>
+        <div className="modal-action">
+          <button className={`btn ${isRegisterEmailLoading ? 'btn-disabled' : ''}`} onClick={handleClose}>
+            Close
+          </button>
+          <form onSubmit={handleSubmit(registerEmail)}>
+            <button className={`btn btn-primary`} type="submit">
+              {isRegisterEmailLoading ? <span className="loading loading-spinner" /> : `Sign up`}
+            </button>
+          </form>
+        </div>
+      </div>
+    </dialog>
   );
 };
 

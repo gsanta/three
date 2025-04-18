@@ -27,12 +27,13 @@ const Toolbar = () => {
 
   return (
     <Box
+      className="bg-base-300"
       height="100%"
-      paddingBlockStart="1"
+      paddingBlockStart="8"
       paddingBlockEnd="1"
       display="flex"
       flexDirection="column"
-      gap="3"
+      gap="8"
       alignItems="center"
     >
       {tool.getTools().map(({ iconName, name, showOnToolbar }) => {
@@ -48,6 +49,7 @@ const Toolbar = () => {
               colorScheme="red"
               toggle={toggle}
               onToggle={() => handleSelectTool(name)}
+              tooltip={name}
               variant="outline"
             >
               {iconName ? <Icon name={iconName} /> : <Text>{name[0].toUpperCase()}</Text>}

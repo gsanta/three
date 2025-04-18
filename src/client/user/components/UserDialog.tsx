@@ -1,18 +1,17 @@
-import Dialog, { DialogBody } from '../../common/components/Dialog';
 import api from '../../common/utils/api';
 import { usersPath } from '../../common/utils/routes';
-import { Avatar, Box, Button, ButtonGroup, FormControl, FormErrorMessage, Text } from '@chakra-ui/react';
+import { Button, ButtonGroup, FormControl, FormErrorMessage } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useSession } from 'next-auth/react';
 import React from 'react';
 
-type UserDialogProps = {
-  isOpen: boolean;
-  onClose(): void;
-};
+const UserDialog = () => {
+  const closeDialog = () => {
+    const dialog = document.getElementById('user-dialog') as HTMLDialogElement;
+    dialog.close();
+  };
 
-const UserDialog = ({ isOpen, onClose }: UserDialogProps) => {
   const { data } = useSession();
 
   const {
@@ -26,16 +25,24 @@ const UserDialog = ({ isOpen, onClose }: UserDialogProps) => {
       return resp;
     },
     onSuccess: () => {
-      onClose();
+      closeDialog();
     },
   });
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose} title="User">
-      <DialogBody padding="1rem">
-        <Box display="flex" justifyContent="center" gap="1rem" alignItems="center">
-          <Avatar name={data?.user?.email || ''} /> <Text maxW="200px">{data?.user?.email}</Text>
-        </Box>
+    <dialog id="user-dialog" className="modal">
+      <div className="modal-box bg-base-200">
+        <h3 className="text-lg font-bold">User</h3>
+        <div className="divider" />
+
+        <div className="flex justify-center items-center gap-4">
+          <div className="avatar avatar-placeholder">
+            <div className="bg-neutral text-neutral-content w-10 rounded-full">
+              <span>{data?.user?.email}</span>
+            </div>
+          </div>
+          <p className="max-w-[200px]">{data?.user?.email}</p>
+        </div>
         <ButtonGroup display="flex" justifyContent="space-around" marginTop="1rem">
           <FormControl isInvalid={isDeleteUserError} width="initial">
             <Button colorScheme="red" onClick={mutateDeleteUser} isLoading={isDeleteUserLoading}>
@@ -44,8 +51,8 @@ const UserDialog = ({ isOpen, onClose }: UserDialogProps) => {
             <FormErrorMessage>Failed to delete user</FormErrorMessage>
           </FormControl>
         </ButtonGroup>
-      </DialogBody>
-    </Dialog>
+      </div>
+    </dialog>
   );
 };
 
