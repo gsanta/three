@@ -1,5 +1,5 @@
-import Num3 from '../../types/Num3';
-import ToolName from '../../types/ToolName';
+import Num3 from '../../models/Num3';
+import ToolName from '../../models/ToolName';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export type ToolState = {

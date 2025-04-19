@@ -1,6 +1,6 @@
 import BlockFactory from './BlockFactory';
-import Block from '@/client/editor/types/Block';
-import Device from '@/client/editor/types/block/Device';
+import Block from '@/client/editor/models/Block';
+import Device from '@/client/editor/models/block/Device';
 
 class LampFactory extends BlockFactory {
   createCategory(block: Block, overrides: Partial<Block> = {}): Device {

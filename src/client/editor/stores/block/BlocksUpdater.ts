@@ -1,4 +1,4 @@
-import BlockDecoration from '../../types/BlockCategory';
+import BlockDecoration from '../../models/BlockCategory';
 import { BlockState, UpdateBlock } from './blockSlice.types';
 
 class BlocksUpdater {

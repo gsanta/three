@@ -1,5 +1,5 @@
 import BlockStore from '../../stores/block/BlockStore';
-import Block from '../../types/Block';
+import Block from '../../models/Block';
 
 class CableHelper {
   constructor(blockStore: BlockStore) {

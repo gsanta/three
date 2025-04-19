@@ -1,5 +1,5 @@
 import { Store } from '@/client/common/utils/store';
-import Block from '../types/Block';
+import Block from '../models/Block';
 
 export const getSelectedMeshes = (store: Store): Block[] => {
   const { blocks: meshes } = store.getState().block.present;

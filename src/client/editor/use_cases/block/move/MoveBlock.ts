@@ -1,15 +1,14 @@
 import BlockMover from './BlockMover';
-import PoleMover from './PoleMover';
 import TransactionService from '../../../services/transaction/TransactionService';
 import SceneStore from '../../../components/scene/SceneStore';
 import BlockStore from '../../../stores/block/BlockStore';
-import Num3 from '@/client/editor/types/Num3';
+import Num3 from '@/client/editor/models/Num3';
 import BaseMover from './BaseMover';
 import ToolStore from '@/client/editor/stores/tool/ToolStore';
 import { store } from '@/client/common/utils/store';
 import { updateSelectTool } from '@/client/editor/stores/tool/toolSlice';
 import MoveDecoration from './MoveDecoration';
-import BlockDecoration from '@/client/editor/types/BlockCategory';
+import BlockDecoration from '@/client/editor/models/BlockCategory';
 import MoveDevice from './MoveDevice';
 
 class MoveBlock {
@@ -17,7 +16,6 @@ class MoveBlock {
     this.blockStore = blockStore;
     this.baseMover = new BaseMover(blockStore, update, sceneStore, toolStore);
     this.update = update;
-    this.movers.poles = new PoleMover(blockStore, sceneStore);
     this.moveDecorationMap.devices = new MoveDevice(blockStore);
     this.sceneStore = sceneStore;
   }

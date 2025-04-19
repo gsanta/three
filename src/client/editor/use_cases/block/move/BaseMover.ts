@@ -2,8 +2,8 @@ import SceneStore from '@/client/editor/components/scene/SceneStore';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import ToolStore from '@/client/editor/stores/tool/ToolStore';
-import Block from '@/client/editor/types/Block';
-import Num3 from '@/client/editor/types/Num3';
+import Block from '@/client/editor/models/Block';
+import Num3 from '@/client/editor/models/Num3';
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { Box3 } from 'three';
 

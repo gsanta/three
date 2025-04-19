@@ -1,4 +1,4 @@
-import WrappedMeshProps from '../../types/block/WrappedMeshProps';
+import WrappedMeshProps from '../../models/block/WrappedMeshProps';
 
 type ModelMeshProps = WrappedMeshProps<'model'>;
 

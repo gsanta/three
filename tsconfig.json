@@ -53,7 +53,7 @@
     ]
   },
   "files": [
-    "src/client/type_definitions/global.d.ts",
+    "src/client/common/global.d.ts",
   ],
   "include": [
     ".eslintrc.js",

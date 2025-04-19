@@ -3,8 +3,8 @@ import Edit from '../../services/transaction/Edit';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockEraser from './erasers/BlockEraser';
 import CableEraser from './erasers/CableEraser';
-import { NeigbourConnection } from '../../types/Block';
-import { ModelPartInfo } from '../../types/BlockType';
+import { NeigbourConnection } from '../../models/Block';
+import { ModelPartInfo } from '../../models/BlockType';
 
 class EraseBlock {
   constructor(store: BlockStore, update: TransactionService) {

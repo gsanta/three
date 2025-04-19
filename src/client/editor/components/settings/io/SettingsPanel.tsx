@@ -7,7 +7,7 @@ import { useAppDispatch } from '@/client/common/hooks/hooks';
 import { ActionCreators } from 'redux-undo';
 import useSaveSnapshot from '../../hooks/useSaveSnapshot';
 import useLoadSnapshot from '../../hooks/useLoadSnapshot';
-import Icon from '@/client/common/components/icon/Icon';
+import Icon from '@/client/common/components/lib/Icon';
 
 const SettingsPanel = () => {
   const [isExportDialogOpen, setExportDialogOpen] = useState(false);

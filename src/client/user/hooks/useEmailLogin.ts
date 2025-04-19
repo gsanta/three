@@ -1,4 +1,4 @@
-import { ServerError } from '../../common/components/ErrorMessage';
+import { ServerError } from '../../common/components/lib/ErrorMessage';
 import { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
 import { useCallback } from 'react';

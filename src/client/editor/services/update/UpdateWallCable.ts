@@ -1,6 +1,6 @@
 import { Box3, Vector3 } from 'three';
 import SceneStore from '../../components/scene/SceneStore';
-import Block from '../../types/Block';
+import Block from '../../models/Block';
 import MeshUtils from '../../utils/MeshUtils';
 import TransactionService from '../transaction/TransactionService';
 

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Block from '@/client/editor/types/Block';
+import Block from '@/client/editor/models/Block';
 import Edit from '../../../services/transaction/Edit';
 
 abstract class BlockMover {

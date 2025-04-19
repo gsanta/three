@@ -1,6 +1,6 @@
 import { ThreeEvent } from '@react-three/fiber';
-import Tool, { EventObject, ToolInfo } from '../types/Tool';
-import ToolName from '../types/ToolName';
+import Tool, { EventObject, ToolInfo } from '../models/Tool';
+import ToolName from '../models/ToolName';
 import { store } from '@/client/common/utils/store';
 import { Mesh, Vector3 } from 'three';
 import SelectTool from '@/client/editor/controllers/tools/SelectTool';

@@ -1,4 +1,4 @@
-import Num3 from '../types/Num3';
+import Num3 from '../models/Num3';
 
 class MathUtils {
   constructor(vector: Num3) {

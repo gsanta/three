@@ -1,6 +1,6 @@
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
-import { ModelPartInfo } from '../../types/BlockType';
+import { ModelPartInfo } from '../../models/BlockType';
 
 class Hover {
   constructor(blockStore: BlockStore, updateService: TransactionService) {

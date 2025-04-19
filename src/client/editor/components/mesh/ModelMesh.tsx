@@ -11,7 +11,7 @@ import { Box3, Group, Mesh, Vector3 } from 'three';
 import ChildMeshRenderer from '../scene/components/ChildMeshRenderer';
 import { useEffect, useState } from 'react';
 import { ColliderBox } from '../scene/components/ColliderBox';
-import Num3 from '../../types/Num3';
+import Num3 from '../../models/Num3';
 
 export const ModelMesh = ({ additions, block, materialProps, meshProps, overwrites }: ModelMeshProps) => {
   const ref = useRegisterScene<Group>();

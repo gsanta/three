@@ -24,7 +24,7 @@ import plantTempalteSeeds from 'prisma/seed/block_types/plantTemplateSeeds';
 import poleTempalteSeeds from 'prisma/seed/block_types/poleTemplateSeeds';
 import roadTempalteSeeds from 'prisma/seed/block_types/roadTemplateSeeds';
 import { setTemplates } from '@/client/editor/stores/blockType/blockTypeSlice';
-import BlockType from '@/client/editor/types/BlockType';
+import BlockType from '@/client/editor/models/BlockType';
 import ElectricitySystemHook from '@/client/editor/services/electricity/ElectricitySystemHook';
 import ElectricityStore from '@/client/editor/stores/electricity/ElectricityStore';
 import { clearEditorSlice } from '@/client/editor/stores/editorSlice';

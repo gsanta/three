@@ -1,4 +1,4 @@
-import { ServerError } from '@/client/common/components/ErrorMessage';
+import { ServerError } from '@/client/common/components/lib/ErrorMessage';
 import api from '@/client/common/utils/api';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError, AxiosResponse } from 'axios';

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Block from '@/client/editor/types/Block';
+import Block from '@/client/editor/models/Block';
 import Edit from '../../../services/transaction/Edit';
 import BlockStore from '../../../stores/block/BlockStore';
 import BlockEraser from './BlockEraser';
-import { CableEnd } from '@/client/editor/types/block/Cable';
+import { CableEnd } from '@/client/editor/models/block/Cable';
 
 class CableEraser extends BlockEraser {
   constructor(store: BlockStore) {

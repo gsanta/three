@@ -1,9 +1,9 @@
-import Tool, { ToolInfo } from '../../types/Tool';
+import Tool, { ToolInfo } from '../../models/Tool';
 import SceneService from '../../components/scene/service/SceneService';
-import { IconName } from '@/client/common/components/icon/Icon';
+import { IconName } from '@/client/common/components/lib/Icon';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
-import ToolName from '../../types/ToolName';
+import ToolName from '../../models/ToolName';
 import Hover from '../../use_cases/select/Hover';
 
 abstract class HoverTool extends Tool {

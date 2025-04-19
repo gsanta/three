@@ -1,5 +1,5 @@
-import { ShapeType } from '@/client/editor/types/BlockType';
-import Block from '@/client/editor/types/Block';
+import { ShapeType } from '@/client/editor/models/BlockType';
+import Block from '@/client/editor/models/Block';
 import { MeshProps, MeshStandardMaterialProps, ThreeEvent } from '@react-three/fiber';
 
 type WrappedMeshProps<S extends ShapeType = ShapeType> = {

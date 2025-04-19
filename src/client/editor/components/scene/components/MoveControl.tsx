@@ -3,7 +3,7 @@ import { PivotControls } from '@react-three/drei';
 import { Quaternion, Vector3 } from 'three';
 import useEditorContext from '@/app/editor/EditorContext';
 import { useAppSelector } from '@/client/common/hooks/hooks';
-import Num3 from '@/client/editor/types/Num3';
+import Num3 from '@/client/editor/models/Num3';
 import { ReactNode } from 'react';
 
 type MoveControlProps = {

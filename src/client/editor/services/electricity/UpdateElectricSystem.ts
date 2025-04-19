@@ -2,7 +2,7 @@ import BlockStore from '../../stores/block/BlockStore';
 import { UpdateBlocks } from '../../stores/block/blockSlice.types';
 import ElectricityStore from '../../stores/electricity/ElectricityStore';
 import { ElectricNodeInfo, ElectricNodeUpdate } from '../../stores/electricity/electricitySlice';
-import Device from '../../types/block/Device';
+import Device from '../../models/block/Device';
 
 function traverseDevices(
   root: Device,

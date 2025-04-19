@@ -1,9 +1,9 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import BlockCategory from '../../types/block/BlockCategory';
+import BlockCategory from '../../models/block/BlockCategory';
 import BlockCategoriesResponse from '@/common/response_types/BlockCategoriesResponse';
 import BlockAddMethod from '@/common/model_types/BlockAddMethod';
 import BlockAddMethodsResponse from '@/common/response_types/BlockAddMethodsResponse';
-import { ModelPartRole } from '../../types/BlockType';
+import { ModelPartRole } from '../../models/BlockType';
 
 export type BlockCategoyState = {
   addMethods: BlockAddMethod[];

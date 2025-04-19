@@ -1,5 +1,5 @@
-import ToolName from '../../types/ToolName';
-import Panel from '../../../common/components/Panel';
+import ToolName from '../../models/ToolName';
+import Panel from '../../../common/components/globals/Panel';
 import React from 'react';
 import { useAppSelector } from '../../../common/hooks/hooks';
 import AddToolOptions from './AddToolOptions';

@@ -1,16 +1,16 @@
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { Vector3 } from 'three';
-import Block from '@/client/editor/types/Block';
+import Block from '@/client/editor/models/Block';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import TransactionService from '../../services/transaction/TransactionService';
 import FactoryService from '../../services/factory/FactoryService';
 import BlockStore from '../../stores/block/BlockStore';
-import Num3 from '../../types/Num3';
+import Num3 from '../../models/Num3';
 import Edit from '../../services/transaction/Edit';
 import MathUtils, { toRadian } from '../../utils/mathUtils';
 import CableHelper from './CableHelper';
-import { ModelPartInfo } from '../../types/BlockType';
-import Pole from '../../types/Pole';
+import { ModelPartInfo } from '../../models/BlockType';
+import Pole from '../../models/Pole';
 
 class JoinPoles {
   constructor(

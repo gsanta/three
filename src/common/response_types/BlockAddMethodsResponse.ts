@@ -1,4 +1,4 @@
-import { BlockCategoryName } from '@/client/editor/types/block/BlockCategory';
+import { BlockCategoryName } from '@/client/editor/models/block/BlockCategory';
 import BlockAddMethod, { BlockAddMethodName } from '../model_types/BlockAddMethod';
 
 type BlockAddMethodsResponse = {

@@ -4,15 +4,15 @@ import { Vector3 } from 'three';
 import { store } from '@/client/common/utils/store';
 import { setSelectedGeometry } from '@/client/editor/stores/blockType/blockTypeSlice';
 import { setSelectedTool } from '@/client/editor/stores/tool/toolSlice';
-import ToolName from '@/client/editor/types/ToolName';
+import ToolName from '@/client/editor/models/ToolName';
 import ExtendedWorld from './ExtendedWorld';
 import findClosestBlock, { calculateDistance } from './helpers/findClosestBlock';
-import Num3 from '@/client/editor/types/Num3';
+import Num3 from '@/client/editor/models/Num3';
 import JoinPoles from '@/client/editor/use_cases/block/JoinPoles';
 import { checkBlockExists, checkPartIndexExists, checkPosition } from './helpers/checks';
 import VectorUtils from '@/client/editor/utils/vectorUtils';
 import AddTool from '@/client/editor/controllers/tools/add/AddTool';
-import { ToolInfo } from '@/client/editor/types/Tool';
+import { ToolInfo } from '@/client/editor/models/Tool';
 import { waitForMeshCountChange } from './helpers/waitFor';
 import { updateBlocks } from '@/client/editor/stores/block/blockActions';
 

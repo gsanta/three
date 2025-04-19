@@ -1,8 +1,8 @@
 import FactoryService from '../../services/factory/FactoryService';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
-import Block from '../../types/Block';
-import { CablePoint } from '../../types/block/Cable';
+import Block from '../../models/Block';
+import { CablePoint } from '../../models/block/Cable';
 
 class AddWirePoints {
   constructor(blockStore: BlockStore, factoryService: FactoryService, updateService: TransactionService) {

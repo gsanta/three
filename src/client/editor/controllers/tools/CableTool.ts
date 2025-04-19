@@ -1,11 +1,11 @@
-import { ToolInfo } from '@/client/editor/types/Tool';
-import ToolName from '@/client/editor/types/ToolName';
+import { ToolInfo } from '@/client/editor/models/Tool';
+import ToolName from '@/client/editor/models/ToolName';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import JoinPoles from '../../use_cases/block/JoinPoles';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
 import FactoryService from '../../services/factory/FactoryService';
-import Selector from '../../use_cases/block/Selector';
+import SelectBlock from '../../use_cases/block/SelectBlock';
 import SceneService from '../../components/scene/service/SceneService';
 import MeshUtils from '../../utils/MeshUtils';
 import { updateTemporaryCables } from '../../stores/block/temporarySlice';
@@ -14,7 +14,7 @@ import { store } from '@/client/common/utils/store';
 import HoverTool from './HoverTool';
 import DrawHouseWiring from '../../use_cases/wiring/DrawHouseWiring';
 import { setEditMode } from '../../stores/editorSlice';
-import Block from '../../types/Block';
+import Block from '../../models/Block';
 
 class CableTool extends HoverTool {
   constructor(
@@ -38,7 +38,7 @@ class CableTool extends HoverTool {
 
     this.sceneService = sceneService;
 
-    this.selector = new Selector(blockStore, sceneService, sceneStore, update);
+    this.selector = new SelectBlock(blockStore, sceneService, sceneStore, update);
     this.updateService = update;
   }
 
@@ -160,7 +160,7 @@ class CableTool extends HoverTool {
 
   private scene: SceneStore;
 
-  private selector: Selector;
+  private selector: SelectBlock;
 
   private updateService: TransactionService;
 }

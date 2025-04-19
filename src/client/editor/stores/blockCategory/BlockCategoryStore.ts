@@ -1,5 +1,5 @@
 import { Store } from '@/client/common/utils/store';
-import { BlockCategoryName } from '../../types/block/BlockCategory';
+import { BlockCategoryName } from '../../models/block/BlockCategory';
 
 class BlockCategoryStore {
   constructor(store: Store) {

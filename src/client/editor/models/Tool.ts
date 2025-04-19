@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import ToolName from './ToolName';
-import { IconName } from '../../common/components/icon/Icon';
+import { IconName } from '../../common/components/lib/Icon';
 import { Mesh, Vector3 } from 'three';
-import Num3 from '@/client/editor/types/Num3';
-import Block from '@/client/editor/types/Block';
+import Num3 from '@/client/editor/models/Num3';
+import Block from '@/client/editor/models/Block';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import TransactionService from '../services/transaction/TransactionService';
 

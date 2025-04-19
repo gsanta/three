@@ -1,6 +1,6 @@
 import { Store } from '@/client/common/utils/store';
-import Block from '../../types/Block';
-import { ModelPartInfo } from '../../types/BlockType';
+import Block from '../../models/Block';
+import { ModelPartInfo } from '../../models/BlockType';
 import { BlockState } from '../../stores/block/blockSlice.types';
 
 class ExportJson {

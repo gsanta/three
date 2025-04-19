@@ -1,7 +1,7 @@
 import useEditorContext from '@/app/editor/EditorContext';
 import { Box } from '@chakra-ui/react';
 import useSelectedBlocks from '../hooks/useSelectedBlocks';
-import IconButton from '@/client/common/components/IconButton';
+import IconButton from '@/client/common/components/lib/IconButton';
 
 const SelectToolOptions = () => {
   const selectedBlocks = useSelectedBlocks();

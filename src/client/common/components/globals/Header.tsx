@@ -1,5 +1,5 @@
-import SettingsPanel from '../../editor/components/settings/io/SettingsPanel';
-import UserSettings from '../../user/components/UserSettings';
+import SettingsPanel from '../../../editor/components/settings/io/SettingsPanel';
+import UserSettings from '../../../user/components/UserSettings';
 import React from 'react';
 
 const Header = () => {

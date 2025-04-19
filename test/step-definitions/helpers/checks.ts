@@ -1,8 +1,8 @@
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 import ExtendedWorld from '../ExtendedWorld';
-import Num3 from '@/client/editor/types/Num3';
+import Num3 from '@/client/editor/models/Num3';
 import { Vector3 } from 'three';
-import BlockDecoration from '@/client/editor/types/BlockCategory';
+import BlockDecoration from '@/client/editor/models/BlockCategory';
 import assert from 'assert';
 import VectorUtils from '@/client/editor/utils/vectorUtils';
 

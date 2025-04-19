@@ -1,10 +1,10 @@
 import React from 'react';
 import { Box, Text, Tooltip } from '@chakra-ui/react';
-import ToggleButton from '../../../common/components/ToggleButton';
-import Icon from '../../../common/components/icon/Icon';
+import ToggleButton from '../../../common/components/lib/ToggleButton';
+import Icon from '../../../common/components/lib/Icon';
 import { useAppDispatch, useAppSelector } from '../../../common/hooks/hooks';
 import useEditorContext from '@/app/editor/EditorContext';
-import ToolName from '../../types/ToolName';
+import ToolName from '../../models/ToolName';
 import { setCityMode } from '../../stores/editorSlice';
 
 const Toolbar = () => {

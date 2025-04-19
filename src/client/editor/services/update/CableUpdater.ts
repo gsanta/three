@@ -1,6 +1,6 @@
 import SceneStore from '../../components/scene/SceneStore';
 import BlockStore from '../../stores/block/BlockStore';
-import Block from '../../types/Block';
+import Block from '../../models/Block';
 import Updater from './Updater';
 import TransactionService from '../transaction/TransactionService';
 import UpdateWallCable from './UpdateWallCable';

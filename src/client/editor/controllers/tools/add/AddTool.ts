@@ -1,5 +1,5 @@
-import { ToolInfo } from '../../../types/Tool';
-import ToolName from '../../../types/ToolName';
+import { ToolInfo } from '../../../models/Tool';
+import ToolName from '../../../models/ToolName';
 import TransactionService from '../../../services/transaction/TransactionService';
 import SceneStore from '../../../components/scene/SceneStore';
 import FactoryService from '../../../services/factory/FactoryService';
@@ -8,9 +8,9 @@ import SceneService from '../../../components/scene/service/SceneService';
 import AddService from './AddService';
 import { store } from '@/client/common/utils/store';
 import DataContext from '@/client/editor/contexts/DataContext';
-import Block from '@/client/editor/types/Block';
-import BlockType from '@/client/editor/types/BlockType';
-import Num3 from '@/client/editor/types/Num3';
+import Block from '@/client/editor/models/Block';
+import BlockType from '@/client/editor/models/BlockType';
+import Num3 from '@/client/editor/models/Num3';
 import ExecuteAddParams from './ExecuteAddParams';
 
 class AddTool extends HoverTool {

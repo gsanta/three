@@ -7,10 +7,10 @@ import VectorUtils from '@/client/editor/utils/vectorUtils';
 import { Vector3 } from 'three';
 import AddBlock from './AddBlock';
 import BlockUtils from '@/client/editor/utils/BlockUtils';
-import Block from '@/client/editor/types/Block';
+import Block from '@/client/editor/models/Block';
 import BlockAddMethod from '@/common/model_types/BlockAddMethod';
-import BlockType, { ModelPart, ModelPartRole } from '@/client/editor/types/BlockType';
-import Num3 from '@/client/editor/types/Num3';
+import BlockType, { ModelPart, ModelPartRole } from '@/client/editor/models/BlockType';
+import Num3 from '@/client/editor/models/Num3';
 
 class AddSlotToSlot extends AddBlock {
   constructor(

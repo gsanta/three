@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import FileType, { getFileTypes } from '../../../types/FileType';
+import FileType, { getFileTypes } from '../../../models/FileType';
 import { downloadString } from '../../../utils/fileUtils';
 import useEditorContext from '@/app/editor/EditorContext';
 

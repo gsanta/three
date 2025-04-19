@@ -1,5 +1,5 @@
-import Block from '@/client/editor/types/Block';
-import Cable, { CablePoint } from '@/client/editor/types/block/Cable';
+import Block from '@/client/editor/models/Block';
+import Cable, { CablePoint } from '@/client/editor/models/block/Cable';
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { Vector3 } from 'three';
 import BlockStore from '../../stores/block/BlockStore';

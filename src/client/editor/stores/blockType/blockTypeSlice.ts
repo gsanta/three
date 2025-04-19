@@ -1,10 +1,10 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import BlockType from '../../types/BlockType';
-import Axis from '@/client/editor/types/Axis';
+import BlockType from '../../models/BlockType';
+import Axis from '@/client/editor/models/Axis';
 import { RGBColor } from '@/client/editor/utils/colorUtils';
-import BlockSettings from '@/client/editor/types/BlockSettings';
+import BlockSettings from '@/client/editor/models/BlockSettings';
 import VectorUtils from '@/client/editor/utils/vectorUtils';
-import BlockSelectedSettings from '@/client/editor/types/BlockSelectedSettings';
+import BlockSelectedSettings from '@/client/editor/models/BlockSelectedSettings';
 import BlockUtils from '../../utils/BlockUtils';
 
 export type TransformType = 'move' | 'scale';

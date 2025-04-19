@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react';
 import React from 'react';
-import ErrorMessage from '../../common/components/ErrorMessage';
+import ErrorMessage from '../../common/components/lib/ErrorMessage';
 import useEmailLogin from '../hooks/useEmailLogin';
 import { signIn } from 'next-auth/react';
 

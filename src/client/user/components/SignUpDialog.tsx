@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import React from 'react';
 import useEmailSignUp from '../hooks/useEmailSignUp';
-import ErrorMessage from '../../common/components/ErrorMessage';
+import ErrorMessage from '../../common/components/lib/ErrorMessage';
 
 const SignUpDialog = () => {
   const closeDialog = () => {

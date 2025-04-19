@@ -1,6 +1,6 @@
-import Transformer from '@/client/editor/types/block/Transformer';
+import Transformer from '@/client/editor/models/block/Transformer';
 import BlockFactory from './BlockFactory';
-import Block from '@/client/editor/types/Block';
+import Block from '@/client/editor/models/Block';
 
 class TransformerFactory extends BlockFactory {
   createCategory(block: Block): Transformer {

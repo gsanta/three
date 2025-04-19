@@ -1,5 +1,5 @@
 import { EditorContext, EditorContextType } from '@/app/editor/EditorContext';
-import { store } from '../utils/store';
+import { store } from '../../utils/store';
 import { ReactNode, useMemo } from 'react';
 import AddTool from '@/client/editor/controllers/tools/add/AddTool';
 import ToolService from '@/client/editor/services/ToolService';

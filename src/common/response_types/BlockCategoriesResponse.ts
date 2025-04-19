@@ -1,4 +1,4 @@
-import { BlockCategoryName } from '@/client/editor/types/block/BlockCategory';
+import { BlockCategoryName } from '@/client/editor/models/block/BlockCategory';
 
 type BlockCategoriesResponse = {
   items: {

@@ -1,5 +1,5 @@
-import Axis from '../types/Axis';
-import Num3 from '../types/Num3';
+import Axis from '../models/Axis';
+import Num3 from '../models/Num3';
 import { toRadian } from './mathUtils';
 import { defaultSnap } from './sceneUtils';
 

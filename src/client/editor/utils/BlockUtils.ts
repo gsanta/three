@@ -1,5 +1,5 @@
-import Block from '../types/Block';
-import BlockType, { ModelPart, ModelPartRole } from '../types/BlockType';
+import Block from '../models/Block';
+import BlockType, { ModelPart } from '../models/BlockType';
 import MathUtils, { toDegree } from './mathUtils';
 
 type RotatedPart = { part: ModelPart; rotation: number };

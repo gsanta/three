@@ -1,6 +1,6 @@
 import Edit from '@/client/editor/services/transaction/Edit';
 import MoveDecoration from './MoveDecoration';
-import Num3 from '@/client/editor/types/Num3';
+import Num3 from '@/client/editor/models/Num3';
 import { addVector } from '@/client/editor/utils/vectorUtils';
 
 class MoveDevice extends MoveDecoration {

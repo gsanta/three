@@ -3,7 +3,7 @@ import LoginDialog from './LoginDialog';
 import UserDialog from './UserDialog';
 import { signOut, useSession } from 'next-auth/react';
 import { useRef } from 'react';
-import Toast, { ToastRef } from '@/client/common/components/Toast';
+import Toast, { ToastRef } from '@/client/common/components/lib/Toast';
 
 const UserSettings = () => {
   const { data: session } = useSession();

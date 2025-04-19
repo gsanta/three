@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { MouseEventHandler } from 'react';
-import Icon, { IconName } from './icon/Icon';
+import Icon, { IconName } from './Icon';
 
 export type IconButtonProps = {
   iconName: IconName;

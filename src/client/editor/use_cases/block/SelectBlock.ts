@@ -2,12 +2,12 @@ import { Vector3 } from 'three';
 import SceneService from '../../components/scene/service/SceneService';
 import SceneStore from '../../components/scene/SceneStore';
 import BlockStore from '../../stores/block/BlockStore';
-import Block from '@/client/editor/types/Block';
+import Block from '@/client/editor/models/Block';
 import { store } from '@/client/common/utils/store';
 import { updateSelectTool } from '../../stores/tool/toolSlice';
 import TransactionService from '../../services/transaction/TransactionService';
 
-class Selector {
+class SelectBlock {
   constructor(blockStore: BlockStore, scene: SceneService, sceneStore: SceneStore, updateService: TransactionService) {
     this.blockStore = blockStore;
     this.scene = scene;
@@ -75,4 +75,4 @@ class Selector {
   private updateService: TransactionService;
 }
 
-export default Selector;
+export default SelectBlock;

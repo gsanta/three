@@ -3,7 +3,7 @@ import { usersPath } from '../../common/utils/routes';
 import { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
 import { useCallback } from 'react';
-import { ServerError } from '../../common/components/ErrorMessage';
+import { ServerError } from '../../common/components/lib/ErrorMessage';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterSchema, registerSchema } from '@/common/validations/RegisterSchema';
 import { useMutation } from '@tanstack/react-query';

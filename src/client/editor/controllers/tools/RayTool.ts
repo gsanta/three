@@ -1,5 +1,5 @@
-import Tool, { ToolInfo } from '@/client/editor/types/Tool';
-import ToolName from '@/client/editor/types/ToolName';
+import Tool, { ToolInfo } from '@/client/editor/models/Tool';
+import ToolName from '@/client/editor/models/ToolName';
 import { ArrowHelper } from 'three';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import BlockStore from '../../stores/block/BlockStore';

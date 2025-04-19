@@ -1,4 +1,4 @@
-import ToolName from '../../types/ToolName';
+import ToolName from '../../models/ToolName';
 import BlockStore from '../../stores/block/BlockStore';
 import TransactionService from '../../services/transaction/TransactionService';
 import HoverTool from './HoverTool';

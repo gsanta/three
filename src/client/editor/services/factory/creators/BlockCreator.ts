@@ -1,8 +1,8 @@
-import BlockType, { ModelPartInfo } from '@/client/editor/types/BlockType';
+import BlockType, { ModelPartInfo } from '@/client/editor/models/BlockType';
 import { toRadian } from '@/client/editor/utils/mathUtils';
 import VectorUtils, { addVector } from '@/client/editor/utils/vectorUtils';
-import Num3 from '@/client/editor/types/Num3';
-import Block from '@/client/editor/types/Block';
+import Num3 from '@/client/editor/models/Num3';
+import Block from '@/client/editor/models/Block';
 
 class BlockCreator {
   static create(id: string, block: BlockType, settings: Partial<Block>): Block {

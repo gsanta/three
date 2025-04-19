@@ -1,9 +1,9 @@
 import { useAppDispatch, useAppSelector } from '@/client/common/hooks/hooks';
 import CableMesh from '../../mesh/CableMesh';
-import WrappedMeshProps from '../../../types/block/WrappedMeshProps';
+import WrappedMeshProps from '../../../models/block/WrappedMeshProps';
 import { ModelMesh } from '../../mesh/ModelMesh';
-import Block from '@/client/editor/types/Block';
-import Cable from '@/client/editor/types/block/Cable';
+import Block from '@/client/editor/models/Block';
+import Cable from '@/client/editor/models/block/Cable';
 import MoveControl from './MoveControl';
 import { useEffect, useRef } from 'react';
 import useEditorContext from '@/app/editor/EditorContext';

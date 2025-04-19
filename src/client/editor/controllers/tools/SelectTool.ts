@@ -1,9 +1,9 @@
-import { ToolInfo } from '../../types/Tool';
-import ToolName from '../../types/ToolName';
+import { ToolInfo } from '../../models/Tool';
+import ToolName from '../../models/ToolName';
 import VectorUtils, { addVector } from '@/client/editor/utils/vectorUtils';
 import { toRadian } from '@/client/editor/utils/mathUtils';
-import Num3 from '@/client/editor/types/Num3';
-import Block from '@/client/editor/types/Block';
+import Num3 from '@/client/editor/models/Num3';
+import Block from '@/client/editor/models/Block';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import MoveBlock from '../../use_cases/block/move/MoveBlock';
 import TransactionService from '../../services/transaction/TransactionService';
@@ -11,11 +11,10 @@ import BlockStore from '../../stores/block/BlockStore';
 import { store } from '@/client/common/utils/store';
 import { updateSelectTool } from '../../stores/tool/toolSlice';
 import SceneService from '../../components/scene/service/SceneService';
-import Selector from '../../use_cases/block/Selector';
+import SelectBlock from '../../use_cases/block/SelectBlock';
 import ToolStore from '../../stores/tool/ToolStore';
 import HoverTool from './HoverTool';
 import BlockMover from '../../use_cases/block/move/BlockMover';
-import PoleMover from '../../use_cases/block/move/PoleMover';
 
 class SelectTool extends HoverTool {
   constructor(
@@ -28,10 +27,8 @@ class SelectTool extends HoverTool {
     super(blockStore, scene, update, ToolName.Select, 'BiRectangle');
 
     this.move = new MoveBlock(blockStore, update, sceneStore, toolStore);
-    this.selector = new Selector(blockStore, scene, sceneStore, update);
+    this.selector = new SelectBlock(blockStore, scene, sceneStore, update);
     this.toolStore = toolStore;
-
-    this.movers.poles = new PoleMover(blockStore, sceneStore);
   }
 
   onPointerUp(info: ToolInfo) {
@@ -163,7 +160,7 @@ class SelectTool extends HoverTool {
 
   private move: MoveBlock;
 
-  private selector: Selector;
+  private selector: SelectBlock;
 
   private toolStore: ToolStore;
 

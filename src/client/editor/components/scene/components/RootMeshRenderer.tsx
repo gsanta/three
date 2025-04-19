@@ -1,5 +1,5 @@
 import { useAppSelector } from '@/client/common/hooks/hooks';
-import WrappedMeshProps from '@/client/editor/types/block/WrappedMeshProps';
+import WrappedMeshProps from '@/client/editor/models/block/WrappedMeshProps';
 import MeshRenderer from './MeshRenderer';
 
 type RootMeshRendererProps = Omit<WrappedMeshProps, 'block' | 'parent'> & {

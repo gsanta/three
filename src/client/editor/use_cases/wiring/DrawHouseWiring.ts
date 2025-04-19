@@ -4,7 +4,7 @@ import SceneStore from '../../components/scene/SceneStore';
 import FactoryService from '../../services/factory/FactoryService';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
-import Block from '../../types/Block';
+import Block from '../../models/Block';
 import VectorUtils from '../../utils/vectorUtils';
 import MeshUtils from '../../utils/MeshUtils';
 import GetNextWireIntersection from './GetNextWireIntersection';
