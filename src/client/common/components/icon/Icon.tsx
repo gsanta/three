@@ -1,31 +1,30 @@
-import React from 'react';
-import * as icons from './Icons';
-import Image from 'next/image';
+import * as BiIcons from 'react-icons/bi'; // You can import other packs too
+import * as CiIcons from 'react-icons/ci'; // You can import other packs too
+import { ComponentType } from 'react';
 
-export type IconName = keyof typeof icons;
-export interface IconNameProps {
+export type IconName = keyof typeof BiIcons | keyof typeof CiIcons;
+
+const iconPacks: Record<IconName, ComponentType<{ size?: number; color?: string }>> = {
+  ...BiIcons,
+  ...CiIcons,
+  // Add more packs as needed
+};
+
+type IconProps = {
   name: IconName;
-  src?: undefined;
-}
+  size?: number;
+  color?: string;
+};
 
-export interface IconSrcProps {
-  src: string;
-  name?: undefined;
-}
+const Icon = ({ name, size = 24, color = 'currentColor' }: IconProps) => {
+  const IconComponent = iconPacks[name] as ComponentType<{ size?: number; color?: string }>;
 
-export type IconProps = IconNameProps | IconSrcProps;
-
-const Icon = ({ name, src }: IconProps) => {
-  if (src) {
-    return <Image src={src} width={500} height={500} alt="Picture of the author" />;
+  if (!IconComponent) {
+    console.warn(`Icon "${name}" not found.`);
+    return null;
   }
 
-  if (name) {
-    const IconComponent = icons[name];
-    return <IconComponent size="24px" />;
-  }
-
-  return null;
+  return <IconComponent size={size} color={color} />;
 };
 
 export default Icon;

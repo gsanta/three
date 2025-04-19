@@ -19,7 +19,7 @@ export type BlockTypeState = {
 };
 
 export const initialBlockTypeState: BlockTypeState = {
-  selectedBlockName: 'building-base-1',
+  selectedBlockName: 'two-story-house-1',
   blocks: [],
   settings: {},
   selectedSettings: {},

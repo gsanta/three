@@ -1,5 +1,4 @@
-import Icon from '../../../../common/components/icon/Icon';
-import { Box, ButtonGroup, IconButton, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
+import { Box, ButtonGroup } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import ExportDialog from './ExportDialog';
 import ImportDialog from './import/ImportDialog';
@@ -8,6 +7,7 @@ import { useAppDispatch } from '@/client/common/hooks/hooks';
 import { ActionCreators } from 'redux-undo';
 import useSaveSnapshot from '../../hooks/useSaveSnapshot';
 import useLoadSnapshot from '../../hooks/useLoadSnapshot';
+import Icon from '@/client/common/components/icon/Icon';
 
 const SettingsPanel = () => {
   const [isExportDialogOpen, setExportDialogOpen] = useState(false);
@@ -28,20 +28,42 @@ const SettingsPanel = () => {
 
   return (
     <Box alignItems="center" display="flex" gap="4">
-      <Menu>
-        <MenuButton
-          paddingInline="4"
-          as={IconButton}
-          aria-label="Options"
-          icon={<Icon name="CiSettings" />}
-          size="sm"
-          variant="ghost"
-        />
-        <MenuList>
-          <MenuItem onClick={openImportDialog}>Import</MenuItem>
-          <MenuItem onClick={() => setExportDialogOpen(true)}>Export</MenuItem>
-        </MenuList>
-      </Menu>
+      <button
+        className="btn btn-primary btn-square"
+        popoverTarget="popover-settings"
+        style={{ anchorName: '--anchor-settings' } as React.CSSProperties}
+      >
+        <Icon name="CiSettings" />
+      </button>
+
+      <ul
+        className="dropdown menu w-52 rounded-box bg-base-100 shadow-sm"
+        popover="auto"
+        id="popover-settings"
+        style={{ positionAnchor: '--anchor-settings' } as React.CSSProperties}
+      >
+        <li>
+          <button
+            onClick={() => {
+              const dialog = document.getElementById('import-dialog') as HTMLDialogElement;
+              dialog.showModal();
+            }}
+          >
+            Import
+          </button>
+        </li>
+        <li>
+          <button
+            onClick={() => {
+              const dialog = document.getElementById('export-dialog') as HTMLDialogElement;
+              dialog.showModal();
+            }}
+          >
+            Export
+          </button>
+        </li>
+      </ul>
+
       <div className="divider divider-horizontal" />
       <ButtonGroup>
         <div className="tooltip tooltip-bottom" data-tip="Save to server">

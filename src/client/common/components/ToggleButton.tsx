@@ -7,12 +7,8 @@ export type ButtonProps = _ButtonProps & {
   tooltip?: string;
 };
 
-const ToggleButton = forwardRef<ButtonProps, 'input'>((props, ref) => {
-  const { children, colorScheme = 'gray', toggle, onClick, onToggle, tooltip, ...rest } = props;
-
-  // if (toggle) {
-  //   colorScheme = 'orange';
-  // }
+const ToggleButton = forwardRef<ButtonProps, 'input'>((props) => {
+  const { toggle, onClick, onToggle, tooltip } = props;
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     onToggle(toggle);
@@ -30,19 +26,6 @@ const ToggleButton = forwardRef<ButtonProps, 'input'>((props, ref) => {
       {props.children}
     </button>
   );
-  // <_Button
-
-  //   // TODO: fix union type is too complex to represent error
-  //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //   {...(rest as any)}
-  //   colorScheme={colorScheme}
-  //   onClick={handleClick}
-  //   ref={ref}
-  //   width="2.5rem"
-  //   height="2.5rem"
-  // >
-  //   {props.children}
-  // </_Button>
 });
 
 export default ToggleButton;

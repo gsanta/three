@@ -1,7 +1,6 @@
 import { EditorContext, EditorContextType } from '@/app/editor/EditorContext';
 import { store } from '../utils/store';
 import { ReactNode, useMemo } from 'react';
-import { Provider } from 'react-redux';
 import AddTool from '@/client/editor/controllers/tools/add/AddTool';
 import ToolService from '@/client/editor/services/ToolService';
 import SelectTool from '@/client/editor/controllers/tools/SelectTool';
@@ -9,10 +8,8 @@ import KeyboardService from '@/client/editor/services/KeyboardService';
 import ExportJson from '@/client/editor/controllers/io/ExportJson';
 import ImportJson from '@/client/editor/controllers/io/ImportJson';
 import EraseTool from '@/client/editor/controllers/tools/EraseTool';
-import CableTool from '@/client/editor/controllers/tools/CableTool';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import RayTool from '@/client/editor/controllers/tools/RayTool';
-import ColorTool from '@/client/editor/controllers/tools/ColorTool';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import ToolStore from '@/client/editor/stores/tool/ToolStore';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -22,7 +19,6 @@ import ControllerService from '@/client/editor/services/controller/ControllerSer
 import ElectricityStore from '@/client/editor/stores/electricity/ElectricityStore';
 import ElectricitySystemHook from '@/client/editor/services/electricity/ElectricitySystemHook';
 import SceneServiceImpl from '@/client/editor/components/scene/service/SceneServiceImpl';
-import RoomModeTool from '@/client/editor/controllers/tools/RoomModeTool';
 import UpdateService from '@/client/editor/services/update/UpdateService';
 import DataContext from '@/client/editor/contexts/DataContext';
 import BlockTypeStore from '@/client/editor/stores/blockType/BlockTypeStore';
@@ -83,11 +79,8 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
         [
           new AddTool(dataContext, factoryService, scene, sceneStore, transaction),
           new SelectTool(blockStore, scene, sceneStore, toolStore, transaction),
-          new CableTool(blockStore, factoryService, scene, sceneStore, transaction),
           new EraseTool(blockStore, transaction),
           new RayTool(blockStore, transaction, sceneStore),
-          new ColorTool(blockStore, transaction),
-          new RoomModeTool(blockStore, scene, transaction),
         ],
         toolStore,
       ),

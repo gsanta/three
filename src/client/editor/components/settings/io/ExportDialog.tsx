@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
-import Dialog, { DialogProps, DialogBody, DialogFooter } from '../../../../common/components/Dialog';
-import { Button, FormControl, FormLabel, Select } from '@chakra-ui/react';
 import FileType, { getFileTypes } from '../../../types/FileType';
 import { downloadString } from '../../../utils/fileUtils';
 import useEditorContext from '@/app/editor/EditorContext';
 
-const ExportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children'>) => {
+const ExportDialog = () => {
   const [selectedFileType, setSelectedFileType] = useState<FileType>(FileType.json);
 
   const { exporter } = useEditorContext();
 
+  const closeDialog = () => {
+    const dialog = document.getElementById('export-dialog') as HTMLDialogElement;
+    dialog.close();
+  };
+
   const exportDocument = () => {
     downloadString(JSON.stringify(exporter.export()), 'data.json');
 
-    onClose();
+    closeDialog();
   };
 
   const handleExport = () => {
@@ -30,28 +33,33 @@ const ExportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children
   };
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose} title="Export">
-      <DialogBody>
-        <FormControl>
-          <FormLabel>Type</FormLabel>
-          <Select onChange={handleFileTypeChange}>
+    <dialog id="export-dialog" className="modal">
+      <div className="modal-box">
+        <h3 className="font-bold text-lg">Export</h3>
+
+        <div className="form-control mt-4">
+          <label className="label">
+            <span className="label-text">Type</span>
+          </label>
+          <select className="select select-bordered" onChange={handleFileTypeChange}>
             {getFileTypes().map((fileType) => (
               <option key={fileType} value={fileType} selected={fileType === selectedFileType}>
                 {fileType}
               </option>
             ))}
-          </Select>
-        </FormControl>
-      </DialogBody>
-      <DialogFooter>
-        <Button size="sm" onClick={onClose}>
-          Close
-        </Button>
-        <Button size="sm" colorScheme="orange" onClick={handleExport}>
-          Export
-        </Button>
-      </DialogFooter>
-    </Dialog>
+          </select>
+        </div>
+
+        <div className="modal-action">
+          <button className="btn btn-sm" onClick={closeDialog}>
+            Close
+          </button>
+          <button className="btn btn-sm btn-warning" onClick={handleExport}>
+            Export
+          </button>
+        </div>
+      </div>
+    </dialog>
   );
 };
 

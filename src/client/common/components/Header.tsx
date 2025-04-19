@@ -1,23 +1,13 @@
 import SettingsPanel from '../../editor/components/settings/io/SettingsPanel';
 import UserSettings from '../../user/components/UserSettings';
-import { Box } from '@chakra-ui/react';
 import React from 'react';
 
 const Header = () => {
   return (
-    <Box
-      borderBottom="1px solid"
-      borderColor="gray.600"
-      display="flex"
-      justifyContent="space-between"
-      height="50px"
-      paddingInline="1"
-      paddingBlock="1"
-      className="bg-base-300"
-    >
+    <div className="border-b border-gray-600 flex justify-between h-[50px] px-1 py-1 bg-base-300">
       <SettingsPanel />
       <UserSettings />
-    </Box>
+    </div>
   );
 };
 

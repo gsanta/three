@@ -1,14 +1,17 @@
 import { useState } from 'react';
-import Dialog, { DialogProps, DialogBody, DialogFooter } from '../../../../../common/components/Dialog';
-import { Button } from '@chakra-ui/react';
 import DropZone from './DropZone';
 import useEditorContext from '@/app/editor/EditorContext';
 
-const ImportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children'>) => {
+const ImportDialog = () => {
   const [fileName, setFileName] = useState<string>();
   const [fileContent, setFileContent] = useState<string>('[]');
 
   const { importer } = useEditorContext();
+
+  const closeDialog = () => {
+    const dialog = document.getElementById('import-dialog') as HTMLDialogElement;
+    dialog.close();
+  };
 
   const handleSetFile = (name: string, content: string) => {
     setFileName(name);
@@ -17,28 +20,32 @@ const ImportDialog = ({ isOpen, onClose }: Omit<DialogProps, 'title' | 'children
 
   const handleImport = () => {
     importer.import(fileContent);
-    onClose();
+    closeDialog();
   };
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose} title="Import">
-      <DialogBody>
-        <DropZone fileName={fileName} setFile={handleSetFile} />
-      </DialogBody>
-      <DialogFooter>
-        <Button size="sm" onClick={onClose}>
-          Close
-        </Button>
-        <Button
-          size="sm"
-          colorScheme="orange"
-          // disabled={fileName === undefined}
-          onClick={handleImport}
-        >
-          Import
-        </Button>
-      </DialogFooter>
-    </Dialog>
+    <dialog id="import-dialog" className="modal">
+      <div className="modal-box">
+        <h3 className="font-bold text-lg">Import</h3>
+
+        <div className="mt-4">
+          <DropZone fileName={fileName} setFile={handleSetFile} />
+        </div>
+
+        <div className="modal-action">
+          <button className="btn btn-sm" onClick={closeDialog}>
+            Close
+          </button>
+          <button
+            className="btn btn-sm btn-warning"
+            onClick={handleImport}
+            // disabled={fileName === undefined}
+          >
+            Import
+          </button>
+        </div>
+      </div>
+    </dialog>
   );
 };
 

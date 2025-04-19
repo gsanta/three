@@ -1,11 +1,12 @@
 import { useAppDispatch, useAppSelector } from '../../../common/hooks/hooks';
 import { Box, FormControl, FormLabel } from '@chakra-ui/react';
-import RadioSwitchButton from '../../../common/components/RadioSwitchButton';
-import RadioSwitchGroup from '../../../common/components/RadioSwitchGroup';
 import { setBlockRotation, setSelectedGeometry } from '../../stores/blockType/blockTypeSlice';
 import { BlockName } from '../../types/BlockType';
 import useTemplate from '../hooks/useTemplate';
 import RotationControl from './RotationControl';
+import Dropdown from '@/client/common/components/Dropdown/Dropdown';
+import DropdownButton from '@/client/common/components/Dropdown/DropdownButton';
+import DropdownItem from '@/client/common/components/Dropdown/DropdownItem';
 
 const AddToolOptions = () => {
   const { blocks, selectedBlockName } = useAppSelector((state) => state.blockType);
@@ -33,16 +34,16 @@ const AddToolOptions = () => {
         <FormLabel display="flex" alignItems="center" gap="2" marginBottom="1">
           Blocks
         </FormLabel>
-        <RadioSwitchGroup name="geometry-selector" onChange={handleGeometryChange} value={selectedBlockName}>
+        <Dropdown id="add-blocks" onChange={handleGeometryChange} value={selectedBlockName}>
+          <DropdownButton />
+          {/* <DropdownItem value="a">A</DropdownItem>
+          <DropdownItem value="b">B</DropdownItem> */}
           {blocks.map((block) => (
-            <RadioSwitchButton key={block.type} value={block.type}>
+            <DropdownItem key={block.type} value={block.type}>
               {block.type}
-            </RadioSwitchButton>
+            </DropdownItem>
           ))}
-          <RadioSwitchButton key="house" value="house">
-            House
-          </RadioSwitchButton>
-        </RadioSwitchGroup>
+        </Dropdown>
       </FormControl>
       {blockSettings && selectedValues && (
         <RotationControl
