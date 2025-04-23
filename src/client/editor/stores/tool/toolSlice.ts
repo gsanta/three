@@ -20,6 +20,7 @@ export const initialToolState: ToolState = {
   },
 };
 
+// todo rename to canvasSlice
 export const toolSlice = createSlice({
   name: 'tool',
   initialState: initialToolState,

@@ -23,8 +23,12 @@ class SelectTool extends HoverTool {
     sceneStore: SceneStore,
     toolStore: ToolStore,
     update: TransactionService,
+    sceneService: SceneService,
   ) {
     super(blockStore, scene, update, ToolName.Select, 'BiRectangle');
+
+    this.sceneStore = sceneStore;
+    this.sceneService = sceneService;
 
     this.move = new MoveBlock(blockStore, update, sceneStore, toolStore);
     this.selector = new SelectBlock(blockStore, scene, sceneStore, update);
@@ -169,6 +173,10 @@ class SelectTool extends HoverTool {
   private isRotated = false;
 
   private isMoved = false;
+
+  private sceneStore: SceneStore;
+
+  sceneService: SceneService;
 }
 
 export default SelectTool;

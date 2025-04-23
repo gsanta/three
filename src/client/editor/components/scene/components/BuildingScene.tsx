@@ -7,7 +7,7 @@ import { ThreeEvent } from '@react-three/fiber';
 import { Plane } from '@react-three/drei';
 
 const BuildingScene = () => {
-  const { scene: sceneService, tool } = useEditorContext();
+  const { sceneStore: sceneService, tool } = useEditorContext();
 
   useEffect(() => {
     sceneService.getCamera().position.set(21, 23, 33);

@@ -55,6 +55,23 @@ CREATE TABLE "BlockAddMethodsOnCategories" (
 );
 
 -- CreateTable
+CREATE TABLE "BlockContextMenuAction" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "BlockContextMenuAction_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "BlockContextMenuActionOnCategories" (
+    "contextMenuActionName" TEXT NOT NULL,
+    "categoryName" TEXT NOT NULL,
+    "categoryName2" TEXT NOT NULL,
+
+    CONSTRAINT "BlockContextMenuActionOnCategories_pkey" PRIMARY KEY ("contextMenuActionName","categoryName","categoryName2")
+);
+
+-- CreateTable
 CREATE TABLE "Snapshot" (
     "id" TEXT NOT NULL,
     "state" JSONB,
@@ -77,6 +94,9 @@ CREATE UNIQUE INDEX "BlockCategory_name_key" ON "BlockCategory"("name");
 -- CreateIndex
 CREATE UNIQUE INDEX "BlockAddMethod_name_key" ON "BlockAddMethod"("name");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "BlockContextMenuAction_name_key" ON "BlockContextMenuAction"("name");
+
 -- AddForeignKey
 ALTER TABLE "BlockType" ADD CONSTRAINT "BlockType_categoryName_fkey" FOREIGN KEY ("categoryName") REFERENCES "BlockCategory"("name") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -85,6 +105,15 @@ ALTER TABLE "BlockAddMethodsOnCategories" ADD CONSTRAINT "BlockAddMethodsOnCateg
 
 -- AddForeignKey
 ALTER TABLE "BlockAddMethodsOnCategories" ADD CONSTRAINT "BlockAddMethodsOnCategories_sourceCategoryName_fkey" FOREIGN KEY ("sourceCategoryName") REFERENCES "BlockCategory"("name") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "BlockContextMenuActionOnCategories" ADD CONSTRAINT "BlockContextMenuActionOnCategories_contextMenuActionName_fkey" FOREIGN KEY ("contextMenuActionName") REFERENCES "BlockContextMenuAction"("name") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "BlockContextMenuActionOnCategories" ADD CONSTRAINT "BlockContextMenuActionOnCategories_categoryName_fkey" FOREIGN KEY ("categoryName") REFERENCES "BlockCategory"("name") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "BlockContextMenuActionOnCategories" ADD CONSTRAINT "BlockContextMenuActionOnCategories_categoryName2_fkey" FOREIGN KEY ("categoryName2") REFERENCES "BlockCategory"("name") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Snapshot" ADD CONSTRAINT "Snapshot_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;

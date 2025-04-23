@@ -23,6 +23,7 @@ import UpdateService from '@/client/editor/services/update/UpdateService';
 import DataContext from '@/client/editor/contexts/DataContext';
 import BlockTypeStore from '@/client/editor/stores/blockType/BlockTypeStore';
 import BlockCategoryStore from '@/client/editor/stores/blockCategory/BlockCategoryStore';
+import EraserService from '@/client/editor/services/EraserService';
 
 type ProtectedPageProps = {
   children: ReactNode;
@@ -71,14 +72,16 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
   const editorContext = useMemo<EditorContextType>(
     () => ({
       controller: new ControllerService(transaction),
+      eraser: new EraserService(blockStore, transaction),
       exporter: new ExportJson(store),
       importer: new ImportJson(store),
       keyboard: new KeyboardService(store),
-      scene: sceneStore,
+      sceneStore: sceneStore,
+      sceneService: scene,
       tool: new ToolService(
         [
           new AddTool(dataContext, factoryService, scene, sceneStore, transaction),
-          new SelectTool(blockStore, scene, sceneStore, toolStore, transaction),
+          new SelectTool(blockStore, scene, sceneStore, toolStore, transaction, scene),
           new EraseTool(blockStore, transaction),
           new RayTool(blockStore, transaction, sceneStore),
         ],
@@ -90,7 +93,7 @@ const ProtectedPage = ({ children }: ProtectedPageProps) => {
     [transaction, sceneStore, dataContext, factoryService, scene, blockStore, toolStore, updateService],
   );
 
-  editorContext.scene.setToolService(editorContext.tool);
+  editorContext.sceneStore.setToolService(editorContext.tool);
 
   return (
     <QueryClientProvider client={queryClient}>

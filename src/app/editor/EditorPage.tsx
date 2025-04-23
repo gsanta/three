@@ -13,22 +13,29 @@ import BlockCategoriesResponse from '@/common/response_types/BlockCategoriesResp
 import BlockAddMethodsResponse from '@/common/response_types/BlockAddMethodsResponse';
 import { useEffect } from 'react';
 import { useAppDispatch } from '@/client/common/hooks/hooks';
-import { setBlockAddMethods, setBlockCategories } from '@/client/editor/stores/blockCategory/blockCategorySlice';
+import {
+  setBlockAddMethods,
+  setBlockCategories,
+  setBlockContextMenuActions,
+} from '@/client/editor/stores/blockCategory/blockCategorySlice';
 import { Provider } from 'react-redux';
 import { store } from '@/client/common/utils/store';
+import BlockContextMenuActionsResponse from '@/common/response_types/BlockContextMenuActionsResponse';
 
 type EditorPageProps = {
   blockAddMethods: BlockAddMethodsResponse;
   blockCategories: BlockCategoriesResponse;
+  blockContextMenuActions: BlockContextMenuActionsResponse;
 };
 
-const EditorPageContent = ({ blockAddMethods, blockCategories }: EditorPageProps) => {
+const EditorPageContent = ({ blockAddMethods, blockCategories, blockContextMenuActions }: EditorPageProps) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(setBlockCategories(blockCategories.items));
     dispatch(setBlockAddMethods(blockAddMethods.items));
-  }, [blockAddMethods.items, blockCategories.items, dispatch]);
+    dispatch(setBlockContextMenuActions(blockContextMenuActions.items));
+  }, [blockAddMethods.items, blockCategories.items, blockContextMenuActions.items, dispatch]);
 
   return (
     <ProtectedPage>

@@ -14,7 +14,7 @@ import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { EffectComposer, Outline, Selection } from '@react-three/postprocessing';
 
 const Scene = () => {
-  const { tool, scene: sceneService } = useEditorContext();
+  const { tool, sceneStore: sceneService } = useEditorContext();
 
   const orbitControlRef = useRef<OrbitControlsImpl>(null);
 

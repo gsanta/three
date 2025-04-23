@@ -67,6 +67,7 @@ export const blockSlice = createSlice({
       }
     },
   },
+
   extraReducers: (builder) => {
     builder.addCase(updateBlocks, (state, action) => {
       blockUpdater.update(state, action.payload.blockUpdates);

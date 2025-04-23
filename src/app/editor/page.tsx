@@ -4,6 +4,7 @@ import '../globals.css';
 import EditorPage from './EditorPage';
 import db from '@/bff/config/db';
 import BlockAddMethodsResponse from '@/common/response_types/BlockAddMethodsResponse';
+import BlockContextMenuActionsResponse from '@/common/response_types/BlockContextMenuActionsResponse';
 
 const Page = async () => {
   const blockCategories = (await db.blockCategory.findMany()) as BlockCategoriesResponse['items'];
@@ -17,12 +18,23 @@ const Page = async () => {
     },
   })) as BlockAddMethodsResponse['items'];
 
+  const blockContextMenuActions = (await db.blockContextMenuAction.findMany({
+    include: {
+      categories: {
+        include: {
+          category: true,
+        },
+      },
+    },
+  })) as BlockContextMenuActionsResponse['items'];
+
   return (
     <EditorPage
       blockCategories={{
         items: blockCategories,
       }}
       blockAddMethods={{ items: blockAddMethods }}
+      blockContextMenuActions={{ items: blockContextMenuActions }}
     />
   );
 };

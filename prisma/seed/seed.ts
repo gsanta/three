@@ -6,7 +6,8 @@ import blockCategories from './blockCategories';
 import blockAddMethodsSeeds from './blockAddMethodsSeeds';
 import blockAddMethodsOnCategoriesSeeds from './blockAddMethodsOnCategoriesSeeds';
 import houseSeeds from './block_types/houseSeeds';
-import plantSeeds from './block_types/plantSeeds';
+import blockContextMenuActionSeeds from './blockContextMenuActionSeeds';
+import blockContextMenuActionOnCategoriesSeeds from './blockContextMenuActionOnCategoriesSeeds';
 
 const prisma = new PrismaClient();
 const main = async () => {
@@ -95,6 +96,28 @@ const main = async () => {
     });
   }
 
+  for (const seed of blockContextMenuActionSeeds) {
+    await prisma.blockContextMenuAction.upsert({
+      where: { name: seed.name },
+      update: {},
+      create: seed,
+    });
+  }
+
+  for (const seed of blockContextMenuActionOnCategoriesSeeds) {
+    await prisma.blockContextMenuActionOnCategories.upsert({
+      where: {
+        contextMenuActionName_categoryName_categoryName2: {
+          contextMenuActionName: seed.contextMenuActionName,
+          categoryName: seed.categoryName,
+          categoryName2: seed.categoryName2,
+        },
+      },
+      update: {},
+      create: seed,
+    });
+  }
+
   for (const template of roadTemplateSeeds) {
     await prisma.blockType.upsert({
       where: { type: template.type },
@@ -120,14 +143,6 @@ const main = async () => {
   }
 
   for (const seed of houseSeeds) {
-    await prisma.blockType.upsert({
-      where: { type: seed.type },
-      update: {},
-      create: seed,
-    });
-  }
-
-  for (const seed of plantSeeds) {
     await prisma.blockType.upsert({
       where: { type: seed.type },
       update: {},

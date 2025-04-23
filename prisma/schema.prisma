@@ -38,6 +38,8 @@ model BlockCategory {
   name            String      @unique
   BlockType       BlockType[]
   addMethods      BlockAddMethodsOnCategories[]
+  categories      BlockContextMenuActionOnCategories[] @relation(name: "category")
+  categories2     BlockContextMenuActionOnCategories[] @relation(name: "category2")
 }
 
 model BlockAddMethod {
@@ -58,6 +60,23 @@ model BlockAddMethodsOnCategories {
   connectionType            String?
 
   @@id([addMethodName, sourceCategoryName])
+}
+
+model BlockContextMenuAction {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique
+  categories BlockContextMenuActionOnCategories[]
+}
+
+model BlockContextMenuActionOnCategories {
+  contextMenuAction     BlockContextMenuAction @relation(fields: [contextMenuActionName], references: [name])
+  contextMenuActionName String
+  category              BlockCategory  @relation(fields: [categoryName], name: "category", references: [name])
+  categoryName          String
+  category2             BlockCategory  @relation(fields: [categoryName2], name: "category2", references: [name])
+  categoryName2         String
+  
+  @@id([contextMenuActionName, categoryName, categoryName2])
 }
 
 model Snapshot {

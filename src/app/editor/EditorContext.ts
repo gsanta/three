@@ -7,14 +7,18 @@ import { createContext, useContext } from 'react';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
 import ControllerService from '@/client/editor/services/controller/ControllerService';
 import UpdateService from '@/client/editor/services/update/UpdateService';
+import SceneService from '@/client/editor/components/scene/service/SceneService';
+import EraserService from '@/client/editor/services/EraserService';
 
 export type EditorContextType = {
   controller: ControllerService;
+  eraser: EraserService;
   tool: ToolService;
   keyboard: KeyboardService;
   exporter: ExportJson;
   importer: ImportJson;
-  scene: SceneStore;
+  sceneStore: SceneStore;
+  sceneService: SceneService;
   transaction: TransactionService;
   update: UpdateService;
 };
