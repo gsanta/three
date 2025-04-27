@@ -1,4 +1,4 @@
-import useEditorContext from '@/app/editor/EditorContext';
+import useEditorContext from '@/app/editor/useEditorContext';
 import { useEffect, useRef } from 'react';
 import { Group, Mesh } from 'three';
 

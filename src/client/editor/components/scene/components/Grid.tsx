@@ -1,4 +1,4 @@
-import useEditorContext from '@/app/editor/EditorContext';
+import useEditorContext from '@/app/editor/useEditorContext';
 import { useAppSelector } from '@/client/common/hooks/hooks';
 
 type RowProps = {

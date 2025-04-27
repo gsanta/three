@@ -38,32 +38,6 @@ class BlockStore {
     return block;
   }
 
-  getSelectedRootBlockIds() {
-    return this.getState().selectedRootBlockIds;
-  }
-
-  getSelectedBlock({ category }: { category?: string } = {}) {
-    let selectedBlocks = this.getSelectedRootBlockIds();
-
-    if (category) {
-      selectedBlocks = selectedBlocks.filter((currBlockId) => this.getBlock(currBlockId).category === category);
-    }
-
-    if (selectedBlocks.length === 1) {
-      return selectedBlocks[0];
-    }
-
-    return null;
-  }
-
-  getSelectedPart(blockId?: string) {
-    return this.getSelectedPartIndexes()[blockId || '']?.[0];
-  }
-
-  getSelectedPartIndexes() {
-    return this.getState().selectedPartIndexes;
-  }
-
   getDecoration<T extends BlockDecoration>(category: T, id?: string) {
     if (!id) {
       throw new Error('Id is not defined');

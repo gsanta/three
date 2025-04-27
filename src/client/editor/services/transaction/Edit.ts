@@ -131,10 +131,10 @@ class Edit {
     return this;
   }
 
-  select(id: string | null, partIndex?: string, options?: EditOptions): this {
+  select(block: Block[], options?: EditOptions): this {
     const mergedOptions = this.getMergedOptions(options);
 
-    this.updates.push({ select: id, slice: mergedOptions.slice, partIndex });
+    this.updates.push({ select: block, slice: mergedOptions.slice });
 
     return this;
   }

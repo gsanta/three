@@ -6,7 +6,7 @@ import Block from '@/client/editor/models/Block';
 import Cable from '@/client/editor/models/block/Cable';
 import MoveControl from './MoveControl';
 import { useEffect, useRef } from 'react';
-import useEditorContext from '@/app/editor/EditorContext';
+import useEditorContext from '@/app/editor/useEditorContext';
 import { resetNotifyOnRendered } from '@/client/editor/stores/block/blockActions';
 
 const isModelMesh = (block: Block): block is Block<'model'> => block.category !== 'cables';

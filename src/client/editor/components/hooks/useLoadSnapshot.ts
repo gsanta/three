@@ -3,7 +3,7 @@ import api from '@/client/common/utils/api';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useEffect } from 'react';
-import useEditorContext from '@/app/editor/EditorContext';
+import useEditorContext from '@/app/editor/useEditorContext';
 
 type LoadSnapshotResponse = {
   state: string;

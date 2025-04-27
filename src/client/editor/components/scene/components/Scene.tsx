@@ -1,6 +1,6 @@
 import { Environment, OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { useCallback, useEffect, useRef } from 'react';
-import useEditorContext from '@/app/editor/EditorContext';
+import useEditorContext from '@/app/editor/useEditorContext';
 import { ThreeEvent, useThree } from '@react-three/fiber';
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import TemporaryCableRenderer from './TemporaryCableRenderer';

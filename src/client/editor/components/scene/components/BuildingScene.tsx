@@ -1,4 +1,4 @@
-import useEditorContext from '@/app/editor/EditorContext';
+import useEditorContext from '@/app/editor/useEditorContext';
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import { Physics } from '@react-three/cannon';
 import { useCallback, useEffect } from 'react';

@@ -13,29 +13,24 @@ import BlockCategoriesResponse from '@/common/response_types/BlockCategoriesResp
 import BlockAddMethodsResponse from '@/common/response_types/BlockAddMethodsResponse';
 import { useEffect } from 'react';
 import { useAppDispatch } from '@/client/common/hooks/hooks';
-import {
-  setBlockAddMethods,
-  setBlockCategories,
-  setBlockContextMenuActions,
-} from '@/client/editor/stores/blockCategory/blockCategorySlice';
+
 import { Provider } from 'react-redux';
 import { store } from '@/client/common/utils/store';
 import BlockContextMenuActionsResponse from '@/common/response_types/BlockContextMenuActionsResponse';
+import { dispatchEditorData } from '@/client/editor/setupEditorData';
 
 type EditorPageProps = {
-  blockAddMethods: BlockAddMethodsResponse;
-  blockCategories: BlockCategoriesResponse;
-  blockContextMenuActions: BlockContextMenuActionsResponse;
+  blockAddMethods: BlockAddMethodsResponse['items'];
+  blockCategories: BlockCategoriesResponse['items'];
+  blockContextMenuActions: BlockContextMenuActionsResponse['items'];
 };
 
-const EditorPageContent = ({ blockAddMethods, blockCategories, blockContextMenuActions }: EditorPageProps) => {
+const EditorPageContent = (props: EditorPageProps) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(setBlockCategories(blockCategories.items));
-    dispatch(setBlockAddMethods(blockAddMethods.items));
-    dispatch(setBlockContextMenuActions(blockContextMenuActions.items));
-  }, [blockAddMethods.items, blockCategories.items, blockContextMenuActions.items, dispatch]);
+    dispatchEditorData(props, dispatch);
+  }, [dispatch, props]);
 
   return (
     <ProtectedPage>

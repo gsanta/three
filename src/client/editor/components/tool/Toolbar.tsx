@@ -3,7 +3,7 @@ import { Box, Text, Tooltip } from '@chakra-ui/react';
 import ToggleButton from '../../../common/components/lib/ToggleButton';
 import Icon from '../../../common/components/lib/Icon';
 import { useAppDispatch, useAppSelector } from '../../../common/hooks/hooks';
-import useEditorContext from '@/app/editor/EditorContext';
+import useEditorContext from '@/app/editor/useEditorContext';
 import ToolName from '../../models/ToolName';
 import { setCityMode } from '../../stores/editorSlice';
 

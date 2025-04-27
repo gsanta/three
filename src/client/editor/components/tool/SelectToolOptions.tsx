@@ -1,4 +1,4 @@
-import useEditorContext from '@/app/editor/EditorContext';
+import useEditorContext from '@/app/editor/useEditorContext';
 import { Box } from '@chakra-ui/react';
 import useSelectedBlocks from '../hooks/useSelectedBlocks';
 import IconButton from '@/client/common/components/lib/IconButton';

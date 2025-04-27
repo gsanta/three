@@ -11,16 +11,19 @@ import Block from '@/client/editor/models/Block';
 import BlockAddMethod from '@/common/model_types/BlockAddMethod';
 import BlockType, { ModelPart, ModelPartRole } from '@/client/editor/models/BlockType';
 import Num3 from '@/client/editor/models/Num3';
+import BlockCategoryStore from '@/client/editor/stores/blockCategory/BlockCategoryStore';
 
 class AddSlotToSlot extends AddBlock {
   constructor(
     blockStore: BlockStore,
+    blockCategoryStore: BlockCategoryStore,
     factoryService: FactoryService,
     sceneStore: SceneStore,
     updateService: TransactionService,
   ) {
     super('add-slot-to-slot');
 
+    this.blockCategoryStore = blockCategoryStore;
     this.blockStore = blockStore;
     this.factoryService = factoryService;
     this.sceneStore = sceneStore;
@@ -66,8 +69,6 @@ class AddSlotToSlot extends AddBlock {
       );
     }
 
-    edit.select(null);
-
     const [sourcePart, rotation] = this.calculateSourcePartWithRotation(
       addMethod.connectionType,
       addMethod.sourcePartRole,
@@ -94,7 +95,7 @@ class AddSlotToSlot extends AddBlock {
       { arrayMergeStrategy: 'merge' },
     );
 
-    edit.select(edit.getLastBlock().id);
+    edit.select([edit.getLastBlock()]);
 
     return edit;
   }
@@ -189,6 +190,8 @@ class AddSlotToSlot extends AddBlock {
   }
 
   private blockStore: BlockStore;
+
+  private blockCategoryStore: BlockCategoryStore;
 
   private factoryService: FactoryService;
 

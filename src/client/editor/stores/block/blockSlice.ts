@@ -7,9 +7,6 @@ export const initialBlockState: BlockState = {
   rootBlocksIds: [],
   blocks: {},
   blockIds: [],
-  selectedBlocks: {},
-  selectedRootBlockIds: [],
-  selectedPartIndexes: {},
   decorations: {
     cables: {},
     decorations: {},
@@ -19,6 +16,7 @@ export const initialBlockState: BlockState = {
     'building-bases': {},
     transformers: {},
   },
+  selectedBlocks: [],
 };
 
 const blockUpdater = new BlocksUpdater('city');
@@ -31,10 +29,6 @@ export const blockSlice = createSlice({
       state.rootBlocksIds = [];
       state.blocks = {};
       state.hovered = undefined;
-      state.selectedRootBlockIds = [];
-
-      state.selectedBlocks = {};
-      state.selectedPartIndexes = {};
       state.decorations = {
         cables: {},
         decorations: {},
@@ -44,6 +38,7 @@ export const blockSlice = createSlice({
         roads: {},
         transformers: {},
       };
+      state.selectedBlocks = [];
     },
 
     hover(state, action: PayloadAction<{ block: string; partIndex?: string } | undefined>) {
@@ -60,7 +55,6 @@ export const blockSlice = createSlice({
     update(state, action: PayloadAction<Partial<BlockState>>) {
       state.blocks = action.payload.blocks || state.blocks;
       state.rootBlocksIds = action.payload.rootBlocksIds || state.rootBlocksIds;
-      state.selectedRootBlockIds = action.payload.selectedRootBlockIds || state.selectedRootBlockIds;
       state.blockIds = action.payload.blockIds || [];
       if (action.payload.decorations) {
         state.decorations = action.payload.decorations;

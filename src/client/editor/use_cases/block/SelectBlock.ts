@@ -6,9 +6,17 @@ import Block from '@/client/editor/models/Block';
 import { store } from '@/client/common/utils/store';
 import { updateSelectTool } from '../../stores/tool/toolSlice';
 import TransactionService from '../../services/transaction/TransactionService';
+import BlockCategoryStore from '../../stores/blockCategory/BlockCategoryStore';
 
 class SelectBlock {
-  constructor(blockStore: BlockStore, scene: SceneService, sceneStore: SceneStore, updateService: TransactionService) {
+  constructor(
+    blockStore: BlockStore,
+    blockCategoryStore: BlockCategoryStore,
+    scene: SceneService,
+    sceneStore: SceneStore,
+    updateService: TransactionService,
+  ) {
+    this.blockCategoryStore = blockCategoryStore;
     this.blockStore = blockStore;
     this.scene = scene;
     this.sceneStore = sceneStore;
@@ -17,10 +25,23 @@ class SelectBlock {
 
   select(blockId: string | undefined, clientX: number, clientY: number) {
     if (blockId) {
-      const block = this.blockStore.getBlocks()[blockId];
-      this.selectBlock(block, clientX, clientY);
+      const alreadySelectedBlockIds = this.blockCategoryStore.getSelectedBlocks();
+      if (!alreadySelectedBlockIds[blockId]) {
+        const block = this.blockStore.getBlocks()[blockId];
+        const edit = this.updateService.createTransaction();
+
+        const alreadySelectedBlocks = Object.keys(alreadySelectedBlockIds).map((id) => this.blockStore.getBlock(id));
+
+        edit.select([...alreadySelectedBlocks, this.blockStore.getBlock(blockId)]);
+
+        store.dispatch(updateSelectTool({ moveAxis: block.moveAxis }));
+
+        edit.commit();
+      }
     } else {
-      this.updateService.createTransaction().select(null).commit();
+      const edit = this.updateService.createTransaction();
+      edit.select([]);
+      edit.commit();
     }
   }
 
@@ -39,11 +60,10 @@ class SelectBlock {
     const partIndex = this.checkPartIntersection(block, clientX, clientY);
 
     if (partIndex) {
-      edit.select(null);
-      edit.select(block.id, partIndex);
+      // edit.select(block, 'selected', partIndex);
       store.dispatch(updateSelectTool({ moveAxis: block.moveAxis }));
     } else {
-      edit.select(block.id, '#1');
+      edit.select([block]);
 
       store.dispatch(updateSelectTool({ moveAxis: block.moveAxis }));
     }
@@ -65,6 +85,8 @@ class SelectBlock {
 
     return undefined;
   }
+
+  private blockCategoryStore: BlockCategoryStore;
 
   private blockStore: BlockStore;
 

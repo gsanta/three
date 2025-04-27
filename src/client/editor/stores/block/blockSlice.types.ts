@@ -10,9 +10,7 @@ export type BlockState = {
     partIndex?: string;
   };
   rootBlocksIds: string[];
-  selectedRootBlockIds: string[];
-  selectedBlocks: Record<string, boolean>;
-  selectedPartIndexes: Record<string, string[]>;
+  selectedBlocks: string[];
 };
 
 export type BlockSlices = 'city' | 'building';
@@ -25,7 +23,11 @@ export type DecorationUpdate<K extends BlockDecoration> = {
 
 export type BlockUpdate = { type: 'update'; block: Block; slice: BlockSlices };
 
-export type BlockSelect = { select: string | null; partIndex?: string; slice: BlockSlices };
+export type BlockSelect = {
+  select: Block[];
+  partIndex?: string;
+  slice: BlockSlices;
+};
 
 export type BlockHover = { hover: string | null; partIndex?: string; slice: BlockSlices };
 

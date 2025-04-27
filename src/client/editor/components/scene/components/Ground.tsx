@@ -1,4 +1,4 @@
-import useEditorContext from '@/app/editor/EditorContext';
+import useEditorContext from '@/app/editor/useEditorContext';
 import { usePlane } from '@react-three/cannon';
 import { MeshReflectorMaterial, useTexture } from '@react-three/drei';
 import { ThreeEvent } from '@react-three/fiber';

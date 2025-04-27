@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import FileType, { getFileTypes } from '../../../models/FileType';
 import { downloadString } from '../../../utils/fileUtils';
-import useEditorContext from '@/app/editor/EditorContext';
+import useEditorContext from '@/app/editor/useEditorContext';
 
 const ExportDialog = () => {
   const [selectedFileType, setSelectedFileType] = useState<FileType>(FileType.json);

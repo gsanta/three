@@ -1,4 +1,4 @@
-import useEditorContext from '@/app/editor/EditorContext';
+import useEditorContext from '@/app/editor/useEditorContext';
 import { ServerError } from '@/client/common/components/lib/ErrorMessage';
 import api from '@/client/common/utils/api';
 import { useToast } from '@chakra-ui/react';

@@ -14,9 +14,20 @@ const houseSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'parts'
         materialPath: 'Palette',
         scale: [2.537, 2.537, 2.537],
       },
+      {
+        name: 'WeatherHead',
+        materialPath: 'Palette',
+        position: [-1.843, 7.337, -2.924],
+        scale: 2.537,
+      },
     ],
     partDetails: {
       Base: {},
+      WeatherHead: {
+        role: 'slot',
+        roles: ['pin'],
+        type: 'physical',
+      },
     },
     type: 'two-story-house-1',
   },

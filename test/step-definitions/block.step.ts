@@ -14,8 +14,8 @@ When('I wait for dirty blocks to update', async function (this: ExtendedWorld) {
 });
 
 Then('parent for block {string} is {string}', function (this: ExtendedWorld, childId: string, parentId: string) {
-  const child = this.env.blockStore.getBlock(childId);
-  const parent = this.env.blockStore.getBlock(parentId);
+  const child = this.getEnv().editorContext.blockStore.getBlock(childId);
+  const parent = this.getEnv().editorContext.blockStore.getBlock(parentId);
 
   assert.equal(child.parentConnection?.block, parent.id);
 
@@ -27,8 +27,8 @@ Then(
   'block {string} is in slot {string} of block {string}',
   function (this: ExtendedWorld, childId: string, partIndexOrName: string, parentId: string) {
     const partIndex = checkPartIndexExists.call(this, parentId, partIndexOrName);
-    const child = this.env.blockStore.getBlock(childId);
-    const parent = this.env.blockStore.getBlock(parentId);
+    const child = this.getEnv().editorContext.blockStore.getBlock(childId);
+    const parent = this.getEnv().editorContext.blockStore.getBlock(parentId);
 
     assert.equal(child.parentConnection?.part, partIndex);
     assert.equal(child.parentConnection?.block, parentId);
@@ -40,7 +40,7 @@ Then(
 Then(
   'slot {string} of block {string} is not occupied',
   function (this: ExtendedWorld, partIndex: string, blockId: string) {
-    const block = this.env.blockStore.getBlock(blockId);
+    const block = this.getEnv().editorContext.blockStore.getBlock(blockId);
 
     assert.ok(!block.childConnections.find((connection) => connection.parentPart === partIndex));
   },
@@ -49,7 +49,7 @@ Then(
 Then(
   'block {string} does not have a child {string}',
   function (this: ExtendedWorld, parentId: string, childId: string) {
-    const parent = this.env.blockStore.getBlock(parentId);
+    const parent = this.getEnv().editorContext.blockStore.getBlock(parentId);
 
     const hasChild = parent.childConnections.find((currChild) => currChild.childBlock === childId);
     assert.ok(!hasChild);
@@ -57,7 +57,7 @@ Then(
 );
 
 Then('block {string} does not exist', function (this: ExtendedWorld, blockId: string) {
-  const block = this.env.blockStore.getBlock(blockId);
+  const block = this.getEnv().editorContext.blockStore.getBlock(blockId);
 
   assert.ok(!block);
 });
@@ -65,7 +65,7 @@ Then('block {string} does not exist', function (this: ExtendedWorld, blockId: st
 Then(
   'block at {float},{float},{float} does not exist',
   function (this: ExtendedWorld, x: number, y: number, z: number) {
-    const blockWithDistance = findClosestBlock(this.env.blockStore.getBlocksAsArray(), [x, y, z]);
+    const blockWithDistance = findClosestBlock(this.getEnv().editorContext.blockStore.getBlocksAsArray(), [x, y, z]);
 
     if (blockWithDistance && blockWithDistance[1] < 0.5) {
       throw new Error(`Block was found near position (${x},${y},${z})`);

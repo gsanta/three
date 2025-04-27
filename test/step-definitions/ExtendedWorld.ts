@@ -1,18 +1,20 @@
-import { IWorldOptions, World, setWorldConstructor } from '@cucumber/cucumber';
+import { World, setWorldConstructor } from '@cucumber/cucumber';
 import TestEnv, { setupTestEnv } from './support/TestEnv';
 
 class ExtendedWorld extends World {
-  env: TestEnv;
+  env?: TestEnv;
 
-  constructor(props: IWorldOptions) {
-    super(props);
-
-    this.env = setupTestEnv();
+  async setup() {
+    // this.env.teardown();
+    this.env = await setupTestEnv();
   }
 
-  setup() {
-    this.env.teardown();
-    this.env = setupTestEnv();
+  getEnv() {
+    if (!this.env) {
+      throw new Error('env is not setup');
+    }
+
+    return this.env;
   }
 }
 

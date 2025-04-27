@@ -34,7 +34,11 @@
         "program": "${workspaceRoot}/node_modules/@cucumber/cucumber/bin/cucumber-js",
         "args": [
             "${workspaceRoot}/test/**/*.feature",
-        ]
+        ],
+        "env": {
+          "TS_NODE_TRANSPILE_ONLY": "true",
+          "NODE_ENV": "test"
+        }
     },
     {
         "name": "Cucumber @only",
@@ -46,7 +50,11 @@
             "${workspaceRoot}/test/**/*.feature",
             "--tags",
             "@only"
-        ]
+        ],
+        "env": {
+          "TS_NODE_TRANSPILE_ONLY": "true",
+          "NODE_ENV": "test"
+        }
     }
   ]
 }

@@ -5,21 +5,28 @@ import AddPoles from './AddPoles';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
-import DataContext from '@/client/editor/contexts/DataContext';
 import ExecuteAddParams from './ExecuteAddParams';
 import AddBlockToSlot from './AddBlockToSlot';
 import AddSlotToSlot from './AddSlotToSlot';
 import BlockAddMethod from '@/common/model_types/BlockAddMethod';
+import BlockCategoryStore from '@/client/editor/stores/blockCategory/BlockCategoryStore';
+import BlockStore from '@/client/editor/stores/block/BlockStore';
 
 class AddService {
-  constructor(data: DataContext, factoryService: FactoryService, sceneStore: SceneStore, update: TransactionService) {
-    this.data = data;
+  constructor(
+    blockStore: BlockStore,
+    blockCategoryStore: BlockCategoryStore,
+    factoryService: FactoryService,
+    sceneStore: SceneStore,
+    update: TransactionService,
+  ) {
+    this.blockCategoryStore = blockCategoryStore;
     this.update = update;
     this.addBlock = [
-      new AddBlockToBlock(factoryService),
-      new AddPoles(data.block, factoryService, sceneStore, update),
+      new AddBlockToBlock(blockStore, factoryService),
+      new AddPoles(blockStore, factoryService, sceneStore, update),
       new AddBlockToSlot(factoryService, sceneStore),
-      new AddSlotToSlot(data.block, factoryService, sceneStore, update),
+      new AddSlotToSlot(blockStore, blockCategoryStore, factoryService, sceneStore, update),
     ];
   }
 
@@ -27,7 +34,7 @@ class AddService {
     const { executionPhase } = params;
     const edit = this.update.createTransaction();
 
-    this.data.blockCategory
+    this.blockCategoryStore
       .getAddMethodsByCategory(params.newBlockType.category)
       .filter((addMethod) =>
         executionPhase === 'afterRender' ? addMethod.executeAfterRender : !addMethod.executeAfterRender,
@@ -65,9 +72,9 @@ class AddService {
 
   private addContext: AddContext = {};
 
-  private data: DataContext;
-
   private update: TransactionService;
+
+  private blockCategoryStore: BlockCategoryStore;
 }
 
 export default AddService;

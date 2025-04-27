@@ -15,7 +15,7 @@ When('I select tool {string}', function (this: ExtendedWorld, toolName: ToolName
 });
 
 When('I execute tool', function (this: ExtendedWorld) {
-  this.env.tool.onExecute();
+  this.getEnv().tool.onExecute();
 });
 
 When('I select template {string}', function (this: ExtendedWorld, templateName: string) {
@@ -23,13 +23,13 @@ When('I select template {string}', function (this: ExtendedWorld, templateName: 
 });
 
 When('I press pointer', function (this: ExtendedWorld) {
-  this.env.toolHelper.pointerDown();
-  this.env.toolHelper.pointerUp();
+  this.getEnv().toolHelper.pointerDown();
+  this.getEnv().toolHelper.pointerUp();
 });
 
 When('I press pointer over block {string}', function (this: ExtendedWorld, blockId: string) {
-  this.env.toolHelper.pointerDown({ blockId });
-  this.env.toolHelper.pointerUp();
+  this.getEnv().toolHelper.pointerDown({ blockId });
+  this.getEnv().toolHelper.pointerUp();
 });
 
 type IntersectionHash = {
@@ -44,7 +44,7 @@ When('I have an intersection with:', function (this: ExtendedWorld, table: any) 
 
   const intersections: BlockIntersection[] = [];
   data.forEach((row) => {
-    const block = this.env.blockStore.getBlock(row.BLOCK);
+    const block = this.getEnv().blockStore.getBlock(row.BLOCK);
     const entry = Object.entries(block.partDetails).find(([, val]) => val?.name === row.PART);
 
     if (!entry?.[0]) {
@@ -74,21 +74,21 @@ When('I have an intersection with:', function (this: ExtendedWorld, table: any) 
     });
   });
 
-  this.env.sceneService.setIntersection(intersections);
+  this.getEnv().sceneService.setIntersection(intersections);
 });
 
 When(
   'I press pointer over block {string} and part {string} at position {string}',
   function (this: ExtendedWorld, blockId: string, partName: string, position: string) {
     const [x, y, z] = checkPosition.call(this, position);
-    const block = this.env.blockStore.getBlock(blockId);
+    const block = this.getEnv().blockStore.getBlock(blockId);
 
     if (!block) {
       throw new Error(`Block not found at position (${x},${y},${z})`);
     }
 
     const partIndex = checkPartIndexExists.call(this, block.id, partName);
-    this.env.sceneService.setIntersection([
+    this.getEnv().sceneService.setIntersection([
       {
         block,
         partIndex: partIndex,
@@ -96,32 +96,32 @@ When(
       },
     ]);
 
-    this.env.toolHelper.pointerEnter({ blockId: block.id, partIndex: partIndex });
-    this.env.toolHelper.pointerDown({ blockId });
-    this.env.toolHelper.pointerUp();
+    this.getEnv().toolHelper.pointerEnter({ blockId: block.id, partIndex: partIndex });
+    this.getEnv().toolHelper.pointerDown({ blockId });
+    this.getEnv().toolHelper.pointerUp();
   },
 );
 
 When('I press pointer at {float},{float},{float}', function (this: ExtendedWorld, x: number, y: number, z: number) {
-  const blockWithDistance = findClosestBlock(this.env.blockStore.getBlocksAsArray(), [x, y, z]);
+  const blockWithDistance = findClosestBlock(this.getEnv().editorContext.blockStore.getBlocksAsArray(), [x, y, z]);
 
-  this.env.toolHelper.pointerDown({ blockId: blockWithDistance?.[0].id });
+  this.getEnv().toolHelper.pointerDown({ blockId: blockWithDistance?.[0].id });
 });
 
 When('I move pointer to {string}', function (this: ExtendedWorld, position: string) {
   const [x, y, z] = checkPosition.call(this, position);
 
-  this.env.toolHelper.pointerMove({ point: new Vector3(x, y, z) });
+  this.getEnv().toolHelper.pointerMove({ point: new Vector3(x, y, z) });
 });
 
 When('I examine block at {float},{float},{float}', function (this: ExtendedWorld, x: number, y: number, z: number) {
-  const blockWithDistance = findClosestBlock(this.env.blockStore.getBlocksAsArray(), [x, y, z]);
+  const blockWithDistance = findClosestBlock(this.getEnv().editorContext.blockStore.getBlocksAsArray(), [x, y, z]);
 
   if (!blockWithDistance || blockWithDistance[1] > 1) {
     throw new Error(`Block was not found near position (${x},${y},${z})`);
   }
 
-  this.env.testScene.storedBlockId = blockWithDistance[0].id;
+  this.getEnv().testScene.storedBlockId = blockWithDistance[0].id;
 });
 
 When(
@@ -129,22 +129,22 @@ When(
   function (this: ExtendedWorld, blockId: string, partIndexOrName: string) {
     const partIndex = checkPartIndexExists.call(this, blockId, partIndexOrName);
 
-    const block = this.env.blockStore.getBlock(blockId);
+    const block = this.getEnv().blockStore.getBlock(blockId);
 
     if (!block) {
       throw new Error(`Could not find block with id ${blockId}`);
     }
 
-    this.env.toolHelper.pointerEnter({ blockId: block.id, partIndex: partIndex });
+    this.getEnv().toolHelper.pointerEnter({ blockId: block.id, partIndex: partIndex });
   },
 );
 
 When('I drag pointer with delta {string}', function (this: ExtendedWorld, deltaStr: string) {
   const delta = checkPosition.call(this, deltaStr);
 
-  this.env.tool.onDrag(new Vector3(...delta));
+  this.getEnv().tool.onDrag(new Vector3(...delta));
 });
 
 When('I end drag', function (this: ExtendedWorld) {
-  this.env.tool.onDragEnd();
+  this.getEnv().tool.onDragEnd();
 });

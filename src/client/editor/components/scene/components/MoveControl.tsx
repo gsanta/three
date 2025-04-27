@@ -1,7 +1,7 @@
 import { snapTo } from '@/client/editor/utils/vectorUtils';
 import { PivotControls } from '@react-three/drei';
 import { Quaternion, Vector3 } from 'three';
-import useEditorContext from '@/app/editor/EditorContext';
+import useEditorContext from '@/app/editor/useEditorContext';
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import Num3 from '@/client/editor/models/Num3';
 import { ReactNode } from 'react';

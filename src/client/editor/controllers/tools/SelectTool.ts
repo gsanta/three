@@ -15,10 +15,12 @@ import SelectBlock from '../../use_cases/block/SelectBlock';
 import ToolStore from '../../stores/tool/ToolStore';
 import HoverTool from './HoverTool';
 import BlockMover from '../../use_cases/block/move/BlockMover';
+import BlockCategoryStore from '../../stores/blockCategory/BlockCategoryStore';
 
 class SelectTool extends HoverTool {
   constructor(
     blockStore: BlockStore,
+    blockCategoryStore: BlockCategoryStore,
     scene: SceneService,
     sceneStore: SceneStore,
     toolStore: ToolStore,
@@ -27,11 +29,12 @@ class SelectTool extends HoverTool {
   ) {
     super(blockStore, scene, update, ToolName.Select, 'BiRectangle');
 
+    this.blockCategoryStore = blockCategoryStore;
     this.sceneStore = sceneStore;
     this.sceneService = sceneService;
 
     this.move = new MoveBlock(blockStore, update, sceneStore, toolStore);
-    this.selector = new SelectBlock(blockStore, scene, sceneStore, update);
+    this.selector = new SelectBlock(blockStore, blockCategoryStore, scene, sceneStore, update);
     this.toolStore = toolStore;
   }
 
@@ -55,7 +58,7 @@ class SelectTool extends HoverTool {
 
     const edit = this.update.createTransaction();
 
-    const selectedBlockId = this.blockStore.getSelectedRootBlockIds()[0];
+    const selectedBlockId = this.blockCategoryStore.getSelectedRootBlockIds()[0];
 
     if (selectedBlockId) {
       // edit.updateBlock(selectedBlock, { notifyOnRender: true });
@@ -70,7 +73,7 @@ class SelectTool extends HoverTool {
   }
 
   onDragEnd() {
-    const selectedBlockIds = this.blockStore.getSelectedRootBlockIds();
+    const selectedBlockIds = this.blockCategoryStore.getSelectedRootBlockIds();
     const blocks = this.blockStore.getBlocks();
 
     const edit = this.update.createTransaction();
@@ -81,7 +84,7 @@ class SelectTool extends HoverTool {
       edit.updateBlock(blockId, { position: addVector(blocks[blockId].position, drag) }),
     );
 
-    const selectedBlockId = this.blockStore.getSelectedRootBlockIds()[0];
+    const selectedBlockId = this.blockCategoryStore.getSelectedRootBlockIds()[0];
 
     if (selectedBlockId) {
       // edit.updateBlock(selectedBlock, { notifyOnRender: true });
@@ -100,7 +103,11 @@ class SelectTool extends HoverTool {
   }
 
   onDeselect() {
-    this.update.createTransaction().select(null).commit(false);
+    const edit = this.update.createTransaction();
+
+    edit.select([]);
+
+    edit.commit(false);
   }
 
   scaleMesh(scale: number, block: Block) {
@@ -120,7 +127,7 @@ class SelectTool extends HoverTool {
   }
 
   rotateMesh(axis: 'x' | 'y' | 'z', rotation: number) {
-    const selectedBlockIds = this.blockStore.getSelectedRootBlockIds();
+    const selectedBlockIds = this.blockCategoryStore.getSelectedRootBlockIds();
 
     if (selectedBlockIds.length === 0) {
       return;
@@ -175,6 +182,8 @@ class SelectTool extends HoverTool {
   private isMoved = false;
 
   private sceneStore: SceneStore;
+
+  private blockCategoryStore: BlockCategoryStore;
 
   sceneService: SceneService;
 }

@@ -8,13 +8,11 @@ import ToolName from '@/client/editor/models/ToolName';
 import ExtendedWorld from './ExtendedWorld';
 import findClosestBlock, { calculateDistance } from './helpers/findClosestBlock';
 import Num3 from '@/client/editor/models/Num3';
-import JoinPoles from '@/client/editor/use_cases/block/JoinPoles';
 import { checkBlockExists, checkPartIndexExists, checkPosition } from './helpers/checks';
 import VectorUtils from '@/client/editor/utils/vectorUtils';
-import AddTool from '@/client/editor/controllers/tools/add/AddTool';
 import { ToolInfo } from '@/client/editor/models/Tool';
-import { waitForMeshCountChange } from './helpers/waitFor';
 import { updateBlocks } from '@/client/editor/stores/block/blockActions';
+import TestSceneService from './support/TestSceneService';
 
 Given('I have an empty canvas', function (this: ExtendedWorld) {
   this.setup();
@@ -28,36 +26,23 @@ type SceneHash = {
 };
 
 Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
-  this.setup();
+  await this.setup();
 
-  const addTool = new AddTool(
-    this.env.blockStore,
-    this.env.services.factory,
-    this.env.sceneService,
-    this.env.sceneStore,
-    this.env.update,
-  );
-  // const addBlock = new AddBlockToPlain(
-  //   this.env.blockStore,
-  //   this.env.services.factory,
-  //   this.env.sceneStore,
-  //   this.env.update,
-  // );
-  // const addBlockToPointerPos = new AddBlockToPointerPos(
-  //   this.env.blockStore,
-  //   this.env.services.factory,
-  //   this.env.sceneService,
-  //   this.env.sceneStore,
-  // );
+  const sceneService = this.getEnv().editorContext.sceneService as TestSceneService;
+  const blockStore = this.getEnv().editorContext.blockStore;
+  const sceneStore = this.getEnv().editorContext.sceneStore;
+  const tool = this.getEnv().editorContext.tool;
+
+  const addTool = tool.getAddTool();
 
   const data = table.hashes() as SceneHash[];
 
   for (const row of data) {
     const pos = row.POS.split(',').map((num) => Number(num)) as Num3;
 
-    this.env.sceneService.setUuid(row.ID);
+    sceneService.setUuid(row.ID);
 
-    const block = this.env.blockStore.getBlockType(row.TYPE);
+    const block = blockStore.getBlockType(row.TYPE);
 
     if (!block) {
       throw new Error(`Block type ${row.TYPE} not found.`);
@@ -66,12 +51,12 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
     if (block.category === 'cables') {
       const block1IdAndPin = row.POS.split(':')[0];
       const block2IdAndPin = row.POS.split(':')[1];
-      const block1 = this.env.blockStore.getBlock(block1IdAndPin.split('#')[0]);
-      const block2 = this.env.blockStore.getBlock(block2IdAndPin.split('#')[0]);
+      const block1 = blockStore.getBlock(block1IdAndPin.split('#')[0]);
+      const block2 = blockStore.getBlock(block2IdAndPin.split('#')[0]);
       const part1 = `#${block1IdAndPin.split('#')[1]}`;
       const part2 = `#${block2IdAndPin.split('#')[1]}`;
 
-      this.env.sceneService.setIntersection([
+      sceneService.setIntersection([
         {
           block: block1,
           partIndex: part1,
@@ -80,11 +65,11 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
       ]);
 
       store.dispatch(setSelectedTool(ToolName.Cable));
-      this.env.toolHelper.pointerDown({ blockId: block1.id });
-      this.env.toolHelper.pointerUp();
-      this.env.toolHelper.pointerMove({ point: new Vector3(0, 0, 0) });
+      this.getEnv().toolHelper.pointerDown({ blockId: block1.id });
+      this.getEnv().toolHelper.pointerUp();
+      this.getEnv().toolHelper.pointerMove({ point: new Vector3(0, 0, 0) });
 
-      this.env.sceneService.setIntersection([
+      sceneService.setIntersection([
         {
           block: block2,
           partIndex: part2,
@@ -92,8 +77,8 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
         },
       ]);
 
-      this.env.toolHelper.pointerDown({ blockId: block2.id });
-      this.env.toolHelper.pointerUp();
+      this.getEnv().toolHelper.pointerDown({ blockId: block2.id });
+      this.getEnv().toolHelper.pointerUp();
 
       // joinPoles.join(block1, block2, [[`#${block1IdAndPin.split('#')[1]}`, `#${block2IdAndPin.split('#')[1]}`]]);
     } else {
@@ -115,15 +100,15 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
       const targetBlock = parentBlockId;
 
       if (parentBlockId) {
-        const intersectingParentMesh = this.env.sceneStore.getObj3d(parentBlockId);
+        const intersectingParentMesh = sceneStore.getObj3d(parentBlockId);
         const intersectingParentPos = new Vector3();
         intersectingParentMesh.getWorldPosition(intersectingParentPos);
-        const parentBlock = this.env.blockStore.getBlock(parentBlockId);
+        const parentBlock = blockStore.getBlock(parentBlockId);
         const relativePos = row.POS.split(':')[1]
           ?.split(',')
           .map((p) => Number(p)) as Num3;
 
-        this.env.sceneService.setIntersection([
+        sceneService.setIntersection([
           {
             meshes: [
               {
@@ -138,13 +123,15 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
       }
 
       store.dispatch(setSelectedTool(ToolName.Add));
-      this.env.toolHelper.pointerEnter({ blockId: targetBlock, partIndex });
+      this.getEnv().toolHelper.pointerEnter({ blockId: targetBlock, partIndex });
       store.dispatch(setSelectedGeometry(block.type));
       addTool.onPointerUp({ clientX: 0, clientY: 0, pos: new Vector3(...pos) } as ToolInfo);
 
-      store.dispatch(updateBlocks({ blockUpdates: [{ select: null, slice: 'city' }] }));
+      store.dispatch(updateBlocks({ blockUpdates: [{ select: [], slice: 'city' }] }));
 
-      // const edit = this.env.update.getTransaction();
+      await sceneService.waitForRender();
+
+      // const edit = this.getEnv().update.getTransaction();
       // addBlock.perform(edit, new Vector3(...pos), row.TYPE);
       // edit.commit();
     }
@@ -153,11 +140,11 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
     //   const [parentId, partIndexOrName] = row.PARENT.split(':');
 
     //   store.dispatch(setSelectedTool(ToolName.Add));
-    //   this.env.toolHelper.pointerEnter({ blockId: parentId, partIndex });
+    //   this.getEnv().toolHelper.pointerEnter({ blockId: parentId, partIndex });
     //   store.dispatch(setSelectedGeometry(block.type));
     //   addTool.onPointerUp({ clientX: 0, clientY: 0, pos: new Vector3(...pos) } as ToolInfo);
     // } else {
-    //   const edit = this.env.update.getTransaction();
+    //   const edit = this.getEnv().update.getTransaction();
     //   addBlockToPointerPos.perform(edit, row.PARENT, '#1', row.TYPE, 0, 0);
     //   edit.commit();
     // }
@@ -168,25 +155,25 @@ export async function addTemplateToPosition(this: ExtendedWorld, template: strin
   store.dispatch(setSelectedTool(ToolName.Add));
   store.dispatch(setSelectedGeometry(template));
 
-  this.env.toolHelper.pointerMove({ point: new Vector3(x, y, z) });
-  this.env.toolHelper.pointerDown();
-  this.env.toolHelper.pointerUp();
+  this.getEnv().toolHelper.pointerMove({ point: new Vector3(x, y, z) });
+  this.getEnv().toolHelper.pointerDown();
+  this.getEnv().toolHelper.pointerUp();
 }
 
 Given('I have canvas with a block {string}', async function (this: ExtendedWorld, template: string) {
-  this.setup();
+  await this.setup();
 
   await addTemplateToPosition.call(this, template, 0, 0, 0);
 });
 
 When('I set next uuid to {string}', function (this: ExtendedWorld, id: string) {
-  this.env.sceneService.setUuid(id);
+  this.getEnv().sceneService.setUuid(id);
 });
 
 Then(
   'I have a block {string} at estimated position {float},{float},{float}',
   function (this: ExtendedWorld, blockName: string, x: number, y: number, z: number) {
-    const blockWithDistance = findClosestBlock(this.env.blockStore.getBlocksAsArray(), [x, y, z]);
+    const blockWithDistance = findClosestBlock(this.getEnv().blockStore.getBlocksAsArray(), [x, y, z]);
 
     if (!blockWithDistance) {
       throw new Error(`Block ${blockName} was nof found`);

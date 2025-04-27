@@ -35,15 +35,6 @@ class BlocksUpdater {
           const blockIdIndex = state.blockIds.indexOf(update.remove.id);
           state.blockIds.splice(blockIdIndex, 1);
 
-          const selectedIndex = state.selectedRootBlockIds.indexOf(update.remove.id);
-          if (selectedIndex !== -1) {
-            state.selectedRootBlockIds.splice(selectedIndex, 1);
-          }
-
-          if (state.selectedBlocks[update.remove.id]) {
-            delete state.selectedBlocks[update.remove.id];
-          }
-
           const block = state.blocks[update.remove.id];
 
           if (block) {
@@ -52,38 +43,20 @@ class BlocksUpdater {
               delete state.decorations[category][update.remove.id];
             });
           }
-        } else if ('select' in update) {
-          if (update.select === null) {
-            Object.keys(state.selectedBlocks).forEach((selectedBlock) => {
-              state.blocks[selectedBlock].isSelected = false;
-              Object.values(state.blocks[selectedBlock].partDetails).forEach((val) => {
-                if (val) {
-                  val.isSelected = false;
-                }
-              });
-            });
-            state.selectedRootBlockIds = [];
-            state.selectedPartIndexes = {};
-            state.selectedBlocks = {};
-          } else {
-            if (update.partIndex) {
-              if (!state.selectedPartIndexes[update.select]) {
-                state.selectedPartIndexes[update.select] = [];
-              }
 
-              state.selectedPartIndexes[update.select] = [
-                ...new Set([...state.selectedPartIndexes[update.select], update.partIndex]),
-              ];
+          const index = state.selectedBlocks.findIndex((blockId) => blockId === update.remove.id);
 
-              const partDetail = state.blocks[update.select].partDetails[update.partIndex];
-              if (partDetail) {
-                partDetail.isSelected = true;
-              }
-            }
-            state.selectedBlocks[update.select] = true;
-            state.blocks[update.select].isSelected = true;
-            state.selectedRootBlockIds = [...new Set([...state.selectedRootBlockIds, update.select])];
+          if (index !== -1) {
+            state.selectedBlocks.splice(index, 1);
           }
+
+        } else if ('select' in update) {
+          state.selectedBlocks.forEach((blockId) => (state.blocks[blockId].isSelected = false));
+          state.selectedBlocks = [];
+          update.select.forEach((block) => {
+            state.selectedBlocks.push(block.id);
+            state.blocks[block.id].isSelected = true;
+          });
         } else {
           if ('block' in update && update.block) {
             if (!state.blocks[update.block.id]) {

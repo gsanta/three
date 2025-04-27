@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import DropZone from './DropZone';
-import useEditorContext from '@/app/editor/EditorContext';
+import useEditorContext from '@/app/editor/useEditorContext';
 
 const ImportDialog = () => {
   const [fileName, setFileName] = useState<string>();

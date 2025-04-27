@@ -1,6 +1,7 @@
 import Block from './Block';
+import BlockModel from './BlockModel';
 
-class Pole {
+class Pole extends BlockModel {
   static PRIMARY_WIRE_1_CONNECTION_A = 'Pin1';
 
   static PRIMARY_WIRE_1_CONNECTION_B = 'Pin1b';
@@ -26,9 +27,8 @@ class Pole {
   ];
 
   constructor(block: Block) {
-    if (block.category !== 'poles') {
-      throw new Error(`Precondition failed: category '${block.category}' is not 'poles'`);
-    }
+    super(block);
+    this.checkCategory('poles');
 
     this.block = block;
   }
@@ -38,8 +38,6 @@ class Pole {
       (name) => !this.block.partDetails[name] || !this.block.partDetails[name].isConnected,
     );
   }
-
-  private block: Block;
 }
 
 export default Pole;

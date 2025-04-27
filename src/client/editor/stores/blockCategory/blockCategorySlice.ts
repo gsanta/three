@@ -6,6 +6,8 @@ import BlockAddMethodsResponse from '@/common/response_types/BlockAddMethodsResp
 import { ModelPartRole } from '../../models/BlockType';
 import BlockContextMenuAction, { BlockContextMenuActionName } from '@/common/model_types/BlockContextMenuAction';
 import BlockContextMenuActionsResponse from '@/common/response_types/BlockContextMenuActionsResponse';
+import { updateBlocks } from '../block/blockActions';
+import SelectionUpdater from './SelectionUpdater';
 
 export type BlockCategoyState = {
   addMethods: BlockAddMethod[];
@@ -14,17 +16,19 @@ export type BlockCategoyState = {
 
   selectedRootBlockIds: string[];
   selectedBlocks: Record<string, boolean>;
-  selectedPartIndexes: Record<string, string[]>;
+  currentContextMenuActions: BlockContextMenuAction[];
 };
 
 export const initialBlockTypeState: BlockCategoyState = {
   addMethods: [],
   blockCategories: [],
   contextMenuActions: [],
+  currentContextMenuActions: [],
   selectedBlocks: {},
   selectedRootBlockIds: [],
-  selectedPartIndexes: {},
 };
+
+const selectionUpdater = new SelectionUpdater();
 
 export const blockCategorySlice = createSlice({
   name: 'block-category',
@@ -65,6 +69,11 @@ export const blockCategorySlice = createSlice({
     setBlockCategories(state, action: PayloadAction<BlockCategoriesResponse['items']>) {
       state.blockCategories = action.payload.map((item) => ({ name: item.name }));
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(updateBlocks, (state, action) => {
+      selectionUpdater.update(state, action.payload.blockUpdates);
+    });
   },
 });
 

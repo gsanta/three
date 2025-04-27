@@ -1,31 +1,23 @@
 import { ToolInfo } from '../../../models/Tool';
 import ToolName from '../../../models/ToolName';
 import TransactionService from '../../../services/transaction/TransactionService';
-import SceneStore from '../../../components/scene/SceneStore';
-import FactoryService from '../../../services/factory/FactoryService';
 import HoverTool from '../HoverTool';
 import SceneService from '../../../components/scene/service/SceneService';
 import AddService from './AddService';
 import { store } from '@/client/common/utils/store';
-import DataContext from '@/client/editor/contexts/DataContext';
 import Block from '@/client/editor/models/Block';
 import BlockType from '@/client/editor/models/BlockType';
 import Num3 from '@/client/editor/models/Num3';
 import ExecuteAddParams from './ExecuteAddParams';
+import BlockStore from '@/client/editor/stores/block/BlockStore';
 
 class AddTool extends HoverTool {
-  constructor(
-    data: DataContext,
-    factoryService: FactoryService,
-    sceneService: SceneService,
-    sceneStore: SceneStore,
-    update: TransactionService,
-  ) {
-    super(data.block, sceneService, update, ToolName.Add, 'BiPlus');
+  constructor(addService: AddService, block: BlockStore, sceneService: SceneService, update: TransactionService) {
+    super(block, sceneService, update, ToolName.Add, 'BiPlus');
 
     // this.addBlockToPlain = new AddBlockToPlain(blockStore, factoryService, sceneStore, update);
 
-    this.addService = new AddService(data, factoryService, sceneStore, update);
+    this.addService = addService;
   }
 
   onPointerUp({ clientX, clientY, gridIndex, pos }: ToolInfo) {
@@ -33,9 +25,9 @@ class AddTool extends HoverTool {
 
     const activeGridIndexes = store.getState().editor.activeGridIndexes;
 
-    if (gridIndex && !activeGridIndexes.includes(gridIndex)) {
-      return;
-    }
+    // if (gridIndex && !activeGridIndexes.includes(gridIndex)) {
+    //   return;
+    // }
 
     if (!selectedBlockName) {
       return;
