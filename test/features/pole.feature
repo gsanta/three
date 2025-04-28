@@ -1,14 +1,74 @@
-@only
 Feature: Pole
-  Scenario: Joining poles with cables
+  Scenario: Adding a pole joins it to the nearest pole
     Given I have a scene with:
-      | TYPE            | ID        | PARENT | POS   |
-      | pole-1          | pole-1-1  | -      | 1,0,0 |
-      | pole-1          | pole-1-2  | -      | 5,0,0 |
+      | TYPE   | ID       | PARENT | POS   |
+      | pole-1 | pole-1-1 | -      | 1,0,0 |
     When I select tool 'add'
     And I select template 'pole-1'
-    And I move pointer to '10,0,0'
+    And I set next uuids to:
+      | UUID      |
+      | pole-1-2  |
+      | cable-1-1 |
+      | cable-1-2 |
+      | cable-1-3 |
+    And I move pointer to '5,0,0'
     And I press pointer
+    Then I have blocks with properties
+      | BLOCK    | POSITION |
+      | pole-1-2 | 5,0,0    |
+    And I wait block 'cable-1-1' to exist
+    Then I have cables with properties
+      | CABLE     | PARENT   | POSITION          |
+      | cable-1-1 | pole-1-1 | 0.087,7.154,0.011 |
+      | cable-1-1 | pole-1-2 | 4.087,7.154,0.011 |
+      | cable-1-2 | pole-1-1 | 0.622,7.154,0.011 |
+      | cable-1-2 | pole-1-2 | 4.622,7.154,0.011 |
+      | cable-1-3 | pole-1-1 | 1.865,7.154,0.011 |
+      | cable-1-3 | pole-1-2 | 5.865,7.154,0.011 |
+
+  @only
+  Scenario: Adding a pole auto-rotates it to align with the neigbours
+    Given I have a scene with:
+      | TYPE   | ID       | PARENT | POS   |
+      | pole-1 | pole-1-1 | -      | 1,0,0 |
+      | pole-1 | pole-1-2 | -      | 5,0,0 |
+    And I wait block 'cable-1-1' to exist
+    Then I have blocks with properties
+      | BLOCK    | ROTATION |
+      | pole-1-1 | 0,0,0    |
+      | pole-1-2 | 0,0,0    |
+    When I select tool 'add'
+    And I select template 'pole-1'
+    And I set next uuids to:
+      | UUID      |
+      | pole-1-3  |
+      | cable-1-x |
+      | cable-1-y |
+      | cable-1-z |
+    And I move pointer to '5,0,5'
+    And I press pointer
+    Then I have blocks with properties
+      | BLOCK    | POSITION |
+      | pole-1-3 | 5,0,5 |
+    And I wait block 'cable-1-x' to exist
+    Then I have blocks with properties
+      | BLOCK    | ROTATION |
+      | pole-1-1 | 0,0,0    |
+      | pole-1-2 | 0,0,0    |
+
+  # Scenario: Joining poles with cables
+  #   Given I have a scene with:
+  #     | TYPE            | ID        | PARENT | POS   |
+  #     | pole-1          | pole-1-1  | -      | 1,0,0 |
+  #     | pole-1          | pole-1-2  | -      | 5,0,0 |
+  #   When I select tool 'add'
+  #   And I select template 'pole-1'
+  #   And I set next uuids to: 'pole-1-3'
+  #   And I move pointer to '10,0,0'
+  #   And I press pointer
+  #   Then I have a block 'pole-1-3' with properties
+  #     | POSITION |
+  #     | 10,0,0  |
     # And I select tool 'select'
     # And I press pointer at 0,0.1,5
     # And I press pointer at 0,0.1,10

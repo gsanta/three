@@ -7,9 +7,9 @@ import assert from 'assert';
 import VectorUtils from '@/client/editor/utils/vectorUtils';
 
 export function checkBlockExists(this: ExtendedWorld, blockId: string) {
-  const realBlockId = blockId === 'examined' ? this.env.testScene.storedBlockId || '' : blockId;
+  const realBlockId = blockId === 'examined' ? this.env?.testScene.storedBlockId || '' : blockId;
 
-  const block = this.env.blockStore.getBlock(realBlockId);
+  const block = this.env?.editorContext.blockStore.getBlock(realBlockId);
 
   if (!block) {
     throw new Error(`Block ${blockId} not found.`);
@@ -19,9 +19,9 @@ export function checkBlockExists(this: ExtendedWorld, blockId: string) {
 }
 
 export function checkDecorationExists(this: ExtendedWorld, category: BlockDecoration, blockId: string) {
-  const realBlockId = blockId === 'examined' ? this.env.testScene.storedBlockId || '' : blockId;
+  const realBlockId = blockId === 'examined' ? this.env?.testScene.storedBlockId || '' : blockId;
 
-  const decortion = this.env.blockStore.getDecoration(category, realBlockId);
+  const decortion = this.env?.editorContext.blockStore.getDecoration(category, realBlockId);
 
   if (!decortion) {
     throw new Error(`Decoration of type ${category} with id ${blockId} not found.`);
@@ -90,5 +90,5 @@ export function checkPositionCloseTo(this: ExtendedWorld, position: string, actu
 
   const diff = VectorUtils.size(VectorUtils.sub(expected, actual));
 
-  assert.ok(diff < 0.1);
+  assert.ok(diff < 0.1, `Expected number (${expected.join(', ')}) to be close to (${actual.join(', ')})`);
 }

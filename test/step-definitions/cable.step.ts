@@ -55,9 +55,9 @@ Then(
   'cable for block {string} and pin {string} ends at position {string}',
   function (this: ExtendedWorld, blockId: string, pin: string, position: string) {
     const [x, y, z] = checkPosition.call(this, position);
-    const cables = Object.values(this.env.blockStore.getDecorations('cables'));
+    const cables = Object.values(this.env?.editorContext.blockStore.getDecorations('cables') || {});
 
-    const realBlockId = blockId === 'examined' ? this.env.testScene.storedBlockId || '' : blockId;
+    const realBlockId = blockId === 'examined' ? this.env?.testScene.storedBlockId || '' : blockId;
 
     const cable = cables.find(
       (currCable) =>
@@ -81,6 +81,37 @@ Then(
   },
 );
 
+type BlockHash = {
+  CABLE: string;
+  PARENT: string;
+  POSITION: string;
+};
+
+Then('I have cables with properties', function (this: ExtendedWorld, table: { hashes(): BlockHash[] }) {
+  const rows = table.hashes();
+
+  rows.forEach((row) => {
+    const cables = Object.values(this.env?.editorContext.blockStore.getDecorations('cables') || {});
+
+    const cable = cables.find((currCable) => currCable?.id === row.CABLE);
+
+    if (!cable) {
+      assert.fail(`Cable not found with id id ${row.CABLE}`);
+    }
+
+    const index = cable?.points.findIndex((point) => row.PARENT === point.blockId);
+
+    if (index === -1) {
+      assert.fail(`Cable does not have a parent with id ${row.PARENT}`);
+    }
+
+    const [x, y, z] = checkPosition.call(this, row.POSITION);
+    const isClose = isPositionCloseTo([x, y, z], cable?.points[index].position);
+
+    assert.ok(isClose, `Expected (${x}, ${y}, ${z}) to be close to (${cable?.points[index].position.join(', ')})`);
+  });
+});
+
 Then('cable {string} ends at position {string}', function (this: ExtendedWorld, blockId: string, posStr: string) {
   const cable = checkDecorationExists.call(this, 'cables', blockId) as Cable;
   const [x, y, z] = checkPosition.call(this, posStr);
@@ -95,9 +126,9 @@ Then('cable {string} ends at position {string}', function (this: ExtendedWorld, 
 });
 
 Then('pin {string} of block {string} is empty', function (this: ExtendedWorld, pin: string, blockId: string) {
-  const realBlockId = blockId === 'examined' ? this.env.testScene.storedBlockId || '' : blockId;
+  const realBlockId = blockId === 'examined' ? this.env?.testScene.storedBlockId || '' : blockId;
 
-  const pole = this.env.blockStore.getDecorations('devices')[realBlockId];
+  const pole = this.env?.editorContext.blockStore.getDecorations('devices')[realBlockId];
 
   assert.equal(pole?.pins[pin as Pins]?.wires.length, 0);
 });
@@ -108,7 +139,7 @@ Then('Points for cable {string} are:', function (this: ExtendedWorld, cableId: s
   const cableBlock = checkBlockExists.call(this, cableId);
 
   const rootBlockId = cableBlock.parentConnection?.block;
-  const rootMesh = this.env.sceneStore.getObj3d(rootBlockId || '');
+  const rootMesh = this.env?.editorContext.sceneStore.getObj3d(rootBlockId || '');
   const baseMesh = MeshUtils.findByName(rootMesh, 'root');
   const basePos = new Vector3();
   baseMesh.getWorldPosition(basePos);

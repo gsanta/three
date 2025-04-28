@@ -27,10 +27,9 @@ class TestSceneService implements SceneService {
   }
 
   uuid(blockType: BlockType) {
-    const id = this.nextUuid;
-    this.nextUuid = '';
+    const id = this.nextUuids.shift();
 
-    if (id) {
+    if (id !== undefined) {
       return id;
     }
 
@@ -66,12 +65,8 @@ class TestSceneService implements SceneService {
     this.intersect = intersect;
   }
 
-  setUuid(id: string) {
-    this.nextUuid = id;
-  }
-
-  clearUuid() {
-    this.nextUuid = '';
+  setNextUuid(id: string) {
+    this.nextUuids.push(id);
   }
 
   waitForRender() {
@@ -87,7 +82,7 @@ class TestSceneService implements SceneService {
 
   private intersect: BlockIntersection[] = [];
 
-  private nextUuid: string = '';
+  private nextUuids: string[] = [];
 
   private blockTypeCounter: Map<string, number> = new Map();
 }

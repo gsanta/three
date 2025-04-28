@@ -126,26 +126,23 @@ class JoinPoles {
       [0, 0, 0],
     ];
 
-    let isDirty = false;
-
-    if (this.scene.hasObj3d(pole1.id) && this.scene.hasObj3d(pole2.id)) {
-      positions = this.getPositions(pole1, pole2, partIndex1, partIndex2);
-    } else {
-      isDirty = true;
-    }
+    positions = this.getPositions(pole1, pole2, partIndex1, partIndex2);
 
     const edit = this.transactionService.getOrCreateActiveTransaction();
 
     this.factory.create(edit, 'cable-1', {
       block: {
-        conduitParentConnections: [{ block: pole1.id }, { block: pole2.id }],
+        multiParentConnections: [{ block: pole1.id }, { block: pole2.id }],
         isDirty: true,
       },
       decorations: {
         cables: {
           end1: { pin: partIndex1, device: pole1.id },
           end2: { pin: partIndex2, device: pole2.id },
-          points: [{ position: positions[0] }, { position: positions[1] }],
+          points: [
+            { position: positions[0], blockId: pole1.id },
+            { position: positions[1], blockId: pole2.id },
+          ],
         },
       },
     });

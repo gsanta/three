@@ -16,7 +16,7 @@ class UpdateDeviceCable {
   update(cable: Block) {
     const edit = this.transactionService.createTransaction();
 
-    const newPoints = cable.conduitParentConnections.map((connection) =>
+    const newPoints = cable.multiParentConnections.map((connection) =>
       this.moveCable(cable.id, this.store.getBlock(connection.block)),
     );
 

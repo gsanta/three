@@ -20,9 +20,9 @@ class CableHelper {
     }
 
     const siblingConnection =
-      cable.conduitParentConnections[0].block === block.id
-        ? cable.conduitParentConnections[1]
-        : cable.conduitParentConnections[0];
+      cable.multiParentConnections[0].block === block.id
+        ? cable.multiParentConnections[1]
+        : cable.multiParentConnections[0];
 
     return this.blockStore.getBlock(siblingConnection.block);
   }

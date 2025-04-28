@@ -11,3 +11,24 @@ Then('Editor mode is {string}', function (this: ExtendedWorld, mode: string) {
 When('I wait block {string} to notify on render', async function (this: ExtendedWorld, blockId: string) {
   await waitForRenderNotification(blockId, this);
 });
+
+When('I wait block {string} to exist', async function (this: ExtendedWorld, blockId: string) {
+  let iter = 0;
+  let interval: ReturnType<typeof setInterval>;
+
+  return new Promise<void>((resolve, reject) => {
+    interval = setInterval(() => {
+      try {
+        this.env?.editorContext.blockStore.getBlock(blockId);
+        clearInterval(interval);
+        resolve();
+      } catch {}
+
+      iter += 1;
+
+      if (iter === 5) {
+        reject(`Block ${blockId} does not exist`);
+      }
+    }, 1);
+  });
+});

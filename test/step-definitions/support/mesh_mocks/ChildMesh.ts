@@ -7,7 +7,7 @@ class ChildMesh extends AbstractMesh {
   position: Vector3;
 
   constructor(parent: BaseMesh, block: Block, name: string) {
-    super(block.partDetails[name]?.name);
+    super(name);
     this.parent = parent;
 
     const pos = block.parts.find((part) => part.name === name)?.position || [0, 0, 0];

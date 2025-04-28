@@ -40,7 +40,7 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
   for (const row of data) {
     const pos = row.POS.split(',').map((num) => Number(num)) as Num3;
 
-    sceneService.setUuid(row.ID);
+    sceneService.setNextUuid(row.ID);
 
     const block = blockStore.getBlockType(row.TYPE);
 
@@ -130,7 +130,6 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
       store.dispatch(updateBlocks({ blockUpdates: [{ select: [], slice: 'city' }] }));
 
       await sceneService.waitForRender();
-
       // const edit = this.getEnv().update.getTransaction();
       // addBlock.perform(edit, new Vector3(...pos), row.TYPE);
       // edit.commit();
@@ -166,8 +165,14 @@ Given('I have canvas with a block {string}', async function (this: ExtendedWorld
   await addTemplateToPosition.call(this, template, 0, 0, 0);
 });
 
-When('I set next uuid to {string}', function (this: ExtendedWorld, id: string) {
-  this.getEnv().sceneService.setUuid(id);
+When('I set next uuids to:', function (this: ExtendedWorld, table: any) {
+  const data = table.hashes() as {
+    UUID: string;
+  }[];
+
+  for (const row of data) {
+    (this.getEnv().editorContext.sceneService as TestSceneService).setNextUuid(row.UUID);
+  }
 });
 
 Then(
