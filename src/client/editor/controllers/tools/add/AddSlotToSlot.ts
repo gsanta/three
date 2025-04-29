@@ -7,9 +7,9 @@ import VectorUtils from '@/client/editor/utils/vectorUtils';
 import { Vector3 } from 'three';
 import AddBlock from './AddBlock';
 import BlockUtils from '@/client/editor/utils/BlockUtils';
-import Block from '@/client/editor/models/Block';
+import BlockType from '@/client/editor/models/BlockType';
 import BlockAddMethod from '@/common/model_types/BlockAddMethod';
-import BlockType, { ModelPart, ModelPartRole } from '@/client/editor/models/BlockType';
+import BaseBlockType, { ModelPart, ModelPartRole } from '@/client/editor/models/BaseBlockType';
 import Num3 from '@/client/editor/models/Num3';
 import BlockCategoryStore from '@/client/editor/stores/blockCategory/BlockCategoryStore';
 
@@ -102,7 +102,7 @@ class AddSlotToSlot extends AddBlock {
 
   private calculatePosition(
     addMethod: BlockAddMethod,
-    targetBlock: Block,
+    targetBlock: BlockType,
     targetPart: ModelPart,
     sourcePart: ModelPart,
     sourceRotation: number,
@@ -131,9 +131,9 @@ class AddSlotToSlot extends AddBlock {
   private calculateSourcePartWithRotation(
     connectionType: BlockAddMethod['connectionType'],
     sourcePartRole: ModelPartRole,
-    targetBlock: Block,
+    targetBlock: BlockType,
     targetPart: ModelPart,
-    newBlockType: BlockType,
+    newBlockType: BaseBlockType,
   ): [ModelPart, Num3] {
     const sourceParts = newBlockType?.parts?.filter((part) =>
       newBlockType.partDetails[part.name]?.roles?.includes(sourcePartRole),
@@ -156,9 +156,9 @@ class AddSlotToSlot extends AddBlock {
 
   private calculateSourceConnection(
     addMethod: BlockAddMethod,
-    targetBlock: Block,
+    targetBlock: BlockType,
     targetPart: ModelPart,
-  ): Partial<Block> {
+  ): Partial<BlockType> {
     switch (addMethod.connectionType) {
       case 'parent-child':
         return {
@@ -173,7 +173,7 @@ class AddSlotToSlot extends AddBlock {
     }
   }
 
-  private calculateTargetConnection(addMethod: BlockAddMethod, newBlock: Block): Partial<Block> {
+  private calculateTargetConnection(addMethod: BlockAddMethod, newBlock: BlockType): Partial<BlockType> {
     switch (addMethod.connectionType) {
       case 'parent-child':
         return {

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import IntersectionOptions from '@/client/editor/components/scene/service/IntersectionOptions';
 import SceneService from '@/client/editor/components/scene/service/SceneService';
-import BlockType from '@/client/editor/models/BlockType';
+import BaseBlockType from '@/client/editor/models/BaseBlockType';
 import { BlockIntersection } from '@/client/editor/use_cases/IntersectMesh';
 import { Object3D, Ray, Vector3 } from 'three';
 
@@ -26,11 +26,9 @@ class TestSceneService implements SceneService {
     throw new Error('Method not implemented.');
   }
 
-  uuid(blockType: BlockType) {
-    const id = this.nextUuids.shift();
-
-    if (id !== undefined) {
-      return id;
+  uuid(blockType: BaseBlockType) {
+    if (this.nextUuids[blockType.type]?.length) {
+      return this.nextUuids[blockType.type].shift() as string;
     }
 
     let count = this.blockTypeCounter.get(blockType.type) || 0;
@@ -65,24 +63,17 @@ class TestSceneService implements SceneService {
     this.intersect = intersect;
   }
 
-  setNextUuid(id: string) {
-    this.nextUuids.push(id);
-  }
+  setNextUuid(id: string, blockType: string) {
+    if (!this.nextUuids[blockType]) {
+      this.nextUuids[blockType] = [];
+    }
 
-  waitForRender() {
-    this.renderDeferred = new Deferred();
-    return this.renderDeferred?.promise || Promise.reject();
+    this.nextUuids[blockType].push(id);
   }
-
-  resolveRender() {
-    this.renderDeferred?.resolve();
-  }
-
-  private renderDeferred?: Deferred;
 
   private intersect: BlockIntersection[] = [];
 
-  private nextUuids: string[] = [];
+  private nextUuids: Record<string, string[]> = {};
 
   private blockTypeCounter: Map<string, number> = new Map();
 }

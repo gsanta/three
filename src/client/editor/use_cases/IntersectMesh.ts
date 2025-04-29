@@ -3,8 +3,8 @@ import SceneStore from '../components/scene/SceneStore';
 import BlockStore from '../stores/block/BlockStore';
 import BlockUtils from '../utils/BlockUtils';
 import MeshUtils from '../utils/MeshUtils';
-import Block from '../models/Block';
-import { ModelPartInfo } from '../models/BlockType';
+import BlockType from '../models/BlockType';
+import { ModelPartInfo } from '../models/BaseBlockType';
 import IntersectionOptions from '../components/scene/service/IntersectionOptions';
 import Num3 from '../models/Num3';
 
@@ -20,7 +20,7 @@ export type MeshIntersection = {
 
 export type BlockIntersection = {
   meshes: MeshIntersection[];
-  block: Block;
+  block: BlockType;
   partIndex?: string;
   partInfo?: ModelPartInfo;
 };

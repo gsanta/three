@@ -8,7 +8,6 @@ import { UpdateBlocks } from '@/client/editor/stores/block/blockSlice.types';
 import { Mesh } from 'three';
 import ToolHelper from './ToolHelper';
 import ModelMesh from './mesh_mocks/ModelMesh';
-import TestSceneService from './TestSceneService';
 import { clearBlockSlice } from '@/client/editor/stores/block/blockSlice';
 
 type TestEnv = {
@@ -97,11 +96,9 @@ export const setupTestEnv = async (): Promise<TestEnv> => {
             sceneStore.addMesh(meshFactory.create(u.block) as unknown as Mesh, u.block.id);
             const mesh = sceneStore.getObj3d(u.block.id) as unknown as ModelMesh;
             mesh.render();
-            tool.onRendered(u.block.id);
           }
         });
-
-        (editorContext.sceneService as TestSceneService).resolveRender();
+        tool.onRendered();
       });
     },
   };

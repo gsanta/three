@@ -3,8 +3,8 @@ import Edit from '../../services/transaction/Edit';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockEraser from './erasers/BlockEraser';
 import CableEraser from './erasers/CableEraser';
-import { NeigbourConnection } from '../../models/Block';
-import { ModelPartInfo } from '../../models/BlockType';
+import { NeigbourConnection } from '../../models/BlockType';
+import { ModelPartInfo } from '../../models/BaseBlockType';
 
 class EraseBlock {
   constructor(store: BlockStore, update: TransactionService) {
@@ -72,6 +72,19 @@ class EraseBlock {
             } as ModelPartInfo,
           },
         });
+      }
+    });
+
+    block.multiParentConnections.forEach((connection) => {
+      const connectingBlock = this.store.getBlock(connection.block);
+      if (connectingBlock) {
+        edit.updateBlock(
+          connectingBlock.id,
+          {
+            conduitConnections: connectingBlock.conduitConnections.filter((conn) => conn.block === block.id),
+          },
+          { arrayMergeStrategy: 'exclude' },
+        );
       }
     });
   }

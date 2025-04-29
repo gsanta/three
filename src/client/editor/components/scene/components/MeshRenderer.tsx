@@ -2,16 +2,16 @@ import { useAppDispatch, useAppSelector } from '@/client/common/hooks/hooks';
 import CableMesh from '../../mesh/CableMesh';
 import WrappedMeshProps from '../../../models/block/WrappedMeshProps';
 import { ModelMesh } from '../../mesh/ModelMesh';
-import Block from '@/client/editor/models/Block';
+import BlockType from '@/client/editor/models/BlockType';
 import Cable from '@/client/editor/models/block/Cable';
 import MoveControl from './MoveControl';
 import { useEffect, useRef } from 'react';
 import useEditorContext from '@/app/editor/useEditorContext';
 import { resetNotifyOnRendered } from '@/client/editor/stores/block/blockActions';
 
-const isModelMesh = (block: Block): block is Block<'model'> => block.category !== 'cables';
+const isModelMesh = (block: BlockType): block is BlockType<'model'> => block.category !== 'cables';
 
-const isTubeMesh = (block: Block): block is Block<'tube'> => block.category === 'cables';
+const isTubeMesh = (block: BlockType): block is BlockType<'tube'> => block.category === 'cables';
 
 const MeshRenderer = (props: WrappedMeshProps) => {
   const { block, meshProps, materialProps = {} } = props;
@@ -27,7 +27,7 @@ const MeshRenderer = (props: WrappedMeshProps) => {
 
   useEffect(() => {
     if (block.notifyOnRender || isFirstRender.current) {
-      tool.onRendered(block.id);
+      tool.onRendered();
 
       isFirstRender.current = false;
 

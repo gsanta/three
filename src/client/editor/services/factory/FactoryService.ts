@@ -2,7 +2,7 @@ import SceneService from '../../components/scene/service/SceneService';
 import BlockFactory from './creators/BlockFactory';
 import PoleFactory from './creators/PoleFactory';
 import CableFactory from './creators/CableFactory';
-import Block from '../../models/Block';
+import BlockType from '../../models/BlockType';
 import BlockDecoration, { PartialBlockCategories } from '../../models/BlockCategory';
 import Edit from '../transaction/Edit';
 import BlockStore from '../../stores/block/BlockStore';
@@ -31,7 +31,7 @@ class FactoryService {
     edit: Edit,
     templateName: string,
     initialData: {
-      block?: Partial<Block>;
+      block?: Partial<BlockType>;
       decorations?: PartialBlockCategories;
     },
     targetSlice?: BlockSlices,

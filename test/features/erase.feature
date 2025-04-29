@@ -1,5 +1,4 @@
 Feature: Erase
-  @only
   Scenario: Erasing a selected block
     Given I have a scene with:
       | TYPE   | ID       | PARENT | POS   |

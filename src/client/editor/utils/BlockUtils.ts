@@ -1,11 +1,11 @@
-import Block from '../models/Block';
-import BlockType, { ModelPart } from '../models/BlockType';
+import BlockType from '../models/BlockType';
+import BaseBlockType, { ModelPart } from '../models/BaseBlockType';
 import MathUtils, { toDegree } from './mathUtils';
 
 type RotatedPart = { part: ModelPart; rotation: number };
 
 class BlockUtils {
-  static getBlock(blocks: BlockType[], blockName: string) {
+  static getBlock(blocks: BaseBlockType[], blockName: string) {
     const block = blocks.find((b) => b.type === blockName);
 
     if (!block) {
@@ -15,14 +15,14 @@ class BlockUtils {
     return block;
   }
 
-  static getPartIndexByName(block: Block, partName?: string) {
+  static getPartIndexByName(block: BlockType, partName?: string) {
     return Object.keys(block.partDetails).find((partIndex) => block.partDetails[partIndex]?.name === partName);
   }
 
   static findMatchingSlot(
-    targetBlock: Block,
+    targetBlock: BlockType,
     targetPartName: string,
-    source: BlockType,
+    source: BaseBlockType,
     sourcePartCandidates: ModelPart[],
   ): RotatedPart | undefined {
     const targetPart = targetBlock.parts.find((part) => part.name === targetPartName);

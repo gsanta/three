@@ -2,10 +2,10 @@ import { useAppSelector } from '@/client/common/hooks/hooks';
 import { useAnimations } from '@react-three/drei';
 import { useEffect } from 'react';
 import { AnimationMixer } from 'three';
-import Block from '../../models/Block';
+import BlockType from '../../models/BlockType';
 
 type UseDeviceProps = {
-  block: Block;
+  block: BlockType;
   actions: ReturnType<typeof useAnimations>['actions'];
   mixer: AnimationMixer;
 };

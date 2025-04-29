@@ -1,5 +1,5 @@
 import { BlockCategoryName } from '@/client/editor/models/block/BlockCategory';
-import { ModelPartRole } from '@/client/editor/models/BlockType';
+import { ModelPartRole } from '@/client/editor/models/BaseBlockType';
 
 export type BlockAddMethodName = 'add-block-to-block' | 'add-block-to-slot' | 'add-slot-to-slot' | 'add-poles';
 

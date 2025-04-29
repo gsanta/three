@@ -1,4 +1,4 @@
-import Block from '@/client/editor/models/Block';
+import BlockType from '@/client/editor/models/BlockType';
 import Cable, { CablePoint } from '@/client/editor/models/block/Cable';
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { Vector3 } from 'three';
@@ -13,7 +13,7 @@ class UpdateDeviceCable {
     this.transactionService = transactionService;
   }
 
-  update(cable: Block) {
+  update(cable: BlockType) {
     const edit = this.transactionService.createTransaction();
 
     const newPoints = cable.multiParentConnections.map((connection) =>
@@ -32,7 +32,7 @@ class UpdateDeviceCable {
     edit.commit(false);
   }
 
-  private moveCable(cableId: string, pole: Block): CablePoint {
+  private moveCable(cableId: string, pole: BlockType): CablePoint {
     const cable = this.store.getDecoration('cables', cableId) as Cable;
 
     let index = 0;

@@ -6,7 +6,10 @@ const MAX_WAIT_ITERATION = 5;
 export const waitForDirtyBlockUpdates = async (world: ExtendedWorld) => {
   let iter = 0;
 
-  const hasDirtyBlock = world.env.blockStore.getBlocksAsArray().find((block) => block.isDirty);
+  const hasDirtyBlock = world
+    .getEnv()
+    .editorContext.blockStore.getBlocksAsArray()
+    .find((block) => block.isDirty);
 
   if (!hasDirtyBlock) {
     return;
@@ -14,10 +17,13 @@ export const waitForDirtyBlockUpdates = async (world: ExtendedWorld) => {
 
   return new Promise<void>((resolve, reject) => {
     setInterval(() => {
-      const dirtyBlocks = world.env.blockStore.getBlocksAsArray().filter((block) => block.isDirty);
+      const dirtyBlocks = world
+        .getEnv()
+        .editorContext.blockStore.getBlocksAsArray()
+        .filter((block) => block.isDirty);
 
       dirtyBlocks.forEach((block) => {
-        const mesh = world.env.sceneStore.getObj3d(block.id) as unknown as ModelMesh;
+        const mesh = world.getEnv().editorContext.sceneStore.getObj3d(block.id) as unknown as ModelMesh;
         mesh.render();
       });
 

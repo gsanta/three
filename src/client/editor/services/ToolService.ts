@@ -110,9 +110,9 @@ class ToolService {
     this.info.draggedMesh = undefined;
   }
 
-  onRendered(blockId: string) {
+  onRendered() {
     const { selectedTool } = store.getState().tool;
-    this.getTool(selectedTool)?.onRendered(blockId);
+    this.getTool(selectedTool)?.onRendered();
   }
 
   getTools(): Tool[] {

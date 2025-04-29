@@ -2,7 +2,7 @@ import { Vector3 } from 'three';
 import SceneService from '../../components/scene/service/SceneService';
 import SceneStore from '../../components/scene/SceneStore';
 import BlockStore from '../../stores/block/BlockStore';
-import Block from '@/client/editor/models/Block';
+import BlockType from '@/client/editor/models/BlockType';
 import { store } from '@/client/common/utils/store';
 import { updateSelectTool } from '../../stores/tool/toolSlice';
 import TransactionService from '../../services/transaction/TransactionService';
@@ -45,7 +45,7 @@ class SelectBlock {
     }
   }
 
-  private selectBlock(block: Block, clientX: number, clientY: number) {
+  private selectBlock(block: BlockType, clientX: number, clientY: number) {
     const mesh = this.sceneStore.getObj3d(block.id);
 
     if (!mesh) {
@@ -71,7 +71,7 @@ class SelectBlock {
     edit.commit();
   }
 
-  private checkPartIntersection(block: Block, clientX: number, clientY: number) {
+  private checkPartIntersection(block: BlockType, clientX: number, clientY: number) {
     const [intersects] = this.scene.intersection([block.id], clientX, clientY);
 
     // TODO find a better solution to skip non-selectable parts

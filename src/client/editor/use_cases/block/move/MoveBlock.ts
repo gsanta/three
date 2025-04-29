@@ -10,10 +10,18 @@ import { updateSelectTool } from '@/client/editor/stores/tool/toolSlice';
 import MoveDecoration from './MoveDecoration';
 import BlockDecoration from '@/client/editor/models/BlockCategory';
 import MoveDevice from './MoveDevice';
+import BlockCategoryStore from '@/client/editor/stores/blockCategory/BlockCategoryStore';
 
 class MoveBlock {
-  constructor(blockStore: BlockStore, update: TransactionService, sceneStore: SceneStore, toolStore: ToolStore) {
+  constructor(
+    blockStore: BlockStore,
+    blockCategoryStore: BlockCategoryStore,
+    update: TransactionService,
+    sceneStore: SceneStore,
+    toolStore: ToolStore,
+  ) {
     this.blockStore = blockStore;
+    this.blockCategoryStore = blockCategoryStore;
     this.baseMover = new BaseMover(blockStore, update, sceneStore, toolStore);
     this.update = update;
     this.moveDecorationMap.devices = new MoveDevice(blockStore);
@@ -21,7 +29,7 @@ class MoveBlock {
   }
 
   perform(drag: Num3, dragDelta: Num3) {
-    const selectedBlockIds = this.blockStore.getSelectedRootBlockIds();
+    const selectedBlockIds = this.blockCategoryStore.getSelectedRootBlockIds();
     const rootBlockId =
       selectedBlockIds.find((blockId) => !this.blockStore.getBlock(blockId).parentConnection) || selectedBlockIds[0];
 
@@ -33,7 +41,7 @@ class MoveBlock {
   performAfterRender() {
     const edit = this.update.createTransaction();
 
-    const selectedBlockIds = this.blockStore.getSelectedRootBlockIds();
+    const selectedBlockIds = this.blockCategoryStore.getSelectedRootBlockIds();
 
     selectedBlockIds.forEach((blockId) => {
       const block = this.blockStore.getBlock(blockId);
@@ -52,6 +60,8 @@ class MoveBlock {
 
     edit.commit();
   }
+
+  private blockCategoryStore: BlockCategoryStore;
 
   private blockStore: BlockStore;
 

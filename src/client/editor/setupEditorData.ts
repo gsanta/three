@@ -8,14 +8,14 @@ import {
   setBlockAddMethods,
   setBlockContextMenuActions,
 } from './stores/blockCategory/blockCategorySlice';
-import BlockType from './models/BlockType';
+import BaseBlockType from './models/BaseBlockType';
 import { setTemplates } from './stores/blockType/blockTypeSlice';
 
 export type EditorDataReturnType = {
   blockCategories: BlockCategoriesResponse['items'];
   blockAddMethods: BlockAddMethodsResponse['items'];
   blockContextMenuActions: BlockContextMenuActionsResponse['items'];
-  blockTypes: BlockType[];
+  blockTypes: BaseBlockType[];
 };
 
 export const fetchEditorData = async (): Promise<EditorDataReturnType> => {
@@ -44,7 +44,7 @@ export const fetchEditorData = async (): Promise<EditorDataReturnType> => {
   const blockTypes = blockTypesData.map((blockType) => ({
     ...blockType,
     category: blockType.categoryName,
-  })) as unknown as BlockType[];
+  })) as unknown as BaseBlockType[];
 
   return {
     blockCategories: categories,

@@ -1,9 +1,9 @@
 import BlockFactory from './BlockFactory';
-import Block from '@/client/editor/models/Block';
+import BlockType from '@/client/editor/models/BlockType';
 import Device, { createPin } from '@/client/editor/models/block/Device';
 
 class HomeElectricsFactory extends BlockFactory {
-  createCategory(block: Block, overrides: Partial<Block> = {}): Device {
+  createCategory(block: BlockType, overrides: Partial<BlockType> = {}): Device {
     const pins: Device['pins'] = {};
 
     Object.keys(block.partDetails)

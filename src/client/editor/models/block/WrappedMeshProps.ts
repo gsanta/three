@@ -1,19 +1,19 @@
-import { ShapeType } from '@/client/editor/models/BlockType';
-import Block from '@/client/editor/models/Block';
+import { ShapeType } from '@/client/editor/models/BaseBlockType';
+import BlockType from '@/client/editor/models/BlockType';
 import { MeshProps, MeshStandardMaterialProps, ThreeEvent } from '@react-three/fiber';
 
 type WrappedMeshProps<S extends ShapeType = ShapeType> = {
   additions?: {
-    position: Block['position'];
+    position: BlockType['position'];
   };
-  block: Block<S>;
+  block: BlockType<S>;
   meshProps?: Omit<MeshProps, 'onPointerEnter'> & {
     onPointerEnter?: (event: ThreeEvent<PointerEvent>, partIndex?: string) => void;
   };
   materialProps?: MeshStandardMaterialProps;
   overwrites?: {
-    position?: Block['position'];
-    rotation?: Block['rotation'];
+    position?: BlockType['position'];
+    rotation?: BlockType['rotation'];
   };
 };
 

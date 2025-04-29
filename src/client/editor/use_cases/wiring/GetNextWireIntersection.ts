@@ -1,6 +1,6 @@
 import SceneService from '../../components/scene/service/SceneService';
 import BlockStore from '../../stores/block/BlockStore';
-import Block from '../../models/Block';
+import BlockType from '../../models/BlockType';
 import { CablePoint } from '../../models/block/Cable';
 import { BlockIntersection } from '../IntersectMesh';
 
@@ -10,7 +10,7 @@ class GetNextWireIntersection {
     this.sceneService = sceneService;
   }
 
-  execute(buildingBlock: Block, clientX: number, clientY: number, cableId?: string) {
+  execute(buildingBlock: BlockType, clientX: number, clientY: number, cableId?: string) {
     const intersectionTargets = [
       buildingBlock.id,
       ...this.blockStore.getDescendants(buildingBlock.id).map((descendant) => descendant.id),
@@ -46,7 +46,7 @@ class GetNextWireIntersection {
     }
   }
 
-  private getNextWirePointForWall(wallBlock: Block, blockIntersections: BlockIntersection[]) {
+  private getNextWirePointForWall(wallBlock: BlockType, blockIntersections: BlockIntersection[]) {
     const target = blockIntersections.find((intersection) =>
       ['wall-join', 'home-electrics'].includes(intersection.partInfo?.roles || ''),
     );

@@ -1,12 +1,12 @@
 import { Vector3 } from 'three';
 import BaseMesh from './BaseMesh';
 import AbstractMesh from './AbstractMesh';
-import Block from '@/client/editor/models/Block';
+import BlockType from '@/client/editor/models/BlockType';
 
 class ChildMesh extends AbstractMesh {
   position: Vector3;
 
-  constructor(parent: BaseMesh, block: Block, name: string) {
+  constructor(parent: BaseMesh, block: BlockType, name: string) {
     super(name);
     this.parent = parent;
 

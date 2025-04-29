@@ -1,6 +1,6 @@
 import { Store } from '@/client/common/utils/store';
 import BlockDecoration, { BlockCategories } from '@/client/editor/models/BlockCategory';
-import Block from '../../models/Block';
+import BlockType from '../../models/BlockType';
 
 class BlockStore {
   constructor(store: Store) {
@@ -82,7 +82,7 @@ class BlockStore {
     return this.getState().rootBlocksIds;
   }
 
-  getDescendants(blockId: string, categoryFilter?: string): Block[] {
+  getDescendants(blockId: string, categoryFilter?: string): BlockType[] {
     const block = this.getBlock(blockId);
 
     if (block.childConnections.length === 0) {
@@ -93,7 +93,7 @@ class BlockStore {
       }
     }
 
-    const descendants: Block[] = [];
+    const descendants: BlockType[] = [];
 
     for (const child of block.childConnections) {
       descendants.push(...this.getDescendants(child.childBlock, categoryFilter));
@@ -102,7 +102,7 @@ class BlockStore {
     return descendants;
   }
 
-  getRoot(blockId: string, expectedCategory?: string): Block {
+  getRoot(blockId: string, expectedCategory?: string): BlockType {
     const block = this.getBlock(blockId);
 
     if (!block.parentConnection) {
@@ -126,10 +126,10 @@ class BlockStore {
     return keys;
   }
 
-  filterDescendants(blockId: string, filter: { category: string }): Block[] {
+  filterDescendants(blockId: string, filter: { category: string }): BlockType[] {
     const block = this.getBlock(blockId);
 
-    const result: Block[] = [];
+    const result: BlockType[] = [];
 
     this.iterateDescendents(block, true, (descendant) => {
       if (descendant.category === filter.category) {
@@ -142,8 +142,8 @@ class BlockStore {
     return result;
   }
 
-  isDescendentSelected(block: Block, checkSelf: boolean) {
-    const terminate = this.iterateDescendents(block, checkSelf, (descendant: Block) => {
+  isDescendentSelected(block: BlockType, checkSelf: boolean) {
+    const terminate = this.iterateDescendents(block, checkSelf, (descendant: BlockType) => {
       return descendant.isSelected;
     });
 
@@ -151,9 +151,9 @@ class BlockStore {
   }
 
   iterateDescendents(
-    block: Block,
+    block: BlockType,
     iterateSelf: boolean,
-    doWork: (descendant: Block) => boolean | undefined,
+    doWork: (descendant: BlockType) => boolean | undefined,
   ): boolean | undefined {
     if (iterateSelf) {
       const terminate = doWork(block);

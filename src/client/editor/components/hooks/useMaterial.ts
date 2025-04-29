@@ -1,5 +1,5 @@
 import { BufferGeometry, Material, NormalBufferAttributes } from 'three';
-import { ModelPart } from '../../models/BlockType';
+import { ModelPart } from '../../models/BaseBlockType';
 import { NodesType } from './useGeometry';
 import { useMemo, useRef } from 'react';
 import { MeshStandardMaterialProps } from '@react-three/fiber';

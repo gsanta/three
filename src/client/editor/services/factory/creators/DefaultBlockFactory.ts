@@ -1,10 +1,10 @@
 import BlockFactory from './BlockFactory';
-import Block from '@/client/editor/models/Block';
-import BlockCreator from './BlockCreator';
 import BlockType from '@/client/editor/models/BlockType';
+import BlockCreator from './BlockCreator';
+import BaseBlockType from '@/client/editor/models/BaseBlockType';
 
 class DefaultBlockFactory extends BlockFactory {
-  create(blockType: BlockType, overrides: Partial<Block> = {}) {
+  create(blockType: BaseBlockType, overrides: Partial<BlockType> = {}) {
     const block = BlockCreator.create(this.sceneService.uuid(blockType), blockType, overrides);
 
     return block;

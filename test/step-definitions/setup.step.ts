@@ -11,7 +11,6 @@ import VectorUtils from '@/client/editor/utils/vectorUtils';
 import { ToolInfo } from '@/client/editor/models/Tool';
 import { updateBlocks } from '@/client/editor/stores/block/blockActions';
 import TestSceneService from './support/TestSceneService';
-import { iWaitForMeshToExist } from './mesh.step';
 import assert from 'assert';
 
 Before(function (this: ExtendedWorld) {
@@ -32,6 +31,8 @@ type SceneHash = {
   POS: string;
   TYPE: string;
 };
+
+const waitTenMs = () => new Promise((resolve) => setTimeout(resolve, 10));
 
 Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
   const sceneService = this.getEnv().editorContext.sceneService as TestSceneService;
@@ -103,7 +104,7 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
 
     store.dispatch(updateBlocks({ blockUpdates: [{ select: [], slice: 'city' }] }));
 
-    await iWaitForMeshToExist.call(this, row.ID);
+    await waitTenMs();
   }
 });
 
@@ -119,18 +120,20 @@ export async function addTemplateToPosition(this: ExtendedWorld, template: strin
 When('I set next uuids to:', function (this: ExtendedWorld, table: any) {
   const data = table.hashes() as {
     UUID: string;
+    TYPE: string;
   }[];
 
   for (const row of data) {
-    (this.getEnv().editorContext.sceneService as TestSceneService).setNextUuid(row.UUID);
+    (this.getEnv().editorContext.sceneService as TestSceneService).setNextUuid(row.UUID, row.TYPE);
   }
 });
 
 type BlockHash = {
   BLOCK: string;
+  TYPE?: string;
 };
 
-Then('My current scene is', function (this: ExtendedWorld, table: { hashes(): BlockHash[] }) {
+Then('my current scene is', function (this: ExtendedWorld, table: { hashes(): BlockHash[] }) {
   const data = table.hashes();
   const blockStore = this.getEnv().editorContext.blockStore;
 
@@ -141,5 +144,9 @@ Then('My current scene is', function (this: ExtendedWorld, table: { hashes(): Bl
 
   for (const row of data) {
     if (!blockStore.getBlock(row.BLOCK)) assert.fail(`Block with id '${row.BLOCK}' does not exist in scene`);
+
+    if (row.TYPE && blockStore.getBlock(row.BLOCK).type !== row.TYPE) {
+      assert.fail(`Expected type for block '${row.BLOCK} is ${row.TYPE}', got ${blockStore.getBlock(row.BLOCK).type}`);
+    }
   }
 });

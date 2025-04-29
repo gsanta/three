@@ -1,13 +1,13 @@
 import { MeshStandardMaterialProps, ThreeEvent } from '@react-three/fiber';
 import { Material } from 'three';
-import { ModelPart } from '../../models/BlockType';
+import { ModelPart } from '../../models/BaseBlockType';
 import useGeometry, { NodesType } from '../hooks/useGeometry';
 import useMaterial from '../hooks/useMaterial';
-import Block from '../../models/Block';
+import BlockType from '../../models/BlockType';
 import { Select } from '@react-three/postprocessing';
 
 export type ModelPartProps = {
-  block: Block;
+  block: BlockType;
   materials: {
     [name: string]: Material;
   };

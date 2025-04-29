@@ -1,8 +1,8 @@
-import Block from '../../models/Block';
+import BlockType from '../../models/BlockType';
 import BlockDecoration, { BlockCategories, BlockCategoryRecords } from '../../models/BlockCategory';
 
 export type BlockState = {
-  blocks: Record<string, Block>;
+  blocks: Record<string, BlockType>;
   blockIds: string[];
   decorations: BlockCategoryRecords;
   hovered?: {
@@ -21,17 +21,17 @@ export type DecorationUpdate<K extends BlockDecoration> = {
   slice: BlockSlices;
 };
 
-export type BlockUpdate = { type: 'update'; block: Block; slice: BlockSlices };
+export type BlockUpdate = { type: 'update'; block: BlockType; slice: BlockSlices };
 
 export type BlockSelect = {
-  select: Block[];
+  select: BlockType[];
   partIndex?: string;
   slice: BlockSlices;
 };
 
 export type BlockHover = { hover: string | null; partIndex?: string; slice: BlockSlices };
 
-export type BlockRemove = { remove: Block; slice: BlockSlices };
+export type BlockRemove = { remove: BlockType; slice: BlockSlices };
 
 // Update type constrained to keys and values from BlockCategories
 export type UpdateBlock<K extends BlockDecoration> =

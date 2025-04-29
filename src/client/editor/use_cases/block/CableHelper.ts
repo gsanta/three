@@ -1,12 +1,12 @@
 import BlockStore from '../../stores/block/BlockStore';
-import Block from '../../models/Block';
+import BlockType from '../../models/BlockType';
 
 class CableHelper {
   constructor(blockStore: BlockStore) {
     this.blockStore = blockStore;
   }
 
-  getSibling(block: Block, edgeIndex: number) {
+  getSibling(block: BlockType, edgeIndex: number) {
     const edgeConnection = block.conduitConnections[edgeIndex];
 
     if (!edgeConnection) {

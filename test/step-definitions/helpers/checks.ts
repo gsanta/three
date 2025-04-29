@@ -49,7 +49,7 @@ export function checkPartIndexExists(this: ExtendedWorld, blockId: string, partI
 export function checkBlockMeshExists(this: ExtendedWorld, blockId: string) {
   const block = checkBlockExists.call(this, blockId);
 
-  const mesh = this.env.sceneStore.getObj3d(block.id);
+  const mesh = this.getEnv().editorContext.sceneStore.getObj3d(block.id);
 
   if (!mesh) {
     throw new Error(`Mesh for block ${blockId} not found.`);
@@ -61,7 +61,7 @@ export function checkBlockMeshExists(this: ExtendedWorld, blockId: string) {
 export function checkPartMeshExists(this: ExtendedWorld, blockId: string, partIndex: string) {
   const mesh = checkBlockMeshExists.call(this, blockId);
 
-  const partName = this.env.blockStore.getBlock(blockId).partDetails[partIndex]?.name;
+  const partName = this.getEnv().editorContext.blockStore.getBlock(blockId).partDetails[partIndex]?.name;
   const partMesh = MeshUtils.findByName(mesh, partName);
 
   if (!partMesh) {

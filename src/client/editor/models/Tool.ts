@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import ToolName from './ToolName';
 import { IconName } from '../../common/components/lib/Icon';
-import { Mesh, Vector3 } from 'three';
+import { Vector3 } from 'three';
 import Num3 from '@/client/editor/models/Num3';
-import Block from '@/client/editor/models/Block';
+import BlockType from '@/client/editor/models/BlockType';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import TransactionService from '../services/transaction/TransactionService';
 
@@ -26,7 +26,7 @@ export interface ToolInfo {
   gridIndex?: number;
   gridX?: number;
   gridY?: number;
-  draggedMesh?: Block;
+  draggedMesh?: BlockType;
   partIndex?: string;
 }
 
@@ -66,7 +66,7 @@ abstract class Tool {
 
   onDeselect() {}
 
-  onRendered(_blockId: string) {}
+  onRendered() {}
 }
 
 export default Tool;

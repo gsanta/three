@@ -14,7 +14,7 @@ import { store } from '@/client/common/utils/store';
 import HoverTool from './HoverTool';
 import DrawHouseWiring from '../../use_cases/wiring/DrawHouseWiring';
 import { setEditMode } from '../../stores/editorSlice';
-import Block from '../../models/Block';
+import BlockType from '../../models/BlockType';
 
 class CableTool extends HoverTool {
   constructor(
@@ -136,7 +136,7 @@ class CableTool extends HoverTool {
     ]);
   }
 
-  private getRootBlock(block: Block) {
+  private getRootBlock(block: BlockType) {
     if (block.category === 'building-bases') {
       return block;
     }

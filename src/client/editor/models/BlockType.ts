@@ -1,62 +1,90 @@
-import * as blocks from '../utils/blocks.json';
-import Axis from './Axis';
-import { BlockCategoryName } from './block/BlockCategory';
-import BlockDecoration from './BlockCategory';
-import Num3 from './Num3';
+import { PartialDeep } from 'type-fest';
+import BaseBlockType, { ModelPartInfo, ShapeType } from './BaseBlockType';
+import { MergeStrategy, mergeArrays } from '../utils/mergeDeep';
+import { MeshStandardMaterialProps } from '@react-three/fiber';
 
-export type BlockName = keyof typeof blocks.blocks;
-
-export type ShapeType = 'box' | 'cone' | 'model' | 'tube';
-
-export type ModelPart = {
-  materialPath?: string;
-  position: Num3;
-  rotation?: Num3;
-  scale?: Num3 | number;
-  parts: ModelPart[];
-  name: string;
+export type BlockSlotSource = {
+  slotName: string;
+  blockId: string;
 };
 
-export type ModelPartRole =
-  | 'pin'
-  | 'wall-slot'
-  | 'ceil-slot'
-  | 'floor-slot'
-  | 'load-on'
-  | 'road-slot'
-  | 'load-off'
-  | 'wall-join'
-  | 'transformer-holder';
-
-export type ModelPartInfo = {
-  allowMovement?: Axis[];
-  hide?: boolean;
-  isSelected?: boolean;
-  isConnected?: boolean;
-  joins?: [string, string];
-  orientation: number;
-  role?: 'slot';
-  roles?: ModelPartRole[];
-  type: 'placeholder' | 'phisycal';
+export type NeigbourConnection = {
+  id: string;
+  neighbourBlock: string;
+  neighbourPart?: string;
+  part?: string;
 };
-
-export type AnimationTriggerName = 'device-on';
 
 type BlockType<S extends ShapeType = ShapeType> = {
-  animations?: Partial<Record<AnimationTriggerName, string[]>>;
-  category: BlockCategoryName;
-  color: [number, number, number];
-  decorations: BlockDecoration[];
-  geometry: S;
-  position: [number, number, number];
-  scale: [number, number, number];
-  movable: boolean;
-  moveAxis: [boolean, boolean, boolean];
-  rotation: [number, number, number];
-  parts: ModelPart[];
-  partDetails: Record<string, ModelPartInfo | undefined>;
-  path: string;
-  type: string;
+  id: string;
+  isHovered: boolean;
+  hoveredPart?: string;
+  isDirty: boolean;
+  isSelected: boolean;
+  selectedPart?: string;
+  isVisible: boolean;
+
+  materialProps: MeshStandardMaterialProps;
+
+  neighbourConnections: NeigbourConnection[];
+
+  notifyOnRender: boolean;
+
+  conduitConnections: {
+    block: string;
+    thisPart?: string;
+  }[];
+
+  multiParentConnections: {
+    block: string;
+  }[];
+
+  childConnections: {
+    childBlock: string;
+    childPart?: string;
+    parentPart?: string;
+  }[];
+
+  parentConnection?: {
+    block: string;
+    part?: string;
+  };
+} & BaseBlockType<S>;
+
+export type PartialMeshData = Partial<BlockType> & { id: string };
+
+export const mergeBlocks = (
+  block: BlockType,
+  partial?: PartialDeep<BlockType>,
+  mergeStrategy: MergeStrategy = 'replace',
+): BlockType => {
+  if (!partial) {
+    return block;
+  }
+
+  const newBlock = {
+    ...block,
+    ...partial,
+    neighbourConnections: mergeArrays(block.neighbourConnections, partial?.neighbourConnections, mergeStrategy),
+    childConnections: mergeArrays(block.childConnections, partial?.childConnections, mergeStrategy),
+    conduitConnections: mergeArrays(block.conduitConnections, partial?.conduitConnections, mergeStrategy),
+    partDetails: {
+      ...block.partDetails,
+    },
+  } as BlockType;
+
+  if (partial.partDetails) {
+    Object.keys(partial.partDetails).forEach((key) => {
+      const newPartInfo = {
+        ...newBlock.partDetails[key],
+        ...partial.partDetails?.[key],
+      } as ModelPartInfo;
+
+      newBlock.partDetails[key] = newPartInfo;
+    });
+  }
+
+  return newBlock;
 };
 
 export default BlockType;

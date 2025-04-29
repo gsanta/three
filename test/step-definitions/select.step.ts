@@ -6,7 +6,7 @@ import assert from 'assert';
 import { Vector3 } from 'three';
 import ExtendedWorld from './ExtendedWorld';
 import findClosestBlock from './helpers/findClosestBlock';
-import Block from '@/client/editor/models/Block';
+import BlockType from '@/client/editor/models/BlockType';
 import TestSceneService from './support/TestSceneService';
 
 function selectBlockAtPosition(this: ExtendedWorld, x: number, y: number, z: number, partIndex?: string) {
@@ -14,7 +14,7 @@ function selectBlockAtPosition(this: ExtendedWorld, x: number, y: number, z: num
 
   const blockWithDistance = findClosestBlock(this.getEnv().editorContext.blockStore.getBlocksAsArray(), [x, y, z]);
 
-  let block: Block | undefined = undefined;
+  let block: BlockType | undefined = undefined;
 
   if (blockWithDistance && blockWithDistance[1] < 1) {
     block = blockWithDistance[0];
@@ -37,9 +37,12 @@ function selectBlockAtPosition(this: ExtendedWorld, x: number, y: number, z: num
 
 When('I select a block at position {float},{float},{float} with part {string}', selectBlockAtPosition);
 
-When('I select a block at position {int},{int},{int}', function (this: ExtendedWorld, x: number, y: number, z: number) {
-  selectBlockAtPosition.bind(this, x, y, z)();
-});
+When(
+  'I select a block at position {float},{float},{float}',
+  function (this: ExtendedWorld, x: number, y: number, z: number) {
+    selectBlockAtPosition.bind(this, x, y, z)();
+  },
+);
 
 Then('block {string} is selected', function (this: ExtendedWorld, blockId: string) {
   const realBlockId = blockId === 'examined' ? this.getEnv().testScene.storedBlockId || '' : blockId;

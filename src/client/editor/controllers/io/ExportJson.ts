@@ -1,6 +1,6 @@
 import { Store } from '@/client/common/utils/store';
-import Block from '../../models/Block';
-import { ModelPartInfo } from '../../models/BlockType';
+import BlockType from '../../models/BlockType';
+import { ModelPartInfo } from '../../models/BaseBlockType';
 import { BlockState } from '../../stores/block/blockSlice.types';
 
 class ExportJson {
@@ -21,7 +21,7 @@ class ExportJson {
     Object.keys(blockState.blocks).forEach((blockId) => {
       const origBlock = blockState.blocks[blockId];
 
-      const newPartDetails: Block['partDetails'] = {};
+      const newPartDetails: BlockType['partDetails'] = {};
 
       Object.keys(origBlock.partDetails).forEach((key) => {
         const origPartDetails = origBlock.partDetails[key] as ModelPartInfo;
@@ -31,7 +31,7 @@ class ExportJson {
         };
       });
 
-      const newBlock: Block = {
+      const newBlock: BlockType = {
         ...origBlock,
         isHovered: false,
         hoveredPart: undefined,

@@ -1,11 +1,11 @@
-import BlockType, { ModelPartInfo } from '@/client/editor/models/BlockType';
+import BaseBlockType, { ModelPartInfo } from '@/client/editor/models/BaseBlockType';
 import { toRadian } from '@/client/editor/utils/mathUtils';
 import VectorUtils, { addVector } from '@/client/editor/utils/vectorUtils';
 import Num3 from '@/client/editor/models/Num3';
-import Block from '@/client/editor/models/Block';
+import BlockType from '@/client/editor/models/BlockType';
 
 class BlockCreator {
-  static create(id: string, block: BlockType, settings: Partial<Block>): Block {
+  static create(id: string, block: BaseBlockType, settings: Partial<BlockType>): BlockType {
     // const { position: pos = [0, 0, 0], ...rest } = settings;
     const pos = settings.position || [0, 0, 0];
 

@@ -3,7 +3,7 @@ import ToolName from '../../models/ToolName';
 import VectorUtils, { addVector } from '@/client/editor/utils/vectorUtils';
 import { toRadian } from '@/client/editor/utils/mathUtils';
 import Num3 from '@/client/editor/models/Num3';
-import Block from '@/client/editor/models/Block';
+import BlockType from '@/client/editor/models/BlockType';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import MoveBlock from '../../use_cases/block/move/MoveBlock';
 import TransactionService from '../../services/transaction/TransactionService';
@@ -33,7 +33,7 @@ class SelectTool extends HoverTool {
     this.sceneStore = sceneStore;
     this.sceneService = sceneService;
 
-    this.move = new MoveBlock(blockStore, update, sceneStore, toolStore);
+    this.move = new MoveBlock(blockStore, blockCategoryStore, update, sceneStore, toolStore);
     this.selector = new SelectBlock(blockStore, blockCategoryStore, scene, sceneStore, update);
     this.toolStore = toolStore;
   }
@@ -110,7 +110,7 @@ class SelectTool extends HoverTool {
     edit.commit(false);
   }
 
-  scaleMesh(scale: number, block: Block) {
+  scaleMesh(scale: number, block: BlockType) {
     const { selectedSettings } = this.blockStore.getBlockSettings();
     const settings = selectedSettings[block.category];
 

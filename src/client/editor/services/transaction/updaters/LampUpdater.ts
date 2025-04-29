@@ -2,7 +2,7 @@ import { BlockDecorationType } from '@/client/editor/models/BlockCategory';
 import BlockUpdater from './BlockUpdater';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import Edit from '../Edit';
-import Block from '@/client/editor/models/Block';
+import BlockType from '@/client/editor/models/BlockType';
 import Device from '@/client/editor/models/block/Device';
 
 const isDevice = (decoration: BlockDecorationType): decoration is Device => {
@@ -16,7 +16,7 @@ class LampUpdater extends BlockUpdater {
     this.blockStore = blockStore;
   }
 
-  onUpdateDecorators(edit: Edit, block: Block, newState: BlockDecorationType): void {
+  onUpdateDecorators(edit: Edit, block: BlockType, newState: BlockDecorationType): void {
     if (isDevice(newState)) {
       const loadOnPartIndexes = Object.keys(block.partDetails).filter(
         (key) => block.partDetails[key]?.roles === 'load-on',

@@ -1,4 +1,4 @@
-import Block from '@/client/editor/models/Block';
+import BlockType from '@/client/editor/models/BlockType';
 import { DoubleSide, Mesh, MeshBasicMaterial, PlaneGeometry } from 'three';
 
 class TestStore {
@@ -35,11 +35,11 @@ class TestStore {
     return this.lastCreatedBlock;
   }
 
-  setLastModifiedBlock(block: Block) {
+  setLastModifiedBlock(block: BlockType) {
     this.lastModifiedBlock = block;
   }
 
-  setLastCreatedBlock(block: Block) {
+  setLastCreatedBlock(block: BlockType) {
     this.lastCreatedBlock = block;
   }
 
@@ -51,9 +51,9 @@ class TestStore {
 
   private plane: Mesh | undefined;
 
-  private lastModifiedBlock: Block | undefined;
+  private lastModifiedBlock: BlockType | undefined;
 
-  private lastCreatedBlock: Block | undefined;
+  private lastCreatedBlock: BlockType | undefined;
 }
 
 export default TestStore;

@@ -1,90 +1,18 @@
-import { PartialDeep } from 'type-fest';
-import BlockType, { ModelPartInfo, ShapeType } from './BlockType';
-import { MergeStrategy, mergeArrays } from '../utils/mergeDeep';
-import { MeshStandardMaterialProps } from '@react-three/fiber';
+import BlockType from './BlockType';
+import { BlockCategoryName } from './block/BlockCategory';
 
-export type BlockSlotSource = {
-  slotName: string;
-  blockId: string;
-};
-
-export type NeigbourConnection = {
-  id: string;
-  neighbourBlock: string;
-  neighbourPart?: string;
-  part?: string;
-};
-
-type Block<S extends ShapeType = ShapeType> = {
-  id: string;
-  isHovered: boolean;
-  hoveredPart?: string;
-  isDirty: boolean;
-  isSelected: boolean;
-  selectedPart?: string;
-  isVisible: boolean;
-
-  materialProps: MeshStandardMaterialProps;
-
-  neighbourConnections: NeigbourConnection[];
-
-  notifyOnRender: boolean;
-
-  conduitConnections: {
-    block: string;
-    thisPart?: string;
-  }[];
-
-  multiParentConnections: {
-    block: string;
-  }[];
-
-  childConnections: {
-    childBlock: string;
-    childPart?: string;
-    parentPart?: string;
-  }[];
-
-  parentConnection?: {
-    block: string;
-    part?: string;
-  };
-} & BlockType<S>;
-
-export type PartialMeshData = Partial<Block> & { id: string };
-
-export const mergeBlocks = (
-  block: Block,
-  partial?: PartialDeep<Block>,
-  mergeStrategy: MergeStrategy = 'replace',
-): Block => {
-  if (!partial) {
-    return block;
+class Block {
+  constructor(block: BlockType) {
+    this.block = block;
   }
 
-  const newBlock = {
-    ...block,
-    ...partial,
-    neighbourConnections: mergeArrays(block.neighbourConnections, partial?.neighbourConnections, mergeStrategy),
-    childConnections: mergeArrays(block.childConnections, partial?.childConnections, mergeStrategy),
-    conduitConnections: mergeArrays(block.conduitConnections, partial?.conduitConnections, mergeStrategy),
-    partDetails: {
-      ...block.partDetails,
-    },
-  } as Block;
-
-  if (partial.partDetails) {
-    Object.keys(partial.partDetails).forEach((key) => {
-      const newPartInfo = {
-        ...newBlock.partDetails[key],
-        ...partial.partDetails?.[key],
-      } as ModelPartInfo;
-
-      newBlock.partDetails[key] = newPartInfo;
-    });
+  checkCategory(category: BlockCategoryName) {
+    if (this.block.category !== category) {
+      throw new Error(`Precondition failed: expected category: '${category}, actual category ${this.block.category}`);
+    }
   }
 
-  return newBlock;
-};
+  protected block: BlockType;
+}
 
 export default Block;

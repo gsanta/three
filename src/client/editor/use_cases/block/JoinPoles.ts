@@ -1,6 +1,6 @@
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { Vector3 } from 'three';
-import Block from '@/client/editor/models/Block';
+import BlockType from '@/client/editor/models/BlockType';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import TransactionService from '../../services/transaction/TransactionService';
 import FactoryService from '../../services/factory/FactoryService';
@@ -9,7 +9,7 @@ import Num3 from '../../models/Num3';
 import Edit from '../../services/transaction/Edit';
 import MathUtils, { toRadian } from '../../utils/mathUtils';
 import CableHelper from './CableHelper';
-import { ModelPartInfo } from '../../models/BlockType';
+import { ModelPartInfo } from '../../models/BaseBlockType';
 import Pole from '../../models/Pole';
 
 class JoinPoles {
@@ -27,7 +27,7 @@ class JoinPoles {
     this.cableHelper = new CableHelper(blockStore);
   }
 
-  join(pole: Block) {
+  join(pole: BlockType) {
     const otherPoles = this.blockStore
       .getBlocksAsArray()
       .filter((block) => block.category === 'poles')
@@ -70,7 +70,7 @@ class JoinPoles {
     pairs.forEach(([partIndex1, partIndex2]) => this.joinPins(pole, neighborPole, partIndex1, partIndex2));
   }
 
-  private getEmptyWireConnectionNames(poleBlock: Block) {
+  private getEmptyWireConnectionNames(poleBlock: BlockType) {
     const pole = new Pole(poleBlock);
 
     if (pole.arePrimaryWireConnectionsEmpty('a')) {
@@ -82,7 +82,7 @@ class JoinPoles {
     throw new Error('Precondition failed: primary wire connections are not empty, can not join poles.');
   }
 
-  private rotatePoles(newPole: Block, neighborPole: Block) {
+  private rotatePoles(newPole: BlockType, neighborPole: BlockType) {
     const neighborNeighborPole = this.cableHelper.getSibling(neighborPole, 0);
 
     if (!neighborNeighborPole) {
@@ -120,7 +120,7 @@ class JoinPoles {
     return;
   }
 
-  private joinPins(pole1: Block, pole2: Block, partIndex1: string, partIndex2: string) {
+  private joinPins(pole1: BlockType, pole2: BlockType, partIndex1: string, partIndex2: string) {
     let positions: Num3[] = [
       [0, 0, 0],
       [0, 0, 0],
@@ -153,7 +153,7 @@ class JoinPoles {
     this.updatePole(edit, cable, pole2, partIndex2);
   }
 
-  private updatePole(edit: Edit, cable: Block, pole: Block, partIndex: string) {
+  private updatePole(edit: Edit, cable: BlockType, pole: BlockType, partIndex: string) {
     const device = this.blockStore.getDecoration('devices', pole.id);
 
     edit.update<'devices'>(
@@ -180,7 +180,7 @@ class JoinPoles {
     );
   }
 
-  private getPositions(pole1: Block, pole2: Block, partIndex1: string, partIndex2: string) {
+  private getPositions(pole1: BlockType, pole2: BlockType, partIndex1: string, partIndex2: string) {
     const mesh1 = this.scene.getObj3d(pole1.id);
     const mesh2 = this.scene.getObj3d(pole2.id);
 

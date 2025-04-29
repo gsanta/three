@@ -1,5 +1,4 @@
 Feature: Pole
-  @only
   Scenario: Adding a pole joins it to the nearest pole
     Given I have a scene with:
       | TYPE   | ID       | PARENT | POS   |
@@ -60,77 +59,85 @@ Feature: Pole
       | pole-1-2 | 0,-45,0     |
       | pole-1-3 | 0,-90,0     |
 
-  @only
-  Scenario: Removing a pole
+  Scenario: Removing a pole removes the associated cables as well
     Given I set next uuids to:
-      | UUID      |
-      | pole-1-1  |
-      | pole-1-2  |
-      | cable-1-1 |
-      | cable-1-2 |
-      | cable-1-3 |
-    Given I have a scene with:
-      | TYPE   | ID       | PARENT | POS   |
-      | pole-1 | pole-1-1 | -      | 0,0.1,5 |
-      | pole-1 | pole-1-2 | -      | 0,0.1,10 |
-    Then My current scene is
-      | BLOCK     |
-      | pole-1-1  |
-      | pole-1-2  |
-      | cable-1-1 |
-      | cable-1-2 |
-      | cable-1-3 |
+      | UUID      | TYPE    |
+      | cable-1-1 | cable-1 |
+      | cable-1-2 | cable-1 |
+      | cable-1-3 | cable-1 |
+      | cable-1-4 | cable-1 |
+      | cable-1-5 | cable-1 |
+      | cable-1-6 | cable-1 |
+    And I have a scene with:
+      | TYPE   | ID       | POS      |
+      | pole-1 | pole-1-1 | 0,0.1,5  |
+      | pole-1 | pole-1-2 | 0,0.1,10 |
+      | pole-1 | pole-1-3 | 0,0.1,15 |
+    Then my current scene is
+      | BLOCK     | TYPE    | 
+      | pole-1-1  | pole-1  |
+      | pole-1-2  | pole-1  |
+      | pole-1-3  | pole-1  |
+      | cable-1-1 | cable-1 |
+      | cable-1-2 | cable-1 |
+      | cable-1-3 | cable-1 |
+      | cable-1-4 | cable-1 |
+      | cable-1-5 | cable-1 |
+      | cable-1-6 | cable-1 |
     When I select tool 'erase'
     And I press pointer at 0,0.1,5
     Then block at 0,0.1,5 does not exist
-    Then My current scene is
-      | BLOCK     |
-      | pole-1-2  |
-    Then I have a block 'pole-1-2' with shared child connections
-      | BLOCK |
-  #   Given I have an empty canvas
-  #   When I select tool 'add'
-  #   And I select template 'pole-1'
-  #   And I move pointer to '0,0.1,5'
-  #   And I press pointer
-  #   And I move pointer to '0,0.1,10'
-  #   And I press pointer
-  #   When I select tool 'erase'
-  #   And I press pointer at 0,0.1,5
-  #   Then block at 0,0.1,5 does not exist
-  #   When I examine block at 0,0.1,10
-  #   Then pin '#2' of block 'examined' is empty
-  #   Then pin '#3' of block 'examined' is empty
-  #   Then pin '#4' of block 'examined' is empty
+    And my current scene is
+      | BLOCK     | TYPE    |
+      | pole-1-2  | pole-1  |
+      | pole-1-3  | pole-1  |
+      | cable-1-4 | cable-1 |
+      | cable-1-5 | cable-1 |
+      | cable-1-6 | cable-1 |
+    When I press pointer at 0,0.1,10
+    Then block at 0,0.1,10 does not exist
+    And my current scene is
+      | BLOCK     | TYPE    |
+      | pole-1-3  | pole-1  |
 
-  # Scenario: Moving a pole joined to two other poles
-  #   Given I have a scene with:
-  #     | TYPE            | ID         | POS                     |
-  #     | pole-1          | pole-1-id  | 5,0,0                   |
-  #     | pole-1          | pole-2-id  | 6,0,0                   |
-  #     | pole-1          | pole-3-id  | 7,0,0                   |
-  #     | cable-1         | cable-1-id | pole-1-id#2:pole-2-id#2 |
-  #     | cable-1         | cable-2-id | pole-1-id#3:pole-2-id#3 |
-  #     | cable-1         | cable-3-id | pole-1-id#4:pole-2-id#4 |
-  #     | cable-1         | cable-4-id | pole-3-id#2:pole-2-id#2 |
-  #     | cable-1         | cable-5-id | pole-3-id#3:pole-2-id#3 |
-  #     | cable-1         | cable-6-id | pole-3-id#4:pole-2-id#4 |
-  #   When I select tool 'select'
-  #   And I select a block at position 100,0,0
-  #   And I select a block at position 6,0,0
-  #   And I drag pointer with delta '0,0,3'
-  #   And I end drag
-  #   And I wait for dirty blocks to update
-  #   Then I have block 'pole-2-id' at estimated position '6,0,3'
-  #   When I store world position for part '#2' of block 'pole-2-id'
-  #   Then cable 'cable-1-id' ends at position 'stored'
-  #   Then cable 'cable-4-id' ends at position 'stored'
-  #   When I store world position for part '#3' of block 'pole-2-id'
-  #   Then cable 'cable-2-id' ends at position 'stored'
-  #   Then cable 'cable-5-id' ends at position 'stored'
-  #   When I store world position for part '#4' of block 'pole-2-id'
-  #   Then cable 'cable-3-id' ends at position 'stored'
-  #   Then cable 'cable-6-id' ends at position 'stored'
+  @only
+  Scenario: Moving a pole joined to two other poles, moves the cables as well
+    Given I set next uuids to:
+      | UUID      | TYPE    |
+      | cable-1-1 | cable-1 |
+      | cable-1-2 | cable-1 |
+      | cable-1-3 | cable-1 |
+      | cable-1-4 | cable-1 |
+      | cable-1-5 | cable-1 |
+      | cable-1-6 | cable-1 |
+    And I have a scene with:
+      | TYPE   | ID       | POS      |
+      | pole-1 | pole-1-1 | 0,0.1,5  |
+      | pole-1 | pole-1-2 | 0,0.1,10 |
+      | pole-1 | pole-1-3 | 0,0.1,15 |
+    Then I have cables with properties
+      | CABLE     | PARENT   | POSITION            |
+      | cable-1-1 | pole-1-2 | -0.913,7.254,10.011 |
+      | cable-1-2 | pole-1-2 | -0.378,7.254,10.011 |
+      | cable-1-3 | pole-1-2 | 0.865,7.254,10.011  |
+      | cable-1-4 | pole-1-2 | -0.913,7.254,10.011 |
+      | cable-1-5 | pole-1-2 | -0.378,7.254,10.011 |
+      | cable-1-6 | pole-1-2 | 0.865,7.254,10.011  |
+    When I select tool 'select'
+    And I select a block at position 0,0.1,10
+    And I drag pointer with delta '0,0,3'
+    And I end drag
+    And I wait for dirty blocks to update
+    Then I have block 'pole-1-2' at estimated position ' 0,0.1,13'
+    Then I have cables with properties
+      | CABLE     | PARENT   | POSITION            |
+      | cable-1-1 | pole-1-2 | -0.913,7.254,13.011 |
+      | cable-1-2 | pole-1-2 | -0.378,7.254,13.011 |
+      | cable-1-3 | pole-1-2 | 0.865,7.254,13.011  |
+      | cable-1-4 | pole-1-2 | -0.913,7.254,13.011 |
+      | cable-1-5 | pole-1-2 | -0.378,7.254,13.011 |
+      | cable-1-6 | pole-1-2 | 0.865,7.254,13.011  |
+
 
 
 
