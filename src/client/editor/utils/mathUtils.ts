@@ -17,8 +17,8 @@ class MathUtils {
     return pos.map((coord) => -coord) as Num3;
   }
 
-  add(other: Num3) {
-    return this.vector.map((val, i) => val + other[i]);
+  add(other: Num3): Num3 {
+    return this.vector.map((val, i) => val + other[i]) as Num3;
   }
 
   // returns -180 to 180 deg

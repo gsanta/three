@@ -10,6 +10,7 @@ import { checkPartIndexExists, checkPosition } from './helpers/checks';
 import { BlockIntersection } from '@/client/editor/use_cases/IntersectMesh';
 import Num3 from '@/client/editor/models/Num3';
 import TestSceneService from './support/TestSceneService';
+import assert from 'assert';
 
 When('I select tool {string}', function (this: ExtendedWorld, toolName: ToolName) {
   store.dispatch(setSelectedTool(toolName));
@@ -19,8 +20,13 @@ When('I execute tool', function (this: ExtendedWorld) {
   this.getEnv().tool.onExecute();
 });
 
-When('I select template {string}', function (this: ExtendedWorld, templateName: string) {
-  store.dispatch(setSelectedGeometry(templateName));
+When('I select template {string}', function (this: ExtendedWorld, type: string) {
+  assert.doesNotThrow(
+    () => this.getEnv().editorContext.blockStore.getBlockType(type),
+    `block type '${type}' does not exist`,
+  );
+
+  store.dispatch(setSelectedGeometry(type));
 });
 
 When('I press pointer', function (this: ExtendedWorld) {
@@ -125,20 +131,17 @@ When('I examine block at {float},{float},{float}', function (this: ExtendedWorld
   this.getEnv().testScene.storedBlockId = blockWithDistance[0].id;
 });
 
-When(
-  'I hover over block {string} and part {string}',
-  function (this: ExtendedWorld, blockId: string, partIndexOrName: string) {
-    const partIndex = checkPartIndexExists.call(this, blockId, partIndexOrName);
+When('I hover over block {string} and part {string}', function (this: ExtendedWorld, blockId: string, name: string) {
+  checkPartIndexExists.call(this, blockId, name);
 
-    const block = this.getEnv().editorContext.blockStore.getBlock(blockId);
+  const block = this.getEnv().editorContext.blockStore.getBlock(blockId);
 
-    if (!block) {
-      throw new Error(`Could not find block with id ${blockId}`);
-    }
+  if (!block) {
+    throw new Error(`Could not find block with id ${blockId}`);
+  }
 
-    this.getEnv().toolHelper.pointerEnter({ blockId: block.id, partIndex: partIndex });
-  },
-);
+  this.getEnv().toolHelper.pointerEnter({ blockId: block.id, partIndex: name });
+});
 
 When('I drag pointer with delta {string}', function (this: ExtendedWorld, deltaStr: string) {
   const delta = checkPosition.call(this, deltaStr);

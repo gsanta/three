@@ -1,11 +1,11 @@
-import Block from '@/client/editor/models/Block';
+import BlockType from '@/client/editor/models/BlockType';
 import Num3 from '@/client/editor/models/Num3';
 
 export function calculateDistance(pos1: Num3, pos2: Num3): number {
   return Math.sqrt(Math.pow(pos1[0] - pos2[0], 2) + Math.pow(pos1[1] - pos2[1], 2) + Math.pow(pos1[2] - pos2[2], 2));
 }
 
-const findClosestBlock = (blocks: Block[], targetPosition: Num3): [Block, number] | undefined => {
+const findClosestBlock = (blocks: BlockType[], targetPosition: Num3): [BlockType, number] | undefined => {
   if (blocks.length === 0) {
     return undefined;
   }

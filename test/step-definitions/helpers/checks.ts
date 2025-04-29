@@ -30,20 +30,16 @@ export function checkDecorationExists(this: ExtendedWorld, category: BlockDecora
   return decortion;
 }
 
-export function checkPartIndexExists(this: ExtendedWorld, blockId: string, partIndexOrName: string) {
+export function checkPartIndexExists(this: ExtendedWorld, blockId: string, partName: string) {
   const block = checkBlockExists.call(this, blockId);
 
-  if (partIndexOrName.startsWith('#')) {
-    return partIndexOrName;
+  const entry = block.partDetails[partName];
+
+  if (!entry) {
+    throw new Error(`Part with name ${partName} not found for block ${blockId}`);
   }
 
-  const entry = Object.entries(block.partDetails).find(([, val]) => val?.name === partIndexOrName);
-
-  if (!entry?.[0]) {
-    throw new Error(`Part with name ${partIndexOrName} not found for block ${blockId}`);
-  }
-
-  return entry?.[0];
+  return entry;
 }
 
 export function checkBlockMeshExists(this: ExtendedWorld, blockId: string) {
@@ -73,20 +69,28 @@ export function checkPartMeshExists(this: ExtendedWorld, blockId: string, partIn
 
 export function checkPosition(this: ExtendedWorld, position: string): Num3 {
   if (position === 'stored') {
-    const pos = this.env.testScene.storedTestData.position as Vector3 | Num3;
+    const pos = this.getEnv().testScene.storedTestData.position as Vector3 | Num3;
 
     if (!pos) {
       throw new Error('No position is stored');
     }
 
     return 'toArray' in pos ? pos.toArray() : pos;
-  }
+  } else if (position.indexOf(',') !== -1) {
+    return position.split(',').map((coord) => Number(coord.trim())) as Num3;
+  } else if (position.indexOf(':') !== -1) {
+    // pole-1-1:Pin4->Join
+    const result = position.split(':')[1].split('->'); // ['Pin4', 'Join']
+    result.unshift(position.split(':')[0]); // ['pole-1-1', 'Pin4', 'Join']
 
-  return position.split(',').map((coord) => Number(coord.trim())) as Num3;
+    const mesh = this.getEnv().editorContext.sceneStore.getObj3d(result[0]);
+
+    return MeshUtils.findByName(mesh, result[1]).position.toArray() as Num3;
+  }
 }
 
-export function checkPositionCloseTo(this: ExtendedWorld, position: string, actual: Num3) {
-  const expected = checkPosition.call(this, position);
+export function checkPositionCloseTo(this: ExtendedWorld, position: string | Num3, actual: Num3) {
+  const expected = typeof position === 'string' ? checkPosition.call(this, position) : position;
 
   const diff = VectorUtils.size(VectorUtils.sub(expected, actual));
 

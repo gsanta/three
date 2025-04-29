@@ -6,12 +6,14 @@ import { setSelectedTool } from '@/client/editor/stores/tool/toolSlice';
 import ToolName from '@/client/editor/models/ToolName';
 import ExtendedWorld from './ExtendedWorld';
 import Num3 from '@/client/editor/models/Num3';
-import { checkPartIndexExists } from './helpers/checks';
+import { checkPartIndexExists, checkPositionCloseTo } from './helpers/checks';
 import VectorUtils from '@/client/editor/utils/vectorUtils';
 import { ToolInfo } from '@/client/editor/models/Tool';
 import { updateBlocks } from '@/client/editor/stores/block/blockActions';
 import TestSceneService from './support/TestSceneService';
 import assert from 'assert';
+import MeshUtils from '@/client/editor/utils/MeshUtils';
+import MathUtils from '@/client/editor/utils/mathUtils';
 
 Before(function (this: ExtendedWorld) {
   return this.setup();
@@ -131,6 +133,7 @@ When('I set next uuids to:', function (this: ExtendedWorld, table: any) {
 type BlockHash = {
   BLOCK: string;
   TYPE?: string;
+  POSITION?: string;
 };
 
 Then('my current scene is', function (this: ExtendedWorld, table: { hashes(): BlockHash[] }) {
@@ -143,10 +146,23 @@ Then('my current scene is', function (this: ExtendedWorld, table: { hashes(): Bl
   }
 
   for (const row of data) {
-    if (!blockStore.getBlock(row.BLOCK)) assert.fail(`Block with id '${row.BLOCK}' does not exist in scene`);
+    const block = blockStore.getBlock(row.BLOCK);
+    if (!block) assert.fail(`Block with id '${row.BLOCK}' does not exist in scene`);
 
-    if (row.TYPE && blockStore.getBlock(row.BLOCK).type !== row.TYPE) {
-      assert.fail(`Expected type for block '${row.BLOCK} is ${row.TYPE}', got ${blockStore.getBlock(row.BLOCK).type}`);
+    if (row.TYPE && block.type !== row.TYPE) {
+      assert.fail(`Expected type for block '${row.BLOCK} is ${row.TYPE}', got ${block.type}`);
+    }
+
+    if (row.POSITION) {
+      const [, , selfPart] = row.POSITION.split(/[:->]/);
+      let actual = block.position;
+      if (selfPart) {
+        const mesh = this.getEnv().editorContext.sceneStore.getObj3d(block.id);
+
+        const partPosition = MeshUtils.findByName(mesh, selfPart).position.toArray();
+        actual = new MathUtils(actual).add(partPosition);
+      }
+      checkPositionCloseTo.call(this, row.POSITION, actual);
     }
   }
 });
