@@ -70,7 +70,6 @@ class IntersectMesh {
         const worldPos = new Vector3();
 
         meshIntersect.object.getWorldPosition(worldPos);
-        console.log(worldPos.toArray());
 
         meshIntersection.object.boungingBox = {
           center: center.toArray(),

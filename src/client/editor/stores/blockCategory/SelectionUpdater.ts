@@ -46,7 +46,6 @@ class SelectionUpdater {
     //   .filter((update) => 'select' in update && update.newState === 'selected')
     //   .map((update) => (update as BlockSelect).select);
 
-    console.log(state.contextMenuActions.length);
   }
 }
 

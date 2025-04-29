@@ -1,4 +1,5 @@
 Feature: Pole
+  @only
   Scenario: Adding a pole joins it to the nearest pole
     Given I have a scene with:
       | TYPE   | ID       | PARENT | POS   |
@@ -26,13 +27,14 @@ Feature: Pole
       | cable-1-3 | pole-1-1 | 1.865,7.154,0.011 |
       | cable-1-3 | pole-1-2 | 5.865,7.154,0.011 |
 
-  @only
   Scenario: Adding a pole auto-rotates it to align with the neigbours
     Given I have a scene with:
       | TYPE   | ID       | PARENT | POS   |
       | pole-1 | pole-1-1 | -      | 1,0,0 |
       | pole-1 | pole-1-2 | -      | 5,0,0 |
     And I wait block 'cable-1-1' to exist
+    And I wait block 'cable-1-2' to exist
+    And I wait block 'cable-1-3' to exist
     Then I have blocks with properties
       | BLOCK    | ROTATION |
       | pole-1-1 | 0,0,0    |
@@ -47,43 +49,45 @@ Feature: Pole
       | cable-1-z |
     And I move pointer to '5,0,5'
     And I press pointer
+    And I wait block 'pole-1-3' to exist
     Then I have blocks with properties
       | BLOCK    | POSITION |
       | pole-1-3 | 5,0,5 |
     And I wait block 'cable-1-x' to exist
     Then I have blocks with properties
-      | BLOCK    | ROTATION |
-      | pole-1-1 | 0,0,0    |
-      | pole-1-2 | 0,0,0    |
+      | BLOCK    | ROTATION    |
+      | pole-1-1 | 0,0,0       |
+      | pole-1-2 | 0,-45,0     |
+      | pole-1-3 | 0,-90,0     |
 
-  # Scenario: Joining poles with cables
-  #   Given I have a scene with:
-  #     | TYPE            | ID        | PARENT | POS   |
-  #     | pole-1          | pole-1-1  | -      | 1,0,0 |
-  #     | pole-1          | pole-1-2  | -      | 5,0,0 |
-  #   When I select tool 'add'
-  #   And I select template 'pole-1'
-  #   And I set next uuids to: 'pole-1-3'
-  #   And I move pointer to '10,0,0'
-  #   And I press pointer
-  #   Then I have a block 'pole-1-3' with properties
-  #     | POSITION |
-  #     | 10,0,0  |
-    # And I select tool 'select'
-    # And I press pointer at 0,0.1,5
-    # And I press pointer at 0,0.1,10
-    # And I select tool 'cable'
-    # And I execute tool
-    # And I examine block at 0,0.1,5
-    # Then cable for block 'examined' and pin '#2' ends at position '-0.913,7.254,5.011'
-    # And cable for block 'examined' and pin '#3' ends at position '-0.378,7.254,5.011'
-    # And cable for block 'examined' and pin '#4' ends at position '0.865,7.254,5.01'
-    # When I examine block at 0,0.1,10
-    # Then cable for block 'examined' and pin '#2' ends at position '-0.913,7.254,10.011'
-    # And cable for block 'examined' and pin '#3' ends at position '-0.378,7.254,10.011'
-    # And cable for block 'examined' and pin '#4' ends at position '0.865,7.254,10.011'
-
-  # Scenario: Removing a pole
+  @only
+  Scenario: Removing a pole
+    Given I set next uuids to:
+      | UUID      |
+      | pole-1-1  |
+      | pole-1-2  |
+      | cable-1-1 |
+      | cable-1-2 |
+      | cable-1-3 |
+    Given I have a scene with:
+      | TYPE   | ID       | PARENT | POS   |
+      | pole-1 | pole-1-1 | -      | 0,0.1,5 |
+      | pole-1 | pole-1-2 | -      | 0,0.1,10 |
+    Then My current scene is
+      | BLOCK     |
+      | pole-1-1  |
+      | pole-1-2  |
+      | cable-1-1 |
+      | cable-1-2 |
+      | cable-1-3 |
+    When I select tool 'erase'
+    And I press pointer at 0,0.1,5
+    Then block at 0,0.1,5 does not exist
+    Then My current scene is
+      | BLOCK     |
+      | pole-1-2  |
+    Then I have a block 'pole-1-2' with shared child connections
+      | BLOCK |
   #   Given I have an empty canvas
   #   When I select tool 'add'
   #   And I select template 'pole-1'

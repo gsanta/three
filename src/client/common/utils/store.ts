@@ -36,7 +36,6 @@ export type RootState = {
 export const testMiddleware = createListenerMiddleware();
 
 export function setupStore(preloadedState?: RootState): EnhancedStore<RootState> {
-  console.log(process.env);
 
   const store = configureStore({
     reducer: {

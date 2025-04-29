@@ -9,6 +9,7 @@ import findClosestBlock from './helpers/findClosestBlock';
 import { checkPartIndexExists, checkPosition } from './helpers/checks';
 import { BlockIntersection } from '@/client/editor/use_cases/IntersectMesh';
 import Num3 from '@/client/editor/models/Num3';
+import TestSceneService from './support/TestSceneService';
 
 When('I select tool {string}', function (this: ExtendedWorld, toolName: ToolName) {
   store.dispatch(setSelectedTool(toolName));
@@ -81,14 +82,14 @@ When(
   'I press pointer over block {string} and part {string} at position {string}',
   function (this: ExtendedWorld, blockId: string, partName: string, position: string) {
     const [x, y, z] = checkPosition.call(this, position);
-    const block = this.getEnv().blockStore.getBlock(blockId);
+    const block = this.getEnv().editorContext.blockStore.getBlock(blockId);
 
     if (!block) {
       throw new Error(`Block not found at position (${x},${y},${z})`);
     }
 
     const partIndex = checkPartIndexExists.call(this, block.id, partName);
-    this.getEnv().sceneService.setIntersection([
+    (this.getEnv().editorContext.sceneService as TestSceneService).setIntersection([
       {
         block,
         partIndex: partIndex,
@@ -129,7 +130,7 @@ When(
   function (this: ExtendedWorld, blockId: string, partIndexOrName: string) {
     const partIndex = checkPartIndexExists.call(this, blockId, partIndexOrName);
 
-    const block = this.getEnv().blockStore.getBlock(blockId);
+    const block = this.getEnv().editorContext.blockStore.getBlock(blockId);
 
     if (!block) {
       throw new Error(`Could not find block with id ${blockId}`);
@@ -142,9 +143,9 @@ When(
 When('I drag pointer with delta {string}', function (this: ExtendedWorld, deltaStr: string) {
   const delta = checkPosition.call(this, deltaStr);
 
-  this.getEnv().tool.onDrag(new Vector3(...delta));
+  this.getEnv().editorContext.tool.onDrag(new Vector3(...delta));
 });
 
 When('I end drag', function (this: ExtendedWorld) {
-  this.getEnv().tool.onDragEnd();
+  this.getEnv().editorContext.tool.onDragEnd();
 });

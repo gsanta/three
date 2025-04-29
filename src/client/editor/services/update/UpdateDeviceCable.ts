@@ -52,7 +52,7 @@ class UpdateDeviceCable {
     const pos = new Vector3();
     mesh.getWorldPosition(pos);
 
-    const newPoint = { position: pos.toArray() };
+    const newPoint = { position: pos.toArray(), blockId: pole.id };
 
     return newPoint;
   }

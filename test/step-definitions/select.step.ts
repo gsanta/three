@@ -54,8 +54,8 @@ Then('block {string} is selected', function (this: ExtendedWorld, blockId: strin
 Then('block {string} is not selected', function (this: ExtendedWorld, blockId: string) {
   const realBlockId = blockId === 'examined' ? this.getEnv().testScene.storedBlockId || '' : blockId;
 
-  const isNotSelected = !this.getEnv().blockStore.getSelectedRootBlockIds().includes(realBlockId);
-  const isNotInSelectionMap = !store.getState().block.present.selectedBlocks[realBlockId];
+  const isNotSelected = !this.getEnv().editorContext.blockCategoryStore.getSelectedRootBlockIds().includes(realBlockId);
+  const isNotInSelectionMap = !store.getState().blockCategory.selectedBlocks[realBlockId];
 
   assert.ok(isNotSelected);
   assert.ok(isNotInSelectionMap);

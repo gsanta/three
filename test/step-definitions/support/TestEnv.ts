@@ -4,14 +4,12 @@ import { dispatchEditorData, fetchEditorData } from '@/client/editor/setupEditor
 import { store, testMiddleware } from '@/client/common/utils/store';
 import EditorContextType, { setupEditor } from '@/client/editor/setupEditor';
 import { updateBlocks } from '@/client/editor/stores/block/blockActions';
-import { BlockState, UpdateBlocks } from '@/client/editor/stores/block/blockSlice.types';
+import { UpdateBlocks } from '@/client/editor/stores/block/blockSlice.types';
 import { Mesh } from 'three';
-import { clearBlockSlice } from '@/client/editor/stores/block/blockSlice';
-import { clearEditorSlice } from '@/client/editor/stores/editorSlice';
-import { PayloadAction } from '@reduxjs/toolkit';
 import ToolHelper from './ToolHelper';
 import ModelMesh from './mesh_mocks/ModelMesh';
 import TestSceneService from './TestSceneService';
+import { clearBlockSlice } from '@/client/editor/stores/block/blockSlice';
 
 type TestEnv = {
   editorContext: EditorContextType;
@@ -63,6 +61,21 @@ export const setupTestEnv = async (): Promise<TestEnv> => {
 
   const meshFactory = new TestMeshFactory(blockStore, sceneStore, update);
 
+  const timeouts: ReturnType<typeof setTimeout>[] = [];
+
+  function setTrackedTimeout(callback: () => void) {
+    const timeout = setTimeout(() => {
+      callback();
+      // Remove the timeout from the array after it runs
+      const index = timeouts.indexOf(timeout);
+      if (index !== -1) {
+        timeouts.splice(index, 1);
+      }
+    }, 0);
+    timeouts.push(timeout);
+    return timeout;
+  }
+
   const updateBlocksListener = {
     actionCreator: updateBlocks,
     effect: async (action: { payload: UpdateBlocks; type: string }) => {
@@ -78,7 +91,7 @@ export const setupTestEnv = async (): Promise<TestEnv> => {
         }
       });
 
-      setTimeout(() => {
+      setTrackedTimeout(() => {
         payload.blockUpdates.forEach((u) => {
           if ('block' in u && u.block) {
             sceneStore.addMesh(meshFactory.create(u.block) as unknown as Mesh, u.block.id);
@@ -89,22 +102,22 @@ export const setupTestEnv = async (): Promise<TestEnv> => {
         });
 
         (editorContext.sceneService as TestSceneService).resolveRender();
-      }, 0);
+      });
     },
   };
 
   const unsubscribeUpdateBlockListener = testMiddleware.startListening(updateBlocksListener);
 
-  const updateListener = {
-    actionCreator: update,
-    effect: async (action: PayloadAction<Partial<BlockState>>) => {
-      Object.values(action.payload.blocks || {}).forEach((block) => {
-        sceneStore.addMesh(meshFactory.create(block) as unknown as Mesh, block.id);
-      });
-    },
-  };
+  // const updateListener = {
+  //   actionCreator: update,
+  //   effect: async (action: PayloadAction<Partial<BlockState>>) => {
+  //     Object.values(action.payload.blocks || {}).forEach((block) => {
+  //       sceneStore.addMesh(meshFactory.create(block) as unknown as Mesh, block.id);
+  //     });
+  //   },
+  // };
 
-  const unsubscribeUpdateListener = testMiddleware.startListening(updateListener);
+  // const unsubscribeUpdateListener = testMiddleware.startListening(updateListener);
 
   // // TODO: used for tests right now, later it should come from db
   // const seeds = [
@@ -121,12 +134,15 @@ export const setupTestEnv = async (): Promise<TestEnv> => {
   // store.dispatch(setTemplates(seeds as BlockType[]));
 
   const teardown = () => {
-    // testMiddleware.clearListeners();
+    testMiddleware.clearListeners();
+    timeouts.forEach((timeout) => {
+      clearTimeout(timeout);
+    });
     store.dispatch(clearBlockSlice());
-    store.dispatch(clearEditorSlice());
-    testStore.storedBlockId = undefined;
-    sceneStore.clear();
-    unsubscribeUpdateListener();
+    // store.dispatch(clearEditorSlice());
+    // testStore.storedBlockId = undefined;
+    // sceneStore.clear();
+    // unsubscribeUpdateListener();
     unsubscribeUpdateBlockListener();
   };
 

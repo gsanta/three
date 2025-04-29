@@ -43,6 +43,10 @@ class TestStore {
     this.lastCreatedBlock = block;
   }
 
+  addTestData(key: string, value: unknown) {
+    this.storedTestData[key] = value;
+  }
+
   storedTestData: Record<string, unknown> = {};
 
   private plane: Mesh | undefined;

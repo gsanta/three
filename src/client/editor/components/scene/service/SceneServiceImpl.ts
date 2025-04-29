@@ -30,7 +30,6 @@ class SceneServiceImpl implements SceneService {
     pos.y = -(pos.y * heightHalf) + heightHalf;
     pos.z = 0;
 
-    console.log(pos);
 
     return pos;
   }

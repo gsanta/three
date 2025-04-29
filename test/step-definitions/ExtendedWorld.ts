@@ -5,7 +5,6 @@ class ExtendedWorld extends World {
   env?: TestEnv;
 
   async setup() {
-    // this.env.teardown();
     this.env = await setupTestEnv();
   }
 
