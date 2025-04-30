@@ -11,14 +11,8 @@ const roadTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
     decorations: [],
     parts: [
       {
-        name: 'Cube008',
-        materialPath: 'Road',
-        position: [-0.002, 0.001, -0.019],
-        scale: [2.184, 0.067, 2.484],
-      },
-      {
-        name: 'Cube008_1',
-        materialPath: 'White',
+        name: 'Base',
+        materialPath: 'Road1Palette',
         position: [-0.002, 0.001, -0.019],
         scale: [2.184, 0.067, 2.484],
       },
@@ -36,8 +30,7 @@ const roadTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
       },
     ],
     partDetails: {
-      Cube008: {},
-      Cube008_1: {},
+      Base: {},
       EndNorth: {
         roles: ['road-slot'],
         role: 'slot',
@@ -50,7 +43,7 @@ const roadTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
         type: 'placeholder',
       },
     },
-    path: '/road1.glb',
+    path: '/road_1.glb',
     type: 'road-1',
   },
   {
@@ -58,28 +51,21 @@ const roadTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
     decorations: [],
     parts: [
       {
-        name: 'Cube012',
-        materialPath: 'Road',
+        name: 'Base',
+        materialPath: 'Material',
         position: [-0.002, 0.137, -0.019],
         rotation: [-3.14, 0, -3.14],
         scale: [-2.975, -0.132, -2.775],
       },
       {
-        name: 'Cube012_1',
-        materialPath: 'White',
-        position: [-0.002, 0.137, -0.019],
-        rotation: [-3.14, 0, -3.14],
-        scale: [-2.975, -0.132, -2.775],
-      },
-      {
-        name: 'EndNorth001',
+        name: 'EndNorth',
         materialPath: 'wall-placeholder',
         position: [0.009, 0.08, -3.022],
         rotation: [-3.14, 0, -3.14],
         scale: [-2.975, -0.132, -2.775],
       },
       {
-        name: 'EndSouth001',
+        name: 'EndSouth',
         materialPath: 'wall-placeholder',
         position: [0.009, 0.08, 2.979],
         rotation: [-3.14, 0, -3.14],
@@ -101,14 +87,13 @@ const roadTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
       },
     ],
     partDetails: {
-      Cube012: {},
-      Cube012_1: {},
-      EndNorth001: {
+      Base: {},
+      EndNorth: {
         roles: ['road-slot'],
         role: 'slot',
         type: 'placeholder',
       },
-      EndSouth001: {
+      EndSouth: {
         roles: ['road-slot'],
         role: 'slot',
         orientation: 180,
@@ -127,34 +112,28 @@ const roadTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
         type: 'placeholder',
       },
     },
-    path: '/road2.glb',
+    path: '/road_2.glb',
     type: 'road-2',
   },
   {
     categoryName: 'roads',
     decorations: [],
-    path: '/road3.glb',
+    path: '/road_3.glb',
     parts: [
       {
-        name: 'Cube018',
-        materialPath: 'Road',
+        name: 'Base',
+        materialPath: 'Material',
         position: [0.001, 0.001, 0.003],
         scale: [2.184, 0.067, 2.484],
       },
       {
-        name: 'Cube018_1',
-        materialPath: 'White',
-        position: [0.001, 0.001, 0.003],
-        scale: [2.184, 0.067, 2.484],
-      },
-      {
-        name: 'Road3EndSouth',
+        name: 'EndSouth',
         materialPath: 'wall-placeholder',
         position: [-1.543, 0.074, 2.482],
         scale: [2.184, 0.067, 2.484],
       },
       {
-        name: 'Road3EndNorth',
+        name: 'EndNorth',
         materialPath: 'wall-placeholder',
         position: [2.51, 0.068, -1.506],
         rotation: [0, -1.5707, 0],
@@ -162,15 +141,14 @@ const roadTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
       },
     ],
     partDetails: {
-      Cube018: {},
-      Cube018_1: {},
-      Road3EndSouth: {
+      Base: {},
+      EndSouth: {
         roles: ['road-slot'],
         role: 'slot',
         orientation: 180,
         type: 'placeholder',
       },
-      Road3EndNorth: {
+      EndNorth: {
         roles: ['road-slot'],
         role: 'slot',
         orientation: 90,
