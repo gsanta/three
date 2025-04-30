@@ -5,6 +5,7 @@ import { Vector3 } from 'three';
 import BlockDecoration from '@/client/editor/models/BlockCategory';
 import assert from 'assert';
 import VectorUtils from '@/client/editor/utils/vectorUtils';
+import MathUtils from '@/client/editor/utils/mathUtils';
 
 export function checkBlockExists(this: ExtendedWorld, blockId: string) {
   const realBlockId = blockId === 'examined' ? this.env?.testScene.storedBlockId || '' : blockId;
@@ -78,14 +79,26 @@ export function checkPosition(this: ExtendedWorld, position: string): Num3 {
     return 'toArray' in pos ? pos.toArray() : pos;
   } else if (position.indexOf(',') !== -1) {
     return position.split(',').map((coord) => Number(coord.trim())) as Num3;
-  } else if (position.indexOf(':') !== -1) {
-    // pole-1-1:Pin4->Join
-    const result = position.split(':')[1].split('->'); // ['Pin4', 'Join']
-    result.unshift(position.split(':')[0]); // ['pole-1-1', 'Pin4', 'Join']
+  } else if (position.indexOf('->') !== -1) {
+    // pole-1-1:Pin4->transformer-1:Join
+    const [source, target] = position.split('->'); // [pole-1-1:Pin4, transformer-1:Join]
+    const [sourceBlockId, sourcePart] = source.split(':');
+    const [targetBlockId] = target.split(':');
 
-    const mesh = this.getEnv().editorContext.sceneStore.getObj3d(result[0]);
+    const sourceBlock = this.getEnv().editorContext.blockStore.getBlock(sourceBlockId);
 
-    return MeshUtils.findByName(mesh, result[1]).position.toArray() as Num3;
+    const mesh = this.getEnv().editorContext.sceneStore.getObj3d(sourceBlockId);
+
+    const targetBlock = this.getEnv().editorContext.blockStore.getBlock(targetBlockId);
+
+    const meshPos = MeshUtils.findByName(mesh, sourcePart).position.toArray() as Num3;
+    const rotateMeshPos = VectorUtils.rotate(meshPos, sourceBlock.rotation[1]);
+
+    if (targetBlock.parentConnection?.block === sourceBlockId) {
+      return rotateMeshPos;
+    } else {
+      return new MathUtils(rotateMeshPos).add(sourceBlock.position);
+    }
   }
 }
 

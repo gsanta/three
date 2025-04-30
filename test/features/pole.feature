@@ -136,24 +136,23 @@ Feature: Pole
       | cable-1-4 | pole-1-2 | -0.913,7.254,13.011 |
       | cable-1-5 | pole-1-2 | -0.378,7.254,13.011 |
       | cable-1-6 | pole-1-2 | 0.865,7.254,13.011  |
-
-@only
-Scenario: Adding a transformer to a pole
-  Given I have a scene with:
-    | TYPE   | ID       | PARENT | POS   |
-    | pole-1 | pole-1-1 | -      | 1,0,0 |
-  And I set next uuids to:
-      | UUID          | TYPE                              |
-      | transformer-1 | distribution-transformer-single-1 |
-  When I select tool 'add'
-  And I select template 'distribution-transformer-single-1'
-  And I hover over block 'pole-1-1' and part 'Pin4'
-  And I press pointer
-  And I wait mesh 'transformer-1' to exist
-  And my current scene is
-    | BLOCK         | TYPE                                | POSITION            |
-    | pole-1-1      | pole-1                              | 1,0,0               |
-    | transformer-1 | distribution-transformer-single-1   | pole-1-1:Pin4->Join |
+  
+  Scenario: Adding a transformer to a pole
+    Given I have a scene with:
+      | TYPE   | ID       | PARENT | POS   |
+      | pole-1 | pole-1-1 | -      | 1,0,0 |
+    And I set next uuids to:
+        | UUID          | TYPE                              |
+        | transformer-1 | distribution-transformer-single-1 |
+    When I select tool 'add'
+    And I select template 'distribution-transformer-single-1'
+    And I hover over block 'pole-1-1' and part 'Pin4'
+    And I press pointer
+    And I wait mesh 'transformer-1' to exist
+    And my current scene is
+      | BLOCK         | TYPE                                | POSITION            |
+      | pole-1-1      | pole-1                              | 1,0,0                 |
+      | transformer-1 | distribution-transformer-single-1   | pole-1-1:Pin4->transformer-1:Join |
 
 
 

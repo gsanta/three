@@ -1,6 +1,5 @@
 import Axis from '../models/Axis';
 import Num3 from '../models/Num3';
-import { toRadian } from './mathUtils';
 import { defaultSnap } from './sceneUtils';
 
 class VectorUtils {
@@ -34,7 +33,7 @@ class VectorUtils {
 
   static rotate(vec: Num3, angle: number) {
     const result = [0, vec[1], 0] as Num3;
-    const rad = toRadian(angle);
+    const rad = angle;
 
     result[0] = vec[0] * Math.cos(rad) + vec[2] * Math.sin(rad);
     result[2] = -vec[0] * Math.sin(rad) + vec[2] * Math.cos(rad);

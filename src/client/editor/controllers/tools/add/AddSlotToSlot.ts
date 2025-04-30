@@ -12,6 +12,7 @@ import BlockAddMethod from '@/common/model_types/BlockAddMethod';
 import BaseBlockType, { ModelPart, ModelPartRole } from '@/client/editor/models/BaseBlockType';
 import Num3 from '@/client/editor/models/Num3';
 import BlockCategoryStore from '@/client/editor/stores/blockCategory/BlockCategoryStore';
+import { toRadian } from '@/client/editor/utils/mathUtils';
 
 class AddSlotToSlot extends AddBlock {
   constructor(
@@ -80,7 +81,7 @@ class AddSlotToSlot extends AddBlock {
     this.factoryService.create(edit, newBlockType.type, {
       block: {
         ...this.calculateSourceConnection(addMethod, targetBlock, targetPart),
-        position: this.calculatePosition(addMethod, targetBlock, targetPart, sourcePart, rotation[1]),
+        position: this.calculatePosition(addMethod, targetBlock, targetPart, sourcePart, toRadian(rotation[1])),
         rotation: rotation,
       },
     });

@@ -154,13 +154,14 @@ Then('my current scene is', function (this: ExtendedWorld, table: { hashes(): Bl
     }
 
     if (row.POSITION) {
-      const [, , selfPart] = row.POSITION.split(/[:->]/);
       let actual = block.position;
-      if (selfPart) {
+      if (row.POSITION.includes('->')) {
+        const selfPart = row.POSITION.split('->')?.[1].split(':')[1];
         const mesh = this.getEnv().editorContext.sceneStore.getObj3d(block.id);
 
-        const partPosition = MeshUtils.findByName(mesh, selfPart).position.toArray();
-        actual = new MathUtils(actual).add(partPosition);
+        const partPosition = MeshUtils.findByName(mesh, selfPart).position.toArray() as Num3;
+        const rotatedPartPosition = VectorUtils.rotate(partPosition, block.rotation[1]);
+        actual = new MathUtils(actual).add(rotatedPartPosition);
       }
       checkPositionCloseTo.call(this, row.POSITION, actual);
     }

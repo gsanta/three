@@ -9,7 +9,7 @@ const poleTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
   {
     categoryName: 'poles',
     decorations: ['devices'],
-    path: '/pole2.glb',
+    path: '/pole_1.glb',
     parts: [
       {
         name: 'Body',
