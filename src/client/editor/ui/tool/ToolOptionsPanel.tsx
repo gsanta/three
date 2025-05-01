@@ -4,7 +4,7 @@ import React from 'react';
 import { useAppSelector } from '../../../common/hooks/hooks';
 import AddToolOptions from './AddToolOptions';
 import SelectToolOptions from './SelectToolOptions';
-import CableToolOptions from '@/client/editor/components/tool/CableToolOptions';
+import CableToolOptions from '@/client/editor/ui/tool/CableToolOptions';
 
 const ToolOptionsPanel = () => {
   const selectedTool = useAppSelector((state) => state.tool.selectedTool);

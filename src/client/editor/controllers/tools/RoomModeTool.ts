@@ -2,7 +2,7 @@ import ToolName from '../../models/ToolName';
 import BlockStore from '../../stores/block/BlockStore';
 import TransactionService from '../../services/transaction/TransactionService';
 import HoverTool from './HoverTool';
-import SceneService from '../../components/scene/service/SceneService';
+import SceneService from '../../ui/scene/service/SceneService';
 import { store } from '@/client/common/utils/store';
 import { setBuildingMode } from '@/client/editor/stores/editorSlice';
 

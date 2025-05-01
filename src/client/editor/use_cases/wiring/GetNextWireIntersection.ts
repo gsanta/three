@@ -1,4 +1,4 @@
-import SceneService from '../../components/scene/service/SceneService';
+import SceneService from '../../ui/scene/service/SceneService';
 import BlockStore from '../../stores/block/BlockStore';
 import BlockData from '../../data/BlockData';
 import { CablePoint } from '../../models/block/Cable';

@@ -7,13 +7,13 @@ import ToolName from '@/client/editor/models/ToolName';
 import ExtendedWorld from './ExtendedWorld';
 import Num3 from '@/client/editor/models/Num3';
 import { checkPartIndexExists, checkPositionCloseTo } from './helpers/checks';
-import VectorUtils from '@/client/editor/utils/vectorUtils';
 import { ToolInfo } from '@/client/editor/models/Tool';
 import { updateBlocks } from '@/client/editor/stores/block/blockActions';
 import TestSceneService from './support/TestSceneService';
 import assert from 'assert';
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 import MathUtils from '@/client/editor/utils/mathUtils';
+import Vector from '@/client/editor/utils/Vector';
 
 Before(function (this: ExtendedWorld) {
   return this.setup();
@@ -91,7 +91,7 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
             {
               object: {},
               distance: 1,
-              point: VectorUtils.add(intersectingParentPos.toArray(), relativePos || [0, 0, 0]),
+              point: new Vector(intersectingParentPos.toArray()).add(new Vector(relativePos || [0, 0, 0])).get(),
             },
           ],
           block: parentBlock,
@@ -160,7 +160,7 @@ Then('my current scene is', function (this: ExtendedWorld, table: { hashes(): Bl
         const mesh = this.getEnv().editorContext.sceneStore.getObj3d(block.id);
 
         const partPosition = MeshUtils.findByName(mesh, selfPart).position.toArray() as Num3;
-        const rotatedPartPosition = VectorUtils.rotate(partPosition, block.rotation[1]);
+        const rotatedPartPosition = new Vector(partPosition).rotateY(block.rotation[1]).get();
         actual = new MathUtils(actual).add(rotatedPartPosition);
       }
       checkPositionCloseTo.call(this, row.POSITION, actual);

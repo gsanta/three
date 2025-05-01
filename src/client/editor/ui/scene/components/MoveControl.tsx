@@ -1,13 +1,18 @@
-import { snapTo } from '@/client/editor/utils/vectorUtils';
 import { PivotControls } from '@react-three/drei';
 import { Quaternion, Vector3 } from 'three';
 import useEditorContext from '@/app/editor/useEditorContext';
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import Num3 from '@/client/editor/models/Num3';
 import { ReactNode } from 'react';
+import { defaultSnap } from '@/client/editor/utils/sceneUtils';
 
 type MoveControlProps = {
   children(props: { drag: Num3 }): ReactNode;
+};
+
+export const snapTo = (num: number, snapVal = defaultSnap) => {
+  const base = num < 0 ? Math.ceil(num / snapVal) : Math.floor(num / snapVal);
+  return base * snapVal;
 };
 
 const MoveControl = ({ children }: MoveControlProps) => {

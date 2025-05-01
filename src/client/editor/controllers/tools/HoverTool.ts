@@ -1,5 +1,5 @@
 import Tool, { ToolInfo } from '../../models/Tool';
-import SceneService from '../../components/scene/service/SceneService';
+import SceneService from '../../ui/scene/service/SceneService';
 import { IconName } from '@/client/common/components/lib/Icon';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
@@ -26,7 +26,7 @@ abstract class HoverTool extends Tool {
     if (info.eventObject?.name === 'plane') {
       this.hover.unhover();
     } else if (block) {
-      this.hover.hover(block.id, info.partIndex);
+      this.hover.hover(block.id, info.partName);
     }
   }
 

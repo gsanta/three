@@ -2,7 +2,7 @@ import AddBlockToBlock from './AddBlockToBlock';
 import AddBlock from './AddBlock';
 import AddContext from './AddContext';
 import AddPoles from './AddPoles';
-import SceneStore from '@/client/editor/components/scene/SceneStore';
+import SceneStore from '@/client/editor/ui/scene/SceneStore';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
 import ExecuteAddParams from './ExecuteAddParams';

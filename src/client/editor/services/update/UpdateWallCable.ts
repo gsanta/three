@@ -1,5 +1,5 @@
 import { Box3, Vector3 } from 'three';
-import SceneStore from '../../components/scene/SceneStore';
+import SceneStore from '../../ui/scene/SceneStore';
 import BlockData from '../../data/BlockData';
 import MeshUtils from '../../utils/MeshUtils';
 import TransactionService from '../transaction/TransactionService';

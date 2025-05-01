@@ -1,4 +1,4 @@
-import SettingsPanel from '../../../editor/components/settings/io/SettingsPanel';
+import SettingsPanel from '../../../editor/ui/settings/io/SettingsPanel';
 import UserSettings from '../../../user/components/UserSettings';
 import React from 'react';
 

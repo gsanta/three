@@ -4,8 +4,8 @@ import Num3 from '@/client/editor/models/Num3';
 import { Vector3 } from 'three';
 import BlockDecoration from '@/client/editor/models/BlockCategory';
 import assert from 'assert';
-import VectorUtils from '@/client/editor/utils/vectorUtils';
 import MathUtils from '@/client/editor/utils/mathUtils';
+import Vector from '@/client/editor/utils/Vector';
 
 export function checkBlockExists(this: ExtendedWorld, blockId: string) {
   const realBlockId = blockId === 'examined' ? this.env?.testScene.storedBlockId || '' : blockId;
@@ -91,7 +91,7 @@ export function checkPosition(this: ExtendedWorld, position: string): Num3 {
     const targetBlock = this.getEnv().editorContext.blockStore.getBlock(targetBlockId);
 
     const meshPos = MeshUtils.findByName(mesh, sourcePart).position.toArray() as Num3;
-    const rotateMeshPos = VectorUtils.rotate(meshPos, sourceBlock.rotation[1]);
+    const rotateMeshPos = new Vector(meshPos).rotateY(sourceBlock.rotation[1]).get();
 
     if (targetBlock.parentConnection?.block === sourceBlockId) {
       return rotateMeshPos;
@@ -107,7 +107,7 @@ export function checkPosition(this: ExtendedWorld, position: string): Num3 {
 
     const meshPos = new Vector3();
     MeshUtils.findByName(mesh, targetPart).getWorldPosition(meshPos);
-    const rotateMeshPos = VectorUtils.rotate(meshPos.toArray(), targetBlock.rotation[1]);
+    const rotateMeshPos = new Vector(meshPos.toArray()).rotateY(targetBlock.rotation[1]).get();
 
     return rotateMeshPos;
   }
@@ -116,7 +116,7 @@ export function checkPosition(this: ExtendedWorld, position: string): Num3 {
 export function checkPositionCloseTo(this: ExtendedWorld, position: string | Num3, actual: Num3) {
   const expected = typeof position === 'string' ? checkPosition.call(this, position) : position;
 
-  const diff = VectorUtils.size(VectorUtils.sub(expected, actual));
+  const diff = new Vector(expected).sub(new Vector(actual)).size();
 
   assert.ok(diff < 0.1, `Expected number (${expected.join(', ')}) to be close to (${actual.join(', ')})`);
 }

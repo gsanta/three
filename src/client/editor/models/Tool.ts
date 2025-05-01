@@ -27,7 +27,7 @@ export interface ToolInfo {
   gridX?: number;
   gridY?: number;
   draggedMesh?: BlockData;
-  partIndex?: string;
+  partName?: string;
 }
 
 abstract class Tool {

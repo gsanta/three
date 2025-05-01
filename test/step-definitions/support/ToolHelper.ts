@@ -2,7 +2,7 @@ import { ThreeEvent } from '@react-three/fiber';
 import { Object3D, Vector3 } from 'three';
 import TestStore from './TestStore';
 import ToolService from '@/client/editor/services/ToolService';
-import SceneStore from '@/client/editor/components/scene/SceneStore';
+import SceneStore from '@/client/editor/ui/scene/SceneStore';
 
 class ToolHelper {
   constructor(sceneStore: SceneStore, tool: ToolService, testScene: TestStore) {

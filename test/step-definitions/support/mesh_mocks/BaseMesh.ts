@@ -1,6 +1,6 @@
 import { Vector3 } from 'three';
 import AbstractMesh from './AbstractMesh';
-import SceneStore from '@/client/editor/components/scene/SceneStore';
+import SceneStore from '@/client/editor/ui/scene/SceneStore';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import BlockData from '@/client/editor/data/BlockData';
 import UpdateService from '@/client/editor/services/update/UpdateService';

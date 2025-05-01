@@ -1,7 +1,6 @@
 import { useAnimations, useGLTF } from '@react-three/drei';
 import useRegisterScene from '../hooks/useRegisterScene';
 import { GroupProps } from '@react-three/fiber';
-import { addVector } from '@/client/editor/utils/vectorUtils';
 import { NodesType } from '../hooks/useGeometry';
 import ModelMeshProps from '../types/ModelMeshProps';
 import ModelGroupMesh from './ModelGroupMesh';
@@ -12,6 +11,7 @@ import ChildMeshRenderer from '../scene/components/ChildMeshRenderer';
 import { useEffect, useState } from 'react';
 import { ColliderBox } from '../scene/components/ColliderBox';
 import Num3 from '../../models/Num3';
+import Vector from '../../utils/Vector';
 
 export const ModelMesh = ({ additions, block, materialProps, meshProps, overwrites }: ModelMeshProps) => {
   const ref = useRegisterScene<Group>();
@@ -21,7 +21,9 @@ export const ModelMesh = ({ additions, block, materialProps, meshProps, overwrit
   const { animations, nodes, materials } = useGLTF(block.path);
   const { actions, mixer } = useAnimations(animations, ref);
 
-  const position = additions?.position ? addVector(additions.position, blockPosition) : blockPosition;
+  const position = additions?.position
+    ? new Vector(additions.position).add(new Vector(blockPosition)).get()
+    : blockPosition;
 
   useDevice({ block, actions, mixer });
 

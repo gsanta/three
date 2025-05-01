@@ -1,4 +1,4 @@
-import SceneStore from '../../components/scene/SceneStore';
+import SceneStore from '../../ui/scene/SceneStore';
 import BlockStore from '../../stores/block/BlockStore';
 import TransactionService from '../transaction/TransactionService';
 import CableUpdater from './CableUpdater';

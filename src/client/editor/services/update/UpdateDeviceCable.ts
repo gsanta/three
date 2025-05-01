@@ -3,7 +3,7 @@ import Cable, { CablePoint } from '@/client/editor/models/block/Cable';
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { Vector3 } from 'three';
 import BlockStore from '../../stores/block/BlockStore';
-import SceneStore from '../../components/scene/SceneStore';
+import SceneStore from '../../ui/scene/SceneStore';
 import TransactionService from '../transaction/TransactionService';
 
 class UpdateDeviceCable {

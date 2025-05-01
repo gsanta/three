@@ -1,21 +1,21 @@
 import { ToolInfo } from '../../models/Tool';
 import ToolName from '../../models/ToolName';
-import VectorUtils, { addVector } from '@/client/editor/utils/vectorUtils';
 import { toRadian } from '@/client/editor/utils/mathUtils';
 import Num3 from '@/client/editor/models/Num3';
 import BlockData from '@/client/editor/data/BlockData';
-import SceneStore from '@/client/editor/components/scene/SceneStore';
+import SceneStore from '@/client/editor/ui/scene/SceneStore';
 import MoveBlock from '../../use_cases/block/move/MoveBlock';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
 import { store } from '@/client/common/utils/store';
 import { updateSelectTool } from '../../stores/tool/toolSlice';
-import SceneService from '../../components/scene/service/SceneService';
+import SceneService from '../../ui/scene/service/SceneService';
 import SelectBlock from '../../use_cases/block/SelectBlock';
 import ToolStore from '../../stores/tool/ToolStore';
 import HoverTool from './HoverTool';
 import BlockMover from '../../use_cases/block/move/BlockMover';
 import BlockCategoryStore from '../../stores/blockCategory/BlockCategoryStore';
+import Vector from '../../utils/Vector';
 
 class SelectTool extends HoverTool {
   constructor(
@@ -39,7 +39,7 @@ class SelectTool extends HoverTool {
   }
 
   onPointerUp(info: ToolInfo) {
-    if (!info.isDragHappened && VectorUtils.size(info.drag) === 0) {
+    if (!info.isDragHappened && new Vector(info.drag).size() === 0) {
       this.selector.select(info.eventObject?.userData.modelId, info.clientX, info.clientY);
     }
   }
@@ -81,7 +81,7 @@ class SelectTool extends HoverTool {
     const drag = this.toolStore.getSelectOptions().drag;
 
     selectedBlockIds.forEach((blockId) =>
-      edit.updateBlock(blockId, { position: addVector(blocks[blockId].position, drag) }),
+      edit.updateBlock(blockId, { position: new Vector(blocks[blockId].position).add(new Vector(drag)).get() }),
     );
 
     const selectedBlockId = this.blockCategoryStore.getSelectedRootBlockIds()[0];
@@ -114,7 +114,7 @@ class SelectTool extends HoverTool {
     const { selectedSettings } = this.blockStore.getBlockSettings();
     const settings = selectedSettings[block.category];
 
-    const index = VectorUtils.getAxisIndex('x');
+    const index = Vector.getAxisIndex('x');
     const newScale = [...block.scale] as Num3;
     newScale[index] = settings.scale[index] * scale;
 
@@ -135,7 +135,7 @@ class SelectTool extends HoverTool {
 
     let block = this.blockStore.getBlocks()[selectedBlockIds[0]];
 
-    const index = VectorUtils.getAxisIndex(axis);
+    const index = Vector.getAxisIndex(axis);
     const newRotation = [...block.rotation] as [number, number, number];
     newRotation[index] += toRadian(rotation);
 

@@ -1,6 +1,6 @@
 import BlockMover from './BlockMover';
 import TransactionService from '../../../services/transaction/TransactionService';
-import SceneStore from '../../../components/scene/SceneStore';
+import SceneStore from '../../../ui/scene/SceneStore';
 import BlockStore from '../../../stores/block/BlockStore';
 import Num3 from '@/client/editor/models/Num3';
 import BaseMover from './BaseMover';

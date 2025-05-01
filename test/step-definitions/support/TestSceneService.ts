@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import IntersectionOptions from '@/client/editor/components/scene/service/IntersectionOptions';
-import SceneService from '@/client/editor/components/scene/service/SceneService';
+import IntersectionOptions from '@/client/editor/ui/scene/service/IntersectionOptions';
+import SceneService from '@/client/editor/ui/scene/service/SceneService';
 import BlockConstantData from '@/client/editor/data/BlockConstantData';
 import { BlockIntersection } from '@/client/editor/use_cases/IntersectMesh';
 import { Object3D, Ray, Vector3 } from 'three';

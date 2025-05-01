@@ -1,4 +1,4 @@
-import SceneStore from '@/client/editor/components/scene/SceneStore';
+import SceneStore from '@/client/editor/ui/scene/SceneStore';
 import AddBlock from './AddBlock';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import MeshUtils from '@/client/editor/utils/MeshUtils';

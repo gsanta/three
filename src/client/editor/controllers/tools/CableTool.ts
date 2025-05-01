@@ -1,18 +1,17 @@
 import { ToolInfo } from '@/client/editor/models/Tool';
 import ToolName from '@/client/editor/models/ToolName';
-import SceneStore from '@/client/editor/components/scene/SceneStore';
+import SceneStore from '@/client/editor/ui/scene/SceneStore';
 import JoinPoles from '../../use_cases/block/JoinPoles';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
 import FactoryService from '../../services/factory/FactoryService';
 import SelectBlock from '../../use_cases/block/SelectBlock';
-import SceneService from '../../components/scene/service/SceneService';
+import SceneService from '../../ui/scene/service/SceneService';
 import MeshUtils from '../../utils/MeshUtils';
 import { updateTemporaryCables } from '../../stores/block/temporarySlice';
 import { Vector3 } from 'three';
 import { store } from '@/client/common/utils/store';
 import HoverTool from './HoverTool';
-import DrawHouseWiring from '../../use_cases/wiring/DrawHouseWiring';
 import { setEditMode } from '../../stores/editorSlice';
 import BlockData from '../../data/BlockData';
 
@@ -27,8 +26,6 @@ class CableTool extends HoverTool {
     super(blockStore, sceneService, update, ToolName.Cable);
 
     this.blockStore = blockStore;
-
-    this.drawHouseWiring = new DrawHouseWiring(blockStore, factoryService, sceneService, sceneStore, update);
 
     this.factoryService = factoryService;
 
@@ -149,8 +146,6 @@ class CableTool extends HoverTool {
 
     return undefined;
   }
-
-  private drawHouseWiring: DrawHouseWiring;
 
   private factoryService: FactoryService;
 

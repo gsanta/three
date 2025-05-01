@@ -2,7 +2,7 @@ import { ToolInfo } from '../../../models/Tool';
 import ToolName from '../../../models/ToolName';
 import TransactionService from '../../../services/transaction/TransactionService';
 import HoverTool from '../HoverTool';
-import SceneService from '../../../components/scene/service/SceneService';
+import SceneService from '../../../ui/scene/service/SceneService';
 import AddService from './AddService';
 import { store } from '@/client/common/utils/store';
 import BlockData from '@/client/editor/data/BlockData';

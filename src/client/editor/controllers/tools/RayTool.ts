@@ -1,11 +1,11 @@
 import Tool, { ToolInfo } from '@/client/editor/models/Tool';
 import ToolName from '@/client/editor/models/ToolName';
 import { ArrowHelper } from 'three';
-import SceneStore from '@/client/editor/components/scene/SceneStore';
+import SceneStore from '@/client/editor/ui/scene/SceneStore';
 import BlockStore from '../../stores/block/BlockStore';
 import TransactionService from '../../services/transaction/TransactionService';
-import SceneService from '../../components/scene/service/SceneService';
-import SceneServiceImpl from '../../components/scene/service/SceneServiceImpl';
+import SceneService from '../../ui/scene/service/SceneService';
+import SceneServiceImpl from '../../ui/scene/service/SceneServiceImpl';
 
 class RayTool extends Tool {
   constructor(store: BlockStore, update: TransactionService, scene: SceneStore) {

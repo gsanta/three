@@ -3,7 +3,7 @@ import BlockConstantData from '@/client/editor/data/BlockConstantData';
 import BlockData from '@/client/editor/data/BlockData';
 import BlockDecoration, { BlockDecorationType } from '@/client/editor/models/BlockCategory';
 import BlockCreator from './BlockCreator';
-import SceneService from '@/client/editor/components/scene/service/SceneService';
+import SceneService from '@/client/editor/ui/scene/service/SceneService';
 
 abstract class BlockFactory {
   constructor(sceneService: SceneService) {

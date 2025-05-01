@@ -1,10 +1,10 @@
 import { Box3, Object3D, Ray, Raycaster, Vector2, Vector3 } from 'three';
-import SceneStore from '../components/scene/SceneStore';
+import SceneStore from '../ui/scene/SceneStore';
 import BlockStore from '../stores/block/BlockStore';
 import BlockUtils from '../utils/BlockUtils';
 import MeshUtils from '../utils/MeshUtils';
 import BlockData from '../data/BlockData';
-import IntersectionOptions from '../components/scene/service/IntersectionOptions';
+import IntersectionOptions from '../ui/scene/service/IntersectionOptions';
 import Num3 from '../models/Num3';
 import BlockPartLookupData from '../data/BlockPartLookupData';
 
@@ -54,7 +54,7 @@ class IntersectMesh {
 
     const blockIntersections = intersects.map((meshIntersect): BlockIntersection => {
       const block = this.blockStore.getBlock(meshIntersect.object.userData.modelId);
-      const partIndex = BlockUtils.getPartIndexByName(block, meshIntersect.object.name);
+      const partIndex = 'a';
 
       const meshIntersection: MeshIntersection = {
         distance: meshIntersect.distance,

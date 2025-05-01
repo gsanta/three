@@ -1,7 +1,7 @@
 import Edit from '@/client/editor/services/transaction/Edit';
 import MoveDecoration from './MoveDecoration';
 import Num3 from '@/client/editor/models/Num3';
-import { addVector } from '@/client/editor/utils/vectorUtils';
+import Vector from '@/client/editor/utils/Vector';
 
 class MoveDevice extends MoveDecoration {
   move(edit: Edit, blockId: string, dragDelta: Num3) {
@@ -25,7 +25,7 @@ class MoveDevice extends MoveDecoration {
     const index = cable.end1?.device === blockId ? 0 : cable.points.length - 1;
     const newPoints = [...cable.points];
 
-    const newPoint = { position: addVector(newPoints[index].position, dragDelta) };
+    const newPoint = { position: new Vector(newPoints[index].position).add(new Vector(dragDelta)).get() };
 
     newPoints.splice(index, 1, newPoint);
 

@@ -1,6 +1,6 @@
 import { Vector3 } from 'three';
-import SceneService from '../../components/scene/service/SceneService';
-import SceneStore from '../../components/scene/SceneStore';
+import SceneService from '../../ui/scene/service/SceneService';
+import SceneStore from '../../ui/scene/SceneStore';
 import BlockStore from '../../stores/block/BlockStore';
 import BlockData from '@/client/editor/data/BlockData';
 import { store } from '@/client/common/utils/store';

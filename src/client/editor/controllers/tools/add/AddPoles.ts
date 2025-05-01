@@ -3,7 +3,7 @@ import TransactionService from '@/client/editor/services/transaction/Transaction
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import JoinPoles from '@/client/editor/use_cases/block/JoinPoles';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
-import SceneStore from '@/client/editor/components/scene/SceneStore';
+import SceneStore from '@/client/editor/ui/scene/SceneStore';
 
 class AddPoles extends AddBlock {
   constructor(

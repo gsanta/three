@@ -1,8 +1,8 @@
 import TestSceneService from '@/test/step-definitions/support/TestSceneService';
 import { store } from '../common/utils/store';
-import SceneStore from './components/scene/SceneStore';
-import SceneService from './components/scene/service/SceneService';
-import SceneServiceImpl from './components/scene/service/SceneServiceImpl';
+import SceneStore from './ui/scene/SceneStore';
+import SceneService from './ui/scene/service/SceneService';
+import SceneServiceImpl from './ui/scene/service/SceneServiceImpl';
 import ExportJson from './controllers/io/ExportJson';
 import ImportJson from './controllers/io/ImportJson';
 import AddService from './controllers/tools/add/AddService';

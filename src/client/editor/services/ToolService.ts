@@ -6,9 +6,9 @@ import { Mesh, Vector3 } from 'three';
 import SelectTool from '@/client/editor/controllers/tools/SelectTool';
 import AddTool from '../controllers/tools/add/AddTool';
 import CableTool from '@/client/editor/controllers/tools/CableTool';
-import VectorUtils from '@/client/editor/utils/vectorUtils';
 import ToolStore from '../stores/tool/ToolStore';
 import { setSelectedTool } from '../stores/tool/toolSlice';
+import Vector from '../utils/Vector';
 
 export type ScenePointerEvent = ThreeEvent<PointerEvent> & {
   gridIndex?: number;
@@ -49,11 +49,11 @@ class ToolService {
     this.getTool(selectedTool)?.onPointerDown(this.info);
   }
 
-  onPointerEnter(event: ThreeEvent<PointerEvent>, partIndex?: string) {
+  onPointerEnter(event: ThreeEvent<PointerEvent>, partName?: string) {
     const { selectedTool } = store.getState().tool;
 
     this.setEventObject(event);
-    this.info.partIndex = partIndex;
+    this.info.partName = partName;
 
     this.getTool(selectedTool)?.onPointerEnter(this.info);
   }
@@ -74,7 +74,7 @@ class ToolService {
     if (
       !this.info.isDragHappened &&
       this.info.downPos &&
-      VectorUtils.size(VectorUtils.sub(this.info.pos.toArray(), this.info.downPos?.toArray())) > 0.1
+      new Vector(this.info.pos.toArray()).sub(new Vector(this.info.downPos?.toArray())).size() > 0.1
     ) {
       this.info.isDragHappened = true;
     }
@@ -97,7 +97,7 @@ class ToolService {
     this.info.drag = delta.toArray();
 
     const prevDrag = this.toolStore.getSelectOptions().drag;
-    this.info.dragDelta = VectorUtils.sub(this.info.drag, prevDrag);
+    this.info.dragDelta = new Vector(this.info.drag).sub(new Vector(prevDrag)).get();
 
     const { selectedTool } = store.getState().tool;
     this.getTool(selectedTool)?.onDrag(this.info);

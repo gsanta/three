@@ -1,4 +1,4 @@
-import SceneStore from '@/client/editor/components/scene/SceneStore';
+import SceneStore from '@/client/editor/ui/scene/SceneStore';
 import BaseMesh from './BaseMesh';
 import ChildMesh from './ChildMesh';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
