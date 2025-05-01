@@ -1,6 +1,6 @@
-import BlockDecoration, { BlockCategories } from '@/client/editor/models/BlockCategory';
+import BlockDecoration, { BlockCategories } from '@/client/editor/models/block/BlockCategory';
 import { PartialDeep } from 'type-fest';
-import BlockData, { mergeBlocks } from '@/client/editor/data/BlockData';
+import BlockData, { mergeBlocks } from '@/client/editor/models/block/BlockData';
 import BlockStore from '../../stores/block/BlockStore';
 import { store, Store } from '@/client/common/utils/store';
 import mergeDeep, { MergeStrategy } from '../../utils/mergeDeep';

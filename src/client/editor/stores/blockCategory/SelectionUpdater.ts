@@ -1,4 +1,4 @@
-import BlockDecoration from '../../models/BlockCategory';
+import BlockDecoration from '../../models/block/BlockCategory';
 import { UpdateBlock } from '../block/blockSlice.types';
 import { BlockCategoyState } from './blockCategorySlice';
 
@@ -45,7 +45,6 @@ class SelectionUpdater {
     // const newSelections = updates
     //   .filter((update) => 'select' in update && update.newState === 'selected')
     //   .map((update) => (update as BlockSelect).select);
-
   }
 }
 

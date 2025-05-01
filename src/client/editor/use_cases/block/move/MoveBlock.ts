@@ -2,13 +2,13 @@ import BlockMover from './BlockMover';
 import TransactionService from '../../../services/transaction/TransactionService';
 import SceneStore from '../../../ui/scene/SceneStore';
 import BlockStore from '../../../stores/block/BlockStore';
-import Num3 from '@/client/editor/models/Num3';
+import Num3 from '@/client/editor/models/math/Num3';
 import BaseMover from './BaseMover';
 import ToolStore from '@/client/editor/stores/tool/ToolStore';
 import { store } from '@/client/common/utils/store';
 import { updateSelectTool } from '@/client/editor/stores/tool/toolSlice';
 import MoveDecoration from './MoveDecoration';
-import BlockDecoration from '@/client/editor/models/BlockCategory';
+import BlockDecoration from '@/client/editor/models/block/BlockCategory';
 import MoveDevice from './MoveDevice';
 import BlockCategoryStore from '@/client/editor/stores/blockCategory/BlockCategoryStore';
 

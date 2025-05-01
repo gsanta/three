@@ -1,8 +1,7 @@
-import { ToolInfo } from '../../models/Tool';
-import ToolName from '../../models/ToolName';
-import { toRadian } from '@/client/editor/utils/mathUtils';
-import Num3 from '@/client/editor/models/Num3';
-import BlockData from '@/client/editor/data/BlockData';
+import { ToolInfo } from '../../models/tool/Tool';
+import ToolName from '../../models/tool/ToolName';
+import Num3 from '@/client/editor/models/math/Num3';
+import BlockData from '@/client/editor/models/block/BlockData';
 import SceneStore from '@/client/editor/ui/scene/SceneStore';
 import MoveBlock from '../../use_cases/block/move/MoveBlock';
 import TransactionService from '../../services/transaction/TransactionService';
@@ -15,7 +14,7 @@ import ToolStore from '../../stores/tool/ToolStore';
 import HoverTool from './HoverTool';
 import BlockMover from '../../use_cases/block/move/BlockMover';
 import BlockCategoryStore from '../../stores/blockCategory/BlockCategoryStore';
-import Vector from '../../utils/Vector';
+import Vector from '../../models/math/Vector';
 
 class SelectTool extends HoverTool {
   constructor(
@@ -137,7 +136,7 @@ class SelectTool extends HoverTool {
 
     const index = Vector.getAxisIndex(axis);
     const newRotation = [...block.rotation] as [number, number, number];
-    newRotation[index] += toRadian(rotation);
+    newRotation[index] += Vector.toRadian(rotation);
 
     const edit = this.update.createTransaction().updateBlock(block.id, {
       rotation: newRotation,

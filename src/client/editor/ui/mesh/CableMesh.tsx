@@ -1,9 +1,9 @@
 import { useEffect, useMemo } from 'react';
 import { CatmullRomCurve3, Mesh, Vector3 } from 'three';
 import WrappedMeshProps from '../../models/block/WrappedMeshProps';
-import Cable from '../../models/block/Cable';
+import Cable from '../../models/block/categories/Cable';
 import useRegisterScene from '../hooks/useRegisterScene';
-import Num3 from '../../models/Num3';
+import Num3 from '../../models/math/Num3';
 import useEditorContext from '@/app/editor/useEditorContext';
 
 type CableProps = WrappedMeshProps<'tube'> & { cable: Cable };

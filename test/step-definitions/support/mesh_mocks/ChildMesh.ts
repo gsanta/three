@@ -1,8 +1,8 @@
 import { Vector3 } from 'three';
 import BaseMesh from './BaseMesh';
 import AbstractMesh from './AbstractMesh';
-import BlockData from '@/client/editor/data/BlockData';
-import Vector from '@/client/editor/utils/Vector';
+import BlockData from '@/client/editor/models/block/BlockData';
+import Vector from '@/client/editor/models/math/Vector';
 
 class ChildMesh extends AbstractMesh {
   position: Vector3;

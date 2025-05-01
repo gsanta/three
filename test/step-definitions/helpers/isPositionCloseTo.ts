@@ -1,4 +1,4 @@
-import Num3 from '@/client/editor/models/Num3';
+import Num3 from '@/client/editor/models/math/Num3';
 import { calculateDistance } from './findClosestBlock';
 
 const isPositionCloseTo = (expected: Num3, actual: Num3): boolean => {

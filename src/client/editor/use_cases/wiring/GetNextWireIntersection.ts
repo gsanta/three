@@ -1,7 +1,7 @@
 import SceneService from '../../ui/scene/service/SceneService';
 import BlockStore from '../../stores/block/BlockStore';
-import BlockData from '../../data/BlockData';
-import { CablePoint } from '../../models/block/Cable';
+import BlockData from '../../models/block/BlockData';
+import { CablePoint } from '../../models/block/categories/Cable';
 import { BlockIntersection } from '../IntersectMesh';
 
 class GetNextWireIntersection {

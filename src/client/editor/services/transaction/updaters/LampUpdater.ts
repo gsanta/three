@@ -1,9 +1,9 @@
-import { BlockDecorationType } from '@/client/editor/models/BlockCategory';
+import { BlockDecorationType } from '@/client/editor/models/block/BlockCategory';
 import BlockUpdater from './BlockUpdater';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import Edit from '../Edit';
-import BlockData from '@/client/editor/data/BlockData';
-import Device from '@/client/editor/models/block/Device';
+import BlockData from '@/client/editor/models/block/BlockData';
+import Device from '@/client/editor/models/block/categories/Device';
 
 const isDevice = (decoration: BlockDecorationType): decoration is Device => {
   return decoration.category === 'devices';

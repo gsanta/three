@@ -6,7 +6,6 @@ import SceneStore from '@/client/editor/ui/scene/SceneStore';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
 import ExecuteAddParams from './ExecuteAddParams';
-import AddBlockToSlot from './AddBlockToSlot';
 import AddSlotToSlot from './AddSlotToSlot';
 import BlockAddMethod from '@/common/model_types/BlockAddMethod';
 import BlockCategoryStore from '@/client/editor/stores/blockCategory/BlockCategoryStore';
@@ -25,7 +24,6 @@ class AddService {
     this.addBlock = [
       new AddBlockToBlock(blockStore, factoryService),
       new AddPoles(blockStore, factoryService, sceneStore, update),
-      new AddBlockToSlot(factoryService, sceneStore),
       new AddSlotToSlot(factoryService, sceneStore),
     ];
   }

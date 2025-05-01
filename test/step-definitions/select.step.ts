@@ -1,12 +1,12 @@
 import { store } from '@/client/common/utils/store';
 import { setSelectedTool } from '@/client/editor/stores/tool/toolSlice';
-import ToolName from '@/client/editor/models/ToolName';
+import ToolName from '@/client/editor/models/tool/ToolName';
 import { When, Then } from '@cucumber/cucumber';
 import assert from 'assert';
 import { Vector3 } from 'three';
 import ExtendedWorld from './ExtendedWorld';
 import findClosestBlock from './helpers/findClosestBlock';
-import BlockData from '@/client/editor/data/BlockData';
+import BlockData from '@/client/editor/models/block/BlockData';
 import TestSceneService from './support/TestSceneService';
 
 function selectBlockAtPosition(this: ExtendedWorld, x: number, y: number, z: number, partIndex?: string) {

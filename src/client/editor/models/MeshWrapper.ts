@@ -30,13 +30,17 @@ const findLeafsRecursive = (obj: Object3D): Mesh[] => {
   return children;
 };
 
-class MeshUtils {
-  static findByName(mesh: Object3D, name?: string): Object3D {
+class MeshWrapper {
+  constructor(mesh: Object3D) {
+    this.mesh = mesh;
+  }
+
+  findByName(name?: string): Object3D {
     if (!name) {
       throw new Error(`Name is mandatory`);
     }
 
-    const found = findByNameRecursive(mesh, name);
+    const found = findByNameRecursive(this.mesh, name);
 
     if (!found) {
       throw new Error(`Mesh with name ${name} not found`);
@@ -45,9 +49,11 @@ class MeshUtils {
     return found;
   }
 
-  static getLeafs(mesh: Object3D): Mesh[] {
-    return findLeafsRecursive(mesh);
+  getLeafs(): Mesh[] {
+    return findLeafsRecursive(this.mesh);
   }
+
+  private mesh: Object3D;
 }
 
-export default MeshUtils;
+export default MeshWrapper;

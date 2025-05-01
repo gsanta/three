@@ -1,14 +1,14 @@
 import { When } from '@cucumber/cucumber';
 import ExtendedWorld from './ExtendedWorld';
 import { setSelectedTool } from '@/client/editor/stores/tool/toolSlice';
-import ToolName from '@/client/editor/models/ToolName';
+import ToolName from '@/client/editor/models/tool/ToolName';
 import { store } from '@/client/common/utils/store';
 import { setSelectedGeometry } from '@/client/editor/stores/blockType/blockTypeSlice';
 import { Vector3 } from 'three';
 import findClosestBlock from './helpers/findClosestBlock';
 import { checkPartIndexExists, checkPosition } from './helpers/checks';
 import { BlockIntersection } from '@/client/editor/use_cases/IntersectMesh';
-import Num3 from '@/client/editor/models/Num3';
+import Num3 from '@/client/editor/models/math/Num3';
 import TestSceneService from './support/TestSceneService';
 import assert from 'assert';
 

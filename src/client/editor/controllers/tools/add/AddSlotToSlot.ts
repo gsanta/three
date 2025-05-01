@@ -1,17 +1,16 @@
 import SceneStore from '@/client/editor/ui/scene/SceneStore';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
-import MeshUtils from '@/client/editor/utils/MeshUtils';
+import MeshWrapper from '@/client/editor/models/MeshWrapper';
 import { Vector3 } from 'three';
 import AddBlock from './AddBlock';
-import BlockData from '@/client/editor/data/BlockData';
+import BlockData from '@/client/editor/models/block/BlockData';
 import BlockAddMethod from '@/common/model_types/BlockAddMethod';
-import BlockConstantData from '@/client/editor/data/BlockConstantData';
-import Num3 from '@/client/editor/models/Num3';
-import { toRadian } from '@/client/editor/utils/mathUtils';
-import BlockPart from '@/client/editor/models/block/BlockPart';
-import Vector from '@/client/editor/utils/Vector';
-import BlockPartGeometryData from '@/client/editor/data/BlockPartGeometryData';
-import { BlockPartRole } from '@/client/editor/data/BlockPartLookupData';
+import BlockConstantData from '@/client/editor/models/block/BlockConstantData';
+import Num3 from '@/client/editor/models/math/Num3';
+import BlockPart from '@/client/editor/models/block/part/BlockPart';
+import Vector from '@/client/editor/models/math/Vector';
+import BlockPartGeometryData from '@/client/editor/models/block/part/BlockPartGeometryData';
+import { BlockPartRole } from '@/client/editor/models/block/part/BlockPartLookupData';
 
 class AddSlotToSlot extends AddBlock {
   constructor(factoryService: FactoryService, sceneStore: SceneStore) {
@@ -75,7 +74,7 @@ class AddSlotToSlot extends AddBlock {
     this.factoryService.create(edit, newBlockType.type, {
       block: {
         ...this.calculateSourceConnection(addMethod, targetBlock, targetPart),
-        position: this.calculatePosition(existingPart, newPart, toRadian(newBlockRotation[1])),
+        position: this.calculatePosition(existingPart, newPart, Vector.toRadian(newBlockRotation[1])),
         rotation: newBlockRotation,
       },
     });
@@ -102,7 +101,7 @@ class AddSlotToSlot extends AddBlock {
     switch (this.addMethod?.connectionType) {
       case 'sibling':
         const mesh = this.sceneStore.getObj3d(existingPart.getBlock().getType().id);
-        const partMesh = MeshUtils.findByName(mesh, existingPart?.getPart().name);
+        const partMesh = new MeshWrapper(mesh).findByName(existingPart?.getPart().name);
         const pos = new Vector3();
         partMesh.getWorldPosition(pos);
         existingPartPos = new Vector([pos.x, pos.y, pos.z]);

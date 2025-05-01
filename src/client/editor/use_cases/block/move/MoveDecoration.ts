@@ -1,6 +1,6 @@
 import Edit from '@/client/editor/services/transaction/Edit';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
-import Num3 from '@/client/editor/models/Num3';
+import Num3 from '@/client/editor/models/math/Num3';
 
 abstract class MoveDecoration {
   constructor(blockStore: BlockStore) {

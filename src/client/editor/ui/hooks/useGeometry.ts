@@ -1,9 +1,9 @@
 import { BufferGeometry, NormalBufferAttributes } from 'three';
 import { NodesOrObject3DType } from './useMaterial';
 import { useMemo } from 'react';
-import BlockData from '../../data/BlockData';
+import BlockData from '../../models/block/BlockData';
 import camelCase from 'camelcase';
-import BlockPartGeometryData from '../../data/BlockPartGeometryData';
+import BlockPartGeometryData from '../../models/block/part/BlockPartGeometryData';
 
 export type NodesType = {
   [name: string]: BufferGeometry<NormalBufferAttributes> | NodesType;

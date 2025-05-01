@@ -2,7 +2,7 @@ import { Vector3 } from 'three';
 import SceneService from '../../ui/scene/service/SceneService';
 import SceneStore from '../../ui/scene/SceneStore';
 import BlockStore from '../../stores/block/BlockStore';
-import BlockData from '@/client/editor/data/BlockData';
+import BlockData from '@/client/editor/models/block/BlockData';
 import { store } from '@/client/common/utils/store';
 import { updateSelectTool } from '../../stores/tool/toolSlice';
 import TransactionService from '../../services/transaction/TransactionService';

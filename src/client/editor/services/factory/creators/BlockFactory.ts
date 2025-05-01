@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import BlockConstantData from '@/client/editor/data/BlockConstantData';
-import BlockData from '@/client/editor/data/BlockData';
-import BlockDecoration, { BlockDecorationType } from '@/client/editor/models/BlockCategory';
+import BlockConstantData from '@/client/editor/models/block/BlockConstantData';
+import BlockData from '@/client/editor/models/block/BlockData';
+import BlockDecoration, { BlockDecorationType } from '@/client/editor/models/block/BlockCategory';
 import BlockCreator from './BlockCreator';
 import SceneService from '@/client/editor/ui/scene/service/SceneService';
 

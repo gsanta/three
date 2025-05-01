@@ -1,5 +1,5 @@
 import TransactionService from '../services/transaction/TransactionService';
-import Device from '../models/block/Device';
+import Device from '../models/block/categories/Device';
 
 class DeviceController {
   constructor(updateService: TransactionService) {

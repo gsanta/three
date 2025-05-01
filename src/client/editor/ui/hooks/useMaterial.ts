@@ -2,7 +2,7 @@ import { BufferGeometry, Material, NormalBufferAttributes } from 'three';
 import { NodesType } from './useGeometry';
 import { useMemo, useRef } from 'react';
 import { MeshStandardMaterialProps } from '@react-three/fiber';
-import BlockPartGeometryData from '../../data/BlockPartGeometryData';
+import BlockPartGeometryData from '../../models/block/part/BlockPartGeometryData';
 
 export type NodesOrObject3DType = NodesType | BufferGeometry<NormalBufferAttributes>;
 

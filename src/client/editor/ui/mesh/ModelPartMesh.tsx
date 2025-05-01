@@ -2,9 +2,9 @@ import { MeshStandardMaterialProps, ThreeEvent } from '@react-three/fiber';
 import { Material } from 'three';
 import useGeometry, { NodesType } from '../hooks/useGeometry';
 import useMaterial from '../hooks/useMaterial';
-import BlockData from '../../data/BlockData';
+import BlockData from '../../models/block/BlockData';
 import { Select } from '@react-three/postprocessing';
-import BlockPartGeometryData from '../../data/BlockPartGeometryData';
+import BlockPartGeometryData from '../../models/block/part/BlockPartGeometryData';
 
 export type ModelPartProps = {
   block: BlockData;

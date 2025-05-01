@@ -4,7 +4,7 @@ import assert from 'assert';
 import findClosestBlock, { calculateDistance } from './helpers/findClosestBlock';
 import { checkBlockExists, checkPosition, checkPositionCloseTo } from './helpers/checks';
 import { waitForDirtyBlockUpdates } from './helpers/waitFor';
-import { toRadian } from '@/client/editor/utils/mathUtils';
+import Vector from '@/client/editor/models/math/Vector';
 
 When('I wait for dirty blocks to update', async function (this: ExtendedWorld) {
   await waitForDirtyBlockUpdates(this);
@@ -72,7 +72,7 @@ Then('I have blocks with properties', function (this: ExtendedWorld, table: { ha
 
     if (row.ROTATION) {
       const rotationInRad = row.ROTATION.split(',')
-        .map((num) => toRadian(Number(num)))
+        .map((num) => Vector.toRadian(Number(num)))
         .join(', ');
       checkPositionCloseTo.call(this, rotationInRad, block.rotation);
     }

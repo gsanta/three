@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import BlockCategory, { BlockCategoryName } from '../../models/block/BlockCategory';
+import { BlockCategoryName } from '../../models/block/BlockCategoryName';
 import BlockCategoriesResponse from '@/common/response_types/BlockCategoriesResponse';
 import BlockAddMethod from '@/common/model_types/BlockAddMethod';
 import BlockAddMethodsResponse from '@/common/response_types/BlockAddMethodsResponse';
@@ -7,11 +7,13 @@ import BlockContextMenuAction, { BlockContextMenuActionName } from '@/common/mod
 import BlockContextMenuActionsResponse from '@/common/response_types/BlockContextMenuActionsResponse';
 import { updateBlocks } from '../block/blockActions';
 import SelectionUpdater from './SelectionUpdater';
-import { BlockPartRole } from '../../data/BlockPartLookupData';
+import { BlockPartRole } from '../../models/block/part/BlockPartLookupData';
 
 export type BlockCategoyState = {
   addMethods: BlockAddMethod[];
-  blockCategories: BlockCategory[];
+  blockCategories: {
+    name: BlockCategoryName;
+  }[];
   contextMenuActions: BlockContextMenuAction[];
 
   selectedRootBlockIds: string[];

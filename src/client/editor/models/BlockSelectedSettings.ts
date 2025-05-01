@@ -1,5 +1,5 @@
-import BlockDecoration from './BlockCategory';
-import Num3 from './Num3';
+import BlockDecoration from './block/BlockCategory';
+import Num3 from './math/Num3';
 
 type BlockSelectedSettings = {
   category: BlockDecoration;

@@ -1,5 +1,5 @@
-import BlockData from '../../data/BlockData';
-import { BlockCategoryName } from './BlockCategory';
+import BlockData from './BlockData';
+import { BlockCategoryName } from './BlockCategoryName';
 
 class Block {
   constructor(block: BlockData) {

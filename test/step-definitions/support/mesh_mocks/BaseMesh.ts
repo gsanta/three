@@ -2,7 +2,7 @@ import { Vector3 } from 'three';
 import AbstractMesh from './AbstractMesh';
 import SceneStore from '@/client/editor/ui/scene/SceneStore';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
-import BlockData from '@/client/editor/data/BlockData';
+import BlockData from '@/client/editor/models/block/BlockData';
 import UpdateService from '@/client/editor/services/update/UpdateService';
 
 class BaseMesh extends AbstractMesh {

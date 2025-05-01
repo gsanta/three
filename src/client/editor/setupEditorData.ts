@@ -8,7 +8,7 @@ import {
   setBlockAddMethods,
   setBlockContextMenuActions,
 } from './stores/blockCategory/blockCategorySlice';
-import BlockConstantData from './data/BlockConstantData';
+import BlockConstantData from './models/block/BlockConstantData';
 import { setTemplates } from './stores/blockType/blockTypeSlice';
 
 export type EditorDataReturnType = {

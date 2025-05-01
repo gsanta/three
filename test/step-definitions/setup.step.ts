@@ -3,17 +3,16 @@ import { Vector3 } from 'three';
 import { store } from '@/client/common/utils/store';
 import { setSelectedGeometry } from '@/client/editor/stores/blockType/blockTypeSlice';
 import { setSelectedTool } from '@/client/editor/stores/tool/toolSlice';
-import ToolName from '@/client/editor/models/ToolName';
+import ToolName from '@/client/editor/models/tool/ToolName';
 import ExtendedWorld from './ExtendedWorld';
-import Num3 from '@/client/editor/models/Num3';
+import Num3 from '@/client/editor/models/math/Num3';
 import { checkPartIndexExists, checkPositionCloseTo } from './helpers/checks';
-import { ToolInfo } from '@/client/editor/models/Tool';
+import { ToolInfo } from '@/client/editor/models/tool/Tool';
 import { updateBlocks } from '@/client/editor/stores/block/blockActions';
 import TestSceneService from './support/TestSceneService';
 import assert from 'assert';
-import MeshUtils from '@/client/editor/utils/MeshUtils';
-import MathUtils from '@/client/editor/utils/mathUtils';
-import Vector from '@/client/editor/utils/Vector';
+import MeshWrapper from '@/client/editor/models/MeshWrapper';
+import Vector from '@/client/editor/models/math/Vector';
 
 Before(function (this: ExtendedWorld) {
   return this.setup();
@@ -159,9 +158,9 @@ Then('my current scene is', function (this: ExtendedWorld, table: { hashes(): Bl
         const selfPart = row.POSITION.split('->')?.[1].split(':')[1];
         const mesh = this.getEnv().editorContext.sceneStore.getObj3d(block.id);
 
-        const partPosition = MeshUtils.findByName(mesh, selfPart).position.toArray() as Num3;
+        const partPosition = new MeshWrapper(mesh).findByName(selfPart).position.toArray() as Num3;
         const rotatedPartPosition = new Vector(partPosition).rotateY(block.rotation[1]).get();
-        actual = new MathUtils(actual).add(rotatedPartPosition);
+        actual = new Vector(actual).add(new Vector(rotatedPartPosition)).get();
       }
       checkPositionCloseTo.call(this, row.POSITION, actual);
     }

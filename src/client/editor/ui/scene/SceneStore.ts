@@ -1,7 +1,6 @@
 import { Camera, Group, Mesh, Object3D, Scene } from 'three';
 import ToolService from '../../services/ToolService';
 import { OrbitControls } from 'three-stdlib';
-import MeshUtils from '../../utils/MeshUtils';
 
 class SceneStore {
   constructor() {
@@ -94,22 +93,6 @@ class SceneStore {
     }
 
     return Boolean(mesh);
-  }
-
-  getRootMesh(modelId: string): Mesh | null {
-    let mesh: Object3D | undefined = this.meshes.get(modelId);
-
-    if (!mesh) {
-      mesh = this.groups.get(modelId);
-    }
-
-    if (!mesh) {
-      return null;
-    }
-
-    const rootMesh = MeshUtils.findByName(mesh, 'root');
-
-    return rootMesh as Mesh;
   }
 
   getAllObj3d() {

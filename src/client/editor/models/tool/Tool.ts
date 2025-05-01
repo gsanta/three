@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import ToolName from './ToolName';
-import { IconName } from '../../common/components/lib/Icon';
+import { IconName } from '../../../common/components/lib/Icon';
 import { Vector3 } from 'three';
-import Num3 from '@/client/editor/models/Num3';
-import BlockData from '@/client/editor/data/BlockData';
+import Num3 from '@/client/editor/models/math/Num3';
+import BlockData from '@/client/editor/models/block/BlockData';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
-import TransactionService from '../services/transaction/TransactionService';
+import TransactionService from '../../services/transaction/TransactionService';
 
 export type EventObject = {
   name: string;

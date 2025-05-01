@@ -1,4 +1,4 @@
-import BlockData from '@/client/editor/data/BlockData';
+import BlockData from '@/client/editor/models/block/BlockData';
 import BaseMesh from './mesh_mocks/BaseMesh';
 import ModelMesh from './mesh_mocks/ModelMesh';
 import SceneStore from '@/client/editor/ui/scene/SceneStore';

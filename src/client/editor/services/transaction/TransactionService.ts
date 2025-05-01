@@ -2,7 +2,7 @@ import Edit from './Edit';
 import BlockStore from '../../stores/block/BlockStore';
 import { Store } from '@/client/common/utils/store';
 import SceneService from '../../ui/scene/service/SceneService';
-import Device from '../../models/block/Device';
+import Device from '../../models/block/categories/Device';
 import SystemHook from './SystemHook';
 
 class TransactionService {

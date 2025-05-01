@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import BlockData from '@/client/editor/data/BlockData';
-import BlockDecoration from '@/client/editor/models/BlockCategory';
+import BlockData from '@/client/editor/models/block/BlockData';
+import BlockDecoration from '@/client/editor/models/block/BlockCategory';
 import Edit from '../../../services/transaction/Edit';
 
 abstract class BlockEraser {

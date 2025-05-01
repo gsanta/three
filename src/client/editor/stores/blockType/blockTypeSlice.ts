@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import BlockConstantData from '../../data/BlockConstantData';
+import BlockConstantData from '../../models/block/BlockConstantData';
 import { RGBColor } from '@/client/editor/utils/colorUtils';
 import BlockSettings from '@/client/editor/models/BlockSettings';
 import BlockSelectedSettings from '@/client/editor/models/BlockSelectedSettings';

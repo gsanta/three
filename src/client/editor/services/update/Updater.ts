@@ -1,4 +1,4 @@
-import BlockData from '../../data/BlockData';
+import BlockData from '../../models/block/BlockData';
 
 interface Updater {
   category: string;

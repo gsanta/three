@@ -1,5 +1,5 @@
-import BlockData from '../../data/BlockData';
-import { BlockCategoryRecords } from '../../models/BlockCategory';
+import BlockData from '../../models/block/BlockData';
+import { BlockCategoryRecords } from '../../models/block/BlockCategory';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { updateBlocks, updateState } from './blockActions';
 import BlocksUpdater from './BlocksUpdater';

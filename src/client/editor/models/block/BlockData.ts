@@ -1,8 +1,8 @@
 import { PartialDeep } from 'type-fest';
 import BlockConstantData from './BlockConstantData';
-import { MergeStrategy, mergeArrays } from '../utils/mergeDeep';
+import { MergeStrategy, mergeArrays } from '../../utils/mergeDeep';
 import { MeshStandardMaterialProps } from '@react-three/fiber';
-import BlockPartLookupData from './BlockPartLookupData';
+import BlockPartLookupData from './part/BlockPartLookupData';
 
 export type BlockSlotSource = {
   slotName: string;

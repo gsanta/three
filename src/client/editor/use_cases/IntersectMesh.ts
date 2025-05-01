@@ -1,12 +1,11 @@
 import { Box3, Object3D, Ray, Raycaster, Vector2, Vector3 } from 'three';
 import SceneStore from '../ui/scene/SceneStore';
 import BlockStore from '../stores/block/BlockStore';
-import BlockUtils from '../utils/BlockUtils';
-import MeshUtils from '../utils/MeshUtils';
-import BlockData from '../data/BlockData';
+import MeshWrapper from '../models/MeshWrapper';
+import BlockData from '../models/block/BlockData';
 import IntersectionOptions from '../ui/scene/service/IntersectionOptions';
-import Num3 from '../models/Num3';
-import BlockPartLookupData from '../data/BlockPartLookupData';
+import Num3 from '../models/math/Num3';
+import BlockPartLookupData from '../models/block/part/BlockPartLookupData';
 
 export type MeshIntersection = {
   distance: number;
@@ -41,7 +40,7 @@ class IntersectMesh {
 
     const realMeshes: Object3D[] = [];
 
-    meshes.forEach((mesh) => realMeshes.push(...MeshUtils.getLeafs(mesh)));
+    meshes.forEach((mesh) => realMeshes.push(...new MeshWrapper(mesh).getLeafs()));
 
     const pointer = new Vector2();
     const { height, width, left, top } = this.sceneStore.getCanvasElement().getBoundingClientRect();

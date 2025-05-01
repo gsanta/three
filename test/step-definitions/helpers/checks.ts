@@ -1,11 +1,10 @@
-import MeshUtils from '@/client/editor/utils/MeshUtils';
+import MeshWrapper from '@/client/editor/models/MeshWrapper';
 import ExtendedWorld from '../ExtendedWorld';
-import Num3 from '@/client/editor/models/Num3';
+import Num3 from '@/client/editor/models/math/Num3';
 import { Vector3 } from 'three';
-import BlockDecoration from '@/client/editor/models/BlockCategory';
+import BlockDecoration from '@/client/editor/models/block/BlockCategory';
 import assert from 'assert';
-import MathUtils from '@/client/editor/utils/mathUtils';
-import Vector from '@/client/editor/utils/Vector';
+import Vector from '@/client/editor/models/math/Vector';
 
 export function checkBlockExists(this: ExtendedWorld, blockId: string) {
   const realBlockId = blockId === 'examined' ? this.env?.testScene.storedBlockId || '' : blockId;
@@ -59,7 +58,7 @@ export function checkPartMeshExists(this: ExtendedWorld, blockId: string, partIn
   const mesh = checkBlockMeshExists.call(this, blockId);
 
   const partName = this.getEnv().editorContext.blockStore.getBlock(blockId).partDetails[partIndex]?.name;
-  const partMesh = MeshUtils.findByName(mesh, partName);
+  const partMesh = new MeshWrapper(mesh).findByName(partName);
 
   if (!partMesh) {
     throw new Error(`Mesh for part ${partIndex} of block ${blockId} not found.`);
@@ -90,13 +89,13 @@ export function checkPosition(this: ExtendedWorld, position: string): Num3 {
 
     const targetBlock = this.getEnv().editorContext.blockStore.getBlock(targetBlockId);
 
-    const meshPos = MeshUtils.findByName(mesh, sourcePart).position.toArray() as Num3;
+    const meshPos = new MeshWrapper(mesh).findByName(sourcePart).position.toArray() as Num3;
     const rotateMeshPos = new Vector(meshPos).rotateY(sourceBlock.rotation[1]).get();
 
     if (targetBlock.parentConnection?.block === sourceBlockId) {
       return rotateMeshPos;
     } else {
-      return new MathUtils(rotateMeshPos).add(sourceBlock.position);
+      return new Vector(rotateMeshPos).add(new Vector(sourceBlock.position)).get();
     }
   } /* pole-1-1:Pin4 */ else if (position.indexOf(':')) {
     const [targetBlockId, targetPart] = position.split(':');
@@ -106,7 +105,7 @@ export function checkPosition(this: ExtendedWorld, position: string): Num3 {
     const mesh = this.getEnv().editorContext.sceneStore.getObj3d(targetBlockId);
 
     const meshPos = new Vector3();
-    MeshUtils.findByName(mesh, targetPart).getWorldPosition(meshPos);
+    new MeshWrapper(mesh).findByName(targetPart).getWorldPosition(meshPos);
     const rotateMeshPos = new Vector(meshPos.toArray()).rotateY(targetBlock.rotation[1]).get();
 
     return rotateMeshPos;

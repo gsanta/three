@@ -2,13 +2,14 @@ import { PivotControls } from '@react-three/drei';
 import { Quaternion, Vector3 } from 'three';
 import useEditorContext from '@/app/editor/useEditorContext';
 import { useAppSelector } from '@/client/common/hooks/hooks';
-import Num3 from '@/client/editor/models/Num3';
+import Num3 from '@/client/editor/models/math/Num3';
 import { ReactNode } from 'react';
-import { defaultSnap } from '@/client/editor/utils/sceneUtils';
 
 type MoveControlProps = {
   children(props: { drag: Num3 }): ReactNode;
 };
+
+const defaultSnap = 0.25;
 
 export const snapTo = (num: number, snapVal = defaultSnap) => {
   const base = num < 0 ? Math.ceil(num / snapVal) : Math.floor(num / snapVal);

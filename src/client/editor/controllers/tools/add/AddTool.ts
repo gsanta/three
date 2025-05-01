@@ -1,13 +1,13 @@
-import { ToolInfo } from '../../../models/Tool';
-import ToolName from '../../../models/ToolName';
+import { ToolInfo } from '../../../models/tool/Tool';
+import ToolName from '../../../models/tool/ToolName';
 import TransactionService from '../../../services/transaction/TransactionService';
 import HoverTool from '../HoverTool';
 import SceneService from '../../../ui/scene/service/SceneService';
 import AddService from './AddService';
 import { store } from '@/client/common/utils/store';
-import BlockData from '@/client/editor/data/BlockData';
-import BlockConstantData from '@/client/editor/data/BlockConstantData';
-import Num3 from '@/client/editor/models/Num3';
+import BlockData from '@/client/editor/models/block/BlockData';
+import BlockConstantData from '@/client/editor/models/block/BlockConstantData';
+import Num3 from '@/client/editor/models/math/Num3';
 import ExecuteAddParams from './ExecuteAddParams';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 

@@ -1,11 +1,11 @@
 import BlockFactory from './BlockFactory';
 import BlockCreator from './BlockCreator';
-import BlockData from '@/client/editor/data/BlockData';
-import BlockConstantData from '@/client/editor/data/BlockConstantData';
-import Cable from '@/client/editor/models/block/Cable';
+import BlockData from '@/client/editor/models/block/BlockData';
+import BlockConstantData from '@/client/editor/models/block/BlockConstantData';
+import Cable from '@/client/editor/models/block/categories/Cable';
 import mergeDeep from '@/client/editor/utils/mergeDeep';
 import { PartialDeep } from 'type-fest';
-import BlockDecoration, { BlockDecorationType } from '@/client/editor/models/BlockCategory';
+import BlockDecoration, { BlockDecorationType } from '@/client/editor/models/block/BlockCategory';
 
 class CableFactory extends BlockFactory {
   create(blockType: BlockConstantData, overrides: Partial<BlockData> = {}) {

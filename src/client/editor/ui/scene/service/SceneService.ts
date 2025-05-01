@@ -1,7 +1,7 @@
 import { Object3D, Ray, Vector3 } from 'three';
 import { BlockIntersection } from '../../../use_cases/IntersectMesh';
 import IntersectionOptions from './IntersectionOptions';
-import BlockConstantData from '@/client/editor/data/BlockConstantData';
+import BlockConstantData from '@/client/editor/models/block/BlockConstantData';
 
 interface SceneService {
   uuid(blockType: BlockConstantData): string;

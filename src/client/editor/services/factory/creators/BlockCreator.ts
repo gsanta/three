@@ -1,8 +1,8 @@
-import BlockConstantData from '@/client/editor/data/BlockConstantData';
-import { toRadian } from '@/client/editor/utils/mathUtils';
-import Num3 from '@/client/editor/models/Num3';
-import BlockData from '@/client/editor/data/BlockData';
-import BlockPartLookupData from '@/client/editor/data/BlockPartLookupData';
+import BlockConstantData from '@/client/editor/models/block/BlockConstantData';
+import Num3 from '@/client/editor/models/math/Num3';
+import BlockData from '@/client/editor/models/block/BlockData';
+import BlockPartLookupData from '@/client/editor/models/block/part/BlockPartLookupData';
+import Vector from '@/client/editor/models/math/Vector';
 
 class BlockCreator {
   static create(id: string, block: BlockConstantData, settings: Partial<BlockData>): BlockData {
@@ -14,7 +14,7 @@ class BlockCreator {
     const x = pos[0]; //snapTo(pos[0]);
     const z = pos[2]; //snapTo(pos[2]);
     const y = pos[1]; // + positionData[1] + scale[1] / 2;
-    const rotation = selectedRotation.map((degree) => toRadian(degree));
+    const rotation = selectedRotation.map((degree) => Vector.toRadian(degree));
 
     const partDetails: Record<string, BlockPartLookupData | undefined> = {};
 

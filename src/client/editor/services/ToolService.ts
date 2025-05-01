@@ -1,14 +1,13 @@
 import { ThreeEvent } from '@react-three/fiber';
-import Tool, { EventObject, ToolInfo } from '../models/Tool';
-import ToolName from '../models/ToolName';
+import Tool, { EventObject, ToolInfo } from '../models/tool/Tool';
+import ToolName from '../models/tool/ToolName';
 import { store } from '@/client/common/utils/store';
 import { Mesh, Vector3 } from 'three';
 import SelectTool from '@/client/editor/controllers/tools/SelectTool';
 import AddTool from '../controllers/tools/add/AddTool';
-import CableTool from '@/client/editor/controllers/tools/CableTool';
 import ToolStore from '../stores/tool/ToolStore';
 import { setSelectedTool } from '../stores/tool/toolSlice';
-import Vector from '../utils/Vector';
+import Vector from '../models/math/Vector';
 
 export type ScenePointerEvent = ThreeEvent<PointerEvent> & {
   gridIndex?: number;
@@ -129,10 +128,6 @@ class ToolService {
 
   getAddTool() {
     return this.tools.find((tool) => tool.name === ToolName.Add) as AddTool;
-  }
-
-  getCableTool() {
-    return this.tools.find((tool) => tool.name === ToolName.Cable) as CableTool;
   }
 
   getToolInfo(): ToolInfo {

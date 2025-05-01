@@ -1,5 +1,5 @@
 import { Store } from '@/client/common/utils/store';
-import { BlockCategoryName } from '../../models/block/BlockCategory';
+import { BlockCategoryName } from '../../models/block/BlockCategoryName';
 import BlockStore from '../block/BlockStore';
 
 class BlockCategoryStore {

@@ -1,6 +1,6 @@
-import BlockData from '@/client/editor/data/BlockData';
-import Cable, { CablePoint } from '@/client/editor/models/block/Cable';
-import MeshUtils from '@/client/editor/utils/MeshUtils';
+import BlockData from '@/client/editor/models/block/BlockData';
+import Cable, { CablePoint } from '@/client/editor/models/block/categories/Cable';
+import MeshWrapper from '@/client/editor/models/MeshWrapper';
 import { Vector3 } from 'three';
 import BlockStore from '../../stores/block/BlockStore';
 import SceneStore from '../../ui/scene/SceneStore';
@@ -47,7 +47,7 @@ class UpdateDeviceCable {
     }
 
     const poleMesh = this.scene.getObj3d(pole.id);
-    const mesh = MeshUtils.findByName(poleMesh, cableEnd?.pin);
+    const mesh = new MeshWrapper(poleMesh).findByName(cableEnd?.pin);
 
     const pos = new Vector3();
     mesh.getWorldPosition(pos);

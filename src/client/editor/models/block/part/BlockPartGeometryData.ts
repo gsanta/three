@@ -1,4 +1,4 @@
-import Num3 from '../models/Num3';
+import Num3 from '../../math/Num3';
 
 export type BlockPartGeometryData = {
   materialPath?: string;

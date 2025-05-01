@@ -1,7 +1,7 @@
 import { Store } from '@/client/common/utils/store';
-import BlockData from '../../data/BlockData';
+import BlockData from '../../models/block/BlockData';
 import { BlockState } from '../../stores/block/blockSlice.types';
-import BlockPartLookupData from '../../data/BlockPartLookupData';
+import BlockPartLookupData from '../../models/block/part/BlockPartLookupData';
 
 class ExportJson {
   constructor(store: Store) {

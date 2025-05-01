@@ -1,6 +1,6 @@
-import BlockData from '@/client/editor/data/BlockData';
-import BlockConstantData from '@/client/editor/data/BlockConstantData';
-import Num3 from '@/client/editor/models/Num3';
+import BlockData from '@/client/editor/models/block/BlockData';
+import BlockConstantData from '@/client/editor/models/block/BlockConstantData';
+import Num3 from '@/client/editor/models/math/Num3';
 import BlockAddMethod from '@/common/model_types/BlockAddMethod';
 
 type ExecuteAddParams = {

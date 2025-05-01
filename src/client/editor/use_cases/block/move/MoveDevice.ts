@@ -1,7 +1,7 @@
 import Edit from '@/client/editor/services/transaction/Edit';
 import MoveDecoration from './MoveDecoration';
-import Num3 from '@/client/editor/models/Num3';
-import Vector from '@/client/editor/utils/Vector';
+import Num3 from '@/client/editor/models/math/Num3';
+import Vector from '@/client/editor/models/math/Vector';
 
 class MoveDevice extends MoveDecoration {
   move(edit: Edit, blockId: string, dragDelta: Num3) {

@@ -1,10 +1,10 @@
-import BlockData from '../../data/BlockData';
-import MathUtils, { toDegree } from '../../utils/mathUtils';
-import BlockConstantData from '../../data/BlockConstantData';
-import Num3 from '../Num3';
-import Block from './Block';
-import BlockPartGeometryData from '../../data/BlockPartGeometryData';
-import { BlockPartRole } from '../../data/BlockPartLookupData';
+import BlockData from '../BlockData';
+import BlockConstantData from '../BlockConstantData';
+import Num3 from '../../math/Num3';
+import Block from '../Block';
+import BlockPartGeometryData from './BlockPartGeometryData';
+import { BlockPartRole } from './BlockPartLookupData';
+import Vector from '../../math/Vector';
 
 type PartWithRotation = [BlockPartGeometryData, Num3];
 
@@ -32,10 +32,10 @@ class BlockPart {
     );
 
     const thisPartOrientation = this.block.partDetails[this.part?.name || '']?.orientation || 0;
-    const thisBlockRotation = toDegree(this.block.rotation[1]);
+    const thisBlockRotation = Vector.toDegree(this.block.rotation[1]);
 
-    const thisPartRotation = MathUtils.normalizeAngle(thisPartOrientation + thisBlockRotation);
-    const oppositeRotation = MathUtils.normalizeAngle(thisPartRotation + 180);
+    const thisPartRotation = Vector.normalizeAngle(thisPartOrientation + thisBlockRotation);
+    const oppositeRotation = Vector.normalizeAngle(thisPartRotation + 180);
 
     const result = sourcePartCandidates.reduce<{ part: BlockPartGeometryData; rotation: number } | undefined>(
       (rotatedPart, nextPart) => {
@@ -44,9 +44,9 @@ class BlockPart {
         const sourcePartOrientation = newBlockType.partDetails[nextPart?.name || '']?.orientation || 0;
 
         if (sourcePartOrientation > oppositeRotation) {
-          sourceRotation = -MathUtils.normalizeAngle(sourcePartOrientation - oppositeRotation);
+          sourceRotation = -Vector.normalizeAngle(sourcePartOrientation - oppositeRotation);
         } else {
-          sourceRotation = MathUtils.normalizeAngle(oppositeRotation - sourcePartOrientation);
+          sourceRotation = Vector.normalizeAngle(oppositeRotation - sourcePartOrientation);
         }
 
         if (!rotatedPart || Math.abs(rotatedPart.rotation) > Math.abs(sourceRotation)) {

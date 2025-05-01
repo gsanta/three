@@ -1,4 +1,4 @@
-import Num3 from '@/client/editor/models/Num3';
+import Num3 from '@/client/editor/models/math/Num3';
 import { useBox, useRaycastVehicle } from '@react-three/cannon';
 import { useGLTF } from '@react-three/drei';
 import { RefObject, useEffect, useRef } from 'react';

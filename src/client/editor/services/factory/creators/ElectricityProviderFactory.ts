@@ -1,6 +1,6 @@
 import BlockFactory from './BlockFactory';
-import BlockData from '@/client/editor/data/BlockData';
-import Device, { createPin } from '@/client/editor/models/block/Device';
+import BlockData from '@/client/editor/models/block/BlockData';
+import Device, { createPin } from '@/client/editor/models/block/categories/Device';
 
 class ElectricityProviderFactory extends BlockFactory {
   createCategory(block: BlockData, overrides: Partial<BlockData> = {}): Device {

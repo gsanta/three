@@ -2,9 +2,9 @@ import { Then } from '@cucumber/cucumber';
 import ExtendedWorld from './ExtendedWorld';
 import assert from 'assert';
 import isPositionCloseTo from './helpers/isPositionCloseTo';
-import { Pins } from '@/client/editor/models/block/Device';
+import { Pins } from '@/client/editor/models/block/categories/Device';
 import { checkDecorationExists, checkPosition } from './helpers/checks';
-import Cable from '@/client/editor/models/block/Cable';
+import Cable from '@/client/editor/models/block/categories/Cable';
 
 Then(
   'cable for block {string} and pin {string} ends at position {string}',

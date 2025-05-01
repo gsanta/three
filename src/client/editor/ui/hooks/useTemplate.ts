@@ -1,5 +1,5 @@
 import { useAppSelector } from '@/client/common/hooks/hooks';
-import BlockConstantData from '../../data/BlockConstantData';
+import BlockConstantData from '../../models/block/BlockConstantData';
 
 const useTemplate = (blockType?: string): BlockConstantData | undefined => {
   const { blocks } = useAppSelector((state) => state.blockType);

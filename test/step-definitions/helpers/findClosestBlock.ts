@@ -1,5 +1,5 @@
-import BlockData from '@/client/editor/data/BlockData';
-import Num3 from '@/client/editor/models/Num3';
+import BlockData from '@/client/editor/models/block/BlockData';
+import Num3 from '@/client/editor/models/math/Num3';
 
 export function calculateDistance(pos1: Num3, pos2: Num3): number {
   return Math.sqrt(Math.pow(pos1[0] - pos2[0], 2) + Math.pow(pos1[1] - pos2[1], 2) + Math.pow(pos1[2] - pos2[2], 2));

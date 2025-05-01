@@ -1,16 +1,16 @@
-import MeshUtils from '@/client/editor/utils/MeshUtils';
+import MeshWrapper from '@/client/editor/models/MeshWrapper';
 import { Vector3 } from 'three';
-import BlockData from '@/client/editor/data/BlockData';
+import BlockData from '@/client/editor/models/block/BlockData';
 import SceneStore from '@/client/editor/ui/scene/SceneStore';
 import TransactionService from '../../services/transaction/TransactionService';
 import FactoryService from '../../services/factory/FactoryService';
 import BlockStore from '../../stores/block/BlockStore';
-import Num3 from '../../models/Num3';
+import Num3 from '../../models/math/Num3';
 import Edit from '../../services/transaction/Edit';
-import MathUtils, { toRadian } from '../../utils/mathUtils';
 import CableHelper from './CableHelper';
-import Pole from '../../models/Pole';
-import BlockPartLookupData from '../../data/BlockPartLookupData';
+import Pole from '../../models/block/categories/Pole';
+import BlockPartLookupData from '../../models/block/part/BlockPartLookupData';
+import Vector from '../../models/math/Vector';
 
 class JoinPoles {
   constructor(
@@ -35,7 +35,7 @@ class JoinPoles {
 
     const { poleId: neighborPoleId } = otherPoles.reduce(
       (closest, next) => {
-        const newDistance = MathUtils.distance(pole.position, next.position);
+        const newDistance = new Vector(pole.position).distance(new Vector(next.position));
         if (closest.distance === -1 || closest.distance > newDistance) {
           return {
             poleId: next.id,
@@ -91,9 +91,9 @@ class JoinPoles {
 
     const [pos1, pos2, pos3] = [neighborNeighborPole.position, neighborPole.position, newPole.position];
 
-    const line1 = new MathUtils(pos1).sub2(pos2);
-    const line2 = new MathUtils(pos2).sub2(pos3);
-    const angle = -new MathUtils(line1).angle2(line2);
+    const line1 = new Vector(pos1).subXZ(new Vector(pos2)).get();
+    const line2 = new Vector(pos2).subXZ(new Vector(pos3)).get();
+    const angle = -new Vector(line1).angle2(new Vector(line2));
 
     const halfAngle = angle / 2;
 
@@ -101,7 +101,7 @@ class JoinPoles {
 
     const neighbourRotation = [
       neighborPole.rotation[0],
-      neighborPole.rotation[1] + toRadian(halfAngle),
+      neighborPole.rotation[1] + Vector.toRadian(halfAngle),
       neighborPole.rotation[2],
     ] as Num3;
 
@@ -114,7 +114,7 @@ class JoinPoles {
     });
 
     edit.updateBlock(newPole.id, {
-      rotation: [newPole.rotation[0], neighbourRotation[1] + toRadian(halfAngle), newPole.rotation[2]],
+      rotation: [newPole.rotation[0], neighbourRotation[1] + Vector.toRadian(halfAngle), newPole.rotation[2]],
     });
 
     return;
@@ -187,9 +187,8 @@ class JoinPoles {
     const pinName1 = partIndex1;
     const pinName2 = partIndex2;
 
-    const pinMesh1 = MeshUtils.findByName(mesh1, pinName1);
-    const pinMesh2 = MeshUtils.findByName(mesh2, pinName2);
-
+    const pinMesh1 = new MeshWrapper(mesh1).findByName(pinName1);
+    const pinMesh2 = new MeshWrapper(mesh2).findByName(pinName2);
     const pos1 = new Vector3();
     pinMesh1.getWorldPosition(pos1);
     const pos2 = new Vector3();

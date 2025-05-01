@@ -2,9 +2,9 @@ import SceneStore from '@/client/editor/ui/scene/SceneStore';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import ToolStore from '@/client/editor/stores/tool/ToolStore';
-import BlockData from '@/client/editor/data/BlockData';
-import Num3 from '@/client/editor/models/Num3';
-import MeshUtils from '@/client/editor/utils/MeshUtils';
+import BlockData from '@/client/editor/models/block/BlockData';
+import Num3 from '@/client/editor/models/math/Num3';
+import MeshWrapper from '@/client/editor/models/MeshWrapper';
 import { Box3 } from 'three';
 
 class BaseMover {
@@ -23,7 +23,7 @@ class BaseMover {
       const targetBlock = this.blockStore.getBlock(stationBlockId);
       const targetPartName = targetBlock.partDetails[stationPartIndex || '#1']?.name;
       const targetMesh = this.sceneStore.getObj3d(block.parentConnection?.block || '');
-      const targetPartMesh = MeshUtils.findByName(targetMesh, targetPartName);
+      const targetPartMesh = new MeshWrapper(targetMesh).findByName(targetPartName);
 
       const sourceBoundingBox = new Box3().setFromObject(sourceMesh);
       const targetBoundingBox = new Box3().setFromObject(targetPartMesh);

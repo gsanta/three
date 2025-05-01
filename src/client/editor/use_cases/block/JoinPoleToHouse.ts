@@ -1,6 +1,6 @@
-import BlockData from '../../data/BlockData';
+import BlockData from '../../models/block/BlockData';
 import BlockModel from '../../models/BlockModel';
-import Pole from '../../models/Pole';
+import Pole from '../../models/block/categories/Pole';
 
 class JoinPoleToHouse {
   constructor() {}

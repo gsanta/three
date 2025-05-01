@@ -1,10 +1,7 @@
-import * as blocks from '../utils/blocks.json';
-import { BlockCategoryName } from '../models/block/BlockCategory';
-import BlockDecoration from '../models/BlockCategory';
-import BlockPartGeometryData from './BlockPartGeometryData';
-import BlockPartLookupData from './BlockPartLookupData';
-
-export type BlockName = keyof typeof blocks.blocks;
+import { BlockCategoryName } from './BlockCategoryName';
+import BlockDecoration from './BlockCategory';
+import BlockPartGeometryData from './part/BlockPartGeometryData';
+import BlockPartLookupData from './part/BlockPartLookupData';
 
 export type AnimationTriggerName = 'device-on';
 

@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import Num3 from '../../models/Num3';
+import Num3 from '../../models/math/Num3';
 
 export type TemporaryState = {
   cables?: [Num3, Num3];

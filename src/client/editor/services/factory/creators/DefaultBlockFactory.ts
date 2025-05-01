@@ -1,7 +1,7 @@
 import BlockFactory from './BlockFactory';
-import BlockData from '@/client/editor/data/BlockData';
+import BlockData from '@/client/editor/models/block/BlockData';
 import BlockCreator from './BlockCreator';
-import BlockConstantData from '@/client/editor/data/BlockConstantData';
+import BlockConstantData from '@/client/editor/models/block/BlockConstantData';
 
 class DefaultBlockFactory extends BlockFactory {
   create(blockType: BlockConstantData, overrides: Partial<BlockData> = {}) {

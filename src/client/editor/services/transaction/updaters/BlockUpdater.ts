@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { BlockDecorationType } from '@/client/editor/models/BlockCategory';
+import { BlockDecorationType } from '@/client/editor/models/block/BlockCategory';
 import Edit from '../Edit';
-import BlockData from '@/client/editor/data/BlockData';
+import BlockData from '@/client/editor/models/block/BlockData';
 
 abstract class BlockUpdater {
   readonly type: string;

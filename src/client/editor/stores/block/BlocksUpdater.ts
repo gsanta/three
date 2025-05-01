@@ -1,4 +1,4 @@
-import BlockDecoration from '../../models/BlockCategory';
+import BlockDecoration from '../../models/block/BlockCategory';
 import { BlockState, UpdateBlock } from './blockSlice.types';
 
 class BlocksUpdater {
@@ -49,7 +49,6 @@ class BlocksUpdater {
           if (index !== -1) {
             state.selectedBlocks.splice(index, 1);
           }
-
         } else if ('select' in update) {
           state.selectedBlocks.forEach((blockId) => (state.blocks[blockId].isSelected = false));
           state.selectedBlocks = [];
