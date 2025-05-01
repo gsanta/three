@@ -12,6 +12,10 @@ class Block {
     }
   }
 
+  getType() {
+    return this.block;
+  }
+
   protected block: BlockType;
 }
 

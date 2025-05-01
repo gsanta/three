@@ -2,7 +2,7 @@ import Axis from '../models/Axis';
 import Num3 from '../models/Num3';
 
 class Vector {
-  constructor(position: Num3) {
+  constructor(position: Num3 = [0, 0, 0]) {
     this.position = position;
   }
 

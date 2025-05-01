@@ -1,15 +1,15 @@
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import MeshUtils from '@/client/editor/utils/MeshUtils';
-import VectorUtils from '@/client/editor/utils/vectorUtils';
 import { Vector3 } from 'three';
 import AddBlock from './AddBlock';
-import BlockUtils from '@/client/editor/utils/BlockUtils';
 import BlockType from '@/client/editor/types/BlockType';
 import BlockAddMethod from '@/common/model_types/BlockAddMethod';
-import BaseBlockType, { ModelPart, ModelPartRole } from '@/client/editor/models/BaseBlockType';
+import BaseBlockType, { ModelPart, BlockPartRole } from '@/client/editor/models/BaseBlockType';
 import Num3 from '@/client/editor/models/Num3';
 import { toRadian } from '@/client/editor/utils/mathUtils';
+import BlockPart from '@/client/editor/models/block/BlockPart';
+import Vector from '@/client/editor/utils/Vector';
 
 class AddSlotToSlot extends AddBlock {
   constructor(factoryService: FactoryService, sceneStore: SceneStore) {
@@ -26,6 +26,8 @@ class AddSlotToSlot extends AddBlock {
     targetBlock,
     targetPartIndex: targetPartName,
   }: Parameters<AddBlock['perform']>[0]) {
+    this.addMethod = addMethod;
+
     if (!targetBlock) {
       throw new Error('targetBlock is mandatory for addMethod: add-slot-to-slot');
     }
@@ -58,7 +60,7 @@ class AddSlotToSlot extends AddBlock {
       );
     }
 
-    const [sourcePart, rotation] = this.calculateSourcePartWithRotation(
+    const [newPart, newBlockRotation] = this.calculateNewBlockRotationAndPartToConnectTo(
       addMethod.connectionType,
       addMethod.sourcePartRole,
       targetBlock,
@@ -66,11 +68,13 @@ class AddSlotToSlot extends AddBlock {
       newBlockType,
     );
 
+    const existingPart = new BlockPart(targetBlock, targetPart);
+
     this.factoryService.create(edit, newBlockType.type, {
       block: {
         ...this.calculateSourceConnection(addMethod, targetBlock, targetPart),
-        position: this.calculatePosition(addMethod, targetBlock, targetPart, sourcePart, toRadian(rotation[1])),
-        rotation: rotation,
+        position: this.calculatePosition(existingPart, newPart, toRadian(newBlockRotation[1])),
+        rotation: newBlockRotation,
       },
     });
 
@@ -89,37 +93,32 @@ class AddSlotToSlot extends AddBlock {
     return edit;
   }
 
-  private calculatePosition(
-    addMethod: BlockAddMethod,
-    targetBlock: BlockType,
-    targetPart: ModelPart,
-    sourcePart: ModelPart,
-    sourceRotation: number,
-  ) {
-    let targetPartPos: Num3 = [0, 0, 0];
-    let sourcePartPos: Num3 = [0, 0, 0];
-    switch (addMethod.connectionType) {
+  private calculatePosition(existingPart: BlockPart, newPart: ModelPart, newBlockRotation: number) {
+    let existingPartPos = new Vector();
+    let newPartPos = new Vector();
+
+    switch (this.addMethod?.connectionType) {
       case 'sibling':
-        const mesh = this.sceneStore.getObj3d(targetBlock.id);
-        const partMesh = MeshUtils.findByName(mesh, targetPart?.name);
+        const mesh = this.sceneStore.getObj3d(existingPart.getBlock().getType().id);
+        const partMesh = MeshUtils.findByName(mesh, existingPart?.getPart().name);
         const pos = new Vector3();
         partMesh.getWorldPosition(pos);
-        targetPartPos = [pos.x, pos.y, pos.z];
-        const sourcePos = VectorUtils.rotate(sourcePart.position || [0, 0, 0], sourceRotation) || [0, 0, 0];
-        sourcePartPos = [-sourcePos[0], -sourcePos[1], -sourcePos[2]];
+        existingPartPos = new Vector([pos.x, pos.y, pos.z]);
+
+        newPartPos = new Vector(newPart.position).rotateY(newBlockRotation).negate();
         break;
       case 'parent-child':
-        targetPartPos = targetPart.position;
-        sourcePartPos = VectorUtils.negate(sourcePart.position);
+        existingPartPos = new Vector(existingPart.getPart().position);
+        newPartPos = new Vector(newPart.position).negate();
         break;
     }
 
-    return VectorUtils.add(targetPartPos, sourcePartPos);
+    return existingPartPos.add(newPartPos).get();
   }
 
-  private calculateSourcePartWithRotation(
+  private calculateNewBlockRotationAndPartToConnectTo(
     connectionType: BlockAddMethod['connectionType'],
-    sourcePartRole: ModelPartRole,
+    sourcePartRole: BlockPartRole,
     targetBlock: BlockType,
     targetPart: ModelPart,
     newBlockType: BaseBlockType,
@@ -133,13 +132,14 @@ class AddSlotToSlot extends AddBlock {
         return [sourceParts[0], [0, 0, 0]];
       case 'sibling':
       default:
-        const rotatedPart = BlockUtils.findMatchingSlot(targetBlock, targetPart.name, newBlockType, sourceParts);
+        const blockPart = new BlockPart(targetBlock, targetPart.name);
+        const partWithRotation = blockPart.findBestMatchingPartToConnectTo(newBlockType, sourcePartRole);
 
-        if (!rotatedPart?.part) {
+        if (!partWithRotation) {
           throw new Error(`Source part with role ${sourcePartRole} not found on block type ${newBlockType}`);
         }
 
-        return [rotatedPart.part, [0, rotatedPart?.rotation || 0, 0]];
+        return partWithRotation;
     }
   }
 
@@ -181,6 +181,8 @@ class AddSlotToSlot extends AddBlock {
   private factoryService: FactoryService;
 
   private sceneStore: SceneStore;
+
+  private addMethod?: BlockAddMethod;
 }
 
 export default AddSlotToSlot;

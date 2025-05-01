@@ -17,7 +17,7 @@ export type ModelPart = {
   name: string;
 };
 
-export type ModelPartRole =
+export type BlockPartRole =
   | 'pin'
   | 'wall-slot'
   | 'ceil-slot'
@@ -36,7 +36,7 @@ export type ModelPartInfo = {
   joins?: [string, string];
   orientation: number;
   role?: 'slot';
-  roles?: ModelPartRole[];
+  roles?: BlockPartRole[];
   type: 'placeholder' | 'phisycal';
 };
 
