@@ -1,9 +1,9 @@
 import BlockFactory from './BlockFactory';
-import BlockType from '@/client/editor/types/BlockType';
+import BlockData from '@/client/editor/data/BlockData';
 import Device from '@/client/editor/models/block/Device';
 
 class LampFactory extends BlockFactory {
-  createCategory(block: BlockType, overrides: Partial<BlockType> = {}): Device {
+  createCategory(block: BlockData, overrides: Partial<BlockData> = {}): Device {
     const device: Device = {
       circuitComponent: 'consumer',
       isOn: false,

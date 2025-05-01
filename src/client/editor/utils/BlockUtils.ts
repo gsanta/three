@@ -1,8 +1,8 @@
-import BlockType from '../types/BlockType';
-import BaseBlockType from '../models/BaseBlockType';
+import BlockData from '../data/BlockData';
+import BlockConstantData from '../data/BlockConstantData';
 
 class BlockUtils {
-  static getBlock(blocks: BaseBlockType[], blockName: string) {
+  static getBlock(blocks: BlockConstantData[], blockName: string) {
     const block = blocks.find((b) => b.type === blockName);
 
     if (!block) {
@@ -12,7 +12,7 @@ class BlockUtils {
     return block;
   }
 
-  static getPartIndexByName(block: BlockType, partName?: string) {
+  static getPartIndexByName(block: BlockData, partName?: string) {
     return Object.keys(block.partDetails).find((partIndex) => block.partDetails[partIndex]?.name === partName);
   }
 }

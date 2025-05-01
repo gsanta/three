@@ -1,7 +1,8 @@
 import { PartialDeep } from 'type-fest';
-import BaseBlockType, { ModelPartInfo, ShapeType } from '../models/BaseBlockType';
+import BlockConstantData from './BlockConstantData';
 import { MergeStrategy, mergeArrays } from '../utils/mergeDeep';
 import { MeshStandardMaterialProps } from '@react-three/fiber';
+import BlockPartLookupData from './BlockPartLookupData';
 
 export type BlockSlotSource = {
   slotName: string;
@@ -15,49 +16,56 @@ export type NeigbourConnection = {
   part?: string;
 };
 
-type BlockType<S extends ShapeType = ShapeType> = {
-  id: string;
-  isHovered: boolean;
-  hoveredPart?: string;
-  isDirty: boolean;
-  isSelected: boolean;
-  selectedPart?: string;
-  isVisible: boolean;
-
-  materialProps: MeshStandardMaterialProps;
-
-  neighbourConnections: NeigbourConnection[];
-
-  notifyOnRender: boolean;
-
-  conduitConnections: {
-    block: string;
-    thisPart?: string;
-  }[];
-
-  multiParentConnections: {
-    block: string;
-  }[];
-
+type BlockData = {
   childConnections: {
     childBlock: string;
     childPart?: string;
     parentPart?: string;
   }[];
 
+  conduitConnections: {
+    block: string;
+    thisPart?: string;
+  }[];
+
+  id: string;
+
+  hoveredPart?: string;
+
+  isDirty: boolean;
+  isHovered: boolean;
+  isSelected: boolean;
+  isVisible: boolean;
+
+  materialProps: MeshStandardMaterialProps;
+
+  multiParentConnections: {
+    block: string;
+  }[];
+
+  neighbourConnections: NeigbourConnection[];
+
+  notifyOnRender: boolean;
+
   parentConnection?: {
     block: string;
     part?: string;
   };
-} & BaseBlockType<S>;
 
-export type PartialMeshData = Partial<BlockType> & { id: string };
+  position: [number, number, number];
+  rotation: [number, number, number];
+  scale: [number, number, number];
+
+  selectedPart?: string;
+} & BlockConstantData;
+
+export type PartialMeshData = Partial<BlockData> & { id: string };
 
 export const mergeBlocks = (
-  block: BlockType,
-  partial?: PartialDeep<BlockType>,
+  block: BlockData,
+  partial?: PartialDeep<BlockData>,
   mergeStrategy: MergeStrategy = 'replace',
-): BlockType => {
+): BlockData => {
   if (!partial) {
     return block;
   }
@@ -71,14 +79,14 @@ export const mergeBlocks = (
     partDetails: {
       ...block.partDetails,
     },
-  } as BlockType;
+  } as BlockData;
 
   if (partial.partDetails) {
     Object.keys(partial.partDetails).forEach((key) => {
       const newPartInfo = {
         ...newBlock.partDetails[key],
         ...partial.partDetails?.[key],
-      } as ModelPartInfo;
+      } as BlockPartLookupData;
 
       newBlock.partDetails[key] = newPartInfo;
     });
@@ -87,4 +95,4 @@ export const mergeBlocks = (
   return newBlock;
 };
 
-export default BlockType;
+export default BlockData;

@@ -1,20 +1,20 @@
 import BlockFactory from './BlockFactory';
 import BlockCreator from './BlockCreator';
-import BlockType from '@/client/editor/types/BlockType';
-import BaseBlockType from '@/client/editor/models/BaseBlockType';
+import BlockData from '@/client/editor/data/BlockData';
+import BlockConstantData from '@/client/editor/data/BlockConstantData';
 import Cable from '@/client/editor/models/block/Cable';
 import mergeDeep from '@/client/editor/utils/mergeDeep';
 import { PartialDeep } from 'type-fest';
 import BlockDecoration, { BlockDecorationType } from '@/client/editor/models/BlockCategory';
 
 class CableFactory extends BlockFactory {
-  create(blockType: BaseBlockType, overrides: Partial<BlockType> = {}) {
+  create(blockType: BlockConstantData, overrides: Partial<BlockData> = {}) {
     const block = BlockCreator.create(this.sceneService.uuid(blockType), blockType, overrides);
 
     return block;
   }
 
-  createCategory(block: BlockType, overrides: Partial<BlockDecorationType> & { category: BlockDecoration }): Cable {
+  createCategory(block: BlockData, overrides: Partial<BlockDecorationType> & { category: BlockDecoration }): Cable {
     const cable: Cable = {
       end1: null,
       end2: null,

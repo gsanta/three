@@ -1,6 +1,6 @@
 import SceneStore from '../../components/scene/SceneStore';
 import BlockStore from '../../stores/block/BlockStore';
-import BlockType from '../../types/BlockType';
+import BlockData from '../../data/BlockData';
 import Updater from './Updater';
 import TransactionService from '../transaction/TransactionService';
 import UpdateWallCable from './UpdateWallCable';
@@ -17,7 +17,7 @@ class CableUpdater implements Updater {
 
   category = 'cable';
 
-  updateDirtyBlock(block: BlockType): boolean {
+  updateDirtyBlock(block: BlockData): boolean {
     if (block.parentConnection?.block) {
       const parent = this.blockStore.getBlock(block.parentConnection?.block);
 

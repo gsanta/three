@@ -2,16 +2,16 @@ import { useAppDispatch, useAppSelector } from '@/client/common/hooks/hooks';
 import CableMesh from '../../mesh/CableMesh';
 import WrappedMeshProps from '../../../models/block/WrappedMeshProps';
 import { ModelMesh } from '../../mesh/ModelMesh';
-import BlockType from '@/client/editor/types/BlockType';
+import BlockData from '@/client/editor/data/BlockData';
 import Cable from '@/client/editor/models/block/Cable';
 import MoveControl from './MoveControl';
 import { useEffect, useRef } from 'react';
 import useEditorContext from '@/app/editor/useEditorContext';
 import { resetNotifyOnRendered } from '@/client/editor/stores/block/blockActions';
 
-const isModelMesh = (block: BlockType): block is BlockType<'model'> => block.category !== 'cables';
+const isModelMesh = (block: BlockData): block is BlockData<'model'> => block.category !== 'cables';
 
-const isTubeMesh = (block: BlockType): block is BlockType<'tube'> => block.category === 'cables';
+const isTubeMesh = (block: BlockData): block is BlockData<'tube'> => block.category === 'cables';
 
 const MeshRenderer = (props: WrappedMeshProps) => {
   const { block, meshProps, materialProps = {} } = props;

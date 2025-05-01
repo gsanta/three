@@ -1,14 +1,14 @@
-import BlockType from '@/client/editor/types/BlockType';
-import BaseBlockType from '@/client/editor/models/BaseBlockType';
+import BlockData from '@/client/editor/data/BlockData';
+import BlockConstantData from '@/client/editor/data/BlockConstantData';
 import Num3 from '@/client/editor/models/Num3';
 import BlockAddMethod from '@/common/model_types/BlockAddMethod';
 
 type ExecuteAddParams = {
   addMethod: BlockAddMethod;
   executionPhase: 'afterRender' | 'render';
-  targetBlock: BlockType | undefined;
+  targetBlock: BlockData | undefined;
   targetPartIndex: string | undefined;
-  newBlockType: BaseBlockType;
+  newBlockType: BlockConstantData;
   clientX: number;
   clientY: number;
   position: Num3;

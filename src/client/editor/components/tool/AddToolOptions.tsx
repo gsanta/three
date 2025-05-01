@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '../../../common/hooks/hooks';
 import { Box, FormControl, FormLabel } from '@chakra-ui/react';
 import { setSelectedGeometry } from '../../stores/blockType/blockTypeSlice';
-import { BlockName } from '../../models/BaseBlockType';
+import { BlockName } from '../../data/BlockConstantData';
 import Dropdown from '@/client/common/components/lib/Dropdown/Dropdown';
 import DropdownButton from '@/client/common/components/lib/Dropdown/DropdownButton';
 import DropdownItem from '@/client/common/components/lib/Dropdown/DropdownItem';

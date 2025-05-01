@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import BaseBlockType from '../../models/BaseBlockType';
+import BlockConstantData from '../../data/BlockConstantData';
 import Axis from '@/client/editor/models/Axis';
 import { RGBColor } from '@/client/editor/utils/colorUtils';
 import BlockSettings from '@/client/editor/models/BlockSettings';
@@ -11,7 +11,7 @@ export type TransformType = 'move' | 'scale';
 
 export type BlockTypeState = {
   selectedBlockName: string;
-  blocks: BaseBlockType[];
+  blocks: BlockConstantData[];
   settings: Partial<Record<string, BlockSettings>>;
   selectedSettings: Record<string, BlockSelectedSettings>;
   selectedTransformType: TransformType;
@@ -48,7 +48,7 @@ export const blockTypeSlice = createSlice({
       state.color = action.payload;
     },
 
-    setTemplates(state, action: PayloadAction<BaseBlockType[]>) {
+    setTemplates(state, action: PayloadAction<BlockConstantData[]>) {
       state.blocks = action.payload.map((block) => ({
         ...block,
         geometry: block.geometry || 'model',

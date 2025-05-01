@@ -1,7 +1,7 @@
 import { useAppSelector } from '@/client/common/hooks/hooks';
-import BaseBlockType from '../../models/BaseBlockType';
+import BlockConstantData from '../../data/BlockConstantData';
 
-const useTemplate = (blockType?: string): BaseBlockType | undefined => {
+const useTemplate = (blockType?: string): BlockConstantData | undefined => {
   const { blocks } = useAppSelector((state) => state.blockType);
 
   const block = blocks.find((b) => b.type === blockType);

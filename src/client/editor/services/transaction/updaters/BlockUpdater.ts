@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { BlockDecorationType } from '@/client/editor/models/BlockCategory';
 import Edit from '../Edit';
-import BlockType from '@/client/editor/types/BlockType';
+import BlockData from '@/client/editor/data/BlockData';
 
 abstract class BlockUpdater {
   readonly type: string;
@@ -10,7 +10,7 @@ abstract class BlockUpdater {
     this.type = type;
   }
 
-  onUpdateDecorators(_edit: Edit, _block: BlockType, _newState: BlockDecorationType): void {
+  onUpdateDecorators(_edit: Edit, _block: BlockData, _newState: BlockDecorationType): void {
     throw new Error('Unimplemented method');
   }
 }

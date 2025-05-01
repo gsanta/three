@@ -4,7 +4,7 @@ import SceneStore from '../../components/scene/SceneStore';
 import FactoryService from '../../services/factory/FactoryService';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
-import BlockType from '../../types/BlockType';
+import BlockData from '../../data/BlockData';
 import VectorUtils from '../../utils/vectorUtils';
 import MeshUtils from '../../utils/MeshUtils';
 import GetNextWireIntersection from './GetNextWireIntersection';
@@ -52,7 +52,7 @@ class DrawHouseWiring {
     ]);
   }
 
-  private getSelectedIntersection(rootBlock: BlockType, clientX: number, clientY: number, cableId?: string) {
+  private getSelectedIntersection(rootBlock: BlockData, clientX: number, clientY: number, cableId?: string) {
     if (rootBlock.category === 'building-bases') {
       return this.getNextWireIntersection.execute(rootBlock, clientX, clientY, cableId);
     }
@@ -60,7 +60,7 @@ class DrawHouseWiring {
     return undefined;
   }
 
-  private getNewWirePoint(rootBlock: BlockType, intersection: BlockIntersection) {
+  private getNewWirePoint(rootBlock: BlockData, intersection: BlockIntersection) {
     const rootMesh = this.sceneStore.getObj3d(rootBlock.id);
     const baseMesh = MeshUtils.findByName(rootMesh, 'root');
     const basePos = new Vector3();

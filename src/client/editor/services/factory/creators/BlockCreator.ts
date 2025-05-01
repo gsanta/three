@@ -1,11 +1,12 @@
-import BaseBlockType, { ModelPartInfo } from '@/client/editor/models/BaseBlockType';
+import BlockConstantData from '@/client/editor/data/BlockConstantData';
 import { toRadian } from '@/client/editor/utils/mathUtils';
 import VectorUtils, { addVector } from '@/client/editor/utils/vectorUtils';
 import Num3 from '@/client/editor/models/Num3';
-import BlockType from '@/client/editor/types/BlockType';
+import BlockData from '@/client/editor/data/BlockData';
+import BlockPartLookupData from '@/client/editor/data/BlockPartLookupData';
 
 class BlockCreator {
-  static create(id: string, block: BaseBlockType, settings: Partial<BlockType>): BlockType {
+  static create(id: string, block: BlockConstantData, settings: Partial<BlockData>): BlockData {
     // const { position: pos = [0, 0, 0], ...rest } = settings;
     const pos = settings.position || [0, 0, 0];
 
@@ -19,10 +20,10 @@ class BlockCreator {
     const y = pos[1]; // + positionData[1] + scale[1] / 2;
     const rotation = addVector(selectedRotation, rotationData).map((degree) => toRadian(degree));
 
-    const partDetails: Record<string, ModelPartInfo | undefined> = {};
+    const partDetails: Record<string, BlockPartLookupData | undefined> = {};
 
     Object.entries(block.partDetails).forEach(([key, val]) => {
-      const info = { ...val, isSelected: val?.isSelected || false } as ModelPartInfo;
+      const info = { ...val, isSelected: val?.isSelected || false } as BlockPartLookupData;
 
       if (info.type === 'placeholder') {
         info.hide = true;

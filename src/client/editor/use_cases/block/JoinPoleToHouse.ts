@@ -1,11 +1,11 @@
-import BlockType from '../../types/BlockType';
+import BlockData from '../../data/BlockData';
 import BlockModel from '../../models/BlockModel';
 import Pole from '../../models/Pole';
 
 class JoinPoleToHouse {
   constructor() {}
 
-  join(pole: BlockType, house: BlockType) {
+  join(pole: BlockData, house: BlockData) {
     const poleModel = new Pole(pole);
 
     const houseModel = new BlockModel(house);

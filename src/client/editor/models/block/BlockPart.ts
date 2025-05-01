@@ -1,13 +1,15 @@
-import BlockType from '../../types/BlockType';
+import BlockData from '../../data/BlockData';
 import MathUtils, { toDegree } from '../../utils/mathUtils';
-import BaseBlockType, { ModelPart, BlockPartRole } from '../BaseBlockType';
+import BlockConstantData from '../../data/BlockConstantData';
 import Num3 from '../Num3';
 import Block from './Block';
+import BlockPartGeometryData from '../../data/BlockPartGeometryData';
+import { BlockPartRole } from '../../data/BlockPartLookupData';
 
-type PartWithRotation = [ModelPart, Num3];
+type PartWithRotation = [BlockPartGeometryData, Num3];
 
 class BlockPart {
-  constructor(block: BlockType, partOrPartName: string | ModelPart) {
+  constructor(block: BlockData, partOrPartName: string | BlockPartGeometryData) {
     const part =
       typeof partOrPartName === 'string'
         ? block.parts.find((currentPart) => currentPart.name === partOrPartName)
@@ -22,7 +24,7 @@ class BlockPart {
   }
 
   findBestMatchingPartToConnectTo(
-    newBlockType: BaseBlockType,
+    newBlockType: BlockConstantData,
     matchingRole: BlockPartRole,
   ): PartWithRotation | undefined {
     const sourcePartCandidates = newBlockType?.parts?.filter((part) =>
@@ -35,7 +37,7 @@ class BlockPart {
     const thisPartRotation = MathUtils.normalizeAngle(thisPartOrientation + thisBlockRotation);
     const oppositeRotation = MathUtils.normalizeAngle(thisPartRotation + 180);
 
-    const result = sourcePartCandidates.reduce<{ part: ModelPart; rotation: number } | undefined>(
+    const result = sourcePartCandidates.reduce<{ part: BlockPartGeometryData; rotation: number } | undefined>(
       (rotatedPart, nextPart) => {
         let sourceRotation = 0;
 
@@ -63,13 +65,13 @@ class BlockPart {
     return new Block(this.block);
   }
 
-  getPart(): ModelPart {
+  getPart(): BlockPartGeometryData {
     return this.part;
   }
 
-  private block: BlockType;
+  private block: BlockData;
 
-  private part: ModelPart;
+  private part: BlockPartGeometryData;
 }
 
 export default BlockPart;

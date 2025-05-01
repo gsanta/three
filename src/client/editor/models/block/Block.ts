@@ -1,8 +1,8 @@
-import BlockType from '../../types/BlockType';
+import BlockData from '../../data/BlockData';
 import { BlockCategoryName } from './BlockCategory';
 
 class Block {
-  constructor(block: BlockType) {
+  constructor(block: BlockData) {
     this.block = block;
   }
 
@@ -16,7 +16,7 @@ class Block {
     return this.block;
   }
 
-  protected block: BlockType;
+  protected block: BlockData;
 }
 
 export default Block;

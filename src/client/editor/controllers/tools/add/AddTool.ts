@@ -5,8 +5,8 @@ import HoverTool from '../HoverTool';
 import SceneService from '../../../components/scene/service/SceneService';
 import AddService from './AddService';
 import { store } from '@/client/common/utils/store';
-import BlockType from '@/client/editor/types/BlockType';
-import BaseBlockType from '@/client/editor/models/BaseBlockType';
+import BlockData from '@/client/editor/data/BlockData';
+import BlockConstantData from '@/client/editor/data/BlockConstantData';
 import Num3 from '@/client/editor/models/Num3';
 import ExecuteAddParams from './ExecuteAddParams';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
@@ -152,11 +152,11 @@ class AddTool extends HoverTool {
 
   private clientY = 0;
 
-  private targetBlock?: BlockType;
+  private targetBlock?: BlockData;
 
   private targetPartIndex?: string;
 
-  private newBlockType?: BaseBlockType;
+  private newBlockType?: BlockConstantData;
 
   private position?: Num3;
 

@@ -1,6 +1,6 @@
 import BlockDecoration, { BlockCategories } from '@/client/editor/models/BlockCategory';
 import { PartialDeep } from 'type-fest';
-import BlockType, { mergeBlocks } from '@/client/editor/types/BlockType';
+import BlockData, { mergeBlocks } from '@/client/editor/data/BlockData';
 import BlockStore from '../../stores/block/BlockStore';
 import { store, Store } from '@/client/common/utils/store';
 import mergeDeep, { MergeStrategy } from '../../utils/mergeDeep';
@@ -38,7 +38,7 @@ class Edit {
     this.commitOrFlush(history === false ? false : true);
   }
 
-  create(block: BlockType, options?: EditOptions): this {
+  create(block: BlockData, options?: EditOptions): this {
     const mergedOptions = this.getMergedOptions(options);
     this.updates.push({ type: 'update', slice: mergedOptions.slice, block });
 
@@ -55,7 +55,7 @@ class Edit {
 
   update<T extends BlockDecoration>(
     id: string,
-    block: Partial<BlockType>,
+    block: Partial<BlockData>,
     decorationType: BlockDecoration,
     decoration: PartialDeep<BlockCategories[T]>,
   ) {
@@ -65,7 +65,7 @@ class Edit {
     return this;
   }
 
-  updateBlock(id: string, update: PartialDeep<BlockType>, options?: EditOptions): this {
+  updateBlock(id: string, update: PartialDeep<BlockData>, options?: EditOptions): this {
     if (this.isRemoved(id)) {
       return this;
     }
@@ -131,7 +131,7 @@ class Edit {
     return this;
   }
 
-  select(block: BlockType[], options?: EditOptions): this {
+  select(block: BlockData[], options?: EditOptions): this {
     const mergedOptions = this.getMergedOptions(options);
 
     this.updates.push({ select: block, slice: mergedOptions.slice });
@@ -148,11 +148,11 @@ class Edit {
   }
 
   hasLastBlock() {
-    let lastUpdateWithBlock: { block: BlockType } | undefined = undefined;
+    let lastUpdateWithBlock: { block: BlockData } | undefined = undefined;
 
     for (let i = this.updates.length - 1; i >= 0; i--) {
       if ('block' in this.updates[i]) {
-        lastUpdateWithBlock = this.updates[i] as { block: BlockType };
+        lastUpdateWithBlock = this.updates[i] as { block: BlockData };
         break;
       }
     }
@@ -161,11 +161,11 @@ class Edit {
   }
 
   getLastBlock() {
-    let lastUpdateWithBlock: { block: BlockType } | undefined = undefined;
+    let lastUpdateWithBlock: { block: BlockData } | undefined = undefined;
 
     for (let i = this.updates.length - 1; i >= 0; i--) {
       if ('block' in this.updates[i]) {
-        lastUpdateWithBlock = this.updates[i] as { block: BlockType };
+        lastUpdateWithBlock = this.updates[i] as { block: BlockData };
         break;
       }
     }
@@ -179,7 +179,7 @@ class Edit {
     return block;
   }
 
-  private mergeBlocks(orig: BlockType, update: PartialDeep<BlockType>, options: EditOptions = getDefaultEditOptions()) {
+  private mergeBlocks(orig: BlockData, update: PartialDeep<BlockData>, options: EditOptions = getDefaultEditOptions()) {
     const { arrayMergeStrategy } = options;
 
     return mergeBlocks(orig, update, arrayMergeStrategy);

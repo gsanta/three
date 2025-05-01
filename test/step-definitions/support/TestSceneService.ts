@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import IntersectionOptions from '@/client/editor/components/scene/service/IntersectionOptions';
 import SceneService from '@/client/editor/components/scene/service/SceneService';
-import BaseBlockType from '@/client/editor/models/BaseBlockType';
+import BlockConstantData from '@/client/editor/data/BlockConstantData';
 import { BlockIntersection } from '@/client/editor/use_cases/IntersectMesh';
 import { Object3D, Ray, Vector3 } from 'three';
 
@@ -26,7 +26,7 @@ class TestSceneService implements SceneService {
     throw new Error('Method not implemented.');
   }
 
-  uuid(blockType: BaseBlockType) {
+  uuid(blockType: BlockConstantData) {
     if (this.nextUuids[blockType.type]?.length) {
       return this.nextUuids[blockType.type].shift() as string;
     }

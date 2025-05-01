@@ -3,7 +3,7 @@ import ToolName from './ToolName';
 import { IconName } from '../../common/components/lib/Icon';
 import { Vector3 } from 'three';
 import Num3 from '@/client/editor/models/Num3';
-import BlockType from '@/client/editor/types/BlockType';
+import BlockData from '@/client/editor/data/BlockData';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import TransactionService from '../services/transaction/TransactionService';
 
@@ -26,7 +26,7 @@ export interface ToolInfo {
   gridIndex?: number;
   gridX?: number;
   gridY?: number;
-  draggedMesh?: BlockType;
+  draggedMesh?: BlockData;
   partIndex?: string;
 }
 

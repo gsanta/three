@@ -1,15 +1,15 @@
 import { BufferGeometry, NormalBufferAttributes } from 'three';
-import { ModelPart } from '../../models/BaseBlockType';
 import { NodesOrObject3DType } from './useMaterial';
 import { useMemo } from 'react';
-import BlockType from '../../types/BlockType';
+import BlockData from '../../data/BlockData';
 import camelCase from 'camelcase';
+import BlockPartGeometryData from '../../data/BlockPartGeometryData';
 
 export type NodesType = {
   [name: string]: BufferGeometry<NormalBufferAttributes> | NodesType;
 };
 
-const useGeometry = (nodes: NodesType, part: ModelPart, block: BlockType) => {
+const useGeometry = (nodes: NodesType, part: BlockPartGeometryData, block: BlockData) => {
   const geometryPath = useMemo(() => {
     const camelized = camelCase(block.type);
 

@@ -3,8 +3,8 @@ import Edit from '../../services/transaction/Edit';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockEraser from './erasers/BlockEraser';
 import CableEraser from './erasers/CableEraser';
-import { NeigbourConnection } from '../../types/BlockType';
-import { ModelPartInfo } from '../../models/BaseBlockType';
+import { NeigbourConnection } from '../../data/BlockData';
+import BlockPartLookupData from '../../data/BlockPartLookupData';
 
 class EraseBlock {
   constructor(store: BlockStore, update: TransactionService) {
@@ -69,7 +69,7 @@ class EraseBlock {
             [connection.thisPart]: {
               ...block.partDetails[connection.thisPart],
               isConnected: false,
-            } as ModelPartInfo,
+            } as BlockPartLookupData,
           },
         });
       }

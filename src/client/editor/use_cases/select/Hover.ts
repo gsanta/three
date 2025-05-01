@@ -1,6 +1,6 @@
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
-import { ModelPartInfo } from '../../models/BaseBlockType';
+import BlockPartLookupData from '../../data/BlockPartLookupData';
 
 class Hover {
   constructor(blockStore: BlockStore, updateService: TransactionService) {
@@ -43,7 +43,7 @@ class Hover {
   private changePlaceholderVisibility(blockId: string, hide: boolean) {
     const block = this.blockStore.getBlock(blockId);
 
-    const change: Record<string, Partial<ModelPartInfo>> = {};
+    const change: Record<string, Partial<BlockPartLookupData>> = {};
 
     Object.keys(block.partDetails)
       .filter((key) => block.partDetails[key]?.type === 'placeholder')

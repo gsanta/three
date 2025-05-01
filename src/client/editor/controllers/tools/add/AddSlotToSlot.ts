@@ -3,13 +3,15 @@ import FactoryService from '@/client/editor/services/factory/FactoryService';
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { Vector3 } from 'three';
 import AddBlock from './AddBlock';
-import BlockType from '@/client/editor/types/BlockType';
+import BlockData from '@/client/editor/data/BlockData';
 import BlockAddMethod from '@/common/model_types/BlockAddMethod';
-import BaseBlockType, { ModelPart, BlockPartRole } from '@/client/editor/models/BaseBlockType';
+import BlockConstantData from '@/client/editor/data/BlockConstantData';
 import Num3 from '@/client/editor/models/Num3';
 import { toRadian } from '@/client/editor/utils/mathUtils';
 import BlockPart from '@/client/editor/models/block/BlockPart';
 import Vector from '@/client/editor/utils/Vector';
+import BlockPartGeometryData from '@/client/editor/data/BlockPartGeometryData';
+import { BlockPartRole } from '@/client/editor/data/BlockPartLookupData';
 
 class AddSlotToSlot extends AddBlock {
   constructor(factoryService: FactoryService, sceneStore: SceneStore) {
@@ -93,7 +95,7 @@ class AddSlotToSlot extends AddBlock {
     return edit;
   }
 
-  private calculatePosition(existingPart: BlockPart, newPart: ModelPart, newBlockRotation: number) {
+  private calculatePosition(existingPart: BlockPart, newPart: BlockPartGeometryData, newBlockRotation: number) {
     let existingPartPos = new Vector();
     let newPartPos = new Vector();
 
@@ -119,10 +121,10 @@ class AddSlotToSlot extends AddBlock {
   private calculateNewBlockRotationAndPartToConnectTo(
     connectionType: BlockAddMethod['connectionType'],
     sourcePartRole: BlockPartRole,
-    targetBlock: BlockType,
-    targetPart: ModelPart,
-    newBlockType: BaseBlockType,
-  ): [ModelPart, Num3] {
+    targetBlock: BlockData,
+    targetPart: BlockPartGeometryData,
+    newBlockType: BlockConstantData,
+  ): [BlockPartGeometryData, Num3] {
     const sourceParts = newBlockType?.parts?.filter((part) =>
       newBlockType.partDetails[part.name]?.roles?.includes(sourcePartRole),
     );
@@ -145,9 +147,9 @@ class AddSlotToSlot extends AddBlock {
 
   private calculateSourceConnection(
     addMethod: BlockAddMethod,
-    targetBlock: BlockType,
-    targetPart: ModelPart,
-  ): Partial<BlockType> {
+    targetBlock: BlockData,
+    targetPart: BlockPartGeometryData,
+  ): Partial<BlockData> {
     switch (addMethod.connectionType) {
       case 'parent-child':
         return {
@@ -162,7 +164,7 @@ class AddSlotToSlot extends AddBlock {
     }
   }
 
-  private calculateTargetConnection(addMethod: BlockAddMethod, newBlock: BlockType): Partial<BlockType> {
+  private calculateTargetConnection(addMethod: BlockAddMethod, newBlock: BlockData): Partial<BlockData> {
     switch (addMethod.connectionType) {
       case 'parent-child':
         return {

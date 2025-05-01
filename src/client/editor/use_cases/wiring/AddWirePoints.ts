@@ -1,7 +1,7 @@
 import FactoryService from '../../services/factory/FactoryService';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
-import BlockType from '../../types/BlockType';
+import BlockData from '../../data/BlockData';
 import { CablePoint } from '../../models/block/Cable';
 
 class AddWirePoints {
@@ -11,14 +11,14 @@ class AddWirePoints {
     this.updateService = updateService;
   }
 
-  add(buildingBlock: BlockType, points: CablePoint[]) {
+  add(buildingBlock: BlockData, points: CablePoint[]) {
     const edit = this.updateService.createTransaction();
 
     const cableId = buildingBlock.conduitConnections.find(
       ({ block }) => this.blockStore.getBlock(block).category === 'cables',
     )?.block;
 
-    let block: BlockType | null = null;
+    let block: BlockData | null = null;
 
     if (cableId) {
       block = this.blockStore.getBlock(cableId);

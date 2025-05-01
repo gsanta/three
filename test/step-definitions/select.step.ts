@@ -6,7 +6,7 @@ import assert from 'assert';
 import { Vector3 } from 'three';
 import ExtendedWorld from './ExtendedWorld';
 import findClosestBlock from './helpers/findClosestBlock';
-import BlockType from '@/client/editor/types/BlockType';
+import BlockData from '@/client/editor/data/BlockData';
 import TestSceneService from './support/TestSceneService';
 
 function selectBlockAtPosition(this: ExtendedWorld, x: number, y: number, z: number, partIndex?: string) {
@@ -14,7 +14,7 @@ function selectBlockAtPosition(this: ExtendedWorld, x: number, y: number, z: num
 
   const blockWithDistance = findClosestBlock(this.getEnv().editorContext.blockStore.getBlocksAsArray(), [x, y, z]);
 
-  let block: BlockType | undefined = undefined;
+  let block: BlockData | undefined = undefined;
 
   if (blockWithDistance && blockWithDistance[1] < 1) {
     block = blockWithDistance[0];

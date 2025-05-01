@@ -3,10 +3,10 @@ import SceneStore from '../components/scene/SceneStore';
 import BlockStore from '../stores/block/BlockStore';
 import BlockUtils from '../utils/BlockUtils';
 import MeshUtils from '../utils/MeshUtils';
-import BlockType from '../types/BlockType';
-import { ModelPartInfo } from '../models/BaseBlockType';
+import BlockData from '../data/BlockData';
 import IntersectionOptions from '../components/scene/service/IntersectionOptions';
 import Num3 from '../models/Num3';
+import BlockPartLookupData from '../data/BlockPartLookupData';
 
 export type MeshIntersection = {
   distance: number;
@@ -20,9 +20,9 @@ export type MeshIntersection = {
 
 export type BlockIntersection = {
   meshes: MeshIntersection[];
-  block: BlockType;
+  block: BlockData;
   partIndex?: string;
-  partInfo?: ModelPartInfo;
+  partInfo?: BlockPartLookupData;
 };
 
 class IntersectMesh {

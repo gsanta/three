@@ -1,5 +1,5 @@
 import Block from './block/Block';
-import BlockType from '../types/BlockType';
+import BlockData from '../data/BlockData';
 
 class Pole extends Block {
   static PRIMARY_WIRE_1_CONNECTION_A = 'Pin1';
@@ -26,7 +26,7 @@ class Pole extends Block {
     Pole.PRIMARY_WIRE_3_CONNECTION_B,
   ];
 
-  constructor(block: BlockType) {
+  constructor(block: BlockData) {
     super(block);
     this.checkCategory('poles');
 

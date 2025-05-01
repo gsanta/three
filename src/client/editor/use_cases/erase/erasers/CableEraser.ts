@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import BlockType from '@/client/editor/types/BlockType';
+import BlockData from '@/client/editor/data/BlockData';
 import Edit from '../../../services/transaction/Edit';
 import BlockStore from '../../../stores/block/BlockStore';
 import BlockEraser from './BlockEraser';
@@ -11,7 +11,7 @@ class CableEraser extends BlockEraser {
     this.store = store;
   }
 
-  erase(edit: Edit, block: BlockType) {
+  erase(edit: Edit, block: BlockData) {
     const cable = this.store.getDecoration('cables', block.id);
 
     const end1 = cable.end1;
@@ -26,7 +26,7 @@ class CableEraser extends BlockEraser {
     }
   }
 
-  associationErased(edit: Edit, cableBlock: BlockType, association: BlockType) {
+  associationErased(edit: Edit, cableBlock: BlockData, association: BlockData) {
     const cable = this.store.getDecoration('cables', cableBlock.id);
     const index = cable.points.findIndex((point) => point.blockId === association.id);
 
@@ -59,7 +59,7 @@ class CableEraser extends BlockEraser {
     );
   }
 
-  eraseDependent(edit: Edit, poleBlock: BlockType, dependent: BlockType) {
+  eraseDependent(edit: Edit, poleBlock: BlockData, dependent: BlockData) {
     const pole = this.store.getDecoration('devices', poleBlock.id);
 
     const cable = this.store.getDecoration('cables', dependent.id);

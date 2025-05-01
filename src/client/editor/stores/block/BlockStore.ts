@@ -1,6 +1,6 @@
 import { Store } from '@/client/common/utils/store';
 import BlockDecoration, { BlockCategories } from '@/client/editor/models/BlockCategory';
-import BlockType from '../../types/BlockType';
+import BlockData from '../../data/BlockData';
 
 class BlockStore {
   constructor(store: Store) {
@@ -82,7 +82,7 @@ class BlockStore {
     return this.getState().rootBlocksIds;
   }
 
-  getDescendants(blockId: string, categoryFilter?: string): BlockType[] {
+  getDescendants(blockId: string, categoryFilter?: string): BlockData[] {
     const block = this.getBlock(blockId);
 
     if (block.childConnections.length === 0) {
@@ -93,7 +93,7 @@ class BlockStore {
       }
     }
 
-    const descendants: BlockType[] = [];
+    const descendants: BlockData[] = [];
 
     for (const child of block.childConnections) {
       descendants.push(...this.getDescendants(child.childBlock, categoryFilter));
@@ -102,7 +102,7 @@ class BlockStore {
     return descendants;
   }
 
-  getRoot(blockId: string, expectedCategory?: string): BlockType {
+  getRoot(blockId: string, expectedCategory?: string): BlockData {
     const block = this.getBlock(blockId);
 
     if (!block.parentConnection) {
@@ -126,10 +126,10 @@ class BlockStore {
     return keys;
   }
 
-  filterDescendants(blockId: string, filter: { category: string }): BlockType[] {
+  filterDescendants(blockId: string, filter: { category: string }): BlockData[] {
     const block = this.getBlock(blockId);
 
-    const result: BlockType[] = [];
+    const result: BlockData[] = [];
 
     this.iterateDescendents(block, true, (descendant) => {
       if (descendant.category === filter.category) {
@@ -142,8 +142,8 @@ class BlockStore {
     return result;
   }
 
-  isDescendentSelected(block: BlockType, checkSelf: boolean) {
-    const terminate = this.iterateDescendents(block, checkSelf, (descendant: BlockType) => {
+  isDescendentSelected(block: BlockData, checkSelf: boolean) {
+    const terminate = this.iterateDescendents(block, checkSelf, (descendant: BlockData) => {
       return descendant.isSelected;
     });
 
@@ -151,9 +151,9 @@ class BlockStore {
   }
 
   iterateDescendents(
-    block: BlockType,
+    block: BlockData,
     iterateSelf: boolean,
-    doWork: (descendant: BlockType) => boolean | undefined,
+    doWork: (descendant: BlockData) => boolean | undefined,
   ): boolean | undefined {
     if (iterateSelf) {
       const terminate = doWork(block);

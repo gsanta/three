@@ -128,7 +128,6 @@ const buildingTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id
       },
       Platform1Floor: {
         roles: ['floor-slot'],
-        allowMovement: ['y'],
         name: 'floor',
         type: 'placeholder',
       },

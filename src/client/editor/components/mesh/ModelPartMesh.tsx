@@ -1,20 +1,20 @@
 import { MeshStandardMaterialProps, ThreeEvent } from '@react-three/fiber';
 import { Material } from 'three';
-import { ModelPart } from '../../models/BaseBlockType';
 import useGeometry, { NodesType } from '../hooks/useGeometry';
 import useMaterial from '../hooks/useMaterial';
-import BlockType from '../../types/BlockType';
+import BlockData from '../../data/BlockData';
 import { Select } from '@react-three/postprocessing';
+import BlockPartGeometryData from '../../data/BlockPartGeometryData';
 
 export type ModelPartProps = {
-  block: BlockType;
+  block: BlockData;
   materials: {
     [name: string]: Material;
   };
   materialProps?: MeshStandardMaterialProps;
   nodes: NodesType;
   onPointerEnter?: (event: ThreeEvent<PointerEvent>, partIndex?: string) => void;
-  part: ModelPart;
+  part: BlockPartGeometryData;
 };
 
 const ModelPartMesh = ({ block, materials, materialProps, nodes, onPointerEnter, part }: ModelPartProps) => {

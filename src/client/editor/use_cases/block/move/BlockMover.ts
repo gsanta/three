@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import BlockType from '@/client/editor/types/BlockType';
+import BlockData from '@/client/editor/data/BlockData';
 import Edit from '../../../services/transaction/Edit';
 
 abstract class BlockMover {
@@ -9,7 +9,7 @@ abstract class BlockMover {
     this.category = category;
   }
 
-  move(_edit: Edit, _block: BlockType) {
+  move(_edit: Edit, _block: BlockData) {
     throw new Error('Unimplemented method');
   }
 }

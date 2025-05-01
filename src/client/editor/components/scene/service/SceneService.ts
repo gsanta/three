@@ -1,10 +1,10 @@
 import { Object3D, Ray, Vector3 } from 'three';
 import { BlockIntersection } from '../../../use_cases/IntersectMesh';
 import IntersectionOptions from './IntersectionOptions';
-import BaseBlockType from '@/client/editor/models/BaseBlockType';
+import BlockConstantData from '@/client/editor/data/BlockConstantData';
 
 interface SceneService {
-  uuid(blockType: BaseBlockType): string;
+  uuid(blockType: BlockConstantData): string;
 
   intersection(
     blocks: string[],

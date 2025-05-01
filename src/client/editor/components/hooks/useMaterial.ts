@@ -1,8 +1,8 @@
 import { BufferGeometry, Material, NormalBufferAttributes } from 'three';
-import { ModelPart } from '../../models/BaseBlockType';
 import { NodesType } from './useGeometry';
 import { useMemo, useRef } from 'react';
 import { MeshStandardMaterialProps } from '@react-three/fiber';
+import BlockPartGeometryData from '../../data/BlockPartGeometryData';
 
 export type NodesOrObject3DType = NodesType | BufferGeometry<NormalBufferAttributes>;
 
@@ -13,10 +13,10 @@ type UseMaterialProps = {
   };
   materialProps?: MeshStandardMaterialProps;
   nodes: NodesType;
-  part: ModelPart;
+  part: BlockPartGeometryData;
 };
 
-const getMaterial = (materials: UseMaterialProps['materials'], nodes: NodesType, part: ModelPart) => {
+const getMaterial = (materials: UseMaterialProps['materials'], nodes: NodesType, part: BlockPartGeometryData) => {
   let material: Material;
 
   const materialPaths = part.materialPath?.split('.') || [];
