@@ -5,7 +5,7 @@ import HoverTool from '../HoverTool';
 import SceneService from '../../../components/scene/service/SceneService';
 import AddService from './AddService';
 import { store } from '@/client/common/utils/store';
-import BlockType from '@/client/editor/models/BlockType';
+import BlockType from '@/client/editor/types/BlockType';
 import BaseBlockType from '@/client/editor/models/BaseBlockType';
 import Num3 from '@/client/editor/models/Num3';
 import ExecuteAddParams from './ExecuteAddParams';

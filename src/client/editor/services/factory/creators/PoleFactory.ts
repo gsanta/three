@@ -1,6 +1,6 @@
 import Device, { createPin } from '@/client/editor/models/block/Device';
 import BlockFactory from './BlockFactory';
-import BlockType from '@/client/editor/models/BlockType';
+import BlockType from '@/client/editor/types/BlockType';
 
 class PoleFactory extends BlockFactory {
   createCategory(block: BlockType, overrides: Partial<BlockType> = {}): Device {

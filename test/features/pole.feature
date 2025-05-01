@@ -18,13 +18,13 @@ Feature: Pole
       | pole-1-2 | 5,0,0    |
     And I wait block 'cable-1-1' to exist
     Then I have cables with properties
-      | CABLE     | PARENT   | POSITION          |
-      | cable-1-1 | pole-1-1 | 0.087,7.154,0.011 |
-      | cable-1-1 | pole-1-2 | 4.087,7.154,0.011 |
-      | cable-1-2 | pole-1-1 | 0.622,7.154,0.011 |
-      | cable-1-2 | pole-1-2 | 4.622,7.154,0.011 |
-      | cable-1-3 | pole-1-1 | 1.865,7.154,0.011 |
-      | cable-1-3 | pole-1-2 | 5.865,7.154,0.011 |
+      | CABLE     | PARENT   | POSITION      |
+      | cable-1-1 | pole-1-1 | pole-1-1:Pin1 |
+      | cable-1-1 | pole-1-2 | pole-1-2:Pin1 |
+      | cable-1-2 | pole-1-1 | pole-1-1:Pin2 |
+      | cable-1-2 | pole-1-2 | pole-1-2:Pin2 |
+      | cable-1-3 | pole-1-1 | pole-1-1:Pin3 |
+      | cable-1-3 | pole-1-2 | pole-1-2:Pin3 |
 
   Scenario: Adding a pole auto-rotates it to align with the neigbours
     Given I have a scene with:
@@ -114,14 +114,6 @@ Feature: Pole
       | pole-1 | pole-1-1 | 0,0.1,5  |
       | pole-1 | pole-1-2 | 0,0.1,10 |
       | pole-1 | pole-1-3 | 0,0.1,15 |
-    Then I have cables with properties
-      | CABLE     | PARENT   | POSITION            |
-      | cable-1-1 | pole-1-2 | -0.913,7.254,10.011 |
-      | cable-1-2 | pole-1-2 | -0.378,7.254,10.011 |
-      | cable-1-3 | pole-1-2 | 0.865,7.254,10.011  |
-      | cable-1-4 | pole-1-2 | -0.913,7.254,10.011 |
-      | cable-1-5 | pole-1-2 | -0.378,7.254,10.011 |
-      | cable-1-6 | pole-1-2 | 0.865,7.254,10.011  |
     When I select tool 'select'
     And I select a block at position 0,0.1,10
     And I drag pointer with delta '0,0,3'
@@ -129,13 +121,13 @@ Feature: Pole
     And I wait for dirty blocks to update
     Then I have block 'pole-1-2' at estimated position ' 0,0.1,13'
     Then I have cables with properties
-      | CABLE     | PARENT   | POSITION            |
-      | cable-1-1 | pole-1-2 | -0.913,7.254,13.011 |
-      | cable-1-2 | pole-1-2 | -0.378,7.254,13.011 |
-      | cable-1-3 | pole-1-2 | 0.865,7.254,13.011  |
-      | cable-1-4 | pole-1-2 | -0.913,7.254,13.011 |
-      | cable-1-5 | pole-1-2 | -0.378,7.254,13.011 |
-      | cable-1-6 | pole-1-2 | 0.865,7.254,13.011  |
+      | CABLE     | PARENT   | POSITION      |
+      | cable-1-1 | pole-1-2 | pole-1-2:Pin1 |
+      | cable-1-2 | pole-1-2 | pole-1-2:Pin2 |
+      | cable-1-3 | pole-1-2 | pole-1-2:Pin3 |
+      | cable-1-4 | pole-1-2 | pole-1-2:Pin1 |
+      | cable-1-5 | pole-1-2 | pole-1-2:Pin2 |
+      | cable-1-6 | pole-1-2 | pole-1-2:Pin3 |
   
   Scenario: Adding a transformer to a pole
     Given I have a scene with:
@@ -150,8 +142,8 @@ Feature: Pole
     And I press pointer
     And I wait mesh 'transformer-1' to exist
     And my current scene is
-      | BLOCK         | TYPE                                | POSITION            |
-      | pole-1-1      | pole-1                              | 1,0,0                 |
+      | BLOCK         | TYPE                                | POSITION                          |
+      | pole-1-1      | pole-1                              | 1,0,0                             |
       | transformer-1 | distribution-transformer-single-1   | pole-1-1:Pin4->transformer-1:Join |
 
 

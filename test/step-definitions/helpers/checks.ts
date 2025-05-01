@@ -79,8 +79,7 @@ export function checkPosition(this: ExtendedWorld, position: string): Num3 {
     return 'toArray' in pos ? pos.toArray() : pos;
   } else if (position.indexOf(',') !== -1) {
     return position.split(',').map((coord) => Number(coord.trim())) as Num3;
-  } else if (position.indexOf('->') !== -1) {
-    // pole-1-1:Pin4->transformer-1:Join
+  } /* pole-1-1:Pin4->transformer-1:Join */ else if (position.indexOf('->') !== -1) {
     const [source, target] = position.split('->'); // [pole-1-1:Pin4, transformer-1:Join]
     const [sourceBlockId, sourcePart] = source.split(':');
     const [targetBlockId] = target.split(':');
@@ -99,6 +98,18 @@ export function checkPosition(this: ExtendedWorld, position: string): Num3 {
     } else {
       return new MathUtils(rotateMeshPos).add(sourceBlock.position);
     }
+  } /* pole-1-1:Pin4 */ else if (position.indexOf(':')) {
+    const [targetBlockId, targetPart] = position.split(':');
+
+    const targetBlock = this.getEnv().editorContext.blockStore.getBlock(targetBlockId);
+
+    const mesh = this.getEnv().editorContext.sceneStore.getObj3d(targetBlockId);
+
+    const meshPos = new Vector3();
+    MeshUtils.findByName(mesh, targetPart).getWorldPosition(meshPos);
+    const rotateMeshPos = VectorUtils.rotate(meshPos.toArray(), targetBlock.rotation[1]);
+
+    return rotateMeshPos;
   }
 }
 

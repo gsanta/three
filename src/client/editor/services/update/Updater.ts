@@ -1,9 +1,9 @@
-import Block from '../../models/Block';
+import BlockType from '../../types/BlockType';
 
 interface Updater {
   category: string;
 
-  updateDirtyBlock(block: Block): boolean;
+  updateDirtyBlock(block: BlockType): boolean;
 }
 
 export default Updater;

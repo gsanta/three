@@ -2,7 +2,7 @@ import { Vector3 } from 'three';
 import AbstractMesh from './AbstractMesh';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
-import BlockType from '@/client/editor/models/BlockType';
+import BlockType from '@/client/editor/types/BlockType';
 import UpdateService from '@/client/editor/services/update/UpdateService';
 
 class BaseMesh extends AbstractMesh {
@@ -37,6 +37,10 @@ class BaseMesh extends AbstractMesh {
   userData: {
     modelId: string;
   };
+
+  getRotation() {
+    return this.blockStore.getBlock(this.blockId).rotation;
+  }
 
   render() {
     const block = this.blockStore.getBlock(this.blockId);

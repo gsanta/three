@@ -1,6 +1,6 @@
 import BlockFactory from './BlockFactory';
 import BlockCreator from './BlockCreator';
-import BlockType from '@/client/editor/models/BlockType';
+import BlockType from '@/client/editor/types/BlockType';
 import BaseBlockType from '@/client/editor/models/BaseBlockType';
 import Cable from '@/client/editor/models/block/Cable';
 import mergeDeep from '@/client/editor/utils/mergeDeep';

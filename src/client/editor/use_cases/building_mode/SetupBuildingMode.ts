@@ -1,6 +1,6 @@
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
-import Block from '../../models/Block';
+import BlockType from '../../types/BlockType';
 
 enum Orientation {
   SOUTH = 0,
@@ -15,7 +15,7 @@ class SetupBuildingMode {
     this.update = update;
   }
 
-  setup(building: Block) {
+  setup(building: BlockType) {
     const edit = this.update.createTransaction();
     const roofs = this.blockStore.filterDescendants(building.id, { category: 'roofs' });
 

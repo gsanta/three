@@ -1,6 +1,6 @@
 import { Box3, Vector3 } from 'three';
 import SceneStore from '../../components/scene/SceneStore';
-import Block from '../../models/Block';
+import BlockType from '../../types/BlockType';
 import MeshUtils from '../../utils/MeshUtils';
 import TransactionService from '../transaction/TransactionService';
 
@@ -10,7 +10,7 @@ class UpdateWallCable {
     this.transactionService = transactionService;
   }
 
-  update(cable: Block, room: Block, wallIndex: string) {
+  update(cable: BlockType, room: BlockType, wallIndex: string) {
     if (!this.sceneStore.hasObj3d(room.id)) {
       return false;
     }

@@ -1,5 +1,5 @@
 import { Store } from '@/client/common/utils/store';
-import BlockType from '../../models/BlockType';
+import BlockType from '../../types/BlockType';
 import { ModelPartInfo } from '../../models/BaseBlockType';
 import { BlockState } from '../../stores/block/blockSlice.types';
 

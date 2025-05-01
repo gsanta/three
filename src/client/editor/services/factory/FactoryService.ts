@@ -2,7 +2,7 @@ import SceneService from '../../components/scene/service/SceneService';
 import BlockFactory from './creators/BlockFactory';
 import PoleFactory from './creators/PoleFactory';
 import CableFactory from './creators/CableFactory';
-import BlockType from '../../models/BlockType';
+import BlockType from '../../types/BlockType';
 import BlockDecoration, { PartialBlockCategories } from '../../models/BlockCategory';
 import Edit from '../transaction/Edit';
 import BlockStore from '../../stores/block/BlockStore';

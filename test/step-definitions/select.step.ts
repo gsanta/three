@@ -6,7 +6,7 @@ import assert from 'assert';
 import { Vector3 } from 'three';
 import ExtendedWorld from './ExtendedWorld';
 import findClosestBlock from './helpers/findClosestBlock';
-import BlockType from '@/client/editor/models/BlockType';
+import BlockType from '@/client/editor/types/BlockType';
 import TestSceneService from './support/TestSceneService';
 
 function selectBlockAtPosition(this: ExtendedWorld, x: number, y: number, z: number, partIndex?: string) {

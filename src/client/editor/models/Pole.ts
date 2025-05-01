@@ -1,5 +1,5 @@
-import Block from './Block';
-import BlockType from './BlockType';
+import Block from './block/Block';
+import BlockType from '../types/BlockType';
 
 class Pole extends Block {
   static PRIMARY_WIRE_1_CONNECTION_A = 'Pin1';

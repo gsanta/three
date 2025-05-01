@@ -26,7 +26,7 @@ class AddService {
       new AddBlockToBlock(blockStore, factoryService),
       new AddPoles(blockStore, factoryService, sceneStore, update),
       new AddBlockToSlot(factoryService, sceneStore),
-      new AddSlotToSlot(blockStore, blockCategoryStore, factoryService, sceneStore, update),
+      new AddSlotToSlot(factoryService, sceneStore),
     ];
   }
 

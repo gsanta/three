@@ -1,4 +1,4 @@
-import BlockType from '@/client/editor/models/BlockType';
+import BlockType from '@/client/editor/types/BlockType';
 import Num3 from '@/client/editor/models/Num3';
 
 export function calculateDistance(pos1: Num3, pos2: Num3): number {

@@ -3,7 +3,7 @@ import ToolName from './ToolName';
 import { IconName } from '../../common/components/lib/Icon';
 import { Vector3 } from 'three';
 import Num3 from '@/client/editor/models/Num3';
-import BlockType from '@/client/editor/models/BlockType';
+import BlockType from '@/client/editor/types/BlockType';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import TransactionService from '../services/transaction/TransactionService';
 

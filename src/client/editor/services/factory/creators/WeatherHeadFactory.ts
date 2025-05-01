@@ -1,5 +1,5 @@
 import BlockFactory from './BlockFactory';
-import BlockType from '@/client/editor/models/BlockType';
+import BlockType from '@/client/editor/types/BlockType';
 import Device, { createPin } from '@/client/editor/models/block/Device';
 
 class WeatherHeadFactory extends BlockFactory {

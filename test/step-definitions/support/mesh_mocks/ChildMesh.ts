@@ -1,7 +1,8 @@
 import { Vector3 } from 'three';
 import BaseMesh from './BaseMesh';
 import AbstractMesh from './AbstractMesh';
-import BlockType from '@/client/editor/models/BlockType';
+import BlockType from '@/client/editor/types/BlockType';
+import VectorUtils from '@/client/editor/utils/vectorUtils';
 
 class ChildMesh extends AbstractMesh {
   position: Vector3;
@@ -16,7 +17,10 @@ class ChildMesh extends AbstractMesh {
 
   getWorldPosition(vec3: Vector3) {
     this.parent.getWorldPosition(vec3);
-    vec3.add(this.position);
+
+    const rotatedPartPosition = VectorUtils.rotate(this.position.toArray(), this.parent.getRotation()[1]);
+
+    vec3.add(new Vector3(...rotatedPartPosition));
   }
 
   private parent: BaseMesh;

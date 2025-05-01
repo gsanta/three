@@ -1,6 +1,6 @@
 import SceneService from '../../components/scene/service/SceneService';
 import BlockStore from '../../stores/block/BlockStore';
-import BlockType from '../../models/BlockType';
+import BlockType from '../../types/BlockType';
 import { CablePoint } from '../../models/block/Cable';
 import { BlockIntersection } from '../IntersectMesh';
 

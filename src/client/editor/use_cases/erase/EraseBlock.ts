@@ -3,7 +3,7 @@ import Edit from '../../services/transaction/Edit';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockEraser from './erasers/BlockEraser';
 import CableEraser from './erasers/CableEraser';
-import { NeigbourConnection } from '../../models/BlockType';
+import { NeigbourConnection } from '../../types/BlockType';
 import { ModelPartInfo } from '../../models/BaseBlockType';
 
 class EraseBlock {

@@ -2,7 +2,7 @@ import SceneStore from '@/client/editor/components/scene/SceneStore';
 import BaseMesh from './BaseMesh';
 import ChildMesh from './ChildMesh';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
-import BlockType from '@/client/editor/models/BlockType';
+import BlockType from '@/client/editor/types/BlockType';
 import UpdateService from '@/client/editor/services/update/UpdateService';
 
 class ModelMesh extends BaseMesh {

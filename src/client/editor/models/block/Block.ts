@@ -1,5 +1,5 @@
-import BlockType from './BlockType';
-import { BlockCategoryName } from './block/BlockCategory';
+import BlockType from '../../types/BlockType';
+import { BlockCategoryName } from './BlockCategory';
 
 class Block {
   constructor(block: BlockType) {

@@ -1,5 +1,5 @@
 import BlockFactory from './BlockFactory';
-import BlockType from '@/client/editor/models/BlockType';
+import BlockType from '@/client/editor/types/BlockType';
 import BlockCreator from './BlockCreator';
 import BaseBlockType from '@/client/editor/models/BaseBlockType';
 

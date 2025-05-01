@@ -1,4 +1,4 @@
-import BlockType from '../../models/BlockType';
+import BlockType from '../../types/BlockType';
 import BlockDecoration, { BlockCategories, BlockCategoryRecords } from '../../models/BlockCategory';
 
 export type BlockState = {

@@ -2,7 +2,7 @@ import { BlockDecorationType } from '@/client/editor/models/BlockCategory';
 import BlockUpdater from './BlockUpdater';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import Edit from '../Edit';
-import BlockType from '@/client/editor/models/BlockType';
+import BlockType from '@/client/editor/types/BlockType';
 import Device from '@/client/editor/models/block/Device';
 
 const isDevice = (decoration: BlockDecorationType): decoration is Device => {

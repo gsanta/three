@@ -2,7 +2,7 @@ import SceneStore from '@/client/editor/components/scene/SceneStore';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import ToolStore from '@/client/editor/stores/tool/ToolStore';
-import Block from '@/client/editor/models/Block';
+import BlockType from '@/client/editor/types/BlockType';
 import Num3 from '@/client/editor/models/Num3';
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { Box3 } from 'three';
@@ -15,7 +15,7 @@ class BaseMover {
     this.toolStore = toolStore;
   }
 
-  move(block: Block, drag: Num3, dragDelta: Num3): Num3 {
+  move(block: BlockType, drag: Num3, dragDelta: Num3): Num3 {
     if (block.parentConnection) {
       const { block: stationBlockId, part: stationPartIndex } = block.parentConnection;
       const sourceMesh = this.sceneStore.getObj3d(block.id);

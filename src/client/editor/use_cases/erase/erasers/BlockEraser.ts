@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Block from '@/client/editor/models/Block';
+import BlockType from '@/client/editor/types/BlockType';
 import BlockDecoration from '@/client/editor/models/BlockCategory';
 import Edit from '../../../services/transaction/Edit';
 
@@ -10,11 +10,11 @@ abstract class BlockEraser {
     this.category = category;
   }
 
-  erase(_edit: Edit, _block: Block) {}
+  erase(_edit: Edit, _block: BlockType) {}
 
-  associationErased(_edit: Edit, _cableBlock: Block, _association: Block) {}
+  associationErased(_edit: Edit, _cableBlock: BlockType, _association: BlockType) {}
 
-  eraseDependent(_edit: Edit, _block: Block, _dependent: Block) {}
+  eraseDependent(_edit: Edit, _block: BlockType, _dependent: BlockType) {}
 }
 
 export default BlockEraser;

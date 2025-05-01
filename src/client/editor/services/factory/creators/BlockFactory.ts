@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import BaseBlockType from '@/client/editor/models/BaseBlockType';
-import BlockType from '@/client/editor/models/BlockType';
+import BlockType from '@/client/editor/types/BlockType';
 import BlockDecoration, { BlockDecorationType } from '@/client/editor/models/BlockCategory';
 import BlockCreator from './BlockCreator';
 import SceneService from '@/client/editor/components/scene/service/SceneService';

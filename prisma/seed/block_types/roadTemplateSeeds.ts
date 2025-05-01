@@ -102,13 +102,13 @@ const roadTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
       EndEast: {
         roles: ['road-slot'],
         role: 'slot',
-        orientation: 90,
+        orientation: -90,
         type: 'placeholder',
       },
       EndWest: {
         roles: ['road-slot'],
         role: 'slot',
-        orientation: 270,
+        orientation: 90,
         type: 'placeholder',
       },
     },
@@ -151,7 +151,7 @@ const roadTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
       EndNorth: {
         roles: ['road-slot'],
         role: 'slot',
-        orientation: 90,
+        orientation: -90,
         type: 'placeholder',
       },
     },

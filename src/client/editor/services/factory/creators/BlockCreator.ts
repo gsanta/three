@@ -2,7 +2,7 @@ import BaseBlockType, { ModelPartInfo } from '@/client/editor/models/BaseBlockTy
 import { toRadian } from '@/client/editor/utils/mathUtils';
 import VectorUtils, { addVector } from '@/client/editor/utils/vectorUtils';
 import Num3 from '@/client/editor/models/Num3';
-import BlockType from '@/client/editor/models/BlockType';
+import BlockType from '@/client/editor/types/BlockType';
 
 class BlockCreator {
   static create(id: string, block: BaseBlockType, settings: Partial<BlockType>): BlockType {

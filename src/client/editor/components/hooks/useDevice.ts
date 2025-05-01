@@ -2,7 +2,7 @@ import { useAppSelector } from '@/client/common/hooks/hooks';
 import { useAnimations } from '@react-three/drei';
 import { useEffect } from 'react';
 import { AnimationMixer } from 'three';
-import BlockType from '../../models/BlockType';
+import BlockType from '../../types/BlockType';
 
 type UseDeviceProps = {
   block: BlockType;

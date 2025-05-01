@@ -1,11 +1,11 @@
-import Block from '../../models/Block';
+import BlockType from '../../types/BlockType';
 import { BlockCategoryRecords } from '../../models/BlockCategory';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { updateBlocks, updateState } from './blockActions';
 import BlocksUpdater from './BlocksUpdater';
 
 export type BlockState = {
-  blocks: Record<string, Block>;
+  blocks: Record<string, BlockType>;
   blockIds: string[];
   decorations: BlockCategoryRecords;
   hovered?: {

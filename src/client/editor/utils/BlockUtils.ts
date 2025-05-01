@@ -1,4 +1,4 @@
-import BlockType from '../models/BlockType';
+import BlockType from '../types/BlockType';
 import BaseBlockType, { ModelPart } from '../models/BaseBlockType';
 import MathUtils, { toDegree } from './mathUtils';
 
@@ -26,24 +26,24 @@ class BlockUtils {
     sourcePartCandidates: ModelPart[],
   ): RotatedPart | undefined {
     const targetPart = targetBlock.parts.find((part) => part.name === targetPartName);
-    const initialRotation = targetBlock.partDetails[targetPart?.name || '']?.orientation || 0;
-    const rotation = toDegree(targetBlock.rotation[1]);
+    const targetPartOrientation = targetBlock.partDetails[targetPart?.name || '']?.orientation || 0;
+    const targetBlockRotation = toDegree(targetBlock.rotation[1]);
 
-    const realRotation = MathUtils.normalizeAngle(initialRotation - rotation);
+    const realRotation = MathUtils.normalizeAngle(targetPartOrientation + targetBlockRotation);
     const bestMatch = MathUtils.normalizeAngle(realRotation + 180);
 
     const result = sourcePartCandidates.reduce((rotatedPart: RotatedPart | undefined, slot) => {
       let sourceRotation = 0;
 
-      const sourceInitialRotation = source.partDetails[slot?.name || '']?.orientation || 0;
+      const sourcePartOrientation = source.partDetails[slot?.name || '']?.orientation || 0;
 
-      if (sourceInitialRotation > bestMatch) {
-        sourceRotation = sourceInitialRotation - bestMatch;
+      if (sourcePartOrientation > bestMatch) {
+        sourceRotation = -MathUtils.normalizeAngle(sourcePartOrientation - bestMatch);
       } else {
-        sourceRotation = sourceInitialRotation + (360 - bestMatch);
+        sourceRotation = MathUtils.normalizeAngle(bestMatch - sourcePartOrientation);
       }
 
-      if (!rotatedPart || rotatedPart.rotation > sourceRotation) {
+      if (!rotatedPart || Math.abs(rotatedPart.rotation) > Math.abs(sourceRotation)) {
         return { part: slot, rotation: sourceRotation };
       }
 

@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from '@/client/common/hooks/hooks';
 import CableMesh from '../../mesh/CableMesh';
 import WrappedMeshProps from '../../../models/block/WrappedMeshProps';
 import { ModelMesh } from '../../mesh/ModelMesh';
-import BlockType from '@/client/editor/models/BlockType';
+import BlockType from '@/client/editor/types/BlockType';
 import Cable from '@/client/editor/models/block/Cable';
 import MoveControl from './MoveControl';
 import { useEffect, useRef } from 'react';

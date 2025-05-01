@@ -2,7 +2,7 @@ import { BufferGeometry, NormalBufferAttributes } from 'three';
 import { ModelPart } from '../../models/BaseBlockType';
 import { NodesOrObject3DType } from './useMaterial';
 import { useMemo } from 'react';
-import BlockType from '../../models/BlockType';
+import BlockType from '../../types/BlockType';
 import camelCase from 'camelcase';
 
 export type NodesType = {

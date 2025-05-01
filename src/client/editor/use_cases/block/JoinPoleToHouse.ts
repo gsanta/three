@@ -1,4 +1,4 @@
-import BlockType from '../../models/BlockType';
+import BlockType from '../../types/BlockType';
 import BlockModel from '../../models/BlockModel';
 import Pole from '../../models/Pole';
 

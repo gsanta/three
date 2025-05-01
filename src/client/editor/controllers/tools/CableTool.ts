@@ -14,7 +14,7 @@ import { store } from '@/client/common/utils/store';
 import HoverTool from './HoverTool';
 import DrawHouseWiring from '../../use_cases/wiring/DrawHouseWiring';
 import { setEditMode } from '../../stores/editorSlice';
-import BlockType from '../../models/BlockType';
+import BlockType from '../../types/BlockType';
 
 class CableTool extends HoverTool {
   constructor(

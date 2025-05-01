@@ -1,5 +1,5 @@
 import { PartialDeep } from 'type-fest';
-import BaseBlockType, { ModelPartInfo, ShapeType } from './BaseBlockType';
+import BaseBlockType, { ModelPartInfo, ShapeType } from '../models/BaseBlockType';
 import { MergeStrategy, mergeArrays } from '../utils/mergeDeep';
 import { MeshStandardMaterialProps } from '@react-three/fiber';
 

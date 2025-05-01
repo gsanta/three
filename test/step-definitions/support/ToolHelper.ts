@@ -12,7 +12,6 @@ class ToolHelper {
   }
 
   pointerEnter({ blockId, partIndex }: { blockId?: string; partIndex?: string }) {
-    console.log('pointerEnter ' + partIndex);
     this.tool.onPointerEnter(
       {
         eventObject: this.getEventObject(blockId),

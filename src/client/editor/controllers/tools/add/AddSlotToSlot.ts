@@ -1,34 +1,22 @@
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
-import TransactionService from '@/client/editor/services/transaction/TransactionService';
-import BlockStore from '@/client/editor/stores/block/BlockStore';
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 import VectorUtils from '@/client/editor/utils/vectorUtils';
 import { Vector3 } from 'three';
 import AddBlock from './AddBlock';
 import BlockUtils from '@/client/editor/utils/BlockUtils';
-import BlockType from '@/client/editor/models/BlockType';
+import BlockType from '@/client/editor/types/BlockType';
 import BlockAddMethod from '@/common/model_types/BlockAddMethod';
 import BaseBlockType, { ModelPart, ModelPartRole } from '@/client/editor/models/BaseBlockType';
 import Num3 from '@/client/editor/models/Num3';
-import BlockCategoryStore from '@/client/editor/stores/blockCategory/BlockCategoryStore';
 import { toRadian } from '@/client/editor/utils/mathUtils';
 
 class AddSlotToSlot extends AddBlock {
-  constructor(
-    blockStore: BlockStore,
-    blockCategoryStore: BlockCategoryStore,
-    factoryService: FactoryService,
-    sceneStore: SceneStore,
-    updateService: TransactionService,
-  ) {
+  constructor(factoryService: FactoryService, sceneStore: SceneStore) {
     super('add-slot-to-slot');
 
-    this.blockCategoryStore = blockCategoryStore;
-    this.blockStore = blockStore;
     this.factoryService = factoryService;
     this.sceneStore = sceneStore;
-    this.updateService = updateService;
   }
 
   perform({
@@ -190,15 +178,9 @@ class AddSlotToSlot extends AddBlock {
     }
   }
 
-  private blockStore: BlockStore;
-
-  private blockCategoryStore: BlockCategoryStore;
-
   private factoryService: FactoryService;
 
   private sceneStore: SceneStore;
-
-  private updateService: TransactionService;
 }
 
 export default AddSlotToSlot;

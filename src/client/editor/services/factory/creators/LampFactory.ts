@@ -1,5 +1,5 @@
 import BlockFactory from './BlockFactory';
-import BlockType from '@/client/editor/models/BlockType';
+import BlockType from '@/client/editor/types/BlockType';
 import Device from '@/client/editor/models/block/Device';
 
 class LampFactory extends BlockFactory {

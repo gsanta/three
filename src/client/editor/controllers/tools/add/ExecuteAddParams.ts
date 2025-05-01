@@ -1,4 +1,4 @@
-import BlockType from '@/client/editor/models/BlockType';
+import BlockType from '@/client/editor/types/BlockType';
 import BaseBlockType from '@/client/editor/models/BaseBlockType';
 import Num3 from '@/client/editor/models/Num3';
 import BlockAddMethod from '@/common/model_types/BlockAddMethod';

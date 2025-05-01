@@ -1,4 +1,4 @@
-import BlockType from '@/client/editor/models/BlockType';
+import BlockType from '@/client/editor/types/BlockType';
 import Cable, { CablePoint } from '@/client/editor/models/block/Cable';
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { Vector3 } from 'three';

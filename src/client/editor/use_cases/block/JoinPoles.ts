@@ -1,6 +1,6 @@
 import MeshUtils from '@/client/editor/utils/MeshUtils';
 import { Vector3 } from 'three';
-import BlockType from '@/client/editor/models/BlockType';
+import BlockType from '@/client/editor/types/BlockType';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
 import TransactionService from '../../services/transaction/TransactionService';
 import FactoryService from '../../services/factory/FactoryService';

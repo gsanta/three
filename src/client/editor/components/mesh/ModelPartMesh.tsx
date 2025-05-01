@@ -3,7 +3,7 @@ import { Material } from 'three';
 import { ModelPart } from '../../models/BaseBlockType';
 import useGeometry, { NodesType } from '../hooks/useGeometry';
 import useMaterial from '../hooks/useMaterial';
-import BlockType from '../../models/BlockType';
+import BlockType from '../../types/BlockType';
 import { Select } from '@react-three/postprocessing';
 
 export type ModelPartProps = {

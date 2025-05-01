@@ -3,7 +3,7 @@ import SceneStore from '../components/scene/SceneStore';
 import BlockStore from '../stores/block/BlockStore';
 import BlockUtils from '../utils/BlockUtils';
 import MeshUtils from '../utils/MeshUtils';
-import BlockType from '../models/BlockType';
+import BlockType from '../types/BlockType';
 import { ModelPartInfo } from '../models/BaseBlockType';
 import IntersectionOptions from '../components/scene/service/IntersectionOptions';
 import Num3 from '../models/Num3';

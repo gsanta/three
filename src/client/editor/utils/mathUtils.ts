@@ -6,7 +6,9 @@ class MathUtils {
   }
 
   static normalizeAngle(angle: number) {
-    return ((angle % 360) + 360) % 360;
+    angle = angle % 360;
+    if (angle < 0) angle += 360;
+    return angle <= 180 ? angle : angle - 360;
   }
 
   static distance(pos1: Num3, pos2: Num3) {

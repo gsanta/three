@@ -1,4 +1,4 @@
-import BlockType from '@/client/editor/models/BlockType';
+import BlockType from '@/client/editor/types/BlockType';
 import { DoubleSide, Mesh, MeshBasicMaterial, PlaneGeometry } from 'three';
 
 class TestStore {

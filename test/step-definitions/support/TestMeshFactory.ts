@@ -1,4 +1,4 @@
-import Block from '@/client/editor/models/Block';
+import BlockType from '@/client/editor/types/BlockType';
 import BaseMesh from './mesh_mocks/BaseMesh';
 import ModelMesh from './mesh_mocks/ModelMesh';
 import SceneStore from '@/client/editor/components/scene/SceneStore';
@@ -12,7 +12,7 @@ class TestMeshFactory {
     this.updateService = updateService;
   }
 
-  create(block: Block): BaseMesh {
+  create(block: BlockType): BaseMesh {
     if (block.parts) {
       return new ModelMesh(block, this.blockStore, this.sceneStore, this.updateService);
     }

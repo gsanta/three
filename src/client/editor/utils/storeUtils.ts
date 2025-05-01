@@ -1,7 +1,7 @@
 import { Store } from '@/client/common/utils/store';
-import Block from '../models/Block';
+import BlockType from '../types/BlockType';
 
-export const getSelectedMeshes = (store: Store): Block[] => {
+export const getSelectedMeshes = (store: Store): BlockType[] => {
   const { blocks: meshes } = store.getState().block.present;
   const { selectedRootBlockIds: selectedMeshIds } = store.getState().block.present;
 
