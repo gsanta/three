@@ -10,22 +10,21 @@ const houseSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'parts'
     path: '/two_story_house_1.glb',
     parts: [
       {
-        name: 'Base',
+        name: 'Body',
         materialPath: 'Palette',
-        scale: [2.537, 2.537, 2.537],
+        scale: 2.537,
       },
       {
-        name: 'WeatherHead',
+        name: 'WeatherHeadAnchor1',
         materialPath: 'Palette',
-        position: [-1.843, 7.337, -2.924],
+        position: [-2.005, 7.173, -2.537],
         scale: 2.537,
       },
     ],
     partDetails: {
       Base: {},
-      WeatherHead: {
-        role: 'slot',
-        roles: ['pin'],
+      WeatherHeadAnchor1: {
+        roles: ['weather-head-anchor'],
         type: 'physical',
       },
     },

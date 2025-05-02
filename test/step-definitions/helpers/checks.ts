@@ -58,7 +58,7 @@ export function checkPartMeshExists(this: ExtendedWorld, blockId: string, partIn
   const mesh = checkBlockMeshExists.call(this, blockId);
 
   const partName = this.getEnv().editorContext.blockStore.getBlock(blockId).partDetails[partIndex]?.name;
-  const partMesh = new MeshWrapper(mesh).findByName(partName);
+  const partMesh = new MeshWrapper(mesh).findByNameOld(partName);
 
   if (!partMesh) {
     throw new Error(`Mesh for part ${partIndex} of block ${blockId} not found.`);
@@ -89,7 +89,7 @@ export function checkPosition(this: ExtendedWorld, position: string): Num3 {
 
     const targetBlock = this.getEnv().editorContext.blockStore.getBlock(targetBlockId);
 
-    const meshPos = new MeshWrapper(mesh).findByName(sourcePart).position.toArray() as Num3;
+    const meshPos = new MeshWrapper(mesh).findByNameOld(sourcePart).position.toArray() as Num3;
     const rotateMeshPos = new Vector(meshPos).rotateY(sourceBlock.rotation[1]).get();
 
     if (targetBlock.parentConnection?.block === sourceBlockId) {
@@ -105,7 +105,7 @@ export function checkPosition(this: ExtendedWorld, position: string): Num3 {
     const mesh = this.getEnv().editorContext.sceneStore.getObj3d(targetBlockId);
 
     const meshPos = new Vector3();
-    new MeshWrapper(mesh).findByName(targetPart).getWorldPosition(meshPos);
+    new MeshWrapper(mesh).findByNameOld(targetPart).getWorldPosition(meshPos);
     const rotateMeshPos = new Vector(meshPos.toArray()).rotateY(targetBlock.rotation[1]).get();
 
     return rotateMeshPos;

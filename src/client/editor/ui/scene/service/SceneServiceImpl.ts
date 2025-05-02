@@ -6,8 +6,9 @@ import { v4 as uuidv4 } from 'uuid';
 import BlockStore from '../../../stores/block/BlockStore';
 import IntersectionOptions from './IntersectionOptions';
 
-class SceneServiceImpl implements SceneService {
+class SceneServiceImpl extends SceneService {
   constructor(blockStore: BlockStore, sceneStore: SceneStore) {
+    super();
     this.intersect = new IntersectMesh(blockStore, sceneStore);
     this.sceneStore = sceneStore;
   }
@@ -29,7 +30,6 @@ class SceneServiceImpl implements SceneService {
     pos.x = pos.x * widthHalf + widthHalf;
     pos.y = -(pos.y * heightHalf) + heightHalf;
     pos.z = 0;
-
 
     return pos;
   }

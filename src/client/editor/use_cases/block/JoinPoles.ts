@@ -11,6 +11,7 @@ import CableHelper from './CableHelper';
 import Pole from '../../models/block/categories/Pole';
 import BlockPartLookupData from '../../models/block/part/BlockPartLookupData';
 import Vector from '../../models/math/Vector';
+import FindNearestBlock from '../scene/FindNearestBlock';
 
 class JoinPoles {
   constructor(
@@ -24,6 +25,8 @@ class JoinPoles {
     this.scene = scene;
     this.transactionService = transactionService;
 
+    this.findNearestBlock = new FindNearestBlock(blockStore)
+
     this.cableHelper = new CableHelper(blockStore);
   }
 
@@ -33,29 +36,11 @@ class JoinPoles {
       .filter((block) => block.category === 'poles')
       .filter((currPole) => currPole.id !== pole.id);
 
-    const { poleId: neighborPoleId } = otherPoles.reduce(
-      (closest, next) => {
-        const newDistance = new Vector(pole.position).distance(new Vector(next.position));
-        if (closest.distance === -1 || closest.distance > newDistance) {
-          return {
-            poleId: next.id,
-            distance: newDistance,
-          };
-        }
+    const neighborPole = this.findNearestBlock.find(new Vector(pole.position), { skipBlocks: [pole.id], category: 'poles' })
 
-        return closest;
-      },
-      {
-        poleId: '',
-        distance: -1,
-      },
-    );
-
-    if (!neighborPoleId) {
+    if (!neighborPole) {
       return;
     }
-
-    const neighborPole = this.blockStore.getBlock(neighborPoleId);
 
     const neighbourPoleEmptyWireConnectionNames = this.getEmptyWireConnectionNames(neighborPole);
     const poleEmptyWireConnectionNames = Pole.PRIMARY_WIRE_CONNECTION_NAMES_A;
@@ -187,8 +172,8 @@ class JoinPoles {
     const pinName1 = partIndex1;
     const pinName2 = partIndex2;
 
-    const pinMesh1 = new MeshWrapper(mesh1).findByName(pinName1);
-    const pinMesh2 = new MeshWrapper(mesh2).findByName(pinName2);
+    const pinMesh1 = new MeshWrapper(mesh1).findByNameOld(pinName1);
+    const pinMesh2 = new MeshWrapper(mesh2).findByNameOld(pinName2);
     const pos1 = new Vector3();
     pinMesh1.getWorldPosition(pos1);
     const pos2 = new Vector3();
@@ -206,6 +191,8 @@ class JoinPoles {
   private scene: SceneStore;
 
   private transactionService: TransactionService;
+
+  private findNearestBlock: FindNearestBlock;
 }
 
 export default JoinPoles;

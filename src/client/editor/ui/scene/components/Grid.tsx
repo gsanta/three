@@ -25,6 +25,7 @@ const Row = ({ activeGridIndexes, count, rowIndex, x, z, offsetX, offsetZ, gridS
     <>
       {Array.from({ length: count }).map((_, i) => (
         <mesh
+          key={i}
           name="selection"
           onPointerDown={(e) =>
             tool.onPointerDown({ ...e, gridX: i, gridY: rowIndex, gridIndex: rowIndex * count + i })

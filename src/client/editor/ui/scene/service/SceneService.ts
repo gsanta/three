@@ -3,8 +3,12 @@ import { BlockIntersection } from '../../../use_cases/IntersectMesh';
 import IntersectionOptions from './IntersectionOptions';
 import BlockConstantData from '@/client/editor/models/block/BlockConstantData';
 
-interface SceneService {
-  uuid(blockType: BlockConstantData): string;
+type MeshRenderedCallback = (blockId: string) => void;
+
+abstract class SceneService {
+  uuid(_blockType: BlockConstantData): string {
+    throw new Error('Not implemented');
+  }
 
   intersection(
     blocks: string[],
@@ -17,9 +21,29 @@ interface SceneService {
     clientX: number,
     clientY: number,
     options?: IntersectionOptions,
-  ): [BlockIntersection[], Ray];
+  ): [BlockIntersection[], Ray] {
+    throw new Error('Not implemented');
+  }
 
-  worldToScreen(object: Object3D): Vector3;
+  worldToScreen(object: Object3D): Vector3 {
+    throw new Error('Not implemented');
+  }
+
+  private meshRenderedListeners: MeshRenderedCallback[] = [];
+
+  subscribeMeshRendered(callback: MeshRenderedCallback) {
+    this.meshRenderedListeners.push(callback);
+
+    return () => {
+      this.meshRenderedListeners = this.meshRenderedListeners.filter(cb => cb !== callback);
+    };
+  }
+
+  onMeshRendered(blockId: string) {
+    for (const callback of this.meshRenderedListeners) {
+      callback(blockId);
+    }
+  }
 }
 
 export default SceneService;

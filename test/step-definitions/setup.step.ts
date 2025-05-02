@@ -158,7 +158,7 @@ Then('my current scene is', function (this: ExtendedWorld, table: { hashes(): Bl
         const selfPart = row.POSITION.split('->')?.[1].split(':')[1];
         const mesh = this.getEnv().editorContext.sceneStore.getObj3d(block.id);
 
-        const partPosition = new MeshWrapper(mesh).findByName(selfPart).position.toArray() as Num3;
+        const partPosition = new MeshWrapper(mesh).findByNameOld(selfPart).position.toArray() as Num3;
         const rotatedPartPosition = new Vector(partPosition).rotateY(block.rotation[1]).get();
         actual = new Vector(actual).add(new Vector(rotatedPartPosition)).get();
       }

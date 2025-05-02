@@ -14,7 +14,6 @@ import ControllerService from './services/controller/ControllerService';
 import ElectricitySystemHook from './services/electricity/ElectricitySystemHook';
 import EraserService from './services/EraserService';
 import FactoryService from './services/factory/FactoryService';
-import KeyboardService from './services/KeyboardService';
 import ToolService from './services/ToolService';
 import TransactionService from './services/transaction/TransactionService';
 import UpdateService from './services/update/UpdateService';
@@ -22,6 +21,8 @@ import BlockStore from './stores/block/BlockStore';
 import BlockCategoryStore from './stores/blockCategory/BlockCategoryStore';
 import ElectricityStore from './stores/electricity/ElectricityStore';
 import ToolStore from './stores/tool/ToolStore';
+import ContextMenuController from './controllers/ContextMenuController';
+import ConnectPoleToBuilding from './controllers/tools/add/ConnectPoleToBuilding';
 
 type EditorContextType = {
   blockStore: BlockStore;
@@ -29,13 +30,14 @@ type EditorContextType = {
   controller: ControllerService;
   eraser: EraserService;
   tool: ToolService;
-  keyboard: KeyboardService;
   exporter: ExportJson;
   importer: ImportJson;
   sceneStore: SceneStore;
   sceneService: SceneService;
   transaction: TransactionService;
   update: UpdateService;
+
+  contextMenuController: ContextMenuController;
 };
 
 export const isTestEnv = () => process.env.NODE_ENV === 'test';
@@ -57,6 +59,8 @@ export const setupEditor = () => {
 
   const updateService = new UpdateService(blockStore, transaction, sceneStore);
 
+  const contextMenuController = new ContextMenuController(blockStore, new ConnectPoleToBuilding(blockStore, factoryService, sceneStore, transaction))
+
   const editorContext: EditorContextType = {
     blockCategoryStore: blockCategoryStore,
     blockStore: blockStore,
@@ -64,7 +68,6 @@ export const setupEditor = () => {
     eraser: new EraserService(blockStore, transaction),
     exporter: new ExportJson(store),
     importer: new ImportJson(store),
-    keyboard: new KeyboardService(store),
     sceneStore: sceneStore,
     sceneService: scene,
     tool: new ToolService(
@@ -78,6 +81,8 @@ export const setupEditor = () => {
     ),
     transaction,
     update: updateService,
+
+    contextMenuController
   };
 
   editorContext.sceneStore.setToolService(editorContext.tool);

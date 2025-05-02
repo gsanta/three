@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import roadTemplateSeeds from './block_types/roadTemplateSeeds';
+import roadSeeds from './block_types/roadSeeds';
 import poleTempalteSeeds from './block_types/poleTemplateSeeds';
 import transformerSeeds from './block_types/transformerSeeds';
 import blockCategories from './blockCategories';
@@ -8,6 +8,7 @@ import blockAddMethodsOnCategoriesSeeds from './blockAddMethodsOnCategoriesSeeds
 import houseSeeds from './block_types/houseSeeds';
 import blockContextMenuActionSeeds from './blockContextMenuActionSeeds';
 import blockContextMenuActionOnCategoriesSeeds from './blockContextMenuActionOnCategoriesSeeds';
+import weatherHeadSeeds from './block_types/weatherHeadSeeds';
 
 const prisma = new PrismaClient();
 const main = async () => {
@@ -118,7 +119,7 @@ const main = async () => {
     });
   }
 
-  for (const template of roadTemplateSeeds) {
+  for (const template of roadSeeds) {
     await prisma.blockType.upsert({
       where: { type: template.type },
       update: {},
@@ -143,6 +144,14 @@ const main = async () => {
   }
 
   for (const seed of houseSeeds) {
+    await prisma.blockType.upsert({
+      where: { type: seed.type },
+      update: {},
+      create: seed,
+    });
+  }
+
+  for (const seed of weatherHeadSeeds) {
     await prisma.blockType.upsert({
       where: { type: seed.type },
       update: {},

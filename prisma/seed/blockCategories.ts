@@ -17,6 +17,9 @@ const blockCategories = [
   {
     name: 'plants',
   },
+  {
+    name: 'weather-heads',
+  },
 ];
 
 export default blockCategories;

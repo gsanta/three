@@ -34,8 +34,7 @@ module.exports = {
     'import',
     'react',
     'react-hooks', // 'jsx-a11y',
-    "unused-imports"
-
+    'unused-imports',
 
     /* @typescript-eslint/eslint-plugin already defines this plugin */
     // '@typescript-eslint',
@@ -45,6 +44,7 @@ module.exports = {
   ],
   rules: {
     /*** Import related rules ***/
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     'import/extensions': 'off',
     'import/no-extraneous-dependencies': [
       'error',
@@ -59,7 +59,7 @@ module.exports = {
         ],
       },
     ],
-    "unused-imports/no-unused-imports": "error",
+    'unused-imports/no-unused-imports': 'error',
 
     /*** Export related rules ***/
     'import/prefer-default-export': 'off',

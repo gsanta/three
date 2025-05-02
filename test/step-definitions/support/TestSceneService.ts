@@ -5,23 +5,7 @@ import BlockConstantData from '@/client/editor/models/block/BlockConstantData';
 import { BlockIntersection } from '@/client/editor/use_cases/IntersectMesh';
 import { Object3D, Ray, Vector3 } from 'three';
 
-class Deferred {
-  constructor() {
-    this.promise = new Promise<void>((resolve) => {
-      this.resolveFunc = resolve;
-    });
-  }
-
-  resolve() {
-    this.resolveFunc?.();
-  }
-
-  promise: Promise<void>;
-
-  private resolveFunc?: () => void;
-}
-
-class TestSceneService implements SceneService {
+class TestSceneService extends SceneService {
   worldToScreen(object: Object3D): Vector3 {
     throw new Error('Method not implemented.');
   }

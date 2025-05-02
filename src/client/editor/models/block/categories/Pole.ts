@@ -14,6 +14,8 @@ class Pole extends Block {
 
   static PRIMARY_WIRE_3_CONNECTION_B = 'Pin3b';
 
+  static WIRE_4 = 'Pin4';
+
   static PRIMARY_WIRE_CONNECTION_NAMES_A = [
     Pole.PRIMARY_WIRE_1_CONNECTION_A,
     Pole.PRIMARY_WIRE_2_CONNECTION_A,

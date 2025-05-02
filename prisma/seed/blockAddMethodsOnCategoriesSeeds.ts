@@ -15,6 +15,13 @@ const blockAddMethodsOnCategoriesSeeds = [
     connectionType: 'parent-child',
   },
   {
+    addMethodName: 'add-slot-to-slot',
+    sourceCategoryName: 'weather-heads',
+    sourcePartRole: 'weather-head-anchor',
+    targetPartRole: 'weather-head-anchor',
+    connectionType: 'parent-child',
+  },
+  {
     addMethodName: 'add-block-to-block',
     sourceCategoryName: 'roads',
     targetCategoryName: 'plain',

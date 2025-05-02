@@ -1,15 +1,32 @@
-import { Mesh, Object3D } from 'three';
+import { Mesh, Object3D, Vector3 } from 'three';
+import Vector from './math/Vector';
 
-const findByNameRecursive = (mesh: Object3D, name: string): Object3D | undefined => {
+const findByNameRecursiveOld = (mesh: Object3D, name: string): Object3D | undefined => {
   if (mesh.name === name) {
     return mesh;
   }
 
   for (const childMesh of mesh.children) {
-    const found = findByNameRecursive(childMesh as Mesh, name);
+    const found = findByNameRecursiveOld(childMesh as Mesh, name);
 
     if (found) {
       return found;
+    }
+  }
+
+  return undefined;
+};
+
+const findByNameRecursive = (mesh: Object3D, name: string): MeshWrapper | undefined => {
+  if (mesh.name === name) {
+    return new MeshWrapper(mesh);
+  }
+
+  for (const childMesh of mesh.children) {
+    const found = findByNameRecursiveOld(childMesh as Mesh, name);
+
+    if (found) {
+      return new MeshWrapper(found);
     }
   }
 
@@ -35,7 +52,21 @@ class MeshWrapper {
     this.mesh = mesh;
   }
 
-  findByName(name?: string): Object3D {
+  findByNameOld(name?: string): Object3D {
+    if (!name) {
+      throw new Error(`Name is mandatory`);
+    }
+
+    const found = findByNameRecursiveOld(this.mesh, name);
+
+    if (!found) {
+      throw new Error(`Mesh with name ${name} not found`);
+    }
+
+    return found;
+  }
+
+  findByName(name?: string): MeshWrapper {
     if (!name) {
       throw new Error(`Name is mandatory`);
     }
@@ -49,8 +80,19 @@ class MeshWrapper {
     return found;
   }
 
+  getWorldPosition() {
+    const pos1 = new Vector3();
+    this.mesh.getWorldPosition(pos1);
+
+    return new Vector(pos1.toArray());
+  }
+
   getLeafs(): Mesh[] {
     return findLeafsRecursive(this.mesh);
+  }
+
+  get() {
+    return this.mesh;
   }
 
   private mesh: Object3D;

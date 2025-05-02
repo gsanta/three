@@ -4,14 +4,7 @@ import Device from './categories/Device';
 
 export type BlockDecoration = 'cables' | 'decorations' | 'devices' | 'roads' | 'walls' | 'building-bases';
 
-export type BlockDecorationType =
-  | Cable
-  | Device
-  | Transformer
-  | EmptyBlockCategory<'decorations'>
-  | EmptyBlockCategory<'roads'>
-  | EmptyBlockCategory<'walls'>
-  | EmptyBlockCategory<'building-bases'>;
+export type BlockDecorationType = Cable | Device | Transformer | EmptyBlockCategory<'roads'>;
 
 export type EmptyBlockCategory<T extends BlockDecoration> = {
   category: T;

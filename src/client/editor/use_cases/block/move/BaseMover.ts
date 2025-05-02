@@ -23,7 +23,7 @@ class BaseMover {
       const targetBlock = this.blockStore.getBlock(stationBlockId);
       const targetPartName = targetBlock.partDetails[stationPartIndex || '#1']?.name;
       const targetMesh = this.sceneStore.getObj3d(block.parentConnection?.block || '');
-      const targetPartMesh = new MeshWrapper(targetMesh).findByName(targetPartName);
+      const targetPartMesh = new MeshWrapper(targetMesh).findByNameOld(targetPartName);
 
       const sourceBoundingBox = new Box3().setFromObject(sourceMesh);
       const targetBoundingBox = new Box3().setFromObject(targetPartMesh);

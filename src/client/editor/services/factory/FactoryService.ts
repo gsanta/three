@@ -7,10 +7,7 @@ import BlockDecoration, { PartialBlockCategories } from '../../models/block/Bloc
 import Edit from '../transaction/Edit';
 import BlockStore from '../../stores/block/BlockStore';
 import DefaultBlockFactory from './creators/DefaultBlockFactory';
-import LampFactory from './creators/LampFactory';
 import WeatherHeadFactory from './creators/WeatherHeadFactory';
-import HomeElectricsFactory from './creators/HomeElectricsFactory';
-import ElectricityProviderFactory from './creators/ElectricityProviderFactory';
 import { BlockSlices } from '../../stores/block/blockSlice.types';
 import TransformerFactory from './creators/TransformerFactory';
 
@@ -19,10 +16,7 @@ class FactoryService {
     this.blockStore = blockStore;
     this.factories.poles = new PoleFactory(sceneService);
     this.factories.cables = new CableFactory(sceneService);
-    this.factories.lamps = new LampFactory(sceneService);
     this.factories['weather-heads'] = new WeatherHeadFactory(sceneService);
-    this.factories['home-electrics'] = new HomeElectricsFactory(sceneService);
-    this.factories['electricity-providers'] = new ElectricityProviderFactory(sceneService);
     this.factories.transformers = new TransformerFactory(sceneService);
     this.defaultBlockFactory = new DefaultBlockFactory(sceneService);
   }

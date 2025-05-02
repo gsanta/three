@@ -6,8 +6,9 @@ import { useFloating } from '@floating-ui/react';
 import Button from '@/client/common/components/lib/Button';
 import JoinElectricSystemsMenuItem from './JoinElectricSystemsMenuItem';
 import { BlockContextMenuActionName } from '@/common/model_types/BlockContextMenuAction';
+import MeshWrapper from '@/client/editor/models/MeshWrapper';
 
-const actionToComponent: Record<BlockContextMenuActionName, () => JSX.Element> = {
+const actionToComponent: Record<BlockContextMenuActionName, (props: { onClick(): void }) => JSX.Element> = {
   'join-electric-system': JoinElectricSystemsMenuItem,
 };
 
@@ -15,25 +16,36 @@ const BlockContextMenu = () => {
   const selectedRootBlockIds = useAppSelector((state) => state.blockCategory.selectedRootBlockIds);
   const currentContextMenuActions = useAppSelector((state) => state.blockCategory.currentContextMenuActions);
 
+  const { blockStore, contextMenuController } = useEditorContext();
+
   const [isVisible, setVisible] = useState(false);
-  const [pos, setPos] = useState<Vector3>();
+  const [pos, setPos] = useState<Vector3>(new Vector3(0, 0, 0));
+  const [blockId, setBlockId] = useState<string>();
 
   const { eraser, sceneStore, sceneService } = useEditorContext();
 
   useEffect(() => {
     if (selectedRootBlockIds.length) {
       const blockId = selectedRootBlockIds[0];
+      const block = blockStore.getBlock(blockId);
+      setBlockId(blockId)
       try {
-        const obj = sceneStore.getObj3d(blockId || '');
+        let obj = sceneStore.getObj3d(blockId || '');
+
+        if (block.partDetails.ContextMenuAnchor) {
+          obj = new MeshWrapper(obj).findByNameOld('ContextMenuAnchor');
+        }
         setPos(sceneService.worldToScreen(obj));
         setVisible(true);
       } catch {}
     } else {
       setVisible(false);
     }
-  }, [sceneService, sceneStore, selectedRootBlockIds]);
+  }, [blockStore, sceneService, sceneStore, selectedRootBlockIds]);
 
-  const { refs, floatingStyles } = useFloating();
+  const { refs, floatingStyles } = useFloating({
+    placement: 'top',
+  });
 
   const handleDeleteSelectedBlock = () => {
     eraser.erase(selectedRootBlockIds[0]);
@@ -48,14 +60,14 @@ const BlockContextMenu = () => {
       <div
         className="absolute w-px h-px bg-transparent"
         ref={refs.setReference}
-        style={{ top: `${pos?.y}px`, left: `${pos?.x}px` }}
+        style={{ top: `${pos.y}px`, left: `${pos.x}px` }}
       />
-      <div className="absolute card bg-base-100 w-96 p-24 shadow-sm" ref={refs.setFloating} style={floatingStyles}>
+      <div className="absolute bg-base-100 w-96 p-24 shadow-sm" ref={refs.setFloating} style={floatingStyles}>
         <Button onClick={handleDeleteSelectedBlock}>Delete</Button>
         {currentContextMenuActions.map((action) => {
           const Component = actionToComponent[action.name];
 
-          return Component();
+          return Component({ onClick: () => blockId && contextMenuController.execute(action.name, blockId) });
         })}
       </div>
     </>

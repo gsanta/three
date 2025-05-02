@@ -15,8 +15,11 @@ const poleTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
         name: 'Body',
         materialPath: 'Main',
         position: [-0.008, -0.002, 0.01],
-        rotation: [-3.14159, 0, -3.14159],
-        scale: [-0.113, -4.042, -0.113],
+      },
+      {
+        name: 'ContextMenuAnchor',
+        materialPath: 'Main',
+        position: [-0.008, 8.161, 0.01],
       },
       {
         name: 'Pin1',
@@ -58,11 +61,11 @@ const poleTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
         name: 'Pin4',
         materialPath: 'DarkGray',
         position: [0.006, 6.336, 0.216],
-        scale: 0.081,
       },
     ],
     partDetails: {
       Body: {},
+      ContextMenuAnchor: {},
       Pin1: {
         role: 'slot',
         roles: ['pin'],

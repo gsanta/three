@@ -89,8 +89,6 @@ class AddSlotToSlot extends AddBlock {
       { arrayMergeStrategy: 'merge' },
     );
 
-    edit.select([edit.getLastBlock()]);
-
     return edit;
   }
 
@@ -101,7 +99,7 @@ class AddSlotToSlot extends AddBlock {
     switch (this.addMethod?.connectionType) {
       case 'sibling':
         const mesh = this.sceneStore.getObj3d(existingPart.getBlock().getType().id);
-        const partMesh = new MeshWrapper(mesh).findByName(existingPart?.getPart().name);
+        const partMesh = new MeshWrapper(mesh).findByNameOld(existingPart?.getPart().name);
         const pos = new Vector3();
         partMesh.getWorldPosition(pos);
         existingPartPos = new Vector([pos.x, pos.y, pos.z]);

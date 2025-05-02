@@ -21,10 +21,6 @@ class BlockCreator {
     Object.entries(block.partDetails).forEach(([key, val]) => {
       const info = { ...val, isSelected: val?.isSelected || false } as BlockPartLookupData;
 
-      if (info.type === 'placeholder') {
-        info.hide = true;
-      }
-
       partDetails[key] = info;
     });
 

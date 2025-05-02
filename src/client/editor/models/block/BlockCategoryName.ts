@@ -1,1 +1,1 @@
-export type BlockCategoryName = 'cables' | 'houses' | 'poles' | 'transformers' | 'roads';
+export type BlockCategoryName = 'cables' | 'devices' | 'houses' | 'poles' | 'transformers' | 'roads' | 'weather-heads';

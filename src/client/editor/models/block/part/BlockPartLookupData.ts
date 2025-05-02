@@ -7,7 +7,8 @@ export type BlockPartRole =
   | 'road-slot'
   | 'load-off'
   | 'wall-join'
-  | 'transformer-holder';
+  | 'transformer-holder'
+  | 'weather-head-anchor';
 
 type BlockPartLookupData = {
   hide?: boolean;

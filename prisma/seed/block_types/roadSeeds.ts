@@ -1,6 +1,6 @@
 import { BlockType, Prisma } from '@prisma/client';
 
-const roadTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'parts' | 'partDetails'> & {
+const roadSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'parts' | 'partDetails'> & {
   animations?: Prisma.JsonObject;
   decorations: Prisma.JsonArray;
   parts: Prisma.JsonArray;
@@ -18,13 +18,13 @@ const roadTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
       },
       {
         name: 'EndNorth',
-        materialPath: 'wall-placeholder',
+        materialPath: 'Road1Palette',
         position: [-0.002, 0.068, -2.011],
         scale: [2.184, 0.067, 2.484],
       },
       {
         name: 'EndSouth',
-        materialPath: 'wall-placeholder',
+        materialPath: 'Road1Palette',
         position: [-0.002, 0.074, 1.977],
         scale: [2.184, 0.067, 2.484],
       },
@@ -59,28 +59,28 @@ const roadTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
       },
       {
         name: 'EndNorth',
-        materialPath: 'wall-placeholder',
+        materialPath: 'Material',
         position: [0.009, 0.08, -3.022],
         rotation: [-3.14, 0, -3.14],
         scale: [-2.975, -0.132, -2.775],
       },
       {
         name: 'EndSouth',
-        materialPath: 'wall-placeholder',
+        materialPath: 'Material',
         position: [0.009, 0.08, 2.979],
         rotation: [-3.14, 0, -3.14],
         scale: [-2.975, -0.132, -2.775],
       },
       {
         name: 'EndEast',
-        materialPath: 'wall-placeholder',
+        materialPath: 'Material',
         position: [2.987, 0.079, -0.015],
         rotation: [-3.14, 0, -3.14],
         scale: [-2.975, -0.132, -2.775],
       },
       {
         name: 'EndWest',
-        materialPath: 'wall-placeholder',
+        materialPath: 'Material',
         position: [-2.991, 0.079, -0.015],
         rotation: [-3.14, 0, -3.14],
         scale: [-2.975, -0.132, -2.775],
@@ -128,13 +128,13 @@ const roadTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
       },
       {
         name: 'EndSouth',
-        materialPath: 'wall-placeholder',
+        materialPath: 'Material',
         position: [-1.543, 0.074, 2.482],
         scale: [2.184, 0.067, 2.484],
       },
       {
         name: 'EndNorth',
-        materialPath: 'wall-placeholder',
+        materialPath: 'Material',
         position: [2.51, 0.068, -1.506],
         rotation: [0, -1.5707, 0],
         scale: [2.184, 0.067, 2.484],
@@ -159,4 +159,4 @@ const roadTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
   },
 ];
 
-export default roadTempalteSeeds;
+export default roadSeeds;

@@ -47,7 +47,7 @@ class UpdateDeviceCable {
     }
 
     const poleMesh = this.scene.getObj3d(pole.id);
-    const mesh = new MeshWrapper(poleMesh).findByName(cableEnd?.pin);
+    const mesh = new MeshWrapper(poleMesh).findByNameOld(cableEnd?.pin);
 
     const pos = new Vector3();
     mesh.getWorldPosition(pos);
