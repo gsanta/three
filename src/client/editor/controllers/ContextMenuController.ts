@@ -1,5 +1,5 @@
 import { BlockContextMenuActionName } from '@/common/model_types/BlockContextMenuAction';
-import ConnectPoleToBuilding from './tools/add/ConnectPoleToBuilding';
+import ConnectPoleToBuilding from '../use_cases/block/add/ConnectPoleToBuilding';
 import BlockStore from '../stores/block/BlockStore';
 
 class ContextMenuController {

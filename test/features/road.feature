@@ -3,7 +3,6 @@ Feature: Road
   # 3 /   2   \3
   # 1|        |1 
   # 1|
-  @only
   Scenario: Attaching road segments to each other
     Given I have a scene with:
       | TYPE   | ID       | PARENT | POS   |

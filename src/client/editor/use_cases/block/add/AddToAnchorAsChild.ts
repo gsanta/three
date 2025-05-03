@@ -21,16 +21,14 @@ type AddParams = {
   };
 };
 
-class AddChildToAnchor {
+class AddToAnchorAsChild {
   constructor(factoryService: FactoryService, sceneStore: SceneStore) {
-    // super('add-slot-to-slot');
-
     this.factoryService = factoryService;
     this.sceneStore = sceneStore;
     this.findNearestPart = new FindNearestPart(sceneStore);
   }
 
-  perform({ edit, newBlockType, newBlockAnchorName, to }: AddParams) {
+  execute({ edit, newBlockType, newBlockAnchorName, to }: AddParams) {
     const targetPart = to.block.parts.find((part) => part.name === to.anchorPartName);
 
     const newBlockPart = newBlockType.parts.find((part) => part.name === newBlockAnchorName);
@@ -68,7 +66,7 @@ class AddChildToAnchor {
       { arrayMergeStrategy: 'merge' },
     );
 
-    return edit;
+    return newBlock;
   }
 
   private calculatePosition(existingPart: BlockPart, newPart: BlockPartGeometryData) {
@@ -87,4 +85,4 @@ class AddChildToAnchor {
   private findNearestPart: FindNearestPart;
 }
 
-export default AddChildToAnchor;
+export default AddToAnchorAsChild;

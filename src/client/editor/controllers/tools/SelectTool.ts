@@ -33,13 +33,13 @@ class SelectTool extends HoverTool {
     this.sceneService = sceneService;
 
     this.move = new MoveBlock(blockStore, blockCategoryStore, update, sceneStore, toolStore);
-    this.selector = new SelectBlock(blockStore, blockCategoryStore, scene, sceneStore, update);
+    this.selector = new SelectBlock(blockStore, blockCategoryStore, update);
     this.toolStore = toolStore;
   }
 
   onPointerUp(info: ToolInfo) {
     if (!info.isDragHappened && new Vector(info.drag).size() === 0) {
-      this.selector.select(info.eventObject?.userData.modelId, info.clientX, info.clientY);
+      this.selector.select(info.eventObject?.userData.modelId);
     }
   }
 

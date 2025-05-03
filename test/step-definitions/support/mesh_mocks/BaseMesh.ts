@@ -3,6 +3,7 @@ import AbstractMesh from './AbstractMesh';
 import SceneStore from '@/client/editor/ui/scene/SceneStore';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import BlockData from '@/client/editor/models/block/BlockData';
+import SceneService from '@/client/editor/ui/scene/service/SceneService';
 import UpdateService from '@/client/editor/services/update/UpdateService';
 
 class BaseMesh extends AbstractMesh {
@@ -10,6 +11,7 @@ class BaseMesh extends AbstractMesh {
     block: BlockData,
     blockStore: BlockStore,
     sceneStore: SceneStore,
+    sceneService: SceneService,
     updateService: UpdateService,
     name?: string,
   ) {
@@ -21,6 +23,7 @@ class BaseMesh extends AbstractMesh {
       modelId: block.id,
     };
     this.sceneStore = sceneStore;
+    this.sceneService = sceneService;
     this.updateService = updateService;
   }
 
@@ -47,9 +50,12 @@ class BaseMesh extends AbstractMesh {
     if (block.isDirty) {
       this.updateService.updateDirtyBlock(block.id);
     }
+    this.sceneService.onMeshRendered(block.id);
   }
 
   protected blockId: string;
+
+  private sceneService: SceneService;
 
   private sceneStore: SceneStore;
 

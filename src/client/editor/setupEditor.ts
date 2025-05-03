@@ -5,8 +5,7 @@ import SceneService from './ui/scene/service/SceneService';
 import SceneServiceImpl from './ui/scene/service/SceneServiceImpl';
 import ExportJson from './controllers/io/ExportJson';
 import ImportJson from './controllers/io/ImportJson';
-import AddService from './controllers/tools/add/AddService';
-import AddTool from './controllers/tools/add/AddTool';
+import AddTool from './controllers/tools/AddTool';
 import EraseTool from './controllers/tools/EraseTool';
 import RayTool from './controllers/tools/RayTool';
 import SelectTool from './controllers/tools/SelectTool';
@@ -22,7 +21,7 @@ import BlockCategoryStore from './stores/blockCategory/BlockCategoryStore';
 import ElectricityStore from './stores/electricity/ElectricityStore';
 import ToolStore from './stores/tool/ToolStore';
 import ContextMenuController from './controllers/ContextMenuController';
-import ConnectPoleToBuilding from './controllers/tools/add/ConnectPoleToBuilding';
+import ConnectPoleToBuilding from './use_cases/block/add/ConnectPoleToBuilding';
 
 type EditorContextType = {
   blockStore: BlockStore;
@@ -55,11 +54,14 @@ export const setupEditor = () => {
 
   const transaction = new TransactionService(blockStore, store, scene, [electricitySystemHook]);
 
-  const addService = new AddService(blockStore, blockCategoryStore, factoryService, sceneStore, transaction);
+  // const addService = new AddService(blockStore, blockCategoryStore, factoryService, sceneStore, transaction);
 
   const updateService = new UpdateService(blockStore, transaction, sceneStore);
 
-  const contextMenuController = new ContextMenuController(blockStore, new ConnectPoleToBuilding(blockStore, factoryService, sceneStore, transaction))
+  const contextMenuController = new ContextMenuController(
+    blockStore,
+    new ConnectPoleToBuilding(blockStore, factoryService, sceneStore, scene, transaction),
+  );
 
   const editorContext: EditorContextType = {
     blockCategoryStore: blockCategoryStore,
@@ -72,7 +74,7 @@ export const setupEditor = () => {
     sceneService: scene,
     tool: new ToolService(
       [
-        new AddTool(addService, blockStore, scene, transaction),
+        new AddTool(blockStore, factoryService, sceneStore, scene, transaction),
         new SelectTool(blockStore, blockCategoryStore, scene, sceneStore, toolStore, transaction, scene),
         new EraseTool(blockStore, transaction),
         new RayTool(blockStore, transaction, sceneStore),
@@ -82,7 +84,7 @@ export const setupEditor = () => {
     transaction,
     update: updateService,
 
-    contextMenuController
+    contextMenuController,
   };
 
   editorContext.sceneStore.setToolService(editorContext.tool);

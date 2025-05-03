@@ -4,7 +4,7 @@ import ToolName from '../models/tool/ToolName';
 import { store } from '@/client/common/utils/store';
 import { Mesh, Vector3 } from 'three';
 import SelectTool from '@/client/editor/controllers/tools/SelectTool';
-import AddTool from '../controllers/tools/add/AddTool';
+import AddTool from '../controllers/tools/AddTool';
 import ToolStore from '../stores/tool/ToolStore';
 import { setSelectedTool } from '../stores/tool/toolSlice';
 import Vector from '../models/math/Vector';

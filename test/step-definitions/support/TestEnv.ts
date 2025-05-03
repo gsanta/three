@@ -26,39 +26,11 @@ export const setupTestEnv = async (): Promise<TestEnv> => {
   testStore.setup();
 
   const editorContext = setupEditor();
-  const { blockStore, sceneStore, tool, update } = editorContext;
-  // const blockStore = new BlockStore(store);
-  // const scene = new TestSceneService();
-  // const factoryService = new FactoryService(blockStore, scene);
-
-  // const electricityStore = new ElectricityStore();
-  // const electricitySystemHook = new ElectricitySystemHook(blockStore, electricityStore);
-
-  // const transactionService = new TransactionService(blockStore, store, scene, [electricitySystemHook]);
-
-  // const sceneStore = new SceneStore();
-
-  // const updateService = new UpdateService(blockStore, transactionService, sceneStore);
-
-  // const toolStore = new ToolStore(store);
-
-  // const tool = new ToolService(
-  //   [
-  //     new AddTool(blockStore, factoryService, scene, sceneStore, transactionService),
-  //     new SelectTool(blockStore, scene, sceneStore, toolStore, transactionService),
-  //     new CableTool(blockStore, factoryService, scene, sceneStore, transactionService),
-  //     new EraseTool(blockStore, transactionService),
-  //     new RayTool(blockStore, transactionService, sceneStore),
-  //     new ColorTool(blockStore, transactionService),
-  //   ],
-  //   toolStore,
-  // );
-
-  // sceneStore.setToolService(tool);
+  const { blockStore, sceneStore, tool, sceneService, update } = editorContext;
 
   const toolHelper = new ToolHelper(sceneStore, tool, testStore);
 
-  const meshFactory = new TestMeshFactory(blockStore, sceneStore, update);
+  const meshFactory = new TestMeshFactory(blockStore, sceneStore, sceneService, update);
 
   const timeouts: ReturnType<typeof setTimeout>[] = [];
 
@@ -84,10 +56,6 @@ export const setupTestEnv = async (): Promise<TestEnv> => {
         if ('type' in u && 'block' in u && u.type === 'update') {
           testStore.setLastCreatedBlock(u.block);
         }
-
-        if ('block' in u && u.block) {
-          // store.dispatch(resetNotifyOnRendered({ block: u.block.id }));
-        }
       });
 
       setTrackedTimeout(() => {
@@ -96,39 +64,15 @@ export const setupTestEnv = async (): Promise<TestEnv> => {
             sceneStore.addMesh(meshFactory.create(u.block) as unknown as Mesh, u.block.id);
             const mesh = sceneStore.getObj3d(u.block.id) as unknown as ModelMesh;
             mesh.render();
+
+            editorContext.sceneService.onMeshRendered(u.block.id);
           }
         });
-        tool.onRendered();
       });
     },
   };
 
   const unsubscribeUpdateBlockListener = testMiddleware.startListening(updateBlocksListener);
-
-  // const updateListener = {
-  //   actionCreator: update,
-  //   effect: async (action: PayloadAction<Partial<BlockState>>) => {
-  //     Object.values(action.payload.blocks || {}).forEach((block) => {
-  //       sceneStore.addMesh(meshFactory.create(block) as unknown as Mesh, block.id);
-  //     });
-  //   },
-  // };
-
-  // const unsubscribeUpdateListener = testMiddleware.startListening(updateListener);
-
-  // // TODO: used for tests right now, later it should come from db
-  // const seeds = [
-  //   ...buildingTempalteSeeds,
-  //   ...lampTempalteSeeds,
-  //   ...plantTempalteSeeds,
-  //   ...poleTempalteSeeds,
-  //   ...roadTempalteSeeds,
-  //   ...homeElectrics,
-  //   ...roomSeeds,
-  //   ...furnitureSeeds,
-  // ];
-
-  // store.dispatch(setTemplates(seeds as BlockType[]));
 
   const teardown = () => {
     testMiddleware.clearListeners();
@@ -136,10 +80,6 @@ export const setupTestEnv = async (): Promise<TestEnv> => {
       clearTimeout(timeout);
     });
     store.dispatch(clearBlockSlice());
-    // store.dispatch(clearEditorSlice());
-    // testStore.storedBlockId = undefined;
-    // sceneStore.clear();
-    // unsubscribeUpdateListener();
     unsubscribeUpdateBlockListener();
   };
 

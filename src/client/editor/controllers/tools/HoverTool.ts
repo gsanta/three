@@ -30,20 +30,6 @@ abstract class HoverTool extends Tool {
     }
   }
 
-  protected checkPartIntersection(blockId: string, clientX: number, clientY: number) {
-    const [intersects] = this.sceneService.intersection([blockId], clientX, clientY);
-
-    const blockIntersection = intersects.find(
-      (intersection) => intersection.partIndex && intersection.partInfo?.name !== 'root',
-    );
-
-    if (blockIntersection) {
-      return blockIntersection.partIndex;
-    }
-
-    return undefined;
-  }
-
   private hover: Hover;
 
   protected sceneService: SceneService;
