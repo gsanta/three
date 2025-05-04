@@ -15,7 +15,7 @@ type EditOptions = {
   slice?: 'city' | 'building';
 };
 
-const getDefaultEditOptions = () => ({ arrayMergeStrategy: 'merge' as const, slice: store.getState().editor.mode });
+const getDefaultEditOptions = () => ({ arrayMergeStrategy: 'merge' as const, slice: store.getState().grid.mode });
 
 class Edit {
   constructor(blockStore: BlockStore, dispatchStore: Store, systemHooks: SystemHook[], close: () => void) {

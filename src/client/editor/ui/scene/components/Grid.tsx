@@ -37,7 +37,7 @@ const Row = ({ activeGridIndexes, count, rowIndex, x, z, offsetX, offsetZ, gridS
           <planeGeometry args={[gridSize - 0.1, gridSize - 0.1]} />
           <meshBasicMaterial
             opacity={0.2}
-            color="blue"
+            color="red"
             transparent
             visible={activeGridIndexes.includes(rowIndex * count + i)}
           />
@@ -48,12 +48,12 @@ const Row = ({ activeGridIndexes, count, rowIndex, x, z, offsetX, offsetZ, gridS
 };
 
 const Grid = () => {
-  const gridOffset = useAppSelector((state) => state.editor.gridOffset);
-  const gridSize = useAppSelector((state) => state.editor.gridSize);
-  const carGridPos = useAppSelector((state) => state.editor.carGridPos);
-  const gridRows = useAppSelector((state) => state.editor.gridRows);
-  const gridCols = useAppSelector((state) => state.editor.gridCols);
-  const activeGridIndexes = useAppSelector((state) => state.editor.activeGridIndexes);
+  const gridOffset = useAppSelector((state) => state.grid.gridOffset);
+  const gridSize = useAppSelector((state) => state.grid.gridSize);
+  const carGridPos = useAppSelector((state) => state.grid.carGridPos);
+  const gridRows = useAppSelector((state) => state.grid.gridRows);
+  const gridCols = useAppSelector((state) => state.grid.gridCols);
+  const activeGridIndexes = useAppSelector((state) => state.grid.activeGridIndexes);
 
   const hightlightRows = [carGridPos[1] - 1, carGridPos[1], carGridPos[1] + 1];
   const hightlightCols = [carGridPos[0] - 1, carGridPos[0], carGridPos[0] + 1];

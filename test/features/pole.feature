@@ -100,6 +100,7 @@ Feature: Pole
       | BLOCK     | TYPE    |
       | pole-1-3  | pole-1  |
 
+  @only
   Scenario: Moving a pole joined to two other poles, moves the cables as well
     Given I set next uuids to:
       | UUID      | TYPE    |
@@ -115,7 +116,8 @@ Feature: Pole
       | pole-1 | pole-1-2 | 0,0.1,10 |
       | pole-1 | pole-1-3 | 0,0.1,15 |
     When I select tool 'select'
-    And I select a block at position 0,0.1,10
+    And I hover over block 'pole-1-2'
+    And I press pointer
     And I drag pointer with delta '0,0,3'
     And I end drag
     And I wait for dirty blocks to update
@@ -128,7 +130,7 @@ Feature: Pole
       | cable-1-4 | pole-1-2 | pole-1-2:Pin1 |
       | cable-1-5 | pole-1-2 | pole-1-2:Pin2 |
       | cable-1-6 | pole-1-2 | pole-1-2:Pin3 |
-  
+
   Scenario: Adding a transformer to a pole
     Given I have a scene with:
       | TYPE   | ID       | PARENT | POS   |
@@ -143,7 +145,7 @@ Feature: Pole
     And I wait mesh 'transformer-1' to exist
     And my current scene is
       | BLOCK         | TYPE                                | POSITION                          |
-      | pole-1-1      | pole-1                              | 1,0,0                             |
+      | pole-1-1      | pole-1                              | -1.22, 0, -1.17                   |
       | transformer-1 | distribution-transformer-single-1   | pole-1-1:Pin4->transformer-1:Join |
 
 

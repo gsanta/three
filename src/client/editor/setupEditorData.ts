@@ -10,6 +10,7 @@ import {
 } from './stores/blockCategory/blockCategorySlice';
 import BlockConstantData from './models/block/BlockConstantData';
 import { setTemplates } from './stores/blockType/blockTypeSlice';
+import { initState } from './stores/block/blockActions';
 
 export type EditorDataReturnType = {
   blockCategories: BlockCategoriesResponse['items'];
@@ -61,4 +62,5 @@ export const dispatchEditorData = (data: EditorDataReturnType, dispatch: Dispatc
   dispatch(setBlockAddMethods(blockAddMethods));
   dispatch(setBlockContextMenuActions(blockContextMenuActions));
   dispatch(setTemplates(blockTypes));
+  dispatch(initState());
 };

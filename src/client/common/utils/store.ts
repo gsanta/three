@@ -1,12 +1,11 @@
 import undoable, { StateWithHistory } from 'redux-undo';
 import blockTypeSlice, { BlockTypeState } from '../../editor/stores/blockType/blockTypeSlice';
 import blockSlice, { hover } from '../../editor/stores/block/blockSlice';
-import editorSlice, { EditorState } from '../../editor/stores/editorSlice';
+import gridSlice, { GridState } from '../../editor/stores/grid/gridSlice';
 import toolSlice, { ToolState } from '../../editor/stores/tool/toolSlice';
 import { EnhancedStore, configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
 import temporarySlice, { TemporaryState } from '@/client/editor/stores/block/temporarySlice';
 import electricitySlice, { ElectricityState } from '@/client/editor/stores/electricity/electricitySlice';
-import buildingSlice from '@/client/editor/stores/block/buildingSlice';
 import { BlockState } from '@/client/editor/stores/block/blockSlice.types';
 import blockCategorySlice, { BlockCategoyState } from '@/client/editor/stores/blockCategory/blockCategorySlice';
 
@@ -16,16 +15,9 @@ const blockSliceUndoable = undoable(blockSlice, {
   },
 });
 
-const buildingSliceUndoable = undoable(buildingSlice, {
-  filter: (action: { payload: { history?: boolean }; type: string }) => {
-    return action.type !== hover.type && action.payload?.history !== false;
-  },
-});
-
 export type RootState = {
-  building: StateWithHistory<BlockState>;
   electricSystem: ElectricityState;
-  editor: EditorState;
+  grid: GridState;
   tool: ToolState;
   temporary: TemporaryState;
   block: StateWithHistory<BlockState>;
@@ -36,17 +28,15 @@ export type RootState = {
 export const testMiddleware = createListenerMiddleware();
 
 export function setupStore(preloadedState?: RootState): EnhancedStore<RootState> {
-
   const store = configureStore({
     reducer: {
       electricSystem: electricitySlice,
-      editor: editorSlice,
+      grid: gridSlice,
       tool: toolSlice,
       blockCategory: blockCategorySlice,
       blockType: blockTypeSlice,
       temporary: temporarySlice,
       block: blockSliceUndoable,
-      building: buildingSliceUndoable,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(testMiddleware.middleware),
 

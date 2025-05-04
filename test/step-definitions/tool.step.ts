@@ -143,6 +143,16 @@ When('I hover over block {string} and part {string}', function (this: ExtendedWo
   this.getEnv().toolHelper.pointerEnter({ blockId: block.id, partIndex: name });
 });
 
+When('I hover over block {string}', function (this: ExtendedWorld, blockId: string) {
+  const block = this.getEnv().editorContext.blockStore.getBlock(blockId);
+
+  if (!block) {
+    throw new Error(`Could not find block with id ${blockId}`);
+  }
+
+  this.getEnv().toolHelper.pointerEnter({ blockId: block.id });
+});
+
 When('I drag pointer with delta {string}', function (this: ExtendedWorld, deltaStr: string) {
   const delta = checkPosition.call(this, deltaStr);
 

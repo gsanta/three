@@ -15,10 +15,7 @@ const isTubeMesh = (block: BlockData): block is BlockData => block.category === 
 
 const MeshRenderer = (props: WrappedMeshProps) => {
   const { block, meshProps, materialProps = {} } = props;
-  const slice = useAppSelector((selector) => selector.editor.mode);
-  const decorations = useAppSelector((selector) =>
-    slice === 'city' ? selector.block.present.decorations : selector.building.present.decorations,
-  );
+  const decorations = useAppSelector((selector) => selector.block.present.decorations);
   const dispatch = useAppDispatch();
 
   const { sceneService, tool } = useEditorContext();

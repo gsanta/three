@@ -20,6 +20,9 @@ const blockCategories = [
   {
     name: 'weather-heads',
   },
+  {
+    name: 'humans',
+  },
 ];
 
 export default blockCategories;

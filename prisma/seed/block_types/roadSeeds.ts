@@ -13,19 +13,18 @@ const roadSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'parts' 
       {
         name: 'Base',
         materialPath: 'Road1Palette',
-        position: [-0.002, 0.001, -0.019],
-        scale: [2.184, 0.067, 2.484],
+        scale: [2.184, 0.067, 2.362],
       },
       {
         name: 'EndNorth',
         materialPath: 'Road1Palette',
-        position: [-0.002, 0.068, -2.011],
+        position: [-0.002, 0.068, -3.796],
         scale: [2.184, 0.067, 2.484],
       },
       {
         name: 'EndSouth',
         materialPath: 'Road1Palette',
-        position: [-0.002, 0.074, 1.977],
+        position: [-0.002, 0.074, 3.778],
         scale: [2.184, 0.067, 2.484],
       },
     ],
@@ -51,7 +50,7 @@ const roadSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'parts' 
     decorations: [],
     parts: [
       {
-        name: 'Base',
+        name: 'Body',
         materialPath: 'Material',
         position: [-0.002, 0.137, -0.019],
         rotation: [-3.14, 0, -3.14],
@@ -60,34 +59,34 @@ const roadSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'parts' 
       {
         name: 'EndNorth',
         materialPath: 'Material',
-        position: [0.009, 0.08, -3.022],
+        position: [0.009, 0.08, -3.77],
         rotation: [-3.14, 0, -3.14],
         scale: [-2.975, -0.132, -2.775],
       },
       {
         name: 'EndSouth',
         materialPath: 'Material',
-        position: [0.009, 0.08, 2.979],
+        position: [0.009, 0.08, 3.766],
         rotation: [-3.14, 0, -3.14],
         scale: [-2.975, -0.132, -2.775],
       },
       {
         name: 'EndEast',
         materialPath: 'Material',
-        position: [2.987, 0.079, -0.015],
+        position: [3.761, 0.079, -0.015],
         rotation: [-3.14, 0, -3.14],
         scale: [-2.975, -0.132, -2.775],
       },
       {
         name: 'EndWest',
         materialPath: 'Material',
-        position: [-2.991, 0.079, -0.015],
+        position: [-3.779, 0.079, -0.015],
         rotation: [-3.14, 0, -3.14],
         scale: [-2.975, -0.132, -2.775],
       },
     ],
     partDetails: {
-      Base: {},
+      Body: {},
       EndNorth: {
         roles: ['road-slot'],
         role: 'slot',

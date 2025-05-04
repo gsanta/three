@@ -5,8 +5,6 @@ import BlockData from '../../models/block/BlockData';
 class BlockStore {
   constructor(store: Store) {
     this.store = store;
-
-    this.mode = 'city';
   }
 
   getHovered() {
@@ -181,20 +179,9 @@ class BlockStore {
     return false;
   }
 
-  setCurrentMode(mode: 'city' | 'building') {
-    this.mode = mode;
-  }
-
   private getState() {
-    const mode = this.store.getState().editor.mode;
-    if (mode === 'city') {
-      return this.store.getState().block.present;
-    } else {
-      return this.store.getState().building.present;
-    }
+    return this.store.getState().block.present;
   }
-
-  private mode: 'city' | 'building';
 
   private store: Store;
 }

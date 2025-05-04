@@ -13,7 +13,7 @@ const Ground = () => {
   const gridMap = useTexture('grid.png');
   const alphaMap = useTexture('alpha-map.png');
 
-  const groundRadius = useAppSelector((state) => state.editor.groundRadius);
+  const groundRadius = useAppSelector((state) => state.grid.groundRadius);
 
   useEffect(() => {
     gridMap.anisotropy = 16;

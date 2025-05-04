@@ -8,14 +8,14 @@ import { WheelDebug } from './WheelDebug';
 import { useControls } from '../../hooks/useControls';
 import { useFrame } from '@react-three/fiber';
 import { useAppDispatch, useAppSelector } from '@/client/common/hooks/hooks';
-import { setCarGridPos } from '@/client/editor/stores/editorSlice';
+import { setCarGridPos } from '@/client/editor/stores/grid/gridSlice';
 
 const Car = () => {
   const car = useGLTF('car.glb').scene;
-  const groundRadius = useAppSelector((state) => state.editor.groundRadius);
-  const gridOffset = useAppSelector((state) => state.editor.gridOffset);
-  const gridSize = useAppSelector((state) => state.editor.gridSize);
-  const carGridPos = useAppSelector((state) => state.editor.carGridPos);
+  const groundRadius = useAppSelector((state) => state.grid.groundRadius);
+  const gridOffset = useAppSelector((state) => state.grid.gridOffset);
+  const gridSize = useAppSelector((state) => state.grid.gridSize);
+  const carGridPos = useAppSelector((state) => state.grid.carGridPos);
 
   const dispatch = useAppDispatch();
 

@@ -30,7 +30,6 @@ const Canvas = () => {
   return (
     <>
       <ThreeCanvas
-        onKeyDown={(e) => keyboard.onKeyDown(e.nativeEvent)}
         style={{ backgroundColor: 'goldenrod' }}
         shadows
         // camera={{ position: [0, 50, 75], fov: 25 }}

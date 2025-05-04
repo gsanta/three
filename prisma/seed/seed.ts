@@ -9,6 +9,7 @@ import houseSeeds from './block_types/houseSeeds';
 import blockContextMenuActionSeeds from './blockContextMenuActionSeeds';
 import blockContextMenuActionOnCategoriesSeeds from './blockContextMenuActionOnCategoriesSeeds';
 import weatherHeadSeeds from './block_types/weatherHeadSeeds';
+import humanSeeds from './block_types/humanSeeds';
 
 const prisma = new PrismaClient();
 const main = async () => {
@@ -152,6 +153,14 @@ const main = async () => {
   }
 
   for (const seed of weatherHeadSeeds) {
+    await prisma.blockType.upsert({
+      where: { type: seed.type },
+      update: {},
+      create: seed,
+    });
+  }
+
+  for (const seed of humanSeeds) {
     await prisma.blockType.upsert({
       where: { type: seed.type },
       update: {},

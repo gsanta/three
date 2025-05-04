@@ -41,9 +41,9 @@ const Scene = () => {
   const scene = useThree((state) => state.scene);
 
   const blockIds = useAppSelector((selector) => selector.block.present.blockIds);
-  const editMode = useAppSelector((selector) => selector.editor.editingMode);
-  const editTargetBlock = useAppSelector((selector) => selector.editor.editingTargetBlock);
-  const sceneMode = useAppSelector((selector) => selector.editor.mode);
+  const editMode = useAppSelector((selector) => selector.grid.editingMode);
+  const editTargetBlock = useAppSelector((selector) => selector.grid.editingTargetBlock);
+  const sceneMode = useAppSelector((selector) => selector.grid.mode);
 
   useEffect(() => {
     sceneService.setCamera(camera);

@@ -22,6 +22,7 @@ import ElectricityStore from './stores/electricity/ElectricityStore';
 import ToolStore from './stores/tool/ToolStore';
 import ContextMenuController from './controllers/ContextMenuController';
 import ConnectPoleToBuilding from './use_cases/block/add/ConnectPoleToBuilding';
+import GridStore from './stores/grid/GridStore';
 
 type EditorContextType = {
   blockStore: BlockStore;
@@ -42,6 +43,7 @@ type EditorContextType = {
 export const isTestEnv = () => process.env.NODE_ENV === 'test';
 
 export const setupEditor = () => {
+  const gridStore = new GridStore(store);
   const sceneStore = new SceneStore();
   const toolStore = new ToolStore(store);
   const blockStore = new BlockStore(store);
@@ -74,7 +76,7 @@ export const setupEditor = () => {
     sceneService: scene,
     tool: new ToolService(
       [
-        new AddTool(blockStore, factoryService, sceneStore, scene, transaction),
+        new AddTool(blockStore, factoryService, gridStore, sceneStore, scene, transaction),
         new SelectTool(blockStore, blockCategoryStore, scene, sceneStore, toolStore, transaction, scene),
         new EraseTool(blockStore, transaction),
         new RayTool(blockStore, transaction, sceneStore),

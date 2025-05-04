@@ -5,7 +5,6 @@ import HoverTool from './HoverTool';
 import SceneService from '../../ui/scene/service/SceneService';
 import BlockData from '@/client/editor/models/block/BlockData';
 import BlockConstantData from '@/client/editor/models/block/BlockConstantData';
-import Num3 from '@/client/editor/models/math/Num3';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import { BlockCategoryName } from '@/client/editor/models/block/BlockCategoryName';
 import AddPole from '../../use_cases/block/add/AddPole';
@@ -15,16 +14,21 @@ import Vector from '@/client/editor/models/math/Vector';
 import AddToPlain from '../../use_cases/block/add/AddToPlain';
 import AddToAnchor from '../../use_cases/block/add/AddToAnchor';
 import AddToAnchorAsChild from '../../use_cases/block/add/AddToAnchorAsChild';
+import GridStore from '../../stores/grid/GridStore';
+import { Vector3 } from 'three';
 
 class AddTool extends HoverTool {
   constructor(
     block: BlockStore,
     factoryService: FactoryService,
+    gridStore: GridStore,
     sceneStore: SceneStore,
     sceneService: SceneService,
     update: TransactionService,
   ) {
     super(block, sceneService, update, ToolName.Add, 'BiPlus');
+
+    this.gridStore = gridStore;
 
     this.addPoles = new AddPole(block, factoryService, sceneService, sceneStore, update);
     this.addToPlain = new AddToPlain(factoryService);
@@ -34,6 +38,8 @@ class AddTool extends HoverTool {
 
   onPointerUp({ pos }: ToolInfo) {
     const { selectedBlockName } = this.blockStore.getBlockSettings();
+
+    const position = this.getPosition(pos);
 
     if (!selectedBlockName) {
       return;
@@ -50,7 +56,7 @@ class AddTool extends HoverTool {
     this.targetBlock = targetBlock;
     this.targetPartName = targetPartIndex;
     this.newBlockType = newBlockType;
-    this.position = pos.toArray();
+    this.position = position;
     this.newBlockCategory = newBlockType.category;
 
     this.add();
@@ -62,7 +68,7 @@ class AddTool extends HoverTool {
 
       switch (this.newBlockCategory) {
         case 'poles':
-          this.addPoles.execute({ edit, newBlockType: this.newBlockType, position: new Vector(this.position) });
+          this.addPoles.execute({ edit, newBlockType: this.newBlockType, position: this.position });
           break;
         case 'roads':
           if (this.targetBlock && this.targetPartName) {
@@ -76,11 +82,12 @@ class AddTool extends HoverTool {
               },
             });
           } else {
-            this.addToPlain.execute({ edit, newBlockType: this.newBlockType, position: new Vector(this.position) });
+            this.addToPlain.execute({ edit, newBlockType: this.newBlockType, position: this.position });
           }
           break;
         case 'houses':
-          this.addToPlain.execute({ edit, newBlockType: this.newBlockType, position: new Vector(this.position) });
+        case 'humans':
+          this.addToPlain.execute({ edit, newBlockType: this.newBlockType, position: this.position });
           break;
         case 'transformers':
           if (this.targetBlock && this.targetPartName) {
@@ -101,6 +108,27 @@ class AddTool extends HoverTool {
     }
   }
 
+  private getPosition(pos: Vector3) {
+    const offsetX = this.gridStore.getGridOffset()[0] + this.gridStore.getGridSize() / 2;
+    const offsetZ = this.gridStore.getGridOffset()[1] + this.gridStore.getGridSize() / 2;
+
+    const positiveX = pos.x - offsetX;
+    const positiveZ = pos.z - offsetZ;
+
+    const floorX = Math.floor(positiveX / this.gridStore.getGridSize()) * this.gridStore.getGridSize();
+    const floorZ = Math.floor(positiveZ / this.gridStore.getGridSize()) * this.gridStore.getGridSize();
+
+    const centerX = floorX + this.gridStore.getGridSize() / 2;
+    const centerZ = floorZ + this.gridStore.getGridSize() / 2;
+
+    const finalX = centerX + offsetX;
+    const finalZ = centerZ + offsetZ;
+
+    console.log('floorX: ' + floorX);
+
+    return new Vector([finalX, pos.y, finalZ]);
+  }
+
   private addPoles: AddPole;
 
   private addToPlain: AddToPlain;
@@ -109,13 +137,15 @@ class AddTool extends HoverTool {
 
   private addToAnchorAsChild: AddToAnchorAsChild;
 
+  private gridStore: GridStore;
+
   private targetBlock?: BlockData;
 
   private targetPartName?: string;
 
   private newBlockType?: BlockConstantData;
 
-  private position?: Num3;
+  private position?: Vector;
 
   private newBlockCategory: BlockCategoryName | undefined;
 }
