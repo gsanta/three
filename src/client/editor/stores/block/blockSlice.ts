@@ -29,6 +29,7 @@ export const blockSlice = createSlice({
       state.rootBlocksIds = [];
       state.blocks = {};
       state.hovered = undefined;
+      state.currentPlayer = undefined;
       state.decorations = {
         cables: {},
         decorations: {},

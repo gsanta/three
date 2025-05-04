@@ -4,6 +4,7 @@ import BlockDecoration, { BlockCategories, BlockCategoryRecords } from '../../mo
 export type BlockState = {
   blocks: Record<string, BlockData>;
   blockIds: string[];
+  currentPlayer?: string;
   decorations: BlockCategoryRecords;
   hovered?: {
     block: string;

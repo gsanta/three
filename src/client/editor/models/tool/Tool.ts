@@ -39,13 +39,13 @@ abstract class Tool {
 
   protected blockStore: BlockStore;
 
-  protected update: TransactionService;
+  protected transaction: TransactionService;
 
-  constructor(store: BlockStore, update: TransactionService, name: ToolName, iconName?: IconName) {
+  constructor(store: BlockStore, transaction: TransactionService, name: ToolName, iconName?: IconName) {
     this.name = name;
     this.iconName = iconName;
     this.blockStore = store;
-    this.update = update;
+    this.transaction = transaction;
   }
 
   onPointerDown(_info: ToolInfo) {}

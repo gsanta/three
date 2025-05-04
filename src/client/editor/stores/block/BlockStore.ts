@@ -76,6 +76,10 @@ class BlockStore {
     return blockType;
   }
 
+  getCurrentPlayer() {
+    return this.getState().currentPlayer;
+  }
+
   getRootBlockIds() {
     return this.getState().rootBlocksIds;
   }

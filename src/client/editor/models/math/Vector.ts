@@ -70,6 +70,18 @@ class Vector {
     return this.position;
   }
 
+  get x() {
+    return this.position[0];
+  }
+
+  get y() {
+    return this.position[1];
+  }
+
+  get z() {
+    return this.position[2];
+  }
+
   static getAxisIndex = (axis: Axis) => {
     if (axis === 'x') {
       return 0;

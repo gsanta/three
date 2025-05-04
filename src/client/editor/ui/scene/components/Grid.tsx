@@ -39,7 +39,7 @@ const Row = ({ activeGridIndexes, count, rowIndex, x, z, offsetX, offsetZ, gridS
             opacity={0.2}
             color="red"
             transparent
-            visible={activeGridIndexes.includes(rowIndex * count + i)}
+            // visible={activeGridIndexes.includes(rowIndex * count + i)}
           />
         </mesh>
       ))}

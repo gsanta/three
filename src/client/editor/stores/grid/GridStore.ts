@@ -13,6 +13,14 @@ class GridStore {
     return this.store.getState().grid.gridSize;
   }
 
+  getCols() {
+    return this.store.getState().grid.gridCols;
+  }
+
+  getRows() {
+    return this.store.getState().grid.gridRows;
+  }
+
   private store: Store;
 }
 

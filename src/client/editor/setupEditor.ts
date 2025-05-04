@@ -23,6 +23,7 @@ import ToolStore from './stores/tool/ToolStore';
 import ContextMenuController from './controllers/ContextMenuController';
 import ConnectPoleToBuilding from './use_cases/block/add/ConnectPoleToBuilding';
 import GridStore from './stores/grid/GridStore';
+import PlayerTool from './controllers/tools/PlayerTool';
 
 type EditorContextType = {
   blockStore: BlockStore;
@@ -77,6 +78,7 @@ export const setupEditor = () => {
     tool: new ToolService(
       [
         new AddTool(blockStore, factoryService, gridStore, sceneStore, scene, transaction),
+        new PlayerTool(blockStore, gridStore, scene, transaction),
         new SelectTool(blockStore, blockCategoryStore, scene, sceneStore, toolStore, transaction, scene),
         new EraseTool(blockStore, transaction),
         new RayTool(blockStore, transaction, sceneStore),

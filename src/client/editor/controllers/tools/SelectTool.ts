@@ -47,7 +47,7 @@ class SelectTool extends HoverTool {
     const block = this.blockStore.getBlocks()[info.eventObject?.userData.modelId || ''];
 
     if (block) {
-      this.update.createTransaction().updateBlock(block.id, { isHovered: false }).commit();
+      this.transaction.createTransaction().updateBlock(block.id, { isHovered: false }).commit();
     }
   }
 
@@ -55,7 +55,7 @@ class SelectTool extends HoverTool {
     this.move.perform(info.drag, info.dragDelta);
     this.isMoved = true;
 
-    const edit = this.update.createTransaction();
+    const edit = this.transaction.createTransaction();
 
     const selectedBlockId = this.blockCategoryStore.getSelectedRootBlockIds()[0];
 
@@ -75,7 +75,7 @@ class SelectTool extends HoverTool {
     const selectedBlockIds = this.blockCategoryStore.getSelectedRootBlockIds();
     const blocks = this.blockStore.getBlocks();
 
-    const edit = this.update.createTransaction();
+    const edit = this.transaction.createTransaction();
 
     const drag = this.toolStore.getSelectOptions().drag;
 
@@ -102,7 +102,7 @@ class SelectTool extends HoverTool {
   }
 
   onDeselect() {
-    const edit = this.update.createTransaction();
+    const edit = this.transaction.createTransaction();
 
     edit.select([]);
 
@@ -117,7 +117,7 @@ class SelectTool extends HoverTool {
     const newScale = [...block.scale] as Num3;
     newScale[index] = settings.scale[index] * scale;
 
-    this.update
+    this.transaction
       .createTransaction()
       .updateBlock(block.id, {
         scale: newScale,
@@ -138,7 +138,7 @@ class SelectTool extends HoverTool {
     const newRotation = [...block.rotation] as [number, number, number];
     newRotation[index] += Vector.toRadian(rotation);
 
-    const edit = this.update.createTransaction().updateBlock(block.id, {
+    const edit = this.transaction.createTransaction().updateBlock(block.id, {
       rotation: newRotation,
       notifyOnRender: true,
     });

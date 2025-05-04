@@ -64,7 +64,7 @@ class AddTool extends HoverTool {
 
   private add() {
     if (this.newBlockType && this.position) {
-      const edit = this.update.createTransaction();
+      const edit = this.transaction.createTransaction();
 
       switch (this.newBlockCategory) {
         case 'poles':

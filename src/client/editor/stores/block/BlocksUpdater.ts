@@ -48,6 +48,11 @@ class BlocksUpdater {
           state.selectedBlocks.splice(index, 1);
         }
       } else if ('select' in update) {
+        const player = update.select.find((block) => block.category === 'humans');
+        if (player) {
+          state.currentPlayer = player.id;
+        }
+
         state.selectedBlocks.forEach((blockId) => (state.blocks[blockId].isSelected = false));
         state.selectedBlocks = [];
         update.select.forEach((block) => {
