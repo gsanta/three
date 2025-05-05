@@ -27,7 +27,6 @@ export type BlockUpdate = { type: 'update'; block: BlockData; slice: BlockSlices
 export type BlockSelect = {
   select: BlockData[];
   partIndex?: string;
-  slice: BlockSlices;
 };
 
 export type BlockHover = { hover: string | null; partIndex?: string; slice: BlockSlices };

@@ -24,6 +24,8 @@ import ContextMenuController from './controllers/ContextMenuController';
 import ConnectPoleToBuilding from './use_cases/block/add/ConnectPoleToBuilding';
 import GridStore from './stores/grid/GridStore';
 import PlayerTool from './controllers/tools/PlayerTool';
+import GameController from './controllers/GameController';
+import GameStore from './stores/game/GameStore';
 
 type EditorContextType = {
   blockStore: BlockStore;
@@ -38,12 +40,17 @@ type EditorContextType = {
   transaction: TransactionService;
   update: UpdateService;
 
+  controllers: {
+    game: GameController;
+  };
+
   contextMenuController: ContextMenuController;
 };
 
 export const isTestEnv = () => process.env.NODE_ENV === 'test';
 
 export const setupEditor = () => {
+  const gameStore = new GameStore(store);
   const gridStore = new GridStore(store);
   const sceneStore = new SceneStore();
   const toolStore = new ToolStore(store);
@@ -66,6 +73,8 @@ export const setupEditor = () => {
     new ConnectPoleToBuilding(blockStore, factoryService, sceneStore, scene, transaction),
   );
 
+  const gameController = new GameController(blockStore, gameStore, gridStore, store);
+
   const editorContext: EditorContextType = {
     blockCategoryStore: blockCategoryStore,
     blockStore: blockStore,
@@ -87,6 +96,10 @@ export const setupEditor = () => {
     ),
     transaction,
     update: updateService,
+
+    controllers: {
+      game: gameController,
+    },
 
     contextMenuController,
   };

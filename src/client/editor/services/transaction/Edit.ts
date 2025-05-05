@@ -6,7 +6,7 @@ import { store, Store } from '@/client/common/utils/store';
 import mergeDeep, { MergeStrategy } from '../../utils/mergeDeep';
 import BlockUpdater from './updaters/BlockUpdater';
 import LampUpdater from './updaters/LampUpdater';
-import SystemHook from './SystemHook';
+import TransactionHook from './TransactionHook';
 import { updateBlocks } from '../../stores/block/blockActions';
 import { BlockUpdate, DecorationUpdate, UpdateBlocks } from '../../stores/block/blockSlice.types';
 
@@ -18,7 +18,7 @@ type EditOptions = {
 const getDefaultEditOptions = () => ({ arrayMergeStrategy: 'merge' as const, slice: store.getState().grid.mode });
 
 class Edit {
-  constructor(blockStore: BlockStore, dispatchStore: Store, systemHooks: SystemHook[], close: () => void) {
+  constructor(blockStore: BlockStore, dispatchStore: Store, systemHooks: TransactionHook[], close: () => void) {
     this.store = blockStore;
     this.systemHooks = systemHooks;
     this.dispatchStore = dispatchStore;
@@ -245,7 +245,7 @@ class Edit {
 
   private updaters: Record<string, BlockUpdater> = {};
 
-  private systemHooks: SystemHook[];
+  private systemHooks: TransactionHook[];
 
   private store: BlockStore;
 

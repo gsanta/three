@@ -26,11 +26,17 @@ const BlockContextMenu = () => {
 
   useEffect(() => {
     if (selectedRootBlockIds.length) {
-      const blockId = selectedRootBlockIds[0];
-      const block = blockStore.getBlock(blockId);
-      setBlockId(blockId)
+      const selectedBlockId = selectedRootBlockIds[0];
+      const block = blockStore.getBlock(selectedBlockId);
+
+      if (block.category === 'humans') {
+        setVisible(false);
+        return;
+      }
+
+      setBlockId(selectedBlockId);
       try {
-        let obj = sceneStore.getObj3d(blockId || '');
+        let obj = sceneStore.getObj3d(selectedBlockId || '');
 
         if (block.partDetails.ContextMenuAnchor) {
           obj = new MeshWrapper(obj).findByNameOld('ContextMenuAnchor');

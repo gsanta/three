@@ -1,5 +1,6 @@
 import useEditorContext from '@/app/editor/useEditorContext';
 import { useAppSelector } from '@/client/common/hooks/hooks';
+import { Line } from '@react-three/drei';
 
 type RowProps = {
   activeGridIndexes: number[];
@@ -16,6 +17,7 @@ type RowProps = {
 
 const Row = ({ activeGridIndexes, count, rowIndex, x, z, offsetX, offsetZ, gridSize }: RowProps) => {
   const { tool } = useEditorContext();
+  const reachableGrids = useAppSelector((selector) => selector.grid.reachableGrids);
 
   const zPos = z * gridSize;
 
@@ -31,16 +33,11 @@ const Row = ({ activeGridIndexes, count, rowIndex, x, z, offsetX, offsetZ, gridS
             tool.onPointerDown({ ...e, gridX: i, gridY: rowIndex, gridIndex: rowIndex * count + i })
           }
           onPointerUp={() => tool.onPointerUp()}
-          position={[getX(i) + offsetX, 0.1, zPos + offsetZ]}
+          position={[getX(i) + offsetX, -0.5, zPos + offsetZ]}
           rotation-x={-Math.PI * 0.5}
         >
           <planeGeometry args={[gridSize - 0.1, gridSize - 0.1]} />
-          <meshBasicMaterial
-            opacity={0.2}
-            color="red"
-            transparent
-            // visible={activeGridIndexes.includes(rowIndex * count + i)}
-          />
+          <meshBasicMaterial opacity={0.5} color="red" transparent visible={!!reachableGrids[rowIndex * count + i]} />
         </mesh>
       ))}
     </>
@@ -67,6 +64,28 @@ const Grid = () => {
         <boxGeometry />
         <meshBasicMaterial transparent={true} opacity={0.25} />
       </mesh>
+      {Array.from({ length: gridRows + 1 }).map((_, i) => (
+        <Line
+          opacity={0.2}
+          points={[
+            [gridOffset[0] - gridSize / 2, 0, gridOffset[1] + i * gridSize - gridSize / 2],
+            [gridOffset[0] + gridCols * gridSize - gridSize / 2, 0, gridOffset[1] + i * gridSize - gridSize / 2],
+          ]}
+          transparent
+        />
+      ))}
+
+      {Array.from({ length: gridCols + 1 }).map((_, i) => (
+        <Line
+          opacity={0.2}
+          points={[
+            [gridOffset[0] + i * gridSize - gridSize / 2, 0, gridOffset[1] - gridSize / 2],
+            [gridOffset[0] + i * gridSize - gridSize / 2, 0, gridOffset[1] + gridRows * gridSize - gridSize / 2],
+          ]}
+          transparent
+        />
+      ))}
+
       {Array.from({ length: gridRows }).map((_, i) => (
         <Row
           activeGridIndexes={activeGridIndexes}

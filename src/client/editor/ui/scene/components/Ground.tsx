@@ -1,10 +1,10 @@
 import useEditorContext from '@/app/editor/useEditorContext';
 import { usePlane } from '@react-three/cannon';
-import { MeshReflectorMaterial, useTexture } from '@react-three/drei';
+import { useTexture } from '@react-three/drei';
 import { ThreeEvent } from '@react-three/fiber';
 import { useCallback, useEffect, useRef } from 'react';
 import { BufferAttribute, BufferGeometry, Mesh } from 'three';
-import Grid from './Grid';
+import CustomGrid from './Grid';
 import { useAppSelector } from '@/client/common/hooks/hooks';
 
 const Ground = () => {
@@ -58,7 +58,7 @@ const Ground = () => {
       <mesh
         ref={groundMesh}
         name="plane"
-        position={[0, -0.01, 0]}
+        position={[0, -0.1, 0]}
         rotation-x={-Math.PI * 0.5}
         onPointerEnter={handleDefaultPointerEnter}
         // onPointerDown={(e) => tool.onPointerDown(e)}
@@ -66,12 +66,25 @@ const Ground = () => {
         onPointerMove={(e) => tool.onPointerMove(e)}
       >
         <planeGeometry args={[100, 100]} />
-        <meshBasicMaterial opacity={0.325} alphaMap={gridMap} transparent={true} color={'white'} />
+        <meshBasicMaterial opacity={0} transparent={true} />
       </mesh>
+      {/* <mesh position={[0, -0.2, 0]} rotation-x={-Math.PI * 0.5}>
+        <boxGeometry args={[150, 100, 0.2]} />
+        <meshPhysicalMaterial
+          clearcoat={1}
+          color={[1, 1, 1]}
+          ior={1.5}
+          thickness={0.2}
+          roughness={0.2}
+          specularIntensity={1}
+          transmission={1}
+        />
+      </mesh> */}
 
-      <Grid />
+      <CustomGrid />
+      {/* <Grid args={[100, 100]} cellSize={7.5} fadeDistance={5000} infiniteGrid sectionSize={7.5} /> */}
 
-      <mesh ref={meshRef} position={[0, -0.015, 0]} rotation-x={-Math.PI * 0.5}>
+      {/* <mesh ref={meshRef} position={[0, -0.015, 0]} rotation-x={-Math.PI * 0.5}>
         <circleGeometry args={[groundRadius, 50]} />
         <MeshReflectorMaterial
           //   aoMap={aoMap}
@@ -94,7 +107,7 @@ const Ground = () => {
           depthToBlurRatioBias={0.25} // Adds a bias factor to the depthTexture before calculating the blur amount [bl
           reflectorOffset={0.02} // Offsets the virtual camera that projects the reflection. Useful when the reflective
         />
-      </mesh>
+      </mesh> */}
     </>
   );
 };

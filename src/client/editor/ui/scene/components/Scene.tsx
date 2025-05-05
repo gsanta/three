@@ -10,8 +10,9 @@ import Car from './Car';
 import Ground from './Ground';
 import Track from './Track';
 import BuildingScene from './BuildingScene';
-import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
+import { LightningStrike, OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { EffectComposer, Outline, Selection } from '@react-three/postprocessing';
+import { Mesh, MeshBasicMaterial, Vector3 } from 'three';
 
 const Scene = () => {
   const { tool, sceneStore: sceneService } = useEditorContext();
@@ -48,6 +49,38 @@ const Scene = () => {
   useEffect(() => {
     sceneService.setCamera(camera);
     sceneService.setScene(scene);
+
+    const lightningStrike = new LightningStrike({
+      sourceOffset: new Vector3(10, 20, 10),
+      destOffset: new Vector3(12, 10, 10),
+      radius0: 0.05,
+      radius1: 0.05,
+      minRadius: 1,
+      maxIterations: 7,
+      isEternal: true,
+
+      timeScale: 0.7,
+
+      propagationTimeFactor: 0.05,
+      vanishingTimeFactor: 0.95,
+      subrayPeriod: 2.5,
+      subrayDutyCycle: 0.3,
+      maxSubrayRecursion: 3,
+      ramification: 7,
+      recursionProbability: 0.6,
+
+      roughness: 0.85,
+      straightness: 0.68,
+    });
+    const lightningStrikeMesh = new Mesh(lightningStrike, new MeshBasicMaterial({ color: 0xffffff }));
+
+    let t = 0;
+    setInterval(() => {
+      t += 0.01;
+      lightningStrike.update(t);
+    }, 20);
+
+    scene.add(lightningStrikeMesh);
   }, [camera, scene, sceneService]);
 
   const handlePointerDown = useCallback(

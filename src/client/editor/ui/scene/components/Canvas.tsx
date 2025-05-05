@@ -3,6 +3,7 @@ import useEditorContext from '@/app/editor/useEditorContext';
 import Scene from './Scene';
 import { useCallback } from 'react';
 import BlockContextMenu from './BlockContextMenu/BlockContextMenu';
+import GameActionPanel from './GameActionPanel';
 
 const Canvas = () => {
   // const { data, isSuccess } = useQuery({ queryKey: ['blocks'], queryFn: () => api.get('/api/block') });
@@ -34,12 +35,14 @@ const Canvas = () => {
         shadows
         // camera={{ position: [0, 50, 75], fov: 25 }}
         // orthographic
+        gl={{ logarithmicDepthBuffer: true }}
         tabIndex={0}
         ref={canvasRef}
       >
         <Scene />
       </ThreeCanvas>
       <BlockContextMenu />
+      <GameActionPanel />
     </>
   );
 };

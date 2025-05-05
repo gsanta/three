@@ -14,11 +14,16 @@ export type GridState = {
   gridOffset: [number, number];
   editedBuilding?: string;
 
+  blockToGridIndex: Record<string, number>;
+
   graph: Graph;
+
+  reachableGrids: Record<number, number>;
 };
 
 export const initialGridState: GridState = {
   activeGridIndexes: [],
+  blockToGridIndex: {},
   carGridPos: [0, 0],
   editingTargetBlock: null,
   groundRadius: 70,
@@ -27,6 +32,7 @@ export const initialGridState: GridState = {
   gridSize: 7.5,
   gridOffset: [0, 0],
   graph: {},
+  reachableGrids: {},
 };
 
 initialGridState.gridOffset[0] = 6.285 - 10 * initialGridState.gridSize;
@@ -63,12 +69,31 @@ export const gridSlice = createSlice({
     clear(state) {
       state.editingTargetBlock = null;
     },
+
+    setReachableGrids(state, action: PayloadAction<Record<number, number>>) {
+      state.reachableGrids = action.payload;
+    },
   },
 
   extraReducers: (builder) => {
     // builder.addCase(updateBlocks, (state, action) => {
-    //   selectionUpdater.update(state, action.payload.blockUpdates);
+    //   action.payload.blockUpdates.forEach((update) => {
+    //     // if ('select' in update) {
+    //     //   const player = update.select.find((block) => block.category === 'humans');
+    //     //   if (player) {
+    //     //     state.currentPlayer = player.id;
+    //     //   }
+    //     // } else
+
+    //     if ('block' in update && update.block) {
+
+    //       if (update.block.category === 'humans' && !state.players.includes(update.block.id)) {
+    //         state.players.push(update.block.id);
+    //       }
+    //     }
+    //   });
     // });
+
     builder.addCase(initState, (state) => {
       state.graph = new GraphCreator(state.gridRows, state.gridCols).create();
       console.log('1');
@@ -76,6 +101,6 @@ export const gridSlice = createSlice({
   },
 });
 
-export const { clear: clearEditorSlice, setCarGridPos } = gridSlice.actions;
+export const { clear: clearEditorSlice, setCarGridPos, setReachableGrids } = gridSlice.actions;
 
 export default gridSlice.reducer;

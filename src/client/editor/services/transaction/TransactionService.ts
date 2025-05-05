@@ -3,10 +3,10 @@ import BlockStore from '../../stores/block/BlockStore';
 import { Store } from '@/client/common/utils/store';
 import SceneService from '../../ui/scene/service/SceneService';
 import Device from '../../models/block/categories/Device';
-import SystemHook from './SystemHook';
+import TransactionHook from './TransactionHook';
 
 class TransactionService {
-  constructor(blockStore: BlockStore, dispatchStore: Store, sceneService: SceneService, systemHooks: SystemHook[]) {
+  constructor(blockStore: BlockStore, dispatchStore: Store, sceneService: SceneService, systemHooks: TransactionHook[]) {
     this.store = blockStore;
     this.dispatchStore = dispatchStore;
     this.sceneService = sceneService;
@@ -40,7 +40,7 @@ class TransactionService {
 
   private dispatchStore: Store;
 
-  private systemHooks: SystemHook[] = [];
+  private systemHooks: TransactionHook[] = [];
 
   private sceneService: SceneService;
 }

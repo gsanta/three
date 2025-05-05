@@ -124,8 +124,6 @@ class AddTool extends HoverTool {
     const finalX = centerX + offsetX;
     const finalZ = centerZ + offsetZ;
 
-    console.log('floorX: ' + floorX);
-
     return new Vector([finalX, pos.y, finalZ]);
   }
 
