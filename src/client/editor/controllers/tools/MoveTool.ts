@@ -6,18 +6,26 @@ import SceneService from '../../ui/scene/service/SceneService';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import Grid from '../../models/Grid';
 import GridStore from '../../stores/grid/GridStore';
+import GameStore from '../../stores/game/GameStore';
 
-class PlayerTool extends HoverTool {
-  constructor(block: BlockStore, gridStore: GridStore, sceneService: SceneService, transaction: TransactionService) {
+class MoveTool extends HoverTool {
+  constructor(
+    block: BlockStore,
+    gameStore: GameStore,
+    gridStore: GridStore,
+    sceneService: SceneService,
+    transaction: TransactionService,
+  ) {
     super(block, sceneService, transaction, ToolName.Move, 'BiMove');
 
+    this.gameStore = gameStore;
     this.grid = new Grid(gridStore);
   }
 
   onPointerUp({ gridIndex }: ToolInfo) {
-    const currentPlayer = this.blockStore.getCurrentPlayer();
+    const currentPlayer = this.gameStore.getCurrentPlayer();
 
-    if (!currentPlayer || gridIndex == null) {
+    if (!currentPlayer || gridIndex == null || !this.gameStore.getReachableGrids()[gridIndex]) {
       return;
     }
 
@@ -34,6 +42,8 @@ class PlayerTool extends HoverTool {
   }
 
   private grid: Grid;
+
+  private gameStore: GameStore;
 }
 
-export default PlayerTool;
+export default MoveTool;

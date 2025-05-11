@@ -1,6 +1,7 @@
 import useEditorContext from '@/app/editor/useEditorContext';
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import { Line } from '@react-three/drei';
+import { useState } from 'react';
 
 type RowProps = {
   activeGridIndexes: number[];
@@ -15,31 +16,46 @@ type RowProps = {
   highlightCols: number[];
 };
 
-const Row = ({ activeGridIndexes, count, rowIndex, x, z, offsetX, offsetZ, gridSize }: RowProps) => {
+const Row = ({ count, rowIndex, x, z, offsetX, offsetZ, gridSize }: RowProps) => {
   const { tool } = useEditorContext();
-  const reachableGrids = useAppSelector((selector) => selector.grid.reachableGrids);
+  const reachableGrids = useAppSelector((selector) => selector.game.reachableGrids);
 
   const zPos = z * gridSize;
 
   const getX = (index: number) => x * gridSize + index * gridSize;
 
+  const [highlighted, setHighlighted] = useState<number>();
+
   return (
     <>
-      {Array.from({ length: count }).map((_, i) => (
-        <mesh
-          key={i}
-          name="selection"
-          onPointerDown={(e) =>
-            tool.onPointerDown({ ...e, gridX: i, gridY: rowIndex, gridIndex: rowIndex * count + i })
-          }
-          onPointerUp={() => tool.onPointerUp()}
-          position={[getX(i) + offsetX, -0.5, zPos + offsetZ]}
-          rotation-x={-Math.PI * 0.5}
-        >
-          <planeGeometry args={[gridSize - 0.1, gridSize - 0.1]} />
-          <meshBasicMaterial opacity={0.5} color="red" transparent visible={!!reachableGrids[rowIndex * count + i]} />
-        </mesh>
-      ))}
+      {Array.from({ length: count }).map((_, i) => {
+        let visible = false;
+        if (!!reachableGrids[rowIndex * count + i]) {
+          visible = true;
+        }
+
+        const gridIndex = rowIndex * count + i;
+
+        return (
+          <mesh
+            key={i}
+            name="selection"
+            onPointerDown={(e) => tool.onPointerDown({ ...e, gridX: i, gridY: rowIndex, gridIndex })}
+            onPointerEnter={() => setHighlighted(gridIndex)}
+            onPointerLeave={() => {
+              if (highlighted === gridIndex) {
+                setHighlighted(undefined);
+              }
+            }}
+            onPointerUp={() => tool.onPointerUp()}
+            position={[getX(i) + offsetX, -0.1, zPos + offsetZ]}
+            rotation-x={-Math.PI * 0.5}
+          >
+            <planeGeometry args={[gridSize - 0.1, gridSize - 0.1]} />
+            <meshBasicMaterial color={highlighted === gridIndex ? 'orange' : 'red'} visible={visible} />
+          </mesh>
+        );
+      })}
     </>
   );
 };

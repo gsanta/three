@@ -1,5 +1,6 @@
 import { Camera, Group, Mesh, Object3D, Scene } from 'three';
 import ToolService from '../../services/ToolService';
+import { RootState } from '@react-three/fiber';
 import { OrbitControls } from 'three-stdlib';
 
 class SceneStore {
@@ -155,6 +156,18 @@ class SceneStore {
     this.toolService = toolService;
   }
 
+  getCanvasState() {
+    return this.canvasState;
+  }
+
+  setCanvasState(canvasState: RootState) {
+    this.canvasState = canvasState;
+  }
+
+  private orbitControls?: OrbitControls;
+
+  private canvasState?: RootState;
+
   private meshes: Map<string, Mesh>;
 
   private groups: Map<string, Group>;
@@ -164,8 +177,6 @@ class SceneStore {
   private objInstances: Map<string, Set<string>>;
 
   private camera: Camera | undefined;
-
-  private orbitControls: OrbitControls | undefined;
 
   private canvasElement: HTMLCanvasElement | undefined;
 

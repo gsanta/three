@@ -4,6 +4,9 @@ import Scene from './Scene';
 import { useCallback } from 'react';
 import BlockContextMenu from './BlockContextMenu/BlockContextMenu';
 import GameActionPanel from './GameActionPanel';
+import { OrbitControls } from '@react-three/drei';
+import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
+import AddPanel from './AddPanel';
 
 const Canvas = () => {
   // const { data, isSuccess } = useQuery({ queryKey: ['blocks'], queryFn: () => api.get('/api/block') });
@@ -28,9 +31,31 @@ const Canvas = () => {
     [scene],
   );
 
+  const controlsRef = useCallback(
+    (controls: OrbitControlsImpl | null) => {
+      if (controls) {
+        scene.setOrbitControls(controls);
+      }
+    },
+    [scene],
+  );
+
+  // const controlsRef = useRef<OrbitControlsImpl | null>(null);
+
+  // Example: update the target when `center` changes
+  // useEffect(() => {
+  //   if (controlsRef.current) {
+  //     controlsRef.current.target.copy(center);
+  //     controlsRef.current.update();
+  //   }
+  // }, [center]);
+
   return (
-    <>
+    <div style={{ width: 'calc(100% - 50px)' }}>
       <ThreeCanvas
+        onCreated={(canvasState) => {
+          scene.setCanvasState(canvasState);
+        }}
         style={{ backgroundColor: 'goldenrod' }}
         shadows
         // camera={{ position: [0, 50, 75], fov: 25 }}
@@ -40,10 +65,14 @@ const Canvas = () => {
         ref={canvasRef}
       >
         <Scene />
+        <OrbitControls ref={controlsRef} />
       </ThreeCanvas>
       <BlockContextMenu />
-      <GameActionPanel />
-    </>
+      <div className="absolute flex flex-col gap-2 left-[70px] bottom-[50px]">
+        <AddPanel />
+        <GameActionPanel />
+      </div>
+    </div>
   );
 };
 

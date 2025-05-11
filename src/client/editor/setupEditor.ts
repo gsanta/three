@@ -23,7 +23,7 @@ import ToolStore from './stores/tool/ToolStore';
 import ContextMenuController from './controllers/ContextMenuController';
 import ConnectPoleToBuilding from './use_cases/block/add/ConnectPoleToBuilding';
 import GridStore from './stores/grid/GridStore';
-import PlayerTool from './controllers/tools/PlayerTool';
+import MoveTool from './controllers/tools/MoveTool';
 import GameController from './controllers/GameController';
 import GameStore from './stores/game/GameStore';
 
@@ -73,7 +73,7 @@ export const setupEditor = () => {
     new ConnectPoleToBuilding(blockStore, factoryService, sceneStore, scene, transaction),
   );
 
-  const gameController = new GameController(blockStore, gameStore, gridStore, store);
+  const gameController = new GameController(blockStore, gameStore, gridStore, sceneStore, store);
 
   const editorContext: EditorContextType = {
     blockCategoryStore: blockCategoryStore,
@@ -87,7 +87,7 @@ export const setupEditor = () => {
     tool: new ToolService(
       [
         new AddTool(blockStore, factoryService, gridStore, sceneStore, scene, transaction),
-        new PlayerTool(blockStore, gridStore, scene, transaction),
+        new MoveTool(blockStore, gameStore, gridStore, scene, transaction),
         new SelectTool(blockStore, blockCategoryStore, scene, sceneStore, toolStore, transaction, scene),
         new EraseTool(blockStore, transaction),
         new RayTool(blockStore, transaction, sceneStore),

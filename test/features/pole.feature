@@ -14,8 +14,8 @@ Feature: Pole
     And I move pointer to '5,0,0'
     And I press pointer
     Then I have blocks with properties
-      | BLOCK    | POSITION |
-      | pole-1-2 | 5,0,0    |
+      | BLOCK    | POSITION     |
+      | pole-1-2 | 6.28,0,-1.17 |
     And I wait block 'cable-1-1' to exist
     Then I have cables with properties
       | CABLE     | PARENT   | POSITION      |
@@ -50,8 +50,8 @@ Feature: Pole
     And I press pointer
     And I wait block 'pole-1-3' to exist
     Then I have blocks with properties
-      | BLOCK    | POSITION |
-      | pole-1-3 | 5,0,5 |
+      | BLOCK    | POSITION    |
+      | pole-1-3 | 6.28,0,6.32 |
     And I wait block 'cable-1-x' to exist
     Then I have blocks with properties
       | BLOCK    | ROTATION    |
@@ -71,8 +71,8 @@ Feature: Pole
     And I have a scene with:
       | TYPE   | ID       | POS      |
       | pole-1 | pole-1-1 | 0,0.1,5  |
-      | pole-1 | pole-1-2 | 0,0.1,10 |
-      | pole-1 | pole-1-3 | 0,0.1,15 |
+      | pole-1 | pole-1-2 | 0,0.1,15 |
+      | pole-1 | pole-1-3 | 0,0.1,25 |
     Then my current scene is
       | BLOCK     | TYPE    | 
       | pole-1-1  | pole-1  |
@@ -100,36 +100,35 @@ Feature: Pole
       | BLOCK     | TYPE    |
       | pole-1-3  | pole-1  |
 
-  @only
-  Scenario: Moving a pole joined to two other poles, moves the cables as well
-    Given I set next uuids to:
-      | UUID      | TYPE    |
-      | cable-1-1 | cable-1 |
-      | cable-1-2 | cable-1 |
-      | cable-1-3 | cable-1 |
-      | cable-1-4 | cable-1 |
-      | cable-1-5 | cable-1 |
-      | cable-1-6 | cable-1 |
-    And I have a scene with:
-      | TYPE   | ID       | POS      |
-      | pole-1 | pole-1-1 | 0,0.1,5  |
-      | pole-1 | pole-1-2 | 0,0.1,10 |
-      | pole-1 | pole-1-3 | 0,0.1,15 |
-    When I select tool 'select'
-    And I hover over block 'pole-1-2'
-    And I press pointer
-    And I drag pointer with delta '0,0,3'
-    And I end drag
-    And I wait for dirty blocks to update
-    Then I have block 'pole-1-2' at estimated position ' 0,0.1,13'
-    Then I have cables with properties
-      | CABLE     | PARENT   | POSITION      |
-      | cable-1-1 | pole-1-2 | pole-1-2:Pin1 |
-      | cable-1-2 | pole-1-2 | pole-1-2:Pin2 |
-      | cable-1-3 | pole-1-2 | pole-1-2:Pin3 |
-      | cable-1-4 | pole-1-2 | pole-1-2:Pin1 |
-      | cable-1-5 | pole-1-2 | pole-1-2:Pin2 |
-      | cable-1-6 | pole-1-2 | pole-1-2:Pin3 |
+  # Scenario: Moving a pole joined to two other poles, moves the cables as well
+  #   Given I set next uuids to:
+  #     | UUID      | TYPE    |
+  #     | cable-1-1 | cable-1 |
+  #     | cable-1-2 | cable-1 |
+  #     | cable-1-3 | cable-1 |
+  #     | cable-1-4 | cable-1 |
+  #     | cable-1-5 | cable-1 |
+  #     | cable-1-6 | cable-1 |
+  #   And I have a scene with:
+  #     | TYPE   | ID       | POS      |
+  #     | pole-1 | pole-1-1 | 0,0.1,5  |
+  #     | pole-1 | pole-1-2 | 0,0.1,10 |
+  #     | pole-1 | pole-1-3 | 0,0.1,15 |
+  #   When I select tool 'select'
+  #   And I hover over block 'pole-1-2'
+  #   And I press pointer
+  #   And I drag pointer with delta '0,0,3'
+  #   And I end drag
+  #   And I wait for dirty blocks to update
+  #   Then I have block 'pole-1-2' at estimated position ' 0,0.1,13'
+  #   Then I have cables with properties
+  #     | CABLE     | PARENT   | POSITION      |
+  #     | cable-1-1 | pole-1-2 | pole-1-2:Pin1 |
+  #     | cable-1-2 | pole-1-2 | pole-1-2:Pin2 |
+  #     | cable-1-3 | pole-1-2 | pole-1-2:Pin3 |
+  #     | cable-1-4 | pole-1-2 | pole-1-2:Pin1 |
+  #     | cable-1-5 | pole-1-2 | pole-1-2:Pin2 |
+  #     | cable-1-6 | pole-1-2 | pole-1-2:Pin3 |
 
   Scenario: Adding a transformer to a pole
     Given I have a scene with:

@@ -19,6 +19,10 @@ class GameStore {
     return this.getStore().players;
   }
 
+  getReachableGrids() {
+    return this.getStore().reachableGrids;
+  }
+
   private getStore() {
     return this.store.getState().game;
   }

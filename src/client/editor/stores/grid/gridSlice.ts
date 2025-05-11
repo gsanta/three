@@ -17,8 +17,6 @@ export type GridState = {
   blockToGridIndex: Record<string, number>;
 
   graph: Graph;
-
-  reachableGrids: Record<number, number>;
 };
 
 export const initialGridState: GridState = {
@@ -32,7 +30,6 @@ export const initialGridState: GridState = {
   gridSize: 7.5,
   gridOffset: [0, 0],
   graph: {},
-  reachableGrids: {},
 };
 
 initialGridState.gridOffset[0] = 6.285 - 10 * initialGridState.gridSize;
@@ -69,10 +66,6 @@ export const gridSlice = createSlice({
     clear(state) {
       state.editingTargetBlock = null;
     },
-
-    setReachableGrids(state, action: PayloadAction<Record<number, number>>) {
-      state.reachableGrids = action.payload;
-    },
   },
 
   extraReducers: (builder) => {
@@ -101,6 +94,6 @@ export const gridSlice = createSlice({
   },
 });
 
-export const { clear: clearEditorSlice, setCarGridPos, setReachableGrids } = gridSlice.actions;
+export const { clear: clearEditorSlice, setCarGridPos } = gridSlice.actions;
 
 export default gridSlice.reducer;

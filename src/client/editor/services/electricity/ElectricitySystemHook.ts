@@ -6,7 +6,7 @@ import UpdateElectricSystem from './UpdateElectricSystem';
 
 class ElectricitySystemHook implements TransactionHook {
   constructor(blockStore: BlockStore, electricityStore: ElectricityStore) {
-    this.updateElectricSystem = new UpdateElectricSystem(blockStore, electricityStore);
+      this.updateElectricSystem = new UpdateElectricSystem(blockStore, electricityStore);
   }
 
   onCommit(updates: UpdateBlocks['blockUpdates']) {

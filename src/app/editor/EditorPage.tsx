@@ -1,13 +1,11 @@
 'use client';
 
-import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import './app.scss';
 import Layout from '../../client/common/components/globals/Layout';
-import Split from 'react-split';
 import Canvas from '../../client/editor/ui/scene/components/Canvas';
 import Header from '../../client/common/components/globals/Header';
 import Toolbar from '../../client/editor/ui/tool/Toolbar';
-import ToolOptionsPanel from '../../client/editor/ui/tool/ToolOptionsPanel';
 import ProtectedPage from '../../client/common/components/globals/ProtectedPage';
 import BlockCategoriesResponse from '@/common/response_types/BlockCategoriesResponse';
 import BlockAddMethodsResponse from '@/common/response_types/BlockAddMethodsResponse';
@@ -38,8 +36,8 @@ const EditorPageContent = (props: EditorPageProps) => {
         <Box width="50px">
           <Toolbar />
         </Box>
-        <Split className="split" direction="horizontal" sizes={[75, 25]} minSize={250}>
-          <Canvas />
+        <Canvas />
+        {/* <Split className="split" direction="horizontal" sizes={[75, 25]} minSize={250}>
           <Split className="split-vertical" direction="vertical" sizes={[50, 50]}>
             <Tabs display="flex" flexDir="column" isLazy>
               <TabList>
@@ -54,7 +52,7 @@ const EditorPageContent = (props: EditorPageProps) => {
             </Tabs>
             <Box overflowY="auto"></Box>
           </Split>
-        </Split>
+        </Split> */}
       </Layout>
     </ProtectedPage>
   );

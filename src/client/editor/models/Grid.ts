@@ -28,8 +28,8 @@ class Grid {
     const positiveX = pos.x - offsetX;
     const positiveZ = pos.z - offsetZ;
 
-    const floorX = Math.floor(positiveX / this.gridStore.getGridSize());
-    const floorZ = Math.floor(positiveZ / this.gridStore.getGridSize());
+    const floorX = Math.ceil(positiveX / this.gridStore.getGridSize());
+    const floorZ = Math.ceil(positiveZ / this.gridStore.getGridSize());
 
     return floorZ * this.gridStore.getCols() + floorX;
   }
