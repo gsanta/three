@@ -1,52 +1,6 @@
 import { Mesh, Object3D, Vector3 } from 'three';
 import Vector from './math/Vector';
 
-const findByNameRecursiveOld = (mesh: Object3D, name: string): Object3D | undefined => {
-  if (mesh.name === name) {
-    return mesh;
-  }
-
-  for (const childMesh of mesh.children) {
-    const found = findByNameRecursiveOld(childMesh as Mesh, name);
-
-    if (found) {
-      return found;
-    }
-  }
-
-  return undefined;
-};
-
-const findByNameRecursive = (mesh: Object3D, name: string): MeshWrapper | undefined => {
-  if (mesh.name === name) {
-    return new MeshWrapper(mesh);
-  }
-
-  for (const childMesh of mesh.children) {
-    const found = findByNameRecursiveOld(childMesh as Mesh, name);
-
-    if (found) {
-      return new MeshWrapper(found);
-    }
-  }
-
-  return undefined;
-};
-
-const findLeafsRecursive = (obj: Object3D): Mesh[] => {
-  if (!obj.children.length) {
-    return [obj as Mesh];
-  }
-
-  const children: Mesh[] = [];
-
-  for (const childObj of obj.children) {
-    children.push(...findLeafsRecursive(childObj));
-  }
-
-  return children;
-};
-
 class MeshWrapper {
   constructor(mesh: Object3D) {
     this.mesh = mesh;
@@ -57,7 +11,7 @@ class MeshWrapper {
       throw new Error(`Name is mandatory`);
     }
 
-    const found = findByNameRecursiveOld(this.mesh, name);
+    const found = this.findByNameRecursiveOld(this.mesh, name);
 
     if (!found) {
       throw new Error(`Mesh with name ${name} not found`);
@@ -71,7 +25,7 @@ class MeshWrapper {
       throw new Error(`Name is mandatory`);
     }
 
-    const found = findByNameRecursive(this.mesh, name);
+    const found = this.findByNameRecursive(this.mesh, name);
 
     if (!found) {
       throw new Error(`Mesh with name ${name} not found`);
@@ -88,11 +42,57 @@ class MeshWrapper {
   }
 
   getLeafs(): Mesh[] {
-    return findLeafsRecursive(this.mesh);
+    return this.findLeafsRecursive(this.mesh);
   }
 
   get() {
     return this.mesh;
+  }
+
+  private findByNameRecursiveOld(mesh: Object3D, name: string): Object3D | undefined {
+    if (mesh.name === name) {
+      return mesh;
+    }
+
+    for (const childMesh of mesh.children) {
+      const found = this.findByNameRecursiveOld(childMesh as Mesh, name);
+
+      if (found) {
+        return found;
+      }
+    }
+
+    return undefined;
+  }
+
+  private findByNameRecursive(mesh: Object3D, name: string): MeshWrapper | undefined {
+    if (mesh.name === name) {
+      return new MeshWrapper(mesh);
+    }
+
+    for (const childMesh of mesh.children) {
+      const found = this.findByNameRecursiveOld(childMesh as Mesh, name);
+
+      if (found) {
+        return new MeshWrapper(found);
+      }
+    }
+
+    return undefined;
+  }
+
+  private findLeafsRecursive(obj: Object3D): Mesh[] {
+    if (!obj.children.length) {
+      return [obj as Mesh];
+    }
+
+    const children: Mesh[] = [];
+
+    for (const childObj of obj.children) {
+      children.push(...this.findLeafsRecursive(childObj));
+    }
+
+    return children;
   }
 
   private mesh: Object3D;

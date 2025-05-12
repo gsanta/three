@@ -1,11 +1,10 @@
-import { useAnimations, useGLTF } from '@react-three/drei';
+import { useGLTF } from '@react-three/drei';
 import useRegisterScene from '../hooks/useRegisterScene';
 import { GroupProps } from '@react-three/fiber';
 import { NodesType } from '../hooks/useGeometry';
 import ModelMeshProps from '../types/ModelMeshProps';
 import ModelGroupMesh from './ModelGroupMesh';
 import ModelPartMesh from './ModelPartMesh';
-import useDevice from '../hooks/useDevice';
 import { Box3, Group, Mesh, Vector3 } from 'three';
 import ChildMeshRenderer from '../scene/components/ChildMeshRenderer';
 import { useEffect, useState } from 'react';
@@ -18,14 +17,11 @@ export const ModelMesh = ({ additions, block, materialProps, meshProps, overwrit
   const blockPosition = overwrites?.position ? overwrites.position : block.position;
   const blockRotation = overwrites?.rotation ? overwrites.rotation : block.rotation;
 
-  const { animations, nodes, materials } = useGLTF(block.path);
-  const { actions, mixer } = useAnimations(animations, ref);
+  const { nodes, materials } = useGLTF(block.path);
 
   const position = additions?.position
     ? new Vector(additions.position).add(new Vector(blockPosition)).get()
     : blockPosition;
-
-  useDevice({ block, actions, mixer });
 
   const geometryNodes = nodes as unknown as NodesType;
 
@@ -113,7 +109,6 @@ export const ModelMesh = ({ additions, block, materialProps, meshProps, overwrit
           // additions={additions}
           meshProps={{ ...meshProps }}
           materialProps={materialProps}
-          slice={block.category === 'rooms' ? 'building' : 'city'}
         />
       ))}
     </group>

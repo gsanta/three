@@ -1,4 +1,3 @@
-import BlockDecoration from '../../models/block/BlockCategory';
 import { BlockState, UpdateBlock } from './blockSlice.types';
 
 class BlocksUpdater {
@@ -6,7 +5,7 @@ class BlocksUpdater {
     this.slice = slice;
   }
 
-  update(state: BlockState, updates: UpdateBlock<BlockDecoration>[]) {
+  update(state: BlockState, updates: UpdateBlock[]) {
     updates.forEach((update) => {
       if ('hover' in update) {
         if (state.hovered) {

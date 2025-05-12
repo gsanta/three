@@ -1,29 +1,27 @@
-import BlockDecoration, { BlockCategories } from '@/client/editor/models/block/BlockCategory';
+import { BlockCategories, BlockDecorationType } from '@/client/editor/models/block/BlockCategory';
 import { PartialDeep } from 'type-fest';
 import BlockData, { mergeBlocks } from '@/client/editor/models/block/BlockData';
 import BlockStore from '../../stores/block/BlockStore';
-import { store, Store } from '@/client/common/utils/store';
+import { Store } from '@/client/common/utils/store';
 import mergeDeep, { MergeStrategy } from '../../utils/mergeDeep';
 import BlockUpdater from './updaters/BlockUpdater';
-import LampUpdater from './updaters/LampUpdater';
 import TransactionHook from './TransactionHook';
 import { updateBlocks } from '../../stores/block/blockActions';
 import { BlockUpdate, DecorationUpdate, UpdateBlocks } from '../../stores/block/blockSlice.types';
+import { BlockCategoryName } from '../../models/block/BlockCategoryName';
 
 type EditOptions = {
   arrayMergeStrategy?: MergeStrategy;
   slice?: 'city' | 'building';
 };
 
-const getDefaultEditOptions = () => ({ arrayMergeStrategy: 'merge' as const, slice: store.getState().grid.mode });
+const getDefaultEditOptions = () => ({ arrayMergeStrategy: 'merge' as const });
 
 class Edit {
   constructor(blockStore: BlockStore, dispatchStore: Store, systemHooks: TransactionHook[], close: () => void) {
     this.store = blockStore;
     this.systemHooks = systemHooks;
     this.dispatchStore = dispatchStore;
-
-    this.updaters.lamps = new LampUpdater(blockStore);
 
     this.close = close;
   }
@@ -45,7 +43,7 @@ class Edit {
     return this;
   }
 
-  createDecoration<T extends BlockDecoration>(data: BlockCategories[T], options?: EditOptions): this {
+  createDecoration(data: BlockDecorationType, options?: EditOptions): this {
     const mergedOptions = this.getMergedOptions(options);
 
     this.updates.push({ type: 'update', slice: mergedOptions.slice, decoration: data });
@@ -53,10 +51,10 @@ class Edit {
     return this;
   }
 
-  update<T extends BlockDecoration>(
+  update<T extends BlockCategoryName>(
     id: string,
     block: Partial<BlockData>,
-    decorationType: BlockDecoration,
+    decorationType: BlockCategoryName,
     decoration: PartialDeep<BlockCategories[T]>,
   ) {
     this.updateBlock(id, block);
@@ -85,7 +83,7 @@ class Edit {
     return this;
   }
 
-  updateDecoration<T extends BlockDecoration>(
+  updateDecoration<T extends BlockCategoryName>(
     category: T,
     id: string,
     partial: PartialDeep<BlockCategories[T], object>,
@@ -195,14 +193,14 @@ class Edit {
     return [this.updates[index] as BlockUpdate | undefined, index];
   }
 
-  private getDecorationFromUpdates(id: string): [DecorationUpdate<BlockDecoration> | undefined, number] {
+  private getDecorationFromUpdates(id: string): [DecorationUpdate | undefined, number] {
     const index = this.updates.findIndex((update) => ('decoration' in update ? update.decoration.id === id : false));
 
     if (index === -1) {
       return [undefined, -1];
     }
 
-    return [this.updates[index] as DecorationUpdate<BlockDecoration> | undefined, index];
+    return [this.updates[index] as DecorationUpdate | undefined, index];
   }
 
   private isRemoved(id: string) {

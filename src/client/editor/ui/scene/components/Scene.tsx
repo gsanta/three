@@ -9,7 +9,6 @@ import { Physics } from '@react-three/cannon';
 import Car from './Car';
 import Ground from './Ground';
 import Track from './Track';
-import BuildingScene from './BuildingScene';
 import { LightningStrike, OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { EffectComposer, Outline, Selection } from '@react-three/postprocessing';
 import { Mesh, MeshBasicMaterial, Vector3 } from 'three';
@@ -42,9 +41,7 @@ const Scene = () => {
   const scene = useThree((state) => state.scene);
 
   const blockIds = useAppSelector((selector) => selector.block.present.blockIds);
-  const editMode = useAppSelector((selector) => selector.grid.editingMode);
   const editTargetBlock = useAppSelector((selector) => selector.grid.editingTargetBlock);
-  const sceneMode = useAppSelector((selector) => selector.grid.mode);
 
   useEffect(() => {
     sceneService.setCamera(camera);
@@ -101,19 +98,6 @@ const Scene = () => {
 
   return (
     <>
-      {editMode === 'wiring' && (
-        <RootMeshRenderer
-          key={editTargetBlock}
-          blockId={editTargetBlock || ''}
-          meshProps={{
-            onPointerDown: handlePointerDown,
-            onPointerEnter: handlePointerEnter,
-          }}
-          materialProps={{ opacity: 0.5, transparent: true }}
-          slice="city"
-        />
-      )}
-
       <mesh position={[5, 1, 0]} castShadow>
         <cylinderGeometry args={[0.02, 0.02, 2, 8]} />
         <meshStandardMaterial color="brown" />
@@ -129,32 +113,28 @@ const Scene = () => {
         </EffectComposer>
 
         <>
-          {sceneMode === 'building' ? (
-            <BuildingScene />
-          ) : (
-            <Physics broadphase="SAP" gravity={[0, -2.6, 0]}>
-              {blockIds.map((id) => {
-                if (editTargetBlock === id) {
-                  return;
-                }
+          <Physics broadphase="SAP" gravity={[0, -2.6, 0]}>
+            {blockIds.map((id) => {
+              if (editTargetBlock === id) {
+                return;
+              }
 
-                return (
-                  <RootMeshRenderer
-                    key={id}
-                    blockId={id}
-                    meshProps={{
-                      onPointerDown: handlePointerDown,
-                      onPointerEnter: handlePointerEnter,
-                    }}
-                    slice="city"
-                  />
-                );
-              })}
-              <Track />
-              <Ground />
-              <Car />
-            </Physics>
-          )}
+              return (
+                <RootMeshRenderer
+                  key={id}
+                  blockId={id}
+                  meshProps={{
+                    onPointerDown: handlePointerDown,
+                    onPointerEnter: handlePointerEnter,
+                  }}
+                  slice="city"
+                />
+              );
+            })}
+            <Track />
+            <Ground />
+            <Car />
+          </Physics>
         </>
       </Selection>
     </>

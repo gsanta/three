@@ -6,7 +6,7 @@ import { setSelectedTool } from '@/client/editor/stores/tool/toolSlice';
 import ToolName from '@/client/editor/models/tool/ToolName';
 import ExtendedWorld from './ExtendedWorld';
 import Num3 from '@/client/editor/models/math/Num3';
-import { checkPartIndexExists, checkPositionCloseTo } from './helpers/checks';
+import { checkPositionCloseTo } from './helpers/checks';
 import { ToolInfo } from '@/client/editor/models/tool/Tool';
 import { updateBlocks } from '@/client/editor/stores/block/blockActions';
 import TestSceneService from './support/TestSceneService';
@@ -49,7 +49,7 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
     const pos = row.POS.split(',').map((num) => Number(num)) as Num3;
 
     if (row.ID) {
-      sceneService.setNextUuid(row.ID);
+      sceneService.setNextUuid(row.ID, row.TYPE);
     }
 
     const block = blockStore.getBlockType(row.TYPE);
@@ -67,11 +67,7 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
       parentBlockId = row.PARENT;
     }
 
-    let partIndex: string | undefined = undefined;
-
-    if (parentBlockId && partIndexOrName) {
-      partIndex = checkPartIndexExists.call(this, parentBlockId, partIndexOrName);
-    }
+    const partIndex: string | undefined = partIndexOrName;
 
     const targetBlock = parentBlockId;
 
@@ -118,16 +114,24 @@ export async function addTemplateToPosition(this: ExtendedWorld, template: strin
   this.getEnv().toolHelper.pointerUp();
 }
 
-When('I set next uuids to:', function (this: ExtendedWorld, table: any) {
-  const data = table.hashes() as {
-    UUID: string;
-    TYPE: string;
-  }[];
+When(
+  'I set next uuids to:',
+  function (
+    this: ExtendedWorld,
+    table: {
+      hashes(): {
+        UUID: string;
+        TYPE: string;
+      }[];
+    },
+  ) {
+    const data = table.hashes();
 
-  for (const row of data) {
-    (this.getEnv().editorContext.sceneService as TestSceneService).setNextUuid(row.UUID, row.TYPE);
-  }
-});
+    for (const row of data) {
+      (this.getEnv().editorContext.sceneService as TestSceneService).setNextUuid(row.UUID, row.TYPE);
+    }
+  },
+);
 
 type BlockHash = {
   BLOCK: string;

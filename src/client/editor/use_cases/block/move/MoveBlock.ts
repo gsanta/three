@@ -8,9 +8,9 @@ import ToolStore from '@/client/editor/stores/tool/ToolStore';
 import { store } from '@/client/common/utils/store';
 import { updateSelectTool } from '@/client/editor/stores/tool/toolSlice';
 import MoveDecoration from './MoveDecoration';
-import BlockDecoration from '@/client/editor/models/block/BlockCategory';
 import MoveDevice from './MoveDevice';
 import BlockCategoryStore from '@/client/editor/stores/blockCategory/BlockCategoryStore';
+import { BlockCategoryName } from '@/client/editor/models/block/BlockCategoryName';
 
 class MoveBlock {
   constructor(
@@ -69,7 +69,7 @@ class MoveBlock {
 
   private movers: Partial<Record<string, BlockMover>> = {};
 
-  private moveDecorationMap: Partial<Record<BlockDecoration, MoveDecoration>> = {};
+  private moveDecorationMap: Partial<Record<BlockCategoryName, MoveDecoration>> = {};
 
   private baseMover: BaseMover;
 

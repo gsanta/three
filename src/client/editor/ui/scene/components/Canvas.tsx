@@ -18,7 +18,7 @@ const Canvas = () => {
   //   }
   // }, [data, dispatch, isSuccess]);
 
-  const { keyboard, sceneStore: scene } = useEditorContext();
+  const { sceneStore: scene } = useEditorContext();
 
   // const canvasRef = useRef<HTMLCanvasElement | null>(null);
 

@@ -7,21 +7,13 @@ import Canvas from '../../client/editor/ui/scene/components/Canvas';
 import Header from '../../client/common/components/globals/Header';
 import Toolbar from '../../client/editor/ui/tool/Toolbar';
 import ProtectedPage from '../../client/common/components/globals/ProtectedPage';
-import BlockCategoriesResponse from '@/common/response_types/BlockCategoriesResponse';
-import BlockAddMethodsResponse from '@/common/response_types/BlockAddMethodsResponse';
 import { useEffect } from 'react';
 import { useAppDispatch } from '@/client/common/hooks/hooks';
 
 import { Provider } from 'react-redux';
 import { store } from '@/client/common/utils/store';
-import BlockContextMenuActionsResponse from '@/common/response_types/BlockContextMenuActionsResponse';
 import { dispatchEditorData } from '@/client/editor/setupEditorData';
-
-type EditorPageProps = {
-  blockAddMethods: BlockAddMethodsResponse['items'];
-  blockCategories: BlockCategoriesResponse['items'];
-  blockContextMenuActions: BlockContextMenuActionsResponse['items'];
-};
+import EditorPageProps from './EditorPageProps';
 
 const EditorPageContent = (props: EditorPageProps) => {
   const dispatch = useAppDispatch();

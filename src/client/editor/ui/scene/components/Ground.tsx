@@ -5,15 +5,11 @@ import { ThreeEvent } from '@react-three/fiber';
 import { useCallback, useEffect, useRef } from 'react';
 import { BufferAttribute, BufferGeometry, Mesh } from 'three';
 import CustomGrid from './Grid';
-import { useAppSelector } from '@/client/common/hooks/hooks';
 
 const Ground = () => {
   const { tool } = useEditorContext();
 
   const gridMap = useTexture('grid.png');
-  const alphaMap = useTexture('alpha-map.png');
-
-  const groundRadius = useAppSelector((state) => state.grid.groundRadius);
 
   useEffect(() => {
     gridMap.anisotropy = 16;

@@ -1,7 +1,6 @@
 import { useAppDispatch, useAppSelector } from '../../../common/hooks/hooks';
 import { Box, FormControl, FormLabel } from '@chakra-ui/react';
 import { setSelectedGeometry } from '../../stores/blockType/blockTypeSlice';
-import { BlockName } from '../../models/block/BlockConstantData';
 import Dropdown from '@/client/common/components/lib/Dropdown/Dropdown';
 import DropdownButton from '@/client/common/components/lib/Dropdown/DropdownButton';
 import DropdownItem from '@/client/common/components/lib/Dropdown/DropdownItem';
@@ -12,7 +11,7 @@ const AddToolOptions = () => {
   const dispatch = useAppDispatch();
 
   const handleGeometryChange = (val: string) => {
-    dispatch(setSelectedGeometry(val as BlockName));
+    dispatch(setSelectedGeometry(val));
   };
 
   return (

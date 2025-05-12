@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import BlockConstantData from '@/client/editor/models/block/BlockConstantData';
 import BlockData from '@/client/editor/models/block/BlockData';
-import BlockDecoration, { BlockDecorationType } from '@/client/editor/models/block/BlockCategory';
+import { BlockDecorationType } from '@/client/editor/models/block/BlockCategory';
 import BlockCreator from './BlockCreator';
 import SceneService from '@/client/editor/ui/scene/service/SceneService';
+import { BlockCategoryName } from '@/client/editor/models/block/BlockCategoryName';
 
 abstract class BlockFactory {
   constructor(sceneService: SceneService) {
@@ -18,7 +19,7 @@ abstract class BlockFactory {
 
   createCategory(
     _block: BlockData,
-    _overrides: Partial<BlockDecorationType> & { category: BlockDecoration },
+    _overrides: Partial<Omit<BlockDecorationType, 'category'>> & { category: BlockCategoryName },
   ): BlockDecorationType {
     throw new Error('Unimplemented method');
   }

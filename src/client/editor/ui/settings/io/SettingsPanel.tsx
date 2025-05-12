@@ -1,8 +1,7 @@
 import { Box, ButtonGroup } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React from 'react';
 import ExportDialog from './ExportDialog';
 import ImportDialog from './import/ImportDialog';
-import { useBoolean } from 'usehooks-ts';
 import { useAppDispatch } from '@/client/common/hooks/hooks';
 import { ActionCreators } from 'redux-undo';
 import useSaveSnapshot from '../../hooks/useSaveSnapshot';
@@ -10,9 +9,6 @@ import useLoadSnapshot from '../../hooks/useLoadSnapshot';
 import Icon from '@/client/common/components/lib/Icon';
 
 const SettingsPanel = () => {
-  const [isExportDialogOpen, setExportDialogOpen] = useState(false);
-  const { value: isImportDialogOpen, setTrue: openImportDialog, setFalse: closeImportDialog } = useBoolean(false);
-
   const dispatch = useAppDispatch();
 
   const { mutate: saveSnapshot } = useSaveSnapshot();
@@ -109,8 +105,8 @@ const SettingsPanel = () => {
           </button>
         </div>
       </ButtonGroup>
-      <ImportDialog isOpen={isImportDialogOpen} onClose={closeImportDialog} />
-      <ExportDialog isOpen={isExportDialogOpen} onClose={() => setExportDialogOpen(false)} />
+      <ImportDialog />
+      <ExportDialog />
     </Box>
   );
 };

@@ -6,7 +6,12 @@ import Device from '../../models/block/categories/Device';
 import TransactionHook from './TransactionHook';
 
 class TransactionService {
-  constructor(blockStore: BlockStore, dispatchStore: Store, sceneService: SceneService, systemHooks: TransactionHook[]) {
+  constructor(
+    blockStore: BlockStore,
+    dispatchStore: Store,
+    sceneService: SceneService,
+    systemHooks: TransactionHook[],
+  ) {
     this.store = blockStore;
     this.dispatchStore = dispatchStore;
     this.sceneService = sceneService;

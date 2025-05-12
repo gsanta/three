@@ -3,13 +3,14 @@ import BlockFactory from './creators/BlockFactory';
 import PoleFactory from './creators/PoleFactory';
 import CableFactory from './creators/CableFactory';
 import BlockData from '../../models/block/BlockData';
-import BlockDecoration, { PartialBlockCategories } from '../../models/block/BlockCategory';
+import { PartialBlockCategories } from '../../models/block/BlockCategory';
 import Edit from '../transaction/Edit';
 import BlockStore from '../../stores/block/BlockStore';
 import DefaultBlockFactory from './creators/DefaultBlockFactory';
 import WeatherHeadFactory from './creators/WeatherHeadFactory';
 import { BlockSlices } from '../../stores/block/blockSlice.types';
 import TransformerFactory from './creators/TransformerFactory';
+import { BlockCategoryName } from '../../models/block/BlockCategoryName';
 
 class FactoryService {
   constructor(blockStore: BlockStore, sceneService: SceneService) {
@@ -43,7 +44,7 @@ class FactoryService {
 
     edit.create(block, { slice: targetSlice });
 
-    template.decorations.forEach((decorationName: BlockDecoration) => {
+    template.decorations.forEach((decorationName: BlockCategoryName) => {
       const decoration = factory.createCategory(block, {
         ...initialDecorations[decorationName],
         category: decorationName,

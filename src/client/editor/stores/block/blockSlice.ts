@@ -9,12 +9,13 @@ export const initialBlockState: BlockState = {
   blockIds: [],
   decorations: {
     cables: {},
-    decorations: {},
     devices: {},
     roads: {},
-    walls: {},
-    'building-bases': {},
     transformers: {},
+    houses: {},
+    humans: {},
+    poles: {},
+    'weather-heads': {},
   },
   selectedBlocks: [],
 };
@@ -30,15 +31,7 @@ export const blockSlice = createSlice({
       state.blocks = {};
       state.hovered = undefined;
       state.currentPlayer = undefined;
-      state.decorations = {
-        cables: {},
-        decorations: {},
-        devices: {},
-        walls: {},
-        'building-bases': {},
-        roads: {},
-        transformers: {},
-      };
+      state.decorations = { ...initialBlockState.decorations };
       state.selectedBlocks = [];
     },
 

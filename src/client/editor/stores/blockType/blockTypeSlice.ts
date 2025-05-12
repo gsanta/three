@@ -1,6 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import BlockConstantData from '../../models/block/BlockConstantData';
-import { RGBColor } from '@/client/editor/utils/colorUtils';
 import BlockSettings from '@/client/editor/models/BlockSettings';
 import BlockSelectedSettings from '@/client/editor/models/BlockSelectedSettings';
 
@@ -12,7 +11,6 @@ export type BlockTypeState = {
   settings: Partial<Record<string, BlockSettings>>;
   selectedSettings: Record<string, BlockSelectedSettings>;
   selectedTransformType: TransformType;
-  color: RGBColor;
 };
 
 export const initialBlockTypeState: BlockTypeState = {
@@ -21,7 +19,6 @@ export const initialBlockTypeState: BlockTypeState = {
   settings: {},
   selectedSettings: {},
   selectedTransformType: 'move',
-  color: { r: 1, g: 1, b: 1 },
 };
 
 export const blockTypeSlice = createSlice({
@@ -35,10 +32,6 @@ export const blockTypeSlice = createSlice({
       state.selectedTransformType = action.payload;
     },
 
-    setColor(state, action: PayloadAction<RGBColor>) {
-      state.color = action.payload;
-    },
-
     setTemplates(state, action: PayloadAction<BlockConstantData[]>) {
       state.blocks = action.payload.map((block) => ({
         ...block,
@@ -50,6 +43,6 @@ export const blockTypeSlice = createSlice({
   },
 });
 
-export const { setColor, setSelectedGeometry, setSelectedTransformType, setTemplates } = blockTypeSlice.actions;
+export const { setSelectedGeometry, setSelectedTransformType, setTemplates } = blockTypeSlice.actions;
 
 export default blockTypeSlice.reducer;

@@ -8,10 +8,9 @@ class ExportJson {
     this.store = store;
   }
 
-  export(): { city: BlockState; building: BlockState } {
+  export(): { city: BlockState } {
     return {
       city: this.exportBlockState(this.store.getState().block.present),
-      building: this.store.getState().building.present,
     };
   }
 
@@ -48,7 +47,7 @@ class ExportJson {
       decorations: blockState.decorations,
       rootBlocksIds: blockState.rootBlocksIds,
       selectedRootBlockIds: [],
-      selectedBlocks: {},
+      selectedBlocks: [],
       selectedPartIndexes: {},
     };
   }

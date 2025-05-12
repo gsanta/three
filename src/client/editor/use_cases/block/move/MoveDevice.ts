@@ -2,10 +2,12 @@ import Edit from '@/client/editor/services/transaction/Edit';
 import MoveDecoration from './MoveDecoration';
 import Num3 from '@/client/editor/models/math/Num3';
 import Vector from '@/client/editor/models/math/Vector';
+import Device from '@/client/editor/models/block/categories/Device';
+import Cable from '@/client/editor/models/block/categories/Cable';
 
 class MoveDevice extends MoveDecoration {
   move(edit: Edit, blockId: string, dragDelta: Num3) {
-    const device = this.blockStore.getDecoration('devices', blockId);
+    const device = this.blockStore.getDecoration('devices', blockId) as Device;
 
     if (!device) {
       throw new Error(`Device not found for block ${blockId}`);
@@ -20,7 +22,7 @@ class MoveDevice extends MoveDecoration {
   }
 
   private moveCable(edit: Edit, cableId: string, blockId: string, dragDelta: Num3) {
-    const cable = this.blockStore.getDecoration('cables', cableId);
+    const cable = this.blockStore.getDecoration('cables', cableId) as Cable;
 
     const index = cable.end1?.device === blockId ? 0 : cable.points.length - 1;
     const newPoints = [...cable.points];

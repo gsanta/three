@@ -12,6 +12,7 @@ import Pole from '../../models/block/categories/Pole';
 import BlockPartLookupData from '../../models/block/part/BlockPartLookupData';
 import Vector from '../../models/math/Vector';
 import FindNearestBlock from '../scene/FindNearestBlock';
+import Device from '../../models/block/categories/Device';
 
 class JoinPoles {
   constructor(
@@ -25,18 +26,16 @@ class JoinPoles {
     this.scene = scene;
     this.transactionService = transactionService;
 
-    this.findNearestBlock = new FindNearestBlock(blockStore)
+    this.findNearestBlock = new FindNearestBlock(blockStore);
 
     this.cableHelper = new CableHelper(blockStore);
   }
 
   join(pole: BlockData) {
-    const otherPoles = this.blockStore
-      .getBlocksAsArray()
-      .filter((block) => block.category === 'poles')
-      .filter((currPole) => currPole.id !== pole.id);
-
-    const neighborPole = this.findNearestBlock.find(new Vector(pole.position), { skipBlocks: [pole.id], category: 'poles' })
+    const neighborPole = this.findNearestBlock.find(new Vector(pole.position), {
+      skipBlocks: [pole.id],
+      category: 'poles',
+    });
 
     if (!neighborPole) {
       return;
@@ -139,7 +138,7 @@ class JoinPoles {
   }
 
   private updatePole(edit: Edit, cable: BlockData, pole: BlockData, partIndex: string) {
-    const device = this.blockStore.getDecoration('devices', pole.id);
+    const device = this.blockStore.getDecoration('devices', pole.id) as Device;
 
     edit.update<'devices'>(
       pole.id,

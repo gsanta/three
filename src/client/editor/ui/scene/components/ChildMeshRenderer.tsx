@@ -4,7 +4,6 @@ import MeshRenderer from './MeshRenderer';
 
 type ChildMeshRendererProps = Omit<WrappedMeshProps, 'block' | 'parent'> & {
   blockId: string;
-  slice: 'city' | 'building';
 };
 
 const ChildMeshRenderer = (props: ChildMeshRendererProps) => {

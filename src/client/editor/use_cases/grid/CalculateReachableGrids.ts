@@ -1,7 +1,7 @@
 import BlockData from '../../models/block/BlockData';
 import Grid from '../../models/Grid';
 import Vector from '../../models/math/Vector';
-import GridStore from './GridStore';
+import GridStore from '../../stores/grid/GridStore';
 
 class CalculateReachableGrids {
   constructor(gridStore: GridStore) {

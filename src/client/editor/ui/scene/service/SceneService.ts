@@ -17,15 +17,15 @@ abstract class SceneService {
     options?: IntersectionOptions,
   ): [BlockIntersection[], Ray];
   intersection(
-    meshes: Object3D[],
-    clientX: number,
-    clientY: number,
-    options?: IntersectionOptions,
+    _meshes: Object3D[] | string[],
+    _clientX: number,
+    _clientY: number,
+    _options?: IntersectionOptions,
   ): [BlockIntersection[], Ray] {
     throw new Error('Not implemented');
   }
 
-  worldToScreen(object: Object3D): Vector3 {
+  worldToScreen(_object: Object3D): Vector3 {
     throw new Error('Not implemented');
   }
 
@@ -35,7 +35,7 @@ abstract class SceneService {
     this.meshRenderedListeners.push(callback);
 
     return () => {
-      this.meshRenderedListeners = this.meshRenderedListeners.filter(cb => cb !== callback);
+      this.meshRenderedListeners = this.meshRenderedListeners.filter((cb) => cb !== callback);
     };
   }
 

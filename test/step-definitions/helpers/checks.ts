@@ -2,9 +2,9 @@ import MeshWrapper from '@/client/editor/models/MeshWrapper';
 import ExtendedWorld from '../ExtendedWorld';
 import Num3 from '@/client/editor/models/math/Num3';
 import { Vector3 } from 'three';
-import BlockDecoration from '@/client/editor/models/block/BlockCategory';
 import assert from 'assert';
 import Vector from '@/client/editor/models/math/Vector';
+import { BlockCategoryName } from '@/client/editor/models/block/BlockCategoryName';
 
 export function checkBlockExists(this: ExtendedWorld, blockId: string) {
   const realBlockId = blockId === 'examined' ? this.env?.testScene.storedBlockId || '' : blockId;
@@ -18,7 +18,7 @@ export function checkBlockExists(this: ExtendedWorld, blockId: string) {
   return block;
 }
 
-export function checkDecorationExists(this: ExtendedWorld, category: BlockDecoration, blockId: string) {
+export function checkDecorationExists(this: ExtendedWorld, category: BlockCategoryName, blockId: string) {
   const realBlockId = blockId === 'examined' ? this.env?.testScene.storedBlockId || '' : blockId;
 
   const decortion = this.env?.editorContext.blockStore.getDecoration(category, realBlockId);
@@ -52,19 +52,6 @@ export function checkBlockMeshExists(this: ExtendedWorld, blockId: string) {
   }
 
   return mesh;
-}
-
-export function checkPartMeshExists(this: ExtendedWorld, blockId: string, partIndex: string) {
-  const mesh = checkBlockMeshExists.call(this, blockId);
-
-  const partName = this.getEnv().editorContext.blockStore.getBlock(blockId).partDetails[partIndex]?.name;
-  const partMesh = new MeshWrapper(mesh).findByNameOld(partName);
-
-  if (!partMesh) {
-    throw new Error(`Mesh for part ${partIndex} of block ${blockId} not found.`);
-  }
-
-  return partMesh;
 }
 
 export function checkPosition(this: ExtendedWorld, position: string): Num3 {
@@ -110,6 +97,8 @@ export function checkPosition(this: ExtendedWorld, position: string): Num3 {
 
     return rotateMeshPos;
   }
+
+  throw new Error('should not reach this point');
 }
 
 export function checkPositionCloseTo(this: ExtendedWorld, position: string | Num3, actual: Num3) {

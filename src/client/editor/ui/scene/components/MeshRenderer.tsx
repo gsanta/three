@@ -9,9 +9,9 @@ import { useEffect, useRef } from 'react';
 import useEditorContext from '@/app/editor/useEditorContext';
 import { resetNotifyOnRendered } from '@/client/editor/stores/block/blockActions';
 
-const isModelMesh = (block: BlockData): block is BlockData => block.category !== 'cables';
+const isModelMesh = (block: BlockData) => block.category !== 'cables';
 
-const isTubeMesh = (block: BlockData): block is BlockData => block.category === 'cables';
+const isTubeMesh = (block: BlockData) => block.category === 'cables';
 
 const MeshRenderer = (props: WrappedMeshProps) => {
   const { block, meshProps, materialProps = {} } = props;

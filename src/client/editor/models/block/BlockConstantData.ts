@@ -1,5 +1,4 @@
 import { BlockCategoryName } from './BlockCategoryName';
-import BlockDecoration from './BlockCategory';
 import BlockPartGeometryData from './part/BlockPartGeometryData';
 import BlockPartLookupData from './part/BlockPartLookupData';
 
@@ -9,7 +8,7 @@ type BlockConstantData = {
   animations?: Partial<Record<AnimationTriggerName, string[]>>;
   category: BlockCategoryName;
   color: [number, number, number];
-  decorations: BlockDecoration[];
+  decorations: BlockCategoryName[];
   movable: boolean;
   moveAxis: [boolean, boolean, boolean];
   parts: BlockPartGeometryData[];

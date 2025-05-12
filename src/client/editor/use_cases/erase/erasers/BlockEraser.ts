@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import BlockData from '@/client/editor/models/block/BlockData';
-import BlockDecoration from '@/client/editor/models/block/BlockCategory';
 import Edit from '../../../services/transaction/Edit';
+import { BlockCategoryName } from '@/client/editor/models/block/BlockCategoryName';
 
 abstract class BlockEraser {
-  readonly category: BlockDecoration;
+  readonly category: BlockCategoryName;
 
-  constructor(category: BlockDecoration) {
+  constructor(category: BlockCategoryName) {
     this.category = category;
   }
 

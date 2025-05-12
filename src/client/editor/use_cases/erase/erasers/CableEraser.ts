@@ -3,7 +3,8 @@ import BlockData from '@/client/editor/models/block/BlockData';
 import Edit from '../../../services/transaction/Edit';
 import BlockStore from '../../../stores/block/BlockStore';
 import BlockEraser from './BlockEraser';
-import { CableEnd } from '@/client/editor/models/block/categories/Cable';
+import Cable, { CableEnd } from '@/client/editor/models/block/categories/Cable';
+import Device from '@/client/editor/models/block/categories/Device';
 
 class CableEraser extends BlockEraser {
   constructor(store: BlockStore) {
@@ -12,7 +13,7 @@ class CableEraser extends BlockEraser {
   }
 
   erase(edit: Edit, block: BlockData) {
-    const cable = this.store.getDecoration('cables', block.id);
+    const cable = this.store.getDecoration('cables', block.id) as Cable;
 
     const end1 = cable.end1;
     const end2 = cable.end2;
@@ -27,7 +28,7 @@ class CableEraser extends BlockEraser {
   }
 
   associationErased(edit: Edit, cableBlock: BlockData, association: BlockData) {
-    const cable = this.store.getDecoration('cables', cableBlock.id);
+    const cable = this.store.getDecoration('cables', cableBlock.id) as Cable;
     const index = cable.points.findIndex((point) => point.blockId === association.id);
 
     const remainingPoints = cable.points.slice(0, index);
@@ -60,9 +61,9 @@ class CableEraser extends BlockEraser {
   }
 
   eraseDependent(edit: Edit, poleBlock: BlockData, dependent: BlockData) {
-    const pole = this.store.getDecoration('devices', poleBlock.id);
+    const pole = this.store.getDecoration('devices', poleBlock.id) as Device;
 
-    const cable = this.store.getDecoration('cables', dependent.id);
+    const cable = this.store.getDecoration('cables', dependent.id) as Cable;
 
     const cableEnd = cable?.end1?.device === poleBlock.id ? cable.end1 : cable?.end2;
 

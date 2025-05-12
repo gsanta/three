@@ -10,7 +10,6 @@ import EraseTool from './controllers/tools/EraseTool';
 import RayTool from './controllers/tools/RayTool';
 import SelectTool from './controllers/tools/SelectTool';
 import ControllerService from './services/controller/ControllerService';
-import ElectricitySystemHook from './services/electricity/ElectricitySystemHook';
 import EraserService from './services/EraserService';
 import FactoryService from './services/factory/FactoryService';
 import ToolService from './services/ToolService';
@@ -18,7 +17,6 @@ import TransactionService from './services/transaction/TransactionService';
 import UpdateService from './services/update/UpdateService';
 import BlockStore from './stores/block/BlockStore';
 import BlockCategoryStore from './stores/blockCategory/BlockCategoryStore';
-import ElectricityStore from './stores/electricity/ElectricityStore';
 import ToolStore from './stores/tool/ToolStore';
 import ContextMenuController from './controllers/ContextMenuController';
 import ConnectPoleToBuilding from './use_cases/block/add/ConnectPoleToBuilding';
@@ -59,10 +57,7 @@ export const setupEditor = () => {
   const scene = isTestEnv() ? new TestSceneService() : new SceneServiceImpl(blockStore, sceneStore);
   const factoryService = new FactoryService(blockStore, scene);
 
-  const electricityStore = new ElectricityStore();
-  const electricitySystemHook = new ElectricitySystemHook(blockStore, electricityStore);
-
-  const transaction = new TransactionService(blockStore, store, scene, [electricitySystemHook]);
+  const transaction = new TransactionService(blockStore, store, scene, []);
 
   // const addService = new AddService(blockStore, blockCategoryStore, factoryService, sceneStore, transaction);
 

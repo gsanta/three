@@ -37,7 +37,7 @@ class Pole extends Block {
 
   arePrimaryWireConnectionsEmpty(place: 'a' | 'b') {
     return (place === 'a' ? Pole.PRIMARY_WIRE_CONNECTION_NAMES_A : Pole.PRIMARY_WIRE_CONNECTION_NAMES_B).every(
-      (name) => !this.block.partDetails[name] || !this.block.partDetails[name].isConnected,
+      (name) => !this.block.partDetails[name] || !this.block.partDetails[name]?.isConnected,
     );
   }
 }

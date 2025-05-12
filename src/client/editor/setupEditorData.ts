@@ -11,6 +11,7 @@ import {
 import BlockConstantData from './models/block/BlockConstantData';
 import { setTemplates } from './stores/blockType/blockTypeSlice';
 import { initState } from './stores/block/blockActions';
+import EditorPageProps from '@/app/editor/EditorPageProps';
 
 export type EditorDataReturnType = {
   blockCategories: BlockCategoriesResponse['items'];
@@ -55,7 +56,7 @@ export const fetchEditorData = async (): Promise<EditorDataReturnType> => {
   };
 };
 
-export const dispatchEditorData = (data: EditorDataReturnType, dispatch: Dispatch<UnknownAction>) => {
+export const dispatchEditorData = (data: EditorPageProps, dispatch: Dispatch<UnknownAction>) => {
   const { blockCategories, blockAddMethods, blockContextMenuActions, blockTypes } = data;
 
   dispatch(setBlockCategories(blockCategories));

@@ -1,9 +1,8 @@
-import BlockDecoration from '../../models/block/BlockCategory';
 import { UpdateBlock } from '../block/blockSlice.types';
 import { BlockCategoyState } from './blockCategorySlice';
 
 class SelectionUpdater {
-  update(state: BlockCategoyState, updates: UpdateBlock<BlockDecoration>[]) {
+  update(state: BlockCategoyState, updates: UpdateBlock[]) {
     updates.forEach((update) => {
       if ('select' in update) {
         const selectedBlock = update.select;

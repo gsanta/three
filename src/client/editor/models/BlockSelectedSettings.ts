@@ -1,8 +1,8 @@
-import BlockDecoration from './block/BlockCategory';
+import { BlockCategoryName } from './block/BlockCategoryName';
 import Num3 from './math/Num3';
 
 type BlockSelectedSettings = {
-  category: BlockDecoration;
+  category: BlockCategoryName;
   rotation: Num3;
   scale: Num3;
 };

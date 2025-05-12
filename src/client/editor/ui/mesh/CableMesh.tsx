@@ -6,7 +6,7 @@ import useRegisterScene from '../hooks/useRegisterScene';
 import Num3 from '../../models/math/Num3';
 import useEditorContext from '@/app/editor/useEditorContext';
 
-type CableProps = WrappedMeshProps<'tube'> & { cable: Cable };
+type CableProps = WrappedMeshProps & { cable: Cable };
 
 const CableMesh = ({ cable, meshProps, block }: CableProps) => {
   const ref = useRegisterScene<Mesh>();

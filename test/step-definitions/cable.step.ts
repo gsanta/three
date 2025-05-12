@@ -2,7 +2,7 @@ import { Then } from '@cucumber/cucumber';
 import ExtendedWorld from './ExtendedWorld';
 import assert from 'assert';
 import isPositionCloseTo from './helpers/isPositionCloseTo';
-import { Pins } from '@/client/editor/models/block/categories/Device';
+import Device, { Pins } from '@/client/editor/models/block/categories/Device';
 import { checkDecorationExists, checkPosition } from './helpers/checks';
 import Cable from '@/client/editor/models/block/categories/Cable';
 
@@ -10,7 +10,7 @@ Then(
   'cable for block {string} and pin {string} ends at position {string}',
   function (this: ExtendedWorld, blockId: string, pin: string, position: string) {
     const [x, y, z] = checkPosition.call(this, position);
-    const cables = Object.values(this.env?.editorContext.blockStore.getDecorations('cables') || {});
+    const cables = Object.values(this.env?.editorContext.blockStore.getDecorations('cables') || {}) as Cable[];
 
     const realBlockId = blockId === 'examined' ? this.env?.testScene.storedBlockId || '' : blockId;
 
@@ -48,7 +48,7 @@ Then('I have cables with properties', function (this: ExtendedWorld, table: { ha
   rows.forEach((row) => {
     const cables = Object.values(this.env?.editorContext.blockStore.getDecorations('cables') || {});
 
-    const cable = cables.find((currCable) => currCable?.id === row.CABLE);
+    const cable = cables.find((currCable) => currCable?.id === row.CABLE) as Cable;
 
     if (!cable) {
       assert.fail(`Cable not found with id id ${row.CABLE}`);
@@ -83,7 +83,7 @@ Then('cable {string} ends at position {string}', function (this: ExtendedWorld, 
 Then('pin {string} of block {string} is empty', function (this: ExtendedWorld, pin: string, blockId: string) {
   const realBlockId = blockId === 'examined' ? this.env?.testScene.storedBlockId || '' : blockId;
 
-  const pole = this.env?.editorContext.blockStore.getDecorations('devices')[realBlockId];
+  const pole = this.env?.editorContext.blockStore.getDecorations('devices')[realBlockId] as Device;
 
   assert.equal(pole?.pins[pin as Pins]?.wires.length, 0);
 });

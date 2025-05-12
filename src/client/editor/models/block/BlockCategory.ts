@@ -1,32 +1,30 @@
 import Cable from './categories/Cable';
 import Transformer from './categories/Transformer';
 import Device from './categories/Device';
+import { BlockCategoryName } from './BlockCategoryName';
 
-export type BlockDecoration = 'cables' | 'decorations' | 'devices' | 'roads' | 'walls' | 'building-bases';
+export type BlockDecorationType = Cable | Device | Transformer | EmptyBlockCategory<BlockCategoryName>;
 
-export type BlockDecorationType = Cable | Device | Transformer | EmptyBlockCategory<'roads'>;
-
-export type EmptyBlockCategory<T extends BlockDecoration> = {
+export type EmptyBlockCategory<T extends BlockCategoryName> = {
   category: T;
   id: string;
 };
 
 export type BlockCategories = {
   cables: Cable;
-  decorations: EmptyBlockCategory<'decorations'>;
   devices: Device;
+  houses: EmptyBlockCategory<'houses'>;
+  humans: EmptyBlockCategory<'humans'>;
+  poles: EmptyBlockCategory<'poles'>;
   roads: EmptyBlockCategory<'roads'>;
-  walls: EmptyBlockCategory<'walls'>;
-  ['building-bases']: EmptyBlockCategory<'building-bases'>;
   transformers: Transformer;
+  'weather-heads': EmptyBlockCategory<'weather-heads'>;
 };
 
 export type PartialBlockCategories = {
-  [K in keyof BlockCategories]?: Partial<BlockCategories[K]>;
+  [K in keyof BlockCategories]?: Partial<BlockDecorationType>;
 };
 
 export type BlockCategoryRecords = {
-  [K in keyof BlockCategories]: Partial<Record<string, BlockCategories[K]>>;
+  [K in keyof BlockCategories]: Partial<Record<string, BlockDecorationType>>;
 };
-
-export default BlockDecoration;

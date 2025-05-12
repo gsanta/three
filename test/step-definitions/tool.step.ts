@@ -7,17 +7,11 @@ import { setSelectedGeometry } from '@/client/editor/stores/blockType/blockTypeS
 import { Vector3 } from 'three';
 import findClosestBlock from './helpers/findClosestBlock';
 import { checkPartIndexExists, checkPosition } from './helpers/checks';
-import { BlockIntersection } from '@/client/editor/use_cases/IntersectMesh';
-import Num3 from '@/client/editor/models/math/Num3';
 import TestSceneService from './support/TestSceneService';
 import assert from 'assert';
 
 When('I select tool {string}', function (this: ExtendedWorld, toolName: ToolName) {
   store.dispatch(setSelectedTool(toolName));
-});
-
-When('I execute tool', function (this: ExtendedWorld) {
-  this.getEnv().tool.onExecute();
 });
 
 When('I select template {string}', function (this: ExtendedWorld, type: string) {
@@ -39,51 +33,6 @@ When('I press pointer over block {string}', function (this: ExtendedWorld, block
   this.getEnv().toolHelper.pointerUp();
 });
 
-type IntersectionHash = {
-  BLOCK: string;
-  PART: string;
-  POSITION: string;
-  B_BOX_CENTER: string;
-};
-
-When('I have an intersection with:', function (this: ExtendedWorld, table: any) {
-  const data = table.hashes() as IntersectionHash[];
-
-  const intersections: BlockIntersection[] = [];
-  data.forEach((row) => {
-    const block = this.getEnv().blockStore.getBlock(row.BLOCK);
-    const entry = Object.entries(block.partDetails).find(([, val]) => val?.name === row.PART);
-
-    if (!entry?.[0]) {
-      throw new Error(`Part with name ${row.PART} not found for block ${block.id}`);
-    }
-
-    const point = row.POSITION ? checkPosition.call(this, row.POSITION) : ([0, 0, 0] as Num3);
-    const boungingBoxCenter = checkPosition.call(this, row.B_BOX_CENTER);
-
-    const partIndex = entry?.[0];
-
-    intersections.push({
-      block,
-      partIndex,
-      partInfo: block.partDetails[partIndex],
-      meshes: [
-        {
-          distance: 1,
-          point,
-          object: {
-            boungingBox: {
-              center: boungingBoxCenter,
-            },
-          },
-        },
-      ],
-    });
-  });
-
-  this.getEnv().sceneService.setIntersection(intersections);
-});
-
 When(
   'I press pointer over block {string} and part {string} at position {string}',
   function (this: ExtendedWorld, blockId: string, partName: string, position: string) {
@@ -94,16 +43,15 @@ When(
       throw new Error(`Block not found at position (${x},${y},${z})`);
     }
 
-    const partIndex = checkPartIndexExists.call(this, block.id, partName);
     (this.getEnv().editorContext.sceneService as TestSceneService).setIntersection([
       {
         block,
-        partIndex: partIndex,
+        partIndex: partName,
         meshes: [{ object: {}, distance: 1, point: [x, y, z] }],
       },
     ]);
 
-    this.getEnv().toolHelper.pointerEnter({ blockId: block.id, partIndex: partIndex });
+    this.getEnv().toolHelper.pointerEnter({ blockId: block.id, partIndex: partName });
     this.getEnv().toolHelper.pointerDown({ blockId });
     this.getEnv().toolHelper.pointerUp();
   },
