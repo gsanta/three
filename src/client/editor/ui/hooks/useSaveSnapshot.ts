@@ -1,12 +1,14 @@
 import useEditorContext from '@/app/editor/useEditorContext';
 import { ServerError } from '@/client/common/components/lib/ErrorMessage';
+import { ToastRef } from '@/client/common/components/lib/Toast';
 import api from '@/client/common/utils/api';
-import { useToast } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { useRef } from 'react';
 
 const useSaveSnapshot = () => {
-  const toast = useToast();
+  const toastRef = useRef<ToastRef>();
+
   const { exporter } = useEditorContext();
 
   const { mutate, error, isPending } = useMutation<unknown, AxiosError<ServerError>, unknown>({
@@ -15,7 +17,7 @@ const useSaveSnapshot = () => {
       return resp;
     },
     onSuccess() {
-      toast({ position: 'top', title: 'Data saved successfully.' });
+      toastRef.current?.execute('Data saved successfully.');
     },
   });
 
@@ -23,6 +25,7 @@ const useSaveSnapshot = () => {
     mutate,
     error,
     isPending,
+    toastRef,
   };
 };
 

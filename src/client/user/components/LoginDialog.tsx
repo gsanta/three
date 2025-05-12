@@ -1,4 +1,3 @@
-import { Box } from '@chakra-ui/react';
 import React from 'react';
 import ErrorMessage from '../../common/components/lib/ErrorMessage';
 import useEmailLogin from '../hooks/useEmailLogin';
@@ -40,11 +39,11 @@ const LoginDialog = () => {
               <p className="fieldset-label text-error">{formErrors.password?.message}</p>
             )}
           </fieldset>
-          <Box display="flex" marginTop="4" justifyContent="space-around">
+          <div className="flex mt-4 justify-around">
             <button className="btn btn-accent" onClick={() => signIn('google')}>
               Log in with google
             </button>
-          </Box>
+          </div>
           {loginEmailError && (
             <ErrorMessage
               error={loginEmailError}

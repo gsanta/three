@@ -1,4 +1,3 @@
-import { Box } from '@chakra-ui/react';
 import React from 'react';
 import useEmailSignUp from '../hooks/useEmailSignUp';
 import ErrorMessage from '../../common/components/lib/ErrorMessage';
@@ -44,9 +43,6 @@ const SignUpDialog = () => {
               <p className="fieldset-label text-error">{formErrors.passwordConfirmation?.message}</p>
             )}
           </fieldset>
-          <Box display="flex" marginTop="4" justifyContent="space-around">
-            {/* <GoogleLogin onLogin={loginGoogle} /> */}
-          </Box>
           {registerEmailError && (
             <ErrorMessage
               error={registerEmailError}

@@ -1,4 +1,3 @@
-import { Box } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
 
 export type LayoutProps = {
@@ -8,21 +7,11 @@ export type LayoutProps = {
 };
 
 const Layout = ({ header, footer, children }: LayoutProps) => (
-  <Box display="grid" gridTemplateRows="auto 1fr auto" height="100%">
-    {header && (
-      <Box as="header" id="header">
-        {header}
-      </Box>
-    )}
-    <Box as="main" display="flex" flexDirection="row" minH="0">
-      {children}
-    </Box>
-    {footer && (
-      <Box as="footer" id="footer">
-        {footer}
-      </Box>
-    )}
-  </Box>
+  <div className="grid grid-rows-[auto_1fr_auto] h-full">
+    {header && <header id="header">{header}</header>}
+    <main className="flex flex-row min-h-0">{children}</main>
+    {footer && <footer id="footer">{footer}</footer>}
+  </div>
 );
 
 export default Layout;

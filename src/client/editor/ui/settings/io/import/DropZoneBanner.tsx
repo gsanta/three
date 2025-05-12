@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-import { Box, Text } from '@chakra-ui/react';
 
 type BannerProps = {
   onClick(): void;
@@ -8,9 +7,7 @@ type BannerProps = {
 };
 
 const BannerText = ({ children }: { children: ReactNode }) => (
-  <Text fontSize="1.5rem" color="#ccc" display="block" marginBlock="0.5">
-    {children}
-  </Text>
+  <p className="text-[1.5rem] text-[#ccc] block my-0.5">{children}</p>
 );
 
 const DropZoneBanner = ({ onClick, onDrop, fileName }: BannerProps) => {
@@ -27,19 +24,11 @@ const DropZoneBanner = ({ onClick, onDrop, fileName }: BannerProps) => {
   };
 
   return (
-    <Box
-      alignItems="center"
-      bgColor="gray.700"
-      cursor="pointer"
-      display="flex"
-      flexDir="column"
-      h="200px"
-      justifyContent="center"
+    <div
+      className="flex flex-col items-center justify-center bg-gray-700 cursor-pointer h-[200px] w-full mb-4"
       onClick={onClick}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
-      marginBottom="1rem"
-      w="100%"
     >
       {fileName ? (
         <>
@@ -53,7 +42,7 @@ const DropZoneBanner = ({ onClick, onDrop, fileName }: BannerProps) => {
           <BannerText>Drag and Drop file</BannerText>
         </>
       )}
-    </Box>
+    </div>
   );
 };
 

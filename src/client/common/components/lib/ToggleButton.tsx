@@ -1,13 +1,15 @@
 import * as React from 'react';
-import { ButtonProps as _ButtonProps, forwardRef } from '@chakra-ui/react';
+import { ReactNode } from 'react';
 
-export type ButtonProps = _ButtonProps & {
+export type ButtonProps = {
+  children: ReactNode;
+  onClick?(e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void;
   toggle: boolean;
   onToggle: (state: boolean) => void;
   tooltip?: string;
 };
 
-const ToggleButton = forwardRef<ButtonProps, 'input'>((props) => {
+const ToggleButton = (props: ButtonProps) => {
   const { toggle, onClick, onToggle, tooltip } = props;
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -26,6 +28,6 @@ const ToggleButton = forwardRef<ButtonProps, 'input'>((props) => {
       {props.children}
     </button>
   );
-});
+};
 
 export default ToggleButton;

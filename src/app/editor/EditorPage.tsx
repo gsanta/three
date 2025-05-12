@@ -1,6 +1,5 @@
 'use client';
 
-import { Box } from '@chakra-ui/react';
 import './app.scss';
 import Layout from '../../client/common/components/globals/Layout';
 import Canvas from '../../client/editor/ui/scene/components/Canvas';
@@ -24,10 +23,10 @@ const EditorPageContent = (props: EditorPageProps) => {
 
   return (
     <ProtectedPage>
-      <Layout header={<Header />} footer={<Box bgColor="orange.600" height="40px"></Box>}>
-        <Box width="50px">
+      <Layout header={<Header />} footer={<div className="bg-orange-600 h-10" />}>
+        <div className="w-[50px]">
           <Toolbar />
-        </Box>
+        </div>
         <Canvas />
         {/* <Split className="split" direction="horizontal" sizes={[75, 25]} minSize={250}>
           <Split className="split-vertical" direction="vertical" sizes={[50, 50]}>

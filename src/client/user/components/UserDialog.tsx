@@ -1,6 +1,6 @@
+import Button from '@/client/common/components/lib/Button';
 import api from '../../common/utils/api';
 import { usersPath } from '../../common/utils/routes';
-import { Button, ButtonGroup, FormControl, FormErrorMessage } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useSession } from 'next-auth/react';
@@ -43,14 +43,12 @@ const UserDialog = () => {
           </div>
           <p className="max-w-[200px]">{data?.user?.email}</p>
         </div>
-        <ButtonGroup display="flex" justifyContent="space-around" marginTop="1rem">
-          <FormControl isInvalid={isDeleteUserError} width="initial">
-            <Button colorScheme="red" onClick={mutateDeleteUser} isLoading={isDeleteUserLoading}>
-              Delete account
-            </Button>
-            <FormErrorMessage>Failed to delete user</FormErrorMessage>
-          </FormControl>
-        </ButtonGroup>
+        <fieldset className="fieldset">
+          <button className={`btn btn-primary`}>
+            {isDeleteUserLoading ? <span className="loading loading-spinner" /> : `Sign up`}
+          </button>
+          {isDeleteUserError && <p className="fieldset-label text-error">Failed to delete user</p>}
+        </fieldset>
       </div>
     </dialog>
   );

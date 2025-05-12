@@ -1,4 +1,3 @@
-import { Box, ButtonGroup } from '@chakra-ui/react';
 import React from 'react';
 import ExportDialog from './ExportDialog';
 import ImportDialog from './import/ImportDialog';
@@ -7,11 +6,12 @@ import { ActionCreators } from 'redux-undo';
 import useSaveSnapshot from '../../hooks/useSaveSnapshot';
 import useLoadSnapshot from '../../hooks/useLoadSnapshot';
 import Icon from '@/client/common/components/lib/Icon';
+import Toast from '@/client/common/components/lib/Toast';
 
 const SettingsPanel = () => {
   const dispatch = useAppDispatch();
 
-  const { mutate: saveSnapshot } = useSaveSnapshot();
+  const { mutate: saveSnapshot, toastRef } = useSaveSnapshot();
   const { refetchSnapshot } = useLoadSnapshot();
 
   const handleUndo = () => {
@@ -23,7 +23,7 @@ const SettingsPanel = () => {
   };
 
   return (
-    <Box alignItems="center" display="flex" gap="4">
+    <div className="flex items-center gap-4">
       <button
         className="btn btn-primary btn-square"
         popoverTarget="popover-settings"
@@ -61,7 +61,7 @@ const SettingsPanel = () => {
       </ul>
 
       <div className="divider divider-horizontal" />
-      <ButtonGroup>
+      <div className="flex gap-1">
         <div className="tooltip tooltip-bottom" data-tip="Save to server">
           <button className="btn btn-square btn-secondary" onClick={() => saveSnapshot({})}>
             <Icon name="BiCloudUpload" />
@@ -72,9 +72,9 @@ const SettingsPanel = () => {
             <Icon name="BiCloudDownload" />
           </button>
         </div>
-      </ButtonGroup>
+      </div>
       <div className="divider divider-horizontal" />
-      <ButtonGroup>
+      <div className="flex gap-1">
         <div className="tooltip tooltip-bottom" data-tip="Undo">
           <button className="btn btn-square btn-secondary" onClick={handleUndo}>
             <Icon name="BiUndo" />
@@ -85,9 +85,9 @@ const SettingsPanel = () => {
             <Icon name="BiRedo" />
           </button>
         </div>
-      </ButtonGroup>
+      </div>
       <div className="divider divider-horizontal" />
-      <ButtonGroup>
+      <div className="flex gap-1">
         <div className="tooltip tooltip-bottom" data-tip="Zoom in">
           <button className="btn btn-square btn-secondary">
             <Icon name="BiZoomIn" />
@@ -104,10 +104,11 @@ const SettingsPanel = () => {
             <Icon name="BiZoomOut" />
           </button>
         </div>
-      </ButtonGroup>
+      </div>
       <ImportDialog />
       <ExportDialog />
-    </Box>
+      <Toast ref={toastRef} />
+    </div>
   );
 };
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Box, Text, Tooltip } from '@chakra-ui/react';
 import ToggleButton from '../../../common/components/lib/ToggleButton';
 import Icon from '../../../common/components/lib/Icon';
 import { useAppSelector } from '../../../common/hooks/hooks';
@@ -15,16 +14,7 @@ const Toolbar = () => {
   };
 
   return (
-    <Box
-      className="bg-base-300"
-      height="100%"
-      paddingBlockStart="8"
-      paddingBlockEnd="1"
-      display="flex"
-      flexDirection="column"
-      gap="8"
-      alignItems="center"
-    >
+    <div className="bg-base-300 h-full pt-2 pb-1 flex flex-col gap-1 items-center">
       {tool.getTools().map(({ iconName, name, showOnToolbar }) => {
         if (!showOnToolbar) {
           return;
@@ -32,21 +22,12 @@ const Toolbar = () => {
 
         const toggle = name === selectedTool;
         return (
-          <Tooltip key={name} label={name} placement="right">
-            <ToggleButton
-              className="iconOnly"
-              colorScheme="red"
-              toggle={toggle}
-              onToggle={() => handleSelectTool(name)}
-              tooltip={name}
-              variant="outline"
-            >
-              {iconName ? <Icon name={iconName} /> : <Text>{name[0].toUpperCase()}</Text>}
-            </ToggleButton>
-          </Tooltip>
+          <ToggleButton toggle={toggle} onToggle={() => handleSelectTool(name)} tooltip={name}>
+            {iconName ? <Icon name={iconName} /> : <p>{name[0].toUpperCase()}</p>}
+          </ToggleButton>
         );
       })}
-    </Box>
+    </div>
   );
 };
 

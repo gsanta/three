@@ -1,4 +1,3 @@
-import { Box, Input } from '@chakra-ui/react';
 import React, { ChangeEvent, useRef } from 'react';
 import DropZoneBanner from './DropZoneBanner';
 
@@ -35,17 +34,17 @@ const DropZone = ({ fileName, setFile }: DropZoneProps) => {
   };
 
   return (
-    <Box display="flex" flexDir="column" alignItems="center" justifyContent="center" width="100%">
+    <div className="flex flex-col items-center justify-center w-full">
       <DropZoneBanner fileName={fileName} onClick={handleClick} onDrop={handleDrop} />
-      <Input
+      <input
         accept=".json,application/json"
         aria-label="add file"
-        display="none"
         onChange={handleChange}
         ref={inputRef}
         type="file"
+        style={{ display: 'none' }}
       />
-    </Box>
+    </div>
   );
 };
 
