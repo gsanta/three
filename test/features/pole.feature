@@ -6,11 +6,11 @@ Feature: Pole
     When I select tool 'add'
     And I select template 'pole-1'
     And I set next uuids to:
-      | UUID      |
-      | pole-1-2  |
-      | cable-1-1 |
-      | cable-1-2 |
-      | cable-1-3 |
+      | UUID      | TYPE    |
+      | pole-1-2  | pole-1  |
+      | cable-1-1 | cable-1 |
+      | cable-1-2 | cable-1 |
+      | cable-1-3 | cable-1 |
     And I move pointer to '5,0,0'
     And I press pointer
     Then I have blocks with properties
@@ -28,9 +28,9 @@ Feature: Pole
 
   Scenario: Adding a pole auto-rotates it to align with the neigbours
     Given I have a scene with:
-      | TYPE   | ID       | PARENT | POS   |
-      | pole-1 | pole-1-1 | -      | 1,0,0 |
-      | pole-1 | pole-1-2 | -      | 5,0,0 |
+      | TYPE   | ID       | PARENT | POS    |
+      | pole-1 | pole-1-1 | -      | 1,0,0  |
+      | pole-1 | pole-1-2 | -      | 10,0,0 |
     And I wait block 'cable-1-1' to exist
     And I wait block 'cable-1-2' to exist
     And I wait block 'cable-1-3' to exist
@@ -41,12 +41,12 @@ Feature: Pole
     When I select tool 'add'
     And I select template 'pole-1'
     And I set next uuids to:
-      | UUID      |
-      | pole-1-3  |
-      | cable-1-x |
-      | cable-1-y |
-      | cable-1-z |
-    And I move pointer to '5,0,5'
+      | UUID     | TYPE     |
+      | pole-1-3  | pole-1  |
+      | cable-1-x | cable-1 |
+      | cable-1-y | cable-1 |
+      | cable-1-z | cable-1 |
+    And I move pointer to '10,0,10'
     And I press pointer
     And I wait block 'pole-1-3' to exist
     Then I have blocks with properties
