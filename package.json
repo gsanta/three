@@ -15,8 +15,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "cucumber-js 'test/**/*.feature'",
-    "test:ci": "cucumber-js 'test/**/*.feature' --format 'junit':'test-results/cucumber-report.xml'"
+    "test": "NODE_ENV=test cucumber-js 'test/**/*.feature'",
+    "test:ci": "NODE_ENV=test cucumber-js 'test/**/*.feature' --format 'junit':'test-results/cucumber-report.xml'"
   },
   "author": "Gergely Santa",
   "license": "MIT",
