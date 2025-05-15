@@ -1,4 +1,3 @@
-import Button from '@/client/common/components/lib/Button';
 import api from '../../common/utils/api';
 import { usersPath } from '../../common/utils/routes';
 import { useMutation } from '@tanstack/react-query';
@@ -44,7 +43,7 @@ const UserDialog = () => {
           <p className="max-w-[200px]">{data?.user?.email}</p>
         </div>
         <fieldset className="fieldset">
-          <button className={`btn btn-primary`}>
+          <button className={`btn btn-primary`} onClick={mutateDeleteUser}>
             {isDeleteUserLoading ? <span className="loading loading-spinner" /> : `Sign up`}
           </button>
           {isDeleteUserError && <p className="fieldset-label text-error">Failed to delete user</p>}
