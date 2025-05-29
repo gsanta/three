@@ -101,6 +101,12 @@ export function checkPosition(this: ExtendedWorld, position: string): Num3 {
   throw new Error('should not reach this point');
 }
 
+export function checkGridPosition(this: ExtendedWorld, position: string): [number, number] {
+  const gridPositions = position.split(',').map((pos) => Number(pos));
+
+  return gridPositions as [number, number];
+}
+
 export function checkPositionCloseTo(this: ExtendedWorld, position: string | Num3, actual: Num3) {
   const expected = typeof position === 'string' ? checkPosition.call(this, position) : position;
 

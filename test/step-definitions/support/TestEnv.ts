@@ -26,9 +26,9 @@ export const setupTestEnv = async (): Promise<TestEnv> => {
   testStore.setup();
 
   const editorContext = setupEditor();
-  const { blockStore, sceneStore, tool, sceneService, update } = editorContext;
+  const { blockStore, gridStore, sceneStore, tool, sceneService, update } = editorContext;
 
-  const toolHelper = new ToolHelper(sceneStore, tool, testStore);
+  const toolHelper = new ToolHelper(blockStore, gridStore, sceneStore, tool, testStore);
 
   const meshFactory = new TestMeshFactory(blockStore, sceneStore, sceneService, update);
 

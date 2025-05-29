@@ -11,7 +11,7 @@ class CalculateReachableGrids {
   }
 
   execute(block: BlockData) {
-    const gridIndex = this.grid.getGridIndex(new Vector(block.position));
+    const gridIndex = this.grid.worldToGridIndex(new Vector(block.position));
     const cols = this.gridStore.getCols();
 
     const reachables: Record<number, number> = {

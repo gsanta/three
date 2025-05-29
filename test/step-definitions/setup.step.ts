@@ -13,6 +13,7 @@ import TestSceneService from './support/TestSceneService';
 import assert from 'assert';
 import MeshWrapper from '@/client/editor/models/MeshWrapper';
 import Vector from '@/client/editor/models/math/Vector';
+import Grid from '@/client/editor/models/Grid';
 
 Before(function (this: ExtendedWorld) {
   return this.setup();
@@ -31,6 +32,8 @@ type SceneHash = {
   PARENT: string;
   POS: string;
   TYPE: string;
+  GRIDPOS: string;
+  GRIDINDEX: number;
 };
 
 const waitTenMs = () => new Promise((resolve) => setTimeout(resolve, 10));
@@ -46,7 +49,26 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
   const data = table.hashes() as SceneHash[];
 
   for (const row of data) {
-    const pos = row.POS.split(',').map((num) => Number(num)) as Num3;
+    let pos: Num3;
+
+    if (row.POS) {
+      pos = row.POS.split(',').map((num) => Number(num)) as Num3;
+    } else if (row.GRIDPOS) {
+      const [gridX, gridZ] = row.GRIDPOS.split(',').map((num) => Number(num));
+
+      const grid = new Grid(this.getEnv().editorContext.gridStore);
+
+      const gridIndex = grid.gridPositionToGridIndex(gridX, gridZ);
+
+      const [worldX, worldZ] = grid.gridToWorldPos(gridIndex);
+
+      pos = [worldX, 0, worldZ];
+    } else if (row.GRIDINDEX) {
+      const grid = new Grid(this.getEnv().editorContext.gridStore);
+      const [worldX, worldZ] = grid.gridToWorldPos(row.GRIDINDEX);
+
+      pos = [worldX, 0, worldZ];
+    }
 
     if (row.ID) {
       sceneService.setNextUuid(row.ID, row.TYPE);
@@ -99,7 +121,7 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
     store.dispatch(setSelectedGeometry(block.type));
     addTool.onPointerUp({ clientX: 0, clientY: 0, pos: new Vector3(...pos) } as ToolInfo);
 
-    store.dispatch(updateBlocks({ blockUpdates: [{ select: [], slice: 'city' }] }));
+    store.dispatch(updateBlocks({ blockUpdates: [{ select: [] }] }));
 
     await waitTenMs();
   }

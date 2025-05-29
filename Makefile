@@ -12,3 +12,6 @@ upload_deploy_script:
 
 execute_deploy_script:
 	ssh -i ./keys/web_server_key.pem ubuntu@${WEB_SERVER_HOST}:/home/ubuntu "bash deploy.sh"
+
+upload_public_folder:
+	scp -i ./keys/web_server_key.pem -r public ubuntu@${WEB_SERVER_HOST}:/home/ubuntu/app

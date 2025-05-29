@@ -41,6 +41,7 @@ const Row = ({ count, rowIndex, x, z, offsetX, offsetZ, gridSize }: RowProps) =>
             key={i}
             name="selection"
             onPointerDown={(e) => tool.onPointerDown({ ...e, gridX: i, gridY: rowIndex, gridIndex })}
+            onPointerMove={(e) => tool.onPointerMove({ ...e, gridX: i, gridY: rowIndex, gridIndex })}
             onPointerEnter={() => setHighlighted(gridIndex)}
             onPointerLeave={() => {
               if (highlighted === gridIndex) {

@@ -16,16 +16,21 @@ export type ScenePointerEvent = ThreeEvent<PointerEvent> & {
 };
 
 class ToolService {
-  constructor(tools: Tool[], toolStore: ToolStore) {
-    this.tools = tools;
+  constructor(toolStore: ToolStore) {
+    this.tools = [];
     this.toolStore = toolStore;
     this.info = {
       pos: new Vector3(),
       drag: [0, 0, 0],
       dragDelta: [0, 0, 0],
+      gridIndex: -1,
       clientX: 0,
       clientY: 0,
     };
+  }
+
+  setTools(tools: Tool[]) {
+    this.tools = tools;
   }
 
   onExecute() {
@@ -40,7 +45,7 @@ class ToolService {
     this.info.downPos = event.point;
     this.info.gridX = event.gridX;
     this.info.gridY = event.gridY;
-    this.info.gridIndex = event.gridIndex;
+    this.info.gridIndex = event.gridIndex === undefined ? -1 : event.gridIndex;
 
     this.setEventObject(event);
 
@@ -65,10 +70,13 @@ class ToolService {
     this.getTool(selectedTool)?.onPointerLeave(this.info);
   }
 
-  onPointerMove(event: ThreeEvent<PointerEvent>) {
+  onPointerMove(event: ScenePointerEvent) {
     this.info.pos = event.point;
     this.info.clientX = event.clientX;
     this.info.clientY = event.clientY;
+    this.info.gridX = event.gridX;
+    this.info.gridY = event.gridY;
+    this.info.gridIndex = event.gridIndex === undefined ? -1 : event.gridIndex;
 
     if (
       !this.info.isDragHappened &&

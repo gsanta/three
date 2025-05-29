@@ -2,11 +2,12 @@ import { Canvas as ThreeCanvas } from '@react-three/fiber';
 import useEditorContext from '@/app/editor/useEditorContext';
 import Scene from './Scene';
 import { useCallback } from 'react';
-import BlockContextMenu from './BlockContextMenu/BlockContextMenu';
 import GameActionPanel from './GameActionPanel';
 import { OrbitControls } from '@react-three/drei';
 import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import AddPanel from './AddPanel';
+import { useAppSelector } from '@/client/common/hooks/hooks';
+import SelectionPanel from './SelectionPanel';
 
 const Canvas = () => {
   // const { data, isSuccess } = useQuery({ queryKey: ['blocks'], queryFn: () => api.get('/api/block') });
@@ -19,6 +20,8 @@ const Canvas = () => {
   // }, [data, dispatch, isSuccess]);
 
   const { sceneStore: scene } = useEditorContext();
+
+  const selectedRootBlockIds = useAppSelector((state) => state.blockCategory.selectedRootBlockIds);
 
   // const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -67,9 +70,8 @@ const Canvas = () => {
         <Scene />
         <OrbitControls ref={controlsRef} />
       </ThreeCanvas>
-      <BlockContextMenu />
       <div className="absolute flex flex-col gap-2 left-[70px] bottom-[50px]">
-        <AddPanel />
+        {selectedRootBlockIds.length === 1 ? <SelectionPanel /> : <AddPanel />}
         <GameActionPanel />
       </div>
     </div>

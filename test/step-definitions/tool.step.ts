@@ -6,9 +6,10 @@ import { store } from '@/client/common/utils/store';
 import { setSelectedGeometry } from '@/client/editor/stores/blockType/blockTypeSlice';
 import { Vector3 } from 'three';
 import findClosestBlock from './helpers/findClosestBlock';
-import { checkPartIndexExists, checkPosition } from './helpers/checks';
+import { checkGridPosition, checkPartIndexExists, checkPosition } from './helpers/checks';
 import TestSceneService from './support/TestSceneService';
 import assert from 'assert';
+import Grid from '@/client/editor/models/Grid';
 
 When('I select tool {string}', function (this: ExtendedWorld, toolName: ToolName) {
   store.dispatch(setSelectedTool(toolName));
@@ -67,6 +68,26 @@ When('I move pointer to {string}', function (this: ExtendedWorld, position: stri
   const [x, y, z] = checkPosition.call(this, position);
 
   this.getEnv().toolHelper.pointerMove({ point: new Vector3(x, y, z) });
+});
+
+When('I move pointer to grid position {string}', function (this: ExtendedWorld, position: string) {
+  const [xGrid, zGrid] = checkGridPosition.call(this, position);
+
+  const grid = new Grid(this.getEnv().editorContext.gridStore);
+
+  const gridIndex = grid.gridPositionToGridIndex(xGrid, zGrid);
+
+  const worldPos = grid.gridToWorldPos(gridIndex);
+
+  this.getEnv().toolHelper.pointerMove({ point: new Vector3(worldPos[0], 0, worldPos[1]) });
+});
+
+When("I move pointer to grid index '{int}'", function (this: ExtendedWorld, gridIndex: number) {
+  const grid = new Grid(this.getEnv().editorContext.gridStore);
+
+  const worldPos = grid.gridToWorldPos(gridIndex);
+
+  this.getEnv().toolHelper.pointerMove({ point: new Vector3(worldPos[0], 0, worldPos[1]) });
 });
 
 When('I examine block at {float},{float},{float}', function (this: ExtendedWorld, x: number, y: number, z: number) {

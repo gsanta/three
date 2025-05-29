@@ -59,7 +59,6 @@ const Ground = () => {
         onPointerEnter={handleDefaultPointerEnter}
         // onPointerDown={(e) => tool.onPointerDown(e)}
         // onPointerUp={() => tool.onPointerUp()}
-        onPointerMove={(e) => tool.onPointerMove(e)}
       >
         <planeGeometry args={[100, 100]} />
         <meshBasicMaterial opacity={0} transparent={true} />

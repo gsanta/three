@@ -1,7 +1,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import GraphCreator from './GraphCreator';
-import { initState } from '../block/blockActions';
+import { initState, updateBlocks } from '../block/blockActions';
 import Graph from './Graph';
+import GridUpdater from './GridUpdater';
 
 export type GridState = {
   activeGridIndexes: number[];
@@ -15,6 +16,7 @@ export type GridState = {
   editedBuilding?: string;
 
   blockToGridIndex: Record<string, number>;
+  gridIndexToBlocks: Record<number, string[]>;
 
   graph: Graph;
 };
@@ -24,6 +26,7 @@ export const initialGridState: GridState = {
   blockToGridIndex: {},
   carGridPos: [0, 0],
   editingTargetBlock: null,
+  gridIndexToBlocks: {},
   groundRadius: 70,
   gridRows: 16,
   gridCols: 20,
@@ -34,6 +37,8 @@ export const initialGridState: GridState = {
 
 initialGridState.gridOffset[0] = 6.285 - 10 * initialGridState.gridSize;
 initialGridState.gridOffset[1] = 6.325 - 8 * initialGridState.gridSize;
+
+const gridUpdater = new GridUpdater();
 
 export const gridSlice = createSlice({
   name: 'editor',
@@ -90,6 +95,10 @@ export const gridSlice = createSlice({
     builder.addCase(initState, (state) => {
       state.graph = new GraphCreator(state.gridRows, state.gridCols).create();
       console.log('1');
+    });
+
+    builder.addCase(updateBlocks, (state, action) => {
+      gridUpdater.update(state, action.payload.blockUpdates);
     });
   },
 });

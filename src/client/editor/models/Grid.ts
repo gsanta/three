@@ -1,5 +1,33 @@
-import GridStore from '../stores/grid/GridStore';
+import type GridStore from '../stores/grid/GridStore';
 import Vector from './math/Vector';
+
+export const gridToWorldPos = (gridIndex: number, gridCols: number, gridSize: number, gridOffset: [number, number]) => {
+  const row = Math.floor(gridIndex / gridCols);
+  const col = gridIndex - row * gridCols;
+
+  const posX = gridOffset[0] + col * gridSize;
+  const posZ = gridOffset[1] + row * gridSize;
+
+  return [posX, posZ];
+};
+
+export const worldToGridIndex = (
+  pos: Vector,
+  gridCols: number,
+  gridSize: number,
+  gridOffset: [number, number],
+): number => {
+  const offsetX = gridOffset[0] + gridSize / 2;
+  const offsetZ = gridOffset[1] + gridSize / 2;
+
+  const positiveX = pos.x - offsetX;
+  const positiveZ = pos.z - offsetZ;
+
+  const floorX = Math.ceil(positiveX / gridSize);
+  const floorZ = Math.ceil(positiveZ / gridSize);
+
+  return floorZ * gridCols + floorX;
+};
 
 class Grid {
   constructor(gridStore: GridStore) {
@@ -7,31 +35,32 @@ class Grid {
   }
 
   gridToWorldPos(gridIndex: number) {
+    return gridToWorldPos(
+      gridIndex,
+      this.gridStore.getCols(),
+      this.gridStore.getGridSize(),
+      this.gridStore.getGridOffset(),
+    );
+  }
+
+  worldToGridIndex(pos: Vector) {
+    return worldToGridIndex(
+      pos,
+      this.gridStore.getCols(),
+      this.gridStore.getGridSize(),
+      this.gridStore.getGridOffset(),
+    );
+  }
+
+  gridPositionToGridIndex(posX: number, posZ: number): number {
+    return this.gridStore.getCols() * posZ + posX;
+  }
+
+  gridIndexToGridPos(gridIndex: number): [number, number] {
     const row = Math.floor(gridIndex / this.gridStore.getCols());
     const col = gridIndex - row * this.gridStore.getCols();
 
-    const gridSize = this.gridStore.getGridSize();
-
-    const offsetX = this.gridStore.getGridOffset()[0];
-    const offsetZ = this.gridStore.getGridOffset()[1];
-
-    const posX = offsetX + col * gridSize;
-    const posZ = offsetZ + row * gridSize;
-
-    return [posX, posZ];
-  }
-
-  getGridIndex(pos: Vector) {
-    const offsetX = this.gridStore.getGridOffset()[0] + this.gridStore.getGridSize() / 2;
-    const offsetZ = this.gridStore.getGridOffset()[1] + this.gridStore.getGridSize() / 2;
-
-    const positiveX = pos.x - offsetX;
-    const positiveZ = pos.z - offsetZ;
-
-    const floorX = Math.ceil(positiveX / this.gridStore.getGridSize());
-    const floorZ = Math.ceil(positiveZ / this.gridStore.getGridSize());
-
-    return floorZ * this.gridStore.getCols() + floorX;
+    return [col, row];
   }
 
   getPosition(pos: Vector) {

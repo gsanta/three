@@ -101,14 +101,6 @@ class SelectTool extends HoverTool {
     store.dispatch(updateSelectTool({ drag: [0, 0, 0] }));
   }
 
-  onDeselect() {
-    const edit = this.transaction.createTransaction();
-
-    edit.select([]);
-
-    edit.commit(false);
-  }
-
   scaleMesh(scale: number, block: BlockData) {
     const { selectedSettings } = this.blockStore.getBlockSettings();
     const settings = selectedSettings[block.category];

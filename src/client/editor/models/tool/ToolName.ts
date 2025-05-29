@@ -1,5 +1,6 @@
 enum ToolName {
   Add = 'add',
+  Join = 'join',
   Cable = 'cable',
   Color = 'color',
   Erase = 'erase',

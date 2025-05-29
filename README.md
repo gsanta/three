@@ -24,3 +24,7 @@ Run migrations on an empty db
 
 Drop and reseed db:
  - npx prisma migrate reset
+
+# AWS server
+
+ssh -i keys/web_server_key.pem ubuntu@ec2-3-72-250-35.eu-central-1.compute.amazonaws.com

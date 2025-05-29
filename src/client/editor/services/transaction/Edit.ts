@@ -9,6 +9,7 @@ import TransactionHook from './TransactionHook';
 import { updateBlocks } from '../../stores/block/blockActions';
 import { BlockUpdate, DecorationUpdate, UpdateBlocks } from '../../stores/block/blockSlice.types';
 import { BlockCategoryName } from '../../models/block/BlockCategoryName';
+import EditorContextType from '../../setupEditor';
 
 type EditOptions = {
   arrayMergeStrategy?: MergeStrategy;
@@ -18,10 +19,17 @@ type EditOptions = {
 const getDefaultEditOptions = () => ({ arrayMergeStrategy: 'merge' as const });
 
 class Edit {
-  constructor(blockStore: BlockStore, dispatchStore: Store, systemHooks: TransactionHook[], close: () => void) {
+  constructor(
+    blockStore: BlockStore,
+    dispatchStore: Store,
+    editorContext: EditorContextType,
+    systemHooks: TransactionHook[],
+    close: () => void,
+  ) {
     this.store = blockStore;
     this.systemHooks = systemHooks;
     this.dispatchStore = dispatchStore;
+    this.editorContext = editorContext;
 
     this.close = close;
   }
@@ -232,7 +240,9 @@ class Edit {
       }
     });
 
-    this.dispatchStore.dispatch(updateBlocks({ blockUpdates: this.updates, history: updateHistory }));
+    this.dispatchStore.dispatch(
+      updateBlocks({ blockUpdates: this.updates, editorContext: this.editorContext, history: updateHistory }),
+    );
 
     this.systemHooks.forEach((systemHook) => systemHook.onCommit(this.updates));
 
@@ -248,6 +258,8 @@ class Edit {
   private store: BlockStore;
 
   private dispatchStore: Store;
+
+  private editorContext: EditorContextType;
 
   private close: () => void;
 }

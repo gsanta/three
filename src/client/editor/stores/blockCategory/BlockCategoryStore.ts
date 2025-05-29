@@ -1,11 +1,25 @@
 import { Store } from '@/client/common/utils/store';
 import { BlockCategoryName } from '../../models/block/BlockCategoryName';
 import BlockStore from '../block/BlockStore';
+import BlockCategoryAction, { BlockCategoryActionName } from './BlockCategoryAction';
 
 class BlockCategoryStore {
-  constructor(store: Store, blockStore: BlockStore) {
+  constructor(store: Store, blockStore: BlockStore, actions: Record<BlockCategoryActionName, BlockCategoryAction>) {
     this.store = store;
     this.blockStore = blockStore;
+    this.actions = actions;
+  }
+
+  getActions(category: BlockCategoryName) {
+    const actions: BlockCategoryAction[] = [this.actions['delete-action']];
+
+    switch (category) {
+      case 'poles':
+        actions.push(this.actions['join-cable-action']);
+        break;
+    }
+
+    return actions;
   }
 
   getAddMethods() {
@@ -51,6 +65,8 @@ class BlockCategoryStore {
   private getState() {
     return this.store.getState().blockCategory;
   }
+
+  private actions: Record<BlockCategoryActionName, BlockCategoryAction>;
 
   private store: Store;
 

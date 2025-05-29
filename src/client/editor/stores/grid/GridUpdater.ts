@@ -1,51 +1,40 @@
-// import BlockDecoration from '../../models/block/BlockCategory';
-// import { UpdateBlock } from '../block/blockSlice.types';
-// import { GridState } from './gridSlice';
+import { worldToGridIndex } from '../../models/Grid';
+import Vector from '../../models/math/Vector';
+import { UpdateBlock } from '../block/blockSlice.types';
+import { GridState } from './gridSlice';
 
-// class GridUpdater {
-//   update(state: GridState, updates: UpdateBlock<BlockDecoration>[]) {
-//     updates.forEach((update) => {
-//       if ('select' in update) {
-//         const selectedBlock = update.select;
+class GridUpdater {
+  update(state: GridState, updates: UpdateBlock[]) {
+    updates.forEach((update) => {
+      if ('block' in update && update.block) {
+        const gridIndex = worldToGridIndex(
+          new Vector(update.block.position),
+          state.gridCols,
+          state.gridSize,
+          state.gridOffset,
+        );
+        state.blockToGridIndex[update.block.id] = gridIndex;
 
-//         state.selectedBlocks = {};
-//         state.selectedRootBlockIds = selectedBlock.map((block) => block.id);
+        if (!state.gridIndexToBlocks[gridIndex]) {
+          state.gridIndexToBlocks[gridIndex] = [];
+        }
 
-//         selectedBlock.forEach((block) => {
-//           state.selectedBlocks[block.id] = true;
-//         });
+        if (!state.gridIndexToBlocks[gridIndex].includes(update.block.id)) {
+          state.gridIndexToBlocks[gridIndex].push(update.block.id);
+        }
+      } else if ('remove' in update) {
+        const gridIndex = state.blockToGridIndex[update.remove.id];
+        delete state.blockToGridIndex[update.remove.id];
 
-//         state.currentContextMenuActions = state.contextMenuActions.filter((action) => {
-//           const selectionLength = selectedBlock.length;
-//           const categories = selectedBlock.map((selection) => selection.category);
-//           if (action.categoryName && action.categoryName2) {
-//             if (selectionLength === 2) {
-//               return categories.includes(action.categoryName) && categories.includes(action.categoryName2);
-//             }
-//           } else if (action.categoryName) {
-//             if (selectionLength === 1) {
-//               return categories.includes(action.categoryName);
-//             }
-//           }
+        const removeIndex = state.gridIndexToBlocks[gridIndex].indexOf(update.remove.id);
+        state.gridIndexToBlocks[gridIndex].splice(removeIndex, 1);
 
-//           return false;
-//         });
-//       } else if ('remove' in update) {
-//         const selectedIndex = state.selectedRootBlockIds.indexOf(update.remove.id);
-//         if (selectedIndex !== -1) {
-//           state.selectedRootBlockIds.splice(selectedIndex, 1);
-//         }
+        if (state.gridIndexToBlocks[gridIndex].length === 0) {
+          delete state.gridIndexToBlocks[gridIndex];
+        }
+      }
+    });
+  }
+}
 
-//         if (state.selectedBlocks[update.remove.id]) {
-//           delete state.selectedBlocks[update.remove.id];
-//         }
-//       }
-//     });
-
-//     // const newSelections = updates
-//     //   .filter((update) => 'select' in update && update.newState === 'selected')
-//     //   .map((update) => (update as BlockSelect).select);
-//   }
-// }
-
-// export default GridUpdater;
+export default GridUpdater;

@@ -23,7 +23,7 @@ export interface ToolInfo {
   isDragHappened?: boolean;
   clientX: number;
   clientY: number;
-  gridIndex?: number;
+  gridIndex: number;
   gridX?: number;
   gridY?: number;
   draggedMesh?: BlockData;

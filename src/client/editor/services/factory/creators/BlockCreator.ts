@@ -37,7 +37,7 @@ class BlockCreator {
       isVisible: true,
       notifyOnRender: false,
       parentConnection: settings.parentConnection,
-      id: id,
+      id: settings.id || id,
       partDetails,
       position: [x, y, z],
       rotation: rotation as Num3,
