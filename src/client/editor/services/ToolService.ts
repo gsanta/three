@@ -1,5 +1,5 @@
 import { ThreeEvent } from '@react-three/fiber';
-import Tool, { EventObject, ToolInfo } from '../models/tool/Tool';
+import Tool, { EventObject, ToolEventName, ToolInfo } from '../models/tool/Tool';
 import ToolName from '../models/tool/ToolName';
 import { store } from '@/client/common/utils/store';
 import { Mesh, Vector3 } from 'three';
@@ -8,6 +8,7 @@ import AddTool from '../controllers/tools/AddTool';
 import ToolStore from '../stores/tool/ToolStore';
 import { setSelectedTool } from '../stores/tool/toolSlice';
 import Vector from '../models/math/Vector';
+import SceneService from '../ui/scene/service/SceneService';
 
 export type ScenePointerEvent = ThreeEvent<PointerEvent> & {
   gridIndex?: number;
@@ -16,7 +17,7 @@ export type ScenePointerEvent = ThreeEvent<PointerEvent> & {
 };
 
 class ToolService {
-  constructor(toolStore: ToolStore) {
+  constructor(sceneService: SceneService, toolStore: ToolStore) {
     this.tools = [];
     this.toolStore = toolStore;
     this.info = {
@@ -27,6 +28,10 @@ class ToolService {
       clientX: 0,
       clientY: 0,
     };
+
+    this.onMeshRendered = this.onMeshRendered.bind(this);
+
+    sceneService.subscribeMeshRendered(this.onMeshRendered);
   }
 
   setTools(tools: Tool[]) {
@@ -77,6 +82,8 @@ class ToolService {
     this.info.gridX = event.gridX;
     this.info.gridY = event.gridY;
     this.info.gridIndex = event.gridIndex === undefined ? -1 : event.gridIndex;
+
+    this.meshRendered.onPointerMove = true;
 
     if (
       !this.info.isDragHappened &&
@@ -143,8 +150,22 @@ class ToolService {
   }
 
   setSelectedTool(toolName: ToolName) {
-    this.getTool(store.getState().tool.selectedTool)?.onDeselect();
+    this.getTool(store.getState().tool.selectedTool)?.onDeactivate();
     store.dispatch(setSelectedTool(toolName));
+
+    this.getTool(toolName)?.onActivate();
+  }
+
+  private onMeshRendered() {
+    const { selectedTool } = store.getState().tool;
+
+    Object.entries(this.meshRendered).forEach(([key, value]) => {
+      if (value) {
+        this.getTool(selectedTool)?.onMeshRendered(key as ToolEventName);
+      }
+
+      this.meshRendered[key as ToolEventName] = false;
+    });
   }
 
   private setEventObject(event: ThreeEvent<PointerEvent>) {
@@ -161,6 +182,10 @@ class ToolService {
   private toolStore: ToolStore;
 
   private mesh: Mesh | undefined;
+
+  private meshRendered: Record<ToolEventName, boolean> = {
+    onPointerMove: false,
+  };
 }
 
 export default ToolService;

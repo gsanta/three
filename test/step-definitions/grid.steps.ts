@@ -35,3 +35,9 @@ Then("the grid at index '{int}' is empty", function (this: ExtendedWorld, gridIn
 
   assert.equal(blocks.length, 0);
 });
+
+Then("the grid index for {string} is '{int}'", function (this: ExtendedWorld, block: string, index: number) {
+  const actualIndex = this.getEnv().editorContext.gridStore.getBlockGridIndex(block);
+
+  assert.equal(actualIndex, index);
+});

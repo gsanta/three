@@ -1,19 +1,19 @@
-import { ToolInfo } from '../../models/tool/Tool';
+import { ToolEventName, ToolInfo } from '../../models/tool/Tool';
 import ToolName from '../../models/tool/ToolName';
 import TransactionService from '../../services/transaction/TransactionService';
 import HoverTool from './HoverTool';
 import SceneService from '../../ui/scene/service/SceneService';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import BlockCategoryStore from '../../stores/blockCategory/BlockCategoryStore';
-import FactoryService from '../../services/factory/FactoryService';
 import GridStore from '../../stores/grid/GridStore';
 import Grid from '../../models/Grid';
+import CableConnector, { ConnectCable } from '../../services/CableConnector';
 
 class JoinTool extends HoverTool {
   constructor(
     block: BlockStore,
     blockCategoryStore: BlockCategoryStore,
-    factoryService: FactoryService,
+    cableConnector: CableConnector,
     gridStore: GridStore,
     sceneService: SceneService,
     update: TransactionService,
@@ -21,22 +21,35 @@ class JoinTool extends HoverTool {
     super(block, sceneService, update, ToolName.Join, 'BiJoystick');
 
     this.blockCategoryStore = blockCategoryStore;
-    this.factoryService = factoryService;
+    this.cableConnector = cableConnector;
     this.gridStore = gridStore;
+
+    this.onMeshRendered = this.onMeshRendered.bind(this);
+  }
+
+  onActivate(): void {
+    const selectedId = this.blockCategoryStore.getSelectedRootBlockIds()[0];
+
+    if (selectedId) {
+      const selectedBlock = this.blockStore.getBlock(selectedId);
+
+      this.connector = this.cableConnector.getConnector(selectedBlock);
+    }
+  }
+
+  onDeactivate(): void {
+    this.connector?.cancel();
+    this.connector = undefined;
   }
 
   onPointerMove(info: ToolInfo): void {
     const selectedId = this.blockCategoryStore.getSelectedRootBlockIds()[0];
 
-    if (!selectedId) {
+    if (!selectedId || !this.connector || info.gridIndex === this.prevGridIndex) {
       return;
     }
 
-    if (info.gridIndex === this.prevGridIndex) {
-      return;
-    }
-
-    const cable = this.blockStore.getBlock(this.tmpCableId);
+    this.prevGridIndex = info.gridIndex;
 
     const grid = new Grid(this.gridStore);
 
@@ -46,42 +59,32 @@ class JoinTool extends HoverTool {
 
     const [toX, toZ] = grid.gridToWorldPos(info.gridIndex);
 
-    console.log(this.gridStore.getBlocksAtGridIndex(info.gridIndex));
+    const toBlockId = this.gridStore.getBlocksAtGridIndex(info.gridIndex);
 
-    const edit = this.transaction.createTransaction();
-    if (!cable) {
-      this.factoryService.create(edit, 'cable-1', {
-        block: {
-          id: this.tmpCableId,
-        },
-        decorations: {
-          cables: {
-            points: [{ position: from }, { position: [toX, from[1], toZ] }],
-          },
-        },
-      });
-    } else {
-      edit.updateDecoration(
-        'cables',
-        cable.id,
-        {
-          points: [{ position: from }, { position: [toX, from[1], toZ] }],
-        },
-        { arrayMergeStrategy: 'replace' },
-      );
-    }
-    edit.commit();
+    const toBlocks = toBlockId.map((id) => this.blockStore.getBlock(id));
+
+    this.connector.preview(toBlocks, [toX, from[1], toZ]);
   }
+
+  onPointerUp(_info: ToolInfo): void {
+    this.connector = undefined;
+  }
+
+  onMeshRendered(name: ToolEventName): void {
+    if (name === 'onPointerMove') {
+      this.connector?.meshRendered();
+    }
+  }
+
+  private connector: ConnectCable | undefined;
 
   private blockCategoryStore: BlockCategoryStore;
 
-  private factoryService: FactoryService;
+  private cableConnector: CableConnector;
 
   private gridStore: GridStore;
 
   private prevGridIndex = -1;
-
-  private tmpCableId = 'tmp-cable-id';
 }
 
 export default JoinTool;

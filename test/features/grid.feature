@@ -19,7 +19,6 @@ Feature: Grid
       | BLOCK   | GRIDPOS |
       | house-1 | 5,5     |
 
-  @only
   Scenario: Deleting a block removes the grid properties
     Given I have a scene with:
       | TYPE   | ID     | PARENT | GRIDINDEX |
@@ -28,3 +27,4 @@ Feature: Grid
     And I hover over block 'pole-1'
     And I press pointer
     Then the grid at index '10' is empty
+    And the grid index for 'pole-1' is '-1'

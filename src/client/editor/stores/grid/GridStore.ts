@@ -8,7 +8,13 @@ class GridStore {
   }
 
   getBlockGridIndex(blockId: string) {
-    return this.getGridSlice().blockToGridIndex[blockId];
+    const index = this.getGridSlice().blockToGridIndex?.[blockId];
+
+    if (index === undefined) {
+      return -1;
+    }
+
+    return index;
   }
 
   getBlockGridPos(blockId: string) {

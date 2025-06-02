@@ -94,7 +94,6 @@ export const gridSlice = createSlice({
 
     builder.addCase(initState, (state) => {
       state.graph = new GraphCreator(state.gridRows, state.gridCols).create();
-      console.log('1');
     });
 
     builder.addCase(updateBlocks, (state, action) => {

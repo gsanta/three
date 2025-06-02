@@ -15,6 +15,7 @@ class EraseBlock {
   }
 
   erase(blockIds: string[]) {
+    console.log('EraseBlock: erase', blockIds);
     const queue = [...blockIds];
 
     const blocksToRemove: string[] = [];

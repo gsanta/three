@@ -30,6 +30,8 @@ export interface ToolInfo {
   partName?: string;
 }
 
+export type ToolEventName = 'onPointerMove';
+
 abstract class Tool {
   name: ToolName;
 
@@ -48,6 +50,10 @@ abstract class Tool {
     this.transaction = transaction;
   }
 
+  onActivate() {}
+
+  onMeshRendered(_name: ToolEventName) {}
+
   onPointerDown(_info: ToolInfo) {}
 
   onPointerMove(_info: ToolInfo) {}
@@ -64,7 +70,7 @@ abstract class Tool {
 
   onExecute(_info: ToolInfo) {}
 
-  onDeselect() {}
+  onDeactivate() {}
 
   onRendered() {}
 }

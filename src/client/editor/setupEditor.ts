@@ -27,6 +27,8 @@ import JoinTool from './controllers/tools/JoinTool';
 import MoveTool from './controllers/tools/MoveTool';
 import RayTool from './controllers/tools/RayTool';
 import SelectTool from './controllers/tools/SelectTool';
+import CableConnector from './services/CableConnector';
+import { ConnectPoleFactory } from './use_cases/connecting/ConnectPole';
 
 type EditorContextType = {
   blockStore: BlockStore;
@@ -62,7 +64,7 @@ export const setupEditor = () => {
 
   const transaction = new TransactionService(blockStore, store, sceneService, []);
 
-  const toolService = new ToolService(toolStore);
+  const toolService = new ToolService(sceneService, toolStore);
 
   const blockCategoryStore = new BlockCategoryStore(store, blockStore, {
     'delete-action': new DeleteAction(new EraserService(blockStore, transaction)),
@@ -78,12 +80,16 @@ export const setupEditor = () => {
 
   const gameController = new GameController(blockStore, gameStore, gridStore, sceneStore, store);
 
+  const cableConnector = new CableConnector({
+    poles: new ConnectPoleFactory(blockStore, factoryService, sceneStore, transaction),
+  });
+
   toolService.setTools([
     new AddTool(blockStore, factoryService, gridStore, sceneStore, sceneService, transaction),
-    new JoinTool(blockStore, blockCategoryStore, factoryService, gridStore, sceneService, transaction),
+    new JoinTool(blockStore, blockCategoryStore, cableConnector, gridStore, sceneService, transaction),
     new MoveTool(blockStore, gameStore, gridStore, sceneService, transaction),
     new SelectTool(blockStore, blockCategoryStore, sceneService, sceneStore, toolStore, transaction, sceneService),
-    new EraseTool(blockStore, transaction),
+    new EraseTool(blockStore, sceneService, transaction),
     new RayTool(blockStore, transaction, sceneStore),
   ]);
 
