@@ -63,11 +63,14 @@ class JoinTool extends HoverTool {
 
     const toBlocks = toBlockId.map((id) => this.blockStore.getBlock(id));
 
-    this.connector.preview(toBlocks, [toX, from[1], toZ]);
+    this.connector.update(toBlocks, [toX, from[1], toZ]);
   }
 
-  onPointerUp(_info: ToolInfo): void {
-    this.connector = undefined;
+  onPointerUp(info: ToolInfo): void {
+    if (!info.isDragHappened) {
+      this.connector?.finalize();
+      this.connector = undefined;
+    }
   }
 
   onMeshRendered(name: ToolEventName): void {

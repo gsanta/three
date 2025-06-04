@@ -42,6 +42,15 @@ class FactoryService {
     const factory = this.factories[template.category] || this.defaultBlockFactory;
     const block = factory.create(template, initialBlock);
 
+    Object.values(block.partDetails).forEach((partDetails) => {
+      if (partDetails?.roles?.includes('pin')) {
+        partDetails.isConnected = {};
+        Array.from({ length: partDetails.pinCount || 2 }).forEach((_, index) => {
+          partDetails.isConnected[index] = false;
+        });
+      }
+    });
+
     edit.create(block, { slice: targetSlice });
 
     template.decorations.forEach((decorationName: BlockCategoryName) => {

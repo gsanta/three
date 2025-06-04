@@ -67,37 +67,30 @@ const poleTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
       Body: {},
       ContextMenuAnchor: {},
       Pin1: {
-        role: 'slot',
         roles: ['pin'],
         type: 'physical',
       },
       Pin1b: {
-        role: 'slot',
         roles: ['pin'],
         type: 'placeholder',
       },
       Pin2: {
         roles: ['pin'],
-        role: 'slot',
         type: 'physical',
       },
       Pin2b: {
         roles: ['pin'],
-        role: 'slot',
         type: 'placeholder',
       },
       Pin3: {
-        role: 'slot',
         roles: ['pin'],
         type: 'physical',
       },
       Pin3b: {
-        role: 'slot',
         roles: ['pin'],
         type: 'placeholder',
       },
       Pin4: {
-        role: 'slot',
         roles: ['pin'],
         type: 'physical',
       },
@@ -162,32 +155,26 @@ const poleTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
     partDetails: {
       Body: {},
       Pin1: {
-        role: 'slot',
         roles: ['pin'],
         type: 'physical',
       },
       Pin1b: {
-        role: 'slot',
         roles: ['pin'],
         type: 'placeholder',
       },
       Pin2: {
         roles: ['pin'],
-        role: 'slot',
         type: 'physical',
       },
       Pin2b: {
         roles: ['pin'],
-        role: 'slot',
         type: 'placeholder',
       },
       Pin3: {
-        role: 'slot',
         roles: ['pin'],
         type: 'physical',
       },
       Pin3b: {
-        role: 'slot',
         roles: ['pin'],
         type: 'placeholder',
       },
@@ -251,32 +238,26 @@ const poleTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
     partDetails: {
       Body: {},
       Pin1: {
-        role: 'slot',
         roles: ['pin'],
         type: 'physical',
       },
       Pin1b: {
-        role: 'slot',
         roles: ['pin'],
         type: 'placeholder',
       },
       Pin2: {
         roles: ['pin'],
-        role: 'slot',
         type: 'physical',
       },
       Pin2b: {
         roles: ['pin'],
-        role: 'slot',
         type: 'placeholder',
       },
       Pin3: {
-        role: 'slot',
         roles: ['pin'],
         type: 'physical',
       },
       Pin3b: {
-        role: 'slot',
         roles: ['pin'],
         type: 'placeholder',
       },
@@ -310,7 +291,6 @@ const poleTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
   //     },
   //     '#2': {
   //       name: 'pin',
-  //       role: 'slot',
   //       category: 'pin',
   //       type: 'physical',
   //     },

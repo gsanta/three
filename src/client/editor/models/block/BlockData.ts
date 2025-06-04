@@ -25,6 +25,7 @@ type BlockData = {
 
   conduitConnections: {
     block: string;
+    pinIndex: number;
     thisPart?: string;
   }[];
 

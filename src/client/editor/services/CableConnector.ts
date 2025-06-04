@@ -1,7 +1,6 @@
 import { BlockCategoryName } from '../models/block/BlockCategoryName';
 import BlockData from '../models/block/BlockData';
 import Num3 from '../models/math/Num3';
-import Vector from '../models/math/Vector';
 
 export interface ConnectCable {
   category: BlockCategoryName;
@@ -12,9 +11,7 @@ export interface ConnectCable {
 
   meshRendered(): void;
 
-  preview(candidates: BlockData[], fallbackPos: Num3): void;
-
-  getConnectionPoint(): Vector;
+  update(candidates: BlockData[], fallbackPos: Num3): void;
 }
 
 export interface ConnectCableFactory {

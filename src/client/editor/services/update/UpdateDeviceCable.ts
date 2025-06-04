@@ -42,12 +42,12 @@ class UpdateDeviceCable {
       cableEnd = cable.end2;
     }
 
-    if (!cableEnd?.pin) {
+    if (!cableEnd?.partName) {
       return { ...cable.points[index] };
     }
 
     const poleMesh = this.scene.getObj3d(pole.id);
-    const mesh = new MeshWrapper(poleMesh).findByNameOld(cableEnd?.pin);
+    const mesh = new MeshWrapper(poleMesh).findByNameOld(cableEnd?.partName);
 
     const pos = new Vector3();
     mesh.getWorldPosition(pos);

@@ -13,10 +13,9 @@ export type BlockPartRole =
 type BlockPartLookupData = {
   hide?: boolean;
   isSelected?: boolean;
-  isConnected?: boolean;
-  joins?: [string, string];
+  isConnected: Record<number, boolean>;
   orientation: number;
-  role?: 'slot';
+  pinCount?: number;
   roles?: BlockPartRole[];
   type: 'placeholder' | 'phisycal';
 };

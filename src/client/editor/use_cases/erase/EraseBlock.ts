@@ -15,7 +15,6 @@ class EraseBlock {
   }
 
   erase(blockIds: string[]) {
-    console.log('EraseBlock: erase', blockIds);
     const queue = [...blockIds];
 
     const blocksToRemove: string[] = [];
@@ -69,7 +68,9 @@ class EraseBlock {
           partDetails: {
             [connection.thisPart]: {
               ...block.partDetails[connection.thisPart],
-              isConnected: false,
+              isConnected: {
+                [connection.pinIndex]: false,
+              },
             } as BlockPartLookupData,
           },
         });

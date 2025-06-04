@@ -81,7 +81,7 @@ export const setupEditor = () => {
   const gameController = new GameController(blockStore, gameStore, gridStore, sceneStore, store);
 
   const cableConnector = new CableConnector({
-    poles: new ConnectPoleFactory(blockStore, factoryService, sceneStore, transaction),
+    poles: new ConnectPoleFactory(blockStore, factoryService, sceneService, sceneStore, transaction),
   });
 
   toolService.setTools([

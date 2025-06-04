@@ -16,8 +16,8 @@ Then(
 
     const cable = cables.find(
       (currCable) =>
-        (currCable?.end1?.device === realBlockId && currCable.end1.pin === pin) ||
-        (currCable?.end2?.device === realBlockId && currCable.end2.pin === pin),
+        (currCable?.end1?.device === realBlockId && currCable.end1.partName === pin) ||
+        (currCable?.end2?.device === realBlockId && currCable.end2.partName === pin),
     );
 
     if (!cable) {

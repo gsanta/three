@@ -1,6 +1,8 @@
 import Block from '../Block';
 import BlockData from '../BlockData';
 
+export type PoleWireNames = 'Pin1' | 'Pin1b' | 'Pin2' | 'Pin2b' | 'Pin3' | 'Pin3b' | 'Pin4';
+
 class Pole extends Block {
   static PRIMARY_WIRE_1_CONNECTION_A = 'Pin1';
 

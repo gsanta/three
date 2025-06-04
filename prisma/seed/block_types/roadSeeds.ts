@@ -32,12 +32,10 @@ const roadSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'parts' 
       Base: {},
       EndNorth: {
         roles: ['road-slot'],
-        role: 'slot',
         type: 'placeholder',
       },
       EndSouth: {
         roles: ['road-slot'],
-        role: 'slot',
         orientation: 180,
         type: 'placeholder',
       },
@@ -89,24 +87,20 @@ const roadSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'parts' 
       Body: {},
       EndNorth: {
         roles: ['road-slot'],
-        role: 'slot',
         type: 'placeholder',
       },
       EndSouth: {
         roles: ['road-slot'],
-        role: 'slot',
         orientation: 180,
         type: 'placeholder',
       },
       EndEast: {
         roles: ['road-slot'],
-        role: 'slot',
         orientation: -90,
         type: 'placeholder',
       },
       EndWest: {
         roles: ['road-slot'],
-        role: 'slot',
         orientation: 90,
         type: 'placeholder',
       },
@@ -143,13 +137,11 @@ const roadSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'parts' 
       Base: {},
       EndSouth: {
         roles: ['road-slot'],
-        role: 'slot',
         orientation: 180,
         type: 'placeholder',
       },
       EndNorth: {
         roles: ['road-slot'],
-        role: 'slot',
         orientation: -90,
         type: 'placeholder',
       },

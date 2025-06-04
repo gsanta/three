@@ -1,17 +1,14 @@
 import { BlockCategoryName } from '../../models/block/BlockCategoryName';
 import BlockData from '../../models/block/BlockData';
-import Pole from '../../models/block/categories/Pole';
 import Num3 from '../../models/math/Num3';
-import Vector from '../../models/math/Vector';
-import MeshWrapper from '../../models/MeshWrapper';
 import { ConnectCable, ConnectCableFactory } from '../../services/CableConnector';
 import FactoryService from '../../services/factory/FactoryService';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
 import SceneStore from '../../ui/scene/SceneStore';
-import AddToAnchorAsChild from '../block/add/AddToAnchorAsChild';
-import DrawOrUpdateCable from '../cable/DrawOrUpdateCable';
-import EraseBlock from '../erase/EraseBlock';
+import SceneService from '../../ui/scene/service/SceneService';
+import ConnectLowWires from './ConnectLowWires';
+import ConnectMainWires from './ConnectMainWires';
 
 class ConnectPole implements ConnectCable {
   category = 'poles' as BlockCategoryName;
@@ -20,128 +17,59 @@ class ConnectPole implements ConnectCable {
     from: BlockData,
     blockStore: BlockStore,
     factoryService: FactoryService,
+    sceneService: SceneService,
     sceneStore: SceneStore,
     transactionService: TransactionService,
   ) {
-    this.blockStore = blockStore;
-    this.eraseBlock = new EraseBlock(blockStore, transactionService);
-    this.sceneStore = sceneStore;
-    this.transactionService = transactionService;
+    this.connectLowWires = new ConnectLowWires(
+      from,
+      blockStore,
+      factoryService,
+      sceneService,
+      sceneStore,
+      transactionService,
+    );
+    this.connectMainWires = new ConnectMainWires(from, blockStore, factoryService, sceneStore, transactionService);
 
-    this.from = from;
-
-    this.addChildToAnchor = new AddToAnchorAsChild(factoryService, sceneStore);
-
-    this.drawOrUpdateCable = new DrawOrUpdateCable(blockStore, factoryService, transactionService);
+    this.currentConnection = this.connectMainWires;
   }
 
   cancel() {
-    this.drawOrUpdateCable.cancel();
-
-    if (this.tempWeatherHeadId) {
-      this.eraseBlock.erase([this.tempWeatherHeadId]);
-    }
+    this.currentConnection.cancel();
   }
 
-  finalize(): void {}
+  finalize(): void {
+    this.currentConnection.finalize();
+  }
 
   meshRendered(): void {
-    this.createOrUpdateCable();
+    this.currentConnection.meshRendered();
   }
 
-  preview(candidates: BlockData[], fallbackPos: Num3) {
-    if (this.lastPos === fallbackPos) {
-      return;
+  update(candidates: BlockData[], fallbackPos: Num3) {
+    let newConnection = this.currentConnection;
+
+    if (this.connectLowWires.canConnect(candidates)) {
+      newConnection = this.connectLowWires;
+    } else if (this.connectMainWires.canConnect(candidates)) {
+      newConnection = this.connectMainWires;
+    } else {
+      newConnection = this.connectMainWires;
     }
 
-    const candidate = candidates[0];
-
-    if (this.tempWeatherHeadId && this.targetCandidateId !== candidate?.id) {
-      this.eraseBlock.erase([this.tempWeatherHeadId]);
-      this.tempWeatherHeadId = undefined;
+    if (newConnection !== this.currentConnection) {
+      this.currentConnection.cancel();
+      this.currentConnection = newConnection;
     }
 
-    this.lastPos = fallbackPos;
-
-    this.createOrUpdateCable();
-
-    if (!this.tempWeatherHeadId && candidate) {
-      this.createWeatherHead(candidate);
-    }
+    this.currentConnection.update(candidates, fallbackPos);
   }
 
-  getConnectionPoint(): Vector {
-    const weatherHead = this.blockStore.getBlock(this.tempWeatherHeadId);
+  private connectLowWires: ConnectLowWires;
 
-    // const poleAnchorPos = new MeshWrapper(this.sceneStore.getObj3d(this.from.id))
-    //   .findByName(Pole.WIRE_4)
-    //   .getWorldPosition();
+  private connectMainWires: ConnectMainWires;
 
-    // const weatherHeadAnchorPos = new MeshWrapper(this.sceneStore.getObj3d(building.id))
-    //   .findByName('WeatherHeadAnchor1')
-    //   .getWorldPosition();
-
-    return new MeshWrapper(this.sceneStore.getObj3d(weatherHead.id)).getWorldPosition();
-  }
-
-  private createWeatherHead(block: BlockData) {
-    const edit = this.transactionService.getOrCreateActiveTransaction();
-
-    this.tempWeatherHeadId = this.addChildToAnchor.execute({
-      edit,
-      newBlockAnchorName: 'BuildingAnchor',
-      newBlockType: this.blockStore.getBlockType('weather-head-1'),
-      to: {
-        block: block,
-        anchorPartName: 'WeatherHeadAnchor1',
-      },
-    })?.id;
-
-    this.targetCandidateId = block.id;
-
-    edit.commit();
-  }
-
-  private createOrUpdateCable() {
-    let updatedPos = this.lastPos;
-
-    if (this.tempWeatherHeadId) {
-      const weatherHead = this.blockStore.getBlock(this.tempWeatherHeadId);
-
-      updatedPos = new MeshWrapper(this.sceneStore.getObj3d(weatherHead.id)).getWorldPosition().get();
-    }
-
-    const fromPos = new MeshWrapper(this.sceneStore.getObj3d(this.from.id))
-      .findByName(Pole.WIRE_4)
-      .getWorldPosition()
-      .get();
-
-    if (updatedPos) {
-      this.drawOrUpdateCable.updateOrCreate(fromPos, updatedPos);
-    }
-  }
-
-  private drawOrUpdateCable: DrawOrUpdateCable;
-
-  private from: BlockData;
-
-  private eraseBlock: EraseBlock;
-
-  private targetCandidateId: string | undefined;
-
-  private tempWeatherHeadId: string | undefined;
-
-  private tempCableId: string | undefined;
-
-  private lastPos: Num3 | undefined;
-
-  private addChildToAnchor: AddToAnchorAsChild;
-
-  private blockStore: BlockStore;
-
-  private sceneStore: SceneStore;
-
-  private transactionService: TransactionService;
+  private currentConnection: ConnectCable;
 }
 
 export class ConnectPoleFactory implements ConnectCableFactory {
@@ -150,17 +78,26 @@ export class ConnectPoleFactory implements ConnectCableFactory {
   constructor(
     blockStore: BlockStore,
     factoryService: FactoryService,
+    sceneService: SceneService,
     sceneStore: SceneStore,
     transactionService: TransactionService,
   ) {
     this.blockStore = blockStore;
     this.factoryService = factoryService;
+    this.sceneService = sceneService;
     this.sceneStore = sceneStore;
     this.transactionService = transactionService;
   }
 
   getConnector(from: BlockData): ConnectCable {
-    return new ConnectPole(from, this.blockStore, this.factoryService, this.sceneStore, this.transactionService);
+    return new ConnectPole(
+      from,
+      this.blockStore,
+      this.factoryService,
+      this.sceneService,
+      this.sceneStore,
+      this.transactionService,
+    );
   }
 
   private blockStore: BlockStore;
@@ -168,6 +105,8 @@ export class ConnectPoleFactory implements ConnectCableFactory {
   private factoryService: FactoryService;
 
   private sceneStore: SceneStore;
+
+  private sceneService: SceneService;
 
   private transactionService: TransactionService;
 }

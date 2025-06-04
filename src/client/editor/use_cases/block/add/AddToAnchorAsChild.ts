@@ -41,6 +41,8 @@ class AddToAnchorAsChild {
       return;
     }
 
+    const targetPartDetail = to.block.partDetails[targetPart.name];
+
     this.factoryService.create(edit, newBlockType.type, {
       block: {
         parentConnection: {
@@ -48,7 +50,7 @@ class AddToAnchorAsChild {
           part: targetPart.name,
         },
         position: this.calculatePosition(new BlockPart(to.block, targetPart), newBlockPart),
-        rotation: [0, 0, 0],
+        rotation: [0, targetPartDetail?.orientation || 0, 0],
       },
     });
 

@@ -51,7 +51,7 @@ class CableEraser extends BlockEraser {
       end.device,
       {
         pins: {
-          [end.pin]: {
+          [end.partName]: {
             wires: [cableId],
           },
         },
@@ -68,7 +68,7 @@ class CableEraser extends BlockEraser {
     const cableEnd = cable?.end1?.device === poleBlock.id ? cable.end1 : cable?.end2;
 
     if (pole && cable && cableEnd) {
-      const origPin = pole.pins[cableEnd.pin];
+      const origPin = pole.pins[cableEnd.partName];
 
       edit.updateDecoration(
         'devices',
@@ -76,7 +76,7 @@ class CableEraser extends BlockEraser {
         {
           pins: {
             ...pole.pins,
-            [cableEnd.pin]: {
+            [cableEnd.partName]: {
               ...origPin,
               wires: [cable.id],
             },

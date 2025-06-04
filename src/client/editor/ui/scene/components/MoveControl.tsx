@@ -42,7 +42,6 @@ const MoveControl = ({ children }: MoveControlProps) => {
       onDragEnd={() => {
         tool.onDragEnd();
       }}
-      userData={{ role: 'selection-pivot' }}
     >
       <group name="selection-group">{children({ drag })}</group>
     </PivotControls>

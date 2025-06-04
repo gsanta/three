@@ -42,6 +42,7 @@ class DrawOrUpdateCable {
       const edit = this.transaction.createTransaction();
       edit.remove(this.tempCableId);
       edit.commit();
+      this.tempCableId = undefined;
     }
   }
 

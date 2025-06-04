@@ -51,7 +51,7 @@ class AddPole {
 
       const newPole = this.blockStore.getBlock(blockId);
 
-      this.joinPoles.join(newPole);
+      // this.joinPoles.join(newPole);
 
       edit.commit();
     }

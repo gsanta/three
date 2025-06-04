@@ -14,6 +14,7 @@ const weatherHeadSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | '
       {
         name: 'Body',
         materialPath: 'Palette',
+        position: [0, 0.086, 0.171],
         scale: 2.537,
       },
       {

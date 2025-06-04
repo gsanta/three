@@ -1,7 +1,8 @@
 import Num3 from '@/client/editor/models/math/Num3';
 
 export type CableEnd = {
-  pin: string;
+  partName: string;
+  pinIndex: number;
   device: string;
 };
 
