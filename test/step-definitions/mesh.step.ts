@@ -22,8 +22,34 @@ export async function iWaitForMeshToExist(this: ExtendedWorld, blockId: string) 
   });
 }
 
+export async function iWaitForMeshNotToExist(this: ExtendedWorld, blockId: string) {
+  let iter = 0;
+  let interval: ReturnType<typeof setInterval>;
+
+  return new Promise<void>((resolve, reject) => {
+    interval = setInterval(() => {
+      try {
+        this.env?.editorContext.sceneStore.getObj3d(blockId);
+      } catch {
+        clearInterval(interval);
+        resolve();
+      }
+
+      iter += 1;
+
+      if (iter === 5) {
+        reject(`Block ${blockId} still exists`);
+      }
+    }, 1);
+  });
+}
+
 When('I wait mesh {string} to exist', async function (this: ExtendedWorld, blockId: string) {
   await iWaitForMeshToExist.call(this, blockId);
+});
+
+When('I wait mesh {string} not to exist', async function (this: ExtendedWorld, blockId: string) {
+  await iWaitForMeshNotToExist.call(this, blockId);
 });
 
 When(

@@ -1,21 +1,14 @@
 Feature: Pole
-  Scenario: Connecting a pole shows the cable previews
+  Scenario: Moving the cursor on the grid shows the pole preview
     Given I have a scene with:
-      | TYPE   | ID       | PARENT | GRIDPOS |
-      | pole-1 | pole-1-1 | -      | 5,0     |
-    When I select tool 'add'
-    And I select template 'pole-1'
+      | TYPE   | ID       | GRIDPOS |
+      | pole-1 | pole-1-1 | 5,0     |
+      | pole-1 | pole-1-2 | 5,5     |
     And I set next uuids to:
       | UUID      | TYPE    |
-      | pole-1-2  | pole-1  |
       | cable-1-1 | cable-1 |
       | cable-1-2 | cable-1 |
       | cable-1-3 | cable-1 |
-    And I move pointer to grid position '5,5'
-    And I press pointer
-    Then I have blocks with properties
-      | BLOCK    | POSITION      |
-      | pole-1-2 | -31.2,0,-16.2 |
     When I select tool 'select'
     And I move pointer to grid position '1,1'
     And I press pointer
@@ -41,6 +34,41 @@ Feature: Pole
       | cable-1-1 | block:pole-1-1,Pin1 | block:pole-1-2,Pin1 |
       | cable-1-2 | block:pole-1-1,Pin2 | block:pole-1-2,Pin2 |
       | cable-1-3 | block:pole-1-1,Pin3 | block:pole-1-2,Pin3 |
+
+  Scenario: Moving the cursor between empty tile and tile with house changes preview style 
+    Given I have a scene with:
+      | TYPE              | ID        | GRIDPOS |
+      | pole-1            | pole-1-1  | 5,0     |
+      | two-story-house-1 | house-1-1 | 6,0     |
+    And I set next uuids to:
+      | UUID             | TYPE                  |
+      | cable-1-1        | cable-1               |
+      | cable-1-2        | cable-1               |
+      | cable-1-3        | cable-1               |
+      | cable-1-4        | cable-1               |
+      | weather-head-1-1 | weather-head-1        |
+    When I select tool 'select'
+    And I hover over block 'pole-1-1'
+    And I press pointer
+    And I execute action 'join-cable-action'
+    And I move pointer to grid position '5,5'
+    And I wait mesh 'cable-1-1' to exist
+    Then I have cables with properties
+      | CABLE     | END1                | END2     |
+      | cable-1-1 | block:pole-1-1,Pin1 | grid:5,5 |
+      | cable-1-2 | block:pole-1-1,Pin2 | grid:5,5 |
+      | cable-1-3 | block:pole-1-1,Pin3 | grid:5,5 |
+    When I move pointer to grid position '6,0'
+    And I wait mesh 'cable-1-4' to exist
+    Then I have cables with properties
+      | CABLE     | END1                | END2                               |
+      | cable-1-4 | block:pole-1-1,Pin4 | block:weather-head-1-1,CableAnchor |
+    When I select tool 'add'
+    And I wait block 'cable-1-4' not to exist  
+    Then my current scene is
+      | BLOCK     | TYPE              |
+      | pole-1-1  | pole-1            |
+      | house-1-1 | two-story-house-1 |
 
   Scenario: Exiting cabling tool removes the cable previews
     Given I have a scene with:
@@ -69,7 +97,7 @@ Feature: Pole
       | BLOCK     | TYPE    |
       | pole-1-1  | pole-1  |
 
-  Scenario: Submitting cabling action makes the cables permanent
+  Scenario: Submitting cabling action makes connection to another poles
     Given I have a scene with:
       | TYPE   | ID       | PARENT | GRIDPOS |
       | pole-1 | pole-1-1 | -      | 5,0     |
@@ -84,7 +112,7 @@ Feature: Pole
     And I press pointer
     And I execute action 'join-cable-action'
     And I move pointer to grid position '6,0'
-    And I wait block 'cable-1-1' to exist
+    And I wait mesh 'cable-1-1' to exist
     Then I have cables with properties
       | CABLE     | END1                | END2                |
       | cable-1-1 | block:pole-1-1,Pin1 | block:pole-1-2,Pin1 |
@@ -100,6 +128,29 @@ Feature: Pole
       | cable-1-2 | cable-1 |
       | cable-1-3 | cable-1 |
 
+  Scenario: Submitting cabling action makes connection to a house
+    Given I have a scene with:
+      | TYPE              | ID        | GRIDPOS |
+      | pole-1            | pole-1-1  | 5,0     |
+      | two-story-house-1 | house-1-1 | 6,0     |
+    When I select tool 'select'
+    And I set next uuids to:
+      | UUID             | TYPE           |
+      | cable-1-1        | cable-1        |
+      | weather-head-1-1 | weather-head-1 |
+    And I hover over block 'pole-1-1'
+    And I press pointer
+    And I execute action 'join-cable-action'
+    And I move pointer to grid position '6,0'
+    And I wait mesh 'cable-1-1' to exist
+    And I press pointer
+    And I select tool 'add'
+    Then my current scene is
+      | BLOCK            | TYPE              |
+      | pole-1-1         | pole-1            |
+      | house-1-1        | two-story-house-1 |
+      | weather-head-1-1 | weather-head-1    |
+      | cable-1-1        | cable-1           |
 
   # Scenario: Adding a pole auto-rotates it to align with the neigbours
   #   Given I have a scene with:
@@ -134,7 +185,6 @@ Feature: Pole
   #     | pole-1-2 | 0,-45,0     |
   #     | pole-1-3 | 0,-90,0     |
 
-  @only
   Scenario: Removing a pole removes the associated cables as well
     Given I have a scene with:
       | TYPE   | ID       | GRIDPOS |

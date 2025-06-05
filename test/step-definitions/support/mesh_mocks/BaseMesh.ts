@@ -50,8 +50,14 @@ class BaseMesh extends AbstractMesh {
     if (block.isDirty) {
       this.updateService.updateDirtyBlock(block.id);
     }
-    this.sceneService.onMeshRendered(block.id);
+    if (!this.isRendered) {
+      console.log(`Rendering mesh for block ${block.id}`);
+      this.sceneService.onMeshRendered(block.id);
+      this.isRendered = true;
+    }
   }
+
+  private isRendered = false;
 
   protected blockId: string;
 

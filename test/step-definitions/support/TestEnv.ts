@@ -60,11 +60,14 @@ export const setupTestEnv = async (): Promise<TestEnv> => {
       setTrackedTimeout(() => {
         payload.blockUpdates.forEach((u) => {
           if ('block' in u && u.block) {
-            sceneStore.addMesh(meshFactory.create(u.block) as unknown as Mesh, u.block.id);
-            const mesh = sceneStore.getObj3d(u.block.id) as unknown as ModelMesh;
-            mesh.render();
+            if (!sceneStore.hasObj3d(u.block.id)) {
+              sceneStore.addMesh(meshFactory.create(u.block) as unknown as Mesh, u.block.id);
+            }
 
-            editorContext.sceneService.onMeshRendered(u.block.id);
+            if (blockStore.getBlock(u.block.id)) {
+              const mesh = sceneStore.getObj3d(u.block.id) as unknown as ModelMesh;
+              mesh.render();
+            }
           }
         });
       });
