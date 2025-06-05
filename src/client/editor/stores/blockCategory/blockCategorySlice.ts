@@ -76,6 +76,11 @@ export const blockCategorySlice = createSlice({
     builder.addCase(updateBlocks, (state, action) => {
       selectionUpdater.update(state, action.payload.blockUpdates);
     });
+
+    builder.addCase('clearAll', (state) => {
+      state.selectedBlocks = {};
+      state.selectedRootBlockIds = [];
+    });
   },
 });
 

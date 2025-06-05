@@ -33,7 +33,8 @@
         "console": "integratedTerminal",
         "program": "${workspaceRoot}/node_modules/@cucumber/cucumber/bin/cucumber-js",
         "args": [
-            "${workspaceRoot}/test/**/*.feature",
+          "${workspaceRoot}/test/**/*.feature",
+          "--format", "progress-bar"
         ],
         "env": {
           "TS_NODE_TRANSPILE_ONLY": "true",

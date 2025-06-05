@@ -5,6 +5,7 @@ import { Vector3 } from 'three';
 import assert from 'assert';
 import Vector from '@/client/editor/models/math/Vector';
 import { BlockCategoryName } from '@/client/editor/models/block/BlockCategoryName';
+import Grid from '@/client/editor/models/Grid';
 
 export function checkBlockExists(this: ExtendedWorld, blockId: string) {
   const realBlockId = blockId === 'examined' ? this.env?.testScene.storedBlockId || '' : blockId;
@@ -99,6 +100,34 @@ export function checkPosition(this: ExtendedWorld, position: string): Num3 {
   }
 
   throw new Error('should not reach this point');
+}
+
+export function checkCableEnd(this: ExtendedWorld, end: string): Num3 {
+  if (end.startsWith('grid')) {
+    const [x, y] = end.split(':')[1].split(',').map(Number);
+
+    const grid = new Grid(this.getEnv().editorContext.gridStore);
+    const [worldX, worldZ] = grid.gridToWorldPos(grid.gridPositionToGridIndex(x, y));
+    return [worldX, 0, worldZ] as Num3;
+  } else if (end.startsWith('block')) {
+    const blockAndPart = end.split(':')[1];
+    let blockId = blockAndPart;
+    let partName = '';
+    if (blockAndPart.indexOf(',') !== -1) {
+      blockId = blockAndPart.split(',')[0];
+      partName = blockAndPart.split(',')[1];
+    }
+
+    if (!partName) {
+      return this.getEnv().editorContext.blockStore.getBlock(blockId).position;
+    } else {
+      const mesh = this.getEnv().editorContext.sceneStore.getObj3d(blockId);
+
+      return new MeshWrapper(mesh).findByName(partName).getWorldPosition().get();
+    }
+  } else {
+    throw new Error(`Unknown cable end format: ${end}`);
+  }
 }
 
 export function checkGridPosition(this: ExtendedWorld, position: string): [number, number] {

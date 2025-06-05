@@ -99,6 +99,14 @@ export const gridSlice = createSlice({
     builder.addCase(updateBlocks, (state, action) => {
       gridUpdater.update(state, action.payload.blockUpdates);
     });
+
+    builder.addCase('clearAll', (state) => {
+      state.activeGridIndexes = [];
+      state.blockToGridIndex = {};
+      state.carGridPos = [0, 0];
+      state.editingTargetBlock = null;
+      state.gridIndexToBlocks = {};
+    });
   },
 });
 

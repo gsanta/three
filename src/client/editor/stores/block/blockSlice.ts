@@ -75,6 +75,15 @@ export const blockSlice = createSlice({
         state.blocks[blockId].notifyOnRender = false;
       }
     });
+
+    builder.addCase('clearAll', (state) => {
+      state.rootBlocksIds = [];
+      state.blocks = {};
+      state.hovered = undefined;
+      state.currentPlayer = undefined;
+      state.decorations = { ...initialBlockState.decorations };
+      state.selectedBlocks = [];
+    });
   },
 });
 

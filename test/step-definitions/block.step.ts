@@ -3,12 +3,7 @@ import ExtendedWorld from './ExtendedWorld';
 import assert from 'assert';
 import findClosestBlock, { calculateDistance } from './helpers/findClosestBlock';
 import { checkBlockExists, checkPosition, checkPositionCloseTo } from './helpers/checks';
-import { waitForDirtyBlockUpdates } from './helpers/waitFor';
 import Vector from '@/client/editor/models/math/Vector';
-
-When('I wait for dirty blocks to update', async function (this: ExtendedWorld) {
-  await waitForDirtyBlockUpdates(this);
-});
 
 Then('block {string} does not exist', function (this: ExtendedWorld, blockId: string) {
   const block = this.getEnv().editorContext.blockStore.getBlock(blockId);
@@ -118,16 +113,36 @@ When('I wait block {string} to exist', async function (this: ExtendedWorld, bloc
 
   return new Promise<void>((resolve, reject) => {
     interval = setInterval(() => {
-      try {
-        this.env?.editorContext.blockStore.getBlock(blockId);
+      const block = this.env?.editorContext.blockStore.getBlock(blockId);
+      if (block) {
         clearInterval(interval);
         resolve();
-      } catch {}
+      }
 
       iter += 1;
 
       if (iter === 5) {
         reject(`Block ${blockId} does not exist`);
+      }
+    }, 1);
+  });
+});
+
+When('I wait block {string} not to exist', async function (this: ExtendedWorld, blockId: string) {
+  let iter = 0;
+  let interval: ReturnType<typeof setInterval>;
+
+  return new Promise<void>((resolve, reject) => {
+    interval = setInterval(() => {
+      if (!this.env?.editorContext.blockStore.getBlock(blockId)) {
+        clearInterval(interval);
+        resolve();
+      }
+
+      iter += 1;
+
+      if (iter === 5) {
+        reject(`Block ${blockId} still exists`);
       }
     }, 1);
   });

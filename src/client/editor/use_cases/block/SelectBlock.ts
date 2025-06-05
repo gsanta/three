@@ -18,9 +18,7 @@ class SelectBlock {
         const block = this.blockStore.getBlocks()[blockId];
         const edit = this.updateService.createTransaction();
 
-        const alreadySelectedBlocks = Object.keys(alreadySelectedBlockIds).map((id) => this.blockStore.getBlock(id));
-
-        edit.select([...alreadySelectedBlocks, this.blockStore.getBlock(blockId)]);
+        edit.select([this.blockStore.getBlock(blockId)]);
 
         store.dispatch(updateSelectTool({ moveAxis: block.moveAxis }));
 

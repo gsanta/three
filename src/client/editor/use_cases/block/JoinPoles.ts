@@ -130,6 +130,8 @@ class JoinPoles {
 
     const cable = edit.getLastBlock();
 
+    console.log('join pole cables', cable.id);
+
     this.updatePole(edit, cable, join1.pole, join1.partName, join1.pinIndex);
     this.updatePole(edit, cable, join2.pole, join2.partName, join2.pinIndex);
   }

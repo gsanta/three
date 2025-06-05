@@ -240,9 +240,7 @@ class Edit {
       }
     });
 
-    this.dispatchStore.dispatch(
-      updateBlocks({ blockUpdates: this.updates, editorContext: this.editorContext, history: updateHistory }),
-    );
+    this.dispatchStore.dispatch(updateBlocks({ blockUpdates: this.updates, history: updateHistory }));
 
     this.systemHooks.forEach((systemHook) => systemHook.onCommit(this.updates));
 

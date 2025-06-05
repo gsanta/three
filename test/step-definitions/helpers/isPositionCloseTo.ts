@@ -7,4 +7,8 @@ const isPositionCloseTo = (expected: Num3, actual: Num3): boolean => {
   return distance < 0.1;
 };
 
+export const isPositionCloseAny = (expected: Num3, actual: Num3[]): boolean => {
+  return actual.some((pos) => isPositionCloseTo(expected, pos));
+};
+
 export default isPositionCloseTo;

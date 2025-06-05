@@ -46,6 +46,10 @@ class BlocksUpdater {
         if (index !== -1) {
           state.selectedBlocks.splice(index, 1);
         }
+
+        if (state.hovered?.block === update.remove.id) {
+          state.hovered = undefined;
+        }
       } else if ('select' in update) {
         const player = update.select.find((block) => block.category === 'humans');
         if (player) {

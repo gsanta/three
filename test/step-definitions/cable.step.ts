@@ -1,9 +1,9 @@
 import { Then } from '@cucumber/cucumber';
 import ExtendedWorld from './ExtendedWorld';
 import assert from 'assert';
-import isPositionCloseTo from './helpers/isPositionCloseTo';
+import isPositionCloseTo, { isPositionCloseAny } from './helpers/isPositionCloseTo';
 import Device, { Pins } from '@/client/editor/models/block/categories/Device';
-import { checkDecorationExists, checkPosition } from './helpers/checks';
+import { checkCableEnd, checkDecorationExists, checkPosition } from './helpers/checks';
 import Cable from '@/client/editor/models/block/categories/Cable';
 
 Then(
@@ -40,6 +40,8 @@ type BlockHash = {
   CABLE: string;
   PARENT: string;
   POSITION: string;
+  END1?: string;
+  END2?: string;
 };
 
 Then('I have cables with properties', function (this: ExtendedWorld, table: { hashes(): BlockHash[] }) {
@@ -54,16 +56,48 @@ Then('I have cables with properties', function (this: ExtendedWorld, table: { ha
       assert.fail(`Cable not found with id id ${row.CABLE}`);
     }
 
-    const index = cable?.points.findIndex((point) => row.PARENT === point.blockId);
+    if (row.PARENT) {
+      const index = cable?.points.findIndex((point) => row.PARENT === point.blockId);
 
-    if (index === -1) {
-      assert.fail(`Cable does not have a parent with id ${row.PARENT}`);
+      if (index === -1) {
+        assert.fail(`Cable does not have a parent with id ${row.PARENT}`);
+      }
     }
 
-    const [x, y, z] = checkPosition.call(this, row.POSITION);
-    const isClose = isPositionCloseTo([x, y, z], cable?.points[index].position);
+    if (row.POSITION) {
+      const index = cable?.points.findIndex((point) => row.PARENT === point.blockId);
 
-    assert.ok(isClose, `Expected (${x}, ${y}, ${z}) to be close to (${cable?.points[index].position.join(', ')})`);
+      const [x, y, z] = checkPosition.call(this, row.POSITION);
+      const isClose = isPositionCloseTo([x, y, z], cable?.points[index].position);
+
+      assert.ok(isClose, `Expected (${x}, ${y}, ${z}) to be close to (${cable?.points[index].position.join(', ')})`);
+    }
+
+    if (row.END1) {
+      const [x, y, z] = checkCableEnd.call(this, row.END1);
+      const isClose = isPositionCloseAny(
+        [x, y, z],
+        cable.points.map((point) => point.position),
+      );
+
+      assert.ok(
+        isClose,
+        `Expected (${x}, ${y}, ${z}) to be close to one of cable points (${cable.points.map((point) => point.position.join(', ')).join(' | ')})`,
+      );
+    }
+
+    if (row.END2) {
+      const [x, y, z] = checkCableEnd.call(this, row.END2);
+      const isClose = isPositionCloseAny(
+        [x, y, z],
+        cable.points.map((point) => point.position),
+      );
+
+      assert.ok(
+        isClose,
+        `Expected (${x}, ${y}, ${z}) to be close to one of cable points (${cable.points.map((point) => point.position.join(', ')).join(' | ')})`,
+      );
+    }
   });
 });
 

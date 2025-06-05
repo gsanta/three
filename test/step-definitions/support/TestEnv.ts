@@ -3,12 +3,11 @@ import TestMeshFactory from './TestMeshFactory';
 import { dispatchEditorData, fetchEditorData } from '@/client/editor/setupEditorData';
 import { store, testMiddleware } from '@/client/common/utils/store';
 import EditorContextType, { setupEditor } from '@/client/editor/setupEditor';
-import { updateBlocks } from '@/client/editor/stores/block/blockActions';
+import { clearAll, updateBlocks } from '@/client/editor/stores/block/blockActions';
 import { UpdateBlocks } from '@/client/editor/stores/block/blockSlice.types';
 import { Mesh } from 'three';
 import ToolHelper from './ToolHelper';
 import ModelMesh from './mesh_mocks/ModelMesh';
-import { clearBlockSlice } from '@/client/editor/stores/block/blockSlice';
 
 type TestEnv = {
   editorContext: EditorContextType;
@@ -79,7 +78,7 @@ export const setupTestEnv = async (): Promise<TestEnv> => {
     timeouts.forEach((timeout) => {
       clearTimeout(timeout);
     });
-    store.dispatch(clearBlockSlice());
+    store.dispatch(clearAll());
     unsubscribeUpdateBlockListener();
   };
 

@@ -1,6 +1,5 @@
 import { When } from '@cucumber/cucumber';
 import ExtendedWorld from './ExtendedWorld';
-import { setSelectedTool } from '@/client/editor/stores/tool/toolSlice';
 import ToolName from '@/client/editor/models/tool/ToolName';
 import { store } from '@/client/common/utils/store';
 import { setSelectedGeometry } from '@/client/editor/stores/blockType/blockTypeSlice';
@@ -12,7 +11,7 @@ import assert from 'assert';
 import Grid from '@/client/editor/models/Grid';
 
 When('I select tool {string}', function (this: ExtendedWorld, toolName: ToolName) {
-  store.dispatch(setSelectedTool(toolName));
+  this.getEnv().editorContext.tool.setSelectedTool(toolName);
 });
 
 When('I select template {string}', function (this: ExtendedWorld, type: string) {

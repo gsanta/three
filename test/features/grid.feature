@@ -15,6 +15,7 @@ Feature: Grid
       | house-1 | two-story-house-1 |
     And I move pointer to grid position '5,5'
     And I press pointer
+    And I wait mesh 'house-1' to exist
     Then the current grid scene is:
       | BLOCK   | GRIDPOS |
       | house-1 | 5,5     |
