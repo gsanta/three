@@ -8,13 +8,15 @@ import {
   setBlockAddMethods,
   setBlockContextMenuActions,
 } from './stores/blockCategory/blockCategorySlice';
-import BlockConstantData from './models/block/BlockConstantData';
-import { setTemplates } from './stores/blockType/blockTypeSlice';
+import BlockConstantData, { BlockTypeName } from './models/block/BlockConstantData';
+import { setBlockTypes } from './stores/blockType/blockTypeSlice';
 import { initState } from './stores/block/blockActions';
 import EditorPageProps from '@/app/editor/EditorPageProps';
+import { BlockDecorations } from './models/block/BlockDecoration';
 
 export type EditorDataReturnType = {
   blockCategories: BlockCategoriesResponse['items'];
+  blockDecorations: Record<BlockTypeName, Partial<BlockDecorations>>;
   blockAddMethods: BlockAddMethodsResponse['items'];
   blockContextMenuActions: BlockContextMenuActionsResponse['items'];
   blockTypes: BlockConstantData[];
@@ -43,13 +45,27 @@ export const fetchEditorData = async (): Promise<EditorDataReturnType> => {
   })) as BlockContextMenuActionsResponse['items'];
 
   const blockTypesData = await db.blockType.findMany();
-  const blockTypes = blockTypesData.map((blockType) => ({
-    ...blockType,
-    category: blockType.categoryName,
-  })) as unknown as BlockConstantData[];
+  const blockTypes = blockTypesData.map((blockType) => {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { decorationData: _, ...rest } = blockType;
+    return {
+      ...rest,
+      category: blockType.categoryName,
+    } as unknown as BlockConstantData;
+  });
+
+  const blockDecorations: Record<BlockTypeName, Partial<BlockDecorations>> = {};
+
+  blockTypesData.forEach((blockType) => {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { decorationData, type } = blockType;
+
+    blockDecorations[type] = decorationData as unknown as Partial<BlockDecorations>;
+  });
 
   return {
     blockCategories: categories,
+    blockDecorations,
     blockAddMethods,
     blockContextMenuActions,
     blockTypes,
@@ -57,11 +73,11 @@ export const fetchEditorData = async (): Promise<EditorDataReturnType> => {
 };
 
 export const dispatchEditorData = (data: EditorPageProps, dispatch: Dispatch<UnknownAction>) => {
-  const { blockCategories, blockAddMethods, blockContextMenuActions, blockTypes } = data;
+  const { blockCategories, blockDecorations, blockAddMethods, blockContextMenuActions, blockTypes } = data;
 
   dispatch(setBlockCategories(blockCategories));
   dispatch(setBlockAddMethods(blockAddMethods));
   dispatch(setBlockContextMenuActions(blockContextMenuActions));
-  dispatch(setTemplates(blockTypes));
+  dispatch(setBlockTypes({ blocks: blockTypes, decorations: blockDecorations }));
   dispatch(initState());
 };

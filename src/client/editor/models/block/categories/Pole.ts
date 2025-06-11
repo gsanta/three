@@ -1,7 +1,11 @@
+import BlockStore from '@/client/editor/stores/block/BlockStore';
 import Block from '../Block';
 import BlockData from '../BlockData';
+import PoleDecorator from './PoleDecorator';
 
-export type PoleWireNames = 'Pin1' | 'Pin1b' | 'Pin2' | 'Pin2b' | 'Pin3' | 'Pin3b' | 'Pin4';
+export type WireRole = 'L1' | 'L2' | 'L3' | 'N' | 'PE';
+
+export type PolePartNames = 'TransformerHolder' | WireRole;
 
 class Pole extends Block {
   static PRIMARY_WIRE_1_CONNECTION_A = 'Pin1';
@@ -16,7 +20,7 @@ class Pole extends Block {
 
   static PRIMARY_WIRE_3_CONNECTION_B = 'Pin3b';
 
-  static WIRE_4 = 'Pin4';
+  static SERVICE_DROP_PART_NAME: PolePartNames = 'TransformerHolder';
 
   static PRIMARY_WIRE_CONNECTION_NAMES_A = [
     Pole.PRIMARY_WIRE_1_CONNECTION_A,
@@ -30,18 +34,35 @@ class Pole extends Block {
     Pole.PRIMARY_WIRE_3_CONNECTION_B,
   ];
 
-  constructor(block: BlockData) {
+  constructor(block: BlockData, blockStore: BlockStore) {
     super(block);
     this.checkCategory('poles');
 
     this.block = block;
+    this.blockStore = blockStore;
   }
 
-  arePrimaryWireConnectionsEmpty(place: 'a' | 'b') {
-    return (place === 'a' ? Pole.PRIMARY_WIRE_CONNECTION_NAMES_A : Pole.PRIMARY_WIRE_CONNECTION_NAMES_B).every(
-      (name) => !this.block.partDetails[name] || !this.block.partDetails[name]?.isConnected,
-    );
+  getPoleDecorator(): PoleDecorator {
+    return this.blockStore.getDecorator('poles', this.block.id) as PoleDecorator;
   }
+
+  getFirstEmptyPin(partName: WireRole): number | undefined {
+    const pinCount = Object.keys(this.block.partDetails[partName]?.isConnected || {}).length;
+
+    for (let i = 0; i < pinCount; i++) {
+      if (this.isPinEmpty(partName, i)) {
+        return i;
+      }
+    }
+
+    return undefined;
+  }
+
+  isPinEmpty(partName: WireRole, pinIndex: number): boolean {
+    return this.block.partDetails[partName]?.isConnected[pinIndex] === false;
+  }
+
+  private blockStore: BlockStore;
 }
 
 export default Pole;

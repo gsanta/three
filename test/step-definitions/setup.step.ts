@@ -1,7 +1,7 @@
 import { After, Before, Given, Then, When } from '@cucumber/cucumber';
 import { Vector3 } from 'three';
 import { store } from '@/client/common/utils/store';
-import { setSelectedGeometry } from '@/client/editor/stores/blockType/blockTypeSlice';
+import { setActiveBlockType } from '@/client/editor/stores/blockType/blockTypeSlice';
 import { setSelectedTool } from '@/client/editor/stores/tool/toolSlice';
 import ToolName from '@/client/editor/models/tool/ToolName';
 import ExtendedWorld from './ExtendedWorld';
@@ -118,7 +118,7 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
 
     store.dispatch(setSelectedTool(ToolName.Add));
     this.getEnv().toolHelper.pointerEnter({ blockId: targetBlock, partIndex });
-    store.dispatch(setSelectedGeometry(block.type));
+    store.dispatch(setActiveBlockType(block.type));
     addTool.onPointerUp({ clientX: 0, clientY: 0, pos: new Vector3(...pos) } as ToolInfo);
 
     store.dispatch(updateBlocks({ blockUpdates: [{ select: [] }] }));
@@ -126,15 +126,6 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
     await waitTenMs();
   }
 });
-
-export async function addTemplateToPosition(this: ExtendedWorld, template: string, x: number, y: number, z: number) {
-  store.dispatch(setSelectedTool(ToolName.Add));
-  store.dispatch(setSelectedGeometry(template));
-
-  this.getEnv().toolHelper.pointerMove({ point: new Vector3(x, y, z) });
-  this.getEnv().toolHelper.pointerDown();
-  this.getEnv().toolHelper.pointerUp();
-}
 
 When(
   'I set next uuids to:',

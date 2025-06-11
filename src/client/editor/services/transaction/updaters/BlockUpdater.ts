@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { BlockDecorationType } from '@/client/editor/models/block/BlockCategory';
+import { BlockDecorationType } from '@/client/editor/models/block/BlockDecoration';
 import Edit from '../Edit';
 import BlockData from '@/client/editor/models/block/BlockData';
 

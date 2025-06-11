@@ -10,7 +10,7 @@ export type Pin = {
 
 type Device = {
   id: string;
-  category: 'devices';
+  decoration: 'devices';
   circuitComponent: 'consumer' | 'provider';
   isOn: boolean;
   pins: Partial<Record<string, Pin>>;

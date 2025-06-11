@@ -1,6 +1,5 @@
 import { BlockCategoryName } from '../../models/block/BlockCategoryName';
 import BlockData from '../../models/block/BlockData';
-import Pole from '../../models/block/categories/Pole';
 import Num3 from '../../models/math/Num3';
 import Vector from '../../models/math/Vector';
 import MeshWrapper from '../../models/MeshWrapper';
@@ -10,10 +9,7 @@ import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
 import SceneStore from '../../ui/scene/SceneStore';
 import SceneService from '../../ui/scene/service/SceneService';
-import AddToAnchorAsChild from '../block/add/AddToAnchorAsChild';
 import ConnectPoleToBuilding from '../block/add/ConnectPoleToBuilding';
-import DrawOrUpdateCable from '../cable/DrawOrUpdateCable';
-import EraseBlock from '../erase/EraseBlock';
 
 class ConnectLowWires implements ConnectCable {
   category = 'poles' as BlockCategoryName;
@@ -27,13 +23,9 @@ class ConnectLowWires implements ConnectCable {
     transactionService: TransactionService,
   ) {
     this.blockStore = blockStore;
-    this.eraseBlock = new EraseBlock(blockStore, transactionService);
     this.sceneStore = sceneStore;
-    this.transactionService = transactionService;
 
     this.from = from;
-
-    this.addChildToAnchor = new AddToAnchorAsChild(factoryService, sceneStore);
 
     this.connectPoleToBuilding = new ConnectPoleToBuilding(
       blockStore,
@@ -42,8 +34,6 @@ class ConnectLowWires implements ConnectCable {
       sceneService,
       transactionService,
     );
-
-    this.drawOrUpdateCable = new DrawOrUpdateCable(blockStore, factoryService, transactionService);
   }
 
   canConnect(candidates: BlockData[]) {
@@ -51,15 +41,9 @@ class ConnectLowWires implements ConnectCable {
   }
 
   cancel() {
-    // this.drawOrUpdateCable.cancel();
     this.connectPoleToBuilding.cancel();
 
     this.lastPos = undefined;
-
-    // if (this.tempWeatherHeadId) {
-    //   this.eraseBlock.erase([this.tempWeatherHeadId]);
-    //   this.tempWeatherHeadId = undefined;
-    // }
   }
 
   finalize(): void {
@@ -70,9 +54,7 @@ class ConnectLowWires implements ConnectCable {
     return candidates.find((candidate) => candidate.category === 'houses');
   }
 
-  meshRendered(): void {
-    // this.createOrUpdateCable();
-  }
+  meshRendered(): void {}
 
   update(candidates: BlockData[], fallbackPos: Num3) {
     if (this.lastPos === fallbackPos) {
@@ -92,12 +74,6 @@ class ConnectLowWires implements ConnectCable {
     this.connectPoleToBuilding.execute(candidate, this.from);
 
     this.lastPos = fallbackPos;
-
-    // this.createOrUpdateCable();
-
-    // if (!this.tempWeatherHeadId && candidate) {
-    //   this.createWeatherHead(candidate);
-    // }
   }
 
   getConnectionPoint(): Vector {
@@ -106,50 +82,9 @@ class ConnectLowWires implements ConnectCable {
     return new MeshWrapper(this.sceneStore.getObj3d(weatherHead.id)).getWorldPosition();
   }
 
-  private createWeatherHead(block: BlockData) {
-    const edit = this.transactionService.getOrCreateActiveTransaction();
-
-    this.tempWeatherHeadId = this.addChildToAnchor.execute({
-      edit,
-      newBlockAnchorName: 'BuildingAnchor',
-      newBlockType: this.blockStore.getBlockType('weather-head-1'),
-      to: {
-        block: block,
-        anchorPartName: 'WeatherHeadAnchor1',
-      },
-    })?.id;
-
-    this.targetCandidateId = block.id;
-
-    edit.commit();
-  }
-
-  private createOrUpdateCable() {
-    let updatedPos = this.lastPos;
-
-    if (this.tempWeatherHeadId) {
-      const weatherHead = this.blockStore.getBlock(this.tempWeatherHeadId);
-
-      updatedPos = new MeshWrapper(this.sceneStore.getObj3d(weatherHead.id)).getWorldPosition().get();
-    }
-
-    const fromPos = new MeshWrapper(this.sceneStore.getObj3d(this.from.id))
-      .findByName(Pole.WIRE_4)
-      .getWorldPosition()
-      .get();
-
-    if (updatedPos) {
-      this.drawOrUpdateCable.updateOrCreate(fromPos, updatedPos);
-    }
-  }
-
   private connectPoleToBuilding: ConnectPoleToBuilding;
 
-  private drawOrUpdateCable: DrawOrUpdateCable;
-
   private from: BlockData;
-
-  private eraseBlock: EraseBlock;
 
   private targetCandidateId: string | undefined;
 
@@ -157,13 +92,9 @@ class ConnectLowWires implements ConnectCable {
 
   private lastPos: Num3 | undefined;
 
-  private addChildToAnchor: AddToAnchorAsChild;
-
   private blockStore: BlockStore;
 
   private sceneStore: SceneStore;
-
-  private transactionService: TransactionService;
 }
 
 export default ConnectLowWires;

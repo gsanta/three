@@ -77,6 +77,10 @@ const Ground = () => {
       </mesh> */}
 
       <CustomGrid />
+      <mesh rotation-x={-Math.PI * 0.5}>
+        <planeGeometry args={[160, 120]} />
+        <meshBasicMaterial color="red" visible opacity={0.2} transparent />
+      </mesh>
       {/* <Grid args={[100, 100]} cellSize={7.5} fadeDistance={5000} infiniteGrid sectionSize={7.5} /> */}
 
       {/* <mesh ref={meshRef} position={[0, -0.015, 0]} rotation-x={-Math.PI * 0.5}>

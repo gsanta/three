@@ -257,13 +257,13 @@ Feature: Pole
         | transformer-1 | distribution-transformer-single-1 |
     When I select tool 'add'
     And I select template 'distribution-transformer-single-1'
-    And I hover over block 'pole-1-1' and part 'Pin4'
+    And I hover over block 'pole-1-1' and part 'TransformerHolder'
     And I press pointer
     And I wait mesh 'transformer-1' to exist
     And my current scene is
-      | BLOCK         | TYPE                                | POSITION                          |
-      | pole-1-1      | pole-1                              | -1.22, 0, -1.17                   |
-      | transformer-1 | distribution-transformer-single-1   | pole-1-1:Pin4->transformer-1:Join |
+      | BLOCK         | TYPE                                | POSITION                                       |
+      | pole-1-1      | pole-1                              | -1.22, 0, -1.17                                |
+      | transformer-1 | distribution-transformer-single-1   | pole-1-1:TransformerHolder->transformer-1:Join |
 
 
 

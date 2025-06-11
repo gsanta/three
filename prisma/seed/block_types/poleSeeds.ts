@@ -1,11 +1,6 @@
-import { BlockType, Prisma } from '@prisma/client';
+import { BlockType } from '@prisma/client';
 
-const poleTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'parts' | 'partDetails'> & {
-  animations?: Prisma.JsonObject;
-  decorations: Prisma.JsonArray;
-  parts?: Prisma.JsonArray;
-  partDetails?: Prisma.JsonObject;
-})[] = [
+const poleSeeds: Partial<BlockType>[] = [
   {
     categoryName: 'poles',
     decorations: ['devices'],
@@ -17,48 +12,27 @@ const poleTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
         position: [-0.008, -0.002, 0.01],
       },
       {
-        name: 'ContextMenuAnchor',
-        materialPath: 'Main',
-        position: [-0.008, 8.161, 0.01],
-      },
-      {
-        name: 'Pin1',
+        name: 'L1',
         materialPath: 'DarkGray',
         position: [-0.913, 7.154, 0.011],
-        scale: 0.081,
       },
       {
-        name: 'Pin1b',
-        materialPath: 'DarkGray',
-        position: [-0.913, 7.154, 0.011],
-        scale: 0.081,
-      },
-      {
-        name: 'Pin2',
+        name: 'L2',
         materialPath: 'DarkGray',
         position: [-0.378, 7.154, 0.011],
-        scale: 0.081,
       },
       {
-        name: 'Pin2b',
-        materialPath: 'DarkGray',
-        position: [-0.378, 7.154, 0.011],
-        scale: 0.081,
-      },
-      {
-        name: 'Pin3',
+        name: 'L3',
         materialPath: 'DarkGray',
         position: [0.865, 7.154, 0.011],
-        scale: 0.081,
       },
       {
-        name: 'Pin3b',
+        name: 'N',
         materialPath: 'DarkGray',
-        position: [0.865, 7.154, 0.011],
-        scale: 0.081,
+        position: [0.464, 7.154, 0.011],
       },
       {
-        name: 'Pin4',
+        name: 'TransformerHolder',
         materialPath: 'DarkGray',
         position: [0.006, 6.336, 0.216],
       },
@@ -66,33 +40,31 @@ const poleTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
     partDetails: {
       Body: {},
       ContextMenuAnchor: {},
-      Pin1: {
+      L1: {
         roles: ['pin'],
         type: 'physical',
       },
-      Pin1b: {
-        roles: ['pin'],
-        type: 'placeholder',
-      },
-      Pin2: {
+      L2: {
         roles: ['pin'],
         type: 'physical',
       },
-      Pin2b: {
-        roles: ['pin'],
-        type: 'placeholder',
-      },
-      Pin3: {
+      L3: {
         roles: ['pin'],
         type: 'physical',
       },
-      Pin3b: {
-        roles: ['pin'],
-        type: 'placeholder',
-      },
-      Pin4: {
+      N: {
         roles: ['pin'],
         type: 'physical',
+      },
+      TransformerHolder: {
+        roles: ['pin'],
+        type: 'physical',
+      },
+    },
+    decorationData: {
+      poles: {
+        decoration: 'poles',
+        wires: ['L1', 'L2', 'L3', 'N'],
       },
     },
     type: 'pole-1',
@@ -297,12 +269,6 @@ const poleTempalteSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 
   //   },
   //   type: 'weather-head-1',
   // },
-  {
-    categoryName: 'cables',
-    decorations: ['cables'],
-    path: null,
-    type: 'cable-1',
-  },
 ];
 
-export default poleTempalteSeeds;
+export default poleSeeds;

@@ -4,6 +4,8 @@ import BlockPartLookupData from './part/BlockPartLookupData';
 
 export type AnimationTriggerName = 'device-on';
 
+export type BlockTypeName = string | 'underground-cable-1';
+
 type BlockConstantData = {
   animations?: Partial<Record<AnimationTriggerName, string[]>>;
   category: BlockCategoryName;
@@ -13,7 +15,7 @@ type BlockConstantData = {
   moveAxis: [boolean, boolean, boolean];
   parts: BlockPartGeometryData[];
   partDetails: Record<string, BlockPartLookupData | undefined>;
-  path: string;
+  path: string | null;
   type: string;
 };
 

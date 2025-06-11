@@ -9,6 +9,7 @@ enum ToolName {
   RayHelper = 'ray-helper',
   RoomModel = 'room-model',
   Select = 'select',
+  UndergroundCable = 'underground-cable',
 }
 
 export default ToolName;

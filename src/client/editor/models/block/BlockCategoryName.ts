@@ -2,8 +2,9 @@ export type BlockCategoryName =
   | 'cables'
   | 'devices'
   | 'houses'
+  | 'humans'
+  | 'plants'
   | 'poles'
-  | 'transformers'
   | 'roads'
-  | 'weather-heads'
-  | 'humans';
+  | 'transformers'
+  | 'weather-heads';

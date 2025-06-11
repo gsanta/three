@@ -1,5 +1,5 @@
 import { Store } from '@/client/common/utils/store';
-import { BlockCategories } from '@/client/editor/models/block/BlockCategory';
+import { BlockDecoratorName, BlockDecorations } from '@/client/editor/models/block/BlockDecoration';
 import BlockData from '../../models/block/BlockData';
 import { BlockCategoryName } from '../../models/block/BlockCategoryName';
 
@@ -37,26 +37,26 @@ class BlockStore {
     return block;
   }
 
-  getDecoration<T extends BlockCategoryName>(category: T, id?: string) {
+  getDecorator<T extends BlockDecoratorName>(decoratorName: T, id?: string) {
     if (!id) {
       throw new Error('Id is not defined');
     }
 
-    const decoration = this.getState().decorations[category][id];
+    const decoration = this.getState().decorations[decoratorName][id];
 
     if (!decoration) {
-      throw new Error(`Decoration '${category}' not found`);
+      throw new Error(`Decoration '${decoratorName}' not found`);
     }
 
     return decoration;
   }
 
-  getDecorations<T extends BlockCategoryName>(category: T) {
+  getDecorations<T extends BlockDecoratorName>(category: T) {
     return this.getState().decorations[category];
   }
 
   getDecorationsAsArray<T extends BlockCategoryName>(decoration: T) {
-    return Object.values(this.getState().decorations[decoration]) as BlockCategories[T][];
+    return Object.values(this.getState().decorations[decoration]) as BlockDecorations[T][];
   }
 
   getBlockSettings() {

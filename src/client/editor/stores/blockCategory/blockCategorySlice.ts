@@ -9,6 +9,8 @@ import { updateBlocks } from '../block/blockActions';
 import SelectionUpdater from './SelectionUpdater';
 import { BlockPartRole } from '../../models/block/part/BlockPartLookupData';
 
+export type ActionPanelType = 'add' | 'selection' | 'cable-drawing';
+
 export type BlockCategoyState = {
   addMethods: BlockAddMethod[];
   blockCategories: {
@@ -19,6 +21,7 @@ export type BlockCategoyState = {
   selectedRootBlockIds: string[];
   selectedBlocks: Record<string, boolean>;
   currentContextMenuActions: BlockContextMenuAction[];
+  currentActionPanel: ActionPanelType;
 };
 
 export const initialBlockTypeState: BlockCategoyState = {
@@ -26,6 +29,7 @@ export const initialBlockTypeState: BlockCategoyState = {
   blockCategories: [],
   contextMenuActions: [],
   currentContextMenuActions: [],
+  currentActionPanel: 'add',
   selectedBlocks: {},
   selectedRootBlockIds: [],
 };
@@ -71,6 +75,10 @@ export const blockCategorySlice = createSlice({
     setBlockCategories(state, action: PayloadAction<BlockCategoriesResponse['items']>) {
       state.blockCategories = action.payload.map((item) => ({ name: item.name }));
     },
+
+    setCurrentActionPanel(state, action: PayloadAction<ActionPanelType>) {
+      state.currentActionPanel = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(updateBlocks, (state, action) => {
@@ -84,6 +92,7 @@ export const blockCategorySlice = createSlice({
   },
 });
 
-export const { setBlockAddMethods, setBlockCategories, setBlockContextMenuActions } = blockCategorySlice.actions;
+export const { setBlockAddMethods, setBlockCategories, setBlockContextMenuActions, setCurrentActionPanel } =
+  blockCategorySlice.actions;
 
 export default blockCategorySlice.reducer;

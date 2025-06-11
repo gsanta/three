@@ -5,8 +5,13 @@ import BlockConstantData from '@/client/editor/models/block/BlockConstantData';
 import Cable from '@/client/editor/models/block/categories/Cable';
 import mergeDeep from '@/client/editor/utils/mergeDeep';
 import { PartialDeep } from 'type-fest';
-import { BlockDecorationType } from '@/client/editor/models/block/BlockCategory';
-import { BlockCategoryName } from '@/client/editor/models/block/BlockCategoryName';
+import { BlockDecorationType, PartialBlockDecorations } from '@/client/editor/models/block/BlockDecoration';
+
+const defaultCableDecoration: Partial<Cable> = {
+  end1: null,
+  end2: null,
+  points: [],
+};
 
 class CableFactory extends BlockFactory {
   create(blockType: BlockConstantData, overrides: Partial<BlockData> = {}) {
@@ -15,16 +20,21 @@ class CableFactory extends BlockFactory {
     return block;
   }
 
-  createCategory(block: BlockData, overrides: Partial<BlockDecorationType> & { category: BlockCategoryName }): Cable {
-    const cable: Cable = {
-      end1: null,
-      end2: null,
-      points: [],
-      ...overrides,
-      category: 'cables',
-      id: block.id,
-    };
-    return cable;
+  createDecorations(block: BlockData, overrides: PartialBlockDecorations): BlockDecorationType[] {
+    const decorations = this.blockTypeStore.getDecorations(block.type);
+
+    const newDecorations = Object.values(decorations).map((decoration) => {
+      const override = overrides[decoration.decoration] || {};
+
+      return {
+        ...defaultCableDecoration,
+        ...decoration,
+        ...override,
+        id: block.id,
+      };
+    }) as BlockDecorationType[];
+
+    return newDecorations;
   }
 
   updateDecoration(orig: Cable, partial: PartialDeep<Cable>) {

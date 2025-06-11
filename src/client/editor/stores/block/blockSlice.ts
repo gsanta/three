@@ -9,13 +9,8 @@ export const initialBlockState: BlockState = {
   blockIds: [],
   decorations: {
     cables: {},
-    devices: {},
-    roads: {},
     transformers: {},
-    houses: {},
-    humans: {},
     poles: {},
-    'weather-heads': {},
   },
   selectedBlocks: [],
 };

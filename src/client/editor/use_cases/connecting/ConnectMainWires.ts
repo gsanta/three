@@ -1,6 +1,6 @@
 import { BlockCategoryName } from '../../models/block/BlockCategoryName';
 import BlockData from '../../models/block/BlockData';
-import Pole from '../../models/block/categories/Pole';
+import Pole, { WireRole } from '../../models/block/categories/Pole';
 import Num3 from '../../models/math/Num3';
 import MeshWrapper from '../../models/MeshWrapper';
 import { ConnectCable } from '../../services/CableConnector';
@@ -25,15 +25,14 @@ class ConnectMainWires implements ConnectCable {
 
     this.sceneStore = sceneStore;
 
-    this.from = from;
-
     this.joinPoles = new JoinPoles(blockStore, sceneStore, factoryService, transactionService);
 
-    this.drawOrUpdateCables = {
-      [Pole.PRIMARY_WIRE_1_CONNECTION_A]: new DrawOrUpdateCable(blockStore, factoryService, transactionService),
-      [Pole.PRIMARY_WIRE_2_CONNECTION_A]: new DrawOrUpdateCable(blockStore, factoryService, transactionService),
-      [Pole.PRIMARY_WIRE_3_CONNECTION_A]: new DrawOrUpdateCable(blockStore, factoryService, transactionService),
-    };
+    const pole = new Pole(from, blockStore);
+    this.from = pole;
+
+    pole.getPoleDecorator().wires.forEach((wire) => {
+      this.drawOrUpdateCables[wire] = new DrawOrUpdateCable(blockStore, factoryService, transactionService);
+    });
   }
 
   canConnect(candidates: BlockData[]) {
@@ -51,7 +50,10 @@ class ConnectMainWires implements ConnectCable {
     this.cancel();
 
     if (candidateId) {
-      this.joinPoles.join(this.from, this.blockStore.getBlock(candidateId));
+      this.joinPoles.join(
+        new Pole(this.from.getBlock(), this.blockStore),
+        new Pole(this.blockStore.getBlock(candidateId), this.blockStore),
+      );
     }
   }
 
@@ -60,9 +62,7 @@ class ConnectMainWires implements ConnectCable {
   }
 
   meshRendered(): void {
-    [Pole.PRIMARY_WIRE_1_CONNECTION_A, Pole.PRIMARY_WIRE_2_CONNECTION_A, Pole.PRIMARY_WIRE_3_CONNECTION_A].forEach(
-      (wire) => this.createOrUpdateCable(wire),
-    );
+    this.from.getPoleDecorator().wires.forEach((wire) => this.createOrUpdateCable(wire));
   }
 
   update(candidates: BlockData[], fallbackPos: Num3) {
@@ -80,12 +80,10 @@ class ConnectMainWires implements ConnectCable {
 
     this.lastPos = fallbackPos;
 
-    [Pole.PRIMARY_WIRE_1_CONNECTION_A, Pole.PRIMARY_WIRE_2_CONNECTION_A, Pole.PRIMARY_WIRE_3_CONNECTION_A].forEach(
-      (wire) => this.createOrUpdateCable(wire),
-    );
+    this.from.getPoleDecorator().wires.forEach((wire) => this.createOrUpdateCable(wire));
   }
 
-  private createOrUpdateCable(wire: string) {
+  private createOrUpdateCable(wire: WireRole) {
     let toPos = this.lastPos;
 
     if (this.candidateId) {
@@ -95,10 +93,13 @@ class ConnectMainWires implements ConnectCable {
       }
     }
 
-    const fromPos = new MeshWrapper(this.sceneStore.getObj3d(this.from.id)).findByName(wire).getWorldPosition().get();
+    const fromPos = new MeshWrapper(this.sceneStore.getObj3d(this.from.getId()))
+      .findByName(wire)
+      .getWorldPosition()
+      .get();
 
     if (toPos) {
-      this.drawOrUpdateCables[wire].updateOrCreate(fromPos, toPos);
+      this.drawOrUpdateCables[wire]?.updateOrCreate(fromPos, toPos);
     }
   }
 
@@ -106,9 +107,9 @@ class ConnectMainWires implements ConnectCable {
 
   private candidateId: string | undefined;
 
-  private drawOrUpdateCables: Record<string, DrawOrUpdateCable>;
+  private drawOrUpdateCables: Partial<Record<WireRole, DrawOrUpdateCable>> = {};
 
-  private from: BlockData;
+  private from: Pole;
 
   private joinPoles: JoinPoles;
 

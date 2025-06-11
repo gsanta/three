@@ -59,9 +59,7 @@ class JoinTool extends HoverTool {
 
     const [toX, toZ] = grid.gridToWorldPos(info.gridIndex);
 
-    const toBlockId = this.gridStore.getBlocksAtGridIndex(info.gridIndex);
-
-    const toBlocks = toBlockId.map((id) => this.blockStore.getBlock(id));
+    const toBlocks = this.gridStore.getBlocksAtGridIndex(info.gridIndex);
 
     this.connector.update(toBlocks, [toX, from[1], toZ]);
   }

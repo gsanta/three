@@ -1,13 +1,14 @@
 import { Canvas as ThreeCanvas } from '@react-three/fiber';
 import useEditorContext from '@/app/editor/useEditorContext';
 import Scene from './Scene';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import GameActionPanel from './GameActionPanel';
 import { OrbitControls } from '@react-three/drei';
 import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import AddPanel from './AddPanel';
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import SelectionPanel from './SelectionPanel';
+import CableDrawingPanel from './CableDrawingPanel';
 
 const Canvas = () => {
   // const { data, isSuccess } = useQuery({ queryKey: ['blocks'], queryFn: () => api.get('/api/block') });
@@ -22,6 +23,7 @@ const Canvas = () => {
   const { sceneStore: scene } = useEditorContext();
 
   const selectedRootBlockIds = useAppSelector((state) => state.blockCategory.selectedRootBlockIds);
+  const currentActionPanel = useAppSelector((state) => state.blockCategory.currentActionPanel);
 
   // const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -42,6 +44,22 @@ const Canvas = () => {
     },
     [scene],
   );
+
+  const actionPanel = useMemo(() => {
+    if (currentActionPanel === 'add') {
+      return <AddPanel />;
+    }
+
+    if (currentActionPanel === 'selection') {
+      return <SelectionPanel />;
+    }
+
+    if (currentActionPanel === 'cable-drawing') {
+      return <CableDrawingPanel />;
+    }
+
+    return undefined;
+  }, [currentActionPanel]);
 
   // const controlsRef = useRef<OrbitControlsImpl | null>(null);
 
@@ -71,7 +89,7 @@ const Canvas = () => {
         <OrbitControls ref={controlsRef} />
       </ThreeCanvas>
       <div className="absolute flex flex-col gap-2 left-[70px] bottom-[50px]">
-        {selectedRootBlockIds.length === 1 ? <SelectionPanel /> : <AddPanel />}
+        {actionPanel}
         <GameActionPanel />
       </div>
     </div>

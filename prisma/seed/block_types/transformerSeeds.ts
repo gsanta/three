@@ -1,14 +1,9 @@
-import { BlockType, Prisma } from '@prisma/client';
+import { BlockType } from '@prisma/client';
 
-const transformerSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'parts' | 'partDetails'> & {
-  animations?: Prisma.JsonObject;
-  decorations: Prisma.JsonArray;
-  parts?: Prisma.JsonArray;
-  partDetails?: Prisma.JsonObject;
-})[] = [
+const transformerSeeds: Partial<BlockType>[] = [
   {
     categoryName: 'transformers',
-    decorations: ['devices'],
+    decorations: ['transformers'],
     path: '/distribution_transformer_single_1.glb',
     parts: [
       {
@@ -46,7 +41,54 @@ const transformerSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | '
         roles: ['transformer-holder'],
       },
     },
+    decorationData: {
+      transformers: {
+        decoration: 'transformers',
+        location: 'pole-mounted',
+      },
+    },
     type: 'distribution-transformer-single-1',
+  },
+  {
+    categoryName: 'transformers',
+    decorations: ['transformers'],
+    path: '/pad_mounted_transformer_1.glb',
+    parts: [
+      {
+        name: 'Body',
+        materialPath: 'Palette',
+        position: [-0.028, -0.006, 0.001],
+        rotation: [Math.PI, 0, Math.PI],
+        scale: [0.766, 1, 0.323],
+      },
+      {
+        name: 'Pin1',
+        materialPath: 'Palette',
+        position: [-0.467, -0.501, 0.002],
+        rotation: [Math.PI, 0, Math.PI],
+      },
+      {
+        name: 'Pin2',
+        materialPath: 'Palette',
+        position: [0.446, -0.501, 0.002],
+        rotation: [Math.PI, 0, Math.PI],
+      },
+    ],
+    partDetails: {
+      Pin1: {
+        roles: ['pin'],
+      },
+      Pin2: {
+        roles: ['pin'],
+      },
+    },
+    decorationData: {
+      transformers: {
+        decoration: 'transformers',
+        location: 'pad-mounted',
+      },
+    },
+    type: 'pad-mounted-transformer-1',
   },
 ];
 

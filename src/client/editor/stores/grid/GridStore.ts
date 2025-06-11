@@ -1,10 +1,13 @@
 import { Store } from '@/client/common/utils/store';
 import Grid from '../../models/Grid';
+import BlockStore from '../block/BlockStore';
 
 class GridStore {
-  constructor(store: Store) {
+  constructor(blockStore: BlockStore, store: Store) {
     this.store = store;
     this.grid = new Grid(this);
+
+    this.blockStore = blockStore;
   }
 
   getBlockGridIndex(blockId: string) {
@@ -23,7 +26,7 @@ class GridStore {
   }
 
   getBlocksAtGridIndex(gridIndex: number) {
-    return this.getGridSlice().gridIndexToBlocks[gridIndex] || [];
+    return this.getGridSlice().gridIndexToBlocks[gridIndex]?.map((blockId) => this.blockStore.getBlock(blockId)) || [];
   }
 
   getGridOffset() {
@@ -45,6 +48,8 @@ class GridStore {
   private getGridSlice() {
     return this.store.getState().grid;
   }
+
+  private blockStore: BlockStore;
 
   private store: Store;
 

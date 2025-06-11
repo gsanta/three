@@ -26,6 +26,7 @@ model BlockType {
   categoryName   String
   category       BlockCategory @relation(fields: [categoryName], references: [name])
   decorations    Json          @default("[]")
+  decorationData Json?
   parts          Json?
   partDetails    Json?
   path           String?

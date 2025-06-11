@@ -16,10 +16,13 @@ import AddToAnchor from '../../use_cases/block/add/AddToAnchor';
 import AddToAnchorAsChild from '../../use_cases/block/add/AddToAnchorAsChild';
 import GridStore from '../../stores/grid/GridStore';
 import { Vector3 } from 'three';
+import BlockTypeStore from '../../stores/blockType/BlockTypeStore';
+import Transformer from '../../models/block/categories/Transformer';
 
 class AddTool extends HoverTool {
   constructor(
     block: BlockStore,
+    blockTypeStore: BlockTypeStore,
     factoryService: FactoryService,
     gridStore: GridStore,
     sceneStore: SceneStore,
@@ -27,6 +30,8 @@ class AddTool extends HoverTool {
     update: TransactionService,
   ) {
     super(block, sceneService, update, ToolName.Add, 'BiPlus');
+
+    this.blockTypeStore = blockTypeStore;
 
     this.gridStore = gridStore;
 
@@ -37,11 +42,11 @@ class AddTool extends HoverTool {
   }
 
   onPointerUp({ pos }: ToolInfo) {
-    const { selectedBlockName } = this.blockStore.getBlockSettings();
+    const activeBlockType = this.blockTypeStore.getActiveBlockType();
 
     const position = this.getPosition(pos);
 
-    if (!selectedBlockName) {
+    if (!activeBlockType) {
       return;
     }
 
@@ -51,7 +56,7 @@ class AddTool extends HoverTool {
 
     const targetBlock = targetBlockId ? this.blockStore.getBlock(targetBlockId) : undefined;
 
-    const newBlockType = this.blockStore.getBlockType(selectedBlockName);
+    const newBlockType = this.blockStore.getBlockType(activeBlockType);
 
     this.targetBlock = targetBlock;
     this.targetPartName = targetPartIndex;
@@ -87,19 +92,25 @@ class AddTool extends HoverTool {
           break;
         case 'houses':
         case 'humans':
+        case 'plants':
           this.addToPlain.execute({ edit, newBlockType: this.newBlockType, position: this.position });
           break;
         case 'transformers':
-          if (this.targetBlock && this.targetPartName) {
-            this.addToAnchorAsChild.execute({
-              edit,
-              newBlockType: this.newBlockType,
-              newBlockAnchorName: 'Join',
-              to: {
-                block: this.targetBlock,
-                anchorPartName: this.targetPartName,
-              },
-            });
+          const transfomer = this.blockTypeStore.getDecoration<Transformer>(this.newBlockType.type, 'transformers');
+          if (transfomer.location === 'pole-mounted') {
+            if (this.targetBlock && this.targetPartName) {
+              this.addToAnchorAsChild.execute({
+                edit,
+                newBlockType: this.newBlockType,
+                newBlockAnchorName: 'Join',
+                to: {
+                  block: this.targetBlock,
+                  anchorPartName: this.targetPartName,
+                },
+              });
+            }
+          } else {
+            this.addToPlain.execute({ edit, newBlockType: this.newBlockType, position: this.position });
           }
           break;
       }
@@ -134,6 +145,8 @@ class AddTool extends HoverTool {
   private addToAnchor: AddToAnchor;
 
   private addToAnchorAsChild: AddToAnchorAsChild;
+
+  private blockTypeStore: BlockTypeStore;
 
   private gridStore: GridStore;
 

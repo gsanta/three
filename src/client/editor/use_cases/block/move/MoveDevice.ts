@@ -7,7 +7,7 @@ import Cable from '@/client/editor/models/block/categories/Cable';
 
 class MoveDevice extends MoveDecoration {
   move(edit: Edit, blockId: string, dragDelta: Num3) {
-    const device = this.blockStore.getDecoration('devices', blockId) as Device;
+    const device = this.blockStore.getDecorator('devices', blockId) as Device;
 
     if (!device) {
       throw new Error(`Device not found for block ${blockId}`);
@@ -22,7 +22,7 @@ class MoveDevice extends MoveDecoration {
   }
 
   private moveCable(edit: Edit, cableId: string, blockId: string, dragDelta: Num3) {
-    const cable = this.blockStore.getDecoration('cables', cableId) as Cable;
+    const cable = this.blockStore.getDecorator('cables', cableId) as Cable;
 
     const index = cable.end1?.device === blockId ? 0 : cable.points.length - 1;
     const newPoints = [...cable.points];

@@ -1,25 +1,16 @@
 import SceneService from '../../ui/scene/service/SceneService';
 import BlockFactory from './creators/BlockFactory';
-import PoleFactory from './creators/PoleFactory';
 import CableFactory from './creators/CableFactory';
 import BlockData from '../../models/block/BlockData';
-import { PartialBlockCategories } from '../../models/block/BlockCategory';
+import { PartialBlockDecorations } from '../../models/block/BlockDecoration';
 import Edit from '../transaction/Edit';
-import BlockStore from '../../stores/block/BlockStore';
-import DefaultBlockFactory from './creators/DefaultBlockFactory';
-import WeatherHeadFactory from './creators/WeatherHeadFactory';
-import { BlockSlices } from '../../stores/block/blockSlice.types';
-import TransformerFactory from './creators/TransformerFactory';
-import { BlockCategoryName } from '../../models/block/BlockCategoryName';
+import BlockTypeStore from '../../stores/blockType/BlockTypeStore';
 
 class FactoryService {
-  constructor(blockStore: BlockStore, sceneService: SceneService) {
-    this.blockStore = blockStore;
-    this.factories.poles = new PoleFactory(sceneService);
-    this.factories.cables = new CableFactory(sceneService);
-    this.factories['weather-heads'] = new WeatherHeadFactory(sceneService);
-    this.factories.transformers = new TransformerFactory(sceneService);
-    this.defaultBlockFactory = new DefaultBlockFactory(sceneService);
+  constructor(blockTypeStore: BlockTypeStore, sceneService: SceneService) {
+    this.blockTypeStore = blockTypeStore;
+    this.factories.cables = new CableFactory(blockTypeStore, sceneService);
+    this.defaultBlockFactory = new BlockFactory(blockTypeStore, sceneService);
   }
 
   create(
@@ -27,11 +18,10 @@ class FactoryService {
     templateName: string,
     initialData: {
       block?: Partial<BlockData>;
-      decorations?: PartialBlockCategories;
+      decorations?: PartialBlockDecorations;
     },
-    targetSlice?: BlockSlices,
   ) {
-    const template = this.blockStore.getBlockType(templateName);
+    const template = this.blockTypeStore.getBlockType(templateName);
 
     if (!template) {
       throw new Error(`Template ${templateName} does not exist`);
@@ -51,15 +41,12 @@ class FactoryService {
       }
     });
 
-    edit.create(block, { slice: targetSlice });
+    edit.create(block);
 
-    template.decorations.forEach((decorationName: BlockCategoryName) => {
-      const decoration = factory.createCategory(block, {
-        ...initialDecorations[decorationName],
-        category: decorationName,
-      });
+    const decorations = factory.createDecorations(block, initialDecorations);
 
-      edit.createDecoration(decoration, { slice: targetSlice });
+    decorations.forEach((decoration) => {
+      edit.createDecoration(decoration);
     });
 
     return block;
@@ -67,9 +54,9 @@ class FactoryService {
 
   private factories: Record<string, BlockFactory> = {};
 
-  private defaultBlockFactory: DefaultBlockFactory;
+  private defaultBlockFactory: BlockFactory;
 
-  private blockStore: BlockStore;
+  private blockTypeStore: BlockTypeStore;
 }
 
 export default FactoryService;

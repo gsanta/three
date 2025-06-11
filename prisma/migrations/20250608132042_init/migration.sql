@@ -16,6 +16,7 @@ CREATE TABLE "BlockType" (
     "id" SERIAL NOT NULL,
     "categoryName" TEXT NOT NULL,
     "decorations" JSONB NOT NULL DEFAULT '[]',
+    "decorationData" JSONB,
     "parts" JSONB,
     "partDetails" JSONB,
     "path" TEXT,

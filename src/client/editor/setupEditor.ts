@@ -29,10 +29,16 @@ import RayTool from './controllers/tools/RayTool';
 import SelectTool from './controllers/tools/SelectTool';
 import CableConnector from './services/CableConnector';
 import { ConnectPoleFactory } from './use_cases/connecting/ConnectPole';
+import BlockTypeSelectorService from './services/BlockTypeSelectorService';
+import BlockTypeStore from './stores/blockType/BlockTypeStore';
+import UndergroundCableTool from './controllers/tools/UndergroundCableTool';
+import CableDrawingService from './services/CableDrawingService';
 
 type EditorContextType = {
   blockStore: BlockStore;
   blockCategoryStore: BlockCategoryStore;
+  blockTypeSelectorService: BlockTypeSelectorService;
+  cableDrawingService: CableDrawingService;
   controller: ControllerService;
   eraser: EraserService;
   gridStore: GridStore;
@@ -54,13 +60,14 @@ export const isTestEnv = () => process.env.NODE_ENV === 'test';
 
 export const setupEditor = () => {
   const gameStore = new GameStore(store);
-  const gridStore = new GridStore(store);
+  const blockStore = new BlockStore(store);
+  const gridStore = new GridStore(blockStore, store);
   const sceneStore = new SceneStore();
   const toolStore = new ToolStore(store);
-  const blockStore = new BlockStore(store);
+  const blockTypeStore = new BlockTypeStore(store);
 
   const sceneService = isTestEnv() ? new TestSceneService() : new SceneServiceImpl(blockStore, sceneStore);
-  const factoryService = new FactoryService(blockStore, sceneService);
+  const factoryService = new FactoryService(blockTypeStore, sceneService);
 
   const transaction = new TransactionService(blockStore, store, sceneService, []);
 
@@ -84,18 +91,25 @@ export const setupEditor = () => {
     poles: new ConnectPoleFactory(blockStore, factoryService, sceneService, sceneStore, transaction),
   });
 
+  const cableDrawingService = new CableDrawingService(blockStore, factoryService, gridStore, sceneStore, transaction);
+
   toolService.setTools([
-    new AddTool(blockStore, factoryService, gridStore, sceneStore, sceneService, transaction),
+    new AddTool(blockStore, blockTypeStore, factoryService, gridStore, sceneStore, sceneService, transaction),
     new JoinTool(blockStore, blockCategoryStore, cableConnector, gridStore, sceneService, transaction),
     new MoveTool(blockStore, gameStore, gridStore, sceneService, transaction),
     new SelectTool(blockStore, blockCategoryStore, sceneService, sceneStore, toolStore, transaction, sceneService),
     new EraseTool(blockStore, sceneService, transaction),
     new RayTool(blockStore, transaction, sceneStore),
+    new UndergroundCableTool(blockStore, cableDrawingService, sceneService, transaction),
   ]);
+
+  const blockTypeSelectorService = new BlockTypeSelectorService(blockTypeStore);
 
   const editorContext: EditorContextType = {
     blockCategoryStore: blockCategoryStore,
     blockStore: blockStore,
+    blockTypeSelectorService,
+    cableDrawingService,
     controller: new ControllerService(transaction),
     eraser: new EraserService(blockStore, transaction),
     exporter: new ExportJson(store),

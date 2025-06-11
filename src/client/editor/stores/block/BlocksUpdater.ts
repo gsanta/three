@@ -88,7 +88,7 @@ class BlocksUpdater {
           const { decoration } = update;
 
           if (decoration) {
-            state.decorations[decoration.category][decoration.id] = decoration;
+            state.decorations[decoration.decoration][decoration.id] = decoration;
           }
         }
       }

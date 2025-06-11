@@ -2,7 +2,7 @@ import { When } from '@cucumber/cucumber';
 import ExtendedWorld from './ExtendedWorld';
 import ToolName from '@/client/editor/models/tool/ToolName';
 import { store } from '@/client/common/utils/store';
-import { setSelectedGeometry } from '@/client/editor/stores/blockType/blockTypeSlice';
+import { setActiveBlockType } from '@/client/editor/stores/blockType/blockTypeSlice';
 import { Vector3 } from 'three';
 import findClosestBlock from './helpers/findClosestBlock';
 import { checkGridPosition, checkPartIndexExists, checkPosition } from './helpers/checks';
@@ -20,7 +20,7 @@ When('I select template {string}', function (this: ExtendedWorld, type: string) 
     `block type '${type}' does not exist`,
   );
 
-  store.dispatch(setSelectedGeometry(type));
+  store.dispatch(setActiveBlockType(type));
 });
 
 When('I press pointer', function (this: ExtendedWorld) {

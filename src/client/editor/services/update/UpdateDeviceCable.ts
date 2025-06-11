@@ -33,7 +33,7 @@ class UpdateDeviceCable {
   }
 
   private moveCable(cableId: string, pole: BlockData): CablePoint {
-    const cable = this.store.getDecoration('cables', cableId) as Cable;
+    const cable = this.store.getDecorator('cables', cableId) as Cable;
 
     let index = 0;
     let cableEnd = cable.end1;

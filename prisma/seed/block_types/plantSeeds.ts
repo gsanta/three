@@ -1,10 +1,6 @@
-import { BlockType, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
-const plantSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'parts' | 'partDetails'> & {
-  animations?: Prisma.JsonObject;
-  parts?: Prisma.JsonArray;
-  partDetails?: Prisma.JsonObject;
-})[] = [
+const plantSeeds: Prisma.BlockTypeUncheckedCreateInput[] = [
   {
     categoryName: 'plants',
     path: '/tree_1.glb',

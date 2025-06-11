@@ -1,6 +1,7 @@
 type Transformer = {
   id: string;
-  category: 'transformers';
+  decoration: 'transformers';
+  location: 'pad-mounted' | 'pole-mounted';
 };
 
 export default Transformer;

@@ -14,9 +14,10 @@ export type CablePoint = {
 
 type Cable = {
   id: string;
-  category: 'cables';
+  decoration: 'cables';
   end1: CableEnd | null;
   end2: CableEnd | null;
+  location: 'underground' | 'overhead';
   points: CablePoint[];
 };
 

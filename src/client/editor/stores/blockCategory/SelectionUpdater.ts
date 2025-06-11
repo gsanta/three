@@ -14,6 +14,12 @@ class SelectionUpdater {
           state.selectedBlocks[block.id] = true;
         });
 
+        if (state.selectedRootBlockIds.length === 1) {
+          state.currentActionPanel = 'selection';
+        } else {
+          state.currentActionPanel = 'add';
+        }
+
         state.currentContextMenuActions = state.contextMenuActions.filter((action) => {
           const selectionLength = selectedBlock.length;
           const categories = selectedBlock.map((selection) => selection.category);

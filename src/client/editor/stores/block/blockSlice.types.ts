@@ -1,5 +1,5 @@
 import BlockData from '../../models/block/BlockData';
-import { BlockCategoryRecords, BlockDecorationType } from '../../models/block/BlockCategory';
+import { BlockCategoryRecords, BlockDecorationType } from '../../models/block/BlockDecoration';
 
 export type BlockState = {
   blocks: Record<string, BlockData>;

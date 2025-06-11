@@ -22,7 +22,7 @@ export function checkBlockExists(this: ExtendedWorld, blockId: string) {
 export function checkDecorationExists(this: ExtendedWorld, category: BlockCategoryName, blockId: string) {
   const realBlockId = blockId === 'examined' ? this.env?.testScene.storedBlockId || '' : blockId;
 
-  const decortion = this.env?.editorContext.blockStore.getDecoration(category, realBlockId);
+  const decortion = this.env?.editorContext.blockStore.getDecorator(category, realBlockId);
 
   if (!decortion) {
     throw new Error(`Decoration of type ${category} with id ${blockId} not found.`);

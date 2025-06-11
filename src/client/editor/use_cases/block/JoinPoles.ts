@@ -11,8 +11,6 @@ import CableHelper from './CableHelper';
 import Pole from '../../models/block/categories/Pole';
 import BlockPartLookupData from '../../models/block/part/BlockPartLookupData';
 import Vector from '../../models/math/Vector';
-import FindNearestBlock from '../scene/FindNearestBlock';
-import Device from '../../models/block/categories/Device';
 
 class JoinPoles {
   constructor(
@@ -26,50 +24,49 @@ class JoinPoles {
     this.scene = scene;
     this.transactionService = transactionService;
 
-    this.findNearestBlock = new FindNearestBlock(blockStore);
-
     this.cableHelper = new CableHelper(blockStore);
   }
 
-  join(pole1: BlockData, pole2: BlockData) {
-    const pole1EmptyPinIndex = this.getEmptyPinIndex(pole1);
-    const pole2EmptyPinIndex = this.getEmptyPinIndex(pole2);
+  join(pole1: Pole, pole2: Pole) {
+    const pole1EmptyPinIndex = pole1.getFirstEmptyPin('L1');
+    const pole2EmptyPinIndex = pole2.getFirstEmptyPin('L1');
+
+    if (pole1EmptyPinIndex === undefined || pole2EmptyPinIndex === undefined) {
+      throw new Error('Precondition failed: no empty pin found.');
+    }
+
+    if (pole1EmptyPinIndex > 1 || pole2EmptyPinIndex > 1) {
+      throw new Error('Precondition failed: only pin 0 or 1 are valid to join poles.');
+    }
 
     const edit = this.transactionService.createTransaction();
 
     this.rotatePoles(pole1, pole2);
 
-    [Pole.PRIMARY_WIRE_1_CONNECTION_A, Pole.PRIMARY_WIRE_2_CONNECTION_A, Pole.PRIMARY_WIRE_3_CONNECTION_A].forEach(
-      (partName) =>
+    pole1
+      .getPoleDecorator()
+      .wires.forEach((partName) =>
         this.joinPins(
-          { pole: pole1, partName, pinIndex: pole1EmptyPinIndex },
-          { pole: pole2, partName, pinIndex: pole2EmptyPinIndex },
+          { pole: pole1.getBlock(), partName, pinIndex: pole1EmptyPinIndex },
+          { pole: pole2.getBlock(), partName, pinIndex: pole2EmptyPinIndex },
         ),
-    );
+      );
 
     edit.commit();
   }
 
-  private getEmptyPinIndex(poleBlock: BlockData) {
-    if (!poleBlock.partDetails[Pole.PRIMARY_WIRE_1_CONNECTION_A]?.isConnected[0]) {
-      return 0;
-    }
-
-    if (!poleBlock.partDetails[Pole.PRIMARY_WIRE_1_CONNECTION_A]?.isConnected[1]) {
-      return 1;
-    }
-
-    throw new Error('Precondition failed: primary wire connections are not empty, can not join poles.');
-  }
-
-  private rotatePoles(newPole: BlockData, neighborPole: BlockData) {
-    const neighborNeighborPole = this.cableHelper.getSibling(neighborPole, 0);
+  private rotatePoles(newPole: Pole, neighborPole: Pole) {
+    const neighborNeighborPole = this.cableHelper.getSibling(neighborPole.getBlock(), 0);
 
     if (!neighborNeighborPole) {
       return;
     }
 
-    const [pos1, pos2, pos3] = [neighborNeighborPole.position, neighborPole.position, newPole.position];
+    const [pos1, pos2, pos3] = [
+      neighborNeighborPole.position,
+      neighborPole.getBlock().position,
+      newPole.getBlock().position,
+    ];
 
     const line1 = new Vector(pos1).subXZ(new Vector(pos2)).get();
     const line2 = new Vector(pos2).subXZ(new Vector(pos3)).get();
@@ -80,21 +77,25 @@ class JoinPoles {
     const edit = this.transactionService.getOrCreateActiveTransaction();
 
     const neighbourRotation = [
-      neighborPole.rotation[0],
-      neighborPole.rotation[1] + Vector.toRadian(halfAngle),
-      neighborPole.rotation[2],
+      neighborPole.getBlock().rotation[0],
+      neighborPole.getBlock().rotation[1] + Vector.toRadian(halfAngle),
+      neighborPole.getBlock().rotation[2],
     ] as Num3;
 
-    edit.updateBlock(neighborPole.id, {
+    edit.updateBlock(neighborPole.getId(), {
       rotation: neighbourRotation,
     });
 
-    neighborPole.conduitConnections.forEach((conn) => {
+    neighborPole.getBlock().conduitConnections.forEach((conn) => {
       edit.updateBlock(conn.block, { isDirty: true });
     });
 
-    edit.updateBlock(newPole.id, {
-      rotation: [newPole.rotation[0], neighbourRotation[1] + Vector.toRadian(halfAngle), newPole.rotation[2]],
+    edit.updateBlock(newPole.getId(), {
+      rotation: [
+        newPole.getBlock().rotation[0],
+        neighbourRotation[1] + Vector.toRadian(halfAngle),
+        newPole.getBlock().rotation[2],
+      ],
     });
   }
 
@@ -137,32 +138,17 @@ class JoinPoles {
   }
 
   private updatePole(edit: Edit, cable: BlockData, pole: BlockData, partName: string, pinIndex: number) {
-    const device = this.blockStore.getDecoration('devices', pole.id) as Device;
-
-    edit.update<'devices'>(
-      pole.id,
-      {
-        conduitConnections: [{ block: cable.id, pinIndex: pinIndex, thisPart: partName }],
-        partDetails: {
-          [partName]: {
-            ...pole.partDetails[partName],
-            isConnected: {
-              [pinIndex]: true,
-            },
-          } as BlockPartLookupData,
-        },
-      },
-      'devices',
-      {
-        pins: {
-          ...device.pins,
-          [partName]: {
-            wires: [cable.id],
-            connectedDevices: [device.id],
+    edit.updateBlock(pole.id, {
+      conduitConnections: [{ block: cable.id, pinIndex: pinIndex, thisPart: partName }],
+      partDetails: {
+        [partName]: {
+          ...pole.partDetails[partName],
+          isConnected: {
+            [pinIndex]: true,
           },
-        },
+        } as BlockPartLookupData,
       },
-    );
+    });
   }
 
   private getPositions(pole1: BlockData, pole2: BlockData, partName1: string, partName2: string) {
@@ -191,8 +177,6 @@ class JoinPoles {
   private scene: SceneStore;
 
   private transactionService: TransactionService;
-
-  private findNearestBlock: FindNearestBlock;
 }
 
 export default JoinPoles;

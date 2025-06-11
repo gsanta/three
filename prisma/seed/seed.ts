@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import roadSeeds from './block_types/roadSeeds';
-import poleTempalteSeeds from './block_types/poleTemplateSeeds';
+import poleSeeds from './block_types/poleSeeds';
 import transformerSeeds from './block_types/transformerSeeds';
 import blockCategories from './blockCategories';
 import blockAddMethodsSeeds from './blockAddMethodsSeeds';
@@ -10,6 +10,8 @@ import blockContextMenuActionSeeds from './blockContextMenuActionSeeds';
 import blockContextMenuActionOnCategoriesSeeds from './blockContextMenuActionOnCategoriesSeeds';
 import weatherHeadSeeds from './block_types/weatherHeadSeeds';
 import humanSeeds from './block_types/humanSeeds';
+import cableSeeds from './block_types/cableSeeds';
+import plantSeeds from './block_types/plantSeeds';
 
 const prisma = new PrismaClient();
 const main = async () => {
@@ -22,14 +24,6 @@ const main = async () => {
   // }
 
   // for (const template of lampTempalteSeeds) {
-  //   await prisma.blockType.upsert({
-  //     where: { type: template.type },
-  //     update: {},
-  //     create: template,
-  //   });
-  // }
-
-  // for (const template of plantTempalteSeeds) {
   //   await prisma.blockType.upsert({
   //     where: { type: template.type },
   //     update: {},
@@ -120,6 +114,22 @@ const main = async () => {
     });
   }
 
+  for (const cable of cableSeeds) {
+    await prisma.blockType.upsert({
+      where: { type: cable.type },
+      update: {},
+      create: cable,
+    });
+  }
+
+  for (const template of plantSeeds) {
+    await prisma.blockType.upsert({
+      where: { type: template.type },
+      update: {},
+      create: template,
+    });
+  }
+
   for (const template of roadSeeds) {
     await prisma.blockType.upsert({
       where: { type: template.type },
@@ -128,7 +138,7 @@ const main = async () => {
     });
   }
 
-  for (const template of poleTempalteSeeds) {
+  for (const template of poleSeeds) {
     await prisma.blockType.upsert({
       where: { type: template.type },
       update: {},

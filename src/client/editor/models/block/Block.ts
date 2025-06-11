@@ -12,6 +12,14 @@ class Block {
     }
   }
 
+  getBlock() {
+    return this.block;
+  }
+
+  getId() {
+    return this.block.id;
+  }
+
   getType() {
     return this.block;
   }
