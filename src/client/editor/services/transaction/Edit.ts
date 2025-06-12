@@ -1,4 +1,8 @@
-import { BlockDecorations, BlockDecorationType } from '@/client/editor/models/block/BlockDecoration';
+import {
+  BlockDecorations,
+  BlockDecorationType,
+  BlockDecoratorName,
+} from '@/client/editor/models/block/BlockDecoration';
 import { PartialDeep } from 'type-fest';
 import BlockData, { mergeBlocks } from '@/client/editor/models/block/BlockData';
 import BlockStore from '../../stores/block/BlockStore';
@@ -8,7 +12,6 @@ import BlockUpdater from './updaters/BlockUpdater';
 import TransactionHook from './TransactionHook';
 import { updateBlocks } from '../../stores/block/blockActions';
 import { BlockUpdate, DecorationUpdate, UpdateBlocks } from '../../stores/block/blockSlice.types';
-import { BlockCategoryName } from '../../models/block/BlockCategoryName';
 import EditorContextType from '../../setupEditor';
 
 type EditOptions = {
@@ -43,26 +46,23 @@ class Edit {
     this.commitOrFlush(history === false ? false : true);
   }
 
-  create(block: BlockData, options?: EditOptions): this {
-    const mergedOptions = this.getMergedOptions(options);
-    this.updates.push({ type: 'update', slice: mergedOptions.slice, block });
+  create(block: BlockData): this {
+    this.updates.push({ type: 'update', block });
 
     return this;
   }
 
-  createDecoration(data: BlockDecorationType, options?: EditOptions): this {
-    const mergedOptions = this.getMergedOptions(options);
-
-    this.updates.push({ type: 'update', slice: mergedOptions.slice, decoration: data });
+  createDecoration(data: BlockDecorationType): this {
+    this.updates.push({ type: 'update', decoration: data });
 
     return this;
   }
 
-  update<T extends BlockCategoryName>(
+  update(
     id: string,
     block: Partial<BlockData>,
-    decorationType: BlockCategoryName,
-    decoration: PartialDeep<BlockDecorations[T]>,
+    decorationType: BlockDecoratorName,
+    decoration: PartialDeep<BlockDecorations>,
   ) {
     this.updateBlock(id, block);
     this.updateDecoration(decorationType, id, decoration);
@@ -74,7 +74,6 @@ class Edit {
     if (this.isRemoved(id)) {
       return this;
     }
-    const mergedOptions = this.getMergedOptions(options);
 
     const origBlock = this.store.getBlocks()[id];
     const [prevUpdate, index] = this.getBlockFromUpdates(id);
@@ -85,15 +84,15 @@ class Edit {
       this.updates.splice(index, 1);
     }
 
-    this.updates.push({ type: 'update', slice: mergedOptions.slice, block: newBlock });
+    this.updates.push({ type: 'update', block: newBlock });
 
     return this;
   }
 
-  updateDecoration<T extends BlockCategoryName>(
+  updateDecoration<T extends BlockDecoratorName>(
     category: T,
     id: string,
-    partial: PartialDeep<BlockDecorations[T], object>,
+    partial: PartialDeep<BlockDecorations, object>,
     options?: EditOptions,
   ): this {
     if (this.isRemoved(id)) {
@@ -112,14 +111,12 @@ class Edit {
       this.updates.splice(index, 1);
     }
 
-    this.updates.push({ type: 'update', slice: mergedOptions.slice, decoration: updated });
+    this.updates.push({ type: 'update', decoration: updated });
 
     return this;
   }
 
-  remove(id: string, options?: EditOptions): this {
-    const mergedOptions = this.getMergedOptions(options);
-
+  remove(id: string): this {
     const [prevBlock, blockIndex] = this.getBlockFromUpdates(id);
     const [prevDecoration, decorationIndex] = this.getDecorationFromUpdates(id);
 
@@ -131,23 +128,19 @@ class Edit {
       this.updates.splice(decorationIndex, 1);
     }
 
-    this.updates.push({ remove: this.store.getBlocks()[id], slice: mergedOptions.slice });
+    this.updates.push({ remove: this.store.getBlocks()[id] });
 
     return this;
   }
 
-  select(block: BlockData[], options?: EditOptions): this {
-    const mergedOptions = this.getMergedOptions(options);
-
-    this.updates.push({ select: block, slice: mergedOptions.slice });
+  select(block: BlockData[]): this {
+    this.updates.push({ select: block });
 
     return this;
   }
 
-  hover(id: string | null, partIndex?: string, options?: EditOptions): this {
-    const mergedOptions = this.getMergedOptions(options);
-
-    this.updates.push({ hover: id, slice: mergedOptions.slice, partIndex });
+  hover(id: string | null, partIndex?: string): this {
+    this.updates.push({ hover: id, partIndex });
 
     return this;
   }

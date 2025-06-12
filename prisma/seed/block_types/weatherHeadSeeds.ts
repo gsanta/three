@@ -1,14 +1,8 @@
-import { BlockType, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
-const weatherHeadSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'parts' | 'partDetails'> & {
-  animations?: Prisma.JsonObject;
-  decorations: Prisma.JsonArray;
-  parts?: Prisma.JsonArray;
-  partDetails?: Prisma.JsonObject;
-})[] = [
+const weatherHeadSeeds: Prisma.BlockTypeUncheckedCreateInput[] = [
   {
     categoryName: 'weather-heads',
-    decorations: ['devices'],
     path: '/weather_head_1.glb',
     parts: [
       {

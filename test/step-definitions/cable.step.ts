@@ -2,7 +2,6 @@ import { Then } from '@cucumber/cucumber';
 import ExtendedWorld from './ExtendedWorld';
 import assert from 'assert';
 import isPositionCloseTo, { isPositionCloseAny } from './helpers/isPositionCloseTo';
-import Device, { Pins } from '@/client/editor/models/block/categories/Device';
 import { checkCableEnd, checkDecorationExists, checkPosition } from './helpers/checks';
 import Cable from '@/client/editor/models/block/categories/Cable';
 
@@ -112,12 +111,4 @@ Then('cable {string} ends at position {string}', function (this: ExtendedWorld, 
     isClose1 || isClose2,
     `Expected cable to end at (${x}, ${y}, ${z}), but points are (${cable.points.map((point) => point.position).join(',')})})`,
   );
-});
-
-Then('pin {string} of block {string} is empty', function (this: ExtendedWorld, pin: string, blockId: string) {
-  const realBlockId = blockId === 'examined' ? this.env?.testScene.storedBlockId || '' : blockId;
-
-  const pole = this.env?.editorContext.blockStore.getDecorations('devices')[realBlockId] as Device;
-
-  assert.equal(pole?.pins[pin as Pins]?.wires.length, 0);
 });

@@ -9,6 +9,7 @@ Feature: Pole
       | cable-1-1 | cable-1 |
       | cable-1-2 | cable-1 |
       | cable-1-3 | cable-1 |
+      | cable-1-4 | cable-1 |
     When I select tool 'select'
     And I move pointer to grid position '1,1'
     And I press pointer
@@ -19,21 +20,24 @@ Feature: Pole
     And I wait block 'cable-1-1' to exist
     Then I have cables with properties
       | CABLE     | END1                | END2     |
-      | cable-1-1 | block:pole-1-1,Pin1 | grid:5,1 |
-      | cable-1-2 | block:pole-1-1,Pin2 | grid:5,1 |
-      | cable-1-3 | block:pole-1-1,Pin3 | grid:5,1 |
+      | cable-1-1 | block:pole-1-1,L1 | grid:5,1 |
+      | cable-1-2 | block:pole-1-1,L2 | grid:5,1 |
+      | cable-1-3 | block:pole-1-1,L3 | grid:5,1 |
+      | cable-1-4 | block:pole-1-1,N  | grid:5,1 |
     When I move pointer to grid position '5,2'
     Then I have cables with properties
       | CABLE     | END1                | END2     |
-      | cable-1-1 | block:pole-1-1,Pin1 | grid:5,2 |
-      | cable-1-2 | block:pole-1-1,Pin2 | grid:5,2 |
-      | cable-1-3 | block:pole-1-1,Pin3 | grid:5,2 |
+      | cable-1-1 | block:pole-1-1,L1 | grid:5,2 |
+      | cable-1-2 | block:pole-1-1,L2 | grid:5,2 |
+      | cable-1-3 | block:pole-1-1,L3 | grid:5,2 |
+      | cable-1-4 | block:pole-1-1,N  | grid:5,2 |
     When I move pointer to grid position '5,5'
     Then I have cables with properties
       | CABLE     | END1                | END2                |
-      | cable-1-1 | block:pole-1-1,Pin1 | block:pole-1-2,Pin1 |
-      | cable-1-2 | block:pole-1-1,Pin2 | block:pole-1-2,Pin2 |
-      | cable-1-3 | block:pole-1-1,Pin3 | block:pole-1-2,Pin3 |
+      | cable-1-1 | block:pole-1-1,L1 | block:pole-1-2,L1 |
+      | cable-1-2 | block:pole-1-1,L2 | block:pole-1-2,L2 |
+      | cable-1-3 | block:pole-1-1,L3 | block:pole-1-2,L3 |
+      | cable-1-4 | block:pole-1-1,N  | block:pole-1-2,N  |
 
   Scenario: Moving the cursor between empty tile and tile with house changes preview style 
     Given I have a scene with:
@@ -46,6 +50,7 @@ Feature: Pole
       | cable-1-2        | cable-1               |
       | cable-1-3        | cable-1               |
       | cable-1-4        | cable-1               |
+      | cable-1-5        | cable-1               |
       | weather-head-1-1 | weather-head-1        |
     When I select tool 'select'
     And I hover over block 'pole-1-1'
@@ -54,17 +59,18 @@ Feature: Pole
     And I move pointer to grid position '5,5'
     And I wait mesh 'cable-1-1' to exist
     Then I have cables with properties
-      | CABLE     | END1                | END2     |
-      | cable-1-1 | block:pole-1-1,Pin1 | grid:5,5 |
-      | cable-1-2 | block:pole-1-1,Pin2 | grid:5,5 |
-      | cable-1-3 | block:pole-1-1,Pin3 | grid:5,5 |
+      | CABLE     | END1              | END2     |
+      | cable-1-1 | block:pole-1-1,L1 | grid:5,5 |
+      | cable-1-2 | block:pole-1-1,L2 | grid:5,5 |
+      | cable-1-3 | block:pole-1-1,L3 | grid:5,5 |
+      | cable-1-4 | block:pole-1-1,N  | grid:5,5 |
     When I move pointer to grid position '6,0'
-    And I wait mesh 'cable-1-4' to exist
+    And I wait mesh 'cable-1-5' to exist
     Then I have cables with properties
-      | CABLE     | END1                | END2                               |
-      | cable-1-4 | block:pole-1-1,Pin4 | block:weather-head-1-1,CableAnchor |
+      | CABLE     | END1                             | END2                               |
+      | cable-1-5 | block:pole-1-1,TransformerHolder | block:weather-head-1-1,CableAnchor |
     When I select tool 'add'
-    And I wait block 'cable-1-4' not to exist  
+    And I wait block 'cable-1-5' not to exist  
     Then my current scene is
       | BLOCK     | TYPE              |
       | pole-1-1  | pole-1            |
@@ -80,6 +86,7 @@ Feature: Pole
       | cable-1-1 | cable-1 |
       | cable-1-2 | cable-1 |
       | cable-1-3 | cable-1 |
+      | cable-1-4 | cable-1 |
     And I hover over block 'pole-1-1'
     And I press pointer
     And I execute action 'join-cable-action'
@@ -91,6 +98,7 @@ Feature: Pole
       | cable-1-1 | cable-1 |
       | cable-1-2 | cable-1 |
       | cable-1-3 | cable-1 |
+      | cable-1-4 | cable-1 |
     When I select tool 'add'
     And I wait block 'cable-1-1' not to exist
     Then my current scene is
@@ -108,16 +116,18 @@ Feature: Pole
       | cable-1-1 | cable-1 |
       | cable-1-2 | cable-1 |
       | cable-1-3 | cable-1 |
+      | cable-1-4 | cable-1 |
     And I hover over block 'pole-1-1'
     And I press pointer
     And I execute action 'join-cable-action'
     And I move pointer to grid position '6,0'
     And I wait mesh 'cable-1-1' to exist
     Then I have cables with properties
-      | CABLE     | END1                | END2                |
-      | cable-1-1 | block:pole-1-1,Pin1 | block:pole-1-2,Pin1 |
-      | cable-1-2 | block:pole-1-1,Pin2 | block:pole-1-2,Pin2 |
-      | cable-1-3 | block:pole-1-1,Pin3 | block:pole-1-2,Pin3 |
+      | CABLE     | END1              | END2              |
+      | cable-1-1 | block:pole-1-1,L1 | block:pole-1-2,L1 |
+      | cable-1-2 | block:pole-1-1,L2 | block:pole-1-2,L2 |
+      | cable-1-3 | block:pole-1-1,L3 | block:pole-1-2,L3 |
+      | cable-1-4 | block:pole-1-1,N  | block:pole-1-2,N  |
     And I press pointer
     When I select tool 'add'
     Then my current scene is
@@ -127,6 +137,7 @@ Feature: Pole
       | cable-1-1 | cable-1 |
       | cable-1-2 | cable-1 |
       | cable-1-3 | cable-1 |
+      | cable-1-4 | cable-1 |
 
   Scenario: Submitting cabling action makes connection to a house
     Given I have a scene with:
@@ -196,15 +207,19 @@ Feature: Pole
       | cable-1-1 | cable-1 |
       | cable-1-2 | cable-1 | 
       | cable-1-3 | cable-1 |
+      | cable-1-n | cable-1 |
       | cable-1-1 | cable-1 |
       | cable-1-2 | cable-1 |
       | cable-1-3 | cable-1 |
+      | cable-1-n | cable-1 |
       | cable-1-4 | cable-1 |
       | cable-1-5 | cable-1 |
       | cable-1-6 | cable-1 |
+      | cable-2-n | cable-1 |
       | cable-1-4 | cable-1 |
       | cable-1-5 | cable-1 |
       | cable-1-6 | cable-1 |
+      | cable-2-n | cable-1 |
     And I hover over block 'pole-1-1'
     And I press pointer
     And I execute action 'join-cable-action'
@@ -229,9 +244,11 @@ Feature: Pole
       | cable-1-1 | cable-1 |
       | cable-1-2 | cable-1 |
       | cable-1-3 | cable-1 |
+      | cable-1-n | cable-1 |
       | cable-1-4 | cable-1 |
       | cable-1-5 | cable-1 |
       | cable-1-6 | cable-1 |
+      | cable-2-n | cable-1 |
     When I select tool 'erase'
     And I hover over block 'pole-1-1'
     And I press pointer
@@ -242,6 +259,7 @@ Feature: Pole
       | cable-1-4 | cable-1 |
       | cable-1-5 | cable-1 |
       | cable-1-6 | cable-1 |
+      | cable-2-n | cable-1 |
     And I hover over block 'pole-1-2'
     And I press pointer
     Then my current scene is

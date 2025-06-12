@@ -144,6 +144,7 @@ class JoinPoles {
         [partName]: {
           ...pole.partDetails[partName],
           isConnected: {
+            ...(pole.partDetails[partName]?.isConnected || {}),
             [pinIndex]: true,
           },
         } as BlockPartLookupData,

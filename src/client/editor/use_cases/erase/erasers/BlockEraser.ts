@@ -11,10 +11,6 @@ abstract class BlockEraser {
   }
 
   erase(_edit: Edit, _block: BlockData) {}
-
-  associationErased(_edit: Edit, _cableBlock: BlockData, _association: BlockData) {}
-
-  eraseDependent(_edit: Edit, _block: BlockData, _dependent: BlockData) {}
 }
 
 export default BlockEraser;

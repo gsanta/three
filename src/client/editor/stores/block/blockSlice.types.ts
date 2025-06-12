@@ -19,19 +19,18 @@ export type BlockSlices = 'city' | 'building';
 export type DecorationUpdate = {
   type: 'update';
   decoration: BlockDecorationType;
-  slice: BlockSlices;
 };
 
-export type BlockUpdate = { type: 'update'; block: BlockData; slice: BlockSlices };
+export type BlockUpdate = { type: 'update'; block: BlockData };
 
 export type BlockSelect = {
   select: BlockData[];
   partIndex?: string;
 };
 
-export type BlockHover = { hover: string | null; partIndex?: string; slice: BlockSlices };
+export type BlockHover = { hover: string | null; partIndex?: string };
 
-export type BlockRemove = { remove: BlockData; slice: BlockSlices };
+export type BlockRemove = { remove: BlockData };
 
 // Update type constrained to keys and values from BlockCategories
 export type UpdateBlock = BlockUpdate | DecorationUpdate | BlockRemove | BlockSelect | BlockHover;
