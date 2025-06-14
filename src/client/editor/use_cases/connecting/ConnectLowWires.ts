@@ -15,7 +15,6 @@ class ConnectLowWires implements ConnectCable {
   category = 'poles' as BlockCategoryName;
 
   constructor(
-    from: BlockData,
     blockStore: BlockStore,
     factoryService: FactoryService,
     sceneService: SceneService,
@@ -24,8 +23,6 @@ class ConnectLowWires implements ConnectCable {
   ) {
     this.blockStore = blockStore;
     this.sceneStore = sceneStore;
-
-    this.from = from;
 
     this.connectPoleToBuilding = new ConnectPoleToBuilding(
       blockStore,
@@ -56,7 +53,15 @@ class ConnectLowWires implements ConnectCable {
 
   meshRendered(): void {}
 
+  start(blockData: BlockData) {
+    this.from = blockData;
+  }
+
   update(candidates: BlockData[], fallbackPos: Num3) {
+    if (!this.from) {
+      throw new Error('No starting block defined for connecting low wires');
+    }
+
     if (this.lastPos === fallbackPos) {
       return;
     }
@@ -84,7 +89,7 @@ class ConnectLowWires implements ConnectCable {
 
   private connectPoleToBuilding: ConnectPoleToBuilding;
 
-  private from: BlockData;
+  private from: BlockData | undefined;
 
   private targetCandidateId: string | undefined;
 

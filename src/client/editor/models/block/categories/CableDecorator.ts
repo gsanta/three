@@ -12,7 +12,7 @@ export type CablePoint = {
   partIndex?: string;
 };
 
-type Cable = {
+type CableDecorator = {
   id: string;
   decoration: 'cables';
   end1: CableEnd | null;
@@ -21,4 +21,4 @@ type Cable = {
   points: CablePoint[];
 };
 
-export default Cable;
+export default CableDecorator;

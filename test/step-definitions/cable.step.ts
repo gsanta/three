@@ -3,13 +3,13 @@ import ExtendedWorld from './ExtendedWorld';
 import assert from 'assert';
 import isPositionCloseTo, { isPositionCloseAny } from './helpers/isPositionCloseTo';
 import { checkCableEnd, checkDecorationExists, checkPosition } from './helpers/checks';
-import Cable from '@/client/editor/models/block/categories/Cable';
+import CableDecorator from '@/client/editor/models/block/categories/CableDecorator';
 
 Then(
   'cable for block {string} and pin {string} ends at position {string}',
   function (this: ExtendedWorld, blockId: string, pin: string, position: string) {
     const [x, y, z] = checkPosition.call(this, position);
-    const cables = Object.values(this.env?.editorContext.blockStore.getDecorations('cables') || {}) as Cable[];
+    const cables = Object.values(this.env?.editorContext.blockStore.getDecorations('cables') || {}) as CableDecorator[];
 
     const realBlockId = blockId === 'examined' ? this.env?.testScene.storedBlockId || '' : blockId;
 
@@ -49,7 +49,7 @@ Then('I have cables with properties', function (this: ExtendedWorld, table: { ha
   rows.forEach((row) => {
     const cables = Object.values(this.env?.editorContext.blockStore.getDecorations('cables') || {});
 
-    const cable = cables.find((currCable) => currCable?.id === row.CABLE) as Cable;
+    const cable = cables.find((currCable) => currCable?.id === row.CABLE) as CableDecorator;
 
     if (!cable) {
       assert.fail(`Cable not found with id id ${row.CABLE}`);
@@ -101,7 +101,7 @@ Then('I have cables with properties', function (this: ExtendedWorld, table: { ha
 });
 
 Then('cable {string} ends at position {string}', function (this: ExtendedWorld, blockId: string, posStr: string) {
-  const cable = checkDecorationExists.call(this, 'cables', blockId) as Cable;
+  const cable = checkDecorationExists.call(this, 'cables', blockId) as CableDecorator;
   const [x, y, z] = checkPosition.call(this, posStr);
 
   const isClose1 = cable.points[0] ? isPositionCloseTo([x, y, z], cable.points[0].position) : false;

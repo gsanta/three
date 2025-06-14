@@ -3,7 +3,7 @@ import CableMesh from '../../mesh/CableMesh';
 import WrappedMeshProps from '../../../models/block/WrappedMeshProps';
 import { ModelMesh } from '../../mesh/ModelMesh';
 import BlockData from '@/client/editor/models/block/BlockData';
-import Cable from '@/client/editor/models/block/categories/Cable';
+import CableDecorator from '@/client/editor/models/block/categories/CableDecorator';
 import MoveControl from './MoveControl';
 import { useEffect, useRef } from 'react';
 import useEditorContext from '@/app/editor/useEditorContext';
@@ -65,7 +65,7 @@ const MeshRenderer = (props: WrappedMeshProps) => {
     return (
       <CableMesh
         additions={additions}
-        cable={decorations.cables[block.id] as Cable}
+        cable={decorations.cables[block.id] as CableDecorator}
         block={block}
         meshProps={{ ...meshProps }}
         materialProps={materialProps}

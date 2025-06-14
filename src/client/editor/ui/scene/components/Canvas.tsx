@@ -3,7 +3,6 @@ import useEditorContext from '@/app/editor/useEditorContext';
 import Scene from './Scene';
 import { useCallback, useMemo } from 'react';
 import GameActionPanel from './GameActionPanel';
-import { OrbitControls } from '@react-three/drei';
 import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import AddPanel from './AddPanel';
 import { useAppSelector } from '@/client/common/hooks/hooks';
@@ -86,7 +85,6 @@ const Canvas = () => {
         ref={canvasRef}
       >
         <Scene />
-        <OrbitControls ref={controlsRef} />
       </ThreeCanvas>
       <div className="absolute flex flex-col gap-2 left-[70px] bottom-[50px]">
         {actionPanel}

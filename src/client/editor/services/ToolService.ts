@@ -96,7 +96,12 @@ class ToolService {
     this.setEventObject(event);
 
     const { selectedTool } = store.getState().tool;
-    this.getTool(selectedTool)?.onPointerMove(this.info);
+
+    if (this.info.isDragHappened) {
+      this.getTool(selectedTool)?.onPointerDrag(this.info);
+    } else {
+      this.getTool(selectedTool)?.onPointerMove(this.info);
+    }
   }
 
   onPointerUp() {

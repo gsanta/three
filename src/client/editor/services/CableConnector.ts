@@ -11,6 +11,8 @@ export interface ConnectCable {
 
   meshRendered(): void;
 
+  start(blockData: BlockData): void;
+
   update(candidates: BlockData[], fallbackPos: Num3): void;
 }
 

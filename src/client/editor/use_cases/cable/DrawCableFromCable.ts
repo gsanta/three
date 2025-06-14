@@ -1,5 +1,5 @@
 import BlockData from '../../models/block/BlockData';
-import Conduit from '../../models/block/categories/Conduit';
+import CableDecorator from '../../models/block/categories/CableDecorator';
 import BlockPart from '../../models/block/part/BlockPart';
 import Grid from '../../models/Grid';
 import Vector from '../../models/math/Vector';
@@ -11,7 +11,7 @@ import GridStore from '../../stores/grid/GridStore';
 import SceneStore from '../../ui/scene/SceneStore';
 import DrawOrUpdateCable from './DrawOrUpdateCable';
 
-class DrawUndergroundCable {
+class DrawCableFromCable {
   constructor(
     blockStore: BlockStore,
     factoryService: FactoryService,
@@ -20,8 +20,6 @@ class DrawUndergroundCable {
     transaction: TransactionService,
   ) {
     this.blockStore = blockStore;
-    this.transaction = transaction;
-    this.factoryService = factoryService;
     this.sceneStore = sceneStore;
 
     this.drawOrUpdateCable = new DrawOrUpdateCable(blockStore, factoryService, transaction);
@@ -30,14 +28,12 @@ class DrawUndergroundCable {
   }
 
   tryStart(candidates: BlockData[]) {
-    const counduit = candidates.find((candidate) => {
+    const cable = candidates.find((candidate) => {
       const category = candidate.category;
-      return category === 'conduits' && !candidate.partDetails[Conduit.GROUND_CONNECTION_PART_NAME]?.isConnected[0];
+      return category === 'cables';
     });
 
-    if (counduit) {
-      this.from = new BlockPart(counduit, Conduit.GROUND_CONNECTION_PART_NAME);
-    }
+    this.from = cable;
 
     return this.from !== undefined;
   }
@@ -54,20 +50,27 @@ class DrawUndergroundCable {
     this.from = undefined;
   }
 
+  drawToPin(part: BlockPart) {
+    const mesh = this.sceneStore.getObj3d(part.getBlock().getId());
+    const meshWrapper = new MeshWrapper(mesh);
+    const to = meshWrapper.findByName(part.getPart().name).getWorldPosition();
+
+    this.drawOrUpdateCable.updateOrCreate(this.getFromPosition().get(), to.get());
+  }
+
   cancel() {
     this.drawOrUpdateCable.cancel();
   }
 
   private getFromPosition() {
-    if (this.from === undefined) {
-      throw new Error('No from position set');
+    if (!this.from) {
+      throw new Error('Cable from block is not set');
     }
 
     if (!this.fromPosition) {
-      const mesh = this.sceneStore.getObj3d(this.from.getBlock().getId());
-      const meshWrapper = new MeshWrapper(mesh);
-      const position = meshWrapper.findByName(this.from.getPart().name).getWorldPosition();
-      this.fromPosition = position;
+      const cable = this.blockStore.getDecorator('cables', this.from.id) as CableDecorator;
+
+      this.fromPosition = new Vector(cable.points[1].position);
     }
 
     return this.fromPosition;
@@ -75,23 +78,17 @@ class DrawUndergroundCable {
 
   private fromPosition: Vector | undefined;
 
-  private from: BlockPart | undefined;
+  private from: BlockData | undefined;
 
   private drawOrUpdateCable: DrawOrUpdateCable;
 
   private grid: Grid;
 
-  private tempCableId?: string;
-
   private blockStore: BlockStore;
 
-  private factoryService: FactoryService;
-
   private sceneStore: SceneStore;
-
-  private transaction: TransactionService;
 
   private undergroundDepth = -1;
 }
 
-export default DrawUndergroundCable;
+export default DrawCableFromCable;

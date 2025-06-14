@@ -15,7 +15,6 @@ class ConnectMainWires implements ConnectCable {
   category = 'poles' as BlockCategoryName;
 
   constructor(
-    from: BlockData,
     blockStore: BlockStore,
     factoryService: FactoryService,
     sceneStore: SceneStore,
@@ -25,18 +24,15 @@ class ConnectMainWires implements ConnectCable {
 
     this.sceneStore = sceneStore;
 
+    this.factoryService = factoryService;
+
+    this.transactionService = transactionService;
+
     this.joinPoles = new JoinPoles(blockStore, sceneStore, factoryService, transactionService);
-
-    const pole = new Pole(from, blockStore);
-    this.from = pole;
-
-    pole.getPoleDecorator().wires.forEach((wire) => {
-      this.drawOrUpdateCables[wire] = new DrawOrUpdateCable(blockStore, factoryService, transactionService);
-    });
   }
 
   canConnect(candidates: BlockData[]) {
-    return candidates.some((candidate) => candidate.category === 'poles');
+    return candidates.some((candidate) => candidate.category === 'poles' || candidate.category === 'transformers');
   }
 
   cancel() {
@@ -46,15 +42,18 @@ class ConnectMainWires implements ConnectCable {
   }
 
   finalize(): void {
+    if (!this.from) {
+      throw new Error('Cannot finalize: no starting pole defined.');
+    }
+
     const candidateId = this.candidateId;
     this.cancel();
 
     if (candidateId) {
-      this.joinPoles.join(
-        new Pole(this.from.getBlock(), this.blockStore),
-        new Pole(this.blockStore.getBlock(candidateId), this.blockStore),
-      );
+      this.joinPoles.join(this.from.getBlock(), this.blockStore.getBlock(candidateId));
     }
+
+    this.from = undefined;
   }
 
   isUsable(_candidates: BlockData[]) {
@@ -62,7 +61,20 @@ class ConnectMainWires implements ConnectCable {
   }
 
   meshRendered(): void {
-    this.from.getPoleDecorator().wires.forEach((wire) => this.createOrUpdateCable(wire));
+    this.from?.getPoleDecorator().wires.forEach((wire) => this.createOrUpdateCable(wire));
+  }
+
+  start(blockData: BlockData) {
+    const pole = new Pole(blockData, this.blockStore);
+    this.from = pole;
+
+    pole.getPoleDecorator().wires.forEach((wire) => {
+      this.drawOrUpdateCables[wire] = new DrawOrUpdateCable(
+        this.blockStore,
+        this.factoryService,
+        this.transactionService,
+      );
+    });
   }
 
   update(candidates: BlockData[], fallbackPos: Num3) {
@@ -71,8 +83,11 @@ class ConnectMainWires implements ConnectCable {
     }
 
     const pole = candidates.find((candidate) => candidate.category === 'poles');
+    const transformer = candidates.find((candidate) => candidate.category === 'transformers');
 
-    if (pole) {
+    if (transformer) {
+      this.candidateId = transformer.id;
+    } else if (pole) {
       this.candidateId = pole.id;
     } else {
       this.candidateId = undefined;
@@ -80,10 +95,14 @@ class ConnectMainWires implements ConnectCable {
 
     this.lastPos = fallbackPos;
 
-    this.from.getPoleDecorator().wires.forEach((wire) => this.createOrUpdateCable(wire));
+    this.from?.getPoleDecorator().wires.forEach((wire) => this.createOrUpdateCable(wire));
   }
 
   private createOrUpdateCable(wire: WireRole) {
+    if (!this.from) {
+      throw new Error('Cannot finalize: no starting pole defined.');
+    }
+
     let toPos = this.lastPos;
 
     if (this.candidateId) {
@@ -98,6 +117,8 @@ class ConnectMainWires implements ConnectCable {
       .getWorldPosition()
       .get();
 
+    console.log(`Connecting ${this.from.getId()} wire ${wire} to ${toPos ? 'position' : 'undefined'}`, fromPos, toPos);
+
     if (toPos) {
       this.drawOrUpdateCables[wire]?.updateOrCreate(fromPos, toPos);
     }
@@ -109,7 +130,11 @@ class ConnectMainWires implements ConnectCable {
 
   private drawOrUpdateCables: Partial<Record<WireRole, DrawOrUpdateCable>> = {};
 
-  private from: Pole;
+  private from: Pole | undefined;
+
+  private factoryService: FactoryService;
+
+  private transactionService: TransactionService;
 
   private joinPoles: JoinPoles;
 

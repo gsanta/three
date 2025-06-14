@@ -24,17 +24,23 @@ const poleSeeds: Partial<BlockType>[] = [
       {
         name: 'L3',
         materialPath: 'DarkGray',
-        position: [0.865, 7.154, 0.011],
+        position: [0.464, 7.154, 0.011],
       },
       {
         name: 'N',
         materialPath: 'DarkGray',
-        position: [0.464, 7.154, 0.011],
+        position: [0.865, 7.154, 0.011],
       },
       {
         name: 'TransformerHolder',
         materialPath: 'DarkGray',
         position: [0.006, 6.336, 0.216],
+      },
+      {
+        name: 'ConduitHolder',
+        materialPath: 'Palette',
+        position: [-0.008, 3.446, 0.136],
+        scale: [0.082, 0.097, 0.026],
       },
     ],
     partDetails: {
@@ -60,6 +66,10 @@ const poleSeeds: Partial<BlockType>[] = [
         roles: ['pin'],
         type: 'physical',
       },
+      ConduitHolder: {
+        roles: ['pin'],
+        type: 'physical',
+      },
     },
     decorationData: {
       poles: {
@@ -82,73 +92,61 @@ const poleSeeds: Partial<BlockType>[] = [
         scale: [0.065, 2.446, 0.065],
       },
       {
-        name: 'Pin1',
+        name: 'L1',
         materialPath: 'Pole2Palette',
         position: [0.926, 6.745, -0.43],
         rotation: [0.065, 0, 0.064],
-        scale: [0.065, 2.446, 0.065],
+        scale: [0.127, 4.774, 0.127],
       },
       {
-        name: 'Pin1b',
-        materialPath: 'Pole2Palette',
-        position: [0.926, 6.745, -0.43],
-        rotation: [0.065, 0, 0.064],
-        scale: [0.065, 2.446, 0.065],
-      },
-      {
-        name: 'Pin2',
+        name: 'L2',
         materialPath: 'Pole2Palette',
         position: [0.926, 5.37, -0.43],
         rotation: [0.065, 0, 0.064],
-        scale: [0.065, 2.446, 0.065],
+        scale: [0.127, 4.774, 0.127],
       },
       {
-        name: 'Pin2b',
-        materialPath: 'Pole2Palette',
-        position: [0.926, 5.37, -0.43],
-        rotation: [0.065, 0, 0.064],
-        scale: [0.065, 2.446, 0.065],
-      },
-      {
-        name: 'Pin3',
+        name: 'L3',
         materialPath: 'Pole2Palette',
         position: [-0.637, 5.942, -0.43],
         rotation: [0.065, 0, 0.064],
-        scale: [0.065, 2.446, 0.065],
+        scale: [0.127, 4.774, 0.127],
       },
       {
-        name: 'Pin3b',
+        name: 'TransformerHolder',
         materialPath: 'Pole2Palette',
-        position: [-0.637, 5.942, -0.43],
-        rotation: [0.065, 0, 0.064],
-        scale: [0.065, 2.446, 0.065],
+        position: [0.083, 4.545, -0.614],
+        scale: [0.321, 0.042, 0.048],
+      },
+      {
+        name: 'TransformerHolder',
+        materialPath: 'Pole2Palette',
+        position: [0.083, 4.545, -0.614],
+        scale: [0.321, 0.042, 0.048],
       },
     ],
     partDetails: {
       Body: {},
-      Pin1: {
+      L1: {
         roles: ['pin'],
         type: 'physical',
       },
-      Pin1b: {
-        roles: ['pin'],
-        type: 'placeholder',
-      },
-      Pin2: {
+      L2: {
         roles: ['pin'],
         type: 'physical',
       },
-      Pin2b: {
-        roles: ['pin'],
-        type: 'placeholder',
-      },
-      Pin3: {
+      L3: {
         roles: ['pin'],
         type: 'physical',
       },
-      Pin3b: {
-        roles: ['pin'],
-        type: 'placeholder',
+      TransformerHolder: {
+        type: 'physical',
+      },
+    },
+    decorationData: {
+      poles: {
+        decoration: 'poles',
+        wires: ['L1', 'L2', 'L3'],
       },
     },
     type: 'pole-2',
@@ -165,42 +163,21 @@ const poleSeeds: Partial<BlockType>[] = [
         scale: [0.065, 2.446, 0.065],
       },
       {
-        name: 'Pin1',
+        name: 'L1',
         materialPath: 'Palette',
         position: [2.807, 6.745, 1.53],
         rotation: [1.57, 1.506, -1.507],
         scale: [0.127, 4.774, 0.127],
       },
       {
-        name: 'Pin1b',
-        materialPath: 'Palette',
-        position: [2.807, 6.745, 1.53],
-        rotation: [1.57, 1.506, -1.507],
-        scale: [0.065, 2.446, 0.065],
-      },
-      {
-        name: 'Pin2',
+        name: 'L2',
         materialPath: 'Palette',
         position: [2.807, 5.37, 1.53],
         rotation: [1.57, 1.506, -1.507],
         scale: [0.127, 4.774, 0.127],
       },
       {
-        name: 'Pin2b',
-        materialPath: 'Palette',
-        position: [2.807, 5.37, 1.53],
-        rotation: [1.57, 1.506, -1.507],
-        scale: [0.127, 4.774, 0.127],
-      },
-      {
-        name: 'Pin3',
-        materialPath: 'Palette',
-        position: [2.807, 5.942, 3.094],
-        rotation: [1.57, 1.506, -1.507],
-        scale: [0.127, 4.774, 0.127],
-      },
-      {
-        name: 'Pin3b',
+        name: 'L3',
         materialPath: 'Palette',
         position: [2.807, 5.942, 3.094],
         rotation: [1.57, 1.506, -1.507],
@@ -209,29 +186,23 @@ const poleSeeds: Partial<BlockType>[] = [
     ],
     partDetails: {
       Body: {},
-      Pin1: {
+      L1: {
         roles: ['pin'],
         type: 'physical',
       },
-      Pin1b: {
-        roles: ['pin'],
-        type: 'placeholder',
-      },
-      Pin2: {
+      L2: {
         roles: ['pin'],
         type: 'physical',
       },
-      Pin2b: {
-        roles: ['pin'],
-        type: 'placeholder',
-      },
-      Pin3: {
+      L3: {
         roles: ['pin'],
         type: 'physical',
       },
-      Pin3b: {
-        roles: ['pin'],
-        type: 'placeholder',
+    },
+    decorationData: {
+      poles: {
+        decoration: 'poles',
+        wires: ['L1', 'L2', 'L3'],
       },
     },
     type: 'pole-3',

@@ -15,7 +15,7 @@ export type GridState = {
   gridOffset: [number, number];
   editedBuilding?: string;
 
-  blockToGridIndex: Record<string, number>;
+  blockToGridIndex: Record<string, number[]>;
   gridIndexToBlocks: Record<number, string[]>;
 
   graph: Graph;

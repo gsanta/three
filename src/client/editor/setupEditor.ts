@@ -91,7 +91,14 @@ export const setupEditor = () => {
     poles: new ConnectPoleFactory(blockStore, factoryService, sceneService, sceneStore, transaction),
   });
 
-  const cableDrawingService = new CableDrawingService(blockStore, factoryService, gridStore, sceneStore, transaction);
+  const cableDrawingService = new CableDrawingService(
+    blockStore,
+    factoryService,
+    gridStore,
+    sceneService,
+    sceneStore,
+    transaction,
+  );
 
   toolService.setTools([
     new AddTool(blockStore, blockTypeStore, factoryService, gridStore, sceneStore, sceneService, transaction),
@@ -100,7 +107,7 @@ export const setupEditor = () => {
     new SelectTool(blockStore, blockCategoryStore, sceneService, sceneStore, toolStore, transaction, sceneService),
     new EraseTool(blockStore, sceneService, transaction),
     new RayTool(blockStore, transaction, sceneStore),
-    new UndergroundCableTool(blockStore, cableDrawingService, sceneService, transaction),
+    new UndergroundCableTool(blockStore, blockTypeStore, cableDrawingService, sceneService, transaction),
   ]);
 
   const blockTypeSelectorService = new BlockTypeSelectorService(blockTypeStore);

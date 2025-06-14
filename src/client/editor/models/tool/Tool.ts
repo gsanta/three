@@ -56,6 +56,8 @@ abstract class Tool {
 
   onPointerDown(_info: ToolInfo) {}
 
+  onPointerDrag(_info: ToolInfo) {}
+
   onPointerMove(_info: ToolInfo) {}
 
   onPointerEnter(_info: ToolInfo) {}

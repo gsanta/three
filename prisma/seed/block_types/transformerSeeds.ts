@@ -90,6 +90,78 @@ const transformerSeeds: Partial<BlockType>[] = [
     },
     type: 'pad-mounted-transformer-1',
   },
+  {
+    categoryName: 'transformers',
+    decorations: ['transformers'],
+    path: '/pole_mounted_transformer_1.glb',
+    parts: [
+      {
+        name: 'Body',
+        materialPath: 'Palette',
+        position: [-0.012, 0.018, 0.118],
+        scale: [0.683, 0.689, 0.3],
+      },
+      {
+        name: 'Holder',
+        materialPath: 'Palette',
+        position: [-0.096, 0.707, 0.451],
+        scale: [0.321, 0.042, 0.048],
+      },
+      {
+        name: 'N',
+        materialPath: 'Palette',
+        position: [0.453, -0.103, 0.001],
+        scale: [0.059, 0.059, 0.063],
+      },
+      {
+        name: 'L3',
+        materialPath: 'Palette',
+        position: [0.212, -0.103, 0.001],
+        scale: [0.059, 0.059, 0.063],
+      },
+      {
+        name: 'L2',
+        materialPath: 'Palette',
+        position: [-0.22, -0.103, 0.001],
+        scale: [0.059, 0.059, 0.063],
+      },
+      {
+        name: 'L1',
+        materialPath: 'Palette',
+        position: [-0.539, -0.103, 0.001],
+        scale: [0.059, 0.059, 0.063],
+      },
+    ],
+    partDetails: {
+      L1: {
+        roles: ['pin'],
+        type: 'physical',
+      },
+      L2: {
+        roles: ['pin'],
+        type: 'physical',
+      },
+      L3: {
+        roles: ['pin'],
+        type: 'physical',
+      },
+      N: {
+        roles: ['pin'],
+        type: 'physical',
+      },
+    },
+    decorationData: {
+      transformers: {
+        decoration: 'transformers',
+        location: 'pole-mounted',
+      },
+      poles: {
+        decoration: 'poles',
+        wires: ['L1', 'L2', 'L3', 'N'],
+      },
+    },
+    type: 'pole-mounted-transformer-1',
+  },
 ];
 
 export default transformerSeeds;

@@ -1,11 +1,11 @@
-import Cable from './categories/Cable';
-import Transformer from './categories/Transformer';
+import CableDecorator from './categories/CableDecorator';
+import TransformerDecorator from './categories/TransformerDecorator';
 import { BlockCategoryName } from './BlockCategoryName';
 import PoleDecorator from './categories/PoleDecorator';
 
 export type BlockDecoratorName = 'cables' | 'transformers' | 'poles';
 
-export type BlockDecorationType = Cable | Transformer | PoleDecorator;
+export type BlockDecorationType = CableDecorator | TransformerDecorator | PoleDecorator;
 
 export type EmptyBlockCategory<T extends BlockCategoryName> = {
   category: T;
@@ -13,8 +13,8 @@ export type EmptyBlockCategory<T extends BlockCategoryName> = {
 };
 
 export type BlockDecorations = {
-  cables: Cable;
-  transformers: Transformer;
+  cables: CableDecorator;
+  transformers: TransformerDecorator;
   poles: PoleDecorator;
   // devices: Device;
   // houses: EmptyBlockCategory<'houses'>;

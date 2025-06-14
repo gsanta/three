@@ -12,6 +12,7 @@ import weatherHeadSeeds from './block_types/weatherHeadSeeds';
 import humanSeeds from './block_types/humanSeeds';
 import cableSeeds from './block_types/cableSeeds';
 import plantSeeds from './block_types/plantSeeds';
+import conduitSeeds from './block_types/conduitSeeds';
 
 const prisma = new PrismaClient();
 const main = async () => {
@@ -119,6 +120,14 @@ const main = async () => {
       where: { type: cable.type },
       update: {},
       create: cable,
+    });
+  }
+
+  for (const conduits of conduitSeeds) {
+    await prisma.blockType.upsert({
+      where: { type: conduits.type },
+      update: {},
+      create: conduits,
     });
   }
 

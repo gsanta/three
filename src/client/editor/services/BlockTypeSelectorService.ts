@@ -14,11 +14,7 @@ class BlockTypeSelectorService {
     store.dispatch(setActiveBlockType(blockType.type));
 
     if (blockType.decorations.includes('cables')) {
-      const cableDecoration = this.blockTypeStore.getDecorations(blockType.type).cables;
-
-      if (cableDecoration?.location === 'underground') {
-        store.dispatch(setSelectedTool(ToolName.UndergroundCable));
-      }
+      store.dispatch(setSelectedTool(ToolName.UndergroundCable));
     } else {
       store.dispatch(setSelectedTool(ToolName.Add));
     }

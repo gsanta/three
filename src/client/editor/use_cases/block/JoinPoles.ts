@@ -9,6 +9,7 @@ import Num3 from '../../models/math/Num3';
 import Edit from '../../services/transaction/Edit';
 import CableHelper from './CableHelper';
 import Pole from '../../models/block/categories/Pole';
+import Transformer from '../../models/block/categories/Transformer';
 import BlockPartLookupData from '../../models/block/part/BlockPartLookupData';
 import Vector from '../../models/math/Vector';
 
@@ -27,9 +28,22 @@ class JoinPoles {
     this.cableHelper = new CableHelper(blockStore);
   }
 
-  join(pole1: Pole, pole2: Pole) {
-    const pole1EmptyPinIndex = pole1.getFirstEmptyPin('L1');
-    const pole2EmptyPinIndex = pole2.getFirstEmptyPin('L1');
+  join(block1: BlockData, block2: BlockData) {
+    const from = new Pole(block1, this.blockStore);
+    const to = this.getTarget(block2);
+    let pole2: Pole | undefined;
+
+    if (to.getBlock().category === 'poles') {
+      pole2 = to as Pole;
+    } else {
+      const parent = to.getBlock().parentConnection?.block;
+      if (parent && this.blockStore.getBlock(parent).category === 'poles') {
+        pole2 = new Pole(this.blockStore.getBlock(parent), this.blockStore);
+      }
+    }
+
+    const pole1EmptyPinIndex = from.getFirstEmptyPin('L1');
+    const pole2EmptyPinIndex = to.getFirstEmptyPin('L1');
 
     if (pole1EmptyPinIndex === undefined || pole2EmptyPinIndex === undefined) {
       throw new Error('Precondition failed: no empty pin found.');
@@ -41,14 +55,16 @@ class JoinPoles {
 
     const edit = this.transactionService.createTransaction();
 
-    this.rotatePoles(pole1, pole2);
+    if (pole2) {
+      this.rotatePoles(from, pole2);
+    }
 
-    pole1
+    from
       .getPoleDecorator()
       .wires.forEach((partName) =>
         this.joinPins(
-          { pole: pole1.getBlock(), partName, pinIndex: pole1EmptyPinIndex },
-          { pole: pole2.getBlock(), partName, pinIndex: pole2EmptyPinIndex },
+          { pole: from.getBlock(), partName, pinIndex: pole1EmptyPinIndex },
+          { pole: to.getBlock(), partName, pinIndex: pole2EmptyPinIndex },
         ),
       );
 
@@ -167,6 +183,16 @@ class JoinPoles {
     pinMesh2.getWorldPosition(pos2);
 
     return [pos1.toArray(), pos2.toArray()];
+  }
+
+  private getTarget(block: BlockData) {
+    if (block.category === 'poles') {
+      return new Pole(block, this.blockStore);
+    }
+    if (block.category === 'transformers') {
+      return new Transformer(block, this.blockStore);
+    }
+    throw new Error(`Unsupported block category: ${block.category}`);
   }
 
   private cableHelper: CableHelper;

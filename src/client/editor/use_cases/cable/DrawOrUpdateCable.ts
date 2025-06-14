@@ -10,6 +10,10 @@ class DrawOrUpdateCable {
     this.factoryService = factoryService;
   }
 
+  finalize() {
+    this.tempCableId = undefined;
+  }
+
   updateOrCreate(from: Num3, to: Num3) {
     const cable = this.tempCableId && this.blockStore.getBlock(this.tempCableId);
 

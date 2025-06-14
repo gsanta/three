@@ -17,6 +17,24 @@ const cableSeeds: Prisma.BlockTypeUncheckedCreateInput[] = [
     categoryName: 'cables',
     decorations: ['cables'],
     path: null,
+    parts: [
+      {
+        name: 'End1',
+      },
+      {
+        name: 'End2',
+      },
+    ],
+    partDetails: {
+      End1: {
+        roles: ['pin'],
+        type: 'physical',
+      },
+      End2: {
+        roles: ['pin'],
+        type: 'physical',
+      },
+    },
     decorationData: {
       cables: {
         decoration: 'cables',

@@ -2,12 +2,12 @@ import BlockFactory from './BlockFactory';
 import BlockCreator from './BlockCreator';
 import BlockData from '@/client/editor/models/block/BlockData';
 import BlockConstantData from '@/client/editor/models/block/BlockConstantData';
-import Cable from '@/client/editor/models/block/categories/Cable';
+import CableDecorator from '@/client/editor/models/block/categories/CableDecorator';
 import mergeDeep from '@/client/editor/utils/mergeDeep';
 import { PartialDeep } from 'type-fest';
 import { BlockDecorationType, PartialBlockDecorations } from '@/client/editor/models/block/BlockDecoration';
 
-const defaultCableDecoration: Partial<Cable> = {
+const defaultCableDecoration: Partial<CableDecorator> = {
   end1: null,
   end2: null,
   points: [],
@@ -37,8 +37,8 @@ class CableFactory extends BlockFactory {
     return newDecorations;
   }
 
-  updateDecoration(orig: Cable, partial: PartialDeep<Cable>) {
-    const updated: Cable = mergeDeep<Cable>(orig, partial, 'merge');
+  updateDecoration(orig: CableDecorator, partial: PartialDeep<CableDecorator>) {
+    const updated: CableDecorator = mergeDeep<CableDecorator>(orig, partial, 'merge');
 
     return updated;
   }

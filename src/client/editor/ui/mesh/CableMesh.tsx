@@ -1,13 +1,13 @@
 import { useEffect, useMemo } from 'react';
 import { CatmullRomCurve3, Mesh, Vector3 } from 'three';
 import WrappedMeshProps from '../../models/block/WrappedMeshProps';
-import Cable from '../../models/block/categories/Cable';
+import CableDecorator from '../../models/block/categories/CableDecorator';
 import useRegisterScene from '../hooks/useRegisterScene';
 import Num3 from '../../models/math/Num3';
 import useEditorContext from '@/app/editor/useEditorContext';
 import { Select } from '@react-three/postprocessing';
 
-type CableProps = WrappedMeshProps & { cable: Cable };
+type CableProps = WrappedMeshProps & { cable: CableDecorator };
 
 const CableMesh = ({ cable, meshProps, block }: CableProps) => {
   const ref = useRegisterScene<Mesh>();

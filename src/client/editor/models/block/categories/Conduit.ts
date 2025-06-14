@@ -4,10 +4,12 @@ import BlockData from '../BlockData';
 import PoleDecorator from './PoleDecorator';
 import { WireRole } from './Pole';
 
-class Transformer extends Block {
+class Conduit extends Block {
+  static GROUND_CONNECTION_PART_NAME = 'GroundConnection';
+
   constructor(block: BlockData, blockStore: BlockStore) {
     super(block);
-    this.checkCategory('transformers');
+    this.checkCategory('conduits');
 
     this.block = block;
     this.blockStore = blockStore;
@@ -32,4 +34,4 @@ class Transformer extends Block {
   private blockStore: BlockStore;
 }
 
-export default Transformer;
+export default Conduit;

@@ -3,7 +3,7 @@ import BlockData from '@/client/editor/models/block/BlockData';
 import Edit from '../../../services/transaction/Edit';
 import BlockStore from '../../../stores/block/BlockStore';
 import BlockEraser from './BlockEraser';
-import Cable, { CableEnd } from '@/client/editor/models/block/categories/Cable';
+import CableDecorator, { CableEnd } from '@/client/editor/models/block/categories/CableDecorator';
 
 class CableEraser extends BlockEraser {
   constructor(store: BlockStore) {
@@ -12,7 +12,7 @@ class CableEraser extends BlockEraser {
   }
 
   erase(edit: Edit, block: BlockData) {
-    const cable = this.store.getDecorator('cables', block.id) as Cable;
+    const cable = this.store.getDecorator('cables', block.id) as CableDecorator;
 
     const end1 = cable.end1;
     const end2 = cable.end2;

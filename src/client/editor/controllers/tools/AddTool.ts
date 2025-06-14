@@ -17,7 +17,7 @@ import AddToAnchorAsChild from '../../use_cases/block/add/AddToAnchorAsChild';
 import GridStore from '../../stores/grid/GridStore';
 import { Vector3 } from 'three';
 import BlockTypeStore from '../../stores/blockType/BlockTypeStore';
-import Transformer from '../../models/block/categories/Transformer';
+import TransformerDecorator from '../../models/block/categories/TransformerDecorator';
 
 class AddTool extends HoverTool {
   constructor(
@@ -96,13 +96,16 @@ class AddTool extends HoverTool {
           this.addToPlain.execute({ edit, newBlockType: this.newBlockType, position: this.position });
           break;
         case 'transformers':
-          const transfomer = this.blockTypeStore.getDecoration<Transformer>(this.newBlockType.type, 'transformers');
+          const transfomer = this.blockTypeStore.getDecoration<TransformerDecorator>(
+            this.newBlockType.type,
+            'transformers',
+          );
           if (transfomer.location === 'pole-mounted') {
             if (this.targetBlock && this.targetPartName) {
               this.addToAnchorAsChild.execute({
                 edit,
                 newBlockType: this.newBlockType,
-                newBlockAnchorName: 'Join',
+                newBlockAnchorName: 'Holder',
                 to: {
                   block: this.targetBlock,
                   anchorPartName: this.targetPartName,
@@ -113,6 +116,18 @@ class AddTool extends HoverTool {
             this.addToPlain.execute({ edit, newBlockType: this.newBlockType, position: this.position });
           }
           break;
+        case 'conduits':
+          if (this.targetBlock && this.targetPartName) {
+            this.addToAnchorAsChild.execute({
+              edit,
+              newBlockType: this.newBlockType,
+              newBlockAnchorName: 'Holder',
+              to: {
+                block: this.targetBlock,
+                anchorPartName: this.targetPartName,
+              },
+            });
+          }
       }
 
       edit.commit();

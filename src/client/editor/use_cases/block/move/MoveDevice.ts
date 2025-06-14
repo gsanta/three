@@ -3,7 +3,7 @@ import MoveDecoration from './MoveDecoration';
 import Num3 from '@/client/editor/models/math/Num3';
 import Vector from '@/client/editor/models/math/Vector';
 import Device from '@/client/editor/models/block/categories/Device';
-import Cable from '@/client/editor/models/block/categories/Cable';
+import CableDecorator from '@/client/editor/models/block/categories/CableDecorator';
 
 class MoveDevice extends MoveDecoration {
   move(edit: Edit, blockId: string, dragDelta: Num3) {
@@ -22,7 +22,7 @@ class MoveDevice extends MoveDecoration {
   }
 
   private moveCable(edit: Edit, cableId: string, blockId: string, dragDelta: Num3) {
-    const cable = this.blockStore.getDecorator('cables', cableId) as Cable;
+    const cable = this.blockStore.getDecorator('cables', cableId) as CableDecorator;
 
     const index = cable.end1?.device === blockId ? 0 : cable.points.length - 1;
     const newPoints = [...cable.points];

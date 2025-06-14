@@ -1,5 +1,5 @@
 import BlockData from '@/client/editor/models/block/BlockData';
-import Cable, { CablePoint } from '@/client/editor/models/block/categories/Cable';
+import CableDecorator, { CablePoint } from '@/client/editor/models/block/categories/CableDecorator';
 import MeshWrapper from '@/client/editor/models/MeshWrapper';
 import { Vector3 } from 'three';
 import BlockStore from '../../stores/block/BlockStore';
@@ -33,7 +33,7 @@ class UpdateDeviceCable {
   }
 
   private moveCable(cableId: string, pole: BlockData): CablePoint {
-    const cable = this.store.getDecorator('cables', cableId) as Cable;
+    const cable = this.store.getDecorator('cables', cableId) as CableDecorator;
 
     let index = 0;
     let cableEnd = cable.end1;
