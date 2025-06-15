@@ -1,7 +1,6 @@
 enum ToolName {
   Add = 'add',
   Join = 'join',
-  Cable = 'cable',
   Color = 'color',
   Erase = 'erase',
   Move = 'move',
@@ -9,7 +8,7 @@ enum ToolName {
   RayHelper = 'ray-helper',
   RoomModel = 'room-model',
   Select = 'select',
-  UndergroundCable = 'underground-cable',
+  Cable = 'cable',
 }
 
 export default ToolName;

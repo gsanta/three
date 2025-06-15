@@ -2,7 +2,7 @@ import { BlockCategoryName } from '../../models/block/BlockCategoryName';
 import BlockData from '../../models/block/BlockData';
 import Grid from '../../models/Grid';
 import Num3 from '../../models/math/Num3';
-import { ConnectCable, ConnectCableFactory } from '../../services/CableConnector';
+import { ConnectCable } from '../../services/CableConnector';
 import FactoryService from '../../services/factory/FactoryService';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
@@ -34,6 +34,7 @@ class ConnectPole {
       sceneStore,
       transactionService,
     );
+
     this.connectMainWires = new ConnectMainWires(blockStore, factoryService, sceneStore, transactionService);
   }
 
@@ -100,45 +101,6 @@ class ConnectPole {
   private grid: Grid;
 
   private gridStore: GridStore;
-}
-
-export class ConnectPoleFactory implements ConnectCableFactory {
-  category: BlockCategoryName = 'poles';
-
-  constructor(
-    blockStore: BlockStore,
-    factoryService: FactoryService,
-    sceneService: SceneService,
-    sceneStore: SceneStore,
-    transactionService: TransactionService,
-  ) {
-    this.blockStore = blockStore;
-    this.factoryService = factoryService;
-    this.sceneService = sceneService;
-    this.sceneStore = sceneStore;
-    this.transactionService = transactionService;
-  }
-
-  getConnector(from: BlockData): ConnectCable {
-    return new ConnectPole(
-      from,
-      this.blockStore,
-      this.factoryService,
-      this.sceneService,
-      this.sceneStore,
-      this.transactionService,
-    );
-  }
-
-  private blockStore: BlockStore;
-
-  private factoryService: FactoryService;
-
-  private sceneStore: SceneStore;
-
-  private sceneService: SceneService;
-
-  private transactionService: TransactionService;
 }
 
 export default ConnectPole;

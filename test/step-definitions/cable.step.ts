@@ -1,9 +1,13 @@
-import { Then } from '@cucumber/cucumber';
+import { When, Then } from '@cucumber/cucumber';
 import ExtendedWorld from './ExtendedWorld';
 import assert from 'assert';
 import isPositionCloseTo, { isPositionCloseAny } from './helpers/isPositionCloseTo';
 import { checkCableEnd, checkDecorationExists, checkPosition } from './helpers/checks';
 import CableDecorator from '@/client/editor/models/block/categories/CableDecorator';
+
+When('I click finish in cable drawing panel', function (this: ExtendedWorld) {
+  this.getEnv().editorContext.cableDrawingService.finish();
+});
 
 Then(
   'cable for block {string} and pin {string} ends at position {string}',

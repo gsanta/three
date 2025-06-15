@@ -9,7 +9,7 @@ import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
 import GridStore from '../../stores/grid/GridStore';
 import SceneStore from '../../ui/scene/SceneStore';
-import DrawOrUpdateCable from './DrawOrUpdateCable';
+import DrawCable from './DrawCable';
 
 class DrawCableFromCable {
   constructor(
@@ -22,7 +22,7 @@ class DrawCableFromCable {
     this.blockStore = blockStore;
     this.sceneStore = sceneStore;
 
-    this.drawOrUpdateCable = new DrawOrUpdateCable(blockStore, factoryService, transaction);
+    this.drawOrUpdateCable = new DrawCable(blockStore, factoryService, transaction);
 
     this.grid = new Grid(gridStore);
   }
@@ -42,7 +42,7 @@ class DrawCableFromCable {
     const [toX, toZ] = this.grid.gridToWorldPos(toGridIndex);
     const to = new Vector([toX, this.undergroundDepth, toZ]);
 
-    this.drawOrUpdateCable.updateOrCreate(this.getFromPosition().get(), to.get());
+    this.drawOrUpdateCable.draw(this.getFromPosition().get(), to.get());
   }
 
   finalize() {
@@ -55,7 +55,7 @@ class DrawCableFromCable {
     const meshWrapper = new MeshWrapper(mesh);
     const to = meshWrapper.findByName(part.getPart().name).getWorldPosition();
 
-    this.drawOrUpdateCable.updateOrCreate(this.getFromPosition().get(), to.get());
+    this.drawOrUpdateCable.draw(this.getFromPosition().get(), to.get());
   }
 
   cancel() {
@@ -80,7 +80,7 @@ class DrawCableFromCable {
 
   private from: BlockData | undefined;
 
-  private drawOrUpdateCable: DrawOrUpdateCable;
+  private drawOrUpdateCable: DrawCable;
 
   private grid: Grid;
 

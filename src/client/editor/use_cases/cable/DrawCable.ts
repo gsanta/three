@@ -1,25 +1,40 @@
+import BlockData from '../../models/block/BlockData';
 import Num3 from '../../models/math/Num3';
 import FactoryService from '../../services/factory/FactoryService';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
 
-class DrawOrUpdateCable {
+export type DrawOrUpdateCableConfig = {
+  isPreview: boolean;
+};
+
+const initialConfig: Pick<BlockData, 'isPreview'> = {
+  isPreview: false,
+};
+
+class DrawCable {
   constructor(blockStore: BlockStore, factoryService: FactoryService, transaction: TransactionService) {
     this.blockStore = blockStore;
     this.transaction = transaction;
     this.factoryService = factoryService;
+
+    this.config = { ...initialConfig };
   }
 
   finalize() {
-    this.tempCableId = undefined;
+    this.cableId = undefined;
+    this.config = { ...initialConfig };
   }
 
-  updateOrCreate(from: Num3, to: Num3) {
-    const cable = this.tempCableId && this.blockStore.getBlock(this.tempCableId);
+  draw(from: Num3, to: Num3) {
+    const cable = this.cableId && this.blockStore.getBlock(this.cableId);
 
     const edit = this.transaction.createTransaction();
     if (!cable) {
       const newCable = this.factoryService.create(edit, 'cable-1', {
+        block: {
+          isPreview: this.config.isPreview,
+        },
         decorations: {
           cables: {
             points: [{ position: from }, { position: to }],
@@ -27,7 +42,7 @@ class DrawOrUpdateCable {
         },
       });
 
-      this.tempCableId = newCable.id;
+      this.cableId = newCable.id;
     } else {
       edit.updateDecoration(
         'cables',
@@ -37,20 +52,29 @@ class DrawOrUpdateCable {
         },
         { arrayMergeStrategy: 'replace' },
       );
+
+      edit.updateBlock(cable.id, this.config);
     }
     edit.commit();
   }
 
-  cancel() {
-    if (this.tempCableId) {
-      const edit = this.transaction.createTransaction();
-      edit.remove(this.tempCableId);
-      edit.commit();
-      this.tempCableId = undefined;
-    }
+  updateConfig(update: Pick<BlockData, 'isPreview'>) {
+    this.config = { ...this.config, ...update };
   }
 
-  private tempCableId?: string;
+  cancel() {
+    if (this.cableId) {
+      const edit = this.transaction.createTransaction();
+      edit.remove(this.cableId);
+      edit.commit();
+      this.cableId = undefined;
+    }
+    this.finalize();
+  }
+
+  private config: DrawOrUpdateCableConfig;
+
+  private cableId?: string;
 
   private blockStore: BlockStore;
 
@@ -59,4 +83,4 @@ class DrawOrUpdateCable {
   private transaction: TransactionService;
 }
 
-export default DrawOrUpdateCable;
+export default DrawCable;

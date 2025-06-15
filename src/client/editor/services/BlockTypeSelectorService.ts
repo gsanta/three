@@ -14,7 +14,7 @@ class BlockTypeSelectorService {
     store.dispatch(setActiveBlockType(blockType.type));
 
     if (blockType.decorations.includes('cables')) {
-      store.dispatch(setSelectedTool(ToolName.UndergroundCable));
+      store.dispatch(setSelectedTool(ToolName.Cable));
     } else {
       store.dispatch(setSelectedTool(ToolName.Add));
     }

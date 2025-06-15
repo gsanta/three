@@ -5,6 +5,8 @@ import PoleDecorator from './PoleDecorator';
 
 export type WireRole = 'L1' | 'L2' | 'L3' | 'N' | 'PE';
 
+export const wireRoleNames: WireRole[] = ['L1', 'L2', 'L3', 'N', 'PE'];
+
 export type PolePartNames = 'TransformerHolder' | WireRole;
 
 class Pole extends Block {

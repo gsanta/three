@@ -7,7 +7,7 @@ import BlockStore from '@/client/editor/stores/block/BlockStore';
 import CableDrawingService from '../../services/CableDrawingService';
 import BlockTypeStore from '../../stores/blockType/BlockTypeStore';
 
-class UndergroundCableTool extends HoverTool {
+class CableTool extends HoverTool {
   constructor(
     block: BlockStore,
     blockTypeStore: BlockTypeStore,
@@ -15,7 +15,7 @@ class UndergroundCableTool extends HoverTool {
     sceneService: SceneService,
     transaction: TransactionService,
   ) {
-    super(block, sceneService, transaction, ToolName.UndergroundCable, 'BiNetworkChart');
+    super(block, sceneService, transaction, ToolName.Cable, 'BiNetworkChart');
 
     this.blockTypeStore = blockTypeStore;
 
@@ -62,4 +62,4 @@ class UndergroundCableTool extends HoverTool {
   private cableDrawingService: CableDrawingService;
 }
 
-export default UndergroundCableTool;
+export default CableTool;

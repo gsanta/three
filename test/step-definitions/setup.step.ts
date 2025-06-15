@@ -150,20 +150,26 @@ type BlockHash = {
   BLOCK: string;
   TYPE?: string;
   POSITION?: string;
+  IS_PREVIEW?: string;
 };
 
-Then('my current scene is', function (this: ExtendedWorld, table: { hashes(): BlockHash[] }) {
+function checkScene(this: ExtendedWorld, table: { hashes(): BlockHash[] }, exact: boolean) {
   const data = table.hashes();
   const blockStore = this.getEnv().editorContext.blockStore;
 
   const blocksArray = this.getEnv().editorContext.blockStore.getBlocksAsArray();
-  if (blocksArray.length !== data.length) {
-    assert.fail(`Expected to have ${data.length} blocks in scene, got ${blocksArray.length}`);
+
+  if (exact) {
+    if (blocksArray.length !== data.length) {
+      assert.fail(`Expected to have ${data.length} blocks in scene, got ${blocksArray.length}`);
+    }
   }
 
   for (const row of data) {
     const block = blockStore.getBlock(row.BLOCK);
-    if (!block) assert.fail(`Block with id '${row.BLOCK}' does not exist in scene`);
+    if (!block) {
+      assert.fail(`Block with id '${row.BLOCK}' does not exist in scene`);
+    }
 
     if (row.TYPE && block.type !== row.TYPE) {
       assert.fail(`Expected type for block '${row.BLOCK} is ${row.TYPE}', got ${block.type}`);
@@ -181,5 +187,21 @@ Then('my current scene is', function (this: ExtendedWorld, table: { hashes(): Bl
       }
       checkPositionCloseTo.call(this, row.POSITION, actual);
     }
+
+    if (row.IS_PREVIEW) {
+      const actual = block.isPreview;
+
+      if ((row.IS_PREVIEW === 'true') !== !!actual) {
+        assert.fail(`Expected block '${row.BLOCK}' to be preview: ${row.IS_PREVIEW}, got ${actual}`);
+      }
+    }
   }
+}
+
+Then('my current scene is', function (this: ExtendedWorld, table: { hashes(): BlockHash[] }) {
+  checkScene.call(this, table, true);
+});
+
+Then('my current scene contains', function (this: ExtendedWorld, table: { hashes(): BlockHash[] }) {
+  checkScene.call(this, table, false);
 });

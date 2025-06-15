@@ -1,5 +1,5 @@
 import { ThreeEvent } from '@react-three/fiber';
-import { Object3D, Vector3 } from 'three';
+import { Object3D } from 'three';
 import TestStore from './TestStore';
 import ToolService, { ScenePointerEvent } from '@/client/editor/services/ToolService';
 import SceneStore from '@/client/editor/ui/scene/SceneStore';
@@ -32,7 +32,7 @@ class ToolHelper {
     );
   }
 
-  pointerMove({ blockId, point }: { blockId?: string; point?: Vector3 } = {}) {
+  pointerMove({ blockId, point }: Partial<Omit<ScenePointerEvent, 'blockId'> & { blockId: string }>) {
     if (!point) {
       return;
     }
@@ -52,13 +52,18 @@ class ToolHelper {
     } as ScenePointerEvent);
   }
 
-  pointerDown({ blockId }: { blockId?: string } = {}) {
+  pointerDown({ blockId }: Partial<Omit<ScenePointerEvent, 'blockId'> & { blockId: string }> = {}) {
+    const toolInfo = this.tool.getToolInfo();
+
     this.tool.onPointerDown({
       point: this.tool.getToolInfo().pos,
       clientX: 0,
       clientY: 0,
+      gridX: toolInfo.gridX,
+      gridY: toolInfo.gridY,
+      gridIndex: toolInfo.gridIndex,
       eventObject: this.getEventObject(blockId),
-    } as ThreeEvent<PointerEvent>);
+    } as ScenePointerEvent);
   }
 
   pointerUp() {

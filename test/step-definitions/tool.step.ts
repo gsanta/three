@@ -25,6 +25,9 @@ When('I select template {string}', function (this: ExtendedWorld, type: string) 
 
 When('I press pointer', function (this: ExtendedWorld) {
   this.getEnv().toolHelper.pointerDown();
+});
+
+When('I release pointer', function (this: ExtendedWorld) {
   this.getEnv().toolHelper.pointerUp();
 });
 
@@ -78,7 +81,7 @@ When('I move pointer to grid position {string}', function (this: ExtendedWorld, 
 
   const worldPos = grid.gridToWorldPos(gridIndex);
 
-  this.getEnv().toolHelper.pointerMove({ point: new Vector3(worldPos[0], 0, worldPos[1]) });
+  this.getEnv().toolHelper.pointerMove({ gridIndex, point: new Vector3(worldPos[0], 0, worldPos[1]) });
 });
 
 When("I move pointer to grid index '{int}'", function (this: ExtendedWorld, gridIndex: number) {

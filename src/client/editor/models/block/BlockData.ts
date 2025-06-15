@@ -34,8 +34,13 @@ type BlockData = {
   hoveredPart?: string;
 
   isDirty: boolean;
+
   isHovered: boolean;
+
+  isPreview: boolean;
+
   isSelected: boolean;
+
   isVisible: boolean;
 
   materialProps: MeshStandardMaterialProps;

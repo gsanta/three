@@ -12,7 +12,6 @@ import BlockUpdater from './updaters/BlockUpdater';
 import TransactionHook from './TransactionHook';
 import { updateBlocks } from '../../stores/block/blockActions';
 import { BlockUpdate, DecorationUpdate, UpdateBlocks } from '../../stores/block/blockSlice.types';
-import EditorContextType from '../../setupEditor';
 
 type EditOptions = {
   arrayMergeStrategy?: MergeStrategy;
@@ -21,17 +20,10 @@ type EditOptions = {
 const getDefaultEditOptions = () => ({ arrayMergeStrategy: 'merge' as const });
 
 class Edit {
-  constructor(
-    blockStore: BlockStore,
-    dispatchStore: Store,
-    editorContext: EditorContextType,
-    systemHooks: TransactionHook[],
-    close: () => void,
-  ) {
+  constructor(blockStore: BlockStore, dispatchStore: Store, systemHooks: TransactionHook[], close: () => void) {
     this.store = blockStore;
     this.systemHooks = systemHooks;
     this.dispatchStore = dispatchStore;
-    this.editorContext = editorContext;
 
     this.close = close;
   }
@@ -177,6 +169,10 @@ class Edit {
     return block;
   }
 
+  getUpdates() {
+    return this.updates;
+  }
+
   private mergeBlocks(orig: BlockData, update: PartialDeep<BlockData>, options: EditOptions = getDefaultEditOptions()) {
     const { arrayMergeStrategy } = options;
 
@@ -248,8 +244,6 @@ class Edit {
   private store: BlockStore;
 
   private dispatchStore: Store;
-
-  private editorContext: EditorContextType;
 
   private close: () => void;
 }

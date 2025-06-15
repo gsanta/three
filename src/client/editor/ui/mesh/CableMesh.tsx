@@ -45,6 +45,11 @@ const CableMesh = ({ cable, meshProps, block }: CableProps) => {
         ref={ref}
       >
         <tubeGeometry args={[curve, 70, 0.06, 50, false]} />
+        <meshBasicMaterial
+          color={block.isPreview ? '#ff00ff' : 'white'}
+          transparent={block.isPreview}
+          opacity={block.isPreview ? 0.1 : 1}
+        />
       </mesh>
     </Select>
   );

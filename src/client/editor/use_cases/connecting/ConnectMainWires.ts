@@ -1,6 +1,6 @@
 import { BlockCategoryName } from '../../models/block/BlockCategoryName';
 import BlockData from '../../models/block/BlockData';
-import Pole, { WireRole } from '../../models/block/categories/Pole';
+import Pole, { WireRole, wireRoleNames } from '../../models/block/categories/Pole';
 import Num3 from '../../models/math/Num3';
 import MeshWrapper from '../../models/MeshWrapper';
 import { ConnectCable } from '../../services/CableConnector';
@@ -9,7 +9,7 @@ import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
 import SceneStore from '../../ui/scene/SceneStore';
 import JoinPoles from '../block/JoinPoles';
-import DrawOrUpdateCable from '../cable/DrawOrUpdateCable';
+import DrawCable from '../cable/DrawCable';
 
 class ConnectMainWires implements ConnectCable {
   category = 'poles' as BlockCategoryName;
@@ -24,11 +24,11 @@ class ConnectMainWires implements ConnectCable {
 
     this.sceneStore = sceneStore;
 
-    this.factoryService = factoryService;
-
-    this.transactionService = transactionService;
-
     this.joinPoles = new JoinPoles(blockStore, sceneStore, factoryService, transactionService);
+
+    wireRoleNames.forEach((wireRole) => {
+      this.drawCables[wireRole] = new DrawCable(blockStore, factoryService, transactionService);
+    });
   }
 
   canConnect(candidates: BlockData[]) {
@@ -38,7 +38,8 @@ class ConnectMainWires implements ConnectCable {
   cancel() {
     this.lastPos = undefined;
     this.candidateId = undefined;
-    Object.values(this.drawOrUpdateCables).forEach((drawOrUpdateCable) => drawOrUpdateCable.cancel());
+
+    this.from?.getPoleDecorator().wires.forEach((wire) => this.drawCables[wire]?.cancel());
   }
 
   finalize(): void {
@@ -68,13 +69,7 @@ class ConnectMainWires implements ConnectCable {
     const pole = new Pole(blockData, this.blockStore);
     this.from = pole;
 
-    pole.getPoleDecorator().wires.forEach((wire) => {
-      this.drawOrUpdateCables[wire] = new DrawOrUpdateCable(
-        this.blockStore,
-        this.factoryService,
-        this.transactionService,
-      );
-    });
+    this.from?.getPoleDecorator().wires.forEach((wire) => this.drawCables[wire]?.updateConfig({ isPreview: true }));
   }
 
   update(candidates: BlockData[], fallbackPos: Num3) {
@@ -120,7 +115,7 @@ class ConnectMainWires implements ConnectCable {
     console.log(`Connecting ${this.from.getId()} wire ${wire} to ${toPos ? 'position' : 'undefined'}`, fromPos, toPos);
 
     if (toPos) {
-      this.drawOrUpdateCables[wire]?.updateOrCreate(fromPos, toPos);
+      this.drawCables[wire]?.draw(fromPos, toPos);
     }
   }
 
@@ -128,13 +123,9 @@ class ConnectMainWires implements ConnectCable {
 
   private candidateId: string | undefined;
 
-  private drawOrUpdateCables: Partial<Record<WireRole, DrawOrUpdateCable>> = {};
+  private drawCables: Partial<Record<WireRole, DrawCable>> = {};
 
   private from: Pole | undefined;
-
-  private factoryService: FactoryService;
-
-  private transactionService: TransactionService;
 
   private joinPoles: JoinPoles;
 

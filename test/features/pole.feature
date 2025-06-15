@@ -196,46 +196,54 @@ Feature: Pole
   #     | pole-1-2 | 0,-45,0     |
   #     | pole-1-3 | 0,-90,0     |
 
+  Scenario: Drawing preview cables and then finalizing it
+    Given I have a scene with:
+      | TYPE   | ID       | GRIDPOS |
+      | pole-1 | pole-1-1 | 5,0     |
+      | pole-1 | pole-1-2 | 6,0     |
+    When I select tool 'cable'
+    And I select template 'cable-1'
+    And I move pointer to grid position '5,0'
+    And I press pointer
+    And I move pointer to grid position '6,0'
+    And I wait mesh 'cable-1-1' to exist
+    Then my current scene contains
+      | BLOCK     | TYPE    | IS_PREVIEW |
+      | cable-1-1 | cable-1 | true       |
+      | cable-1-2 | cable-1 | true       |
+      | cable-1-3 | cable-1 | true       |
+      | cable-1-4 | cable-1 | true       |
+    And I release pointer
+    And I click finish in cable drawing panel
+    Then my current scene contains
+      | BLOCK     | TYPE    | IS_PREVIEW |
+      | cable-1-1 | cable-1 | false      |
+      | cable-1-2 | cable-1 | false      |
+      | cable-1-3 | cable-1 | false      |
+      | cable-1-4 | cable-1 | false      |
+      
   Scenario: Removing a pole removes the associated cables as well
     Given I have a scene with:
       | TYPE   | ID       | GRIDPOS |
       | pole-1 | pole-1-1 | 5,0     |
       | pole-1 | pole-1-2 | 6,0     |
       | pole-1 | pole-1-3 | 7,0     |
-    And I set next uuids to:
-      | UUID      | TYPE    |
-      | cable-1-1 | cable-1 |
-      | cable-1-2 | cable-1 | 
-      | cable-1-3 | cable-1 |
-      | cable-1-n | cable-1 |
-      | cable-1-1 | cable-1 |
-      | cable-1-2 | cable-1 |
-      | cable-1-3 | cable-1 |
-      | cable-1-n | cable-1 |
-      | cable-1-4 | cable-1 |
-      | cable-1-5 | cable-1 |
-      | cable-1-6 | cable-1 |
-      | cable-2-n | cable-1 |
-      | cable-1-4 | cable-1 |
-      | cable-1-5 | cable-1 |
-      | cable-1-6 | cable-1 |
-      | cable-2-n | cable-1 |
-    And I hover over block 'pole-1-1'
+    When I select tool 'cable'
+    And I select template 'cable-1'
+    And I move pointer to grid position '5,0'
     And I press pointer
-    And I execute action 'join-cable-action'
     And I move pointer to grid position '6,0'
     And I wait mesh 'cable-1-1' to exist
-    And I press pointer
-    And I wait mesh 'cable-1-1' to exist
-    And I select tool 'select'
-    And I move pointer to grid position '1,1'
-    And I press pointer
-    And I hover over block 'pole-1-2'
-    And I press pointer
-    And I execute action 'join-cable-action'
+    And I release pointer
+    And I click finish in cable drawing panel
+    When I select tool 'cable'
+    And I select template 'cable-1'
     And I move pointer to grid position '7,0'
     And I press pointer
-    And I wait mesh 'cable-1-4' to exist
+    And I move pointer to grid position '6,0'
+    And I wait mesh 'cable-1-5' to exist
+    And I release pointer
+    And I click finish in cable drawing panel
     Then my current scene is
       | BLOCK     | TYPE    | 
       | pole-1-1  | pole-1  |
@@ -244,11 +252,11 @@ Feature: Pole
       | cable-1-1 | cable-1 |
       | cable-1-2 | cable-1 |
       | cable-1-3 | cable-1 |
-      | cable-1-n | cable-1 |
       | cable-1-4 | cable-1 |
       | cable-1-5 | cable-1 |
       | cable-1-6 | cable-1 |
-      | cable-2-n | cable-1 |
+      | cable-1-7 | cable-1 |
+      | cable-1-8 | cable-1 |
     When I select tool 'erase'
     And I hover over block 'pole-1-1'
     And I press pointer
@@ -256,10 +264,10 @@ Feature: Pole
       | BLOCK     | TYPE    |
       | pole-1-2  | pole-1  |
       | pole-1-3  | pole-1  |
-      | cable-1-4 | cable-1 |
       | cable-1-5 | cable-1 |
       | cable-1-6 | cable-1 |
-      | cable-2-n | cable-1 |
+      | cable-1-7 | cable-1 |
+      | cable-1-8 | cable-1 |
     And I hover over block 'pole-1-2'
     And I press pointer
     Then my current scene is
@@ -269,19 +277,19 @@ Feature: Pole
   Scenario: Adding a transformer to a pole
     Given I have a scene with:
       | TYPE   | ID       | PARENT | POS   |
-      | pole-1 | pole-1-1 | -      | 1,0,0 |
+      | pole-2 | pole-2-1 | -      | 1,0,0 |
     And I set next uuids to:
         | UUID          | TYPE                              |
-        | transformer-1 | distribution-transformer-single-1 |
+        | transformer-1 | pole-mounted-transformer-1 |
     When I select tool 'add'
-    And I select template 'distribution-transformer-single-1'
-    And I hover over block 'pole-1-1' and part 'TransformerHolder'
+    And I select template 'pole-mounted-transformer-1'
+    And I hover over block 'pole-2-1' and part 'TransformerHolder'
     And I press pointer
     And I wait mesh 'transformer-1' to exist
     And my current scene is
-      | BLOCK         | TYPE                                | POSITION                                       |
-      | pole-1-1      | pole-1                              | -1.22, 0, -1.17                                |
-      | transformer-1 | distribution-transformer-single-1   | pole-1-1:TransformerHolder->transformer-1:Join |
+      | BLOCK         | TYPE                       | POSITION                                         |
+      | pole-2-1      | pole-2                     | -1.22, 0, -1.17                                  |
+      | transformer-1 | pole-mounted-transformer-1 | pole-2-1:TransformerHolder->transformer-1:Holder |
 
 
 

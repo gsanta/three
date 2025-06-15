@@ -2,6 +2,7 @@ import { Store } from '@/client/common/utils/store';
 import { BlockDecoratorName, BlockDecorations } from '@/client/editor/models/block/BlockDecoration';
 import BlockData from '../../models/block/BlockData';
 import { BlockCategoryName } from '../../models/block/BlockCategoryName';
+import { BlockTypeName } from '../../models/block/BlockConstantData';
 
 class BlockStore {
   constructor(store: Store) {
@@ -26,6 +27,11 @@ class BlockStore {
 
   getBlocksAsArray() {
     return Object.values(this.getState().blocks);
+  }
+
+  getBlocksByType(type: BlockTypeName) {
+    const blocks = this.getBlocksAsArray();
+    return blocks.filter((block) => block.type === type);
   }
 
   getRootBlock(blockId: string) {
