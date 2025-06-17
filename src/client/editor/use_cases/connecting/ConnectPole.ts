@@ -11,6 +11,7 @@ import SceneStore from '../../ui/scene/SceneStore';
 import SceneService from '../../ui/scene/service/SceneService';
 import ConnectLowWires from './ConnectLowWires';
 import ConnectMainWires from './ConnectMainWires';
+import ConnectToEmpty from './ConnectToEmpty';
 
 class ConnectPole {
   category = 'poles' as BlockCategoryName;
@@ -36,6 +37,8 @@ class ConnectPole {
     );
 
     this.connectMainWires = new ConnectMainWires(blockStore, factoryService, sceneStore, transactionService);
+
+    this.connectToEmpty = new ConnectToEmpty(blockStore, factoryService, sceneStore, transactionService);
   }
 
   tryStart(candidates: BlockData[]) {
@@ -51,6 +54,7 @@ class ConnectPole {
 
   cancel() {
     this.currentConnection?.cancel();
+    this.currentConnection = undefined;
   }
 
   finalize(): void {
@@ -67,7 +71,10 @@ class ConnectPole {
       throw new Error('Cannot update: no starting pole defined.');
     }
 
-    const candidates = this.gridStore.getBlocksAtGridIndex(gridIndex);
+    const candidates = this.gridStore
+      .getBlocksAtGridIndex(gridIndex)
+      .filter((candidate) => candidate.id !== this.from?.id);
+
     const [toX, toZ] = this.grid.gridToWorldPos(gridIndex);
     const fallbackPos = [toX, 0, toZ] as Num3;
 
@@ -78,7 +85,7 @@ class ConnectPole {
     } else if (this.connectMainWires.canConnect(candidates)) {
       newConnection = this.connectMainWires;
     } else {
-      newConnection = this.connectMainWires;
+      newConnection = this.connectToEmpty;
     }
 
     if (newConnection !== this.currentConnection) {
@@ -95,6 +102,8 @@ class ConnectPole {
   private connectLowWires: ConnectLowWires;
 
   private connectMainWires: ConnectMainWires;
+
+  private connectToEmpty: ConnectToEmpty;
 
   private currentConnection: ConnectCable | undefined;
 

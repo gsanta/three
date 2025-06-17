@@ -92,6 +92,10 @@ export const mergeBlocks = (
       const newPartInfo = {
         ...newBlock.partDetails[key],
         ...partial.partDetails?.[key],
+        isConnected: {
+          ...(newBlock.partDetails[key]?.isConnected || {}),
+          ...(partial.partDetails?.[key]?.isConnected || {}),
+        },
       } as BlockPartLookupData;
 
       newBlock.partDetails[key] = newPartInfo;

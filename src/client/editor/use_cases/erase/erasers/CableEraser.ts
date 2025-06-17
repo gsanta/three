@@ -6,42 +6,41 @@ import BlockEraser from './BlockEraser';
 import CableDecorator, { CableEnd } from '@/client/editor/models/block/categories/CableDecorator';
 
 class CableEraser extends BlockEraser {
-  constructor(store: BlockStore) {
+  constructor(blockStore: BlockStore) {
     super('cables');
-    this.store = store;
+    this.blockStore = blockStore;
   }
 
   erase(edit: Edit, block: BlockData) {
-    const cable = this.store.getDecorator('cables', block.id) as CableDecorator;
+    const cable = this.blockStore.getDecorator('cables', block.id) as CableDecorator;
 
     const end1 = cable.end1;
     const end2 = cable.end2;
 
     if (end1) {
-      // this.removePin(edit, cable.id, end1);
+      this.removeConnection(edit, cable.id, end1);
     }
 
     if (end2) {
-      // this.removePin(edit, cable.id, end2);
+      this.removeConnection(edit, cable.id, end2);
     }
   }
 
-  private removePin(edit: Edit, cableId: string, end: CableEnd) {
-    edit.updateDecoration(
-      'devices',
-      end.device,
-      {
-        pins: {
-          [end.partName]: {
-            wires: [cableId],
+  private removeConnection(edit: Edit, cableId: string, end: CableEnd) {
+    this.blockStore.getBlock(end.device);
+
+    edit.updateBlock(end.device, {
+      partDetails: {
+        [end.partName]: {
+          isConnected: {
+            [end.pinIndex]: false,
           },
         },
       },
-      { arrayMergeStrategy: 'exclude' },
-    );
+    });
   }
 
-  private store: BlockStore;
+  private blockStore: BlockStore;
 }
 
 export default CableEraser;

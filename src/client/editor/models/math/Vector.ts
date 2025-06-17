@@ -52,6 +52,11 @@ class Vector {
     return new Vector(newPosition);
   }
 
+  negateY(): Vector {
+    const newPosition = [this.position[0], -this.position[1], this.position[2]] as Num3;
+    return new Vector(newPosition);
+  }
+
   rotateY(angle: number): Vector {
     const result = [0, this.position[1], 0] as Num3;
     const rad = angle;

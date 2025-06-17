@@ -1,4 +1,4 @@
-import { ToolInfo } from '../../models/tool/Tool';
+import { ToolEventName, ToolInfo } from '../../models/tool/Tool';
 import ToolName from '../../models/tool/ToolName';
 import TransactionService from '../../services/transaction/TransactionService';
 import HoverTool from './HoverTool';
@@ -17,11 +17,11 @@ import AddToAnchorAsChild from '../../use_cases/block/add/AddToAnchorAsChild';
 import GridStore from '../../stores/grid/GridStore';
 import { Vector3 } from 'three';
 import BlockTypeStore from '../../stores/blockType/BlockTypeStore';
-import TransformerDecorator from '../../models/block/categories/TransformerDecorator';
+import AddTransformer from '../../use_cases/block/add/AddTransformer';
 
 class AddTool extends HoverTool {
   constructor(
-    block: BlockStore,
+    blockStore: BlockStore,
     blockTypeStore: BlockTypeStore,
     factoryService: FactoryService,
     gridStore: GridStore,
@@ -29,16 +29,17 @@ class AddTool extends HoverTool {
     sceneService: SceneService,
     update: TransactionService,
   ) {
-    super(block, sceneService, update, ToolName.Add, 'BiPlus');
+    super(blockStore, sceneService, update, ToolName.Add, 'BiPlus');
 
     this.blockTypeStore = blockTypeStore;
 
     this.gridStore = gridStore;
 
-    this.addPoles = new AddPole(block, factoryService, sceneService, sceneStore, update);
+    this.addPoles = new AddPole(blockStore, factoryService, sceneService, sceneStore, update);
     this.addToPlain = new AddToPlain(factoryService);
     this.addToAnchor = new AddToAnchor(factoryService, sceneStore);
     this.addToAnchorAsChild = new AddToAnchorAsChild(factoryService, sceneStore);
+    this.addTranformer = new AddTransformer(blockStore, blockTypeStore, factoryService, sceneStore, update);
   }
 
   onPointerUp({ pos }: ToolInfo) {
@@ -65,6 +66,13 @@ class AddTool extends HoverTool {
     this.newBlockCategory = newBlockType.category;
 
     this.add();
+  }
+
+  onMeshRendered(name: ToolEventName): void {
+    if (name === 'onPointerUp') {
+      this.activeAdder?.executeAfterRender();
+      this.activeAdder = undefined;
+    }
   }
 
   private add() {
@@ -96,25 +104,17 @@ class AddTool extends HoverTool {
           this.addToPlain.execute({ edit, newBlockType: this.newBlockType, position: this.position });
           break;
         case 'transformers':
-          const transfomer = this.blockTypeStore.getDecoration<TransformerDecorator>(
-            this.newBlockType.type,
-            'transformers',
-          );
-          if (transfomer.location === 'pole-mounted') {
-            if (this.targetBlock && this.targetPartName) {
-              this.addToAnchorAsChild.execute({
-                edit,
-                newBlockType: this.newBlockType,
-                newBlockAnchorName: 'Holder',
-                to: {
-                  block: this.targetBlock,
-                  anchorPartName: this.targetPartName,
-                },
-              });
-            }
-          } else {
-            this.addToPlain.execute({ edit, newBlockType: this.newBlockType, position: this.position });
-          }
+          this.addTranformer.execute({
+            edit,
+            newBlockType: this.newBlockType,
+            position: this.position,
+            to: {
+              block: this.targetBlock,
+              anchorPartName: this.targetPartName,
+            },
+          });
+
+          this.activeAdder = this.addTranformer;
           break;
         case 'conduits':
           if (this.targetBlock && this.targetPartName) {
@@ -152,6 +152,10 @@ class AddTool extends HoverTool {
 
     return new Vector([finalX, pos.y, finalZ]);
   }
+
+  private activeAdder: { executeAfterRender(): void } | undefined;
+
+  private addTranformer: AddTransformer;
 
   private addPoles: AddPole;
 

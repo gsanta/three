@@ -9,15 +9,17 @@ import BlockPartGeometryData from '@/client/editor/models/block/part/BlockPartGe
 import Edit from '@/client/editor/services/transaction/Edit';
 import FindNearestPart from '@/client/editor/use_cases/scene/FindNearestPart';
 
-type AddParams = {
+export type AddParams = {
   edit: Edit;
 
   newBlockType: BlockConstantData;
-  newBlockAnchorName: string;
+  newBlockAnchorName?: string;
 
-  to: {
-    block: BlockData;
-    anchorPartName: string;
+  position?: Vector;
+
+  to?: {
+    block?: BlockData;
+    anchorPartName?: string;
   };
 };
 
@@ -29,6 +31,10 @@ class AddToAnchorAsChild {
   }
 
   execute({ edit, newBlockType, newBlockAnchorName, to }: AddParams) {
+    if (!to || !to.block || !to.anchorPartName) {
+      throw new Error('Target block and anchor part name must be provided');
+    }
+
     const targetPart = to.block.parts.find((part) => part.name === to.anchorPartName);
 
     const newBlockPart = newBlockType.parts.find((part) => part.name === newBlockAnchorName);

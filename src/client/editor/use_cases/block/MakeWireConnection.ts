@@ -1,100 +1,40 @@
 import { Vector3 } from 'three';
 import BlockData from '../../models/block/BlockData';
-import BlockPart from '../../models/block/part/BlockPart';
+import BlockPartLookupData from '../../models/block/part/BlockPartLookupData';
 import Num3 from '../../models/math/Num3';
 import MeshWrapper from '../../models/MeshWrapper';
 import FactoryService from '../../services/factory/FactoryService';
-import TransactionService from '../../services/transaction/TransactionService';
-import BlockStore from '../../stores/block/BlockStore';
-import SceneStore from '../../ui/scene/SceneStore';
-import BlockPartLookupData from '../../models/block/part/BlockPartLookupData';
 import Edit from '../../services/transaction/Edit';
+import TransactionService from '../../services/transaction/TransactionService';
+import SceneStore from '../../ui/scene/SceneStore';
+import EraseBlock from '../erase/EraseBlock';
+import BlockStore from '../../stores/block/BlockStore';
 
-export type DrawOrUpdateCableConfig = {
-  isPreview: boolean;
+type WireConfig = {
+  isPreview?: boolean;
 };
 
-const initialConfig: Pick<BlockData, 'isPreview'> = {
-  isPreview: false,
-};
-
-class DrawCable {
+class MakeWireConnection {
   constructor(
     blockStore: BlockStore,
     factoryService: FactoryService,
     sceneStore: SceneStore,
     transactionService: TransactionService,
   ) {
-    this.blockStore = blockStore;
+    this.transactionService = transactionService;
     this.factoryService = factoryService;
     this.sceneStore = sceneStore;
-    this.transactionService = transactionService;
 
-    this.config = { ...initialConfig };
+    this.eraseBlock = new EraseBlock(blockStore, transactionService);
   }
 
-  finalize() {
-    this.cableId = undefined;
-    this.config = { ...initialConfig };
-  }
-
-  draw(from: Num3, to: Num3) {
-    const cable = this.cableId && this.blockStore.getBlock(this.cableId);
-
-    const edit = this.transactionService.createTransaction();
-    if (!cable) {
-      const newCable = this.factoryService.create(edit, 'cable-1', {
-        block: {
-          isPreview: this.config.isPreview,
-        },
-        decorations: {
-          cables: {
-            points: [{ position: from }, { position: to }],
-          },
-        },
-      });
-
-      this.cableId = newCable.id;
-    } else {
-      edit.updateDecoration(
-        'cables',
-        cable.id,
-        {
-          points: [{ position: from }, { position: to }],
-        },
-        { arrayMergeStrategy: 'replace' },
-      );
-
-      edit.updateBlock(cable.id, this.config);
-    }
-    edit.commit();
-  }
-
-  finish(from: { part: BlockPart; pinIndex: number }, to: { part: BlockPart; pinIndex: number }) {
-    this.joinPins(
-      { pole: from.part.getBlock().getBlock(), partName: from.part.getPart().name, pinIndex: from.pinIndex },
-      { pole: to.part.getBlock().getBlock(), partName: to.part.getPart().name, pinIndex: to.pinIndex },
-    );
-  }
-
-  updateConfig(update: Pick<BlockData, 'isPreview'>) {
-    this.config = { ...this.config, ...update };
-  }
-
-  cancel() {
-    if (this.cableId) {
-      const edit = this.transactionService.createTransaction();
-      edit.remove(this.cableId);
-      edit.commit();
-      this.cableId = undefined;
-    }
-    this.finalize();
-  }
-
-  private joinPins(
+  execute(
     join1: { pole: BlockData; partName: string; pinIndex: number },
     join2: { pole: BlockData; partName: string; pinIndex: number },
+    wireConfig: WireConfig = { isPreview: false },
   ) {
+    this.wireConfig = { ...this.wireConfig, ...wireConfig };
+
     let positions: Num3[] = [
       [0, 0, 0],
       [0, 0, 0],
@@ -108,6 +48,7 @@ class DrawCable {
       block: {
         multiParentConnections: [{ block: join1.pole.id }, { block: join2.pole.id }],
         isDirty: true,
+        isPreview: this.wireConfig.isPreview,
       },
       decorations: {
         cables: {
@@ -126,7 +67,16 @@ class DrawCable {
     this.updatePole(edit, cable, join1.pole, join1.partName, join1.pinIndex);
     this.updatePole(edit, cable, join2.pole, join2.partName, join2.pinIndex);
 
-    edit.commit();
+    this.wireId = cable.id;
+  }
+
+  undo() {
+    if (!this.wireId) {
+      return;
+    }
+
+    this.eraseBlock.erase([this.wireId]);
+    this.wireId = undefined;
   }
 
   private updatePole(edit: Edit, cable: BlockData, pole: BlockData, partName: string, pinIndex: number) {
@@ -161,17 +111,17 @@ class DrawCable {
     return [pos1.toArray(), pos2.toArray()];
   }
 
-  private config: DrawOrUpdateCableConfig;
+  private eraseBlock: EraseBlock;
 
-  private cableId?: string;
-
-  private blockStore: BlockStore;
+  private wireId?: string;
 
   private factoryService: FactoryService;
 
   private sceneStore: SceneStore;
 
   private transactionService: TransactionService;
+
+  private wireConfig: WireConfig = { isPreview: false };
 }
 
-export default DrawCable;
+export default MakeWireConnection;

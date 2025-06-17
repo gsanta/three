@@ -30,7 +30,7 @@ export interface ToolInfo {
   partName?: string;
 }
 
-export type ToolEventName = 'onPointerMove';
+export type ToolEventName = 'onPointerMove' | 'onPointerUp';
 
 abstract class Tool {
   name: ToolName;

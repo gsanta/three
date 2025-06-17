@@ -86,6 +86,8 @@ const transformerSeeds: Partial<BlockType>[] = [
       transformers: {
         decoration: 'transformers',
         location: 'pad-mounted',
+        primaryWires: ['L1', 'L2', 'L3'],
+        secondaryWires: ['T1', 'T2', 'T3', 'N'],
       },
     },
     type: 'pad-mounted-transformer-1',
@@ -108,27 +110,45 @@ const transformerSeeds: Partial<BlockType>[] = [
         scale: [0.321, 0.042, 0.048],
       },
       {
-        name: 'N',
+        name: 'L1',
         materialPath: 'Palette',
-        position: [0.453, -0.103, 0.001],
-        scale: [0.059, 0.059, 0.063],
-      },
-      {
-        name: 'L3',
-        materialPath: 'Palette',
-        position: [0.212, -0.103, 0.001],
+        position: [-0.539, 1.513, 0.001],
         scale: [0.059, 0.059, 0.063],
       },
       {
         name: 'L2',
         materialPath: 'Palette',
-        position: [-0.22, -0.103, 0.001],
+        position: [-0.054, 1.51, 0.001],
         scale: [0.059, 0.059, 0.063],
       },
       {
-        name: 'L1',
+        name: 'L3',
+        materialPath: 'Palette',
+        position: [0.446, 1.513, 0.001],
+        scale: [0.059, 0.059, 0.063],
+      },
+      {
+        name: 'T1',
         materialPath: 'Palette',
         position: [-0.539, -0.103, 0.001],
+        scale: [0.059, 0.059, 0.063],
+      },
+      {
+        name: 'T2',
+        materialPath: 'Palette',
+        position: [-0.208, -0.103, 0.001],
+        scale: [0.059, 0.059, 0.063],
+      },
+      {
+        name: 'T3',
+        materialPath: 'Palette',
+        position: [0.155, -0.103, 0.001],
+        scale: [0.059, 0.059, 0.063],
+      },
+      {
+        name: 'N',
+        materialPath: 'Palette',
+        position: [0.482, -0.103, 0.001],
         scale: [0.059, 0.059, 0.063],
       },
     ],
@@ -145,6 +165,18 @@ const transformerSeeds: Partial<BlockType>[] = [
         roles: ['pin'],
         type: 'physical',
       },
+      T1: {
+        roles: ['pin'],
+        type: 'physical',
+      },
+      T2: {
+        roles: ['pin'],
+        type: 'physical',
+      },
+      T3: {
+        roles: ['pin'],
+        type: 'physical',
+      },
       N: {
         roles: ['pin'],
         type: 'physical',
@@ -154,10 +186,8 @@ const transformerSeeds: Partial<BlockType>[] = [
       transformers: {
         decoration: 'transformers',
         location: 'pole-mounted',
-      },
-      poles: {
-        decoration: 'poles',
-        wires: ['L1', 'L2', 'L3', 'N'],
+        primaryWires: ['L1', 'L2', 'L3'],
+        secondaryWires: ['T1', 'T2', 'T3', 'N'],
       },
     },
     type: 'pole-mounted-transformer-1',

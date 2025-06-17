@@ -1,7 +1,7 @@
 import Edit from './Edit';
 import BlockStore from '../../stores/block/BlockStore';
 import { Store } from '@/client/common/utils/store';
-import Device from '../../models/block/categories/Device';
+import Device from '../../models/block/categories/Device2';
 import TransactionHook from './TransactionHook';
 import EditorContextType from '../../setupEditor';
 

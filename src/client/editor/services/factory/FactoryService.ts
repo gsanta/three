@@ -20,7 +20,7 @@ class FactoryService {
       block?: Partial<BlockData>;
       decorations?: PartialBlockDecorations;
     },
-  ) {
+  ): BlockData | undefined {
     const template = this.blockTypeStore.getBlockType(templateName);
 
     if (!template) {

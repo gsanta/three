@@ -1,8 +1,8 @@
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import Block from '../Block';
 import BlockData from '../BlockData';
-import PoleDecorator from './PoleDecorator';
-import { WireRole } from './Pole';
+import TransformerDecorator from './TransformerDecorator';
+import ElectricDevice from './ElectricDevice';
 
 class Transformer extends Block {
   constructor(block: BlockData, blockStore: BlockStore) {
@@ -11,25 +11,21 @@ class Transformer extends Block {
 
     this.block = block;
     this.blockStore = blockStore;
+
+    this.electricDevice = new ElectricDevice(block);
   }
 
-  getPoleDecorator(): PoleDecorator {
-    return this.blockStore.getDecorator('poles', this.block.id) as PoleDecorator;
+  getTransformerDecorator(): TransformerDecorator {
+    return this.blockStore.getDecorator('transformers', this.block.id) as TransformerDecorator;
   }
 
-  getFirstEmptyPin(partName: WireRole): number | undefined {
-    if (this.isPinEmpty(partName, 0)) {
-      return 0;
-    }
-
-    return undefined;
-  }
-
-  isPinEmpty(partName: WireRole, pinIndex: number): boolean {
-    return this.block.partDetails[partName]?.isConnected[pinIndex] === false;
+  getAsElectricDevice(): ElectricDevice {
+    return this.electricDevice;
   }
 
   private blockStore: BlockStore;
+
+  private electricDevice: ElectricDevice;
 }
 
 export default Transformer;

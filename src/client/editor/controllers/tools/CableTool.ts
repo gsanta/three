@@ -38,10 +38,6 @@ class CableTool extends HoverTool {
     if (this.cableDrawingService.isDrawing()) {
       this.cableDrawingService.udpate(info.gridIndex);
     }
-
-    // const [worldX, worldZ] = this.grid.gridToWorldPos(info.gridIndex);
-    // const worldPos = new Vector([worldX, this.undergroundDepth, worldZ]);
-    // this.drawUndergroundCable?.execute(worldPos);
   }
 
   onPointerDown(info: ToolInfo): void {

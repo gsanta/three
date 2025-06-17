@@ -1,15 +1,5 @@
 import FactoryService from '@/client/editor/services/factory/FactoryService';
-import Edit from '@/client/editor/services/transaction/Edit';
-import BlockConstantData from '@/client/editor/models/block/BlockConstantData';
-import Vector from '@/client/editor/models/math/Vector';
-
-type AddParams = {
-  edit: Edit;
-
-  newBlockType: BlockConstantData;
-
-  position: Vector;
-};
+import { AddParams } from './AddToAnchorAsChild';
 
 class AddToPlain {
   constructor(factoryService: FactoryService) {
@@ -17,10 +7,14 @@ class AddToPlain {
   }
 
   execute({ edit, newBlockType, position }: AddParams) {
-    this.factoryService.create(edit, newBlockType.type, { block: { position: position.get() } });
+    if (!position) {
+      throw new Error('Position must be provided for adding to plain');
+    }
+
+    const block = this.factoryService.create(edit, newBlockType.type, { block: { position: position.get() } });
     edit.select([edit.getLastBlock()]);
 
-    return edit;
+    return block;
   }
 
   private factoryService: FactoryService;

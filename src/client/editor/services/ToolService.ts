@@ -109,6 +109,8 @@ class ToolService {
     this.getTool(selectedTool)?.onPointerUp(this.info);
     this.info.isDragHappened = false;
     this.info.downPos = undefined;
+
+    this.meshRendered.onPointerUp = true;
   }
 
   onDrag(delta: Vector3) {
@@ -190,6 +192,7 @@ class ToolService {
 
   private meshRendered: Record<ToolEventName, boolean> = {
     onPointerMove: false,
+    onPointerUp: false,
   };
 }
 

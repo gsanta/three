@@ -2,7 +2,7 @@ import Edit from '@/client/editor/services/transaction/Edit';
 import MoveDecoration from './MoveDecoration';
 import Num3 from '@/client/editor/models/math/Num3';
 import Vector from '@/client/editor/models/math/Vector';
-import Device from '@/client/editor/models/block/categories/Device';
+import Device from '@/client/editor/models/block/categories/Device2';
 import CableDecorator from '@/client/editor/models/block/categories/CableDecorator';
 
 class MoveDevice extends MoveDecoration {
