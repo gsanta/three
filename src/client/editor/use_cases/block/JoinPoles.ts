@@ -7,6 +7,7 @@ import Pole from '../../models/block/categories/Pole';
 import Transformer from '../../models/block/categories/Transformer';
 import AutoRotatePoles from './AutoRotatePoles';
 import MakeWireConnection from './MakeWireConnection';
+import CableHelper from './CableHelper';
 
 type ConnectPolesConfig = {
   isPreview?: boolean;
@@ -22,6 +23,8 @@ class JoinPoles {
     this.autoRotatePoles = new AutoRotatePoles(blockStore, transactionService);
 
     this.blockStore = blockStore;
+
+    this.cableHelper = new CableHelper(blockStore);
 
     this.factoryService = factoryService;
 
@@ -63,7 +66,12 @@ class JoinPoles {
     const edit = this.transactionService.createTransaction();
 
     if (pole2) {
-      this.autoRotatePoles.execute(from, pole2);
+      const secondNeighborPole = this.cableHelper.findClosestWithCategory(to.getBlock(), 'poles');
+      this.autoRotatePoles.execute(
+        from,
+        pole2,
+        secondNeighborPole ? new Pole(secondNeighborPole, this.blockStore) : undefined,
+      );
     }
 
     this.makeWireConnectionList = Array.from({ length: block1Wires.length }).map(
@@ -122,6 +130,8 @@ class JoinPoles {
   }
 
   private autoRotatePoles: AutoRotatePoles;
+
+  private cableHelper: CableHelper;
 
   private connectPolesConfig: ConnectPolesConfig = { isPreview: false };
 

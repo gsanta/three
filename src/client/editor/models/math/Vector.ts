@@ -47,6 +47,11 @@ class Vector {
     return new Vector(newPosition);
   }
 
+  addZ(amount: number): Vector {
+    const newPosition = [this.position[0], this.position[1], this.position[2] + amount] as Num3;
+    return new Vector(newPosition);
+  }
+
   negate(): Vector {
     const newPosition = this.get().map((val) => -val) as Num3;
     return new Vector(newPosition);

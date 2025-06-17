@@ -12,80 +12,102 @@ class AutoRotatePoles {
     this.transactionService = transactionService;
   }
 
-  execute(newPole: Pole, neighborPole: Pole) {
-    const neighborNeighborPole = this.cableHelper.getSibling(neighborPole.getBlock(), 0);
-
-    if (!neighborNeighborPole) {
-      return;
-    }
-
+  execute(newPole: Pole, neighborPole: Pole, secondNeighborPole?: Pole) {
     this.neighborPoleId = neighborPole.getId();
     this.newPoleId = newPole.getId();
 
-    const [pos1, pos2, pos3] = [
-      neighborNeighborPole.position,
-      neighborPole.getBlock().position,
-      newPole.getBlock().position,
-    ];
+    const newPolePos = newPole.getBlock().position;
+    const neighborPolePos = neighborPole.getBlock().position;
+    const secondNeighborPolePos = secondNeighborPole?.getBlock().position;
 
-    const line1 = new Vector(pos1).subXZ(new Vector(pos2)).get();
-    const line2 = new Vector(pos2).subXZ(new Vector(pos3)).get();
-    const angle = -new Vector(line1).angle2(new Vector(line2));
-
-    const halfAngle = angle / 2;
+    const yRotation = secondNeighborPolePos
+      ? this.getYRotationFromThreePoints(newPolePos, neighborPolePos, secondNeighborPolePos)
+      : this.getYRotationFromTwoPoints(newPolePos, neighborPolePos);
 
     const edit = this.transactionService.getOrCreateActiveTransaction();
 
-    this.neighborPoleRotation = [
+    const neighborPoleNewRotation = [
       neighborPole.getBlock().rotation[0],
-      neighborPole.getBlock().rotation[1] + Vector.toRadian(halfAngle),
+      neighborPole.getBlock().rotation[1] + yRotation,
       neighborPole.getBlock().rotation[2],
     ] as Num3;
 
+    this.neighborPoleOrigRotation = neighborPole.getBlock().rotation;
+
     edit.updateBlock(neighborPole.getId(), {
-      rotation: this.neighborPoleRotation,
+      rotation: neighborPoleNewRotation,
     });
 
     neighborPole.getBlock().conduitConnections.forEach((conn) => {
       edit.updateBlock(conn.block, { isDirty: true });
     });
 
-    this.newPoleRotation = [
+    this.newPoleOrigRotation = newPole.getBlock().rotation;
+
+    const newPoleNewRotation = [
       newPole.getBlock().rotation[0],
-      this.neighborPoleRotation[1] + Vector.toRadian(halfAngle),
+      this.neighborPoleOrigRotation[1] + yRotation,
       newPole.getBlock().rotation[2],
     ] as Num3;
 
     edit.updateBlock(newPole.getId(), {
-      rotation: this.newPoleRotation,
+      rotation: newPoleNewRotation,
     });
   }
 
   undo() {
-    const edit = this.transactionService.getOrCreateActiveTransaction();
-
     if (!this.neighborPoleId || !this.newPoleId) {
       return;
     }
 
+    const edit = this.transactionService.getOrCreateActiveTransaction();
+
     edit.updateBlock(this.neighborPoleId, {
-      rotation: new Vector(this.neighborPoleRotation).negateY().get(),
+      rotation: new Vector(this.neighborPoleOrigRotation).negateY().get(),
     });
 
     edit.updateBlock(this.newPoleId, {
-      rotation: new Vector(this.newPoleRotation).negateY().get(),
+      rotation: new Vector(this.newPoleOrigRotation).negateY().get(),
     });
 
     edit.commit();
+  }
+
+  private getYRotationFromThreePoints(point1: Num3, point2: Num3, point3: Num3) {
+    const line1 = new Vector(point1).subXZ(new Vector(point2)).get();
+    const line2 = new Vector(point2).subXZ(new Vector(point3)).get();
+    const angle = -new Vector(line1).angle2(new Vector(line2));
+
+    const halfAngle = angle / 2;
+
+    return Vector.toRadian(halfAngle);
+  }
+
+  private getYRotationFromTwoPoints(point1: Num3, point2: Num3) {
+    const line1 =
+      point2[2] < point1[2]
+        ? new Vector(point1).subXZ(new Vector(point2)).get()
+        : new Vector(point2).subXZ(new Vector(point1)).get();
+    const line2 = [0, 0, 1] as Num3;
+
+    return this.getLine(line1, line2);
+  }
+
+  private getLine(line1: Num3, line2: Num3) {
+    const angle = -new Vector(line1).angle2(new Vector(line2));
+
+    const halfAngle = angle / 2;
+
+    return Vector.toRadian(halfAngle);
   }
 
   private neighborPoleId: string | undefined;
 
   private newPoleId: string | undefined;
 
-  private neighborPoleRotation: Num3 | undefined;
+  private neighborPoleOrigRotation: Num3 | undefined;
 
-  private newPoleRotation: Num3 | undefined;
+  private newPoleOrigRotation: Num3 | undefined;
 
   private cableHelper: CableHelper;
 
