@@ -36,6 +36,11 @@ When('I press pointer over block {string}', function (this: ExtendedWorld, block
   this.getEnv().toolHelper.pointerUp();
 });
 
+When('I click pointer', function (this: ExtendedWorld) {
+  this.getEnv().toolHelper.pointerDown();
+  this.getEnv().toolHelper.pointerUp();
+});
+
 When(
   'I press pointer over block {string} and part {string} at position {string}',
   function (this: ExtendedWorld, blockId: string, partName: string, position: string) {

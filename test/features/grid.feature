@@ -7,15 +7,13 @@ Feature: Grid
       | BLOCK  | GRIDINDEX |
       | pole-1 | 10        |
 
+  @only
   Scenario: Adding a block sets the grid properties
     When I select tool 'add'
     And I select template 'two-story-house-1'
-    And I set next uuids to:
-      | UUID    | TYPE              |
-      | house-1 | two-story-house-1 |
     And I move pointer to grid position '5,5'
-    And I press pointer
-    And I wait mesh 'house-1' to exist
+    And I click pointer
+    And I wait mesh 'two-story-house-1-1' to exist
     Then the current grid scene is:
       | BLOCK   | GRIDPOS |
       | house-1 | 5,5     |

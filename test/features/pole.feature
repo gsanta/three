@@ -80,17 +80,12 @@ Feature: Pole
     Given I have a scene with:
       | TYPE   | ID       | PARENT | GRIDPOS |
       | pole-1 | pole-1-1 | -      | 5,0     |
-    When I select tool 'select'
-    And I set next uuids to:
-      | UUID      | TYPE    |
-      | cable-1-1 | cable-1 |
-      | cable-1-2 | cable-1 |
-      | cable-1-3 | cable-1 |
-      | cable-1-4 | cable-1 |
+    When I select tool 'cable'
+    And I select template 'cable-1'
     And I hover over block 'pole-1-1'
+    And I move pointer to grid position '5,0'
     And I press pointer
-    And I execute action 'join-cable-action'
-    And I move pointer to grid position '5,1'
+    And I move pointer to grid position '6,0'
     And I wait block 'cable-1-1' to exist
     Then my current scene is
       | BLOCK     | TYPE    |
@@ -99,29 +94,25 @@ Feature: Pole
       | cable-1-2 | cable-1 |
       | cable-1-3 | cable-1 |
       | cable-1-4 | cable-1 |
-    When I select tool 'add'
+    When I click cancel on the cable drawing panel
     And I wait block 'cable-1-1' not to exist
     Then my current scene is
       | BLOCK     | TYPE    |
       | pole-1-1  | pole-1  |
-
+  
   Scenario: Submitting cabling action makes connection to another poles
     Given I have a scene with:
       | TYPE   | ID       | PARENT | GRIDPOS |
       | pole-1 | pole-1-1 | -      | 5,0     |
       | pole-1 | pole-1-2 | -      | 6,0     |
-    When I select tool 'select'
-    And I set next uuids to:
-      | UUID      | TYPE    |
-      | cable-1-1 | cable-1 |
-      | cable-1-2 | cable-1 |
-      | cable-1-3 | cable-1 |
-      | cable-1-4 | cable-1 |
+    When I select tool 'cable'
+    And I select template 'cable-1'
     And I hover over block 'pole-1-1'
+    And I move pointer to grid position '5,0'
     And I press pointer
-    And I execute action 'join-cable-action'
     And I move pointer to grid position '6,0'
     And I wait mesh 'cable-1-1' to exist
+    And I click finish on the cable drawing panel
     Then I have cables with properties
       | CABLE     | END1              | END2              |
       | cable-1-1 | block:pole-1-1,L1 | block:pole-1-2,L1 |
@@ -144,18 +135,14 @@ Feature: Pole
       | TYPE              | ID        | GRIDPOS |
       | pole-1            | pole-1-1  | 5,0     |
       | two-story-house-1 | house-1-1 | 6,0     |
-    When I select tool 'select'
-    And I set next uuids to:
-      | UUID             | TYPE           |
-      | cable-1-1        | cable-1        |
-      | weather-head-1-1 | weather-head-1 |
+    When I select tool 'cable'
+    And I select template 'cable-1'
     And I hover over block 'pole-1-1'
+    And I move pointer to grid position '5,0'
     And I press pointer
-    And I execute action 'join-cable-action'
     And I move pointer to grid position '6,0'
     And I wait mesh 'cable-1-1' to exist
-    And I press pointer
-    And I select tool 'add'
+    And I click finish on the cable drawing panel
     Then my current scene is
       | BLOCK            | TYPE              |
       | pole-1-1         | pole-1            |
@@ -214,7 +201,7 @@ Feature: Pole
       | cable-1-3 | cable-1 | true       |
       | cable-1-4 | cable-1 | true       |
     And I release pointer
-    And I click finish in cable drawing panel
+    And I click finish on the cable drawing panel
     Then my current scene contains
       | BLOCK     | TYPE    | IS_PREVIEW |
       | cable-1-1 | cable-1 | false      |
@@ -235,7 +222,7 @@ Feature: Pole
     And I move pointer to grid position '6,0'
     And I wait mesh 'cable-1-1' to exist
     And I release pointer
-    And I click finish in cable drawing panel
+    And I click finish on the cable drawing panel
     When I select tool 'cable'
     And I select template 'cable-1'
     And I move pointer to grid position '7,0'
@@ -243,7 +230,7 @@ Feature: Pole
     And I move pointer to grid position '6,0'
     And I wait mesh 'cable-1-5' to exist
     And I release pointer
-    And I click finish in cable drawing panel
+    And I click finish on the cable drawing panel
     Then my current scene is
       | BLOCK     | TYPE    | 
       | pole-1-1  | pole-1  |
@@ -278,18 +265,18 @@ Feature: Pole
     Given I have a scene with:
       | TYPE   | ID       | PARENT | POS   |
       | pole-2 | pole-2-1 | -      | 1,0,0 |
-    And I set next uuids to:
-        | UUID          | TYPE                              |
-        | transformer-1 | pole-mounted-transformer-1 |
     When I select tool 'add'
     And I select template 'pole-mounted-transformer-1'
     And I hover over block 'pole-2-1' and part 'TransformerHolder'
-    And I press pointer
-    And I wait mesh 'transformer-1' to exist
+    And I click pointer
+    And I wait mesh 'pole-mounted-transformer-1-1' to exist
     And my current scene is
-      | BLOCK         | TYPE                       | POSITION                                         |
-      | pole-2-1      | pole-2                     | -1.22, 0, -1.17                                  |
-      | transformer-1 | pole-mounted-transformer-1 | pole-2-1:TransformerHolder->transformer-1:Holder |
+      | BLOCK                        | TYPE                       | POSITION                                                        | 
+      | pole-2-1                     | pole-2                     | -1.22, 0, -1.17                                                 |
+      | pole-mounted-transformer-1-1 | pole-mounted-transformer-1 | pole-2-1:TransformerHolder->pole-mounted-transformer-1-1:Holder |
+      | cable-1-1                    | cable-1                    |                                                                 |
+      | cable-1-2                    | cable-1                    |                                                                 |
+      | cable-1-3                    | cable-1                    |                                                                 |
 
 
 

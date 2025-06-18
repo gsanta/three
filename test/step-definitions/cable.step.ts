@@ -5,8 +5,12 @@ import isPositionCloseTo, { isPositionCloseAny } from './helpers/isPositionClose
 import { checkCableEnd, checkDecorationExists, checkPosition } from './helpers/checks';
 import CableDecorator from '@/client/editor/models/block/categories/CableDecorator';
 
-When('I click finish in cable drawing panel', function (this: ExtendedWorld) {
+When('I click finish on the cable drawing panel', function (this: ExtendedWorld) {
   this.getEnv().editorContext.cableDrawingService.finish();
+});
+
+When('I click cancel on the cable drawing panel', function (this: ExtendedWorld) {
+  this.getEnv().editorContext.cableDrawingService.cancel();
 });
 
 Then(
