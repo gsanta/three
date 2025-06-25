@@ -14,7 +14,7 @@ export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);
 
-    const user = await db.user.findUnique({ where: { email: session?.user?.email || '' } });
+    const user = await db.user.findUniqueOrThrow({ where: { email: session?.user?.email || '' } });
 
     const body = await req.json();
     const { name, state, snapshotId } = body as SnapshotRequest;
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
       },
       create: {
         name: name,
-        userId: user?.id,
+        userId: user.id,
         state: state,
       },
     });
