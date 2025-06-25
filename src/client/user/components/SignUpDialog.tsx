@@ -57,7 +57,7 @@ const SignUpDialog = () => {
             Close
           </button>
           <form onSubmit={handleSubmit(registerEmail)}>
-            <button className={`btn btn-primary`} type="submit">
+            <button className={`btn btn-primary ${isRegisterEmailLoading ? 'btn-disabled' : ''}`} type="submit">
               {isRegisterEmailLoading ? <span className="loading loading-spinner" /> : `Sign up`}
             </button>
           </form>

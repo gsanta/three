@@ -1,8 +1,7 @@
 import { ServerError } from '@/client/common/components/lib/ErrorMessage';
 import api from '@/client/common/utils/api';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { AxiosError, AxiosResponse } from 'axios';
-import { useEffect } from 'react';
 import useEditorContext from '@/app/editor/useEditorContext';
 
 type LoadSnapshotResponse = {
@@ -10,25 +9,30 @@ type LoadSnapshotResponse = {
 };
 
 const useLoadSnapshot = () => {
-  const { importer } = useEditorContext();
+  const { serializer } = useEditorContext();
 
-  const { data, error, isPending, refetch } = useQuery<AxiosResponse<LoadSnapshotResponse>, AxiosError<ServerError>>({
-    queryKey: ['snapshot'],
-    queryFn: async () => {
-      const resp = await api.get('/api/snapshot');
+  const { mutateAsync, error, isPending } = useMutation<
+    AxiosResponse<LoadSnapshotResponse>,
+    AxiosError<ServerError>,
+    { id: string }
+  >({
+    mutationFn: async ({ id }) => {
+      const resp = await api.get(`/api/snapshots/${id}`);
       return resp;
     },
   });
 
-  useEffect(() => {
-    if (data?.data.state) {
-      importer.import(data.data.state);
+  const handleLoad = async (id: string) => {
+    try {
+      const response = await mutateAsync({ id });
+      serializer.import(JSON.parse(response.data.state));
+    } catch (err) {
+      // Prevent the error from bubbling up
     }
-  }, [data, importer]);
+  };
 
   return {
-    refetchSnapshot: refetch,
-    snapshot: data,
+    load: handleLoad,
     loadSnapshotError: error,
     isLoadSnapshotPending: isPending,
   };

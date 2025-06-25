@@ -2,6 +2,7 @@ import { PayloadAction, createSlice, current } from '@reduxjs/toolkit';
 import {
   clearAll,
   historyAction,
+  importAction,
   redoAction,
   resetNotifyOnRendered,
   undoAction,
@@ -96,6 +97,10 @@ export const blockSlice = createSlice({
       const previousState = history.redo(structuredClone(current(state)));
 
       overwriteState(state, previousState);
+    });
+
+    builder.addCase(importAction, (state, action) => {
+      overwriteState(state, action.payload.block);
     });
     // if (previousState) {
     //   state.rootBlocksIds = previousState.rootBlocksIds;

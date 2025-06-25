@@ -1,5 +1,5 @@
 import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
-import { historyAction, redoAction, undoAction, updateBlocks } from '../block/blockActions';
+import { historyAction, importAction, redoAction, undoAction, updateBlocks } from '../block/blockActions';
 import HistoryStorage from '../utils/HistoryStorage';
 
 export type GameState = {
@@ -75,6 +75,10 @@ export const gameSlice = createSlice({
       const previousState = history.redo(structuredClone(current(state)));
 
       overwriteState(state, previousState);
+    });
+
+    builder.addCase(importAction, (state, action) => {
+      overwriteState(state, action.payload.game);
     });
   },
 });

@@ -3,8 +3,7 @@ import { store } from '../common/utils/store';
 import SceneStore from './ui/scene/SceneStore';
 import SceneService from './ui/scene/service/SceneService';
 import SceneServiceImpl from './ui/scene/service/SceneServiceImpl';
-import ExportJson from './controllers/io/ExportJson';
-import ImportJson from './controllers/io/ImportJson';
+import Serializer from './controllers/serializer/Serializer';
 import ControllerService from './services/controller/ControllerService';
 import EraserService from './services/EraserService';
 import FactoryService from './services/factory/FactoryService';
@@ -30,6 +29,9 @@ import BlockTypeSelectorService from './services/BlockTypeSelectorService';
 import BlockTypeStore from './stores/blockType/BlockTypeStore';
 import CableTool from './controllers/tools/CableTool';
 import CableDrawingService from './services/CableDrawingService';
+import BlockSerializer from './stores/block/BlockSerializer';
+import GameSerializer from './stores/game/GameSerializer';
+import GridSerializer from './stores/grid/GridSerializer';
 
 type EditorContextType = {
   blockStore: BlockStore;
@@ -40,10 +42,9 @@ type EditorContextType = {
   eraser: EraserService;
   gridStore: GridStore;
   tool: ToolService;
-  exporter: ExportJson;
-  importer: ImportJson;
   sceneStore: SceneStore;
   sceneService: SceneService;
+  serializer: Serializer;
   update: UpdateService;
 
   controllers: {
@@ -121,9 +122,8 @@ export const setupEditor = () => {
     cableDrawingService,
     controller: new ControllerService(transactionService),
     eraser: new EraserService(blockStore, transactionService),
-    exporter: new ExportJson(store),
+    serializer: new Serializer(store, new BlockSerializer(store), new GameSerializer(store), new GridSerializer(store)),
     gridStore: gridStore,
-    importer: new ImportJson(store),
     sceneStore: sceneStore,
     sceneService: sceneService,
     tool: toolService,

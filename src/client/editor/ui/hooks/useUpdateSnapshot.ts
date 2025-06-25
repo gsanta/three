@@ -6,12 +6,12 @@ import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { MutableRefObject } from 'react';
 
-const useCreateSnapshot = (toastRef: MutableRefObject<ToastRef>) => {
+const useUpdateSnapshot = (toastRef: MutableRefObject<ToastRef>) => {
   const { serializer } = useEditorContext();
 
-  const { mutate, error, isPending } = useMutation<unknown, AxiosError<ServerError>, { name: string; state: string }>({
-    mutationFn: async (data) => {
-      const resp = await api.post('/api/snapshots', data);
+  const { mutate, error, isPending } = useMutation<unknown, AxiosError<ServerError>, { id: string; state: string }>({
+    mutationFn: async ({ id, state }) => {
+      const resp = await api.patch(`/api/snapshots/${id}`, { state });
       return resp;
     },
     onSuccess() {
@@ -19,15 +19,16 @@ const useCreateSnapshot = (toastRef: MutableRefObject<ToastRef>) => {
     },
   });
 
-  const handleMutate = (name: string) => {
-    mutate({ name, state: JSON.stringify(serializer.export()) });
+  const handleMutate = (id: string) => {
+    mutate({ id, state: JSON.stringify(serializer.export()) });
   };
 
   return {
     mutate: handleMutate,
     error,
     isPending,
+    toastRef,
   };
 };
 
-export default useCreateSnapshot;
+export default useUpdateSnapshot;

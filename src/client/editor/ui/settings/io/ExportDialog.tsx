@@ -6,7 +6,7 @@ import useEditorContext from '@/app/editor/useEditorContext';
 const ExportDialog = () => {
   const [selectedFileType, setSelectedFileType] = useState<FileType>(FileType.json);
 
-  const { exporter } = useEditorContext();
+  const { serializer: exporter } = useEditorContext();
 
   const closeDialog = () => {
     const dialog = document.getElementById('export-dialog') as HTMLDialogElement;

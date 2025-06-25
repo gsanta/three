@@ -6,7 +6,8 @@ import { useSession } from 'next-auth/react';
 
 type UseSnapshotsResponse = {
   items: {
-    state: string;
+    id: string;
+    name: string;
   }[];
 };
 

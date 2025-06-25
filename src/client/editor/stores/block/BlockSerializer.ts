@@ -1,20 +1,18 @@
-import { Store } from '@/client/common/utils/store';
+import { Store } from '@reduxjs/toolkit';
 import BlockData from '../../models/block/BlockData';
-import { BlockState } from '../../stores/block/blockSlice.types';
 import BlockPartLookupData from '../../models/block/part/BlockPartLookupData';
+import { BlockState } from './blockSlice.types';
 
-class ExportJson {
+class BlockSerializer {
+  sliceName = 'block';
+
   constructor(store: Store) {
     this.store = store;
   }
 
-  export(): { city: BlockState } {
-    return {
-      city: this.exportBlockState(this.store.getState().block),
-    };
-  }
+  export(): BlockState {
+    const blockState = this.store.getState().block;
 
-  private exportBlockState(blockState: BlockState) {
     const blocks: (typeof blockState)['blocks'] = {};
 
     Object.keys(blockState.blocks).forEach((blockId) => {
@@ -46,13 +44,11 @@ class ExportJson {
       blocks,
       decorations: blockState.decorations,
       rootBlocksIds: blockState.rootBlocksIds,
-      selectedRootBlockIds: [],
       selectedBlocks: [],
-      selectedPartIndexes: {},
     };
   }
 
   private store: Store;
 }
 
-export default ExportJson;
+export default BlockSerializer;

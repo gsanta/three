@@ -1,7 +1,5 @@
 import { Store } from '@/client/common/utils/store';
-import { BlockDecoratorName, BlockDecorations } from '@/client/editor/models/block/BlockDecoration';
-import BlockData from '../../models/block/BlockData';
-import { BlockCategoryName } from '../../models/block/BlockCategoryName';
+import { BlockDecoratorName } from '@/client/editor/models/block/BlockDecoration';
 import { BlockTypeName } from '../../models/block/BlockConstantData';
 
 class BlockStore {
@@ -61,16 +59,8 @@ class BlockStore {
     return this.getState().decorations[category];
   }
 
-  getDecorationsAsArray<T extends BlockCategoryName>(decoration: T) {
-    return Object.values(this.getState().decorations[decoration]) as BlockDecorations[T][];
-  }
-
   getBlockSettings() {
     return this.store.getState().blockType;
-  }
-
-  getBlockTemplates() {
-    return this.store.getState().blockType.blocks;
   }
 
   getBlockType(type: string) {
@@ -81,113 +71,6 @@ class BlockStore {
     }
 
     return blockType;
-  }
-
-  getCurrentPlayer() {
-    return this.getState().currentPlayer;
-  }
-
-  getRootBlockIds() {
-    return this.getState().rootBlocksIds;
-  }
-
-  getDescendants(blockId: string, categoryFilter?: string): BlockData[] {
-    const block = this.getBlock(blockId);
-
-    if (block.childConnections.length === 0) {
-      if (categoryFilter) {
-        return block.category === categoryFilter ? [block] : [];
-      } else {
-        return [block];
-      }
-    }
-
-    const descendants: BlockData[] = [];
-
-    for (const child of block.childConnections) {
-      descendants.push(...this.getDescendants(child.childBlock, categoryFilter));
-    }
-
-    return descendants;
-  }
-
-  getRoot(blockId: string, expectedCategory?: string): BlockData {
-    const block = this.getBlock(blockId);
-
-    if (!block.parentConnection) {
-      if (expectedCategory && expectedCategory !== block.category) {
-        throw new Error(`Expected category is ${expectedCategory}, but got ${block.category}`);
-      }
-
-      return block;
-    }
-
-    return this.getRoot(block.parentConnection.block, expectedCategory);
-  }
-
-  filterParts(blockId: string, filter: { orientation: number }): string[] {
-    const block = this.getBlock(blockId);
-
-    const keys = Object.keys(block.partDetails).filter(
-      (key) => block.partDetails[key]?.orientation === filter.orientation,
-    );
-
-    return keys;
-  }
-
-  filterDescendants(blockId: string, filter: { category: string }): BlockData[] {
-    const block = this.getBlock(blockId);
-
-    const result: BlockData[] = [];
-
-    this.iterateDescendents(block, true, (descendant) => {
-      if (descendant.category === filter.category) {
-        result.push(descendant);
-      }
-
-      return false;
-    });
-
-    return result;
-  }
-
-  isDescendentSelected(block: BlockData, checkSelf: boolean) {
-    const terminate = this.iterateDescendents(block, checkSelf, (descendant: BlockData) => {
-      return descendant.isSelected;
-    });
-
-    return terminate;
-  }
-
-  iterateDescendents(
-    block: BlockData,
-    iterateSelf: boolean,
-    doWork: (descendant: BlockData) => boolean | undefined,
-  ): boolean | undefined {
-    if (iterateSelf) {
-      const terminate = doWork(block);
-
-      if (terminate) {
-        return terminate;
-      }
-    }
-
-    for (const connection of block.childConnections) {
-      const child = this.getBlock(connection.childBlock);
-      let terminate = doWork(child);
-
-      if (terminate) {
-        return terminate;
-      }
-
-      terminate = this.iterateDescendents(child, iterateSelf, doWork);
-
-      if (terminate) {
-        return terminate;
-      }
-    }
-
-    return false;
   }
 
   private getState() {

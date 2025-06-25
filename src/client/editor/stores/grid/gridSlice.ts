@@ -1,6 +1,14 @@
 import { PayloadAction, createSlice, current } from '@reduxjs/toolkit';
 import GraphCreator from './GraphCreator';
-import { clearAll, historyAction, initState, redoAction, undoAction, updateBlocks } from '../block/blockActions';
+import {
+  clearAll,
+  historyAction,
+  importAction,
+  initState,
+  redoAction,
+  undoAction,
+  updateBlocks,
+} from '../block/blockActions';
 import Graph from './Graph';
 import GridUpdater from './GridUpdater';
 import HistoryStorage from '../utils/HistoryStorage';
@@ -136,6 +144,10 @@ export const gridSlice = createSlice({
       const previousState = history.redo(structuredClone(current(state)));
 
       overwriteState(state, previousState);
+    });
+
+    builder.addCase(importAction, (state, action) => {
+      overwriteState(state, action.payload.grid);
     });
 
     builder.addCase(clearAll, (state) => {
