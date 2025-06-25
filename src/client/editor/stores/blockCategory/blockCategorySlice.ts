@@ -1,13 +1,14 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice, current } from '@reduxjs/toolkit';
 import { BlockCategoryName } from '../../models/block/BlockCategoryName';
 import BlockCategoriesResponse from '@/common/response_types/BlockCategoriesResponse';
 import BlockAddMethod from '@/common/model_types/BlockAddMethod';
 import BlockAddMethodsResponse from '@/common/response_types/BlockAddMethodsResponse';
 import BlockContextMenuAction, { BlockContextMenuActionName } from '@/common/model_types/BlockContextMenuAction';
 import BlockContextMenuActionsResponse from '@/common/response_types/BlockContextMenuActionsResponse';
-import { updateBlocks } from '../block/blockActions';
+import { clearAll, historyAction, redoAction, undoAction, updateBlocks } from '../block/blockActions';
 import SelectionUpdater from './SelectionUpdater';
 import { BlockPartRole } from '../../models/block/part/BlockPartLookupData';
+import HistoryStorage from '../utils/HistoryStorage';
 
 export type ActionPanelType = 'add' | 'selection' | 'cable-drawing';
 
@@ -22,6 +23,8 @@ export type BlockCategoyState = {
   selectedBlocks: Record<string, boolean>;
   currentContextMenuActions: BlockContextMenuAction[];
   currentActionPanel: ActionPanelType;
+  redoSize: number;
+  undoSize: number;
 };
 
 export const initialBlockTypeState: BlockCategoyState = {
@@ -32,9 +35,18 @@ export const initialBlockTypeState: BlockCategoyState = {
   currentActionPanel: 'add',
   selectedBlocks: {},
   selectedRootBlockIds: [],
+  undoSize: 0,
+  redoSize: 0,
 };
 
 const selectionUpdater = new SelectionUpdater();
+
+const history = new HistoryStorage<BlockCategoyState>(HistoryStorage.MAX_DEPTH);
+
+const overwriteState = (writableState: BlockCategoyState, newState: Partial<BlockCategoyState>) => {
+  writableState.selectedBlocks = newState.selectedBlocks || writableState.selectedBlocks;
+  writableState.selectedRootBlockIds = newState.selectedRootBlockIds || writableState.selectedRootBlockIds;
+};
 
 export const blockCategorySlice = createSlice({
   name: 'block-category',
@@ -82,12 +94,38 @@ export const blockCategorySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(updateBlocks, (state, action) => {
+      if (action.payload.history) {
+        history.push(structuredClone(current(state)));
+      }
+
+      state.undoSize = history.undoSize();
+      state.redoSize = history.redoSize();
+
       selectionUpdater.update(state, action.payload.blockUpdates);
     });
 
-    builder.addCase('clearAll', (state) => {
-      state.selectedBlocks = {};
-      state.selectedRootBlockIds = [];
+    builder.addCase(historyAction, (state) => {
+      history.push(structuredClone(current(state)));
+    });
+
+    builder.addCase(undoAction, (state) => {
+      const previousState = history.undo(structuredClone(current(state)));
+
+      state.undoSize = history.undoSize();
+      state.redoSize = history.redoSize();
+      overwriteState(state, previousState);
+    });
+
+    builder.addCase(redoAction, (state) => {
+      const previousState = history.redo(structuredClone(current(state)));
+
+      state.undoSize = history.undoSize();
+      state.redoSize = history.redoSize();
+      overwriteState(state, previousState);
+    });
+
+    builder.addCase(clearAll, (state) => {
+      overwriteState(state, { selectedBlocks: {}, selectedRootBlockIds: [] });
     });
   },
 });

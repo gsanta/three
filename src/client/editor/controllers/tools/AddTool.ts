@@ -130,7 +130,7 @@ class AddTool extends HoverTool {
           }
       }
 
-      edit.commit();
+      edit.commit({ history: true });
     }
   }
 

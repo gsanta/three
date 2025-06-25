@@ -1,4 +1,3 @@
-import { Vector3 } from 'three';
 import BlockData from '../../models/block/BlockData';
 import BlockPartLookupData from '../../models/block/part/BlockPartLookupData';
 import Num3 from '../../models/math/Num3';
@@ -101,14 +100,10 @@ class MakeWireConnection {
     const pinName1 = partName1;
     const pinName2 = partName2;
 
-    const pinMesh1 = new MeshWrapper(mesh1).findByNameOld(pinName1);
-    const pinMesh2 = new MeshWrapper(mesh2).findByNameOld(pinName2);
-    const pos1 = new Vector3();
-    pinMesh1.getWorldPosition(pos1);
-    const pos2 = new Vector3();
-    pinMesh2.getWorldPosition(pos2);
+    const pos1 = new MeshWrapper(mesh1).findByName(pinName1).getWorldPosition();
+    const pos2 = new MeshWrapper(mesh2).findByName(pinName2).getWorldPosition();
 
-    return [pos1.toArray(), pos2.toArray()];
+    return [pos1.get(), pos2.get()];
   }
 
   private eraseBlock: EraseBlock;

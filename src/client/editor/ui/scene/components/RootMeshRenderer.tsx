@@ -9,7 +9,7 @@ type RootMeshRendererProps = Omit<WrappedMeshProps, 'block' | 'parent'> & {
 
 const RootMeshRenderer = (props: RootMeshRendererProps) => {
   const { blockId, ...rest } = props;
-  const block = useAppSelector((selector) => selector.block.present.blocks[blockId]);
+  const block = useAppSelector((selector) => selector.block.blocks[blockId]);
 
   if (block.parentConnection) {
     return;

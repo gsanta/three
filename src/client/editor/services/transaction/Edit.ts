@@ -28,14 +28,10 @@ class Edit {
     this.close = close;
   }
 
-  flush() {
-    this.commitOrFlush(false);
-  }
-
-  commit(history?: boolean) {
+  commit(props: { history?: boolean } = { history: false }) {
     this.close();
 
-    this.commitOrFlush(history === false ? false : true);
+    this.commitOrFlush(props);
   }
 
   create(block: BlockData): this {
@@ -216,7 +212,7 @@ class Edit {
     return mergedOptions as Required<EditOptions>;
   }
 
-  private commitOrFlush(updateHistory: boolean) {
+  private commitOrFlush({ history }: { history?: boolean } = { history: false }) {
     if (!this.updates.length) {
       return;
     }
@@ -228,7 +224,7 @@ class Edit {
       }
     });
 
-    this.dispatchStore.dispatch(updateBlocks({ blockUpdates: this.updates, history: updateHistory }));
+    this.dispatchStore.dispatch(updateBlocks({ blockUpdates: this.updates, history }));
 
     this.systemHooks.forEach((systemHook) => systemHook.onCommit(this.updates));
 

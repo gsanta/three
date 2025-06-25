@@ -90,7 +90,9 @@ class ConnectPoleToBuilding {
         .findByName(Pole.SERVICE_DROP_PART_NAME)
         .getWorldPosition();
 
-      const weatherHeadAnchorPos = new MeshWrapper(this.sceneStore.getObj3d(weatherHead.id)).getWorldPosition();
+      const weatherHeadAnchorPos = new MeshWrapper(this.sceneStore.getObj3d(weatherHead.id))
+        .findByName('CableAnchor')
+        .getWorldPosition();
 
       const cable = this.factory.create(edit, 'cable-1', {
         block: {

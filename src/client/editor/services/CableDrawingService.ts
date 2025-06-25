@@ -10,6 +10,7 @@ import BlockData from '../models/block/BlockData';
 import DrawCableFromCable from '../use_cases/cable/DrawCableFromCable';
 import ConnectPole from '../use_cases/connecting/ConnectPole';
 import SceneService from '../ui/scene/service/SceneService';
+import { historyAction } from '../stores/block/blockActions';
 
 class CableDrawingService {
   constructor(
@@ -43,6 +44,7 @@ class CableDrawingService {
     this.activeDrawing?.finalize();
     this.activeDrawing = undefined;
     store.dispatch(setCurrentActionPanel('add'));
+    store.dispatch(historyAction());
   }
 
   isDrawing() {
@@ -68,7 +70,7 @@ class CableDrawingService {
 
       this._isDrawing = true;
       store.dispatch(setCurrentActionPanel('cable-drawing'));
-    } else if (this.drawCableFromCable.tryStart(toBlocks)) {
+    } else if (this.drawCableFromCable.tryStart(toBlocks, gridIndex)) {
       this.drawCableFromCable.execute(gridIndex);
 
       this.activeDrawing = this.drawCableFromCable;

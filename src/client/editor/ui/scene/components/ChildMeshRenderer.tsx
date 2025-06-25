@@ -8,7 +8,7 @@ type ChildMeshRendererProps = Omit<WrappedMeshProps, 'block' | 'parent'> & {
 
 const ChildMeshRenderer = (props: ChildMeshRendererProps) => {
   const { blockId, ...rest } = props;
-  const block = useAppSelector((selector) => selector.block.present.blocks[blockId]);
+  const block = useAppSelector((selector) => selector.block.blocks[blockId]);
 
   return <MeshRenderer {...rest} block={block} />;
 };

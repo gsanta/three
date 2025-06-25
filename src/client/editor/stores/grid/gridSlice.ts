@@ -1,8 +1,9 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice, current } from '@reduxjs/toolkit';
 import GraphCreator from './GraphCreator';
-import { initState, updateBlocks } from '../block/blockActions';
+import { clearAll, historyAction, initState, redoAction, undoAction, updateBlocks } from '../block/blockActions';
 import Graph from './Graph';
 import GridUpdater from './GridUpdater';
+import HistoryStorage from '../utils/HistoryStorage';
 
 export type GridState = {
   activeGridIndexes: number[];
@@ -39,6 +40,23 @@ initialGridState.gridOffset[0] = 6.285 - 10 * initialGridState.gridSize;
 initialGridState.gridOffset[1] = 6.325 - 8 * initialGridState.gridSize;
 
 const gridUpdater = new GridUpdater();
+
+const history = new HistoryStorage<Partial<GridState>>(HistoryStorage.MAX_DEPTH);
+
+const overwriteState = (writableState: GridState, newState: Partial<GridState>) => {
+  writableState.activeGridIndexes = newState.activeGridIndexes || writableState.activeGridIndexes;
+  writableState.blockToGridIndex = newState.blockToGridIndex || writableState.blockToGridIndex;
+  writableState.carGridPos = newState.carGridPos || writableState.carGridPos;
+  writableState.editingTargetBlock = newState.editingTargetBlock || writableState.editingTargetBlock;
+  writableState.gridIndexToBlocks = newState.gridIndexToBlocks || writableState.gridIndexToBlocks;
+  writableState.groundRadius = newState.groundRadius || writableState.groundRadius;
+  writableState.gridRows = newState.gridRows || writableState.gridRows;
+  writableState.gridCols = newState.gridCols || writableState.gridCols;
+  writableState.gridSize = newState.gridSize || writableState.gridSize;
+  writableState.gridOffset = newState.gridOffset || writableState.gridOffset;
+  writableState.editedBuilding = newState.editedBuilding || writableState.editedBuilding;
+  writableState.graph = newState.graph || writableState.graph;
+};
 
 export const gridSlice = createSlice({
   name: 'editor',
@@ -96,16 +114,38 @@ export const gridSlice = createSlice({
       state.graph = new GraphCreator(state.gridRows, state.gridCols).create();
     });
 
+    builder.addCase(historyAction, (state) => {
+      history.push(structuredClone(current(state)));
+    });
+
     builder.addCase(updateBlocks, (state, action) => {
+      if (action.payload.history) {
+        history.push(structuredClone(current(state)));
+      }
+
       gridUpdater.update(state, action.payload.blockUpdates);
     });
 
-    builder.addCase('clearAll', (state) => {
-      state.activeGridIndexes = [];
-      state.blockToGridIndex = {};
-      state.carGridPos = [0, 0];
-      state.editingTargetBlock = null;
-      state.gridIndexToBlocks = {};
+    builder.addCase(undoAction, (state) => {
+      const previousState = history.undo(structuredClone(current(state)));
+
+      overwriteState(state, previousState);
+    });
+
+    builder.addCase(redoAction, (state) => {
+      const previousState = history.redo(structuredClone(current(state)));
+
+      overwriteState(state, previousState);
+    });
+
+    builder.addCase(clearAll, (state) => {
+      overwriteState(state, {
+        activeGridIndexes: [],
+        blockToGridIndex: {},
+        carGridPos: [0, 0],
+        editingTargetBlock: null,
+        gridIndexToBlocks: {},
+      });
     });
   },
 });

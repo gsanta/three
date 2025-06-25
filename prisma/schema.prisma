@@ -27,9 +27,11 @@ model BlockType {
   category       BlockCategory @relation(fields: [categoryName], references: [name])
   decorations    Json          @default("[]")
   decorationData Json?
+  geometry       String?
   parts          Json?
   partDetails    Json?
   path           String?
+  texturePath    String?
   type           String        @unique
   animations     Json?
 }
@@ -82,9 +84,10 @@ model BlockContextMenuActionOnCategories {
 
 model Snapshot {
   id        String   @id @default(uuid())
-  state     Json?
-  User      User?    @relation(fields: [userId], references: [id])
-  userId    Int?
+  name      String  
+  state     Json
+  User      User    @relation(fields: [userId], references: [id])
+  userId    Int
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
 }

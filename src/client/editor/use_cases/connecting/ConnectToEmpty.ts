@@ -95,7 +95,7 @@ class ConnectToEmpty implements ConnectCable {
       .get();
 
     if (toPos) {
-      this.drawCables[wire]?.draw(fromPos, toPos);
+      this.drawCables[wire]?.draw(fromPos, toPos, 'cable-1');
     }
   }
 

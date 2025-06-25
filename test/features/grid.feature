@@ -7,7 +7,6 @@ Feature: Grid
       | BLOCK  | GRIDINDEX |
       | pole-1 | 10        |
 
-  @only
   Scenario: Adding a block sets the grid properties
     When I select tool 'add'
     And I select template 'two-story-house-1'
@@ -15,8 +14,8 @@ Feature: Grid
     And I click pointer
     And I wait mesh 'two-story-house-1-1' to exist
     Then the current grid scene is:
-      | BLOCK   | GRIDPOS |
-      | house-1 | 5,5     |
+      | BLOCK               | GRIDPOS |
+      | two-story-house-1-1 | 5,5     |
 
   Scenario: Deleting a block removes the grid properties
     Given I have a scene with:

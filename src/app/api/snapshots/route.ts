@@ -1,9 +1,11 @@
 import { authOptions } from '@/bff/config/auth';
 import db from '@/bff/config/db';
+import { Prisma } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 
 type SnapshotRequest = {
+  name: string;
   state: object;
   snapshotId?: string;
 };
@@ -15,16 +17,18 @@ export async function POST(req: Request) {
     const user = await db.user.findUnique({ where: { email: session?.user?.email || '' } });
 
     const body = await req.json();
-    const { state, snapshotId } = body as SnapshotRequest;
+    const { name, state, snapshotId } = body as SnapshotRequest;
 
     await db.snapshot.upsert({
       where: {
         id: snapshotId || '',
       },
       update: {
+        name: name,
         state: state,
       },
       create: {
+        name: name,
         userId: user?.id,
         state: state,
       },
@@ -32,9 +36,11 @@ export async function POST(req: Request) {
 
     return NextResponse.json({}, { status: 200 });
   } catch (error) {
-    let message = 'unkown error';
+    let message = 'Unkown error';
 
-    if (error instanceof Error) {
+    if (error instanceof Prisma.PrismaClientValidationError) {
+      message = 'Invalid data provided.';
+    } else if (error instanceof Error) {
       message = error.message;
     }
 
@@ -48,14 +54,14 @@ export async function GET() {
 
     const user = await db.user.findUnique({ where: { email: session?.user?.email || '' } });
 
-    const latestSnapshot = await db.snapshot.findMany({
+    const latestSnapshots = await db.snapshot.findMany({
       where: { userId: user?.id },
       orderBy: {
         updatedAt: 'desc',
       },
-      take: 1,
+      take: 10,
     });
-    return NextResponse.json({ state: latestSnapshot[0]?.state }, { status: 200 });
+    return NextResponse.json({ items: latestSnapshots }, { status: 200 });
   } catch (error) {
     let message = 'unkown error';
 

@@ -191,7 +191,7 @@ class BlockStore {
   }
 
   private getState() {
-    return this.store.getState().block.present;
+    return this.store.getState().block;
   }
 
   private store: Store;

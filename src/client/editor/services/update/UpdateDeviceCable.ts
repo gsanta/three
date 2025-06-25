@@ -29,7 +29,7 @@ class UpdateDeviceCable {
       { arrayMergeStrategy: 'replace' },
     );
 
-    edit.commit(false);
+    edit.commit();
   }
 
   private moveCable(cableId: string, pole: BlockData): CablePoint {

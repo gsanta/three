@@ -1,21 +1,17 @@
 import { useAppDispatch, useAppSelector } from '@/client/common/hooks/hooks';
-import CableMesh from '../../mesh/CableMesh';
+import GroundCableMesh from '../../mesh/GroundCableMesh';
 import WrappedMeshProps from '../../../models/block/WrappedMeshProps';
 import { ModelMesh } from '../../mesh/ModelMesh';
-import BlockData from '@/client/editor/models/block/BlockData';
 import CableDecorator from '@/client/editor/models/block/categories/CableDecorator';
 import MoveControl from './MoveControl';
 import { useEffect, useRef } from 'react';
 import useEditorContext from '@/app/editor/useEditorContext';
 import { resetNotifyOnRendered } from '@/client/editor/stores/block/blockActions';
-
-const isModelMesh = (block: BlockData) => block.category !== 'cables';
-
-const isTubeMesh = (block: BlockData) => block.category === 'cables';
+import CableMesh from '../../mesh/CableMesh';
 
 const MeshRenderer = (props: WrappedMeshProps) => {
   const { block, meshProps, materialProps = {} } = props;
-  const decorations = useAppSelector((selector) => selector.block.present.decorations);
+  const decorations = useAppSelector((selector) => selector.block.decorations);
   const dispatch = useAppDispatch();
 
   const { sceneService, tool } = useEditorContext();
@@ -35,7 +31,7 @@ const MeshRenderer = (props: WrappedMeshProps) => {
 
   const { additions } = props;
 
-  if (isModelMesh(block)) {
+  if (!block.geometry) {
     return block.isSelected ? (
       <MoveControl>
         {({ drag }) => (
@@ -59,11 +55,19 @@ const MeshRenderer = (props: WrappedMeshProps) => {
         materialProps={materialProps}
       />
     );
-  }
-
-  if (isTubeMesh(block)) {
+  } else if (block.geometry === 'cable-geometry') {
     return (
       <CableMesh
+        additions={additions}
+        cable={decorations.cables[block.id] as CableDecorator}
+        block={block}
+        meshProps={{ ...meshProps }}
+        materialProps={materialProps}
+      />
+    );
+  } else if (block.geometry === 'ground-cable-geometry') {
+    return (
+      <GroundCableMesh
         additions={additions}
         cable={decorations.cables[block.id] as CableDecorator}
         block={block}

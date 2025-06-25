@@ -5,19 +5,23 @@ import BlockPartLookupData from './part/BlockPartLookupData';
 
 export type AnimationTriggerName = 'device-on';
 
-export type BlockTypeName = string | 'underground-cable-1';
+export type BlockTypeName = string | 'ground-cable-1';
+
+export type BlockGeometry = 'ground-cable-geometry' | 'cable-geometry';
 
 type BlockConstantData = {
   animations?: Partial<Record<AnimationTriggerName, string[]>>;
   category: BlockCategoryName;
   color: [number, number, number];
   decorations: BlockDecoratorName[];
+  geometry?: BlockGeometry;
   movable: boolean;
   moveAxis: [boolean, boolean, boolean];
   parts: BlockPartGeometryData[];
   partDetails: Record<string, BlockPartLookupData | undefined>;
   path: string | null;
-  type: string;
+  texturePath?: string | null;
+  type: BlockTypeName;
 };
 
 export default BlockConstantData;

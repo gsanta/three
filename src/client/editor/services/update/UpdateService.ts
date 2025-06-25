@@ -21,7 +21,7 @@ class UpdateService {
 
       edit.updateBlock(blockId, { isDirty: false });
 
-      edit.commit(false);
+      edit.commit();
     }
   }
 

@@ -1,61 +1,47 @@
 Feature: Pole
-  Scenario: Moving the cursor on the grid shows the pole preview
+  Scenario: Drawing cables from a pole, shows the cable preview
     Given I have a scene with:
       | TYPE   | ID       | GRIDPOS |
       | pole-1 | pole-1-1 | 5,0     |
       | pole-1 | pole-1-2 | 5,5     |
-    And I set next uuids to:
-      | UUID      | TYPE    |
-      | cable-1-1 | cable-1 |
-      | cable-1-2 | cable-1 |
-      | cable-1-3 | cable-1 |
-      | cable-1-4 | cable-1 |
-    When I select tool 'select'
-    And I move pointer to grid position '1,1'
-    And I press pointer
+    When I select tool 'cable'
+    And I select template 'cable-1'
     And I hover over block 'pole-1-1'
+    And I move pointer to grid position '5,0'
     And I press pointer
-    And I execute action 'join-cable-action'
     And I move pointer to grid position '5,1'
     And I wait block 'cable-1-1' to exist
     Then I have cables with properties
-      | CABLE     | END1                | END2     |
+      | CABLE     | END1              | END2     |
       | cable-1-1 | block:pole-1-1,L1 | grid:5,1 |
       | cable-1-2 | block:pole-1-1,L2 | grid:5,1 |
       | cable-1-3 | block:pole-1-1,L3 | grid:5,1 |
       | cable-1-4 | block:pole-1-1,N  | grid:5,1 |
     When I move pointer to grid position '5,2'
     Then I have cables with properties
-      | CABLE     | END1                | END2     |
+      | CABLE     | END1              | END2     |
       | cable-1-1 | block:pole-1-1,L1 | grid:5,2 |
       | cable-1-2 | block:pole-1-1,L2 | grid:5,2 |
       | cable-1-3 | block:pole-1-1,L3 | grid:5,2 |
       | cable-1-4 | block:pole-1-1,N  | grid:5,2 |
     When I move pointer to grid position '5,5'
     Then I have cables with properties
-      | CABLE     | END1                | END2                |
+      | CABLE     | END1              | END2              |
       | cable-1-1 | block:pole-1-1,L1 | block:pole-1-2,L1 |
       | cable-1-2 | block:pole-1-1,L2 | block:pole-1-2,L2 |
       | cable-1-3 | block:pole-1-1,L3 | block:pole-1-2,L3 |
       | cable-1-4 | block:pole-1-1,N  | block:pole-1-2,N  |
 
-  Scenario: Moving the cursor between empty tile and tile with house changes preview style 
+  Scenario: Moving the cursor between empty tile and tile with house changes from 4 to 1 cable
     Given I have a scene with:
       | TYPE              | ID        | GRIDPOS |
       | pole-1            | pole-1-1  | 5,0     |
       | two-story-house-1 | house-1-1 | 6,0     |
-    And I set next uuids to:
-      | UUID             | TYPE                  |
-      | cable-1-1        | cable-1               |
-      | cable-1-2        | cable-1               |
-      | cable-1-3        | cable-1               |
-      | cable-1-4        | cable-1               |
-      | cable-1-5        | cable-1               |
-      | weather-head-1-1 | weather-head-1        |
-    When I select tool 'select'
+    When I select tool 'cable'
+    And I select template 'cable-1'
     And I hover over block 'pole-1-1'
+    And I move pointer to grid position '5,0'
     And I press pointer
-    And I execute action 'join-cable-action'
     And I move pointer to grid position '5,5'
     And I wait mesh 'cable-1-1' to exist
     Then I have cables with properties
@@ -65,16 +51,10 @@ Feature: Pole
       | cable-1-3 | block:pole-1-1,L3 | grid:5,5 |
       | cable-1-4 | block:pole-1-1,N  | grid:5,5 |
     When I move pointer to grid position '6,0'
-    And I wait mesh 'cable-1-5' to exist
+    And I wait mesh 'cable-1-1' to exist
     Then I have cables with properties
       | CABLE     | END1                             | END2                               |
-      | cable-1-5 | block:pole-1-1,TransformerHolder | block:weather-head-1-1,CableAnchor |
-    When I select tool 'add'
-    And I wait block 'cable-1-5' not to exist  
-    Then my current scene is
-      | BLOCK     | TYPE              |
-      | pole-1-1  | pole-1            |
-      | house-1-1 | two-story-house-1 |
+      | cable-1-1 | block:pole-1-1,TransformerHolder | block:weather-head-1-1,CableAnchor |
 
   Scenario: Exiting cabling tool removes the cable previews
     Given I have a scene with:
@@ -100,6 +80,7 @@ Feature: Pole
       | BLOCK     | TYPE    |
       | pole-1-1  | pole-1  |
   
+  @only
   Scenario: Submitting cabling action makes connection to another poles
     Given I have a scene with:
       | TYPE   | ID       | PARENT | GRIDPOS |

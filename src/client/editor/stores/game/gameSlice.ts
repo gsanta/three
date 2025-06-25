@@ -1,5 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { updateBlocks } from '../block/blockActions';
+import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
+import { historyAction, redoAction, undoAction, updateBlocks } from '../block/blockActions';
+import HistoryStorage from '../utils/HistoryStorage';
 
 export type GameState = {
   currentPlayer?: string;
@@ -14,6 +15,15 @@ export const initialGameState: GameState = {
   players: [],
   reachableGrids: {},
 };
+
+const overwriteState = (writableState: GameState, newState: Partial<GameState>) => {
+  writableState.gameState = newState.gameState || writableState.gameState;
+  writableState.currentPlayer = newState.currentPlayer || writableState.currentPlayer;
+  writableState.players = newState.players || writableState.players;
+  writableState.reachableGrids = newState.reachableGrids || writableState.reachableGrids;
+};
+
+const history = new HistoryStorage<Partial<GameState>>(HistoryStorage.MAX_DEPTH);
 
 export const gameSlice = createSlice({
   name: 'game',
@@ -30,6 +40,12 @@ export const gameSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(updateBlocks, (state, action) => {
       action.payload.blockUpdates.forEach((update) => {
+        if (action.payload.history) {
+          history.push(
+            structuredClone({ players: current(state.players), reachableGrids: current(state.reachableGrids) }),
+          );
+        }
+
         // if ('select' in update) {
         //   const player = update.select.find((block) => block.category === 'humans');
         //   if (player) {
@@ -43,6 +59,22 @@ export const gameSlice = createSlice({
           }
         }
       });
+    });
+
+    builder.addCase(historyAction, (state) => {
+      history.push(structuredClone(current(state)));
+    });
+
+    builder.addCase(undoAction, (state) => {
+      const previousState = history.undo(structuredClone(current(state)));
+
+      overwriteState(state, previousState);
+    });
+
+    builder.addCase(redoAction, (state) => {
+      const previousState = history.redo(structuredClone(current(state)));
+
+      overwriteState(state, previousState);
     });
   },
 });

@@ -69,7 +69,7 @@ Then('no blocks are selected', function (this: ExtendedWorld) {
   const isSelectedBlocksEmpty =
     Object.keys(this.getEnv().editorContext.blockCategoryStore.getSelectedBlocks()).length == 0;
 
-  const isSelectionEmptyInBlockSlice = store.getState().block.present.selectedBlocks.length === 0;
+  const isSelectionEmptyInBlockSlice = store.getState().block.selectedBlocks.length === 0;
 
   assert.ok(isEmpty);
   assert.ok(isSelectionEmptyInBlockSlice, 'selectedBlocks is not empty in blockSlice.');

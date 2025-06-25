@@ -10,7 +10,7 @@ class ExportJson {
 
   export(): { city: BlockState } {
     return {
-      city: this.exportBlockState(this.store.getState().block.present),
+      city: this.exportBlockState(this.store.getState().block),
     };
   }
 

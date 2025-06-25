@@ -1,7 +1,16 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { resetNotifyOnRendered, updateBlocks, updateState } from './blockActions';
+import { PayloadAction, createSlice, current } from '@reduxjs/toolkit';
+import {
+  clearAll,
+  historyAction,
+  redoAction,
+  resetNotifyOnRendered,
+  undoAction,
+  updateBlocks,
+  updateState,
+} from './blockActions';
 import BlocksUpdater from './BlocksUpdater';
 import { BlockState } from './blockSlice.types';
+import HistoryStorage from '../utils/HistoryStorage';
 
 export const initialBlockState: BlockState = {
   rootBlocksIds: [],
@@ -12,10 +21,23 @@ export const initialBlockState: BlockState = {
     transformers: {},
     poles: {},
   },
+  hovered: undefined,
   selectedBlocks: [],
 };
 
 const blockUpdater = new BlocksUpdater('city');
+
+const history = new HistoryStorage<BlockState>(HistoryStorage.MAX_DEPTH);
+
+const overwriteState = (writableState: BlockState, newState: BlockState) => {
+  writableState.rootBlocksIds = newState.rootBlocksIds;
+  writableState.blocks = newState.blocks;
+  writableState.blockIds = newState.blockIds;
+  writableState.hovered = newState.hovered;
+  writableState.currentPlayer = newState.currentPlayer;
+  writableState.decorations = newState.decorations;
+  writableState.selectedBlocks = newState.selectedBlocks;
+};
 
 export const blockSlice = createSlice({
   name: 'block',
@@ -53,8 +75,33 @@ export const blockSlice = createSlice({
 
   extraReducers: (builder) => {
     builder.addCase(updateBlocks, (state, action) => {
+      if (action.payload.history) {
+        history.push(structuredClone(current(state)));
+      }
+
       blockUpdater.update(state, action.payload.blockUpdates);
     });
+
+    builder.addCase(historyAction, (state) => {
+      history.push(structuredClone(current(state)));
+    });
+
+    builder.addCase(undoAction, (state) => {
+      const previousState = history.undo(structuredClone(current(state)));
+
+      overwriteState(state, previousState);
+    });
+
+    builder.addCase(redoAction, (state) => {
+      const previousState = history.redo(structuredClone(current(state)));
+
+      overwriteState(state, previousState);
+    });
+    // if (previousState) {
+    //   state.rootBlocksIds = previousState.rootBlocksIds;
+    //   state.blocks = previousState.blocks;
+    //   state.blockIds = previousState.blockIds;
+    //   state.decorations = previousState.decorations;
 
     builder.addCase(updateState, (state, action) => {
       const cityState = action.payload.city;
@@ -71,13 +118,8 @@ export const blockSlice = createSlice({
       }
     });
 
-    builder.addCase('clearAll', (state) => {
-      state.rootBlocksIds = [];
-      state.blocks = {};
-      state.hovered = undefined;
-      state.currentPlayer = undefined;
-      state.decorations = { ...initialBlockState.decorations };
-      state.selectedBlocks = [];
+    builder.addCase(clearAll, (state) => {
+      overwriteState(state, initialBlockState);
     });
   },
 });

@@ -10,3 +10,9 @@ export const updateState = createAction<{ city: BlockState; building: BlockState
 export const resetNotifyOnRendered = createAction<{ block: string }>('resetNotifyOnRendered');
 
 export const clearAll = createAction('clearAll');
+
+export const historyAction = createAction('history');
+
+export const undoAction = createAction('undo');
+
+export const redoAction = createAction('redo');

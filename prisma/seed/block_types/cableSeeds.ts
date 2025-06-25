@@ -10,30 +10,38 @@ const cableSeeds: Prisma.BlockTypeUncheckedCreateInput[] = [
         location: 'overhead',
       },
     },
+    geometry: 'cable-geometry',
     path: null,
     type: 'cable-1',
   },
   {
     categoryName: 'cables',
     decorations: ['cables'],
-    path: null,
+    geometry: 'ground-cable-geometry',
+    path: '/ground_cable_1.glb',
     parts: [
       {
-        name: 'End1',
+        name: 'Body',
+        materialPath: 'Palette',
+        position: [0.004, 0.036, -0.106],
+        rotation: [Math.PI / 2, 0, 0],
       },
-      {
-        name: 'End2',
-      },
+      // {
+      //   name: 'End1',
+      // },
+      // {
+      //   name: 'End2',
+      // },
     ],
     partDetails: {
-      End1: {
-        roles: ['pin'],
-        type: 'physical',
-      },
-      End2: {
-        roles: ['pin'],
-        type: 'physical',
-      },
+      // End1: {
+      //   roles: ['pin'],
+      //   type: 'physical',
+      // },
+      // End2: {
+      //   roles: ['pin'],
+      //   type: 'physical',
+      // },
     },
     decorationData: {
       cables: {
@@ -41,7 +49,8 @@ const cableSeeds: Prisma.BlockTypeUncheckedCreateInput[] = [
         location: 'underground',
       },
     },
-    type: 'underground-cable-1',
+    texturePath: '/ribbon_caution.png',
+    type: 'ground-cable-1',
   },
 ];
 

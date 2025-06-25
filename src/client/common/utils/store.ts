@@ -1,6 +1,5 @@
-import undoable, { StateWithHistory } from 'redux-undo';
 import blockTypeSlice, { BlockTypeState } from '../../editor/stores/blockType/blockTypeSlice';
-import blockSlice, { hover } from '../../editor/stores/block/blockSlice';
+import blockSlice from '../../editor/stores/block/blockSlice';
 import gridSlice, { GridState } from '../../editor/stores/grid/gridSlice';
 import toolSlice, { ToolState } from '../../editor/stores/tool/toolSlice';
 import { configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
@@ -10,18 +9,12 @@ import { BlockState } from '@/client/editor/stores/block/blockSlice.types';
 import blockCategorySlice, { BlockCategoyState } from '@/client/editor/stores/blockCategory/blockCategorySlice';
 import gameSlice, { GameState } from '@/client/editor/stores/game/gameSlice';
 
-const blockSliceUndoable = undoable(blockSlice, {
-  filter: (action: { payload: { history?: boolean }; type: string }) => {
-    return action.type !== hover.type && action.payload?.history !== false;
-  },
-});
-
 export type RootState = {
   electricSystem: ElectricityState;
   grid: GridState;
   tool: ToolState;
   temporary: TemporaryState;
-  block: StateWithHistory<BlockState>;
+  block: BlockState;
   blockCategory: BlockCategoyState;
   blockType: BlockTypeState;
   game: GameState;
@@ -38,7 +31,7 @@ export function setupStore(preloadedState?: RootState) {
       blockCategory: blockCategorySlice,
       blockType: blockTypeSlice,
       temporary: temporarySlice,
-      block: blockSliceUndoable,
+      block: blockSlice,
       game: gameSlice,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(testMiddleware.middleware),

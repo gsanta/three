@@ -17,9 +17,11 @@ CREATE TABLE "BlockType" (
     "categoryName" TEXT NOT NULL,
     "decorations" JSONB NOT NULL DEFAULT '[]',
     "decorationData" JSONB,
+    "geometry" TEXT,
     "parts" JSONB,
     "partDetails" JSONB,
     "path" TEXT,
+    "texturePath" TEXT,
     "type" TEXT NOT NULL,
     "animations" JSONB,
 
@@ -75,8 +77,9 @@ CREATE TABLE "BlockContextMenuActionOnCategories" (
 -- CreateTable
 CREATE TABLE "Snapshot" (
     "id" TEXT NOT NULL,
-    "state" JSONB,
-    "userId" INTEGER,
+    "name" TEXT NOT NULL,
+    "state" JSONB NOT NULL,
+    "userId" INTEGER NOT NULL,
     "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(6) NOT NULL,
 
@@ -117,4 +120,4 @@ ALTER TABLE "BlockContextMenuActionOnCategories" ADD CONSTRAINT "BlockContextMen
 ALTER TABLE "BlockContextMenuActionOnCategories" ADD CONSTRAINT "BlockContextMenuActionOnCategories_categoryName2_fkey" FOREIGN KEY ("categoryName2") REFERENCES "BlockCategory"("name") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Snapshot" ADD CONSTRAINT "Snapshot_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Snapshot" ADD CONSTRAINT "Snapshot_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

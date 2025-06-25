@@ -24,7 +24,7 @@ class DrawUndergroundCable {
     this.factoryService = factoryService;
     this.sceneStore = sceneStore;
 
-    this.drawOrUpdateCable = new DrawCable(blockStore, factoryService, transaction);
+    this.drawOrUpdateCable = new DrawCable(blockStore, factoryService, sceneStore, transaction);
 
     this.grid = new Grid(gridStore);
   }
@@ -46,7 +46,7 @@ class DrawUndergroundCable {
     const [toX, toZ] = this.grid.gridToWorldPos(toGridIndex);
     const to = new Vector([toX, this.undergroundDepth, toZ]);
 
-    this.drawOrUpdateCable.draw(this.getFromPosition().get(), to.get());
+    this.drawOrUpdateCable.draw(this.getFromPosition().get(), to.get(), 'ground-cable-1');
   }
 
   finalize() {

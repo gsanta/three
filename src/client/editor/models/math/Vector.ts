@@ -28,6 +28,11 @@ class Vector {
     );
   }
 
+  divide(amount: number): Vector {
+    const newPosition = this.get().map((val) => val / amount) as Num3;
+    return new Vector(newPosition);
+  }
+
   multiply(other: Vector): Vector {
     const newPosition = this.get().map((val, index) => val * other.get()[index]) as Num3;
     return new Vector(newPosition);

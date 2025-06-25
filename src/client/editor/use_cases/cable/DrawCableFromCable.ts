@@ -22,12 +22,14 @@ class DrawCableFromCable {
     this.blockStore = blockStore;
     this.sceneStore = sceneStore;
 
-    this.drawOrUpdateCable = new DrawCable(blockStore, factoryService, transaction);
+    this.drawOrUpdateCable = new DrawCable(blockStore, factoryService, sceneStore, transaction);
 
     this.grid = new Grid(gridStore);
   }
 
-  tryStart(candidates: BlockData[]) {
+  tryStart(candidates: BlockData[], gridIndex: number) {
+    this.fromGridIndex = gridIndex;
+
     const cable = candidates.find((candidate) => {
       const category = candidate.category;
       return category === 'cables';
@@ -42,12 +44,14 @@ class DrawCableFromCable {
     const [toX, toZ] = this.grid.gridToWorldPos(toGridIndex);
     const to = new Vector([toX, this.undergroundDepth, toZ]);
 
-    this.drawOrUpdateCable.draw(this.getFromPosition().get(), to.get());
+    this.drawOrUpdateCable.draw(this.getFromPosition().get(), to.get(), 'ground-cable-1');
   }
 
   finalize() {
     this.drawOrUpdateCable.finalize();
     this.from = undefined;
+    this.fromGridIndex = undefined;
+    this.fromPosition = undefined;
   }
 
   drawToPin(part: BlockPart) {
@@ -55,11 +59,14 @@ class DrawCableFromCable {
     const meshWrapper = new MeshWrapper(mesh);
     const to = meshWrapper.findByName(part.getPart().name).getWorldPosition();
 
-    this.drawOrUpdateCable.draw(this.getFromPosition().get(), to.get());
+    this.drawOrUpdateCable.draw(this.getFromPosition().get(), to.get(), 'ground-cable-1');
   }
 
   cancel() {
     this.drawOrUpdateCable.cancel();
+    this.from = undefined;
+    this.fromGridIndex = undefined;
+    this.fromPosition = undefined;
   }
 
   private getFromPosition() {
@@ -70,11 +77,19 @@ class DrawCableFromCable {
     if (!this.fromPosition) {
       const cable = this.blockStore.getDecorator('cables', this.from.id) as CableDecorator;
 
-      this.fromPosition = new Vector(cable.points[1].position);
+      const point1GridIndex = this.grid.worldToGridIndex(new Vector(cable.points[0].position));
+
+      if (point1GridIndex === this.fromGridIndex) {
+        this.fromPosition = new Vector(cable.points[0].position);
+      } else {
+        this.fromPosition = new Vector(cable.points[1].position);
+      }
     }
 
     return this.fromPosition;
   }
+
+  private fromGridIndex: number | undefined;
 
   private fromPosition: Vector | undefined;
 

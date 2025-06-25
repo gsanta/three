@@ -11,9 +11,9 @@ const useSaveSnapshot = () => {
 
   const { exporter } = useEditorContext();
 
-  const { mutate, error, isPending } = useMutation<unknown, AxiosError<ServerError>, unknown>({
-    mutationFn: async () => {
-      const resp = await api.post('/api/snapshot', { state: JSON.stringify(exporter.export()) });
+  const { mutate, error, isPending } = useMutation<unknown, AxiosError<ServerError>, { name: string; state: string }>({
+    mutationFn: async (data) => {
+      const resp = await api.post('/api/snapshots', data);
       return resp;
     },
     onSuccess() {
@@ -21,8 +21,12 @@ const useSaveSnapshot = () => {
     },
   });
 
+  const handleMutate = (name: string) => {
+    mutate({ name, state: JSON.stringify(exporter.export()) });
+  };
+
   return {
-    mutate,
+    mutate: handleMutate,
     error,
     isPending,
     toastRef,

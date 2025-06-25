@@ -9,6 +9,8 @@ import BlockStore from '../../stores/block/BlockStore';
 import SceneStore from '../../ui/scene/SceneStore';
 import BlockPartLookupData from '../../models/block/part/BlockPartLookupData';
 import Edit from '../../services/transaction/Edit';
+import { BlockTypeName } from '../../models/block/BlockConstantData';
+import Vector from '../../models/math/Vector';
 
 export type DrawOrUpdateCableConfig = {
   isPreview: boolean;
@@ -38,14 +40,17 @@ class DrawCable {
     this.config = { ...initialConfig };
   }
 
-  draw(from: Num3, to: Num3) {
+  draw(from: Num3, to: Num3, cableType: BlockTypeName) {
+    this.cableType = cableType;
+
     const cable = this.cableId && this.blockStore.getBlock(this.cableId);
 
     const edit = this.transactionService.createTransaction();
     if (!cable) {
-      const newCable = this.factoryService.create(edit, 'cable-1', {
+      const newCable = this.factoryService.create(edit, cableType, {
         block: {
           isPreview: this.config.isPreview,
+          position: new Vector(from).add(new Vector(to)).divide(2).get(),
         },
         decorations: {
           cables: {
@@ -104,7 +109,7 @@ class DrawCable {
 
     const edit = this.transactionService.getOrCreateActiveTransaction();
 
-    this.factoryService.create(edit, 'cable-1', {
+    this.factoryService.create(edit, this.cableType, {
       block: {
         multiParentConnections: [{ block: join1.pole.id }, { block: join2.pole.id }],
         isDirty: true,
@@ -162,6 +167,8 @@ class DrawCable {
   }
 
   private config: DrawOrUpdateCableConfig;
+
+  private cableType: BlockTypeName = 'cable-1';
 
   private cableId?: string;
 

@@ -67,7 +67,7 @@ class SelectTool extends HoverTool {
         edit.updateBlock(connection.block, { isDirty: true });
       });
 
-      edit.commit(false);
+      edit.commit();
     }
   }
 
@@ -93,10 +93,10 @@ class SelectTool extends HoverTool {
         edit.updateBlock(connection.block, { isDirty: true });
       });
 
-      edit.commit(false);
+      edit.commit();
     }
 
-    edit.commit(false);
+    edit.commit();
 
     store.dispatch(updateSelectTool({ drag: [0, 0, 0] }));
   }

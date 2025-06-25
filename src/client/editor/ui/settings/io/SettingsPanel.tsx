@@ -1,26 +1,40 @@
+'use client';
+
 import React from 'react';
 import ExportDialog from './ExportDialog';
 import ImportDialog from './import/ImportDialog';
-import { useAppDispatch } from '@/client/common/hooks/hooks';
-import { ActionCreators } from 'redux-undo';
-import useSaveSnapshot from '../../hooks/useSaveSnapshot';
+import { useAppDispatch, useAppSelector } from '@/client/common/hooks/hooks';
 import useLoadSnapshot from '../../hooks/useLoadSnapshot';
 import Icon from '@/client/common/components/lib/Icon';
-import Toast from '@/client/common/components/lib/Toast';
+import { redoAction, undoAction } from '@/client/editor/stores/block/blockActions';
+import SaveDialog from './server/SaveDialog';
+import useDialog from '../../hooks/useDialog';
+import { useSession } from 'next-auth/react';
 
 const SettingsPanel = () => {
   const dispatch = useAppDispatch();
+  const { data: session } = useSession();
 
-  const { mutate: saveSnapshot, toastRef } = useSaveSnapshot();
   const { refetchSnapshot } = useLoadSnapshot();
 
+  const redoSize = useAppSelector((state) => state.blockCategory.redoSize);
+  const undoSize = useAppSelector((state) => state.blockCategory.undoSize);
+
+  const {
+    isDialogOpen: isSaveDialogOpen,
+    onDialogClose: onSaveDialogClose,
+    onDialogOpen: onSaveDialogOpen,
+  } = useDialog({ dialogId: 'save-dialog' });
+
   const handleUndo = () => {
-    dispatch(ActionCreators.undo());
+    dispatch(undoAction());
   };
 
   const handleRedo = () => {
-    dispatch(ActionCreators.redo());
+    dispatch(redoAction());
   };
+
+  const isLoggedIn = session?.user?.email;
 
   return (
     <div className="flex items-center gap-4">
@@ -62,8 +76,11 @@ const SettingsPanel = () => {
 
       <div className="divider divider-horizontal" />
       <div className="flex gap-1">
-        <div className="tooltip tooltip-bottom" data-tip="Save to server">
-          <button className="btn btn-square btn-secondary" onClick={() => saveSnapshot({})}>
+        <div className="tooltip tooltip-bottom" data-tip={isLoggedIn ? 'Save' : 'Login to save'}>
+          <button
+            className={`btn btn-square btn-secondary  ${!isLoggedIn ? 'btn-disabled' : ''}`}
+            onClick={onSaveDialogOpen}
+          >
             <Icon name="BiCloudUpload" />
           </button>
         </div>
@@ -76,38 +93,26 @@ const SettingsPanel = () => {
       <div className="divider divider-horizontal" />
       <div className="flex gap-1">
         <div className="tooltip tooltip-bottom" data-tip="Undo">
-          <button className="btn btn-square btn-secondary" onClick={handleUndo}>
+          <button
+            className={`btn btn-square btn-secondary ${undoSize === 0 ? 'btn-disabled' : ''}`}
+            onClick={handleUndo}
+          >
             <Icon name="BiUndo" />
           </button>
         </div>
         <div className="tooltip tooltip-bottom" data-tip="Redo">
-          <button className="btn btn-square btn-secondary" onClick={handleRedo}>
+          <button
+            className={`btn btn-square btn-secondary ${redoSize === 0 ? 'btn-disabled' : ''}`}
+            onClick={handleRedo}
+          >
             <Icon name="BiRedo" />
           </button>
         </div>
       </div>
-      <div className="divider divider-horizontal" />
-      <div className="flex gap-1">
-        <div className="tooltip tooltip-bottom" data-tip="Zoom in">
-          <button className="btn btn-square btn-secondary">
-            <Icon name="BiZoomIn" />
-          </button>
-        </div>
-        <div className="tooltip tooltip-bottom" data-tip="Reset zoom to 1">
-          <button className="btn btn-secondary">Reset</button>
-        </div>
-        <div className="tooltip tooltip-bottom" data-tip="Fit drawing to viewport">
-          <button className="btn btn-secondary">Fit</button>
-        </div>
-        <div className="tooltip tooltip-bottom" data-tip="Zoom out">
-          <button className="btn btn-square btn-secondary">
-            <Icon name="BiZoomOut" />
-          </button>
-        </div>
-      </div>
+
       <ImportDialog />
       <ExportDialog />
-      <Toast ref={toastRef} />
+      <SaveDialog isOpen={isSaveDialogOpen} onClose={onSaveDialogClose} />
     </div>
   );
 };
