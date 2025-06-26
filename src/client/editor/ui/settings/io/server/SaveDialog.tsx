@@ -1,9 +1,10 @@
 import React, { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import useSnapshots from '../../../hooks/queries/useSnapshots';
-import useCreateSnapshot from '../../../hooks/useSaveSnapshot';
+import useCreateSnapshot from '../../../hooks/useCreateSnapshot';
 import Toast, { ToastRef } from '@/client/common/components/lib/Toast';
 import useUpdateSnapshot from '../../../hooks/useUpdateSnapshot';
+import ErrorMessage from '@/client/common/components/lib/ErrorMessage';
 
 type SaveForm = {
   id?: string;
@@ -16,14 +17,19 @@ type SaveDialogProps = {
 };
 
 const SaveDialog = ({ isOpen, onClose }: SaveDialogProps) => {
-  const { snapshots, isSnapshotsPending } = useSnapshots({ enabled: isOpen });
-
-  const {} = useSnapshots({ enabled: isOpen });
-
   const toastRef = useRef<ToastRef>();
 
-  const { mutate: createSnapshot } = useCreateSnapshot(toastRef);
-  const { mutate: updateSnapshot } = useUpdateSnapshot(toastRef);
+  const { snapshots, isSnapshotsPending, snapshotsError } = useSnapshots({ enabled: isOpen });
+  const {
+    mutate: createSnapshot,
+    error: createSnapshotError,
+    reset: resetCreateSnapshot,
+  } = useCreateSnapshot(toastRef);
+  const {
+    mutate: updateSnapshot,
+    error: updateSnapshotError,
+    reset: resetUpdateSnapshot,
+  } = useUpdateSnapshot(toastRef);
 
   const { register, formState, handleSubmit, reset } = useForm<SaveForm>({
     defaultValues: {
@@ -35,17 +41,28 @@ const SaveDialog = ({ isOpen, onClose }: SaveDialogProps) => {
   const handleClose = () => {
     onClose();
     reset();
+    resetCreateSnapshot();
+    resetUpdateSnapshot();
   };
 
   const onSubmit = handleSubmit(async ({ id, name }) => {
-    if (id) {
-      await updateSnapshot(id);
-    } else if (name) {
-      await createSnapshot(name);
-    }
+    resetCreateSnapshot();
+    resetUpdateSnapshot();
 
-    handleClose();
+    try {
+      if (id) {
+        await updateSnapshot(id);
+      } else if (name) {
+        await createSnapshot(name);
+      }
+
+      handleClose();
+    } catch {
+      // Handle error silently, as the error is already displayed in the dialog
+    }
   });
+
+  const errorMessage = createSnapshotError || updateSnapshotError || snapshotsError;
 
   return (
     <dialog id="save-dialog" className="modal">
@@ -84,12 +101,13 @@ const SaveDialog = ({ isOpen, onClose }: SaveDialogProps) => {
         </div>
 
         <div className="divider" />
+        <div className="flex flex-col gap-2">{errorMessage && <ErrorMessage error={errorMessage} />}</div>
         <div className="modal-action">
           <button className="btn btn-sm" onClick={handleClose}>
             Close
           </button>
           <button className={`btn btn-sm btn-warning  ${!formState.isDirty ? 'btn-disabled' : ''}`} onClick={onSubmit}>
-            Export
+            Save
           </button>
         </div>
       </div>

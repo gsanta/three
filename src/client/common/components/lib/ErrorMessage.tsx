@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import React from 'react';
 
-const knownErrorCodes = ['ERR_INVALID_CREDENTIALS'];
+const knownErrorCodes = ['ERR_INVALID_CREDENTIALS', 'ERR_OPERATION_FAILED'];
 
 export type ServerError = {
   code?: string;
@@ -17,7 +17,7 @@ const ErrorMessage = ({ error, fallbackMessage }: ErrorMessageProps) => {
   const code = error.response?.data.code;
   const message = error.response?.data.message;
   return (
-    <div role="alert" className="alert alert-warning">
+    <div role="alert" className="alert alert-error text-white">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-6 w-6 shrink-0 stroke-current"

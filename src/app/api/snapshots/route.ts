@@ -1,6 +1,5 @@
 import { authOptions } from '@/bff/config/auth';
 import db from '@/bff/config/db';
-import { Prisma } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 
@@ -33,18 +32,12 @@ export async function POST(req: Request) {
         state: state,
       },
     });
-
     return NextResponse.json({}, { status: 200 });
   } catch (error) {
-    let message = 'Unkown error';
-
-    if (error instanceof Prisma.PrismaClientValidationError) {
-      message = 'Invalid data provided.';
-    } else if (error instanceof Error) {
-      message = error.message;
-    }
-
-    return NextResponse.json({ message: 'Snapshot not created.', error: message }, { status: 400 });
+    return NextResponse.json(
+      { code: 'ERR_OPERATION_FAILED', message: 'Failed to create snapshot.', error },
+      { status: 400 },
+    );
   }
 }
 
@@ -61,14 +54,12 @@ export async function GET() {
       },
       take: 10,
     });
+
     return NextResponse.json({ items: latestSnapshots }, { status: 200 });
   } catch (error) {
-    let message = 'unkown error';
-
-    if (error instanceof Error) {
-      message = error.message;
-    }
-
-    return NextResponse.json({ message: 'Could not get snapshot.', error: message }, { status: 400 });
+    return NextResponse.json(
+      { code: 'ERR_OPERATION_FAILED', message: 'Failed to load snapshots.', error },
+      { status: 400 },
+    );
   }
 }

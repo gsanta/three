@@ -1,9 +1,11 @@
 import React from 'react';
 import ToggleButton from '../../../common/components/lib/ToggleButton';
 import Icon from '../../../common/components/lib/Icon';
-import { useAppSelector } from '../../../common/hooks/hooks';
+import { useAppDispatch, useAppSelector } from '../../../common/hooks/hooks';
 import useEditorContext from '@/app/editor/useEditorContext';
 import ToolName from '../../models/tool/ToolName';
+import IconButton from '@/client/common/components/lib/IconButton';
+import { undoAction, redoAction } from '../../stores/block/blockActions';
 
 const Toolbar = () => {
   const { tool } = useEditorContext();
@@ -11,6 +13,22 @@ const Toolbar = () => {
 
   const handleSelectTool = (name: ToolName) => {
     tool.setSelectedTool(name as ToolName);
+  };
+
+  const undoSize = useAppSelector((state) => state.blockCategory.undoSize);
+  const isUndoDisabled = undoSize === 0;
+
+  const redoSize = useAppSelector((state) => state.blockCategory.redoSize);
+  const isRedoDisabled = redoSize === 0;
+
+  const dispatch = useAppDispatch();
+
+  const handleUndo = () => {
+    dispatch(undoAction());
+  };
+
+  const handleRedo = () => {
+    dispatch(redoAction());
   };
 
   return (
@@ -27,6 +45,10 @@ const Toolbar = () => {
           </ToggleButton>
         );
       })}
+
+      <div className="divider w-full" />
+      <IconButton iconName="BiUndo" isDisabled={isUndoDisabled} onClick={handleUndo} tooltip="Undo" />
+      <IconButton iconName="BiRedo" isDisabled={isRedoDisabled} onClick={handleRedo} tooltip="Redo" />
     </div>
   );
 };

@@ -2,6 +2,8 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import useSnapshots from '../../../hooks/queries/useSnapshots';
 import useLoadSnapshot from '../../../hooks/useLoadSnapshot';
+import ErrorMessage from '@/client/common/components/lib/ErrorMessage';
+import IconButton from '@/client/common/components/lib/IconButton';
 
 type LoadForm = {
   id?: string;
@@ -13,7 +15,7 @@ type LoadDialogProps = {
 };
 
 const LoadDialog = ({ isOpen, onClose }: LoadDialogProps) => {
-  const { snapshots, isSnapshotsPending } = useSnapshots({ enabled: isOpen });
+  const { snapshots, isSnapshotsPending, snapshotsError } = useSnapshots({ enabled: isOpen });
 
   const { load, isLoadSnapshotPending } = useLoadSnapshot();
 
@@ -52,18 +54,34 @@ const LoadDialog = ({ isOpen, onClose }: LoadDialogProps) => {
               ))}
             </>
           ) : (
-            <>
+            <table className="table">
               {snapshots.map((snapshot) => (
-                <label className="flex items-center gap-4" key={snapshot.id}>
-                  <input className="radio radio-neutral" type="radio" value={snapshot.id} {...register('id')} />
-                  {snapshot.name}
-                </label>
+                <tr>
+                  <td className="w-4">
+                    <input
+                      className="radio radio-neutral"
+                      id={snapshot.id}
+                      type="radio"
+                      value={snapshot.id}
+                      {...register('id')}
+                    />
+                  </td>
+                  <td>
+                    <label className="flex items-center gap-4" htmlFor={snapshot.id} key={snapshot.id}>
+                      {snapshot.name}
+                    </label>
+                  </td>
+                  <td>
+                    <IconButton iconName="BiTrashAlt" />
+                  </td>
+                </tr>
               ))}
-            </>
+            </table>
           )}
         </div>
 
         <div className="divider" />
+        {snapshotsError && <ErrorMessage error={snapshotsError} fallbackMessage="Failed to load snapshots" />}
         <div className="modal-action">
           <button className={`btn btn-sm ${isLoadSnapshotPending ? 'btn-disabled' : ''}`} onClick={handleClose}>
             Close

@@ -9,7 +9,11 @@ import { MutableRefObject } from 'react';
 const useUpdateSnapshot = (toastRef: MutableRefObject<ToastRef>) => {
   const { serializer } = useEditorContext();
 
-  const { mutate, error, isPending } = useMutation<unknown, AxiosError<ServerError>, { id: string; state: string }>({
+  const { mutateAsync, error, isPending, reset } = useMutation<
+    unknown,
+    AxiosError<ServerError>,
+    { id: string; state: string }
+  >({
     mutationFn: async ({ id, state }) => {
       const resp = await api.patch(`/api/snapshots/${id}`, { state });
       return resp;
@@ -19,15 +23,15 @@ const useUpdateSnapshot = (toastRef: MutableRefObject<ToastRef>) => {
     },
   });
 
-  const handleMutate = (id: string) => {
-    mutate({ id, state: JSON.stringify(serializer.export()) });
+  const handleMutate = async (id: string) => {
+    await mutateAsync({ id, state: JSON.stringify(serializer.export()) });
   };
 
   return {
     mutate: handleMutate,
     error,
     isPending,
-    toastRef,
+    reset,
   };
 };
 

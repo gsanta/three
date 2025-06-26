@@ -4,7 +4,6 @@ import Scene from './Scene';
 import { useCallback, useMemo } from 'react';
 import GameActionPanel from './GameActionPanel';
 import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
-import AddPanel from './AddPanel';
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import SelectionPanel from './SelectionPanel';
 import CableDrawingPanel from './CableDrawingPanel';
@@ -45,9 +44,9 @@ const Canvas = () => {
   );
 
   const actionPanel = useMemo(() => {
-    if (currentActionPanel === 'add') {
-      return <AddPanel />;
-    }
+    // if (currentActionPanel === 'add') {
+    //   return <AddPanel />;
+    // }
 
     if (currentActionPanel === 'selection') {
       return <SelectionPanel />;
@@ -71,12 +70,12 @@ const Canvas = () => {
   // }, [center]);
 
   return (
-    <div style={{ width: 'calc(100% - 50px)' }}>
+    <div style={{ width: 'calc(100% - 50px)', height: '100%' }}>
       <ThreeCanvas
         onCreated={(canvasState) => {
           scene.setCanvasState(canvasState);
         }}
-        style={{ backgroundColor: 'goldenrod' }}
+        style={{ width: '100%', height: '100%', backgroundColor: 'goldenrod' }}
         shadows
         // camera={{ position: [0, 50, 75], fov: 25 }}
         // orthographic
