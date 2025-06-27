@@ -10,6 +10,7 @@ import useDialog from '../../hooks/useDialog';
 import { useSession } from 'next-auth/react';
 import LoadDialog from './server/LoadDialog';
 import EditorDrawer from '../EditorDrawer';
+import AppDrawer from '../AppDrawer';
 
 const SettingsPanel = () => {
   const dispatch = useAppDispatch();
@@ -43,7 +44,7 @@ const SettingsPanel = () => {
   return (
     <div className="flex items-center gap-4">
       <EditorDrawer />
-
+      <AppDrawer />
       {/* <div className="divider divider-horizontal" />
       <div className="flex gap-1">
         <div className="tooltip tooltip-bottom" data-tip={isLoggedIn ? 'Save' : 'Login to save'}>

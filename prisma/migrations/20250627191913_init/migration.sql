@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "name" TEXT,
     "password" TEXT,
@@ -79,7 +79,7 @@ CREATE TABLE "Snapshot" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "state" JSONB NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
     "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(6) NOT NULL,
 
@@ -120,4 +120,4 @@ ALTER TABLE "BlockContextMenuActionOnCategories" ADD CONSTRAINT "BlockContextMen
 ALTER TABLE "BlockContextMenuActionOnCategories" ADD CONSTRAINT "BlockContextMenuActionOnCategories_categoryName2_fkey" FOREIGN KEY ("categoryName2") REFERENCES "BlockCategory"("name") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Snapshot" ADD CONSTRAINT "Snapshot_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Snapshot" ADD CONSTRAINT "Snapshot_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

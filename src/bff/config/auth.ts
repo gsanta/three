@@ -1,9 +1,12 @@
-import { NextAuthOptions, getServerSession } from 'next-auth';
+import { NextAuthOptions, Session, getServerSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import db from './db';
 import bcrypt from 'bcrypt';
 import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from 'next';
+import { User } from 'next-auth';
+import { Account } from 'next-auth';
+import { Profile } from 'next-auth';
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID!;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET!;
@@ -41,7 +44,7 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({ clientId: GOOGLE_CLIENT_ID, clientSecret: GOOGLE_CLIENT_SECRET }),
   ],
   callbacks: {
-    async signIn({ account, profile }) {
+    async signIn({ account, profile }: { account: Account; profile: Profile }) {
       if (account?.provider === 'credentials') {
         return true;
       }
@@ -59,6 +62,13 @@ export const authOptions: NextAuthOptions = {
         update: {},
       });
       return true;
+    },
+    async session({ session, user }: { session: Session; user: User }) {
+      // Add user.id to the session object
+      if (session.user) {
+        session.user.id = user.id;
+      }
+      return session;
     },
   },
   session: {

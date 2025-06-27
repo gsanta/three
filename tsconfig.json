@@ -18,6 +18,7 @@
     ],
     "types": [
       "node",
+      "src/types/next-auth"
     ],
     "target": "es6",
     "lib": [
@@ -72,6 +73,7 @@
     "prisma/seed/**/*.ts",
     "cucumber.js",
     "postcss.config.mjs",
+    "tailwind.config.js",
   ],
   "exclude": [
     "node_modules"

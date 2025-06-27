@@ -1,6 +1,6 @@
 import SignUpDialog from './SignUpDialog';
 import LoginDialog from './LoginDialog';
-import UserDialog from './UserDialog';
+import ProfileDialog from './ProfileDialog';
 import { signOut, useSession } from 'next-auth/react';
 import { useRef } from 'react';
 import Toast, { ToastRef } from '@/client/common/components/lib/Toast';
@@ -66,7 +66,7 @@ const UserSettings = () => {
       )}
       <LoginDialog />
       <SignUpDialog />
-      <UserDialog />
+      <ProfileDialog />
       <Toast ref={toastRef} />
     </>
   );
