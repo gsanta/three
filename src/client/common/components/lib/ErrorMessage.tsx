@@ -14,8 +14,8 @@ type ErrorMessageProps = {
 };
 
 const ErrorMessage = ({ error, fallbackMessage }: ErrorMessageProps) => {
-  const code = error.response?.data.code;
-  const message = error.response?.data.message;
+  const code = error.response?.data.code || error.code;
+  const message = error.response?.data.message || error.message;
   return (
     <div role="alert" className="alert alert-error text-white">
       <svg

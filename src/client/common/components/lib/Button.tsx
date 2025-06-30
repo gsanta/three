@@ -3,13 +3,15 @@ import { MouseEventHandler, ReactNode, useMemo } from 'react';
 type ButtonType = {
   children: ReactNode;
   onClick: MouseEventHandler<HTMLButtonElement> | undefined;
-  colorScheme?: 'primary' | 'neutral';
+  colorScheme?: 'primary' | 'neutral' | 'accent';
   isDisabled?: boolean;
 };
 
 const Button = ({ children, colorScheme, isDisabled, onClick }: ButtonType) => {
   const colorClass = useMemo(() => {
     switch (colorScheme) {
+      case 'accent':
+        return 'btn-accent';
       case 'neutral':
         return 'btn-neutral';
       case 'primary':

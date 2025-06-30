@@ -1,18 +1,13 @@
 import api from '../../common/utils/api';
-import { usersPath } from '../../common/utils/routes';
+import { userPath } from '../../common/utils/routes';
 import { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
-import { useCallback } from 'react';
 import { ServerError } from '../../common/components/lib/ErrorMessage';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterSchema, registerSchema } from '@/common/validations/RegisterSchema';
 import { useMutation } from '@tanstack/react-query';
 
-type UseEmailSignUpProps = {
-  onClose(): void;
-};
-
-const useEmailSignUp = ({ onClose }: UseEmailSignUpProps) => {
+const useEmailSignUp = () => {
   const {
     register,
     handleSubmit,
@@ -26,32 +21,19 @@ const useEmailSignUp = ({ onClose }: UseEmailSignUpProps) => {
       password: '',
       passwordConfirmation: '',
     },
-    mode: 'onSubmit',
   });
 
-  const { mutate, isPending, error } = useMutation<unknown, AxiosError<ServerError>, RegisterSchema>({
+  const { mutateAsync, isPending, error } = useMutation<unknown, AxiosError<ServerError>, RegisterSchema>({
     mutationFn: async (data) => {
-      const resp = await api.post(usersPath, data);
+      const resp = await api.post(userPath, data);
 
       return resp;
     },
-    onSuccess() {
-      onClose();
-      reset();
-    },
   });
-
-  const handleRegistration = useCallback(
-    (data: RegisterSchema) => {
-      reset();
-      mutate(data);
-    },
-    [mutate, reset],
-  );
 
   return {
     query: {
-      registerEmail: handleRegistration,
+      registerEmail: mutateAsync,
       registerEmailError: error,
       isRegisterEmailLoading: isPending,
     },

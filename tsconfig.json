@@ -13,12 +13,11 @@
     "outDir": "./build",
     "typeRoots": [
       "./node_modules/@types",
-      "src/client/type_definitions",
+      "./src/types",
       "test/client/support/matchers"
     ],
     "types": [
       "node",
-      "src/types/next-auth"
     ],
     "target": "es6",
     "lib": [
@@ -53,9 +52,6 @@
       }
     ]
   },
-  "files": [
-    "src/client/common/global.d.ts",
-  ],
   "include": [
     ".eslintrc.js",
     "webpack.config.js",
@@ -68,6 +64,7 @@
     "engine/**/*.ts",
     "engine/**/*.js",
     "src/**/*.tsx",
+    "src/types",
     ".next/types/**/*.ts",
     "test/**/*.ts",
     "prisma/seed/**/*.ts",

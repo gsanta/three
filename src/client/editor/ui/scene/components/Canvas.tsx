@@ -2,7 +2,6 @@ import { Canvas as ThreeCanvas } from '@react-three/fiber';
 import useEditorContext from '@/app/editor/useEditorContext';
 import Scene from './Scene';
 import { useCallback, useMemo } from 'react';
-import GameActionPanel from './GameActionPanel';
 import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import SelectionPanel from './SelectionPanel';
@@ -85,10 +84,7 @@ const Canvas = () => {
       >
         <Scene />
       </ThreeCanvas>
-      <div className="absolute flex flex-col gap-2 left-[70px] bottom-[50px]">
-        {actionPanel}
-        <GameActionPanel />
-      </div>
+      <div className="absolute flex flex-col gap-2 left-[70px] bottom-[50px]">{actionPanel}</div>
     </div>
   );
 };

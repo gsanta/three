@@ -13,6 +13,7 @@ export type DialogProps = {
   isSubmitDisabled?: boolean;
   isSubmitLoading?: boolean;
   onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
+  placement?: 'modal-bottom' | 'modal-top' | 'modal-middle';
   submitLabel?: string;
   title: string;
 };
@@ -27,11 +28,12 @@ const Dialog = ({
   isSubmitDisabled,
   leftAction,
   onClose,
+  placement = 'modal-middle',
   submitLabel,
   title,
 }: DialogProps) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    // e.preventDefault();
     onSubmit?.(e);
   };
 
@@ -44,12 +46,18 @@ const Dialog = ({
         <>
           <h3 className="divider font-bold text-lg mb-0" />
 
-          <fieldset className="modal-action fieldset flex justify-between mt-2">
+          <fieldset className={`modal-action fieldset flex ${leftAction ? 'justify-between' : 'justify-end'} mt-2`}>
             {leftAction}
             {(onClose || submitLabel) && (
               <div className="flex gap-2">
                 {onClose && (
-                  <button className={`btn justify-self-end	 ${isSubmitLoading ? 'btn-disabled' : ''}`} onClick={onClose}>
+                  <button
+                    className={`btn justify-self-end	 ${isSubmitLoading ? 'btn-disabled' : ''}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onClose();
+                    }}
+                  >
                     Close
                   </button>
                 )}
@@ -70,7 +78,7 @@ const Dialog = ({
   );
 
   return (
-    <dialog id={id} className="modal">
+    <dialog id={id} className={`modal ${placement}`}>
       {onSubmit ? (
         <form className="modal-box" onSubmit={handleSubmit}>
           {content}

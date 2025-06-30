@@ -5,6 +5,7 @@ import useCreateSnapshot from '../../../hooks/useCreateSnapshot';
 import Toast, { ToastRef } from '@/client/common/components/lib/Toast';
 import useUpdateSnapshot from '../../../hooks/useUpdateSnapshot';
 import ErrorMessage from '@/client/common/components/lib/ErrorMessage';
+import EmptyState from '@/client/common/components/lib/EmptyState';
 
 type SaveForm = {
   id?: string;
@@ -89,12 +90,16 @@ const SaveDialog = ({ isOpen, onClose }: SaveDialogProps) => {
               <fieldset className="fieldset">
                 <legend className="fieldset-legend">Overwrite existing snapshot</legend>
 
-                {snapshots.map((snapshot) => (
-                  <label className="flex items-center gap-4" key={snapshot.id}>
-                    <input className="radio radio-neutral" type="radio" value={snapshot.id} {...register('id')} />
-                    {snapshot.name}
-                  </label>
-                ))}
+                {snapshots.length === 0 ? (
+                  <EmptyState message="There are no snapshots" />
+                ) : (
+                  snapshots.map((snapshot) => (
+                    <label className="flex items-center gap-4" key={snapshot.id}>
+                      <input className="radio radio-neutral" type="radio" value={snapshot.id} {...register('id')} />
+                      {snapshot.name}
+                    </label>
+                  ))
+                )}
               </fieldset>
             )}
           </div>

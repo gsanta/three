@@ -3,8 +3,10 @@ import useEditorContext from '@/app/editor/useEditorContext';
 import Avatar from '@/client/common/components/lib/Avatar';
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import BlockConstantData from '@/client/editor/models/block/BlockConstantData';
+import Dialog, { DialogProps } from '@/client/common/components/Dialog';
+import Button from '@/client/common/components/lib/Button';
 
-const AddDialog = () => {
+const AddDialog = (props: Pick<DialogProps, 'onClose' | 'isOpen'>) => {
   const blockTypes = useAppSelector((state) => state.blockType.blocks);
   const { blockTypeSelectorService } = useEditorContext();
 
@@ -30,30 +32,36 @@ const AddDialog = () => {
   }, [categories, selectedCategory]);
 
   return (
-    <dialog id="add-dialog" className="modal modal-top">
-      <div className="modal-box max-w-full rounded-none">
-        <h3 className="divider font-bold text-lg">Add item</h3>
-
-        <div className="flex flex-wrap gap-2">
-          {selectedCategory ? (
-            <>
-              {actieveBlockTypes?.map((blockType) => (
-                <Avatar
-                  onClick={() => blockTypeSelectorService.setSelectedBlockType(blockType)}
-                  placeholder={blockType.type}
-                />
-              ))}
-            </>
-          ) : (
-            <>
-              {Object.keys(categories).map((category) => (
-                <Avatar onClick={() => setSelectedCategory(category)} placeholder={category} />
-              ))}
-            </>
-          )}
-        </div>
+    <Dialog
+      {...props}
+      id={'add-dialog'}
+      leftAction={
+        <Button colorScheme="accent" isDisabled={!selectedCategory} onClick={() => setSelectedCategory(undefined)}>
+          Back
+        </Button>
+      }
+      placement="modal-bottom"
+      title={'Add'}
+    >
+      <div className="flex flex-wrap gap-2">
+        {selectedCategory ? (
+          <>
+            {actieveBlockTypes?.map((blockType) => (
+              <Avatar
+                onClick={() => blockTypeSelectorService.setSelectedBlockType(blockType)}
+                placeholder={blockType.type}
+              />
+            ))}
+          </>
+        ) : (
+          <>
+            {Object.keys(categories).map((category) => (
+              <Avatar onClick={() => setSelectedCategory(category)} placeholder={category} />
+            ))}
+          </>
+        )}
       </div>
-    </dialog>
+    </Dialog>
   );
 };
 

@@ -3,17 +3,21 @@ import Icon from '@/client/common/components/lib/Icon';
 import useDialog from '../hooks/useDialog';
 import SaveDialog from './io/server/SaveDialog';
 import LoadDialog from './io/server/LoadDialog';
+import ImportDialog from './io/import/ImportDialog';
+import ExportDialog from './io/ExportDialog';
 
 const EditorDrawer = () => {
-  const handleExport = () => {
-    const dialog = document.getElementById('export-dialog') as HTMLDialogElement;
-    dialog.showModal();
-  };
+  const {
+    isDialogOpen: isImportDialogOpen,
+    onDialogClose: onImportDialogClose,
+    onDialogOpen: onImportDialogOpen,
+  } = useDialog({ dialogId: 'import-dialog' });
 
-  const handleImport = () => {
-    const dialog = document.getElementById('import-dialog') as HTMLDialogElement;
-    dialog.showModal();
-  };
+  const {
+    isDialogOpen: isExportDialogOpen,
+    onDialogClose: onExportDialogClose,
+    onDialogOpen: onExportDialogOpen,
+  } = useDialog({ dialogId: 'export-dialog' });
 
   const {
     isDialogOpen: isSaveDialogOpen,
@@ -38,32 +42,46 @@ const EditorDrawer = () => {
       </div>
       <div className="drawer-side">
         <label htmlFor="editor-drawer" aria-label="close sidebar" className="drawer-overlay" />
-        <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4 flex flex-col gap-2">
-          {/* Sidebar content here */}
-          <li>
-            <Button colorScheme="neutral" onClick={handleImport}>
-              Import
-            </Button>
-          </li>
-          <li>
-            <Button colorScheme="neutral" onClick={handleExport}>
-              Export
-            </Button>
-          </li>
-          <li>
-            <Button colorScheme="neutral" onClick={onSaveDialogOpen}>
-              Save
-            </Button>
-          </li>
-          <li>
-            <Button colorScheme="neutral" onClick={onLoadDialogOpen}>
-              Load
-            </Button>
-          </li>
-        </ul>
+
+        <div className="menu bg-base-200 text-base-content min-h-full w-80 p-4 ">
+          <ul className="flex flex-col gap-2">
+            <li>
+              <Button colorScheme="neutral" onClick={onImportDialogOpen}>
+                Start game
+              </Button>
+            </li>
+          </ul>
+
+          <div className="divider" />
+
+          <ul className="flex flex-col gap-2">
+            <li>
+              <Button colorScheme="neutral" onClick={onImportDialogOpen}>
+                Import
+              </Button>
+            </li>
+            <li>
+              <Button colorScheme="neutral" onClick={onExportDialogOpen}>
+                Export
+              </Button>
+            </li>
+            <li>
+              <Button colorScheme="neutral" onClick={onSaveDialogOpen}>
+                Save
+              </Button>
+            </li>
+            <li>
+              <Button colorScheme="neutral" onClick={onLoadDialogOpen}>
+                Load
+              </Button>
+            </li>
+          </ul>
+        </div>
       </div>
       <SaveDialog isOpen={isSaveDialogOpen} onClose={onSaveDialogClose} />
       <LoadDialog isOpen={isLoadDialogOpen} onClose={onLoadDialogClose} />
+      <ImportDialog isOpen={isImportDialogOpen} onClose={onImportDialogClose} />
+      <ExportDialog isOpen={isExportDialogOpen} onClose={onExportDialogClose} />
     </div>
   );
 };

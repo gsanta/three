@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import FileType, { getFileTypes } from '../../../models/FileType';
 import { downloadString } from '../../../utils/fileUtils';
 import useEditorContext from '@/app/editor/useEditorContext';
+import Dialog, { DialogProps } from '@/client/common/components/Dialog';
 
-const ExportDialog = () => {
+const ExportDialog = (props: Pick<DialogProps, 'onClose' | 'isOpen'>) => {
   const [selectedFileType, setSelectedFileType] = useState<FileType>(FileType.json);
 
   const { serializer: exporter } = useEditorContext();
@@ -33,33 +34,28 @@ const ExportDialog = () => {
   };
 
   return (
-    <dialog id="export-dialog" className="modal">
-      <div className="modal-box">
-        <h3 className="font-bold text-lg">Export</h3>
-
-        <div className="form-control mt-4">
-          <label className="label">
-            <span className="label-text">Type</span>
-          </label>
-          <select className="select select-bordered" onChange={handleFileTypeChange}>
-            {getFileTypes().map((fileType) => (
-              <option key={fileType} value={fileType} selected={fileType === selectedFileType}>
-                {fileType}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="modal-action">
-          <button className="btn btn-sm" onClick={closeDialog}>
-            Close
-          </button>
-          <button className="btn btn-sm btn-warning" onClick={handleExport}>
-            Export
-          </button>
-        </div>
-      </div>
-    </dialog>
+    <Dialog {...props} id="export-dialog" onSubmit={handleExport} submitLabel="Export" title="Export">
+      <table className="table table-fixed">
+        <tbody>
+          <tr>
+            <th className="w-[30%]">
+              <label className="label" htmlFor="file-type-selector">
+                <span className="label-text">Type</span>
+              </label>
+            </th>
+            <td>
+              <select className="select select-bordered" id="file-type-selector" onChange={handleFileTypeChange}>
+                {getFileTypes().map((fileType) => (
+                  <option key={fileType} value={fileType} selected={fileType === selectedFileType}>
+                    {fileType}
+                  </option>
+                ))}
+              </select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </Dialog>
   );
 };
 

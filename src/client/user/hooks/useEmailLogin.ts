@@ -2,16 +2,14 @@ import { ServerError } from '../../common/components/lib/ErrorMessage';
 import { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
 import { useCallback } from 'react';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginSchema, loginSchema } from '@/common/validations/LoginSchema';
 import { useMutation } from '@tanstack/react-query';
 
-type UseEmailLoginProps = {
-  onClose(): void;
-};
+const useEmailLogin = () => {
+  const { update } = useSession();
 
-const useEmailLogin = ({ onClose }: UseEmailLoginProps) => {
   const {
     clearErrors,
     register,
@@ -24,42 +22,40 @@ const useEmailLogin = ({ onClose }: UseEmailLoginProps) => {
       password: '',
     },
     resolver: zodResolver(loginSchema),
-    mode: 'onSubmit',
   });
 
-  const { mutate, error, isPending } = useMutation<unknown, AxiosError<ServerError>, LoginSchema>({
+  const {
+    mutateAsync,
+    error,
+    isPending,
+    reset: resetMutation,
+  } = useMutation<unknown, AxiosError<ServerError>, LoginSchema>({
     mutationFn: async ({ email, password }) => {
       const resp = await signIn('credentials', {
         email,
         password,
         redirect: false,
       });
+
+      if (resp?.status === 401) {
+        throw new AxiosError<ServerError>('Invalid email or password', 'ERR_INVALID_CREDENTIALS');
+      }
+
+      await update();
+
       return resp;
     },
-    onSuccess() {
-      onClose();
-      reset({
-        email: '',
-        password: '',
-      });
-    },
   });
-
-  const loginEmail = useCallback(
-    async (data: LoginSchema) => {
-      mutate(data);
-    },
-    [mutate],
-  );
 
   const handleReset = useCallback(() => {
     reset();
     clearErrors();
-  }, [clearErrors, reset]);
+    resetMutation();
+  }, [clearErrors, reset, resetMutation]);
 
   return {
     query: {
-      loginEmail,
+      loginEmail: mutateAsync,
       loginEmailError: error,
       isLoginEmailLoding: isPending,
     },

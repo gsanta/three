@@ -1,17 +1,13 @@
 import { useState } from 'react';
 import DropZone from './DropZone';
 import useEditorContext from '@/app/editor/useEditorContext';
+import Dialog, { DialogProps } from '@/client/common/components/Dialog';
 
-const ImportDialog = () => {
+const ImportDialog = (props: Pick<DialogProps, 'onClose' | 'isOpen'>) => {
   const [fileName, setFileName] = useState<string>();
   const [fileContent, setFileContent] = useState<string>('[]');
 
-  const { importer } = useEditorContext();
-
-  const closeDialog = () => {
-    const dialog = document.getElementById('import-dialog') as HTMLDialogElement;
-    dialog.close();
-  };
+  const { serializer } = useEditorContext();
 
   const handleSetFile = (name: string, content: string) => {
     setFileName(name);
@@ -19,33 +15,16 @@ const ImportDialog = () => {
   };
 
   const handleImport = () => {
-    importer.import(fileContent);
-    closeDialog();
+    serializer.import(JSON.parse(fileContent));
+    props.onClose?.();
   };
 
   return (
-    <dialog id="import-dialog" className="modal">
-      <div className="modal-box">
-        <h3 className="font-bold text-lg">Import</h3>
-
-        <div className="mt-4">
-          <DropZone fileName={fileName} setFile={handleSetFile} />
-        </div>
-
-        <div className="modal-action">
-          <button className="btn btn-sm" onClick={closeDialog}>
-            Close
-          </button>
-          <button
-            className="btn btn-sm btn-warning"
-            onClick={handleImport}
-            // disabled={fileName === undefined}
-          >
-            Import
-          </button>
-        </div>
+    <Dialog {...props} id="import-dialog" onSubmit={handleImport} submitLabel="Import" title="Import">
+      <div className="mt-4">
+        <DropZone fileName={fileName} setFile={handleSetFile} />
       </div>
-    </dialog>
+    </Dialog>
   );
 };
 

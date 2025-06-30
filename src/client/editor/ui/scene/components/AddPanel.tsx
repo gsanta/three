@@ -3,6 +3,8 @@ import Avatar from '@/client/common/components/lib/Avatar';
 import { useAppSelector } from '@/client/common/hooks/hooks';
 import BlockConstantData from '@/client/editor/models/block/BlockConstantData';
 import { useMemo, useState } from 'react';
+import useDialog from '../../hooks/useDialog';
+import AddDialog from './AddDialog';
 
 const AddPanel = () => {
   const blockTypes = useAppSelector((state) => state.blockType.blocks);
@@ -28,6 +30,8 @@ const AddPanel = () => {
     }
     return undefined;
   }, [categories, selectedCategory]);
+
+  const { onDialogOpen: onAddDialogOpen } = useDialog({ dialogId: 'add-dialog' });
 
   return (
     <div className="card w-[37rem] rounded-none bg-base-100 shadow-md">
@@ -59,6 +63,7 @@ const AddPanel = () => {
           </div>
         )}
       </div>
+      <AddDialog />
     </div>
   );
 };

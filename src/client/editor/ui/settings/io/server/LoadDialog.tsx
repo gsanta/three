@@ -4,6 +4,7 @@ import useSnapshots from '../../../hooks/queries/useSnapshots';
 import useLoadSnapshot from '../../../hooks/useLoadSnapshot';
 import ErrorMessage from '@/client/common/components/lib/ErrorMessage';
 import IconButton from '@/client/common/components/lib/IconButton';
+import EmptyState from '@/client/common/components/lib/EmptyState';
 
 type LoadForm = {
   id?: string;
@@ -54,29 +55,35 @@ const LoadDialog = ({ isOpen, onClose }: LoadDialogProps) => {
               ))}
             </>
           ) : (
-            <table className="table">
-              {snapshots.map((snapshot) => (
-                <tr>
-                  <td className="w-4">
-                    <input
-                      className="radio radio-neutral"
-                      id={snapshot.id}
-                      type="radio"
-                      value={snapshot.id}
-                      {...register('id')}
-                    />
-                  </td>
-                  <td>
-                    <label className="flex items-center gap-4" htmlFor={snapshot.id} key={snapshot.id}>
-                      {snapshot.name}
-                    </label>
-                  </td>
-                  <td>
-                    <IconButton iconName="BiTrashAlt" />
-                  </td>
-                </tr>
-              ))}
-            </table>
+            <>
+              {snapshots.length === 0 ? (
+                <EmptyState message="There are no snapshots" />
+              ) : (
+                <table className="table">
+                  {snapshots.map((snapshot) => (
+                    <tr>
+                      <td className="w-4">
+                        <input
+                          className="radio radio-neutral"
+                          id={snapshot.id}
+                          type="radio"
+                          value={snapshot.id}
+                          {...register('id')}
+                        />
+                      </td>
+                      <td>
+                        <label className="flex items-center gap-4" htmlFor={snapshot.id} key={snapshot.id}>
+                          {snapshot.name}
+                        </label>
+                      </td>
+                      <td>
+                        <IconButton iconName="BiTrashAlt" />
+                      </td>
+                    </tr>
+                  ))}
+                </table>
+              )}
+            </>
           )}
         </div>
 

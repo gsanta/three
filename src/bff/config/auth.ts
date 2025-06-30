@@ -7,6 +7,7 @@ import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from 'next
 import { User } from 'next-auth';
 import { Account } from 'next-auth';
 import { Profile } from 'next-auth';
+import { JWT } from 'next-auth/jwt';
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID!;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET!;
@@ -44,7 +45,7 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({ clientId: GOOGLE_CLIENT_ID, clientSecret: GOOGLE_CLIENT_SECRET }),
   ],
   callbacks: {
-    async signIn({ account, profile }: { account: Account; profile: Profile }) {
+    async signIn({ account, profile }: { account: Account | null; profile?: Profile }) {
       if (account?.provider === 'credentials') {
         return true;
       }
@@ -63,10 +64,18 @@ export const authOptions: NextAuthOptions = {
       });
       return true;
     },
-    async session({ session, user }: { session: Session; user: User }) {
-      // Add user.id to the session object
-      if (session.user) {
-        session.user.id = user.id;
+    async jwt({ token, user }: { token: JWT; user?: User }) {
+      // Add user id to token on first login
+      if (user) {
+        token.sub = user.id;
+      }
+      return token;
+    },
+
+    async session({ session, token }: { session: Session; token: JWT }) {
+      // Set session.user.id from token
+      if (session.user && token.sub) {
+        session.user.id = token.sub;
       }
       return session;
     },
