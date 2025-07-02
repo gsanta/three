@@ -69,6 +69,10 @@ class MakeWireConnection {
     this.wireId = cable.id;
   }
 
+  getCableId() {
+    return this.wireId;
+  }
+
   undo() {
     if (!this.wireId) {
       return;

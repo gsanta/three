@@ -43,6 +43,13 @@ class ConnectToEmpty implements ConnectCable {
     throw new Error('Cannot finalize: ConnectToEmpty does not support finalization.');
   }
 
+  getCableIds() {
+    return this.from
+      ?.getPoleDecorator()
+      .wires.map((wire) => this.drawCables[wire]?.getCableId())
+      .filter((id) => id !== undefined);
+  }
+
   meshRendered(): void {
     this.from?.getPoleDecorator().wires.forEach((wire) => this.createOrUpdateCable(wire));
   }

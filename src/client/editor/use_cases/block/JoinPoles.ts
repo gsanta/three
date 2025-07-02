@@ -33,6 +33,10 @@ class JoinPoles {
     this.transactionService = transactionService;
   }
 
+  getCableIds() {
+    return this.makeWireConnectionList.map((makeWireConnection) => makeWireConnection.getCableId());
+  }
+
   join(block1: BlockData, block2: BlockData, config: ConnectPolesConfig = { isPreview: false }) {
     this.connectPolesConfig = { ...this.connectPolesConfig, ...config };
 
@@ -99,6 +103,7 @@ class JoinPoles {
     this.makeWireConnectionList.forEach((makeWireConnection) => {
       makeWireConnection.undo();
     });
+
     this.makeWireConnectionList = [];
   }
 

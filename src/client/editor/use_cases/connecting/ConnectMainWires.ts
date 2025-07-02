@@ -49,6 +49,10 @@ class ConnectMainWires implements ConnectCable {
     this.from = undefined;
   }
 
+  getCableIds() {
+    return this.joinPoles.getCableIds().filter((cableId) => cableId !== undefined);
+  }
+
   meshRendered(): void {}
 
   start(blockData: BlockData) {

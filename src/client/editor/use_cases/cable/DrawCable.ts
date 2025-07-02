@@ -40,6 +40,10 @@ class DrawCable {
     this.config = { ...initialConfig };
   }
 
+  getCableId() {
+    return this.cableId;
+  }
+
   draw(from: Num3, to: Num3, cableType: BlockTypeName) {
     this.cableType = cableType;
 

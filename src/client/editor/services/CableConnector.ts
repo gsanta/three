@@ -9,6 +9,8 @@ export interface ConnectCable {
 
   finalize(): void;
 
+  getCableIds(): string[] | undefined;
+
   meshRendered(): void;
 
   start(blockData: BlockData): void;

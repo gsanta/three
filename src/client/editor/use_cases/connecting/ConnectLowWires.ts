@@ -47,6 +47,11 @@ class ConnectLowWires implements ConnectCable {
     this.connectPoleToBuilding.finalize();
   }
 
+  getCableIds() {
+    const cableId = this.connectPoleToBuilding.getCableId();
+    return cableId ? [cableId] : undefined;
+  }
+
   isUsable(candidates: BlockData[]) {
     return candidates.find((candidate) => candidate.category === 'houses');
   }

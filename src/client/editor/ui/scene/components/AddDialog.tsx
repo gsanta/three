@@ -31,6 +31,11 @@ const AddDialog = (props: Pick<DialogProps, 'onClose' | 'isOpen'>) => {
     return undefined;
   }, [categories, selectedCategory]);
 
+  const handleBlockTypeClick = (blockType: BlockConstantData) => {
+    blockTypeSelectorService.setSelectedBlockType(blockType);
+    props.onClose?.();
+  };
+
   return (
     <Dialog
       {...props}
@@ -47,10 +52,7 @@ const AddDialog = (props: Pick<DialogProps, 'onClose' | 'isOpen'>) => {
         {selectedCategory ? (
           <>
             {actieveBlockTypes?.map((blockType) => (
-              <Avatar
-                onClick={() => blockTypeSelectorService.setSelectedBlockType(blockType)}
-                placeholder={blockType.type}
-              />
+              <Avatar onClick={() => handleBlockTypeClick(blockType)} placeholder={blockType.type} />
             ))}
           </>
         ) : (

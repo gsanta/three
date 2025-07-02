@@ -37,6 +37,10 @@ class SelectTool extends HoverTool {
     this.toolStore = toolStore;
   }
 
+  deselect() {
+    this.transaction.createTransaction().select([]).commit();
+  }
+
   onPointerUp(info: ToolInfo) {
     if (!info.isDragHappened && new Vector(info.drag).size() === 0) {
       this.selector.select(info.eventObject?.userData.modelId);

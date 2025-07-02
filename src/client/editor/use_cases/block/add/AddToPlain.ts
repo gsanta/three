@@ -12,7 +12,6 @@ class AddToPlain {
     }
 
     const block = this.factoryService.create(edit, newBlockType.type, { block: { position: position.get() } });
-    edit.select([edit.getLastBlock()]);
 
     return block;
   }

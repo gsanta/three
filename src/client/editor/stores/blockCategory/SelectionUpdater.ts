@@ -15,9 +15,9 @@ class SelectionUpdater {
         });
 
         if (state.selectedRootBlockIds.length === 1) {
-          state.currentActionPanel = 'selection';
+          state.currentAction = 'selection';
         } else {
-          state.currentActionPanel = 'add';
+          state.currentAction = 'add';
         }
 
         state.currentContextMenuActions = state.contextMenuActions.filter((action) => {

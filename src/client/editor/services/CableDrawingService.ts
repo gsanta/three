@@ -1,6 +1,6 @@
 import { store } from '@/client/common/utils/store';
 import BlockStore from '../stores/block/BlockStore';
-import { setCurrentActionPanel } from '../stores/blockCategory/blockCategorySlice';
+import { setCurrentCanvasAction } from '../stores/blockCategory/blockCategorySlice';
 import DrawUndergroundCable from '../use_cases/cable/DrawUndergroundCable';
 import FactoryService from './factory/FactoryService';
 import TransactionService from './transaction/TransactionService';
@@ -8,7 +8,7 @@ import GridStore from '../stores/grid/GridStore';
 import SceneStore from '../ui/scene/SceneStore';
 import BlockData from '../models/block/BlockData';
 import DrawCableFromCable from '../use_cases/cable/DrawCableFromCable';
-import ConnectPole from '../use_cases/connecting/ConnectPole';
+import DrawOverheadCables from '../use_cases/connecting/DrawOverheaderCables';
 import SceneService from '../ui/scene/service/SceneService';
 import { historyAction } from '../stores/block/blockActions';
 
@@ -27,7 +27,14 @@ class CableDrawingService {
 
     this.drawUndergroundCable = new DrawUndergroundCable(block, factoryService, gridStore, sceneStore, transaction);
 
-    this.connectPole = new ConnectPole(block, factoryService, gridStore, sceneService, sceneStore, transaction);
+    this.drawOverheadCables = new DrawOverheadCables(
+      block,
+      factoryService,
+      gridStore,
+      sceneService,
+      sceneStore,
+      transaction,
+    );
   }
 
   cancel() {
@@ -35,7 +42,7 @@ class CableDrawingService {
 
     this.activeDrawing?.cancel();
     this.activeDrawing = undefined;
-    store.dispatch(setCurrentActionPanel('add'));
+    store.dispatch(setCurrentCanvasAction('add'));
   }
 
   finish() {
@@ -43,9 +50,11 @@ class CableDrawingService {
 
     this.activeDrawing?.finalize();
     this.activeDrawing = undefined;
-    store.dispatch(setCurrentActionPanel('add'));
+    store.dispatch(setCurrentCanvasAction('add'));
     store.dispatch(historyAction());
   }
+
+  getDrawingState() {}
 
   isDrawing() {
     return this._isDrawing;
@@ -60,23 +69,20 @@ class CableDrawingService {
       this.activeDrawing = this.drawUndergroundCable;
 
       this._isDrawing = true;
-      store.dispatch(setCurrentActionPanel('cable-drawing'));
-
       return true;
-    } else if (this.connectPole.tryStart(toBlocks)) {
-      this.connectPole.execute(gridIndex);
+    } else if (this.drawOverheadCables.tryStart(toBlocks)) {
+      this.drawOverheadCables.execute(gridIndex);
 
-      this.activeDrawing = this.connectPole;
+      this.activeDrawing = this.drawOverheadCables;
 
       this._isDrawing = true;
-      store.dispatch(setCurrentActionPanel('cable-drawing'));
+      return true;
     } else if (this.drawCableFromCable.tryStart(toBlocks, gridIndex)) {
       this.drawCableFromCable.execute(gridIndex);
 
       this.activeDrawing = this.drawCableFromCable;
 
       this._isDrawing = true;
-      store.dispatch(setCurrentActionPanel('cable-drawing'));
 
       return true;
     }
@@ -86,6 +92,8 @@ class CableDrawingService {
 
   udpate(gridIndex: number) {
     this.activeDrawing?.execute(gridIndex);
+
+    return this.activeDrawing?.getDrawInfo();
   }
 
   private _isDrawing = false;
@@ -94,9 +102,9 @@ class CableDrawingService {
 
   private drawCableFromCable: DrawCableFromCable;
 
-  private connectPole: ConnectPole;
+  private drawOverheadCables: DrawOverheadCables;
 
-  private activeDrawing: DrawUndergroundCable | DrawCableFromCable | ConnectPole | undefined;
+  private activeDrawing: DrawUndergroundCable | DrawCableFromCable | DrawOverheadCables | undefined;
 
   private gridStore: GridStore;
 }

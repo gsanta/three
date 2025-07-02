@@ -1,9 +1,7 @@
 import BlockData from '../../models/block/BlockData';
 import CableDecorator from '../../models/block/categories/CableDecorator';
-import BlockPart from '../../models/block/part/BlockPart';
 import Grid from '../../models/Grid';
 import Vector from '../../models/math/Vector';
-import MeshWrapper from '../../models/MeshWrapper';
 import FactoryService from '../../services/factory/FactoryService';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
@@ -20,9 +18,8 @@ class DrawCableFromCable {
     transaction: TransactionService,
   ) {
     this.blockStore = blockStore;
-    this.sceneStore = sceneStore;
 
-    this.drawOrUpdateCable = new DrawCable(blockStore, factoryService, sceneStore, transaction);
+    this.drawCable = new DrawCable(blockStore, factoryService, sceneStore, transaction);
 
     this.grid = new Grid(gridStore);
   }
@@ -44,26 +41,25 @@ class DrawCableFromCable {
     const [toX, toZ] = this.grid.gridToWorldPos(toGridIndex);
     const to = new Vector([toX, this.undergroundDepth, toZ]);
 
-    this.drawOrUpdateCable.draw(this.getFromPosition().get(), to.get(), 'ground-cable-1');
+    this.drawCable.draw(this.getFromPosition().get(), to.get(), 'ground-cable-1');
   }
 
   finalize() {
-    this.drawOrUpdateCable.finalize();
+    this.drawCable.finalize();
     this.from = undefined;
     this.fromGridIndex = undefined;
     this.fromPosition = undefined;
   }
 
-  drawToPin(part: BlockPart) {
-    const mesh = this.sceneStore.getObj3d(part.getBlock().getId());
-    const meshWrapper = new MeshWrapper(mesh);
-    const to = meshWrapper.findByName(part.getPart().name).getWorldPosition();
-
-    this.drawOrUpdateCable.draw(this.getFromPosition().get(), to.get(), 'ground-cable-1');
+  getDrawInfo() {
+    return {
+      cableIds: this.drawCable.getCableId() ? [this.drawCable.getCableId()] : [],
+      finishable: false,
+    };
   }
 
   cancel() {
-    this.drawOrUpdateCable.cancel();
+    this.drawCable.cancel();
     this.from = undefined;
     this.fromGridIndex = undefined;
     this.fromPosition = undefined;
@@ -95,13 +91,11 @@ class DrawCableFromCable {
 
   private from: BlockData | undefined;
 
-  private drawOrUpdateCable: DrawCable;
+  private drawCable: DrawCable;
 
   private grid: Grid;
 
   private blockStore: BlockStore;
-
-  private sceneStore: SceneStore;
 
   private undergroundDepth = -1;
 }

@@ -19,12 +19,9 @@ class DrawUndergroundCable {
     sceneStore: SceneStore,
     transaction: TransactionService,
   ) {
-    this.blockStore = blockStore;
-    this.transaction = transaction;
-    this.factoryService = factoryService;
     this.sceneStore = sceneStore;
 
-    this.drawOrUpdateCable = new DrawCable(blockStore, factoryService, sceneStore, transaction);
+    this.drawCable = new DrawCable(blockStore, factoryService, sceneStore, transaction);
 
     this.grid = new Grid(gridStore);
   }
@@ -46,16 +43,23 @@ class DrawUndergroundCable {
     const [toX, toZ] = this.grid.gridToWorldPos(toGridIndex);
     const to = new Vector([toX, this.undergroundDepth, toZ]);
 
-    this.drawOrUpdateCable.draw(this.getFromPosition().get(), to.get(), 'ground-cable-1');
+    this.drawCable.draw(this.getFromPosition().get(), to.get(), 'ground-cable-1');
   }
 
   finalize() {
-    this.drawOrUpdateCable.finalize();
+    this.drawCable.finalize();
     this.from = undefined;
   }
 
+  getDrawInfo() {
+    return {
+      cableIds: [this.drawCable?.getCableId()],
+      finishable: Boolean(this.drawCable.getCableId()),
+    };
+  }
+
   cancel() {
-    this.drawOrUpdateCable.cancel();
+    this.drawCable.cancel();
   }
 
   private getFromPosition() {
@@ -77,19 +81,11 @@ class DrawUndergroundCable {
 
   private from: BlockPart | undefined;
 
-  private drawOrUpdateCable: DrawCable;
+  private drawCable: DrawCable;
 
   private grid: Grid;
 
-  private tempCableId?: string;
-
-  private blockStore: BlockStore;
-
-  private factoryService: FactoryService;
-
   private sceneStore: SceneStore;
-
-  private transaction: TransactionService;
 
   private undergroundDepth = -1;
 }

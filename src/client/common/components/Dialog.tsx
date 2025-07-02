@@ -9,6 +9,7 @@ export type DialogProps = {
   error?: AxiosError<ServerError> | null;
   errorMessageFallback?: string;
   leftAction?: React.ReactNode;
+  hasBackdrop?: boolean;
   id: string;
   isSubmitDisabled?: boolean;
   isSubmitLoading?: boolean;
@@ -20,9 +21,11 @@ export type DialogProps = {
 
 const Dialog = ({
   id,
+  isOpen,
   children,
   error,
   errorMessageFallback,
+  hasBackdrop = true,
   onSubmit,
   isSubmitLoading,
   isSubmitDisabled,
@@ -77,16 +80,34 @@ const Dialog = ({
     </>
   );
 
-  return (
+  return hasBackdrop ? (
     <dialog id={id} className={`modal ${placement}`}>
       {onSubmit ? (
-        <form className="modal-box" onSubmit={handleSubmit}>
+        <form className="modal-box m-auto max-w-[50rem]" onSubmit={handleSubmit}>
           {content}
         </form>
       ) : (
-        <div className="modal-box">{content}</div>
+        <div className="modal-box mx-auto max-w-[50rem]">{content}</div>
       )}
     </dialog>
+  ) : (
+    <>
+      {isOpen && (
+        <div
+          id={id}
+          role="dialog"
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[40rem] p-4 bg-white rounded-t-xl z-[100]"
+        >
+          {onSubmit ? (
+            <form className="m-auto max-w-[50rem]" onSubmit={handleSubmit}>
+              {content}
+            </form>
+          ) : (
+            <div className="mx-auto max-w-[50rem]">{content}</div>
+          )}
+        </div>
+      )}
+    </>
   );
 };
 

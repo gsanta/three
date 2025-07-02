@@ -6,6 +6,8 @@ import SceneService from '../../ui/scene/service/SceneService';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import CableDrawingService from '../../services/CableDrawingService';
 import BlockTypeStore from '../../stores/blockType/BlockTypeStore';
+import { store } from '@/client/common/utils/store';
+import { setCurrentCanvasAction } from '../../stores/blockCategory/blockCategorySlice';
 
 class CableTool extends HoverTool {
   constructor(
@@ -36,7 +38,11 @@ class CableTool extends HoverTool {
     this.prevGridIndex = info.gridIndex;
 
     if (this.cableDrawingService.isDrawing()) {
-      this.cableDrawingService.udpate(info.gridIndex);
+      const drawInfo = this.cableDrawingService.udpate(info.gridIndex);
+
+      if (drawInfo?.finishable) {
+        store.dispatch(setCurrentCanvasAction('finish-cable-drawing'));
+      }
     }
   }
 
@@ -47,7 +53,10 @@ class CableTool extends HoverTool {
     if (this.cableDrawingService.isDrawing()) {
       this.cableDrawingService.udpate(info.gridIndex);
     } else {
-      this.cableDrawingService.start(selectedBlock, info.gridIndex);
+      const didStart = this.cableDrawingService.start(selectedBlock, info.gridIndex);
+      if (didStart) {
+        store.dispatch(setCurrentCanvasAction('cable-drawing'));
+      }
     }
   }
 

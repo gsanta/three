@@ -4,7 +4,7 @@ import Scene from './Scene';
 import { useCallback, useMemo } from 'react';
 import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { useAppSelector } from '@/client/common/hooks/hooks';
-import SelectionPanel from './SelectionPanel';
+import SelectionDialog from './SelectionDialog';
 import CableDrawingPanel from './CableDrawingPanel';
 
 const Canvas = () => {
@@ -20,7 +20,7 @@ const Canvas = () => {
   const { sceneStore: scene } = useEditorContext();
 
   const selectedRootBlockIds = useAppSelector((state) => state.blockCategory.selectedRootBlockIds);
-  const currentActionPanel = useAppSelector((state) => state.blockCategory.currentActionPanel);
+  const currentActionPanel = useAppSelector((state) => state.blockCategory.currentAction);
 
   // const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -48,10 +48,10 @@ const Canvas = () => {
     // }
 
     if (currentActionPanel === 'selection') {
-      return <SelectionPanel />;
+      return <SelectionDialog />;
     }
 
-    if (currentActionPanel === 'cable-drawing') {
+    if (currentActionPanel === 'finish-cable-drawing') {
       return <CableDrawingPanel />;
     }
 

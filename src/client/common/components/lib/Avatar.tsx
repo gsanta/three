@@ -1,6 +1,6 @@
 type AvatarProps = {
   placeholder?: string;
-  onClick(): void;
+  onClick?(): void;
   src?: string;
 };
 

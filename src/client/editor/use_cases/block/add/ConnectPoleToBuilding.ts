@@ -36,6 +36,7 @@ class ConnectPoleToBuilding {
     if (this.weatherHeadId) {
       this.eraseBlock.erase([this.weatherHeadId]);
       this.weatherHeadId = undefined;
+      this.cableId = undefined;
     }
   }
 
@@ -70,6 +71,11 @@ class ConnectPoleToBuilding {
   finalize() {
     this.weatherHeadId = undefined;
     this.pole = undefined;
+    this.cableId = undefined;
+  }
+
+  getCableId() {
+    return this.cableId;
   }
 
   isExecuted() {
@@ -111,6 +117,8 @@ class ConnectPoleToBuilding {
         },
       });
 
+      this.cableId = cable.id;
+
       edit.updateBlock(this.weatherHeadId, {
         conduitConnections: [{ block: cable.id, pinIndex: 0, thisPart: 'CableAnchor' }],
       });
@@ -137,6 +145,8 @@ class ConnectPoleToBuilding {
         { distance: Number.MAX_SAFE_INTEGER, partName: '' },
       );
   }
+
+  private cableId?: string;
 
   private eraseBlock: EraseBlock;
 

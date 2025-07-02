@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ToggleButton from '../../../common/components/lib/ToggleButton';
 import Icon from '../../../common/components/lib/Icon';
 import { useAppDispatch, useAppSelector } from '../../../common/hooks/hooks';
@@ -9,6 +9,8 @@ import { undoAction, redoAction } from '../../stores/block/blockActions';
 import useDialog from '../hooks/useDialog';
 import AddDialog from '../scene/components/AddDialog';
 import PlayerDialog from '../scene/components/PlayerDialog';
+import SelectionDialog from '../scene/components/SelectionDialog';
+import ItemDialog from '../scene/components/ItemDialog';
 
 const Toolbar = () => {
   const { tool } = useEditorContext();
@@ -34,6 +36,10 @@ const Toolbar = () => {
     dispatch(redoAction());
   };
 
+  const currentActionPanel = useAppSelector((state) => state.blockCategory.currentAction);
+
+  const activeBlockType = useAppSelector((state) => state.blockType.activeBlockType);
+
   const {
     isDialogOpen: isAddDialogOpen,
     onDialogClose: onAddDialogClose,
@@ -45,6 +51,30 @@ const Toolbar = () => {
     onDialogClose: onPlayerDialogClose,
     onDialogOpen: onPlayerDialogOpen,
   } = useDialog({ dialogId: 'player-dialog' });
+
+  const {
+    isDialogOpen: isSelectionDialogOpen,
+    onDialogClose: onSelectionDialogClose,
+    onDialogOpen: onSelectionDialogOpen,
+  } = useDialog({ dialogId: 'selection-dialog' });
+
+  const {
+    isDialogOpen: isItemDialogOpen,
+    onDialogClose: onItemDialogClose,
+    onDialogOpen: onItemDialogOpen,
+  } = useDialog({ dialogId: 'item-dialog' });
+
+  useEffect(() => {
+    if (activeBlockType) {
+      onItemDialogOpen();
+    }
+  }, [activeBlockType, onItemDialogOpen]);
+
+  useEffect(() => {
+    if (currentActionPanel === 'selection') {
+      onSelectionDialogOpen();
+    }
+  }, [currentActionPanel, onSelectionDialogOpen]);
 
   return (
     <div className="bg-base-300 h-full pt-2 pb-1 flex flex-col justify-between gap-1 items-center">
@@ -67,6 +97,9 @@ const Toolbar = () => {
         <IconButton iconName="BiRedo" isDisabled={isRedoDisabled} onClick={handleRedo} tooltip="Redo" />
       </div>
       <div className="flex flex-col gap-1 items-center pb-2">
+        <ToggleButton toggle={selectedTool === ToolName.Select} onToggle={() => handleSelectTool(ToolName.Select)}>
+          <Icon name="BiRectangle" />
+        </ToggleButton>
         <ToggleButton toggle={isPlayerDialogOpen} onToggle={onPlayerDialogOpen}>
           <Icon name="BiUser" />
         </ToggleButton>
@@ -74,7 +107,10 @@ const Toolbar = () => {
           <Icon name="BiBuildingHouse" />
         </ToggleButton>
       </div>
+
+      <SelectionDialog isOpen={isSelectionDialogOpen} onClose={onSelectionDialogClose} />
       <AddDialog isOpen={isAddDialogOpen} onClose={onAddDialogClose} />
+      <ItemDialog isOpen={isItemDialogOpen} onClose={onItemDialogClose} />
       <PlayerDialog isOpen={isPlayerDialogOpen} onClose={onPlayerDialogClose} />
     </div>
   );

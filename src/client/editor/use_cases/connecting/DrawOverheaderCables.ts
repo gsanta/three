@@ -1,4 +1,3 @@
-import { BlockCategoryName } from '../../models/block/BlockCategoryName';
 import BlockData from '../../models/block/BlockData';
 import Grid from '../../models/Grid';
 import Num3 from '../../models/math/Num3';
@@ -13,9 +12,7 @@ import ConnectLowWires from './ConnectLowWires';
 import ConnectMainWires from './ConnectMainWires';
 import ConnectToEmpty from './ConnectToEmpty';
 
-class ConnectPole {
-  category = 'poles' as BlockCategoryName;
-
+class DrawOverheadCables {
   constructor(
     blockStore: BlockStore,
     factoryService: FactoryService,
@@ -60,6 +57,13 @@ class ConnectPole {
   finalize(): void {
     this.currentConnection?.finalize();
     this.currentConnection = undefined;
+  }
+
+  getDrawInfo() {
+    return {
+      cableIds: this.currentConnection?.getCableIds(),
+      finishable: this.currentConnection && this.currentConnection !== this.connectToEmpty,
+    };
   }
 
   meshRendered(): void {
@@ -112,4 +116,4 @@ class ConnectPole {
   private gridStore: GridStore;
 }
 
-export default ConnectPole;
+export default DrawOverheadCables;
