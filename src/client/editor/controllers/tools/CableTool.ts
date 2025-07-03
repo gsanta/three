@@ -26,6 +26,18 @@ class CableTool extends HoverTool {
     this.onMeshRendered = this.onMeshRendered.bind(this);
   }
 
+  cancelCableDrawing(): void {
+    if (this.cableDrawingService.isDrawing()) {
+      this.cableDrawingService.cancel();
+    }
+  }
+
+  finishCableDrawing(): void {
+    if (this.cableDrawingService.isDrawing()) {
+      this.cableDrawingService.finish();
+    }
+  }
+
   onDeactivate(): void {
     this.cableDrawingService.cancel();
     this.prevGridIndex = -1;

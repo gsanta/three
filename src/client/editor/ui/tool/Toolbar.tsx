@@ -11,10 +11,12 @@ import AddDialog from '../scene/components/AddDialog';
 import PlayerDialog from '../scene/components/PlayerDialog';
 import SelectionDialog from '../scene/components/SelectionDialog';
 import ItemDialog from '../scene/components/ItemDialog';
+import GameStartDialog from '../scene/components/GameStartDialog';
 
 const Toolbar = () => {
   const { tool } = useEditorContext();
   const selectedTool = useAppSelector((state) => state.tool.selectedTool);
+  const gameState = useAppSelector((state) => state.game.gameState);
 
   const handleSelectTool = (name: ToolName) => {
     tool.setSelectedTool(name as ToolName);
@@ -51,6 +53,12 @@ const Toolbar = () => {
     onDialogClose: onPlayerDialogClose,
     onDialogOpen: onPlayerDialogOpen,
   } = useDialog({ dialogId: 'player-dialog' });
+
+  const {
+    isDialogOpen: isGameStartDialogOpen,
+    onDialogClose: onGameStartDialogClose,
+    onDialogOpen: onGameStartDialogOpen,
+  } = useDialog({ dialogId: 'game-start-dialog' });
 
   const {
     isDialogOpen: isSelectionDialogOpen,
@@ -97,11 +105,14 @@ const Toolbar = () => {
         <IconButton iconName="BiRedo" isDisabled={isRedoDisabled} onClick={handleRedo} tooltip="Redo" />
       </div>
       <div className="flex flex-col gap-1 items-center pb-2">
+        <ToggleButton
+          toggle={isPlayerDialogOpen}
+          onToggle={gameState === 'not-started' ? onGameStartDialogOpen : onPlayerDialogOpen}
+        >
+          <Icon name="BiPlayCircle" />
+        </ToggleButton>
         <ToggleButton toggle={selectedTool === ToolName.Select} onToggle={() => handleSelectTool(ToolName.Select)}>
           <Icon name="BiRectangle" />
-        </ToggleButton>
-        <ToggleButton toggle={isPlayerDialogOpen} onToggle={onPlayerDialogOpen}>
-          <Icon name="BiUser" />
         </ToggleButton>
         <ToggleButton toggle={isAddDialogOpen} onToggle={onAddDialogOpen}>
           <Icon name="BiBuildingHouse" />
@@ -112,6 +123,7 @@ const Toolbar = () => {
       <AddDialog isOpen={isAddDialogOpen} onClose={onAddDialogClose} />
       <ItemDialog isOpen={isItemDialogOpen} onClose={onItemDialogClose} />
       <PlayerDialog isOpen={isPlayerDialogOpen} onClose={onPlayerDialogClose} />
+      <GameStartDialog isOpen={isGameStartDialogOpen} onClose={onGameStartDialogClose} />
     </div>
   );
 };

@@ -15,6 +15,7 @@ export type DialogProps = {
   isSubmitLoading?: boolean;
   onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
   placement?: 'modal-bottom' | 'modal-top' | 'modal-middle';
+  size?: 'sm' | 'md';
   submitLabel?: string;
   title: string;
 };
@@ -32,6 +33,7 @@ const Dialog = ({
   leftAction,
   onClose,
   placement = 'modal-middle',
+  size = 'md',
   submitLabel,
   title,
 }: DialogProps) => {
@@ -83,11 +85,11 @@ const Dialog = ({
   return hasBackdrop ? (
     <dialog id={id} className={`modal ${placement}`}>
       {onSubmit ? (
-        <form className="modal-box m-auto max-w-[50rem]" onSubmit={handleSubmit}>
+        <form className={`modal-box m-auto max-w-[${size === 'md' ? '50rem' : '25rem'}]`} onSubmit={handleSubmit}>
           {content}
         </form>
       ) : (
-        <div className="modal-box mx-auto max-w-[50rem]">{content}</div>
+        <div className={`modal-box mx-auto max-w-[${size === 'md' ? '50rem' : '25rem'}]`}>{content}</div>
       )}
     </dialog>
   ) : (

@@ -18,7 +18,7 @@ const Scene = () => {
 
   const orbitControlRef = useRef<OrbitControlsImpl>(null);
 
-  const currentActionPanel = useAppSelector((state) => state.blockCategory.currentAction);
+  const currentAction = useAppSelector((state) => state.blockCategory.currentAction);
 
   useEffect(() => {
     if (orbitControlRef.current) {
@@ -106,7 +106,11 @@ const Scene = () => {
         <meshStandardMaterial color="brown" />
       </mesh>
       <TemporaryCableRenderer />
-      <OrbitControls makeDefault ref={orbitControlRef} />
+      <OrbitControls
+        enableRotate={!['cable-drawing', 'finish-cable-drawing'].includes(currentAction || '')}
+        makeDefault
+        ref={orbitControlRef}
+      />
       <Environment files="envmap.hdr" background={true} />
 
       <PerspectiveCamera makeDefault position={[0, 50, 75]} fov={25} />

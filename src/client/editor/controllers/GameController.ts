@@ -8,6 +8,8 @@ import { setSelectedTool } from '../stores/tool/toolSlice';
 import ToolName from '../models/tool/ToolName';
 import SceneStore from '../ui/scene/SceneStore';
 import { Box3, Vector3 } from 'three';
+import Serializer from './serializer/Serializer';
+import game1 from '../../../examples/game_1.json';
 
 class GameController {
   constructor(
@@ -15,11 +17,13 @@ class GameController {
     gameStore: GameStore,
     gridStore: GridStore,
     sceneStore: SceneStore,
+    serializer: Serializer,
     store: Store,
   ) {
     this.blockStore = blockStore;
     this.gameStore = gameStore;
     this.sceneStore = sceneStore;
+    this.serializer = serializer;
     this.store = store;
 
     this.calculateReachableGrids = new CalculateReachableGrids(gridStore);
@@ -49,6 +53,8 @@ class GameController {
   }
 
   startGame() {
+    this.serializer.import(game1);
+
     const players = this.gameStore.getPlayers();
 
     const nextPlayer = this.blockStore.getBlock(players[0]);
@@ -64,6 +70,8 @@ class GameController {
   private gameStore: GameStore;
 
   private sceneStore: SceneStore;
+
+  private serializer: Serializer;
 
   private store: Store;
 

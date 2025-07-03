@@ -85,7 +85,14 @@ export const setupEditor = () => {
     new ConnectPoleToBuilding(blockStore, factoryService, sceneStore, sceneService, transactionService),
   );
 
-  const gameController = new GameController(blockStore, gameStore, gridStore, sceneStore, store);
+  const serializer = new Serializer(
+    store,
+    new BlockSerializer(store),
+    new GameSerializer(store),
+    new GridSerializer(store),
+  );
+
+  const gameController = new GameController(blockStore, gameStore, gridStore, sceneStore, serializer, store);
 
   const cableDrawingService = new CableDrawingService(
     blockStore,
@@ -122,7 +129,7 @@ export const setupEditor = () => {
     cableDrawingService,
     controller: new ControllerService(transactionService),
     eraser: new EraserService(blockStore, transactionService),
-    serializer: new Serializer(store, new BlockSerializer(store), new GameSerializer(store), new GridSerializer(store)),
+    serializer,
     gridStore: gridStore,
     sceneStore: sceneStore,
     sceneService: sceneService,

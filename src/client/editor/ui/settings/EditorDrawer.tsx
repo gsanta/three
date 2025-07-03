@@ -47,16 +47,6 @@ const EditorDrawer = () => {
           <ul className="flex flex-col gap-2">
             <li>
               <Button colorScheme="neutral" onClick={onImportDialogOpen}>
-                Start game
-              </Button>
-            </li>
-          </ul>
-
-          <div className="divider" />
-
-          <ul className="flex flex-col gap-2">
-            <li>
-              <Button colorScheme="neutral" onClick={onImportDialogOpen}>
                 Import
               </Button>
             </li>
