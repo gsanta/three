@@ -24,7 +24,7 @@ const ToggleButton = (props: ButtonProps) => {
       </button>
     </div>
   ) : (
-    <button className="btn btn-square btn-neutral" onClick={handleClick}>
+    <button className={`btn btn-square ${toggle ? 'btn-warning' : 'btn-neutral'}`} onClick={handleClick}>
       {props.children}
     </button>
   );

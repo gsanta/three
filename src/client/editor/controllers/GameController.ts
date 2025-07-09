@@ -7,9 +7,11 @@ import GridStore from '../stores/grid/GridStore';
 import { setSelectedTool } from '../stores/tool/toolSlice';
 import ToolName from '../models/tool/ToolName';
 import SceneStore from '../ui/scene/SceneStore';
-import { Box3, Vector3 } from 'three';
+import { Box3, Camera, Vector3 } from 'three';
 import Serializer from './serializer/Serializer';
 import game1 from '../../../examples/game_1.json';
+import { SerializedState } from './serializer/SerializedState';
+import { setGameState } from '../stores/game/gameSlice';
 
 class GameController {
   constructor(
@@ -44,8 +46,11 @@ class GameController {
     const box = new Box3().setFromObject(object);
     const center = box.getCenter(new Vector3());
 
-    this.sceneStore.getOrbitControls().target.copy(center);
-    this.sceneStore.getOrbitControls().update();
+    // this.sceneStore.getCamera().position.set(center.x, center.y + 30, center.z + 45);
+    // this.sceneStore.getOrbitControls().target.set(center.x, center.y, center.z);
+    // this.sceneStore.getOrbitControls().update();
+
+    this.slideCameraToLookAtPoint(this.sceneStore.getCamera(), center);
 
     this.sceneStore.getCanvasState();
 
@@ -53,7 +58,7 @@ class GameController {
   }
 
   startGame() {
-    this.serializer.import(game1);
+    this.serializer.import(game1 as SerializedState);
 
     const players = this.gameStore.getPlayers();
 
@@ -63,6 +68,19 @@ class GameController {
 
     this.store.dispatch(selectPlayer(nextPlayer, reachableGrids));
     this.store.dispatch(setSelectedTool(ToolName.Move));
+    this.store.dispatch(setGameState('started'));
+  }
+
+  private slideCameraToLookAtPoint(camera: Camera, point: Vector3) {
+    const controls = this.sceneStore.getOrbitControls();
+
+    const offset = new Vector3().subVectors(camera.position, controls.target);
+
+    camera.position.z = point.z + offset.z;
+    camera.position.x = point.x - offset.x;
+
+    this.sceneStore.getOrbitControls().target.set(point.x, point.y, point.z);
+    this.sceneStore.getOrbitControls().update();
   }
 
   private blockStore: BlockStore;

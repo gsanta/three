@@ -3,6 +3,7 @@ import { useAppSelector } from '@/client/common/hooks/hooks';
 import Dialog, { DialogProps } from '@/client/common/components/Dialog';
 import useEditorContext from '@/app/editor/useEditorContext';
 import Button from '@/client/common/components/lib/Button';
+import Avatar from '@/client/common/components/lib/Avatar';
 
 const PlayerDialog = (props: Pick<DialogProps, 'onClose' | 'isOpen'>) => {
   const {
@@ -17,6 +18,7 @@ const PlayerDialog = (props: Pick<DialogProps, 'onClose' | 'isOpen'>) => {
   return (
     <Dialog
       {...props}
+      hasBackdrop={false}
       id={'player-dialog'}
       leftAction={
         <Button colorScheme="accent" onClick={() => game.selectNextPlayer()}>
@@ -25,7 +27,12 @@ const PlayerDialog = (props: Pick<DialogProps, 'onClose' | 'isOpen'>) => {
       }
       placement="modal-bottom"
       title={`Player ${currentPlayerIndex}/${players?.length}`}
-    ></Dialog>
+    >
+      <div className="flex flex-row justify-center gap-2">
+        <Avatar onClick={() => {}} placeholder="Move" />
+        <Avatar onClick={() => {}} placeholder="Build" />
+      </div>
+    </Dialog>
   );
 };
 

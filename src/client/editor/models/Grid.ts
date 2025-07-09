@@ -56,7 +56,7 @@ class Grid {
     return this.gridStore.getCols() * posZ + posX;
   }
 
-  gridIndexToGridPos(gridIndex: number): [number, number] {
+  gridIndexToGridPosition(gridIndex: number): [number, number] {
     const row = Math.floor(gridIndex / this.gridStore.getCols());
     const col = gridIndex - row * this.gridStore.getCols();
 

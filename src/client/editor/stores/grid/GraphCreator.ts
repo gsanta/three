@@ -14,7 +14,7 @@ class GraphCreator {
     for (let i = 0; i < maxIndex; i++) {
       graph[i] = this.getNeighboursFor(i).map((index) => ({
         index,
-        weight: 0,
+        weight: 1,
       }));
     }
 
@@ -25,18 +25,31 @@ class GraphCreator {
     const row = Math.floor(gridIndex / this.cols);
     const col = gridIndex - row * this.cols;
 
-    const minCol = col === 0 ? 0 : col - 1;
-    const maxCol = col === this.cols - 1 ? col : col + 1;
+    // const minCol = col === 0 ? 0 : col - 1;
+    // const maxCol = col === this.cols - 1 ? col : col + 1;
 
-    const minRow = row === 0 ? 0 : row - 1;
-    const maxRow = row === this.rows - 1 ? row : row + 1;
+    // const minRow = row === 0 ? 0 : row - 1;
+    // const maxRow = row === this.rows - 1 ? row : row + 1;
 
     const neighbours: number[] = [];
 
-    for (let i = minRow; i <= maxRow; i++) {
-      for (let j = minCol; j <= maxCol; j++) {
-        neighbours.push(i * this.cols + j);
-      }
+    // for (let i = minRow; i <= maxRow; i++) {
+    //   for (let j = minCol; j <= maxCol; j++) {
+    //     neighbours.push(i * this.cols + j);
+    //   }
+    // }
+
+    if (col > 0) {
+      neighbours.push(row * this.cols + (col - 1)); // left
+    }
+    if (col < this.cols - 1) {
+      neighbours.push(row * this.cols + (col + 1)); // right
+    }
+    if (row > 0) {
+      neighbours.push((row - 1) * this.cols + col); // up
+    }
+    if (row < this.rows - 1) {
+      neighbours.push((row + 1) * this.cols + col); // down
     }
 
     return neighbours;

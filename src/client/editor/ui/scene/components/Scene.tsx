@@ -12,6 +12,7 @@ import Track from './Track';
 import { LightningStrike, OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { EffectComposer, Outline, Selection } from '@react-three/postprocessing';
 import { Mesh, MeshBasicMaterial, Vector3 } from 'three';
+import Arrow from './Arrow';
 
 const Scene = () => {
   const { tool, sceneStore: sceneService } = useEditorContext();
@@ -138,6 +139,7 @@ const Scene = () => {
                 />
               );
             })}
+            <Arrow />
             <Track />
             <Ground />
             <Car />

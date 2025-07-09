@@ -39,7 +39,7 @@ class ToolHelper {
 
     const grid = new Grid(this.gridStore);
     const gridIndex = grid.worldToGridIndex(new Vector(point?.toArray()));
-    const [gridX, gridY] = grid.gridIndexToGridPos(gridIndex);
+    const [gridX, gridY] = grid.gridIndexToGridPosition(gridIndex);
 
     this.tool.onPointerMove({
       point,

@@ -35,6 +35,9 @@ export const gameSlice = createSlice({
     setReachableGrids(state, action: PayloadAction<Record<number, number>>) {
       state.reachableGrids = action.payload;
     },
+    setGameState(state, action: PayloadAction<GameState['gameState']>) {
+      state.gameState = action.payload;
+    },
   },
 
   extraReducers: (builder) => {
@@ -83,6 +86,6 @@ export const gameSlice = createSlice({
   },
 });
 
-export const { setReachableGrids, setSelectedPlayer } = gameSlice.actions;
+export const { setGameState, setReachableGrids, setSelectedPlayer } = gameSlice.actions;
 
 export default gameSlice.reducer;

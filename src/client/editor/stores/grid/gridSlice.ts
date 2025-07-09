@@ -12,10 +12,12 @@ import {
 import Graph from './Graph';
 import GridUpdater from './GridUpdater';
 import HistoryStorage from '../utils/HistoryStorage';
+import { GridPath } from '../../use_cases/grid/GridPathBuilder';
 
 export type GridState = {
   activeGridIndexes: number[];
   carGridPos: [number, number];
+  currentMovementPath?: GridPath;
   editingTargetBlock: string | null;
   groundRadius: number;
   gridRows: number;
@@ -34,6 +36,7 @@ export const initialGridState: GridState = {
   activeGridIndexes: [],
   blockToGridIndex: {},
   carGridPos: [0, 0],
+  currentMovementPath: undefined,
   editingTargetBlock: null,
   gridIndexToBlocks: {},
   groundRadius: 70,
@@ -96,6 +99,10 @@ export const gridSlice = createSlice({
 
     clear(state) {
       state.editingTargetBlock = null;
+    },
+
+    setCurrentMovementPath(state, action: PayloadAction<GridPath>) {
+      state.currentMovementPath = action.payload;
     },
   },
 
@@ -162,6 +169,6 @@ export const gridSlice = createSlice({
   },
 });
 
-export const { clear: clearEditorSlice, setCarGridPos } = gridSlice.actions;
+export const { clear: clearEditorSlice, setCarGridPos, setCurrentMovementPath } = gridSlice.actions;
 
 export default gridSlice.reducer;

@@ -22,11 +22,15 @@ class GridStore {
 
   getBlockGridPos(blockId: string) {
     const gridIndex = this.getBlockGridIndex(blockId);
-    return this.grid.gridIndexToGridPos(gridIndex);
+    return this.grid.gridIndexToGridPosition(gridIndex);
   }
 
   getBlocksAtGridIndex(gridIndex: number) {
     return this.getGridSlice().gridIndexToBlocks[gridIndex]?.map((blockId) => this.blockStore.getBlock(blockId)) || [];
+  }
+
+  getGraph() {
+    return this.getGridSlice().graph;
   }
 
   getGridOffset() {

@@ -98,15 +98,9 @@ const Dialog = ({
         <div
           id={id}
           role="dialog"
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[40rem] p-4 bg-white rounded-t-xl z-[100]"
+          className={`absolute w-full max-w-[${size === 'md' ? '50rem' : '25rem'}] bottom-0 left-1/2 -translate-x-1/2 w-[40rem] p-4 bg-white rounded-t-xl z-[100]`}
         >
-          {onSubmit ? (
-            <form className="m-auto max-w-[50rem]" onSubmit={handleSubmit}>
-              {content}
-            </form>
-          ) : (
-            <div className="mx-auto max-w-[50rem]">{content}</div>
-          )}
+          {onSubmit ? <form onSubmit={handleSubmit}>{content}</form> : <div>{content}</div>}
         </div>
       )}
     </>

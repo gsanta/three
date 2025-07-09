@@ -1,10 +1,10 @@
-import Graph from './Graph';
+import Graph from '../../stores/grid/Graph';
 
-class ShortestPath {
-  dijkstra(graph: Graph, start: string, end: string): { distance: number; path: string[] } {
-    const distances: Record<string, number> = {};
-    const previous: Record<string, string | null> = {};
-    const queue = new Set<string>(Object.keys(graph));
+class Dijkstra {
+  execute(graph: Graph, start: number, end: number): { distance: number; path: number[] } {
+    const distances: Record<number, number> = {};
+    const previous: Record<number, number | null> = {};
+    const queue = new Set<number>(Object.keys(graph).map(Number));
 
     // Initialize distances
     for (const node of queue) {
@@ -15,7 +15,7 @@ class ShortestPath {
 
     while (queue.size > 0) {
       // Find node with the smallest distance
-      let currentNode: string | null = null;
+      let currentNode: number | null = null;
       for (const node of queue) {
         if (currentNode === null || distances[node] < distances[currentNode]) {
           currentNode = node;
@@ -37,8 +37,8 @@ class ShortestPath {
     }
 
     // Reconstruct path
-    const path: string[] = [];
-    let current: string | null = end;
+    const path: number[] = [];
+    let current: number | null = end;
     while (current) {
       path.unshift(current);
       current = previous[current];
@@ -51,4 +51,4 @@ class ShortestPath {
   }
 }
 
-export default ShortestPath;
+export default Dijkstra;

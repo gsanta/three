@@ -78,11 +78,11 @@ const Toolbar = () => {
     }
   }, [activeBlockType, onItemDialogOpen]);
 
-  useEffect(() => {
-    if (currentActionPanel === 'selection') {
-      onSelectionDialogOpen();
-    }
-  }, [currentActionPanel, onSelectionDialogOpen]);
+  // useEffect(() => {
+  //   if (currentActionPanel === 'selection') {
+  //     onSelectionDialogOpen();
+  //   }
+  // }, [currentActionPanel, onSelectionDialogOpen]);
 
   return (
     <div className="bg-base-300 h-full pt-2 pb-1 flex flex-col justify-between gap-1 items-center">
@@ -106,7 +106,7 @@ const Toolbar = () => {
       </div>
       <div className="flex flex-col gap-1 items-center pb-2">
         <ToggleButton
-          toggle={isPlayerDialogOpen}
+          toggle={isPlayerDialogOpen || isGameStartDialogOpen}
           onToggle={gameState === 'not-started' ? onGameStartDialogOpen : onPlayerDialogOpen}
         >
           <Icon name="BiPlayCircle" />
