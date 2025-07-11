@@ -20,24 +20,12 @@ const Scene = () => {
   const orbitControlRef = useRef<OrbitControlsImpl>(null);
 
   const currentAction = useAppSelector((state) => state.blockCategory.currentAction);
+  const players = useAppSelector((state) => state.game.players);
 
   useEffect(() => {
     if (orbitControlRef.current) {
       sceneService.setOrbitControls(orbitControlRef.current);
       orbitControlRef.current.enableRotate = false;
-      // const controls = orbitControlRef.current;
-
-      // const onChange = () => {
-      //   console.log('Camera position:', controls.object.position);
-      //   console.log('Target position:', controls.target);
-      // };
-
-      // controls.addEventListener('end', onChange);
-
-      // // Cleanup event listener on unmount
-      // return () => {
-      //   controls.removeEventListener('end', onChange);
-      // };
     }
   }, [orbitControlRef, sceneService]);
 
@@ -139,7 +127,9 @@ const Scene = () => {
                 />
               );
             })}
-            <Arrow />
+            {players.map((player) => (
+              <Arrow player={player} />
+            ))}
             <Track />
             <Ground />
             <Car />

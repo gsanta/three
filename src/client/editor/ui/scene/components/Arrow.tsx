@@ -1,5 +1,4 @@
 import { useAppSelector } from '@/client/common/hooks/hooks';
-import { gridToWorldPos } from '@/client/editor/models/Grid';
 import Num3 from '@/client/editor/models/math/Num3';
 import { useMemo } from 'react';
 import { MeshStandardMaterial, DoubleSide, BufferAttribute, BufferGeometry, ColorRepresentation, Vector3 } from 'three';
@@ -116,58 +115,33 @@ export const TriangleArrowHead = ({
   return <mesh geometry={geometry} material={material} position={finalPosition} rotation={[0, rotationY, 0]} />;
 };
 
-const Arrow = () => {
-  const currentMovementPath = useAppSelector((state) => state.grid.currentMovementPath);
-  const gridSize = useAppSelector((state) => state.grid.gridSize);
-  const gridCols = useAppSelector((state) => state.grid.gridCols);
-  const gridOffset = useAppSelector((state) => state.grid.gridOffset);
+type ArrowProps = {
+  player: string;
+};
+
+const Arrow = ({ player }: ArrowProps) => {
+  const currentMovementPath = useAppSelector((state) => state.block.decorations.players[player]?.currentMovementPath);
 
   if (!currentMovementPath) {
     return null;
   }
-  const { path, lastGridIndex } = currentMovementPath;
-
-  const lastPos = gridToWorldPos(lastGridIndex, gridCols, gridSize, gridOffset);
-
-  const lineWidth = 0.1;
+  const { path, lastNode } = currentMovementPath;
 
   return (
     <>
       <TriangleArrowHead
         color="cornflowerblue"
         direction={path[path.length - 1].direction}
-        position={[lastPos[0], 0, lastPos[1]]}
+        position={lastNode.position}
       />
       {path.map((position) => {
-        console.log('turn: ' + position.isTurn);
-
-        const pos = gridToWorldPos(position.gridIndex, gridCols, gridSize, gridOffset);
-
-        let finalPos = pos;
-        let width = gridSize;
-
-        if (position.direction === 'left') {
-          finalPos = [pos[0] - gridSize / 2, pos[1]];
-
-          if (position.isTurn) {
-            finalPos[0] -= 0.5 / 2;
-            width += 0.5;
-          }
-        } else if (position.direction === 'right') {
-          finalPos = [pos[0] + gridSize / 2, pos[1]];
-        } else if (position.direction === 'up') {
-          finalPos = [pos[0], pos[1] - gridSize / 2];
-        } else if (position.direction === 'down') {
-          finalPos = [pos[0], pos[1] + gridSize / 2];
-        }
-
         return (
           <mesh
-            position={[finalPos[0], 0, finalPos[1]]}
+            position={position.position}
             rotation={[0, ['left', 'right'].includes(position.direction) ? Math.PI / 2 : 0, 0]}
-            key={pos.join(',')}
+            key={position.position.join(',')}
           >
-            <boxGeometry args={[1, lineWidth, width]} />
+            <boxGeometry args={[1, 0.1, position.size]} />
             <meshStandardMaterial color="cornflowerblue" />
           </mesh>
         );

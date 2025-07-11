@@ -19,8 +19,9 @@ export const initialBlockState: BlockState = {
   blockIds: [],
   decorations: {
     cables: {},
-    transformers: {},
+    players: {},
     poles: {},
+    transformers: {},
   },
   hovered: undefined,
   selectedBlocks: [],

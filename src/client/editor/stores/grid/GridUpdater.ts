@@ -5,7 +5,7 @@ import Vector from '../../models/math/Vector';
 import { UpdateBlock } from '../block/blockSlice.types';
 import { GridState } from './gridSlice';
 
-const setGridIndexToBlock = (state: GridState, blockId: string, position: Num3) => {
+const addGridIndexToBlock = (state: GridState, blockId: string, position: Num3) => {
   const gridIndex = worldToGridIndex(new Vector(position), state.gridCols, state.gridSize, state.gridOffset);
 
   if (!state.blockToGridIndex[blockId]) {
@@ -48,12 +48,23 @@ class GridUpdater {
           state.blockToGridIndex[update.block.id] = [];
         }
 
-        if (!state.blockToGridIndex[update.block.id].includes(gridIndex)) {
-          state.blockToGridIndex[update.block.id].push(gridIndex);
-        }
-
         if (!state.gridIndexToBlocks[gridIndex]) {
           state.gridIndexToBlocks[gridIndex] = [];
+        }
+
+        const prevGridIndex = state.blockToGridIndex[update.block.id]?.[0];
+
+        if (prevGridIndex != null) {
+          state.blockToGridIndex[update.block.id] = state.blockToGridIndex[update.block.id].filter(
+            (id) => id !== prevGridIndex,
+          );
+          state.gridIndexToBlocks[prevGridIndex] = state.gridIndexToBlocks[gridIndex].filter(
+            (id) => id !== update.block.id,
+          );
+        }
+
+        if (!state.blockToGridIndex[update.block.id].includes(gridIndex)) {
+          state.blockToGridIndex[update.block.id].push(gridIndex);
         }
 
         if (!state.gridIndexToBlocks[gridIndex].includes(update.block.id)) {
@@ -63,8 +74,8 @@ class GridUpdater {
         if (update.decoration.decoration === 'cables') {
           const cableDecorator = update.decoration as CableDecorator;
 
-          setGridIndexToBlock(state, update.decoration.id, cableDecorator.points[0].position);
-          setGridIndexToBlock(state, update.decoration.id, cableDecorator.points[1].position);
+          addGridIndexToBlock(state, update.decoration.id, cableDecorator.points[0].position);
+          addGridIndexToBlock(state, update.decoration.id, cableDecorator.points[1].position);
         }
       } else if ('remove' in update) {
         const gridIndexes = state.blockToGridIndex[update.remove.id];

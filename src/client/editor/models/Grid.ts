@@ -34,13 +34,13 @@ class Grid {
     this.gridStore = gridStore;
   }
 
-  gridToWorldPos(gridIndex: number) {
+  gridToWorldPos(gridIndex: number): [number, number] {
     return gridToWorldPos(
       gridIndex,
       this.gridStore.getCols(),
       this.gridStore.getGridSize(),
       this.gridStore.getGridOffset(),
-    );
+    ) as [number, number];
   }
 
   worldToGridIndex(pos: Vector) {

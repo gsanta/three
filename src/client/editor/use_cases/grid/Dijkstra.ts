@@ -1,7 +1,7 @@
 import Graph from '../../stores/grid/Graph';
 
 class Dijkstra {
-  execute(graph: Graph, start: number, end: number): { distance: number; path: number[] } {
+  execute(graph: Graph, start: number, end: number): { distance: number; path: { index: number; cost: number }[] } {
     const distances: Record<number, number> = {};
     const previous: Record<number, number | null> = {};
     const queue = new Set<number>(Object.keys(graph).map(Number));
@@ -36,12 +36,15 @@ class Dijkstra {
       }
     }
 
-    // Reconstruct path
-    const path: number[] = [];
+    // Reconstruct path and costs
+    const path: { index: number; cost: number }[] = [];
     let current: number | null = end;
-    while (current) {
-      path.unshift(current);
+    while (current !== null && previous[current] !== undefined) {
+      path.unshift({ index: current, cost: distances[current] });
       current = previous[current];
+    }
+    if (current === start) {
+      path.unshift({ index: start, cost: distances[start] });
     }
 
     return {

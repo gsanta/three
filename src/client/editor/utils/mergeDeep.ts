@@ -47,11 +47,15 @@ const mergeDeepRecursive = <T extends Record<string, any>>(
       if (isObject(source[key])) {
         const newSource = source[key];
         if (newSource) {
-          mergeDeepRecursive(
-            target[key],
-            newSource as PartialDeep<T[Extract<keyof NonNullable<PartialDeep<T>>, string>], object>,
-            mergeStrategy,
-          );
+          if (target[key] === undefined) {
+            Object.assign(target, { [key]: source[key] });
+          } else {
+            mergeDeepRecursive(
+              target[key],
+              newSource as PartialDeep<T[Extract<keyof NonNullable<PartialDeep<T>>, string>], object>,
+              mergeStrategy,
+            );
+          }
         }
       } else if (Array.isArray(source[key])) {
         Object.assign(target, { [key]: mergeArrays(target[key], source[key] as unknown[], mergeStrategy) });

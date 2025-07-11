@@ -5,11 +5,15 @@ import Dijkstra from './Dijkstra';
 
 export type GridPath = {
   path: {
-    gridIndex: number;
+    index: number;
+    cost: number;
     direction: Direction;
     isTurn: boolean;
   }[];
-  lastGridIndex: number;
+  lastNode: {
+    index: number;
+    cost: number;
+  };
 };
 
 class GridPathBuilder {
@@ -26,9 +30,9 @@ class GridPathBuilder {
 
     const pathWithoutLast = path.slice(0, -1);
 
-    const directions: Direction[] = pathWithoutLast.map((gridIndex, index) => {
-      const next = path[index + 1];
-      return this.getDirection(gridIndex, next);
+    const directions: Direction[] = pathWithoutLast.map((node, index) => {
+      const next = path[index + 1].index;
+      return this.getDirection(node.index, next);
     });
 
     const directionsWithoutLast = directions.slice(0, -1);
@@ -40,15 +44,15 @@ class GridPathBuilder {
 
     turns.push(false); // Last direction cannot be a turn
 
-    const gridPath = pathWithoutLast.map((gridIndex, i) => ({
-      gridIndex,
+    const gridPath = pathWithoutLast.map((node, i) => ({
+      ...node,
       direction: directions[i],
       isTurn: turns[i],
     }));
 
     return {
       path: gridPath,
-      lastGridIndex: path[path.length - 1],
+      lastNode: path[path.length - 1],
     };
   }
 

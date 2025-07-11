@@ -15,6 +15,16 @@ class GameStore {
     return currentPlayer;
   }
 
+  getPlayerInfo(playerId: string) {
+    const info = this.getStore().players.find((p) => p.id === playerId);
+
+    if (!info) {
+      throw new Error(`Player with id ${playerId} not found`);
+    }
+
+    return info;
+  }
+
   getPlayers() {
     return this.getStore().players;
   }

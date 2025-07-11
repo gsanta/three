@@ -10,6 +10,7 @@ import { setSelectedTool } from '../stores/tool/toolSlice';
 import Vector from '../models/math/Vector';
 import SceneService from '../ui/scene/service/SceneService';
 import CableTool from '../controllers/tools/CableTool';
+import MoveTool from '../controllers/tools/MoveTool';
 
 export type ScenePointerEvent = ThreeEvent<PointerEvent> & {
   gridIndex?: number;
@@ -155,6 +156,10 @@ class ToolService {
 
   getCableTool() {
     return this.tools.find((tool) => tool.name === ToolName.Cable) as CableTool;
+  }
+
+  getMoveTool() {
+    return this.tools.find((tool) => tool.name === ToolName.Move) as MoveTool;
   }
 
   getToolInfo(): ToolInfo {

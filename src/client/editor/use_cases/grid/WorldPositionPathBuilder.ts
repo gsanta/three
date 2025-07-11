@@ -6,11 +6,18 @@ import GridPathBuilder, { GridPath } from './GridPathBuilder';
 
 export type WorldPositionPath = {
   path: {
+    cost: number;
+    gridIndex: number;
     position: Num3;
+    size: number;
     direction: Direction;
     isTurn: boolean;
   }[];
-  lastPosition: Num3;
+  lastNode: {
+    cost: number;
+    gridIndex: number;
+    position: Num3;
+  };
 };
 
 class WorldPositionPathBuilder {
@@ -26,29 +33,48 @@ class WorldPositionPathBuilder {
     const gridPath = this.gridPathBuilder.build(start, end);
 
     const positions: Num3[] = gridPath.path.map((position) => {
-      const pos = this.grid.gridToWorldPos(position.gridIndex);
+      const pos = this.grid.gridToWorldPos(position.index);
 
       const gridSize = this.gridStore.getGridSize();
 
-      let finalPos = pos;
+      let finalPos: Num3 = [pos[0], 0, pos[1]] as Num3;
 
       if (position.direction === 'left') {
-        finalPos = [pos[0] - gridSize / 2, pos[1]];
+        finalPos = [pos[0] - gridSize / 2, 0, pos[1]];
       } else if (position.direction === 'right') {
-        finalPos = [pos[0] + gridSize / 2, pos[1]];
+        finalPos = [pos[0] + gridSize / 2, 0, pos[1]];
       } else if (position.direction === 'up') {
-        finalPos = [pos[0], pos[1] - gridSize / 2];
+        finalPos = [pos[0], 0, pos[1] - gridSize / 2];
       } else if (position.direction === 'down') {
-        finalPos = [pos[0], pos[1] + gridSize / 2];
+        finalPos = [pos[0], 0, pos[1] + gridSize / 2];
       }
 
       return finalPos;
+    }) as Num3[];
+
+    const lastPos = this.grid.gridToWorldPos(gridPath.lastNode.index);
+
+    const worldPath = this.adjustPositionsAndSizesAtTurns(positions, gridPath).map((item, i) => {
+      return {
+        ...item,
+        gridIndex: gridPath.path[i].index,
+        cost: gridPath.path[i].cost,
+        direction: gridPath.path[i].direction,
+        isTurn: gridPath.path[i].isTurn,
+      };
     });
 
-    const adjustedPositions = this.adjustTurnPositions(positions, gridPath);
+    return {
+      path: worldPath,
+      lastNode: {
+        cost: gridPath.lastNode.cost,
+        gridIndex: gridPath.lastNode.index,
+        position: [lastPos[0], 0, lastPos[1]] as Num3,
+      },
+    };
   }
 
-  private adjustTurnPositions(positions: Num3[], gridPath: GridPath) {
+  private adjustPositionsAndSizesAtTurns(positions: Num3[], gridPath: GridPath) {
     const moveSize = this.adjustSize / 2;
     const adjustSize = this.adjustSize;
 

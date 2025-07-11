@@ -46,14 +46,16 @@ class Edit {
     return this;
   }
 
-  update(
+  update<T extends BlockDecoratorName>(
     id: string,
     block: Partial<BlockData>,
-    decorationType: BlockDecoratorName,
-    decoration: PartialDeep<BlockDecorations>,
+    decoration: {
+      type: T;
+      data: PartialDeep<BlockDecorations[T]>;
+    },
   ) {
     this.updateBlock(id, block);
-    this.updateDecoration(decorationType, id, decoration);
+    this.updateDecoration(decoration.type, id, decoration.data);
 
     return this;
   }
@@ -80,7 +82,7 @@ class Edit {
   updateDecoration<T extends BlockDecoratorName>(
     category: T,
     id: string,
-    partial: PartialDeep<BlockDecorations, object>,
+    partial: PartialDeep<BlockDecorations[T]>,
     options?: EditOptions,
   ): this {
     if (this.isRemoved(id)) {

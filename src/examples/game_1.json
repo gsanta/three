@@ -1,14 +1,16 @@
 {
   "block": {
     "blockIds": [
-      "906409e3-1b35-4bdb-ad24-f0a8eab17083",
-      "35c009c8-cf50-43d5-a5e9-16e20a1deece"
+      "0f2f7a6d-9cdc-4127-8458-676640265170",
+      "087ff6a2-1124-453d-9dcd-079f8833d34b"
     ],
     "blocks": {
-      "906409e3-1b35-4bdb-ad24-f0a8eab17083": {
-        "id": "906409e3-1b35-4bdb-ad24-f0a8eab17083",
+      "0f2f7a6d-9cdc-4127-8458-676640265170": {
+        "id": "0f2f7a6d-9cdc-4127-8458-676640265170",
         "categoryName": "humans",
-        "decorations": [],
+        "decorations": [
+          "players"
+        ],
         "geometry": null,
         "parts": [
           {
@@ -44,9 +46,9 @@
         "isPreview": false,
         "notifyOnRender": false,
         "position": [
-          -1.2150000000000034,
-          -0.1000000000000001,
-          -38.675
+          -16.215000000000003,
+          -0.10000000000000024,
+          -23.674999999999997
         ],
         "rotation": [
           0,
@@ -59,10 +61,12 @@
           1
         ]
       },
-      "35c009c8-cf50-43d5-a5e9-16e20a1deece": {
-        "id": "35c009c8-cf50-43d5-a5e9-16e20a1deece",
+      "087ff6a2-1124-453d-9dcd-079f8833d34b": {
+        "id": "087ff6a2-1124-453d-9dcd-079f8833d34b",
         "categoryName": "humans",
-        "decorations": [],
+        "decorations": [
+          "players"
+        ],
         "geometry": null,
         "parts": [
           {
@@ -99,8 +103,8 @@
         "notifyOnRender": false,
         "position": [
           -31.215000000000003,
-          -0.10000000000000009,
-          -8.674999999999997
+          -0.09999999999999991,
+          13.825000000000003
         ],
         "rotation": [
           0,
@@ -116,20 +120,34 @@
     },
     "decorations": {
       "cables": {},
-      "transformers": {},
-      "poles": {}
+      "players": {
+        "0f2f7a6d-9cdc-4127-8458-676640265170": {
+          "maxWork": 3,
+          "decoration": "players",
+          "remainingWork": 3,
+          "id": "0f2f7a6d-9cdc-4127-8458-676640265170"
+        },
+        "087ff6a2-1124-453d-9dcd-079f8833d34b": {
+          "maxWork": 3,
+          "decoration": "players",
+          "remainingWork": 3,
+          "id": "087ff6a2-1124-453d-9dcd-079f8833d34b"
+        }
+      },
+      "poles": {},
+      "transformers": {}
     },
     "rootBlocksIds": [
-      "906409e3-1b35-4bdb-ad24-f0a8eab17083",
-      "35c009c8-cf50-43d5-a5e9-16e20a1deece"
+      "0f2f7a6d-9cdc-4127-8458-676640265170",
+      "087ff6a2-1124-453d-9dcd-079f8833d34b"
     ],
     "selectedBlocks": []
   },
   "game": {
     "gameState": "not-started",
     "players": [
-      "906409e3-1b35-4bdb-ad24-f0a8eab17083",
-      "35c009c8-cf50-43d5-a5e9-16e20a1deece"
+      "0f2f7a6d-9cdc-4127-8458-676640265170",
+      "087ff6a2-1124-453d-9dcd-079f8833d34b"
     ],
     "reachableGrids": {}
   },
@@ -147,25 +165,24 @@
       190
     ],
     "blockToGridIndex": {
-      "906409e3-1b35-4bdb-ad24-f0a8eab17083": [
-        49
+      "0f2f7a6d-9cdc-4127-8458-676640265170": [
+        87
       ],
-      "35c009c8-cf50-43d5-a5e9-16e20a1deece": [
-        125
+      "087ff6a2-1124-453d-9dcd-079f8833d34b": [
+        185
       ]
     },
     "carGridPos": [
       9,
       8
     ],
-    "currentMovementPath": [],
     "editingTargetBlock": null,
     "gridIndexToBlocks": {
-      "49": [
-        "906409e3-1b35-4bdb-ad24-f0a8eab17083"
+      "87": [
+        "0f2f7a6d-9cdc-4127-8458-676640265170"
       ],
-      "125": [
-        "35c009c8-cf50-43d5-a5e9-16e20a1deece"
+      "185": [
+        "087ff6a2-1124-453d-9dcd-079f8833d34b"
       ]
     },
     "groundRadius": 70,

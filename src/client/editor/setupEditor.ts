@@ -92,7 +92,15 @@ export const setupEditor = () => {
     new GridSerializer(store),
   );
 
-  const gameController = new GameController(blockStore, gameStore, gridStore, sceneStore, serializer, store);
+  const gameController = new GameController(
+    blockStore,
+    gameStore,
+    gridStore,
+    sceneStore,
+    serializer,
+    store,
+    transactionService,
+  );
 
   const cableDrawingService = new CableDrawingService(
     blockStore,

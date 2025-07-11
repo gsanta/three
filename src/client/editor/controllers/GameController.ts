@@ -12,6 +12,7 @@ import Serializer from './serializer/Serializer';
 import game1 from '../../../examples/game_1.json';
 import { SerializedState } from './serializer/SerializedState';
 import { setGameState } from '../stores/game/gameSlice';
+import TransactionService from '../services/transaction/TransactionService';
 
 class GameController {
   constructor(
@@ -21,14 +22,33 @@ class GameController {
     sceneStore: SceneStore,
     serializer: Serializer,
     store: Store,
+    transactionService: TransactionService,
   ) {
     this.blockStore = blockStore;
     this.gameStore = gameStore;
     this.sceneStore = sceneStore;
     this.serializer = serializer;
     this.store = store;
+    this.transactionService = transactionService;
 
     this.calculateReachableGrids = new CalculateReachableGrids(gridStore);
+  }
+
+  nextRound() {
+    const players = this.gameStore.getPlayers();
+
+    const edit = this.transactionService.createTransaction();
+
+    players.forEach((playerId) => {
+      const playerDecorator = this.blockStore.getDecorator<'players'>('players', playerId);
+
+      edit.updateDecoration('players', playerId, {
+        currentMovementPath: undefined,
+        remainingWork: playerDecorator.maxWork,
+      });
+    });
+
+    edit.commit();
   }
 
   selectNextPlayer() {
@@ -94,6 +114,8 @@ class GameController {
   private store: Store;
 
   private calculateReachableGrids: CalculateReachableGrids;
+
+  private transactionService: TransactionService;
 }
 
 export default GameController;

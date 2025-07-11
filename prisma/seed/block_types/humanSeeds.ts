@@ -1,12 +1,17 @@
-import { BlockType, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
-const humanSeeds: (Omit<BlockType, 'animations' | 'decorations' | 'id' | 'parts' | 'partDetails'> & {
-  animations?: Prisma.JsonObject;
-  parts?: Prisma.JsonArray;
-  partDetails?: Prisma.JsonObject;
-})[] = [
+const humanSeeds: Prisma.BlockTypeUncheckedCreateInput[] = [
   {
     categoryName: 'humans',
+    decorations: ['players'],
+    decorationData: {
+      players: {
+        currentMovementPath: undefined,
+        decoration: 'players',
+        maxWork: 3,
+        remainingWork: 3,
+      },
+    },
     path: '/human_1.glb',
     parts: [
       {

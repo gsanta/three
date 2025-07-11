@@ -6,6 +6,10 @@ class Vector {
     this.position = position;
   }
 
+  static fromXZ(xz: [number, number], y = 0): Vector {
+    return new Vector([xz[0], y, xz[1]] as Num3);
+  }
+
   // returns -180 to 180 deg
   angle2(other: Vector) {
     const [x1, , z1] = this.position;

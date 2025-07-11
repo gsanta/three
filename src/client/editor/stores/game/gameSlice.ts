@@ -1,9 +1,11 @@
 import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
 import { historyAction, importAction, redoAction, undoAction, updateBlocks } from '../block/blockActions';
 import HistoryStorage from '../utils/HistoryStorage';
+import { WorldPositionPath } from '../../use_cases/grid/WorldPositionPathBuilder';
 
 export type GameState = {
   currentPlayer?: string;
+  currentMovementPath?: WorldPositionPath;
   players: string[];
   gameState: 'started' | 'not-started';
 
@@ -11,6 +13,7 @@ export type GameState = {
 };
 
 export const initialGameState: GameState = {
+  currentMovementPath: undefined,
   gameState: 'not-started',
   players: [],
   reachableGrids: {},
@@ -29,14 +32,17 @@ export const gameSlice = createSlice({
   name: 'game',
   initialState: initialGameState,
   reducers: {
-    setSelectedPlayer(state, action: PayloadAction<string>) {
-      state.currentPlayer = action.payload;
+    setCurrentMovementPath(state, action: PayloadAction<WorldPositionPath | undefined>) {
+      state.currentMovementPath = action.payload;
+    },
+    setGameState(state, action: PayloadAction<GameState['gameState']>) {
+      state.gameState = action.payload;
     },
     setReachableGrids(state, action: PayloadAction<Record<number, number>>) {
       state.reachableGrids = action.payload;
     },
-    setGameState(state, action: PayloadAction<GameState['gameState']>) {
-      state.gameState = action.payload;
+    setSelectedPlayer(state, action: PayloadAction<string>) {
+      state.currentPlayer = action.payload;
     },
   },
 
@@ -48,13 +54,6 @@ export const gameSlice = createSlice({
             structuredClone({ players: current(state.players), reachableGrids: current(state.reachableGrids) }),
           );
         }
-
-        // if ('select' in update) {
-        //   const player = update.select.find((block) => block.category === 'humans');
-        //   if (player) {
-        //     state.currentPlayer = player.id;
-        //   }
-        // } else
 
         if ('block' in update && update.block) {
           if (update.block.category === 'humans' && !state.players.includes(update.block.id)) {
@@ -86,6 +85,6 @@ export const gameSlice = createSlice({
   },
 });
 
-export const { setGameState, setReachableGrids, setSelectedPlayer } = gameSlice.actions;
+export const { setCurrentMovementPath, setGameState, setReachableGrids, setSelectedPlayer } = gameSlice.actions;
 
 export default gameSlice.reducer;

@@ -2,10 +2,11 @@ import CableDecorator from './categories/CableDecorator';
 import TransformerDecorator from './categories/TransformerDecorator';
 import { BlockCategoryName } from './BlockCategoryName';
 import PoleDecorator from './categories/PoleDecorator';
+import PlayerDecorator from './categories/PlayerDecorator';
 
-export type BlockDecoratorName = 'cables' | 'transformers' | 'poles';
+export type BlockDecoratorName = 'cables' | 'players' | 'transformers' | 'poles';
 
-export type BlockDecorationType = CableDecorator | TransformerDecorator | PoleDecorator;
+export type BlockDecorationType = CableDecorator | TransformerDecorator | PlayerDecorator | PoleDecorator;
 
 export type EmptyBlockCategory<T extends BlockCategoryName> = {
   category: T;
@@ -15,14 +16,8 @@ export type EmptyBlockCategory<T extends BlockCategoryName> = {
 export type BlockDecorations = {
   cables: CableDecorator;
   transformers: TransformerDecorator;
+  players: PlayerDecorator;
   poles: PoleDecorator;
-  // devices: Device;
-  // houses: EmptyBlockCategory<'houses'>;
-  // humans: EmptyBlockCategory<'humans'>;
-  // poles: EmptyBlockCategory<'poles'>;
-  // roads: EmptyBlockCategory<'roads'>;
-  // transformers: Transformer;
-  // 'weather-heads': EmptyBlockCategory<'weather-heads'>;
 };
 
 export type PartialBlockDecorations = {
@@ -30,5 +25,8 @@ export type PartialBlockDecorations = {
 };
 
 export type BlockCategoryRecords = {
-  [K in keyof BlockDecorations]: Partial<Record<string, BlockDecorationType>>;
+  cables: Partial<Record<string, CableDecorator>>;
+  transformers: Partial<Record<string, TransformerDecorator>>;
+  players: Partial<Record<string, PlayerDecorator>>;
+  poles: Partial<Record<string, PoleDecorator>>;
 };
