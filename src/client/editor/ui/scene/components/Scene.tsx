@@ -128,7 +128,7 @@ const Scene = () => {
               );
             })}
             {players.map((player) => (
-              <Arrow player={player} />
+              <Arrow key={player} player={player} />
             ))}
             <Track />
             <Ground />

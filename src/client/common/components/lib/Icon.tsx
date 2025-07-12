@@ -1,12 +1,14 @@
 import * as BiIcons from 'react-icons/bi'; // You can import other packs too
 import * as CiIcons from 'react-icons/ci'; // You can import other packs too
+import * as FaIcons from 'react-icons/fa6'; // You can import other packs too
 import { ComponentType } from 'react';
 
-export type IconName = keyof typeof BiIcons | keyof typeof CiIcons;
+export type IconName = keyof typeof BiIcons | keyof typeof CiIcons | keyof typeof FaIcons;
 
 const iconPacks: Record<IconName, ComponentType<{ size?: number; color?: string }>> = {
   ...BiIcons,
   ...CiIcons,
+  ...FaIcons,
   // Add more packs as needed
 };
 

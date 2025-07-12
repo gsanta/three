@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import ToggleButton from '../../../common/components/lib/ToggleButton';
 import Icon from '../../../common/components/lib/Icon';
 import { useAppDispatch, useAppSelector } from '../../../common/hooks/hooks';
@@ -10,7 +10,6 @@ import useDialog from '../hooks/useDialog';
 import AddDialog from '../scene/components/AddDialog';
 import PlayerDialog from '../scene/components/PlayerDialog';
 import SelectionDialog from '../scene/components/SelectionDialog';
-import ItemDialog from '../scene/components/ItemDialog';
 import GameStartDialog from '../scene/components/GameStartDialog';
 
 const Toolbar = () => {
@@ -66,18 +65,6 @@ const Toolbar = () => {
     onDialogOpen: onSelectionDialogOpen,
   } = useDialog({ dialogId: 'selection-dialog' });
 
-  const {
-    isDialogOpen: isItemDialogOpen,
-    onDialogClose: onItemDialogClose,
-    onDialogOpen: onItemDialogOpen,
-  } = useDialog({ dialogId: 'item-dialog' });
-
-  useEffect(() => {
-    if (activeBlockType) {
-      onItemDialogOpen();
-    }
-  }, [activeBlockType, onItemDialogOpen]);
-
   // useEffect(() => {
   //   if (currentActionPanel === 'selection') {
   //     onSelectionDialogOpen();
@@ -121,7 +108,6 @@ const Toolbar = () => {
 
       <SelectionDialog isOpen={isSelectionDialogOpen} onClose={onSelectionDialogClose} />
       <AddDialog isOpen={isAddDialogOpen} onClose={onAddDialogClose} />
-      <ItemDialog isOpen={isItemDialogOpen} onClose={onItemDialogClose} />
       <PlayerDialog isOpen={isPlayerDialogOpen} onClose={onPlayerDialogClose} />
       <GameStartDialog isOpen={isGameStartDialogOpen} onClose={onGameStartDialogClose} />
     </div>

@@ -84,9 +84,7 @@ class GameController {
 
     const nextPlayer = this.blockStore.getBlock(players[0]);
 
-    const reachableGrids = this.calculateReachableGrids.execute(nextPlayer);
-
-    this.store.dispatch(selectPlayer(nextPlayer, reachableGrids));
+    this.store.dispatch(selectPlayer(nextPlayer));
     this.store.dispatch(setSelectedTool(ToolName.Move));
     this.store.dispatch(setGameState('started'));
   }

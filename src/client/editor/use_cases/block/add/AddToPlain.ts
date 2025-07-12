@@ -11,7 +11,9 @@ class AddToPlain {
       throw new Error('Position must be provided for adding to plain');
     }
 
-    const block = this.factoryService.create(edit, newBlockType.type, { block: { position: position.get() } });
+    const block = this.factoryService.create(edit, newBlockType.type, {
+      block: { isPreview: true, position: position.get() },
+    });
 
     return block;
   }

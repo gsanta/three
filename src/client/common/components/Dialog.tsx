@@ -15,6 +15,7 @@ export type DialogProps = {
   isSubmitLoading?: boolean;
   onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
   placement?: 'modal-bottom' | 'modal-top' | 'modal-middle';
+  rightAction?: React.ReactNode;
   size?: 'sm' | 'md';
   submitLabel?: string;
   title: string;
@@ -33,6 +34,7 @@ const Dialog = ({
   leftAction,
   onClose,
   placement = 'modal-middle',
+  rightAction,
   size = 'md',
   submitLabel,
   title,
@@ -47,14 +49,15 @@ const Dialog = ({
       <h3 className="divider font-bold text-lg">{title}</h3>
       {children}
       {error && <ErrorMessage error={error} fallbackMessage={errorMessageFallback} />}
-      {(leftAction || onClose || submitLabel) && (
+      {(leftAction || onClose || submitLabel || rightAction) && (
         <>
           <h3 className="divider font-bold text-lg mb-0" />
 
           <fieldset className={`modal-action fieldset flex ${leftAction ? 'justify-between' : 'justify-end'} mt-2`}>
             {leftAction}
-            {(onClose || submitLabel) && (
+            {(onClose || submitLabel || rightAction) && (
               <div className="flex gap-2">
+                {rightAction}
                 {onClose && (
                   <button
                     className={`btn justify-self-end	 ${isSubmitLoading ? 'btn-disabled' : ''}`}
@@ -82,14 +85,16 @@ const Dialog = ({
     </>
   );
 
+  const maxWidth = size === 'md' ? '50rem' : '25rem';
+
   return hasBackdrop ? (
-    <dialog id={id} className={`modal ${placement}`}>
+    <dialog id={id} className={`modal ${placement} w-[${size === 'md' ? '50rem' : '25rem'}]`}>
       {onSubmit ? (
-        <form className={`modal-box m-auto max-w-[${size === 'md' ? '50rem' : '25rem'}]`} onSubmit={handleSubmit}>
+        <form className={`modal-box  max-w-[${size === 'md' ? '50rem' : '25rem'}]`} onSubmit={handleSubmit}>
           {content}
         </form>
       ) : (
-        <div className={`modal-box mx-auto max-w-[${size === 'md' ? '50rem' : '25rem'}]`}>{content}</div>
+        <div className={`modal-box  w-[${size === 'md' ? '50rem' : '25rem'}]`}>{content}</div>
       )}
     </dialog>
   ) : (
@@ -98,7 +103,7 @@ const Dialog = ({
         <div
           id={id}
           role="dialog"
-          className={`absolute  max-w-[${size === 'md' ? '50rem' : '25rem'}] bottom-0 left-1/2 -translate-x-1/2 w-[40rem] p-4 bg-white rounded-t-xl z-[100]`}
+          className={`absolute [width:min(100vw,${maxWidth})] bottom-0 left-1/2 -translate-x-1/2 p-4 bg-white rounded-t-xl z-[100]`}
         >
           {onSubmit ? <form onSubmit={handleSubmit}>{content}</form> : <div>{content}</div>}
         </div>

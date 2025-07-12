@@ -10,6 +10,8 @@ import FactoryService from '@/client/editor/services/factory/FactoryService';
 import Edit from '@/client/editor/services/transaction/Edit';
 import SceneStore from '@/client/editor/ui/scene/SceneStore';
 import { Vector3 } from 'three';
+import DrawCommand from './DrawCommand';
+import TransactionService from '@/client/editor/services/transaction/TransactionService';
 
 type AddParams = {
   edit: Edit;
@@ -23,10 +25,19 @@ type AddParams = {
   };
 };
 
-class AddToAnchor {
-  constructor(factoryService: FactoryService, sceneStore: SceneStore) {
+class AddToAnchor implements DrawCommand {
+  constructor(factoryService: FactoryService, sceneStore: SceneStore, transactionService: TransactionService) {
     this.factoryService = factoryService;
+
     this.sceneStore = sceneStore;
+
+    this.transactionService = transactionService;
+  }
+
+  finish(): void {
+    if (this.newBlockId) {
+      this.transactionService.createTransaction().updateBlock(this.newBlockId, { isPreview: false }).commit();
+    }
   }
 
   execute({ edit, newBlockType, newBlockAnchorRole, to }: AddParams) {
@@ -54,7 +65,7 @@ class AddToAnchor {
       },
     });
 
-    return edit.getLastBlock();
+    this.newBlockId = edit.getLastBlock().id;
   }
 
   private calculatePosition(existingPart: BlockPart, newPart: BlockPartGeometryData, newBlockRotation: number) {
@@ -85,9 +96,13 @@ class AddToAnchor {
     return partWithRotation;
   }
 
+  private newBlockId?: string;
+
   private factoryService: FactoryService;
 
   private sceneStore: SceneStore;
+
+  private transactionService: TransactionService;
 }
 
 export default AddToAnchor;

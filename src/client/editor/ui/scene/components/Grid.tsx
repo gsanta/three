@@ -67,7 +67,7 @@ const Grid = () => {
   const carGridPos = useAppSelector((state) => state.grid.carGridPos);
   const gridRows = useAppSelector((state) => state.grid.gridRows);
   const gridCols = useAppSelector((state) => state.grid.gridCols);
-  const activeGridIndexes = useAppSelector((state) => state.grid.activeGridIndexes);
+  const activeGridIndexes = useAppSelector((state) => state.game.activeGridIndexes);
 
   const hightlightRows = [carGridPos[1] - 1, carGridPos[1], carGridPos[1] + 1];
   const hightlightCols = [carGridPos[0] - 1, carGridPos[0], carGridPos[0] + 1];

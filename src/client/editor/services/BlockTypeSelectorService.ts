@@ -1,6 +1,5 @@
 import { store } from '@/client/common/utils/store';
 import BlockConstantData from '../models/block/BlockConstantData';
-import { setActiveBlockType } from '../stores/blockType/blockTypeSlice';
 import BlockTypeStore from '../stores/blockType/BlockTypeStore';
 import { setSelectedTool } from '../stores/tool/toolSlice';
 import ToolName from '../models/tool/ToolName';

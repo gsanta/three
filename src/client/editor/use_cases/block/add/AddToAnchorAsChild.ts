@@ -1,13 +1,10 @@
-import SceneStore from '@/client/editor/ui/scene/SceneStore';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import BlockData from '@/client/editor/models/block/BlockData';
-import BlockAddMethod from '@/common/model_types/BlockAddMethod';
 import BlockConstantData from '@/client/editor/models/block/BlockConstantData';
 import BlockPart from '@/client/editor/models/block/part/BlockPart';
 import Vector from '@/client/editor/models/math/Vector';
 import BlockPartGeometryData from '@/client/editor/models/block/part/BlockPartGeometryData';
 import Edit from '@/client/editor/services/transaction/Edit';
-import FindNearestPart from '@/client/editor/use_cases/scene/FindNearestPart';
 
 export type AddParams = {
   edit: Edit;
@@ -24,10 +21,8 @@ export type AddParams = {
 };
 
 class AddToAnchorAsChild {
-  constructor(factoryService: FactoryService, sceneStore: SceneStore) {
+  constructor(factoryService: FactoryService) {
     this.factoryService = factoryService;
-    this.sceneStore = sceneStore;
-    this.findNearestPart = new FindNearestPart(sceneStore);
   }
 
   execute({ edit, newBlockType, newBlockAnchorName, to }: AddParams) {
@@ -85,12 +80,6 @@ class AddToAnchorAsChild {
   }
 
   private factoryService: FactoryService;
-
-  private sceneStore: SceneStore;
-
-  private addMethod?: BlockAddMethod;
-
-  private findNearestPart: FindNearestPart;
 }
 
 export default AddToAnchorAsChild;

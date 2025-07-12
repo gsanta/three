@@ -21,7 +21,7 @@ class AddTransformer {
     this.blockTypeStore = blockTypeStore;
 
     this.addToPlain = new AddToPlain(factoryService);
-    this.addToAnchorAsChild = new AddToAnchorAsChild(factoryService, sceneStore);
+    this.addToAnchorAsChild = new AddToAnchorAsChild(factoryService);
 
     this.drawCable = new DrawCable(blockStore, factoryService, sceneStore, transactionService);
   }
@@ -49,9 +49,11 @@ class AddTransformer {
   }
 
   executeAfterRender() {
-    if (!this.transformerId) {
+    if (!this.transformerId || this.executedAfterRender) {
       return;
     }
+
+    this.executedAfterRender = true;
 
     const transformer = this.blockStore.getBlock(this.transformerId);
     const pole = this.blockStore.getBlock(transformer.parentConnection?.block);
@@ -80,6 +82,8 @@ class AddTransformer {
   private blockTypeStore: BlockTypeStore;
 
   private drawCable: DrawCable;
+
+  private executedAfterRender = false;
 }
 
 export default AddTransformer;

@@ -1,13 +1,12 @@
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
-import JoinPoles from '@/client/editor/use_cases/block/JoinPoles';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
-import SceneStore from '@/client/editor/ui/scene/SceneStore';
 import SceneService from '@/client/editor/ui/scene/service/SceneService';
 import BlockConstantData from '@/client/editor/models/block/BlockConstantData';
 import Vector from '@/client/editor/models/math/Vector';
 import Edit from '@/client/editor/services/transaction/Edit';
 import AddToPlain from './AddToPlain';
+import DrawCommand from './DrawCommand';
 
 type AddParams = {
   edit: Edit;
@@ -17,12 +16,11 @@ type AddParams = {
   position: Vector;
 };
 
-class AddPole {
+class AddPole implements DrawCommand {
   constructor(
     blockStore: BlockStore,
     factoryService: FactoryService,
     sceneService: SceneService,
-    sceneStore: SceneStore,
     transactionService: TransactionService,
   ) {
     this.blockStore = blockStore;
@@ -33,9 +31,13 @@ class AddPole {
 
     this.onMeshRendered = this.onMeshRendered.bind(this);
 
-    this.joinPoles = new JoinPoles(blockStore, sceneStore, factoryService, transactionService);
-
     sceneService.subscribeMeshRendered(this.onMeshRendered);
+  }
+
+  finish(): void {
+    if (this.tmpBlockId) {
+      this.transactionService.createTransaction().updateBlock(this.tmpBlockId, { isPreview: false }).commit();
+    }
   }
 
   execute({ edit, newBlockType, position }: AddParams) {
@@ -49,9 +51,7 @@ class AddPole {
 
       const edit = this.transactionService.createTransaction();
 
-      const newPole = this.blockStore.getBlock(blockId);
-
-      // this.joinPoles.join(newPole);
+      this.blockStore.getBlock(blockId);
 
       edit.commit();
     }
@@ -60,8 +60,6 @@ class AddPole {
   private addToPlain: AddToPlain;
 
   private blockStore: BlockStore;
-
-  private joinPoles: JoinPoles;
 
   private tmpBlockId?: string;
 

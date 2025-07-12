@@ -32,11 +32,14 @@ import CableDrawingService from './services/CableDrawingService';
 import BlockSerializer from './stores/block/BlockSerializer';
 import GameSerializer from './stores/game/GameSerializer';
 import GridSerializer from './stores/grid/GridSerializer';
+import BuildService from './services/BuildService';
+import AddService from './controllers/tools/AddService';
 
 type EditorContextType = {
   blockStore: BlockStore;
   blockCategoryStore: BlockCategoryStore;
   blockTypeSelectorService: BlockTypeSelectorService;
+  buildService: BuildService;
   cableDrawingService: CableDrawingService;
   controller: ControllerService;
   eraser: EraserService;
@@ -102,6 +105,18 @@ export const setupEditor = () => {
     transactionService,
   );
 
+  const buildService = new BuildService(blockStore, blockTypeStore, gameStore, gridStore);
+
+  const addService = new AddService(
+    blockStore,
+    blockTypeStore,
+    buildService,
+    factoryService,
+    sceneStore,
+    sceneService,
+    transactionService,
+  );
+
   const cableDrawingService = new CableDrawingService(
     blockStore,
     factoryService,
@@ -111,8 +126,10 @@ export const setupEditor = () => {
     transactionService,
   );
 
+  buildService.setDrawServices([addService, cableDrawingService]);
+
   toolService.setTools([
-    new AddTool(blockStore, blockTypeStore, factoryService, gridStore, sceneStore, sceneService, transactionService),
+    new AddTool(addService, blockStore, blockTypeStore, gridStore, sceneService, transactionService),
     new MoveTool(blockStore, gameStore, gridStore, sceneService, transactionService),
     new SelectTool(
       blockStore,
@@ -125,7 +142,7 @@ export const setupEditor = () => {
     ),
     new EraseTool(blockStore, sceneService, transactionService),
     new RayTool(blockStore, transactionService, sceneStore),
-    new CableTool(blockStore, blockTypeStore, cableDrawingService, sceneService, transactionService),
+    new CableTool(blockStore, blockTypeStore, buildService, cableDrawingService, sceneService, transactionService),
   ]);
 
   const blockTypeSelectorService = new BlockTypeSelectorService(blockTypeStore);
@@ -134,6 +151,7 @@ export const setupEditor = () => {
     blockCategoryStore: blockCategoryStore,
     blockStore: blockStore,
     blockTypeSelectorService,
+    buildService,
     cableDrawingService,
     controller: new ControllerService(transactionService),
     eraser: new EraserService(blockStore, transactionService),

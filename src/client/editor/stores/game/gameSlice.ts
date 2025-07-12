@@ -4,6 +4,7 @@ import HistoryStorage from '../utils/HistoryStorage';
 import { WorldPositionPath } from '../../use_cases/grid/WorldPositionPathBuilder';
 
 export type GameState = {
+  activeGridIndexes: number[];
   currentPlayer?: string;
   currentMovementPath?: WorldPositionPath;
   players: string[];
@@ -13,6 +14,7 @@ export type GameState = {
 };
 
 export const initialGameState: GameState = {
+  activeGridIndexes: [],
   currentMovementPath: undefined,
   gameState: 'not-started',
   players: [],
@@ -32,6 +34,9 @@ export const gameSlice = createSlice({
   name: 'game',
   initialState: initialGameState,
   reducers: {
+    setActiveGridIndexes(state, action: PayloadAction<number[]>) {
+      state.activeGridIndexes = action.payload;
+    },
     setCurrentMovementPath(state, action: PayloadAction<WorldPositionPath | undefined>) {
       state.currentMovementPath = action.payload;
     },
@@ -85,6 +90,12 @@ export const gameSlice = createSlice({
   },
 });
 
-export const { setCurrentMovementPath, setGameState, setReachableGrids, setSelectedPlayer } = gameSlice.actions;
+export const {
+  setActiveGridIndexes,
+  setCurrentMovementPath,
+  setGameState,
+  setReachableGrids,
+  setSelectedPlayer,
+} = gameSlice.actions;
 
 export default gameSlice.reducer;

@@ -20,7 +20,13 @@ export type ModelPartProps = {
 const ModelPartMesh = ({ block, materials, materialProps, nodes, onPointerEnter, part }: ModelPartProps) => {
   const partInfo = block.partDetails[part.name];
 
-  const material = useMaterial({ materials, materialProps, nodes, part, isSelected: block.isSelected });
+  const material = useMaterial({
+    materials,
+    materialProps,
+    nodes,
+    part,
+    isPreview: block.isSelected || block.isPreview,
+  });
   const geometry = useGeometry(nodes, part, block);
 
   return (

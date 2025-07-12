@@ -7,7 +7,13 @@ import { BlockDecorations } from '../../models/block/BlockDecoration';
 export type TransformType = 'move' | 'scale';
 
 export type BlockTypeState = {
-  activeBlockType?: string;
+  addAction:
+    | {
+        blockType: string;
+        cancelable: boolean;
+        finishable: boolean;
+      }
+    | undefined;
   blocks: BlockConstantData[];
   decorations: Record<BlockTypeName, Partial<BlockDecorations>>;
   settings: Partial<Record<string, BlockSettings>>;
@@ -16,7 +22,7 @@ export type BlockTypeState = {
 };
 
 export const initialBlockTypeState: BlockTypeState = {
-  activeBlockType: undefined,
+  addAction: undefined,
   blocks: [],
   decorations: {},
   settings: {},
@@ -28,8 +34,8 @@ export const blockTypeSlice = createSlice({
   name: 'block-type',
   initialState: initialBlockTypeState,
   reducers: {
-    setActiveBlockType: (state, action: PayloadAction<string | undefined>) => {
-      state.activeBlockType = action.payload;
+    setAddAction: (state, action: PayloadAction<BlockTypeState['addAction']>) => {
+      state.addAction = action.payload;
     },
     setSelectedTransformType: (state, action: PayloadAction<TransformType>) => {
       state.selectedTransformType = action.payload;
@@ -53,6 +59,6 @@ export const blockTypeSlice = createSlice({
   },
 });
 
-export const { setActiveBlockType, setSelectedTransformType, setBlockTypes } = blockTypeSlice.actions;
+export const { setAddAction, setSelectedTransformType, setBlockTypes } = blockTypeSlice.actions;
 
 export default blockTypeSlice.reducer;

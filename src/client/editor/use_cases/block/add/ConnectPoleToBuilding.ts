@@ -23,7 +23,7 @@ class ConnectPoleToBuilding {
     this.sceneStore = sceneStore;
     this.transactionService = transactionService;
 
-    this.addChildToAnchor = new AddToAnchorAsChild(factory, sceneStore);
+    this.addChildToAnchor = new AddToAnchorAsChild(factory);
 
     this.onMeshRendered = this.onMeshRendered.bind(this);
 

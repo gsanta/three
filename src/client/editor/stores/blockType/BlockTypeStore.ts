@@ -7,8 +7,8 @@ class BlockTypeStore {
     this.store = store;
   }
 
-  getActiveBlockType() {
-    return this.getState().activeBlockType;
+  getAddAction() {
+    return this.getState().addAction;
   }
 
   getBlockType(type: string) {

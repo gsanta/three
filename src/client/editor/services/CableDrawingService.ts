@@ -11,8 +11,10 @@ import DrawCableFromCable from '../use_cases/cable/DrawCableFromCable';
 import DrawOverheadCables from '../use_cases/connecting/DrawOverheaderCables';
 import SceneService from '../ui/scene/service/SceneService';
 import { historyAction } from '../stores/block/blockActions';
+import DrawService from '../controllers/tools/DrawService';
+import { BlockCategoryName } from '../models/block/BlockCategoryName';
 
-class CableDrawingService {
+class CableDrawingService implements DrawService {
   constructor(
     block: BlockStore,
     factoryService: FactoryService,
@@ -37,6 +39,10 @@ class CableDrawingService {
     );
   }
 
+  canHandleCategory(category: BlockCategoryName): boolean {
+    return category === 'cables';
+  }
+
   cancel() {
     this._isDrawing = false;
 
@@ -53,8 +59,6 @@ class CableDrawingService {
     store.dispatch(setCurrentCanvasAction('add'));
     store.dispatch(historyAction());
   }
-
-  getDrawingState() {}
 
   isDrawing() {
     return this._isDrawing;

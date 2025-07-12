@@ -7,7 +7,7 @@ import BlockPartGeometryData from '../../models/block/part/BlockPartGeometryData
 export type NodesOrObject3DType = NodesType | BufferGeometry<NormalBufferAttributes>;
 
 type UseMaterialProps = {
-  isSelected: boolean;
+  isPreview: boolean;
   materials: {
     [name: string]: Material;
   };
@@ -35,7 +35,7 @@ const getMaterial = (materials: UseMaterialProps['materials'], nodes: NodesType,
   return material;
 };
 
-const useMaterial = ({ isSelected, materialProps, materials, nodes, part }: UseMaterialProps) => {
+const useMaterial = ({ isPreview, materialProps, materials, nodes, part }: UseMaterialProps) => {
   const selectionMaterial = useRef<Material>();
 
   let material: Material | undefined = undefined;
@@ -56,7 +56,7 @@ const useMaterial = ({ isSelected, materialProps, materials, nodes, part }: UseM
       //   newMaterial[prop as Exclude<keyof Material, 'isMaterial'>] = materialProps[prop];
       // });
 
-      if (isSelected) {
+      if (isPreview) {
         selectionMaterial.current.transparent = true;
         selectionMaterial.current.opacity = 0.2;
       }
@@ -68,7 +68,7 @@ const useMaterial = ({ isSelected, materialProps, materials, nodes, part }: UseM
       }
       return getMaterial(materials, nodes, part);
     }
-  }, [isSelected, material, materialProps, materials, nodes, part]);
+  }, [isPreview, material, materialProps, materials, nodes, part]);
 
   return material;
 };

@@ -6,13 +6,13 @@ import SceneService from '../../ui/scene/service/SceneService';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import CableDrawingService from '../../services/CableDrawingService';
 import BlockTypeStore from '../../stores/blockType/BlockTypeStore';
-import { store } from '@/client/common/utils/store';
-import { setCurrentCanvasAction } from '../../stores/blockCategory/blockCategorySlice';
+import BuildService from '../../services/BuildService';
 
 class CableTool extends HoverTool {
   constructor(
     block: BlockStore,
     blockTypeStore: BlockTypeStore,
+    buildService: BuildService,
     cableDrawingService: CableDrawingService,
     sceneService: SceneService,
     transaction: TransactionService,
@@ -20,6 +20,8 @@ class CableTool extends HoverTool {
     super(block, sceneService, transaction, ToolName.Cable, 'BiNetworkChart');
 
     this.blockTypeStore = blockTypeStore;
+
+    this.buildService = buildService;
 
     this.cableDrawingService = cableDrawingService;
 
@@ -53,13 +55,13 @@ class CableTool extends HoverTool {
       const drawInfo = this.cableDrawingService.udpate(info.gridIndex);
 
       if (drawInfo?.finishable) {
-        store.dispatch(setCurrentCanvasAction('finish-cable-drawing'));
+        this.buildService.setIsEditing({ cancelable: true, finishable: true });
       }
     }
   }
 
   onPointerDown(info: ToolInfo): void {
-    const selectedId = this.blockTypeStore.getActiveBlockType();
+    const selectedId = this.blockTypeStore.getAddAction()?.blockType;
     const selectedBlock = this.blockStore.getBlock(selectedId);
 
     if (this.cableDrawingService.isDrawing()) {
@@ -67,7 +69,7 @@ class CableTool extends HoverTool {
     } else {
       const didStart = this.cableDrawingService.start(selectedBlock, info.gridIndex);
       if (didStart) {
-        store.dispatch(setCurrentCanvasAction('cable-drawing'));
+        this.buildService.setIsEditing({ cancelable: true, finishable: false });
       }
     }
   }
@@ -75,6 +77,8 @@ class CableTool extends HoverTool {
   private prevGridIndex: number = -1;
 
   private blockTypeStore: BlockTypeStore;
+
+  private buildService: BuildService;
 
   private cableDrawingService: CableDrawingService;
 }
