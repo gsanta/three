@@ -5,6 +5,8 @@ import BlockPart from '@/client/editor/models/block/part/BlockPart';
 import Vector from '@/client/editor/models/math/Vector';
 import BlockPartGeometryData from '@/client/editor/models/block/part/BlockPartGeometryData';
 import Edit from '@/client/editor/services/transaction/Edit';
+import DrawCommand from './DrawCommand';
+import TransactionService from '@/client/editor/services/transaction/TransactionService';
 
 export type AddParams = {
   edit: Edit;
@@ -20,9 +22,18 @@ export type AddParams = {
   };
 };
 
-class AddToAnchorAsChild {
-  constructor(factoryService: FactoryService) {
+class AddToAnchorAsChild implements DrawCommand {
+  constructor(factoryService: FactoryService, transactionService: TransactionService) {
     this.factoryService = factoryService;
+
+    this.transactionService = transactionService;
+  }
+
+  finish(): void {
+    if (this.newBlockId) {
+      this.transactionService.createTransaction().updateBlock(this.newBlockId, { isPreview: false }).commit();
+    }
+    this.newBlockId = undefined;
   }
 
   execute({ edit, newBlockType, newBlockAnchorName, to }: AddParams) {
@@ -69,7 +80,11 @@ class AddToAnchorAsChild {
       { arrayMergeStrategy: 'merge' },
     );
 
-    return newBlock;
+    this.newBlockId = newBlock.id;
+  }
+
+  getNewBlockId() {
+    return this.newBlockId;
   }
 
   private calculatePosition(existingPart: BlockPart, newPart: BlockPartGeometryData) {
@@ -80,6 +95,10 @@ class AddToAnchorAsChild {
   }
 
   private factoryService: FactoryService;
+
+  private newBlockId?: string;
+
+  private transactionService: TransactionService;
 }
 
 export default AddToAnchorAsChild;

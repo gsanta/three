@@ -30,7 +30,6 @@ class BlockCreator {
       multiParentConnections: settings.multiParentConnections || [],
       conduitConnections: settings.conduitConnections || [],
       materialProps: {},
-      neighbourConnections: [],
       isDirty: settings.isDirty || false,
       isHovered: false,
       isSelected: false,

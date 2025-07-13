@@ -13,8 +13,6 @@ import UpdateService from './services/update/UpdateService';
 import BlockStore from './stores/block/BlockStore';
 import BlockCategoryStore from './stores/blockCategory/BlockCategoryStore';
 import ToolStore from './stores/tool/ToolStore';
-import ContextMenuController from './controllers/ContextMenuController';
-import ConnectPoleToBuilding from './use_cases/block/add/ConnectPoleToBuilding';
 import GridStore from './stores/grid/GridStore';
 import GameController from './controllers/GameController';
 import GameStore from './stores/game/GameStore';
@@ -34,6 +32,7 @@ import GameSerializer from './stores/game/GameSerializer';
 import GridSerializer from './stores/grid/GridSerializer';
 import BuildService from './services/BuildService';
 import AddService from './controllers/tools/AddService';
+import HistoryController from './controllers/HistoryController';
 
 type EditorContextType = {
   blockStore: BlockStore;
@@ -53,13 +52,12 @@ type EditorContextType = {
   controllers: {
     game: GameController;
   };
-
-  contextMenuController: ContextMenuController;
 };
 
 export const isTestEnv = () => process.env.NODE_ENV === 'test';
 
 export const setupEditor = () => {
+  const historyController = new HistoryController(store);
   const gameStore = new GameStore(store);
   const blockStore = new BlockStore(store);
   const gridStore = new GridStore(blockStore, store);
@@ -82,11 +80,6 @@ export const setupEditor = () => {
   });
 
   const updateService = new UpdateService(blockStore, transactionService, sceneStore);
-
-  const contextMenuController = new ContextMenuController(
-    blockStore,
-    new ConnectPoleToBuilding(blockStore, factoryService, sceneStore, sceneService, transactionService),
-  );
 
   const serializer = new Serializer(
     store,
@@ -112,6 +105,7 @@ export const setupEditor = () => {
     blockTypeStore,
     buildService,
     factoryService,
+    historyController,
     sceneStore,
     sceneService,
     transactionService,
@@ -142,7 +136,15 @@ export const setupEditor = () => {
     ),
     new EraseTool(blockStore, sceneService, transactionService),
     new RayTool(blockStore, transactionService, sceneStore),
-    new CableTool(blockStore, blockTypeStore, buildService, cableDrawingService, sceneService, transactionService),
+    new CableTool(
+      blockStore,
+      blockTypeStore,
+      buildService,
+      cableDrawingService,
+      sceneService,
+      store,
+      transactionService,
+    ),
   ]);
 
   const blockTypeSelectorService = new BlockTypeSelectorService(blockTypeStore);
@@ -165,8 +167,6 @@ export const setupEditor = () => {
     controllers: {
       game: gameController,
     },
-
-    contextMenuController,
   };
 
   editorContext.sceneStore.setToolService(editorContext.tool);

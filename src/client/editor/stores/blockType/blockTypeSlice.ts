@@ -16,6 +16,7 @@ export type BlockTypeState = {
     | undefined;
   blocks: BlockConstantData[];
   decorations: Record<BlockTypeName, Partial<BlockDecorations>>;
+  isOrbitControlStopped: boolean;
   settings: Partial<Record<string, BlockSettings>>;
   selectedSettings: Record<string, BlockSelectedSettings>;
   selectedTransformType: TransformType;
@@ -25,6 +26,7 @@ export const initialBlockTypeState: BlockTypeState = {
   addAction: undefined,
   blocks: [],
   decorations: {},
+  isOrbitControlStopped: false,
   settings: {},
   selectedSettings: {},
   selectedTransformType: 'move',
@@ -36,6 +38,9 @@ export const blockTypeSlice = createSlice({
   reducers: {
     setAddAction: (state, action: PayloadAction<BlockTypeState['addAction']>) => {
       state.addAction = action.payload;
+    },
+    setIsOrbitControlStopped: (state, action: PayloadAction<boolean>) => {
+      state.isOrbitControlStopped = action.payload;
     },
     setSelectedTransformType: (state, action: PayloadAction<TransformType>) => {
       state.selectedTransformType = action.payload;
@@ -59,6 +64,7 @@ export const blockTypeSlice = createSlice({
   },
 });
 
-export const { setAddAction, setSelectedTransformType, setBlockTypes } = blockTypeSlice.actions;
+export const { setAddAction, setBlockTypes, setIsOrbitControlStopped, setSelectedTransformType } =
+  blockTypeSlice.actions;
 
 export default blockTypeSlice.reducer;

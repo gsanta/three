@@ -14,6 +14,8 @@ import AddToAnchor from '../../use_cases/block/add/AddToAnchor';
 import AddToAnchorAsChild from '../../use_cases/block/add/AddToAnchorAsChild';
 import AddToPlain from '../../use_cases/block/add/AddToPlain';
 import AddTransformer from '../../use_cases/block/add/AddTransformer';
+import DrawCommand from '../../use_cases/block/add/DrawCommand';
+import HistoryController from '../HistoryController';
 import DrawService from './DrawService';
 
 type AddInfo = {
@@ -29,6 +31,7 @@ class AddService implements DrawService {
     blockTypeStore: BlockTypeStore,
     buildService: BuildService,
     factoryService: FactoryService,
+    historyController: HistoryController,
     sceneStore: SceneStore,
     sceneService: SceneService,
     transactionService: TransactionService,
@@ -37,10 +40,12 @@ class AddService implements DrawService {
 
     this.transactionService = transactionService;
 
-    this.addPoles = new AddPole(blockStore, factoryService, sceneService, sceneStore, transactionService);
-    this.addToPlain = new AddToPlain(factoryService);
+    this.historyController = historyController;
+
+    this.addPoles = new AddPole(blockStore, factoryService, sceneService, transactionService);
+    this.addToPlain = new AddToPlain(factoryService, transactionService);
     this.addToAnchor = new AddToAnchor(factoryService, sceneStore, transactionService);
-    this.addToAnchorAsChild = new AddToAnchorAsChild(factoryService);
+    this.addToAnchorAsChild = new AddToAnchorAsChild(factoryService, transactionService);
     this.addTranformer = new AddTransformer(blockStore, blockTypeStore, factoryService, sceneStore, transactionService);
   }
 
@@ -49,11 +54,11 @@ class AddService implements DrawService {
   }
 
   cancel(): void {
-    throw new Error('Method not implemented.');
+    this.historyController.undo();
   }
 
   finish(): void {
-    throw new Error('Method not implemented.');
+    this.activeDrawCommand?.finish();
   }
 
   add({ newBlockTemplate, position, targetBlock, targetPartName }: AddInfo) {
@@ -62,6 +67,7 @@ class AddService implements DrawService {
     switch (newBlockTemplate.category) {
       case 'poles':
         this.addPoles.execute({ edit, newBlockType: newBlockTemplate, position: position });
+        this.activeDrawCommand = this.addPoles;
         break;
       case 'roads':
         if (targetBlock && targetPartName) {
@@ -74,14 +80,17 @@ class AddService implements DrawService {
               anchorPartName: targetPartName,
             },
           });
+          this.activeDrawCommand = this.addToAnchor;
         } else {
           this.addToPlain.execute({ edit, newBlockType: newBlockTemplate, position: position });
+          this.activeDrawCommand = this.addToPlain;
         }
         break;
       case 'houses':
       case 'humans':
       case 'plants':
         this.addToPlain.execute({ edit, newBlockType: newBlockTemplate, position: position });
+        this.activeDrawCommand = this.addToPlain;
         break;
       case 'transformers':
         this.addTranformer.execute({
@@ -94,7 +103,8 @@ class AddService implements DrawService {
           },
         });
 
-        this.activeAdder = this.addTranformer;
+        this.activeDrawCommand = this.addTranformer;
+
         break;
       case 'conduits':
         if (targetBlock && targetPartName) {
@@ -107,6 +117,7 @@ class AddService implements DrawService {
               anchorPartName: targetPartName,
             },
           });
+          this.activeDrawCommand = this.addToAnchorAsChild;
         }
     }
 
@@ -115,10 +126,10 @@ class AddService implements DrawService {
   }
 
   getActiveAddCommand() {
-    return this.activeAdder;
+    return this.activeDrawCommand;
   }
 
-  private activeAdder: { executeAfterRender(): void } | undefined;
+  private activeDrawCommand?: DrawCommand;
 
   private addTranformer: AddTransformer;
 
@@ -131,6 +142,8 @@ class AddService implements DrawService {
   private addToAnchorAsChild: AddToAnchorAsChild;
 
   private buildService: BuildService;
+
+  private historyController: HistoryController;
 
   private transactionService: TransactionService;
 }

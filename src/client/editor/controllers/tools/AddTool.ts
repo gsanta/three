@@ -57,7 +57,7 @@ class AddTool extends HoverTool {
 
   onMeshRendered(name: ToolEventName): void {
     if (name === 'onPointerUp') {
-      this.addService.getActiveAddCommand()?.executeAfterRender();
+      this.addService.getActiveAddCommand()?.executeAfterRender?.();
     }
   }
 

@@ -10,7 +10,7 @@ export type GameState = {
   players: string[];
   gameState: 'started' | 'not-started';
 
-  reachableGrids: Record<number, number>;
+  reachableGrids: Record<number, { cost: number; gridPosition: [number, number] }>;
 };
 
 export const initialGameState: GameState = {
@@ -43,7 +43,7 @@ export const gameSlice = createSlice({
     setGameState(state, action: PayloadAction<GameState['gameState']>) {
       state.gameState = action.payload;
     },
-    setReachableGrids(state, action: PayloadAction<Record<number, number>>) {
+    setReachableGrids(state, action: PayloadAction<GameState['reachableGrids']>) {
       state.reachableGrids = action.payload;
     },
     setSelectedPlayer(state, action: PayloadAction<string>) {
@@ -90,12 +90,7 @@ export const gameSlice = createSlice({
   },
 });
 
-export const {
-  setActiveGridIndexes,
-  setCurrentMovementPath,
-  setGameState,
-  setReachableGrids,
-  setSelectedPlayer,
-} = gameSlice.actions;
+export const { setActiveGridIndexes, setCurrentMovementPath, setGameState, setReachableGrids, setSelectedPlayer } =
+  gameSlice.actions;
 
 export default gameSlice.reducer;

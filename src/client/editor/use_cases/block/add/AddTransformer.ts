@@ -8,8 +8,9 @@ import DrawCable from '../../cable/DrawCable';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import BlockPart from '@/client/editor/models/block/part/BlockPart';
+import DrawCommand from './DrawCommand';
 
-class AddTransformer {
+class AddTransformer implements DrawCommand {
   constructor(
     blockStore: BlockStore,
     blockTypeStore: BlockTypeStore,
@@ -20,10 +21,17 @@ class AddTransformer {
     this.blockStore = blockStore;
     this.blockTypeStore = blockTypeStore;
 
-    this.addToPlain = new AddToPlain(factoryService);
-    this.addToAnchorAsChild = new AddToAnchorAsChild(factoryService);
+    this.addToPlain = new AddToPlain(factoryService, transactionService);
+    this.addToAnchorAsChild = new AddToAnchorAsChild(factoryService, transactionService);
 
     this.drawCable = new DrawCable(blockStore, factoryService, sceneStore, transactionService);
+  }
+
+  finish(): void {
+    if (this.activeDrawCommand) {
+      this.activeDrawCommand.finish();
+    }
+    this.transformerId = undefined;
   }
 
   execute({ edit, newBlockType, position, to }: AddParams) {
@@ -35,16 +43,22 @@ class AddTransformer {
 
     if (transfomer.location === 'pole-mounted') {
       if (to?.block && to.anchorPartName) {
-        this.transformerId = this.addToAnchorAsChild.execute({
+        this.addToAnchorAsChild.execute({
           edit,
           newBlockType: newBlockType,
           newBlockAnchorName: 'Holder',
           position,
           to,
-        })?.id;
+        });
+
+        this.transformerId = this.addToAnchorAsChild.getNewBlockId();
+
+        this.activeDrawCommand = this.addToAnchorAsChild;
       }
     } else {
-      this.transformerId = this.addToPlain.execute({ edit, newBlockType: newBlockType, position })?.id;
+      this.addToPlain.execute({ edit, newBlockType: newBlockType, position });
+      this.transformerId = this.addToPlain.getNewBlockId();
+      this.activeDrawCommand = this.addToPlain;
     }
   }
 
@@ -70,6 +84,8 @@ class AddTransformer {
       { part: new BlockPart(transformer, 'L3'), pinIndex: 0 },
     );
   }
+
+  private activeDrawCommand?: DrawCommand;
 
   private transformerId?: string;
 

@@ -16,6 +16,42 @@ type RowProps = {
   highlightCols: number[];
 };
 
+const Highlights = () => {
+  const reachableGrids = useAppSelector((selector) => selector.game.reachableGrids);
+  const gridSize = useAppSelector((selector) => selector.grid.gridSize);
+  const offsetX = useAppSelector((selector) => selector.grid.gridOffset[0]);
+  const offsetZ = useAppSelector((selector) => selector.grid.gridOffset[1]);
+
+  const [highlighted, setHighlighted] = useState<number>();
+
+  return Object.entries(reachableGrids).map(
+    ([
+      index,
+      {
+        gridPosition: [x, z],
+      },
+    ]) => {
+      return (
+        <mesh
+          key={index}
+          onPointerEnter={() => setHighlighted(Number(index))}
+          onPointerLeave={() => {
+            if (highlighted === Number(index)) {
+              setHighlighted(undefined);
+            }
+          }}
+          position={[x * gridSize + offsetX, 0.2, z * gridSize + offsetZ]}
+          renderOrder={1}
+          rotation-x={-Math.PI * 0.5}
+        >
+          <boxGeometry args={[gridSize - 0.5, gridSize - 0.5, 0.2]} />
+          <meshBasicMaterial color={highlighted === Number(index) ? 'orange' : 'red'} opacity={0.2} transparent />
+        </mesh>
+      );
+    },
+  );
+};
+
 const Row = ({ count, rowIndex, x, z, offsetX, offsetZ, gridSize }: RowProps) => {
   const { tool } = useEditorContext();
   const reachableGrids = useAppSelector((selector) => selector.game.reachableGrids);
@@ -53,7 +89,7 @@ const Row = ({ count, rowIndex, x, z, offsetX, offsetZ, gridSize }: RowProps) =>
             rotation-x={-Math.PI * 0.5}
           >
             <planeGeometry args={[gridSize - 0.1, gridSize - 0.1]} />
-            <meshBasicMaterial color={highlighted === gridIndex ? 'orange' : 'red'} visible={visible} />
+            <meshBasicMaterial visible={false} />
           </mesh>
         );
       })}
@@ -81,8 +117,10 @@ const Grid = () => {
         <boxGeometry />
         <meshBasicMaterial transparent={true} opacity={0.25} />
       </mesh>
+      <Highlights />
       {Array.from({ length: gridRows + 1 }).map((_, i) => (
         <Line
+          lineWidth={1}
           opacity={0.2}
           points={[
             [gridOffset[0] - gridSize / 2, 0, gridOffset[1] + i * gridSize - gridSize / 2],

@@ -49,8 +49,6 @@ type BlockData = {
     block: string;
   }[];
 
-  neighbourConnections: NeigbourConnection[];
-
   notifyOnRender: boolean;
 
   parentConnection?: {
@@ -79,7 +77,6 @@ export const mergeBlocks = (
   const newBlock = {
     ...block,
     ...partial,
-    neighbourConnections: mergeArrays(block.neighbourConnections, partial?.neighbourConnections, mergeStrategy),
     childConnections: mergeArrays(block.childConnections, partial?.childConnections, mergeStrategy),
     conduitConnections: mergeArrays(block.conduitConnections, partial?.conduitConnections, mergeStrategy),
     partDetails: {

@@ -36,6 +36,8 @@ class BuildService {
         service.cancel();
       }
     });
+
+    this.setIsEditing({ cancelable: false, finishable: false });
   }
 
   finish() {
@@ -52,6 +54,8 @@ class BuildService {
         service.finish();
       }
     });
+
+    this.setIsEditing({ cancelable: false, finishable: false });
   }
 
   setBuildBlock(block: BlockConstantData | undefined) {

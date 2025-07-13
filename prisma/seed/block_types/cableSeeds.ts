@@ -26,22 +26,28 @@ const cableSeeds: Prisma.BlockTypeUncheckedCreateInput[] = [
         position: [0.004, 0.036, -0.106],
         rotation: [Math.PI / 2, 0, 0],
       },
-      // {
-      //   name: 'End1',
-      // },
-      // {
-      //   name: 'End2',
-      // },
+      {
+        name: 'End1',
+        materialPath: 'Palette',
+        position: [0.004, 0.036, 0.894],
+        rotation: [Math.PI / 2, 0, 0],
+      },
+      {
+        name: 'End2',
+        materialPath: 'Palette',
+        position: [0.004, 0.036, -1.1],
+        rotation: [Math.PI / 2, 0, 0],
+      },
     ],
     partDetails: {
-      // End1: {
-      //   roles: ['pin'],
-      //   type: 'physical',
-      // },
-      // End2: {
-      //   roles: ['pin'],
-      //   type: 'physical',
-      // },
+      End1: {
+        roles: ['pin'],
+        type: 'physical',
+      },
+      End2: {
+        roles: ['pin'],
+        type: 'physical',
+      },
     },
     decorationData: {
       cables: {

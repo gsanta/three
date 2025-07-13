@@ -34,6 +34,7 @@ const Scene = () => {
 
   const blockIds = useAppSelector((selector) => selector.block.blockIds);
   const editTargetBlock = useAppSelector((selector) => selector.grid.editingTargetBlock);
+  const isOrbitControlStopped = useAppSelector((selector) => selector.blockType.isOrbitControlStopped);
 
   useEffect(() => {
     sceneService.setCamera(camera);
@@ -95,11 +96,7 @@ const Scene = () => {
         <meshStandardMaterial color="brown" />
       </mesh>
       <TemporaryCableRenderer />
-      <OrbitControls
-        enableRotate={!['cable-drawing', 'finish-cable-drawing'].includes(currentAction || '')}
-        makeDefault
-        ref={orbitControlRef}
-      />
+      <OrbitControls enableRotate={!isOrbitControlStopped} makeDefault ref={orbitControlRef} />
       <Environment files="envmap.hdr" background={true} />
 
       <PerspectiveCamera makeDefault position={[0, 50, 75]} fov={25} />

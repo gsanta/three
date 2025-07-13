@@ -1,5 +1,10 @@
 import Num3 from '@/client/editor/models/math/Num3';
 
+export enum CableEndName {
+  End1 = 'End1',
+  End2 = 'End2',
+}
+
 export type CableEnd = {
   partName: string;
   pinIndex: number;

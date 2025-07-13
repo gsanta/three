@@ -14,15 +14,39 @@ class CalculateReachableGrids {
     const gridIndex = this.grid.worldToGridIndex(new Vector(block.position));
     const cols = this.gridStore.getCols();
 
-    const reachables: Record<number, number> = {
-      [gridIndex - 1]: 1,
-      [gridIndex + 1]: 1,
-      [gridIndex - 1 - cols]: 1,
-      [gridIndex - cols]: 1,
-      [gridIndex + 1 - cols]: 1,
-      [gridIndex - 1 + cols]: 1,
-      [gridIndex + cols]: 1,
-      [gridIndex + 1 + cols]: 1,
+    const reachables: Record<number, { cost: number; gridPosition: [number, number] }> = {
+      [gridIndex - 1]: {
+        cost: 1,
+        gridPosition: this.grid.gridIndexToGridPosition(gridIndex - 1),
+      },
+      [gridIndex + 1]: {
+        cost: 1,
+        gridPosition: this.grid.gridIndexToGridPosition(gridIndex + 1),
+      },
+      [gridIndex - 1 - cols]: {
+        cost: 1,
+        gridPosition: this.grid.gridIndexToGridPosition(gridIndex - 1 - cols),
+      },
+      [gridIndex - cols]: {
+        cost: 1,
+        gridPosition: this.grid.gridIndexToGridPosition(gridIndex - cols),
+      },
+      [gridIndex + 1 - cols]: {
+        cost: 1,
+        gridPosition: this.grid.gridIndexToGridPosition(gridIndex + 1 - cols),
+      },
+      [gridIndex - 1 + cols]: {
+        cost: 1,
+        gridPosition: this.grid.gridIndexToGridPosition(gridIndex - 1 + cols),
+      },
+      [gridIndex + cols]: {
+        cost: 1,
+        gridPosition: this.grid.gridIndexToGridPosition(gridIndex + cols),
+      },
+      [gridIndex + 1 + cols]: {
+        cost: 1,
+        gridPosition: this.grid.gridIndexToGridPosition(gridIndex + 1 + cols),
+      },
     };
 
     return reachables;

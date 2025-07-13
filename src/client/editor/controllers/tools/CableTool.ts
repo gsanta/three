@@ -7,6 +7,8 @@ import BlockStore from '@/client/editor/stores/block/BlockStore';
 import CableDrawingService from '../../services/CableDrawingService';
 import BlockTypeStore from '../../stores/blockType/BlockTypeStore';
 import BuildService from '../../services/BuildService';
+import { Store } from '@/client/common/utils/store';
+import { setIsOrbitControlStopped } from '../../stores/blockType/blockTypeSlice';
 
 class CableTool extends HoverTool {
   constructor(
@@ -15,6 +17,7 @@ class CableTool extends HoverTool {
     buildService: BuildService,
     cableDrawingService: CableDrawingService,
     sceneService: SceneService,
+    store: Store,
     transaction: TransactionService,
   ) {
     super(block, sceneService, transaction, ToolName.Cable, 'BiNetworkChart');
@@ -24,6 +27,8 @@ class CableTool extends HoverTool {
     this.buildService = buildService;
 
     this.cableDrawingService = cableDrawingService;
+
+    this.store = store;
 
     this.onMeshRendered = this.onMeshRendered.bind(this);
   }
@@ -54,6 +59,8 @@ class CableTool extends HoverTool {
     if (this.cableDrawingService.isDrawing()) {
       const drawInfo = this.cableDrawingService.udpate(info.gridIndex);
 
+      console.log(drawInfo);
+
       if (drawInfo?.finishable) {
         this.buildService.setIsEditing({ cancelable: true, finishable: true });
       }
@@ -72,6 +79,12 @@ class CableTool extends HoverTool {
         this.buildService.setIsEditing({ cancelable: true, finishable: false });
       }
     }
+
+    this.store.dispatch(setIsOrbitControlStopped(true));
+  }
+
+  onPointerUp(): void {
+    this.store.dispatch(setIsOrbitControlStopped(false));
   }
 
   private prevGridIndex: number = -1;
@@ -81,6 +94,8 @@ class CableTool extends HoverTool {
   private buildService: BuildService;
 
   private cableDrawingService: CableDrawingService;
+
+  private store: Store;
 }
 
 export default CableTool;

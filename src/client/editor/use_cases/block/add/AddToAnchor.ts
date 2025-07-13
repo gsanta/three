@@ -38,6 +38,7 @@ class AddToAnchor implements DrawCommand {
     if (this.newBlockId) {
       this.transactionService.createTransaction().updateBlock(this.newBlockId, { isPreview: false }).commit();
     }
+    this.newBlockId = undefined;
   }
 
   execute({ edit, newBlockType, newBlockAnchorRole, to }: AddParams) {

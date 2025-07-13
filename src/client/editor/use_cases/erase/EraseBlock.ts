@@ -3,7 +3,6 @@ import Edit from '../../services/transaction/Edit';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockEraser from './erasers/BlockEraser';
 import CableEraser from './erasers/CableEraser';
-import { NeigbourConnection } from '../../models/block/BlockData';
 import BlockPartLookupData from '../../models/block/part/BlockPartLookupData';
 
 class EraseBlock {
@@ -51,16 +50,6 @@ class EraseBlock {
     if (eraser) {
       eraser.erase(edit, block);
     }
-
-    block.neighbourConnections.forEach((connection) => {
-      edit.updateBlock(
-        connection.neighbourBlock,
-        {
-          neighbourConnections: [{ id: connection.id } as NeigbourConnection],
-        },
-        { arrayMergeStrategy: 'exclude' },
-      );
-    });
 
     block.conduitConnections.forEach((connection) => {
       if (connection.thisPart) {

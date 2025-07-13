@@ -27,7 +27,7 @@ class AddPole implements DrawCommand {
 
     this.transactionService = transactionService;
 
-    this.addToPlain = new AddToPlain(factoryService);
+    this.addToPlain = new AddToPlain(factoryService, transactionService);
 
     this.onMeshRendered = this.onMeshRendered.bind(this);
 
@@ -35,9 +35,7 @@ class AddPole implements DrawCommand {
   }
 
   finish(): void {
-    if (this.tmpBlockId) {
-      this.transactionService.createTransaction().updateBlock(this.tmpBlockId, { isPreview: false }).commit();
-    }
+    this.addToPlain.finish();
   }
 
   execute({ edit, newBlockType, position }: AddParams) {
