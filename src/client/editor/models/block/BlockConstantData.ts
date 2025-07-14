@@ -7,7 +7,7 @@ export type AnimationTriggerName = 'device-on';
 
 export type BlockTypeName = string | 'ground-cable-1';
 
-export type BlockGeometry = 'ground-cable-geometry' | 'cable-geometry';
+export type BlockGeometry = 'empty' | 'ground-cable-geometry' | 'cable-geometry';
 
 type BlockConstantData = {
   animations?: Partial<Record<AnimationTriggerName, string[]>>;

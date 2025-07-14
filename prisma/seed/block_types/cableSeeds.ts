@@ -58,6 +58,18 @@ const cableSeeds: Prisma.BlockTypeUncheckedCreateInput[] = [
     texturePath: '/ribbon_caution.png',
     type: 'ground-cable-1',
   },
+  {
+    categoryName: 'cable-groups',
+    decorations: [],
+    geometry: 'empty',
+    // decorationData: {
+    //   'cable-groups': {
+    //     decoration: 'cable-groups',
+    //   },
+    // },
+    texturePath: '/ribbon_caution.png',
+    type: 'cable-group-1',
+  },
 ];
 
 export default cableSeeds;

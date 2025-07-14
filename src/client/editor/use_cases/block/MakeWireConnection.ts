@@ -30,6 +30,7 @@ class MakeWireConnection {
   execute(
     join1: { pole: BlockData; partName: string; pinIndex: number },
     join2: { pole: BlockData; partName: string; pinIndex: number },
+    cableGroupId: string,
     wireConfig: WireConfig = { isPreview: false },
   ) {
     this.wireConfig = { ...this.wireConfig, ...wireConfig };
@@ -48,6 +49,7 @@ class MakeWireConnection {
         multiParentConnections: [{ block: join1.pole.id }, { block: join2.pole.id }],
         isDirty: true,
         isPreview: this.wireConfig.isPreview,
+        groupParentConnection: cableGroupId
       },
       decorations: {
         cables: {

@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { CatmullRomCurve3, DoubleSide, Mesh, RepeatWrapping, TextureLoader, Vector2, Vector3 } from 'three';
+import { CatmullRomCurve3, DoubleSide, Group, RepeatWrapping, TextureLoader, Vector2, Vector3 } from 'three';
 import WrappedMeshProps from '../../models/block/WrappedMeshProps';
 import CableDecorator from '../../models/block/categories/CableDecorator';
 import useRegisterScene from '../hooks/useRegisterScene';
@@ -11,7 +11,7 @@ import { useLoader } from '@react-three/fiber';
 type GroundCableProps = WrappedMeshProps & { cable: CableDecorator };
 
 const GroundCableMesh = ({ cable, meshProps, block }: GroundCableProps) => {
-  const ref = useRegisterScene<Mesh>();
+  const ref = useRegisterScene<Group>();
   const { update } = useEditorContext();
 
   useEffect(() => {
@@ -64,34 +64,64 @@ const GroundCableMesh = ({ cable, meshProps, block }: GroundCableProps) => {
 
   return (
     <Select enabled={block.isHovered || block.isSelected}>
-      <mesh
-        {...meshProps}
-        onPointerEnter={onPointerEnter ? (e) => onPointerEnter(e) : undefined}
-        userData={{ modelId: block.id }}
-        key={`${block.id}-ribbon`}
-        name={block.type}
-        position={[midpoint.x, startPoint[1] + 0.3, midpoint.y]}
-        rotation={[Math.PI / 2, 0, -angle]}
-        ref={ref}
-      >
-        <planeGeometry args={[length, planeHeight]} />
-        <meshStandardMaterial map={texture} side={DoubleSide} />
-      </mesh>
-      <mesh
-        {...meshProps}
-        onPointerEnter={onPointerEnter ? (e) => onPointerEnter(e) : undefined}
-        userData={{ modelId: block.id }}
-        key={`${block.id}-cable`}
-        name={block.type}
-        ref={ref}
-      >
-        <tubeGeometry args={[curve, 70, 0.06, 50, false]} />
-        <meshBasicMaterial
-          color={block.isPreview ? '#ff00ff' : 'black'}
-          transparent={block.isPreview}
-          opacity={block.isPreview ? 0.1 : 1}
-        />
-      </mesh>
+      <group ref={ref} key={block.id} userData={{ modelId: block.id }}>
+        <mesh
+          {...meshProps}
+          onPointerEnter={onPointerEnter ? (e) => onPointerEnter(e) : undefined}
+          userData={{ modelId: block.id }}
+          key={`${block.id}-ribbon`}
+          name={block.type}
+          position={[midpoint.x, startPoint[1] + 0.3, midpoint.y]}
+          rotation={[Math.PI / 2, 0, -angle]}
+        >
+          <planeGeometry args={[length, planeHeight]} />
+          <meshStandardMaterial map={texture} side={DoubleSide} />
+        </mesh>
+        <mesh
+          {...meshProps}
+          onPointerEnter={onPointerEnter ? (e) => onPointerEnter(e) : undefined}
+          userData={{ modelId: block.id }}
+          key={`${block.id}-cable`}
+          name={block.type}
+        >
+          <tubeGeometry args={[curve, 70, 0.06, 50, false]} />
+          <meshBasicMaterial
+            color={block.isPreview ? '#ff00ff' : 'black'}
+            transparent={block.isPreview}
+            opacity={block.isPreview ? 0.1 : 1}
+          />
+        </mesh>
+        <mesh
+          {...meshProps}
+          onPointerEnter={onPointerEnter ? (e) => onPointerEnter(e) : undefined}
+          userData={{ modelId: block.id }}
+          key={`${block.id}-cable`}
+          name="End1"
+          position={cable.points[0].position}
+        >
+          <boxGeometry args={[0.1, 0.1, 0.1]} />
+          <meshBasicMaterial
+            color={block.isPreview ? '#ff00ff' : 'black'}
+            transparent={block.isPreview}
+            opacity={block.isPreview ? 0.1 : 1}
+          />
+        </mesh>
+        <mesh
+          {...meshProps}
+          onPointerEnter={onPointerEnter ? (e) => onPointerEnter(e) : undefined}
+          userData={{ modelId: block.id }}
+          key={`${block.id}-cable`}
+          name="End2"
+          position={cable.points[1].position}
+        >
+          <boxGeometry args={[0.1, 0.1, 0.1]} />
+          <meshBasicMaterial
+            color={block.isPreview ? '#ff00ff' : 'black'}
+            transparent={block.isPreview}
+            opacity={block.isPreview ? 0.1 : 1}
+          />
+        </mesh>
+      </group>
     </Select>
   );
 };

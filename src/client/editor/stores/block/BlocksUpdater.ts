@@ -1,10 +1,6 @@
-import { BlockState, UpdateBlock } from './blockSlice.types';
+import { BlockState, isBaseDecoratorName, UpdateBlock } from './blockSlice.types';
 
 class BlocksUpdater {
-  constructor(slice: 'city' | 'building') {
-    this.slice = slice;
-  }
-
   update(state: BlockState, updates: UpdateBlock[]) {
     updates.forEach((update) => {
       if ('hover' in update) {
@@ -36,8 +32,10 @@ class BlocksUpdater {
 
         if (block) {
           delete state.blocks[update.remove.id];
-          block.decorations.forEach((category) => {
-            delete state.decorations[category][update.remove.id];
+          block.decorations.forEach((decorator) => {
+            if (isBaseDecoratorName(decorator)) {
+              delete state.decorations[decorator][update.remove.id];
+            }
           });
         }
 
@@ -88,14 +86,15 @@ class BlocksUpdater {
           const { decoration } = update;
 
           if (decoration) {
-            state.decorations[decoration.decoration][decoration.id] = decoration;
+            const decorator = decoration.decoration;
+            if (isBaseDecoratorName(decorator)) {
+              state.decorations[decorator][decoration.id] = decoration as any;
+            }
           }
         }
       }
     });
   }
-
-  private slice: 'city' | 'building';
 }
 
 export default BlocksUpdater;

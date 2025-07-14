@@ -85,8 +85,6 @@ class ConnectMainWires implements ConnectCable {
     });
   }
 
-  private previewCableIds: string[] = [];
-
   private blockStore: BlockStore;
 
   private candidateId: string | undefined;

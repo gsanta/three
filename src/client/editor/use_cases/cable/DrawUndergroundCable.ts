@@ -50,6 +50,7 @@ class DrawUndergroundCable {
   finalize() {
     this.drawCable.finalize();
     this.from = undefined;
+    this.fromPosition = undefined;
   }
 
   getDrawInfo() {
@@ -62,6 +63,7 @@ class DrawUndergroundCable {
   cancel() {
     this.drawCable.cancel();
     this.from = undefined;
+    this.fromPosition = undefined;
   }
 
   private getFromPosition() {

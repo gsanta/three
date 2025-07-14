@@ -29,6 +29,8 @@ type BlockData = {
     thisPart?: string;
   }[];
 
+  groupChildConnections: string[];
+
   id: string;
 
   hoveredPart?: string;
@@ -55,6 +57,8 @@ type BlockData = {
     block: string;
     part?: string;
   };
+
+  groupParentConnection?: string;
 
   position: [number, number, number];
   rotation: [number, number, number];

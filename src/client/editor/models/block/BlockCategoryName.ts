@@ -1,5 +1,6 @@
 export type BlockCategoryName =
   | 'cables'
+  | 'cable-groups'
   | 'conduits'
   | 'devices'
   | 'houses'

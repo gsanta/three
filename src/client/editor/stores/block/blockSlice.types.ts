@@ -1,5 +1,5 @@
 import BlockData from '../../models/block/BlockData';
-import { BlockCategoryRecords, BlockDecorationType } from '../../models/block/BlockDecoration';
+import { BlockCategoryRecords, BlockDecorationType, BlockDecoratorName } from '../../models/block/BlockDecoration';
 
 export type BlockState = {
   blocks: Record<string, BlockData>;
@@ -14,7 +14,11 @@ export type BlockState = {
   selectedBlocks: string[];
 };
 
-export type BlockSlices = 'city' | 'building';
+export type BaseDecoratorName = Extract<BlockDecoratorName, 'cables' | 'players' | 'transformers' | 'poles'>;
+
+export const isBaseDecoratorName = (name: string): name is BaseDecoratorName => {
+  return ['cables', 'players', 'transformers', 'poles'].includes(name);
+};
 
 export type DecorationUpdate = {
   type: 'update';

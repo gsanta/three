@@ -82,13 +82,21 @@ class JoinPoles {
       () => new MakeWireConnection(this.blockStore, this.factoryService, this.sceneStore, this.transactionService),
     );
 
-    const newCableIds = block1Wires.map((partName, index) =>
+    const cableGroup = this.factoryService.create(edit, 'cable-group-1', {});
+
+    const newCableIds = block1Wires.map((partName, index) => {
       this.makeWireConnectionList[index].execute(
         { pole: from.getBlock(), partName, pinIndex: pole1EmptyPinIndex },
         { pole: to.getBlock(), partName: block2Wires[index], pinIndex: pole2EmptyPinIndex },
+        cableGroup.id,
         this.connectPolesConfig,
-      ),
-    );
+      );
+      return this.makeWireConnectionList[index].getCableId() as string;
+    });
+
+    edit.updateBlock(cableGroup.id, {
+      groupChildConnections: newCableIds,
+    });
 
     edit.commit();
 

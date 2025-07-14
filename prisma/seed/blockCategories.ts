@@ -9,6 +9,9 @@ const blockCategories = [
     name: 'cables',
   },
   {
+    name: 'cable-groups',
+  },
+  {
     name: 'conduits',
   },
   {

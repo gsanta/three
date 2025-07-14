@@ -67,7 +67,7 @@ class CableDrawingService implements DrawService {
   start(cable: BlockData, gridIndex: number): boolean {
     const toBlocks = this.gridStore.getBlocksAtGridIndex(gridIndex);
 
-    if (this.drawUndergroundCable.tryStart(toBlocks)) {
+    if (this.drawUndergroundCable.tryStart(toBlocks, gridIndex)) {
       this.drawUndergroundCable.execute(gridIndex);
 
       this.activeDrawing = this.drawUndergroundCable;
