@@ -2,7 +2,14 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import BlockConstantData, { BlockTypeName } from '../../models/block/BlockConstantData';
 import BlockSettings from '@/client/editor/models/BlockSettings';
 import BlockSelectedSettings from '@/client/editor/models/BlockSelectedSettings';
-import { BlockDecorations } from '../../models/block/BlockDecoration';
+import { BlockDecorations, BlockDecoratorName } from '../../models/block/BlockDecoration';
+import ElectricSupplierDecorator, {
+  electricSupplierDefaultValues,
+} from '../../models/block/categories/ElectricSupplierDecorator';
+import CableDecorator from '../../models/block/categories/CableDecorator';
+import PlayerDecorator from '../../models/block/categories/PlayerDecorator';
+import TransformerDecorator from '../../models/block/categories/TransformerDecorator';
+import PoleDecorator from '../../models/block/categories/PoleDecorator';
 
 export type TransformType = 'move' | 'scale';
 
@@ -50,7 +57,7 @@ export const blockTypeSlice = createSlice({
       state,
       action: PayloadAction<{
         blocks: BlockConstantData[];
-        decorations: Record<BlockTypeName, Partial<BlockDecorations>>;
+        decorations: Record<BlockTypeName, Partial<BlockDecorations> | null>;
       }>,
     ) {
       state.blocks = action.payload.blocks.map((block) => ({
@@ -59,7 +66,43 @@ export const blockTypeSlice = createSlice({
         partDetails: block.partDetails || {},
       }));
 
-      state.decorations = action.payload.decorations;
+      state.decorations = {};
+
+      const getDefaultValues = (decoratorName: BlockDecoratorName) => {
+        switch (decoratorName) {
+          case 'cables':
+            return { decoration: 'cables' } as CableDecorator;
+          case 'electric-supplier':
+            return { ...electricSupplierDefaultValues } as ElectricSupplierDecorator;
+          case 'electric-consumer':
+            return { decoration: 'electric-consumer' };
+          case 'players':
+            return { decoration: 'players' } as PlayerDecorator;
+          case 'transformers':
+            return { decoration: 'transformers' } as TransformerDecorator;
+          case 'poles':
+            return { decoration: 'poles' } as PoleDecorator;
+        }
+      };
+
+      Object.entries(action.payload.decorations).forEach(([blockTypeName, decorations]) => {
+        const mergedDecorations: Partial<BlockDecorations> = {};
+
+        if (decorations) {
+          Object.entries(decorations).forEach(([decoratorName, decorationData]) => {
+            const defaultValues = getDefaultValues(decoratorName as BlockDecoratorName);
+
+            (mergedDecorations as any)[decoratorName] = {
+              ...defaultValues,
+              ...decorationData,
+            };
+          });
+
+          state.decorations[blockTypeName as BlockTypeName] = mergedDecorations;
+        }
+      });
+
+      console.log('end');
     },
   },
 });

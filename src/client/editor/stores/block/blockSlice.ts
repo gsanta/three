@@ -27,7 +27,7 @@ export const initialBlockState: BlockState = {
   selectedBlocks: [],
 };
 
-const blockUpdater = new BlocksUpdater('city');
+const blockUpdater = new BlocksUpdater();
 
 const history = new HistoryStorage<BlockState>(HistoryStorage.MAX_DEPTH);
 
@@ -127,6 +127,16 @@ export const blockSlice = createSlice({
     builder.addCase(clearAll, (state) => {
       overwriteState(state, initialBlockState);
     });
+
+    // for debugging purposes
+    builder.addMatcher(
+      () => true,
+      (state) => {
+        if (typeof window !== 'undefined') {
+          (window as any).blockState = current(state);
+        }
+      },
+    );
   },
 });
 

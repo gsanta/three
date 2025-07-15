@@ -2,7 +2,7 @@ import { WorldPositionPath } from '@/client/editor/use_cases/grid/WorldPositionP
 
 type PlayerDecorator = {
   currentMovementPath: WorldPositionPath | undefined;
-  decoration: 'player';
+  decoration: 'players';
   remainingWork: number;
   maxWork: number;
   id: string;

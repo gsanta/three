@@ -94,7 +94,7 @@ const transformerSeeds: Partial<BlockType>[] = [
   },
   {
     categoryName: 'transformers',
-    decorations: ['transformers'],
+    decorations: ['transformers', 'electric-supplier'],
     path: '/pole_mounted_transformer_1.glb',
     parts: [
       {
@@ -189,6 +189,7 @@ const transformerSeeds: Partial<BlockType>[] = [
         primaryWires: ['L1', 'L2', 'L3'],
         secondaryWires: ['T1', 'T2', 'T3', 'N'],
       },
+      'electric-supplier': {},
     },
     type: 'pole-mounted-transformer-1',
   },

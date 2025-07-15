@@ -1,4 +1,7 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import ElectricSupplierDecorator from '../../models/block/categories/ElectricSupplierDecorator';
+import { updateBlocks } from '../block/blockActions';
+import ElectricityUpdater from './ElectricityUpdater';
 
 export type ElectricNode = {
   blockId: string;
@@ -13,11 +16,17 @@ export type ElectricityState = {
   nodes: Partial<Record<string, ElectricNode>>;
 
   sources: Record<string, object>;
+  decorations: {
+    'electric-supplier': Partial<Record<string, ElectricSupplierDecorator>>;
+  };
 };
 
 export const initialElectricityState: ElectricityState = {
   nodes: {},
   sources: {},
+  decorations: {
+    'electric-supplier': {},
+  },
 };
 
 export type ElectricNodeUpdate = {
@@ -33,24 +42,20 @@ export type ElectricNodeUpdate = {
     }
 );
 
+const electricityUpdater = new ElectricityUpdater();
+
 export const electricitySlice = createSlice({
   name: 'settings',
   initialState: initialElectricityState,
-  reducers: {
-    updateElectricSystem(state: ElectricityState, action: PayloadAction<ElectricNodeUpdate[]>) {
-      const updates = action.payload;
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(updateBlocks, (state, action) => {
+      // if (action.payload.history) {
+      //   history.push(structuredClone(current(state)));
+      // }
 
-      updates.forEach((update) => {
-        if (update.type === 'remove') {
-          delete state.nodes[update.id];
-        } else {
-          const current = state.nodes[update.id];
-
-          if (current?.currentFlows !== update.info.currentFlows || current.provider !== update.info.provider)
-            state.nodes[update.id] = update.info;
-        }
-      });
-    },
+      electricityUpdater.update(state, action.payload.blockUpdates);
+    });
   },
 });
 

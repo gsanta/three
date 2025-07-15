@@ -4,7 +4,13 @@ import { BlockCategoryName } from './BlockCategoryName';
 import PoleDecorator from './categories/PoleDecorator';
 import PlayerDecorator from './categories/PlayerDecorator';
 
-export type BlockDecoratorName = 'cables' | 'electric-node' | 'players' | 'transformers' | 'poles';
+export type BlockDecoratorName =
+  | 'cables'
+  | 'electric-supplier'
+  | 'electric-consumer'
+  | 'players'
+  | 'transformers'
+  | 'poles';
 
 export type BlockDecorationType = CableDecorator | TransformerDecorator | PlayerDecorator | PoleDecorator;
 
