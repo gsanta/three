@@ -1,6 +1,6 @@
 import { BlockCategoryName } from '../../models/block/BlockCategoryName';
 import BlockData from '../../models/block/BlockData';
-import Pole, { WireRole, wireRoleNames } from '../../models/block/categories/Pole';
+import PoleModel, { WireRole, wireRoleNames } from '../../models/block/categories/PoleModel';
 import Num3 from '../../models/math/Num3';
 import MeshWrapper from '../../models/MeshWrapper';
 import { ConnectCable } from '../../services/CableConnector';
@@ -55,7 +55,7 @@ class ConnectToEmpty implements ConnectCable {
   }
 
   start(blockData: BlockData) {
-    const pole = new Pole(blockData, this.blockStore);
+    const pole = new PoleModel(blockData, this.blockStore);
     this.from = pole;
 
     this.from?.getPoleDecorator().wires.forEach((wire) => this.drawCables[wire]?.updateConfig({ isPreview: true }));
@@ -112,7 +112,7 @@ class ConnectToEmpty implements ConnectCable {
 
   private drawCables: Partial<Record<WireRole, DrawCable>> = {};
 
-  private from: Pole | undefined;
+  private from: PoleModel | undefined;
 
   private lastPos: Num3 | undefined;
 

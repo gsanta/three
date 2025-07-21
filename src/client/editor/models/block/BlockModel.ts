@@ -1,7 +1,8 @@
 import BlockData from './BlockData';
 import { BlockCategoryName } from './BlockCategoryName';
+import CableModel from './categories/CableModel';
 
-class Block {
+class BlockModel {
   constructor(block: BlockData) {
     this.block = block;
   }
@@ -16,6 +17,8 @@ class Block {
     return this.block;
   }
 
+  getConduit;
+
   getId() {
     return this.block.id;
   }
@@ -24,7 +27,11 @@ class Block {
     return this.block;
   }
 
+  isCable(): this is CableModel {
+    return this.block.category === 'cables';
+  }
+
   protected block: BlockData;
 }
 
-export default Block;
+export default BlockModel;

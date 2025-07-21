@@ -9,9 +9,8 @@ class ElectricityUpdater {
         const { decoration } = update;
 
         if (decoration) {
-          const decorator = decoration.decoration;
-          if (isElectricityDecoratorName(decorator)) {
-            state.decorations[decorator][decoration.id] = decoration as any;
+          if (isElectricityDecoratorName(decoration)) {
+            state.decorators[decoration.decoration][decoration.id] = decoration;
           }
         }
       }

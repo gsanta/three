@@ -60,14 +60,12 @@ const cableSeeds: Prisma.BlockTypeUncheckedCreateInput[] = [
   },
   {
     categoryName: 'cable-groups',
-    decorations: [],
+    decorations: ['electric-consumer'],
     geometry: 'empty',
-    // decorationData: {
-    //   'cable-groups': {
-    //     decoration: 'cable-groups',
-    //   },
-    // },
     texturePath: '/ribbon_caution.png',
+    decorationData: {
+      'electric-consumer': {},
+    },
     type: 'cable-group-1',
   },
 ];

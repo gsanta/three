@@ -3,11 +3,12 @@ import SceneStore from '@/client/editor/ui/scene/SceneStore';
 import TransactionService from '../../services/transaction/TransactionService';
 import FactoryService from '../../services/factory/FactoryService';
 import BlockStore from '../../stores/block/BlockStore';
-import Pole from '../../models/block/categories/Pole';
+import PoleModel from '../../models/block/categories/PoleModel';
 import Transformer from '../../models/block/categories/Transformer';
 import AutoRotatePoles from './AutoRotatePoles';
 import MakeWireConnection from './MakeWireConnection';
 import CableHelper from './CableHelper';
+import ElectricityService from '../../stores/electricity/ElectricityService';
 
 type ConnectPolesConfig = {
   isPreview?: boolean;
@@ -31,6 +32,8 @@ class JoinPoles {
     this.sceneStore = sceneStore;
 
     this.transactionService = transactionService;
+
+    this.electricSystemUpdater = new ElectricityService(blockStore, transactionService);
   }
 
   getCableIds() {
@@ -40,16 +43,16 @@ class JoinPoles {
   join(block1: BlockData, block2: BlockData, config: ConnectPolesConfig = { isPreview: false }) {
     this.connectPolesConfig = { ...this.connectPolesConfig, ...config };
 
-    const from = new Pole(block1, this.blockStore);
+    const from = new PoleModel(block1, this.blockStore);
     const to = this.getTarget(block2);
-    let pole2: Pole | undefined;
+    let pole2: PoleModel | undefined;
 
     if (to.getBlock().category === 'poles') {
-      pole2 = to as Pole;
+      pole2 = to as PoleModel;
     } else {
       const parent = to.getBlock().parentConnection?.block;
       if (parent && this.blockStore.getBlock(parent).category === 'poles') {
-        pole2 = new Pole(this.blockStore.getBlock(parent), this.blockStore);
+        pole2 = new PoleModel(this.blockStore.getBlock(parent), this.blockStore);
       }
     }
 
@@ -74,7 +77,7 @@ class JoinPoles {
       this.autoRotatePoles.execute(
         from,
         pole2,
-        secondNeighborPole ? new Pole(secondNeighborPole, this.blockStore) : undefined,
+        secondNeighborPole ? new PoleModel(secondNeighborPole, this.blockStore) : undefined,
       );
     }
 
@@ -100,6 +103,8 @@ class JoinPoles {
 
     edit.commit();
 
+    // this.electricSystemUpdater.makeElectricConnection(from.getBlock());
+
     return {
       cableIds: newCableIds,
     };
@@ -117,7 +122,7 @@ class JoinPoles {
 
   private getElectricDevice(block: BlockData) {
     if (block.category === 'poles') {
-      return new Pole(block, this.blockStore).getAsElectricDevice();
+      return new PoleModel(block, this.blockStore).getAsElectricDevice();
     } else {
       return new Transformer(block, this.blockStore).getAsElectricDevice();
     }
@@ -125,7 +130,7 @@ class JoinPoles {
 
   private getWireConnections(block: BlockData) {
     if (block.category === 'poles') {
-      return new Pole(block, this.blockStore).getPoleDecorator().wires;
+      return new PoleModel(block, this.blockStore).getPoleDecorator().wires;
     } else {
       const transformer = new Transformer(block, this.blockStore);
       return transformer.getTransformerDecorator().secondaryWires;
@@ -134,7 +139,7 @@ class JoinPoles {
 
   private getTarget(block: BlockData) {
     if (block.category === 'poles') {
-      return new Pole(block, this.blockStore);
+      return new PoleModel(block, this.blockStore);
     }
     if (block.category === 'transformers') {
       return new Transformer(block, this.blockStore);
@@ -149,6 +154,8 @@ class JoinPoles {
   private connectPolesConfig: ConnectPolesConfig = { isPreview: false };
 
   private blockStore: BlockStore;
+
+  private electricSystemUpdater: ElectricityService;
 
   private factoryService: FactoryService;
 

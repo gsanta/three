@@ -1,10 +1,10 @@
 import BlockStore from '@/client/editor/stores/block/BlockStore';
-import Block from '../Block';
+import BlockModel from '../BlockModel';
 import BlockData from '../BlockData';
 import TransformerDecorator from './TransformerDecorator';
 import ElectricDevice from './ElectricDevice';
 
-class Transformer extends Block {
+class Transformer extends BlockModel {
   constructor(block: BlockData, blockStore: BlockStore) {
     super(block);
     this.checkCategory('transformers');

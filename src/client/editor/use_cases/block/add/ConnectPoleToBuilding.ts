@@ -1,5 +1,5 @@
 import BlockData from '@/client/editor/models/block/BlockData';
-import Pole from '@/client/editor/models/block/categories/Pole';
+import PoleModel from '@/client/editor/models/block/categories/PoleModel';
 import MeshWrapper from '@/client/editor/models/MeshWrapper';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
@@ -93,7 +93,7 @@ class ConnectPoleToBuilding {
       const weatherHead = this.blockStore.getBlock(blockId);
 
       const poleAnchorPos = new MeshWrapper(this.sceneStore.getObj3d(this.pole.id))
-        .findByName(Pole.SERVICE_DROP_PART_NAME)
+        .findByName(PoleModel.SERVICE_DROP_PART_NAME)
         .getWorldPosition();
 
       const weatherHeadAnchorPos = new MeshWrapper(this.sceneStore.getObj3d(weatherHead.id))
@@ -107,7 +107,7 @@ class ConnectPoleToBuilding {
         },
         decorations: {
           cables: {
-            end1: { partName: Pole.SERVICE_DROP_PART_NAME, device: this.pole.id, pinIndex: 0 },
+            end1: { partName: PoleModel.SERVICE_DROP_PART_NAME, device: this.pole.id, pinIndex: 0 },
             end2: { partName: 'CableAnchor', device: weatherHead.id, pinIndex: 0 },
             points: [
               { position: poleAnchorPos.get(), blockId: this.pole.id },

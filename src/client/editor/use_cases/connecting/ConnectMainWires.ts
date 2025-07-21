@@ -1,6 +1,6 @@
 import { BlockCategoryName } from '../../models/block/BlockCategoryName';
 import BlockData from '../../models/block/BlockData';
-import Pole from '../../models/block/categories/Pole';
+import PoleModel from '../../models/block/categories/PoleModel';
 import Num3 from '../../models/math/Num3';
 import { ConnectCable } from '../../services/CableConnector';
 import FactoryService from '../../services/factory/FactoryService';
@@ -56,7 +56,7 @@ class ConnectMainWires implements ConnectCable {
   meshRendered(): void {}
 
   start(blockData: BlockData) {
-    const pole = new Pole(blockData, this.blockStore);
+    const pole = new PoleModel(blockData, this.blockStore);
     this.from = pole;
   }
 
@@ -89,7 +89,7 @@ class ConnectMainWires implements ConnectCable {
 
   private candidateId: string | undefined;
 
-  private from: Pole | undefined;
+  private from: PoleModel | undefined;
 
   private joinPoles: JoinPoles;
 

@@ -1,5 +1,5 @@
 import BlockStore from '@/client/editor/stores/block/BlockStore';
-import Block from '../Block';
+import BlockModel from '../BlockModel';
 import BlockData from '../BlockData';
 import PoleDecorator from './PoleDecorator';
 import ElectricDevice from './ElectricDevice';
@@ -10,7 +10,7 @@ export const wireRoleNames: WireRole[] = ['L1', 'L2', 'L3', 'N', 'PE'];
 
 export type PolePartNames = 'TransformerHolder' | WireRole;
 
-class Pole extends Block {
+class PoleModel extends BlockModel {
   static SERVICE_DROP_PART_NAME: PolePartNames = 'TransformerHolder';
 
   constructor(block: BlockData, blockStore: BlockStore) {
@@ -36,4 +36,4 @@ class Pole extends Block {
   private electricDevice: ElectricDevice;
 }
 
-export default Pole;
+export default PoleModel;

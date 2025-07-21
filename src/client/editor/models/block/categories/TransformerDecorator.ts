@@ -1,4 +1,4 @@
-import { WireRole } from './Pole';
+import { WireRole } from './PoleModel';
 
 type TransformerDecorator = {
   id: string;

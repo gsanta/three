@@ -10,6 +10,9 @@ import CableDecorator from '../../models/block/categories/CableDecorator';
 import PlayerDecorator from '../../models/block/categories/PlayerDecorator';
 import TransformerDecorator from '../../models/block/categories/TransformerDecorator';
 import PoleDecorator from '../../models/block/categories/PoleDecorator';
+import ElectricConsumerDecorator, {
+  electricConsumerDefaultValues,
+} from '../../models/block/categories/ElectricConsumerDecorator';
 
 export type TransformType = 'move' | 'scale';
 
@@ -75,7 +78,7 @@ export const blockTypeSlice = createSlice({
           case 'electric-supplier':
             return { ...electricSupplierDefaultValues } as ElectricSupplierDecorator;
           case 'electric-consumer':
-            return { decoration: 'electric-consumer' };
+            return { ...electricConsumerDefaultValues } as ElectricConsumerDecorator;
           case 'players':
             return { decoration: 'players' } as PlayerDecorator;
           case 'transformers':

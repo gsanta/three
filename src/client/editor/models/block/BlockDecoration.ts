@@ -3,6 +3,8 @@ import TransformerDecorator from './categories/TransformerDecorator';
 import { BlockCategoryName } from './BlockCategoryName';
 import PoleDecorator from './categories/PoleDecorator';
 import PlayerDecorator from './categories/PlayerDecorator';
+import ElectricConsumerDecorator from './categories/ElectricConsumerDecorator';
+import ElectricSupplierDecorator from './categories/ElectricSupplierDecorator';
 
 export type BlockDecoratorName =
   | 'cables'
@@ -12,7 +14,7 @@ export type BlockDecoratorName =
   | 'transformers'
   | 'poles';
 
-export type BlockDecorationType = CableDecorator | TransformerDecorator | PlayerDecorator | PoleDecorator;
+export type BlockDecorationType = CableDecorator | ElectricConsumerDecorator | ElectricSupplierDecorator | TransformerDecorator | PlayerDecorator | PoleDecorator;
 
 export type EmptyBlockCategory<T extends BlockCategoryName> = {
   category: T;

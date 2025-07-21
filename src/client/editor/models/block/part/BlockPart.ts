@@ -1,7 +1,7 @@
 import BlockData from '../BlockData';
 import BlockConstantData from '../BlockConstantData';
 import Num3 from '../../math/Num3';
-import Block from '../Block';
+import BlockModel from '../BlockModel';
 import BlockPartGeometryData from './BlockPartGeometryData';
 import { BlockPartRole } from './BlockPartLookupData';
 import Vector from '../../math/Vector';
@@ -61,8 +61,8 @@ class BlockPart {
     return result && [result?.part, [0, result?.rotation, 0]];
   }
 
-  getBlock(): Block {
-    return new Block(this.block);
+  getBlock(): BlockModel {
+    return new BlockModel(this.block);
   }
 
   getPart(): BlockPartGeometryData {

@@ -1,4 +1,4 @@
-import Pole from '../../models/block/categories/Pole';
+import PoleModel from '../../models/block/categories/PoleModel';
 import Num3 from '../../models/math/Num3';
 import Vector from '../../models/math/Vector';
 import TransactionService from '../../services/transaction/TransactionService';
@@ -12,7 +12,7 @@ class AutoRotatePoles {
     this.transactionService = transactionService;
   }
 
-  execute(newPole: Pole, neighborPole: Pole, secondNeighborPole?: Pole) {
+  execute(newPole: PoleModel, neighborPole: PoleModel, secondNeighborPole?: PoleModel) {
     this.neighborPoleId = neighborPole.getId();
     this.newPoleId = newPole.getId();
 

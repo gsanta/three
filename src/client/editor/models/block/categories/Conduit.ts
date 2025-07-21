@@ -1,10 +1,10 @@
 import BlockStore from '@/client/editor/stores/block/BlockStore';
-import Block from '../Block';
+import BlockModel from '../BlockModel';
 import BlockData from '../BlockData';
 import PoleDecorator from './PoleDecorator';
-import { WireRole } from './Pole';
+import { WireRole } from './PoleModel';
 
-class Conduit extends Block {
+class Conduit extends BlockModel {
   static GROUND_CONNECTION_PART_NAME = 'GroundConnection';
 
   constructor(block: BlockData, blockStore: BlockStore) {

@@ -1,5 +1,5 @@
 import BlockData from '../BlockData';
-import { WireRole } from './Pole';
+import { WireRole } from './PoleModel';
 
 class ElectricDevice {
   constructor(block: BlockData) {

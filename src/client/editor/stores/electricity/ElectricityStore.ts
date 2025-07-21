@@ -1,11 +1,13 @@
 import { store } from '@/client/common/utils/store';
 import { ElectricNodeUpdate, updateElectricSystem } from './electricitySlice';
-import { BlockDecoratorName } from '../../models/block/BlockDecoration';
+import { BlockDecorationType, BlockDecoratorName } from '../../models/block/BlockDecoration';
+import ElectricConsumerDecorator from '../../models/block/categories/ElectricConsumerDecorator';
+import ElectricSupplierDecorator from '../../models/block/categories/ElectricSupplierDecorator';
 
-export type ElectricityDecoratorName = Extract<BlockDecoratorName, 'electric-supplier'>;
+export type ElectricityDecoratorType = Extract<BlockDecorationType, ElectricConsumerDecorator | ElectricSupplierDecorator>;
 
-export const isElectricityDecoratorName = (name: string): name is ElectricityDecoratorName => {
-  return ['electric-supplier'].includes(name);
+export const isElectricityDecoratorName = (type: BlockDecorationType): type is ElectricityDecoratorType => {
+  return ['electric-supplier', 'electric-consumer'].includes(type.decoration);
 };
 
 class ElectricityStore {

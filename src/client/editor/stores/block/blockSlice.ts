@@ -103,11 +103,6 @@ export const blockSlice = createSlice({
     builder.addCase(importAction, (state, action) => {
       overwriteState(state, action.payload.block);
     });
-    // if (previousState) {
-    //   state.rootBlocksIds = previousState.rootBlocksIds;
-    //   state.blocks = previousState.blocks;
-    //   state.blockIds = previousState.blockIds;
-    //   state.decorations = previousState.decorations;
 
     builder.addCase(updateState, (state, action) => {
       const cityState = action.payload.city;
