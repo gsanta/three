@@ -10,7 +10,7 @@ import blockCategorySlice, { BlockCategoyState } from '@/client/editor/stores/bl
 import gameSlice, { GameState } from '@/client/editor/stores/game/gameSlice';
 
 export type RootState = {
-  electricSystem: ElectricityState;
+  electricity: ElectricityState;
   grid: GridState;
   tool: ToolState;
   temporary: TemporaryState;
@@ -25,7 +25,7 @@ export const testMiddleware = createListenerMiddleware();
 export function setupStore(preloadedState?: RootState) {
   const store = configureStore({
     reducer: {
-      electricSystem: electricitySlice,
+      electricity: electricitySlice,
       grid: gridSlice,
       tool: toolSlice,
       blockCategory: blockCategorySlice,

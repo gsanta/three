@@ -3,8 +3,8 @@ import ElectricSupplierDecorator from '../../models/block/categories/ElectricSup
 import { historyAction, redoAction, undoAction, updateBlocks } from '../block/blockActions';
 import ElectricityUpdater from './ElectricityUpdater';
 import ElectricConsumerDecorator from '../../models/block/categories/ElectricConsumerDecorator';
-import { BlockState } from '../block/blockSlice.types';
 import HistoryStorage from '../utils/HistoryStorage';
+import BlockData from '../../models/block/BlockData';
 
 export type ElectricNode = {
   blockId: string;
@@ -16,7 +16,9 @@ export type ElectricConnection = {
 };
 
 export type ElectricityState = {
-  nodes: Partial<Record<string, ElectricNode>>;
+  nodes: Record<string, BlockData>;
+  edges: Record<string, BlockData>;
+  relations: Record<string, { to: string; edgeId: string }[]>;
 
   sources: Record<string, object>;
   decorators: {
@@ -27,6 +29,8 @@ export type ElectricityState = {
 
 export const initialElectricityState: ElectricityState = {
   nodes: {},
+  edges: {},
+  relations: {},
   sources: {},
   decorators: {
     'electric-supplier': {},
@@ -56,7 +60,6 @@ const overwriteState = (writableState: ElectricityState, newState: ElectricitySt
   writableState.sources = newState.sources;
   writableState.decorators = newState.decorators;
 };
-
 
 export const electricitySlice = createSlice({
   name: 'settings',

@@ -1,24 +1,34 @@
 import BlockData from '../../models/block/BlockData';
-import BlockModel from '../../models/block/BlockModel';
 import TransactionService from '../../services/transaction/TransactionService';
-import BlockStore from '../block/BlockStore';
 
 class ElectricityService {
-  constructor(blockStore: BlockStore, transactionService: TransactionService) {
-    this.blockStore = blockStore;
+  constructor(transactionService: TransactionService) {
+    this.transactionService = transactionService;
   }
 
-  makeElectricConnection(electricDevice: BlockModel) {
-    if (electricDevice.isCable()) {
-      electricDevice.getLeftConnector();
-    }
+  makeElectricConnection(node1: BlockData, node2: BlockData, connection: BlockData) {
+    const edit = this.transactionService.getOrCreateActiveTransaction();
+
+    edit.updateBlock(
+      connection.id,
+      {
+        electricNodes: [node1.id, node2.id],
+      },
+      {
+        arrayMergeStrategy: 'replace',
+      },
+    );
+
+    edit.updateBlock(node1.id, {
+      electricEdges: [connection.id],
+    });
+
+    edit.updateBlock(node2.id, {
+      electricEdges: [connection.id],
+    });
   }
 
-  private getNeighborElectricNodes(block: BlockData): BlockData[] {
-    const conduitConnectionBlocks = block.conduitConnections.map((connection) => connection.block);
-  }
-
-  private blockStore: BlockStore;
+  private transactionService: TransactionService;
 }
 
 export default ElectricityService;

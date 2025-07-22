@@ -4,7 +4,6 @@ import SceneStore from './ui/scene/SceneStore';
 import SceneService from './ui/scene/service/SceneService';
 import SceneServiceImpl from './ui/scene/service/SceneServiceImpl';
 import Serializer from './controllers/serializer/Serializer';
-import ControllerService from './services/controller/ControllerService';
 import EraserService from './services/EraserService';
 import FactoryService from './services/factory/FactoryService';
 import ToolService from './services/ToolService';
@@ -40,7 +39,6 @@ type EditorContextType = {
   blockTypeSelectorService: BlockTypeSelectorService;
   buildService: BuildService;
   cableDrawingService: CableDrawingService;
-  controller: ControllerService;
   eraser: EraserService;
   gridStore: GridStore;
   tool: ToolService;
@@ -104,6 +102,7 @@ export const setupEditor = () => {
     blockStore,
     blockTypeStore,
     buildService,
+    electiricty
     factoryService,
     historyController,
     sceneStore,
@@ -155,7 +154,6 @@ export const setupEditor = () => {
     blockTypeSelectorService,
     buildService,
     cableDrawingService,
-    controller: new ControllerService(transactionService),
     eraser: new EraserService(blockStore, transactionService),
     serializer,
     gridStore: gridStore,
@@ -170,8 +168,6 @@ export const setupEditor = () => {
   };
 
   editorContext.sceneStore.setToolService(editorContext.tool);
-
-  transactionService.setEditorContext(editorContext);
 
   return editorContext;
 };

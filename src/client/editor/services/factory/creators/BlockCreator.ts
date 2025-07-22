@@ -30,6 +30,8 @@ class BlockCreator {
       conduitConnections: settings.conduitConnections || [],
       groupChildConnections: settings.groupChildConnections || [],
       groupParentConnection: settings.groupParentConnection,
+      electricNodes: settings.electricNodes,
+      electricEdges: settings.electricEdges,
       id: settings.id || id,
       isDirty: settings.isDirty || false,
       isHovered: false,

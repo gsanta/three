@@ -17,6 +17,7 @@ type ConnectPolesConfig = {
 class JoinPoles {
   constructor(
     blockStore: BlockStore,
+    electricityService: ElectricityService,
     sceneStore: SceneStore,
     factoryService: FactoryService,
     transactionService: TransactionService,
@@ -33,7 +34,7 @@ class JoinPoles {
 
     this.transactionService = transactionService;
 
-    this.electricSystemUpdater = new ElectricityService(blockStore, transactionService);
+    this.electricSystemUpdater = new ElectricityService(transactionService);
   }
 
   getCableIds() {
@@ -101,9 +102,9 @@ class JoinPoles {
       groupChildConnections: newCableIds,
     });
 
-    edit.commit();
+    this.electricSystemUpdater.makeElectricConnection(from.getBlock(), to.getBlock(), cableGroup);
 
-    // this.electricSystemUpdater.makeElectricConnection(from.getBlock());
+    edit.commit();
 
     return {
       cableIds: newCableIds,

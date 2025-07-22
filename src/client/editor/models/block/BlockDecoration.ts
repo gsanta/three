@@ -10,11 +10,19 @@ export type BlockDecoratorName =
   | 'cables'
   | 'electric-supplier'
   | 'electric-consumer'
+  | 'electric-connection'
+  | 'electric-node'
   | 'players'
   | 'transformers'
   | 'poles';
 
-export type BlockDecorationType = CableDecorator | ElectricConsumerDecorator | ElectricSupplierDecorator | TransformerDecorator | PlayerDecorator | PoleDecorator;
+export type BlockDecorationType =
+  | CableDecorator
+  | ElectricConsumerDecorator
+  | ElectricSupplierDecorator
+  | TransformerDecorator
+  | PlayerDecorator
+  | PoleDecorator;
 
 export type EmptyBlockCategory<T extends BlockCategoryName> = {
   category: T;

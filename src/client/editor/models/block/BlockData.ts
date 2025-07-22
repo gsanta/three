@@ -29,6 +29,10 @@ type BlockData = {
     thisPart?: string;
   }[];
 
+  electricNodes?: [string, string];
+
+  electricEdges?: string[];
+
   groupChildConnections: string[];
 
   id: string;

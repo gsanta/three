@@ -1,14 +1,13 @@
 import BlockTypeStore from '@/client/editor/stores/blockType/BlockTypeStore';
 import AddToPlain from './AddToPlain';
 import TransformerDecorator from '@/client/editor/models/block/categories/TransformerDecorator';
-import AddToAnchorAsChild, { AddParams } from './AddToAnchorAsChild';
+import { AddParams } from './AddToAnchorAsChild';
 import FactoryService from '@/client/editor/services/factory/FactoryService';
 import SceneStore from '@/client/editor/ui/scene/SceneStore';
-import DrawCable from '../../cable/DrawCable';
 import TransactionService from '@/client/editor/services/transaction/TransactionService';
 import BlockStore from '@/client/editor/stores/block/BlockStore';
-import BlockPart from '@/client/editor/models/block/part/BlockPart';
 import DrawCommand from './DrawCommand';
+import AddPoleMountedTransformer from './AddPoleMountedTransformer';
 
 class AddTransformer implements DrawCommand {
   constructor(
@@ -18,23 +17,27 @@ class AddTransformer implements DrawCommand {
     sceneStore: SceneStore,
     transactionService: TransactionService,
   ) {
-    this.blockStore = blockStore;
     this.blockTypeStore = blockTypeStore;
 
+    this.addPoleMountedTransformer = new AddPoleMountedTransformer(
+      blockStore,
+      factoryService,
+      sceneStore,
+      transactionService,
+    );
     this.addToPlain = new AddToPlain(factoryService, transactionService);
-    this.addToAnchorAsChild = new AddToAnchorAsChild(factoryService, transactionService);
-
-    this.drawCable = new DrawCable(blockStore, factoryService, sceneStore, transactionService);
   }
 
   finish(): void {
     if (this.activeDrawCommand) {
       this.activeDrawCommand.finish();
     }
-    this.transformerId = undefined;
+
+    this.activeDrawCommand = undefined;
   }
 
-  execute({ edit, newBlockType, position, to }: AddParams) {
+  execute(params: AddParams) {
+    const { newBlockType } = params;
     if (newBlockType.category !== 'transformers') {
       throw new Error('Invalid block type for transformer addition');
     }
@@ -42,64 +45,25 @@ class AddTransformer implements DrawCommand {
     const transfomer = this.blockTypeStore.getDecoration<TransformerDecorator>(newBlockType.type, 'transformers');
 
     if (transfomer.location === 'pole-mounted') {
-      if (to?.block && to.anchorPartName) {
-        this.addToAnchorAsChild.execute({
-          edit,
-          newBlockType: newBlockType,
-          newBlockAnchorName: 'Holder',
-          position,
-          to,
-        });
-
-        this.transformerId = this.addToAnchorAsChild.getNewBlockId();
-
-        this.activeDrawCommand = this.addToAnchorAsChild;
-      }
+      this.addPoleMountedTransformer.execute(params);
+      this.activeDrawCommand = this.addPoleMountedTransformer;
     } else {
-      this.addToPlain.execute({ edit, newBlockType: newBlockType, position });
-      this.transformerId = this.addToPlain.getNewBlockId();
+      this.addToPlain.execute(params);
       this.activeDrawCommand = this.addToPlain;
     }
   }
 
   executeAfterRender() {
-    if (!this.transformerId || this.executedAfterRender) {
-      return;
-    }
-
-    this.executedAfterRender = true;
-
-    const transformer = this.blockStore.getBlock(this.transformerId);
-    const pole = this.blockStore.getBlock(transformer.parentConnection?.block);
-    this.drawCable.finish(
-      { part: new BlockPart(pole, 'L1'), pinIndex: 1 },
-      { part: new BlockPart(transformer, 'L1'), pinIndex: 0 },
-    );
-    this.drawCable.finish(
-      { part: new BlockPart(pole, 'L2'), pinIndex: 1 },
-      { part: new BlockPart(transformer, 'L2'), pinIndex: 0 },
-    );
-    this.drawCable.finish(
-      { part: new BlockPart(pole, 'L3'), pinIndex: 1 },
-      { part: new BlockPart(transformer, 'L3'), pinIndex: 0 },
-    );
+    this.activeDrawCommand?.executeAfterRender?.();
   }
+
+  private addPoleMountedTransformer: AddPoleMountedTransformer;
 
   private activeDrawCommand?: DrawCommand;
 
-  private transformerId?: string;
-
-  private blockStore: BlockStore;
-
   private addToPlain: AddToPlain;
 
-  private addToAnchorAsChild: AddToAnchorAsChild;
-
   private blockTypeStore: BlockTypeStore;
-
-  private drawCable: DrawCable;
-
-  private executedAfterRender = false;
 }
 
 export default AddTransformer;

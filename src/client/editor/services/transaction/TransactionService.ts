@@ -1,7 +1,6 @@
 import Edit from './Edit';
 import BlockStore from '../../stores/block/BlockStore';
 import { Store } from '@/client/common/utils/store';
-import Device from '../../models/block/categories/Device2';
 import TransactionHook from './TransactionHook';
 import EditorContextType from '../../setupEditor';
 
@@ -31,22 +30,10 @@ class TransactionService {
   }
 
   createTransaction(): Edit {
-    if (!this.editorContext) {
-      throw new Error('Set editorContext into TransactionService before creating transaction');
-    }
-
     const edit = new Edit(this.store, this.dispatchStore, this.systemHooks, this.close);
     this.activeTransaction = edit;
 
     return edit;
-  }
-
-  setEditorContext(editorContext: EditorContextType) {
-    this.editorContext = editorContext;
-  }
-
-  updateDevice(id: string, device: Partial<Device>) {
-    this.createTransaction().updateDecoration('devices', id, device).commit();
   }
 
   private close() {
@@ -58,8 +45,6 @@ class TransactionService {
   private store: BlockStore;
 
   private dispatchStore: Store;
-
-  private editorContext: EditorContextType | undefined;
 
   private systemHooks: TransactionHook[] = [];
 }
