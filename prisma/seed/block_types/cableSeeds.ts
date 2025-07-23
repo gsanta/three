@@ -16,7 +16,7 @@ const cableSeeds: Prisma.BlockTypeUncheckedCreateInput[] = [
   },
   {
     categoryName: 'cables',
-    decorations: ['cables', 'electric-connection'],
+    decorations: ['cables', 'electrics'],
     geometry: 'ground-cable-geometry',
     path: '/ground_cable_1.glb',
     parts: [
@@ -55,18 +55,18 @@ const cableSeeds: Prisma.BlockTypeUncheckedCreateInput[] = [
         location: 'underground',
       },
       'electric-connection': {},
+      electrics: {},
     },
     texturePath: '/ribbon_caution.png',
     type: 'ground-cable-1',
   },
   {
     categoryName: 'cable-groups',
-    decorations: ['electric-consumer', 'electric-connection'],
+    decorations: ['electrics'],
     geometry: 'empty',
     texturePath: '/ribbon_caution.png',
     decorationData: {
-      'electric-consumer': {},
-      'electric-connection': {},
+      electrics: {},
     },
     type: 'cable-group-1',
   },

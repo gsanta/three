@@ -1,11 +1,11 @@
 type ElectricConsumerDecorator = {
   id: string;
-  decoration: 'electric-consumer';
+  decoration: 'electric-consumers';
   supplierId?: string;
 };
 
 export const electricConsumerDefaultValues: Partial<ElectricConsumerDecorator> = {
-  decoration: 'electric-consumer',
+  decoration: 'electric-consumers',
 };
 
 export default ElectricConsumerDecorator;

@@ -1,5 +1,5 @@
 import { Store } from '@/client/common/utils/store';
-import { BlockDecorations, BlockDecoratorName } from '@/client/editor/models/block/BlockDecoration';
+import { CoreDecorations, BlockDecoratorName } from '@/client/editor/models/block/BlockDecoration';
 import { BlockTypeName } from '../../models/block/BlockConstantData';
 
 class BlockStore {
@@ -41,7 +41,7 @@ class BlockStore {
     return block;
   }
 
-  getDecorator<T extends BlockDecoratorName>(decoratorName: T, id?: string): BlockDecorations[T] {
+  getDecorator<T extends BlockDecoratorName>(decoratorName: T, id?: string): CoreDecorations[T] {
     if (!id) {
       throw new Error('Id is not defined');
     }
@@ -52,7 +52,7 @@ class BlockStore {
       throw new Error(`Decoration '${decoratorName}' not found`);
     }
 
-    return decoration as BlockDecorations[T];
+    return decoration as CoreDecorations[T];
   }
 
   getDecorations<T extends BlockDecoratorName>(category: T) {

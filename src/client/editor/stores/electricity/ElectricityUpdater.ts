@@ -1,6 +1,6 @@
 import { UpdateBlock } from '../block/blockSlice.types';
 import { ElectricityState } from './electricitySlice';
-import { getElectricityDecorator, isElectricityDecorator } from './ElectricityStore';
+import { getElectricityDecorator, isElectricityDecorator } from './Electrics.types';
 
 class ElectricityUpdater {
   update(state: ElectricityState, updates: UpdateBlock[]) {

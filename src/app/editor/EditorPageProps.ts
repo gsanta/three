@@ -1,5 +1,5 @@
 import BlockConstantData, { BlockTypeName } from '@/client/editor/models/block/BlockConstantData';
-import { BlockDecorations } from '@/client/editor/models/block/BlockDecoration';
+import { CoreDecorations } from '@/client/editor/models/block/BlockDecoration';
 import BlockAddMethodsResponse from '@/common/response_types/BlockAddMethodsResponse';
 import BlockCategoriesResponse from '@/common/response_types/BlockCategoriesResponse';
 import BlockContextMenuActionsResponse from '@/common/response_types/BlockContextMenuActionsResponse';
@@ -9,7 +9,7 @@ type EditorPageProps = {
   blockCategories: BlockCategoriesResponse['items'];
   blockContextMenuActions: BlockContextMenuActionsResponse['items'];
   blockTypes: BlockConstantData[];
-  blockDecorations: Record<BlockTypeName, Partial<BlockDecorations>>;
+  blockDecorations: Record<BlockTypeName, Partial<CoreDecorations>>;
 };
 
 export default EditorPageProps;

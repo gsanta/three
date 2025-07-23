@@ -13,10 +13,12 @@ import SceneService from '../ui/scene/service/SceneService';
 import { historyAction } from '../stores/block/blockActions';
 import DrawService from '../controllers/tools/DrawService';
 import { BlockCategoryName } from '../models/block/BlockCategoryName';
+import ElectricityService from '../stores/electricity/ElectricityService';
 
 class CableDrawingService implements DrawService {
   constructor(
     block: BlockStore,
+    electricityService: ElectricityService,
     factoryService: FactoryService,
     gridStore: GridStore,
     sceneService: SceneService,
@@ -31,6 +33,7 @@ class CableDrawingService implements DrawService {
 
     this.drawOverheadCables = new DrawOverheadCables(
       block,
+      electricityService,
       factoryService,
       gridStore,
       sceneService,

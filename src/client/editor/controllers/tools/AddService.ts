@@ -7,6 +7,7 @@ import FactoryService from '../../services/factory/FactoryService';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
 import BlockTypeStore from '../../stores/blockType/BlockTypeStore';
+import ElectricityService from '../../stores/electricity/ElectricityService';
 import SceneStore from '../../ui/scene/SceneStore';
 import SceneService from '../../ui/scene/service/SceneService';
 import AddPole from '../../use_cases/block/add/AddPole';
@@ -30,6 +31,7 @@ class AddService implements DrawService {
     blockStore: BlockStore,
     blockTypeStore: BlockTypeStore,
     buildService: BuildService,
+    electricityService: ElectricityService,
     factoryService: FactoryService,
     historyController: HistoryController,
     sceneStore: SceneStore,
@@ -46,7 +48,14 @@ class AddService implements DrawService {
     this.addToPlain = new AddToPlain(factoryService, transactionService);
     this.addToAnchor = new AddToAnchor(factoryService, sceneStore, transactionService);
     this.addToAnchorAsChild = new AddToAnchorAsChild(factoryService, transactionService);
-    this.addTranformer = new AddTransformer(blockStore, blockTypeStore, factoryService, sceneStore, transactionService);
+    this.addTranformer = new AddTransformer(
+      blockStore,
+      blockTypeStore,
+      electricityService,
+      factoryService,
+      sceneStore,
+      transactionService,
+    );
   }
 
   canHandleCategory(category: BlockCategoryName): boolean {

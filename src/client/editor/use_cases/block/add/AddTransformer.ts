@@ -8,11 +8,13 @@ import TransactionService from '@/client/editor/services/transaction/Transaction
 import BlockStore from '@/client/editor/stores/block/BlockStore';
 import DrawCommand from './DrawCommand';
 import AddPoleMountedTransformer from './AddPoleMountedTransformer';
+import ElectricityService from '@/client/editor/stores/electricity/ElectricityService';
 
 class AddTransformer implements DrawCommand {
   constructor(
     blockStore: BlockStore,
     blockTypeStore: BlockTypeStore,
+    electricityService: ElectricityService,
     factoryService: FactoryService,
     sceneStore: SceneStore,
     transactionService: TransactionService,
@@ -21,6 +23,7 @@ class AddTransformer implements DrawCommand {
 
     this.addPoleMountedTransformer = new AddPoleMountedTransformer(
       blockStore,
+      electricityService,
       factoryService,
       sceneStore,
       transactionService,

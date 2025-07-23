@@ -28,13 +28,13 @@ class JoinPoles {
 
     this.cableHelper = new CableHelper(blockStore);
 
+    this.electricityService = electricityService;
+
     this.factoryService = factoryService;
 
     this.sceneStore = sceneStore;
 
     this.transactionService = transactionService;
-
-    this.electricSystemUpdater = new ElectricityService(transactionService);
   }
 
   getCableIds() {
@@ -102,9 +102,9 @@ class JoinPoles {
       groupChildConnections: newCableIds,
     });
 
-    this.electricSystemUpdater.makeElectricConnection(from.getBlock(), to.getBlock(), cableGroup);
-
     edit.commit();
+
+    this.electricityService.makeElectricConnection(from.getBlock(), to.getBlock(), cableGroup);
 
     return {
       cableIds: newCableIds,
@@ -156,7 +156,7 @@ class JoinPoles {
 
   private blockStore: BlockStore;
 
-  private electricSystemUpdater: ElectricityService;
+  private electricityService: ElectricityService;
 
   private factoryService: FactoryService;
 

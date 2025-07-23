@@ -1,24 +1,30 @@
 import { Store } from '@/client/common/utils/store';
-import { BlockDecorationType, BlockDecoratorName } from '../../models/block/BlockDecoration';
-import ElectricConsumerDecorator from '../../models/block/categories/ElectricConsumerDecorator';
-import ElectricSupplierDecorator from '../../models/block/categories/ElectricSupplierDecorator';
-
-export type ElectricityDecoratorType = Extract<
-  BlockDecorationType,
-  ElectricConsumerDecorator | ElectricSupplierDecorator
->;
-
-export const getElectricityDecorator = (type: BlockDecorationType): type is ElectricityDecoratorType => {
-  return ['electric-supplier', 'electric-consumer'].includes(type.decoration);
-};
-
-export const isElectricityDecorator = (name: BlockDecoratorName): name is 'electric-supplier' | 'electric-consumer' => {
-  return ['electric-supplier', 'electric-consumer'].includes(name);
-};
 
 class ElectricityStore {
   constructor(store: Store) {
     this.store = store;
+  }
+
+  getDecorator<T extends ElectricityDecoratorName>(decoratorName: T, id?: string): ElectricityDecoratorNameToType[T] {
+    if (!id) {
+      throw new Error('Id is not defined');
+    }
+
+    const decoration = this.getState().decorators[decoratorName][id];
+
+    if (!decoration) {
+      throw new Error(`Decoration '${decoratorName}' not found`);
+    }
+
+    return decoration as ElectricityDecoratorNameToType[T];
+  }
+
+  hasDecorator<T extends ElectricityDecoratorName>(decoratorName: T, id: string): boolean {
+    try {
+      return !!this.getDecorator(decoratorName, id);
+    } catch (e) {
+      return false;
+    }
   }
 
   getRelations() {

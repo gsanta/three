@@ -12,11 +12,11 @@ import BlockConstantData, { BlockTypeName } from './models/block/BlockConstantDa
 import { setBlockTypes } from './stores/blockType/blockTypeSlice';
 import { initState } from './stores/block/blockActions';
 import EditorPageProps from '@/app/editor/EditorPageProps';
-import { BlockDecorations } from './models/block/BlockDecoration';
+import { CoreDecorations } from './models/block/BlockDecoration';
 
 export type EditorDataReturnType = {
   blockCategories: BlockCategoriesResponse['items'];
-  blockDecorations: Record<BlockTypeName, Partial<BlockDecorations>>;
+  blockDecorations: Record<BlockTypeName, Partial<CoreDecorations>>;
   blockAddMethods: BlockAddMethodsResponse['items'];
   blockContextMenuActions: BlockContextMenuActionsResponse['items'];
   blockTypes: BlockConstantData[];
@@ -54,13 +54,13 @@ export const fetchEditorData = async (): Promise<EditorDataReturnType> => {
     } as unknown as BlockConstantData;
   });
 
-  const blockDecorations: Record<BlockTypeName, Partial<BlockDecorations>> = {};
+  const blockDecorations: Record<BlockTypeName, Partial<CoreDecorations>> = {};
 
   blockTypesData.forEach((blockType) => {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     const { decorationData, type } = blockType;
 
-    blockDecorations[type] = decorationData as unknown as Partial<BlockDecorations>;
+    blockDecorations[type] = decorationData as unknown as Partial<CoreDecorations>;
   });
 
   return {

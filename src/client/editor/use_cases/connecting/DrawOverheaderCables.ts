@@ -5,6 +5,7 @@ import { ConnectCable } from '../../services/CableConnector';
 import FactoryService from '../../services/factory/FactoryService';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
+import ElectricityService from '../../stores/electricity/ElectricityService';
 import GridStore from '../../stores/grid/GridStore';
 import SceneStore from '../../ui/scene/SceneStore';
 import SceneService from '../../ui/scene/service/SceneService';
@@ -15,6 +16,7 @@ import ConnectToEmpty from './ConnectToEmpty';
 class DrawOverheadCables {
   constructor(
     blockStore: BlockStore,
+    electricityService: ElectricityService,
     factoryService: FactoryService,
     gridStore: GridStore,
     sceneService: SceneService,
@@ -33,7 +35,13 @@ class DrawOverheadCables {
       transactionService,
     );
 
-    this.connectMainWires = new ConnectMainWires(blockStore, factoryService, sceneStore, transactionService);
+    this.connectMainWires = new ConnectMainWires(
+      blockStore,
+      electricityService,
+      factoryService,
+      sceneStore,
+      transactionService,
+    );
 
     this.connectToEmpty = new ConnectToEmpty(blockStore, factoryService, sceneStore, transactionService);
   }

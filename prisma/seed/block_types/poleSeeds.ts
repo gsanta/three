@@ -3,7 +3,7 @@ import { BlockType } from '@prisma/client';
 const poleSeeds: Partial<BlockType>[] = [
   {
     categoryName: 'poles',
-    decorations: ['poles'],
+    decorations: ['poles', 'electrics'],
     path: '/pole_1.glb',
     parts: [
       {
@@ -76,12 +76,13 @@ const poleSeeds: Partial<BlockType>[] = [
         decoration: 'poles',
         wires: ['L1', 'L2', 'L3', 'N'],
       },
+      electrics: {},
     },
     type: 'pole-1',
   },
   {
     categoryName: 'poles',
-    decorations: ['devices'],
+    decorations: ['devices', 'electrics'],
     path: '/pole_2.glb',
     parts: [
       {
@@ -148,12 +149,13 @@ const poleSeeds: Partial<BlockType>[] = [
         decoration: 'poles',
         wires: ['L1', 'L2', 'L3'],
       },
+      electrics: {},
     },
     type: 'pole-2',
   },
   {
     categoryName: 'poles',
-    decorations: ['devices'],
+    decorations: ['electrics'],
     path: '/pole_3.glb',
     parts: [
       {
@@ -204,6 +206,7 @@ const poleSeeds: Partial<BlockType>[] = [
         decoration: 'poles',
         wires: ['L1', 'L2', 'L3'],
       },
+      electrics: {},
     },
     type: 'pole-3',
   },

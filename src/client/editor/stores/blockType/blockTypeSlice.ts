@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import BlockConstantData, { BlockTypeName } from '../../models/block/BlockConstantData';
 import BlockSettings from '@/client/editor/models/BlockSettings';
 import BlockSelectedSettings from '@/client/editor/models/BlockSelectedSettings';
-import { BlockDecorations, BlockDecoratorName } from '../../models/block/BlockDecoration';
+import { CoreDecorations, BlockDecoratorName } from '../../models/block/BlockDecoration';
 import ElectricSupplierDecorator, {
   electricSupplierDefaultValues,
 } from '../../models/block/categories/ElectricSupplierDecorator';
@@ -13,6 +13,7 @@ import PoleDecorator from '../../models/block/categories/PoleDecorator';
 import ElectricConsumerDecorator, {
   electricConsumerDefaultValues,
 } from '../../models/block/categories/ElectricConsumerDecorator';
+import ElectricsDecorator, { electricsDefaultValues } from '../../models/block/categories/ElectricsDecorator';
 
 export type TransformType = 'move' | 'scale';
 
@@ -25,7 +26,7 @@ export type BlockTypeState = {
       }
     | undefined;
   blocks: BlockConstantData[];
-  decorations: Record<BlockTypeName, Partial<BlockDecorations>>;
+  decorations: Record<BlockTypeName, Partial<CoreDecorations>>;
   isOrbitControlStopped: boolean;
   settings: Partial<Record<string, BlockSettings>>;
   selectedSettings: Record<string, BlockSelectedSettings>;
@@ -60,7 +61,7 @@ export const blockTypeSlice = createSlice({
       state,
       action: PayloadAction<{
         blocks: BlockConstantData[];
-        decorations: Record<BlockTypeName, Partial<BlockDecorations> | null>;
+        decorations: Record<BlockTypeName, Partial<CoreDecorations> | null>;
       }>,
     ) {
       state.blocks = action.payload.blocks.map((block) => ({
@@ -75,9 +76,11 @@ export const blockTypeSlice = createSlice({
         switch (decoratorName) {
           case 'cables':
             return { decoration: 'cables' } as CableDecorator;
-          case 'electric-supplier':
+          case 'electrics':
+            return { ...electricsDefaultValues } as ElectricsDecorator;
+          case 'electric-suppliers':
             return { ...electricSupplierDefaultValues } as ElectricSupplierDecorator;
-          case 'electric-consumer':
+          case 'electric-consumers':
             return { ...electricConsumerDefaultValues } as ElectricConsumerDecorator;
           case 'players':
             return { decoration: 'players' } as PlayerDecorator;
@@ -89,7 +92,7 @@ export const blockTypeSlice = createSlice({
       };
 
       Object.entries(action.payload.decorations).forEach(([blockTypeName, decorations]) => {
-        const mergedDecorations: Partial<BlockDecorations> = {};
+        const mergedDecorations: Partial<CoreDecorations> = {};
 
         if (decorations) {
           Object.entries(decorations).forEach(([decoratorName, decorationData]) => {

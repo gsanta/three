@@ -5,13 +5,13 @@ import PoleDecorator from './categories/PoleDecorator';
 import PlayerDecorator from './categories/PlayerDecorator';
 import ElectricConsumerDecorator from './categories/ElectricConsumerDecorator';
 import ElectricSupplierDecorator from './categories/ElectricSupplierDecorator';
+import { ElectricityDecoratorNameToType } from '../../stores/electricity/Electrics.types';
 
 export type BlockDecoratorName =
   | 'cables'
-  | 'electric-supplier'
-  | 'electric-consumer'
-  | 'electric-connection'
-  | 'electric-node'
+  | 'electrics'
+  | 'electric-suppliers'
+  | 'electric-consumers'
   | 'players'
   | 'transformers'
   | 'poles';
@@ -29,7 +29,7 @@ export type EmptyBlockCategory<T extends BlockCategoryName> = {
   id: string;
 };
 
-export type BlockDecorations = {
+export type CoreDecorations = {
   cables: CableDecorator;
   transformers: TransformerDecorator;
   players: PlayerDecorator;
@@ -37,7 +37,7 @@ export type BlockDecorations = {
 };
 
 export type PartialBlockDecorations = {
-  [K in keyof BlockDecorations]?: Partial<BlockDecorationType>;
+  [K in keyof CoreDecorations]?: Partial<BlockDecorationType>;
 };
 
 export type BlockCategoryRecords = {
@@ -46,3 +46,5 @@ export type BlockCategoryRecords = {
   players: Partial<Record<string, PlayerDecorator>>;
   poles: Partial<Record<string, PoleDecorator>>;
 };
+
+export type BlockDecorators = CoreDecorations & ElectricityDecoratorNameToType;

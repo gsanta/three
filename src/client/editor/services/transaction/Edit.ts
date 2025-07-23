@@ -1,7 +1,8 @@
 import {
-  BlockDecorations,
+  CoreDecorations,
   BlockDecorationType,
   BlockDecoratorName,
+  BlockDecorators,
 } from '@/client/editor/models/block/BlockDecoration';
 import { PartialDeep } from 'type-fest';
 import BlockData, { mergeBlocks } from '@/client/editor/models/block/BlockData';
@@ -51,7 +52,7 @@ class Edit {
     block: Partial<BlockData>,
     decoration: {
       type: T;
-      data: PartialDeep<BlockDecorations[T]>;
+      data: PartialDeep<CoreDecorations[T]>;
     },
   ) {
     this.updateBlock(id, block);
@@ -80,9 +81,9 @@ class Edit {
   }
 
   updateDecoration<T extends BlockDecoratorName>(
-    category: T,
+    decoratorName: T,
     id: string,
-    partial: PartialDeep<BlockDecorations[T]>,
+    partial: PartialDeep<BlockDecorators[T]>,
     options?: EditOptions,
   ): this {
     if (this.isRemoved(id)) {
@@ -91,9 +92,9 @@ class Edit {
 
     const mergedOptions = this.getMergedOptions(options);
 
-    const origDecoration = this.store.getDecorator(category, id);
+    const origDecoration = this.store.getDecorator(decoratorName, id);
     const [prevUpdate, index] = this.getDecorationFromUpdates(id);
-    const prevDecoration = prevUpdate?.decoration as BlockDecorations[T];
+    const prevDecoration = prevUpdate?.decoration as BlockDecorators[T];
 
     const updated = mergeDeep(prevDecoration || origDecoration, partial, mergedOptions.arrayMergeStrategy);
 

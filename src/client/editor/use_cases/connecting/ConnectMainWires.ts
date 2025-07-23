@@ -6,6 +6,7 @@ import { ConnectCable } from '../../services/CableConnector';
 import FactoryService from '../../services/factory/FactoryService';
 import TransactionService from '../../services/transaction/TransactionService';
 import BlockStore from '../../stores/block/BlockStore';
+import ElectricityService from '../../stores/electricity/ElectricityService';
 import SceneStore from '../../ui/scene/SceneStore';
 import JoinPoles from '../block/JoinPoles';
 
@@ -14,13 +15,14 @@ class ConnectMainWires implements ConnectCable {
 
   constructor(
     blockStore: BlockStore,
+    electricityService: ElectricityService,
     factoryService: FactoryService,
     sceneStore: SceneStore,
     transactionService: TransactionService,
   ) {
     this.blockStore = blockStore;
 
-    this.joinPoles = new JoinPoles(blockStore, sceneStore, factoryService, transactionService);
+    this.joinPoles = new JoinPoles(blockStore, electricityService, sceneStore, factoryService, transactionService);
   }
 
   canConnect(candidates: BlockData[]) {

@@ -1,12 +1,60 @@
 import ElectricityStore from './ElectricityStore';
 
 class ElectricityPathFinder {
-  constructor(electricStore: ElectricityStore) {
-    this.electricStore = electricStore;
+  constructor(electricityStore: ElectricityStore) {
+    this.electricityStore = electricityStore;
   }
 
-  visit(node: string) {
-    const relations = this.electricStore.getRelations();
+  find(startNode: string, filterFn: (node: string, depth: number) => boolean): string | undefined {
+    let result: string | undefined;
+
+    this.visit(startNode, (node, depth) => {
+      if (filterFn(node, depth)) {
+        result = node;
+      }
+
+      if (result) {
+        return true;
+      }
+
+      return false;
+    });
+
+    return result;
+  }
+
+  filter(startNode: string, filterFn: (node: string, depth: number) => boolean): string[] {
+    const results: string[] = [];
+    this.visit(startNode, (node, depth) => {
+      if (filterFn(node, depth)) {
+        results.push(node);
+      }
+    });
+    return results;
+  }
+
+  visit(startNode: string, callback: (node: string, depth: number) => boolean | void) {
+    const relations = this.electricityStore.getRelations();
+    const visited = new Set<string>();
+    const queue: { node: string; depth: number }[] = [{ node: startNode, depth: 0 }];
+
+    while (queue.length > 0) {
+      const { node, depth } = queue.shift()!;
+
+      if (visited.has(node)) continue;
+      visited.add(node);
+
+      if (callback(node, depth)) {
+        return;
+      }
+
+      const connections = relations[node] || [];
+      connections.forEach((connection) => {
+        if (!visited.has(connection.to)) {
+          queue.push({ node: connection.to, depth: depth + 1 });
+        }
+      });
+    }
   }
 
   // execute(graph: Graph, start: number, end: number): { distance: number; path: { index: number; cost: number }[] } {
@@ -61,7 +109,7 @@ class ElectricityPathFinder {
   //   };
   // }
 
-  private electricStore: ElectricityStore;
+  private electricityStore: ElectricityStore;
 }
 
 export default ElectricityPathFinder;

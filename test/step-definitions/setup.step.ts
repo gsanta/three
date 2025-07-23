@@ -1,7 +1,6 @@
 import { After, Before, Given, Then, When } from '@cucumber/cucumber';
 import { Vector3 } from 'three';
 import { store } from '@/client/common/utils/store';
-import { setActiveBlockType } from '@/client/editor/stores/blockType/blockTypeSlice';
 import { setSelectedTool } from '@/client/editor/stores/tool/toolSlice';
 import ToolName from '@/client/editor/models/tool/ToolName';
 import ExtendedWorld from './ExtendedWorld';
@@ -40,6 +39,7 @@ const waitTenMs = () => new Promise((resolve) => setTimeout(resolve, 10));
 
 Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
   const sceneService = this.getEnv().editorContext.sceneService as TestSceneService;
+  const buildService = this.getEnv().editorContext.buildService;
   const blockStore = this.getEnv().editorContext.blockStore;
   const sceneStore = this.getEnv().editorContext.sceneStore;
   const tool = this.getEnv().editorContext.tool;
@@ -118,7 +118,7 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
 
     store.dispatch(setSelectedTool(ToolName.Add));
     this.getEnv().toolHelper.pointerEnter({ blockId: targetBlock, partIndex });
-    store.dispatch(setActiveBlockType(block.type));
+    buildService.setBuildBlock(block);
     addTool.onPointerUp({ clientX: 0, clientY: 0, pos: new Vector3(...pos) } as ToolInfo);
 
     store.dispatch(updateBlocks({ blockUpdates: [{ select: [] }] }));

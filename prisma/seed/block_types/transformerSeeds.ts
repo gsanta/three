@@ -3,7 +3,7 @@ import { BlockType } from '@prisma/client';
 const transformerSeeds: Partial<BlockType>[] = [
   {
     categoryName: 'transformers',
-    decorations: ['transformers'],
+    decorations: ['transformers', 'electrics'],
     path: '/distribution_transformer_single_1.glb',
     parts: [
       {
@@ -46,12 +46,13 @@ const transformerSeeds: Partial<BlockType>[] = [
         decoration: 'transformers',
         location: 'pole-mounted',
       },
+      electrics: {},
     },
     type: 'distribution-transformer-single-1',
   },
   {
     categoryName: 'transformers',
-    decorations: ['transformers'],
+    decorations: ['transformers', 'electrics'],
     path: '/pad_mounted_transformer_1.glb',
     parts: [
       {
@@ -89,12 +90,13 @@ const transformerSeeds: Partial<BlockType>[] = [
         primaryWires: ['L1', 'L2', 'L3'],
         secondaryWires: ['T1', 'T2', 'T3', 'N'],
       },
+      electrics: {},
     },
     type: 'pad-mounted-transformer-1',
   },
   {
     categoryName: 'transformers',
-    decorations: ['transformers', 'electric-supplier'],
+    decorations: ['transformers', 'electric-suppliers', 'electrics'],
     path: '/pole_mounted_transformer_1.glb',
     parts: [
       {
@@ -189,7 +191,8 @@ const transformerSeeds: Partial<BlockType>[] = [
         primaryWires: ['L1', 'L2', 'L3'],
         secondaryWires: ['T1', 'T2', 'T3', 'N'],
       },
-      'electric-supplier': {},
+      'electric-suppliers': {},
+      electrics: {},
     },
     type: 'pole-mounted-transformer-1',
   },

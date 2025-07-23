@@ -11,6 +11,7 @@ import DrawCommand from './DrawCommand';
 class AddPoleMountedTransformer implements DrawCommand {
   constructor(
     blockStore: BlockStore,
+    electricityService: ElectricityService,
     factoryService: FactoryService,
     sceneStore: SceneStore,
     transactionService: TransactionService,
@@ -19,11 +20,11 @@ class AddPoleMountedTransformer implements DrawCommand {
     this.factoryService = factoryService;
     this.transactionService = transactionService;
 
-    this.electricityService = new ElectricityService(transactionService);
-
     this.addToAnchorAsChild = new AddToAnchorAsChild(factoryService, transactionService);
 
     this.drawCable = new DrawCable(blockStore, factoryService, sceneStore, transactionService);
+
+    this.electricityService = electricityService;
   }
 
   finish(): void {
@@ -32,15 +33,11 @@ class AddPoleMountedTransformer implements DrawCommand {
     }
 
     if (this.transformerId && this.cableGroupId && this.poleId) {
-      const edit = this.transactionService.createTransaction();
-
       this.electricityService.makeElectricConnection(
         this.blockStore.getBlock(this.transformerId!),
         this.blockStore.getBlock(this.poleId!),
         this.blockStore.getBlock(this.cableGroupId!),
       );
-
-      edit.commit();
     }
 
     this.transformerId = undefined;

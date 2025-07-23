@@ -1,8 +1,6 @@
 import { When } from '@cucumber/cucumber';
 import ExtendedWorld from './ExtendedWorld';
 import ToolName from '@/client/editor/models/tool/ToolName';
-import { store } from '@/client/common/utils/store';
-import { setActiveBlockType } from '@/client/editor/stores/blockType/blockTypeSlice';
 import { Vector3 } from 'three';
 import findClosestBlock from './helpers/findClosestBlock';
 import { checkGridPosition, checkPartIndexExists, checkPosition } from './helpers/checks';
@@ -15,12 +13,14 @@ When('I select tool {string}', function (this: ExtendedWorld, toolName: ToolName
 });
 
 When('I select template {string}', function (this: ExtendedWorld, type: string) {
+  const blockTypeStore = this.getEnv().editorContext.blockTypeStore;
+  const buildService = this.getEnv().editorContext.buildService;
   assert.doesNotThrow(
     () => this.getEnv().editorContext.blockStore.getBlockType(type),
     `block type '${type}' does not exist`,
   );
 
-  store.dispatch(setActiveBlockType(type));
+  buildService.setBuildBlock(blockTypeStore.getBlockType(type));
 });
 
 When('I press pointer', function (this: ExtendedWorld) {

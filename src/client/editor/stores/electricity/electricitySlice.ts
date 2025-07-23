@@ -5,6 +5,7 @@ import ElectricityUpdater from './ElectricityUpdater';
 import ElectricConsumerDecorator from '../../models/block/categories/ElectricConsumerDecorator';
 import HistoryStorage from '../utils/HistoryStorage';
 import BlockData from '../../models/block/BlockData';
+import ElectricsDecorator from '../../models/block/categories/ElectricsDecorator';
 
 export type ElectricNode = {
   blockId: string;
@@ -22,8 +23,9 @@ export type ElectricityState = {
 
   sources: Record<string, object>;
   decorators: {
-    'electric-supplier': Partial<Record<string, ElectricSupplierDecorator>>;
-    'electric-consumer': Partial<Record<string, ElectricConsumerDecorator>>;
+    electrics: Record<string, ElectricsDecorator>;
+    'electric-suppliers': Partial<Record<string, ElectricSupplierDecorator>>;
+    'electric-consumers': Partial<Record<string, ElectricConsumerDecorator>>;
   };
 };
 
@@ -33,8 +35,9 @@ export const initialElectricityState: ElectricityState = {
   relations: {},
   sources: {},
   decorators: {
-    'electric-supplier': {},
-    'electric-consumer': {},
+    electrics: {},
+    'electric-suppliers': {},
+    'electric-consumers': {},
   },
 };
 

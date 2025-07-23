@@ -32,13 +32,17 @@ import GridSerializer from './stores/grid/GridSerializer';
 import BuildService from './services/BuildService';
 import AddService from './controllers/tools/AddService';
 import HistoryController from './controllers/HistoryController';
+import ElectricityService from './stores/electricity/ElectricityService';
+import ElectricityStore from './stores/electricity/ElectricityStore';
 
 type EditorContextType = {
   blockStore: BlockStore;
   blockCategoryStore: BlockCategoryStore;
+  blockTypeStore: BlockTypeStore;
   blockTypeSelectorService: BlockTypeSelectorService;
   buildService: BuildService;
   cableDrawingService: CableDrawingService;
+  electricityService: ElectricityService;
   eraser: EraserService;
   gridStore: GridStore;
   tool: ToolService;
@@ -96,13 +100,16 @@ export const setupEditor = () => {
     transactionService,
   );
 
+  const electricityStore = new ElectricityStore(store);
+  const electricityService = new ElectricityService(electricityStore, transactionService);
+
   const buildService = new BuildService(blockStore, blockTypeStore, gameStore, gridStore);
 
   const addService = new AddService(
     blockStore,
     blockTypeStore,
     buildService,
-    electiricty
+    electricityService,
     factoryService,
     historyController,
     sceneStore,
@@ -112,6 +119,7 @@ export const setupEditor = () => {
 
   const cableDrawingService = new CableDrawingService(
     blockStore,
+    electricityService,
     factoryService,
     gridStore,
     sceneService,
@@ -151,9 +159,11 @@ export const setupEditor = () => {
   const editorContext: EditorContextType = {
     blockCategoryStore: blockCategoryStore,
     blockStore: blockStore,
+    blockTypeStore,
     blockTypeSelectorService,
     buildService,
     cableDrawingService,
+    electricityService,
     eraser: new EraserService(blockStore, transactionService),
     serializer,
     gridStore: gridStore,

@@ -80,7 +80,6 @@ Feature: Pole
       | BLOCK     | TYPE    |
       | pole-1-1  | pole-1  |
   
-  @only
   Scenario: Submitting cabling action makes connection to another poles
     Given I have a scene with:
       | TYPE   | ID       | PARENT | GRIDPOS |
@@ -242,6 +241,7 @@ Feature: Pole
       | BLOCK     | TYPE    |
       | pole-1-3  | pole-1  |
 
+  @only
   Scenario: Adding a transformer to a pole
     Given I have a scene with:
       | TYPE   | ID       | PARENT | POS   |
@@ -258,6 +258,7 @@ Feature: Pole
       | cable-1-1                    | cable-1                    |                                                                 |
       | cable-1-2                    | cable-1                    |                                                                 |
       | cable-1-3                    | cable-1                    |                                                                 |
+      | cable-group-1-1              | cable-group-1              |                                                                 |
 
 
 
