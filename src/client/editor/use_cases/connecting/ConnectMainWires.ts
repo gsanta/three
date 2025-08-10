@@ -22,7 +22,9 @@ class ConnectMainWires implements ConnectCable {
   ) {
     this.blockStore = blockStore;
 
-    this.joinPoles = new JoinPoles(blockStore, electricityService, sceneStore, factoryService, transactionService);
+    this.electricityService = electricityService;
+
+    this.joinPoles = new JoinPoles(blockStore, sceneStore, factoryService, transactionService);
   }
 
   canConnect(candidates: BlockData[]) {
@@ -48,7 +50,10 @@ class ConnectMainWires implements ConnectCable {
       this.joinPoles.join(this.from.getBlock(), this.blockStore.getBlock(candidateId), { isPreview: false });
     }
 
+    this.electricityService.makeElectricConnection(this.previewBlocks?.from!, this.previewBlocks?.to!, this.previewBlocks?.cableGroup!);
+
     this.from = undefined;
+    this.previewBlocks = undefined;
   }
 
   getCableIds() {
@@ -82,7 +87,7 @@ class ConnectMainWires implements ConnectCable {
 
     this.lastPos = fallbackPos;
 
-    this.joinPoles.join(this.from?.getBlock(), this.blockStore.getBlock(this.candidateId), {
+    this.previewBlocks = this.joinPoles.join(this.from?.getBlock(), this.blockStore.getBlock(this.candidateId), {
       isPreview: true,
     });
   }
@@ -91,11 +96,19 @@ class ConnectMainWires implements ConnectCable {
 
   private candidateId: string | undefined;
 
+  private electricityService: ElectricityService;
+
   private from: PoleModel | undefined;
 
   private joinPoles: JoinPoles;
 
   private lastPos: Num3 | undefined;
+
+  private previewBlocks: {
+    cableGroup: BlockData;
+    from: BlockData;
+    to: BlockData;
+  } | undefined;
 }
 
 export default ConnectMainWires;

@@ -1,6 +1,5 @@
 import { store } from '@/client/common/utils/store';
 import BlockStore from '../stores/block/BlockStore';
-import { setCurrentCanvasAction } from '../stores/blockCategory/blockCategorySlice';
 import DrawUndergroundCable from '../use_cases/cable/DrawUndergroundCable';
 import FactoryService from './factory/FactoryService';
 import TransactionService from './transaction/TransactionService';
@@ -51,7 +50,6 @@ class CableDrawingService implements DrawService {
 
     this.activeDrawing?.cancel();
     this.activeDrawing = undefined;
-    store.dispatch(setCurrentCanvasAction('add'));
   }
 
   finish() {
@@ -59,7 +57,6 @@ class CableDrawingService implements DrawService {
 
     this.activeDrawing?.finalize();
     this.activeDrawing = undefined;
-    store.dispatch(setCurrentCanvasAction('add'));
     store.dispatch(historyAction());
   }
 
@@ -67,7 +64,7 @@ class CableDrawingService implements DrawService {
     return this._isDrawing;
   }
 
-  start(cable: BlockData, gridIndex: number): boolean {
+  start(_cable: BlockData, gridIndex: number): boolean {
     const toBlocks = this.gridStore.getBlocksAtGridIndex(gridIndex);
 
     if (this.drawUndergroundCable.tryStart(toBlocks, gridIndex)) {

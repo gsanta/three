@@ -59,8 +59,6 @@ class CableTool extends HoverTool {
     if (this.cableDrawingService.isDrawing()) {
       const drawInfo = this.cableDrawingService.udpate(info.gridIndex);
 
-      console.log(drawInfo);
-
       if (drawInfo?.finishable) {
         this.buildService.setIsEditing({ cancelable: true, finishable: true });
       }

@@ -1,14 +1,13 @@
 import Edit from './Edit';
 import BlockStore from '../../stores/block/BlockStore';
 import { Store } from '@/client/common/utils/store';
-import TransactionHook from './TransactionHook';
-import EditorContextType from '../../setupEditor';
+import ElectricityStore from '../../stores/electricity/ElectricityStore';
 
 class TransactionService {
-  constructor(blockStore: BlockStore, dispatchStore: Store, systemHooks: TransactionHook[]) {
+  constructor(blockStore: BlockStore, dispatchStore: Store, electricsStore: ElectricityStore) {
     this.store = blockStore;
     this.dispatchStore = dispatchStore;
-    this.systemHooks = systemHooks;
+    this.electricsStore = electricsStore;
 
     this.close = this.close.bind(this);
   }
@@ -30,7 +29,7 @@ class TransactionService {
   }
 
   createTransaction(): Edit {
-    const edit = new Edit(this.store, this.dispatchStore, this.systemHooks, this.close);
+    const edit = new Edit(this.store, this.dispatchStore, this.electricsStore, this.close);
     this.activeTransaction = edit;
 
     return edit;
@@ -46,7 +45,7 @@ class TransactionService {
 
   private dispatchStore: Store;
 
-  private systemHooks: TransactionHook[] = [];
+  private electricsStore: ElectricityStore;
 }
 
 export default TransactionService;

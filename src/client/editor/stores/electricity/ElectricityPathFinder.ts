@@ -33,7 +33,11 @@ class ElectricityPathFinder {
     return results;
   }
 
-  visit(startNode: string, callback: (node: string, depth: number) => boolean | void) {
+  visit(
+    startNode: string,
+    callback: (node: string, depth: number) => boolean | void,
+    connectionCallback?: (params: { fromNode: string; toNode: string; edgeId: string; depth: number }) => void,
+  ) {
     const relations = this.electricityStore.getRelations();
     const visited = new Set<string>();
     const queue: { node: string; depth: number }[] = [{ node: startNode, depth: 0 }];
@@ -51,6 +55,8 @@ class ElectricityPathFinder {
       const connections = relations[node] || [];
       connections.forEach((connection) => {
         if (!visited.has(connection.to)) {
+          connectionCallback?.({ fromNode: node, toNode: connection.to, edgeId: connection.edgeId, depth });
+
           queue.push({ node: connection.to, depth: depth + 1 });
         }
       });

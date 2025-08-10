@@ -37,10 +37,6 @@ const Toolbar = () => {
     dispatch(redoAction());
   };
 
-  const currentActionPanel = useAppSelector((state) => state.blockCategory.currentAction);
-
-  const activeBlockType = useAppSelector((state) => state.blockType.activeBlockType);
-
   const {
     isDialogOpen: isAddDialogOpen,
     onDialogClose: onAddDialogClose,
@@ -64,12 +60,6 @@ const Toolbar = () => {
     onDialogClose: onSelectionDialogClose,
     onDialogOpen: onSelectionDialogOpen,
   } = useDialog({ dialogId: 'selection-dialog' });
-
-  // useEffect(() => {
-  //   if (currentActionPanel === 'selection') {
-  //     onSelectionDialogOpen();
-  //   }
-  // }, [currentActionPanel, onSelectionDialogOpen]);
 
   return (
     <div className="bg-base-300 h-full pt-2 pb-1 flex flex-col justify-between gap-1 items-center">

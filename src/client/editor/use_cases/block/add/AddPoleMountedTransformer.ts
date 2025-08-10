@@ -7,6 +7,8 @@ import SceneStore from '@/client/editor/ui/scene/SceneStore';
 import DrawCable from '../../cable/DrawCable';
 import AddToAnchorAsChild, { AddParams } from './AddToAnchorAsChild';
 import DrawCommand from './DrawCommand';
+import SceneService from '@/client/editor/ui/scene/service/SceneService';
+import MeshWrapper from '@/client/editor/models/MeshWrapper';
 
 class AddPoleMountedTransformer implements DrawCommand {
   constructor(
@@ -25,6 +27,8 @@ class AddPoleMountedTransformer implements DrawCommand {
     this.drawCable = new DrawCable(blockStore, factoryService, sceneStore, transactionService);
 
     this.electricityService = electricityService;
+
+    this.sceneStore = sceneStore;
   }
 
   finish(): void {
@@ -45,12 +49,20 @@ class AddPoleMountedTransformer implements DrawCommand {
     this.poleId = undefined;
   }
 
-  execute({ edit, newBlockType, position, to }: AddParams) {
+  execute({ edit, newBlockType, to }: AddParams) {
+    if (!to?.block) {
+      return;
+    }
+
     if (newBlockType.category !== 'transformers') {
       throw new Error('Invalid block type for transformer addition');
     }
 
-    if (to?.block && to.anchorPartName) {
+    const position = new MeshWrapper(this.sceneStore.getObj3d(to.block.id))
+        .findByName('TransformerHolder')
+        .getWorldPosition();
+
+    if (to?.block) {
       this.poleId = to.block.id;
 
       this.addToAnchorAsChild.execute({
@@ -58,7 +70,10 @@ class AddPoleMountedTransformer implements DrawCommand {
         newBlockType: newBlockType,
         newBlockAnchorName: 'Holder',
         position,
-        to,
+        to: {
+          block: to.block,
+          anchorPartName: 'TransformerHolder',
+        },
       });
 
       this.transformerId = this.addToAnchorAsChild.getNewBlockId();
@@ -116,6 +131,8 @@ class AddPoleMountedTransformer implements DrawCommand {
   private electricityService: ElectricityService;
 
   private factoryService: FactoryService;
+
+  private sceneStore: SceneStore;
 
   private transactionService: TransactionService;
 }

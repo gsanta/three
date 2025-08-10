@@ -24,7 +24,7 @@ class Hover {
     //   partDetails: this.changePlaceholderVisibility(hovered.block, true),
     // });
 
-    edit.commit(false);
+    edit.commit();
   }
 
   hover(blockId: string, partIndex?: string) {
@@ -37,7 +37,7 @@ class Hover {
     //   partDetails: this.changePlaceholderVisibility(blockId, false),
     // });
 
-    edit.commit(false);
+    edit.commit();
   }
 
   private changePlaceholderVisibility(blockId: string, hide: boolean) {

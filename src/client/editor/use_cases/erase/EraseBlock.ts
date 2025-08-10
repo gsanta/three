@@ -6,11 +6,11 @@ import CableEraser from './erasers/CableEraser';
 import BlockPartLookupData from '../../models/block/part/BlockPartLookupData';
 
 class EraseBlock {
-  constructor(store: BlockStore, update: TransactionService) {
-    this.store = store;
+  constructor(blockStore: BlockStore, update: TransactionService) {
+    this.blockStore = blockStore;
     this.update = update;
 
-    this.erasers.cables = new CableEraser(store);
+    this.erasers.cables = new CableEraser(blockStore);
   }
 
   erase(blockIds: string[]) {
@@ -23,9 +23,15 @@ class EraseBlock {
     while (queue.length) {
       const next = queue.shift();
       if (next) {
-        const block = this.store.getBlocks()[next];
+        const block = this.blockStore.getBlocks()[next];
         queue.push(...block.childConnections.map((child) => child.childBlock));
         queue.push(...block.conduitConnections.map((child) => child.block));
+        queue.push(...block.groupChildConnections.map((child) => child));
+        if (block.groupParentConnection) {
+          queue.push(block.groupParentConnection);
+          const parent = this.blockStore.getBlocks()[block.groupParentConnection];
+          queue.push(...parent.groupChildConnections);
+        }
         blocksToRemove.push(next);
         edit.remove(next);
       }
@@ -37,9 +43,9 @@ class EraseBlock {
   }
 
   private removeBlock(blockId: string, edit: Edit) {
-    const block = this.store.getBlocks()[blockId];
+    const block = this.blockStore.getBlocks()[blockId];
 
-    const parent = this.store.getBlocks()[block.parentConnection?.block || ''];
+    const parent = this.blockStore.getBlocks()[block.parentConnection?.block || ''];
 
     if (parent) {
       edit.updateBlock(parent.id, { childConnections: [{ childBlock: blockId }] }, { arrayMergeStrategy: 'exclude' });
@@ -67,7 +73,7 @@ class EraseBlock {
     });
 
     block.multiParentConnections.forEach((connection) => {
-      const connectingBlock = this.store.getBlock(connection.block);
+      const connectingBlock = this.blockStore.getBlock(connection.block);
       if (connectingBlock) {
         edit.updateBlock(
           connectingBlock.id,
@@ -80,7 +86,7 @@ class EraseBlock {
     });
   }
 
-  private store: BlockStore;
+  private blockStore: BlockStore;
 
   private update: TransactionService;
 

@@ -6,6 +6,7 @@ import assert from 'assert';
 import Vector from '@/client/editor/models/math/Vector';
 import { BlockCategoryName } from '@/client/editor/models/block/BlockCategoryName';
 import Grid from '@/client/editor/models/Grid';
+import { CoreDecoratorName } from '@/client/editor/models/block/BlockDecoration';
 
 export function checkBlockExists(this: ExtendedWorld, blockId: string) {
   const realBlockId = blockId === 'examined' ? this.env?.testScene.storedBlockId || '' : blockId;
@@ -19,7 +20,7 @@ export function checkBlockExists(this: ExtendedWorld, blockId: string) {
   return block;
 }
 
-export function checkDecorationExists(this: ExtendedWorld, category: BlockCategoryName, blockId: string) {
+export function checkDecorationExists(this: ExtendedWorld, category: CoreDecoratorName, blockId: string) {
   const realBlockId = blockId === 'examined' ? this.env?.testScene.storedBlockId || '' : blockId;
 
   const decortion = this.env?.editorContext.blockStore.getDecorator(category, realBlockId);

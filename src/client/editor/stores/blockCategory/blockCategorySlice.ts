@@ -10,8 +10,6 @@ import SelectionUpdater from './SelectionUpdater';
 import { BlockPartRole } from '../../models/block/part/BlockPartLookupData';
 import HistoryStorage from '../utils/HistoryStorage';
 
-export type CanvasAction = 'cable-drawing' | 'finish-cable-drawing';
-
 export type BlockCategoyState = {
   addMethods: BlockAddMethod[];
   blockCategories: {
@@ -22,7 +20,6 @@ export type BlockCategoyState = {
   selectedRootBlockIds: string[];
   selectedBlocks: Record<string, boolean>;
   currentContextMenuActions: BlockContextMenuAction[];
-  currentAction?: CanvasAction;
   currentItem?: string;
 
   redoSize: number;
@@ -34,7 +31,6 @@ export const initialBlockTypeState: BlockCategoyState = {
   blockCategories: [],
   contextMenuActions: [],
   currentContextMenuActions: [],
-  currentAction: undefined,
   currentItem: undefined,
   selectedBlocks: {},
   selectedRootBlockIds: [],
@@ -90,10 +86,6 @@ export const blockCategorySlice = createSlice({
     setBlockCategories(state, action: PayloadAction<BlockCategoriesResponse['items']>) {
       state.blockCategories = action.payload.map((item) => ({ name: item.name }));
     },
-
-    setCurrentCanvasAction(state, action: PayloadAction<CanvasAction>) {
-      state.currentAction = action.payload;
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(updateBlocks, (state, action) => {
@@ -133,7 +125,7 @@ export const blockCategorySlice = createSlice({
   },
 });
 
-export const { setBlockAddMethods, setBlockCategories, setBlockContextMenuActions, setCurrentCanvasAction } =
+export const { setBlockAddMethods, setBlockCategories, setBlockContextMenuActions } =
   blockCategorySlice.actions;
 
 export default blockCategorySlice.reducer;

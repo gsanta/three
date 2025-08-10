@@ -81,6 +81,8 @@ class AddToAnchorAsChild implements DrawCommand {
     );
 
     this.newBlockId = newBlock.id;
+
+    return this.newBlockId
   }
 
   getNewBlockId() {

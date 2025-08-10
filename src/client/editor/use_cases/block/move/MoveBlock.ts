@@ -7,10 +7,7 @@ import BaseMover from './BaseMover';
 import ToolStore from '@/client/editor/stores/tool/ToolStore';
 import { store } from '@/client/common/utils/store';
 import { updateSelectTool } from '@/client/editor/stores/tool/toolSlice';
-import MoveDecoration from './MoveDecoration';
-import MoveDevice from './MoveDevice';
 import BlockCategoryStore from '@/client/editor/stores/blockCategory/BlockCategoryStore';
-import { BlockCategoryName } from '@/client/editor/models/block/BlockCategoryName';
 
 class MoveBlock {
   constructor(
@@ -24,8 +21,6 @@ class MoveBlock {
     this.blockCategoryStore = blockCategoryStore;
     this.baseMover = new BaseMover(blockStore, update, sceneStore, toolStore);
     this.update = update;
-    this.moveDecorationMap.devices = new MoveDevice(blockStore);
-    this.sceneStore = sceneStore;
   }
 
   perform(drag: Num3, dragDelta: Num3) {
@@ -69,11 +64,7 @@ class MoveBlock {
 
   private movers: Partial<Record<string, BlockMover>> = {};
 
-  private moveDecorationMap: Partial<Record<BlockCategoryName, MoveDecoration>> = {};
-
   private baseMover: BaseMover;
-
-  private sceneStore: SceneStore;
 }
 
 export default MoveBlock;

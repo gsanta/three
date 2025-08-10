@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import BlockConstantData from '@/client/editor/models/block/BlockConstantData';
 import BlockData from '@/client/editor/models/block/BlockData';
-import { BlockDecorationType, PartialBlockDecorations } from '@/client/editor/models/block/BlockDecoration';
+import { BlockDecoratorType, PartialBlockDecorations } from '@/client/editor/models/block/BlockDecoration';
 import BlockCreator from './BlockCreator';
 import SceneService from '@/client/editor/ui/scene/service/SceneService';
 import BlockTypeStore from '@/client/editor/stores/blockType/BlockTypeStore';
@@ -19,7 +19,7 @@ class BlockFactory {
     return block;
   }
 
-  createDecorations(block: BlockData, overrides: PartialBlockDecorations): BlockDecorationType[] {
+  createDecorations(block: BlockData, overrides: PartialBlockDecorations): BlockDecoratorType[] {
     const decorations = this.blockTypeStore.getDecorations(block.type);
 
     const newDecorations = Object.values(decorations).map((decoration) => {
@@ -30,7 +30,7 @@ class BlockFactory {
         ...override,
         id: block.id,
       };
-    }) as BlockDecorationType[];
+    }) as BlockDecoratorType[];
 
     return newDecorations;
   }

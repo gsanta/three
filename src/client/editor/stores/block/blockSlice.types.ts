@@ -1,5 +1,5 @@
 import BlockData from '../../models/block/BlockData';
-import { BlockCategoryRecords, BlockDecorationType, BlockDecoratorName } from '../../models/block/BlockDecoration';
+import { BlockCategoryRecords, BlockDecoratorType, BlockDecoratorName } from '../../models/block/BlockDecoration';
 
 export type BlockState = {
   blocks: Record<string, BlockData>;
@@ -22,7 +22,7 @@ export const isBaseDecoratorName = (name: string): name is BaseDecoratorName => 
 
 export type DecorationUpdate = {
   type: 'update';
-  decoration: BlockDecorationType;
+  decoration: BlockDecoratorType;
 };
 
 export type BlockUpdate = { type: 'update'; block: BlockData };

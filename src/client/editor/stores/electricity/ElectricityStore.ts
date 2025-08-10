@@ -1,11 +1,12 @@
 import { Store } from '@/client/common/utils/store';
+import { ElectricityDecoratorNameToType, ElectricsDecoratorName } from './Electrics.types';
 
 class ElectricityStore {
   constructor(store: Store) {
     this.store = store;
   }
 
-  getDecorator<T extends ElectricityDecoratorName>(decoratorName: T, id?: string): ElectricityDecoratorNameToType[T] {
+  getDecorator<T extends ElectricsDecoratorName>(decoratorName: T, id?: string): ElectricityDecoratorNameToType[T] {
     if (!id) {
       throw new Error('Id is not defined');
     }
@@ -19,7 +20,7 @@ class ElectricityStore {
     return decoration as ElectricityDecoratorNameToType[T];
   }
 
-  hasDecorator<T extends ElectricityDecoratorName>(decoratorName: T, id: string): boolean {
+  hasDecorator<T extends ElectricsDecoratorName>(decoratorName: T, id: string): boolean {
     try {
       return !!this.getDecorator(decoratorName, id);
     } catch (e) {

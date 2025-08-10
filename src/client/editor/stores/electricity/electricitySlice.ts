@@ -101,6 +101,4 @@ export const electricitySlice = createSlice({
   },
 });
 
-export const { updateElectricSystem } = electricitySlice.actions;
-
 export default electricitySlice.reducer;

@@ -80,6 +80,7 @@ Feature: Pole
       | BLOCK     | TYPE    |
       | pole-1-1  | pole-1  |
   
+  @only
   Scenario: Submitting cabling action makes connection to another poles
     Given I have a scene with:
       | TYPE   | ID       | PARENT | GRIDPOS |
@@ -244,8 +245,8 @@ Feature: Pole
   @only
   Scenario: Adding a transformer to a pole
     Given I have a scene with:
-      | TYPE   | ID       | PARENT | POS   |
-      | pole-2 | pole-2-1 | -      | 1,0,0 |
+      | TYPE   | ID       | GRIDPOS   |
+      | pole-2 | pole-2-1 | 5,0       |  
     When I select tool 'add'
     And I select template 'pole-mounted-transformer-1'
     And I hover over block 'pole-2-1' and part 'TransformerHolder'

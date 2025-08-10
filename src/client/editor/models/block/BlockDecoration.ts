@@ -7,16 +7,13 @@ import ElectricConsumerDecorator from './categories/ElectricConsumerDecorator';
 import ElectricSupplierDecorator from './categories/ElectricSupplierDecorator';
 import { ElectricityDecoratorNameToType } from '../../stores/electricity/Electrics.types';
 
-export type BlockDecoratorName =
-  | 'cables'
-  | 'electrics'
-  | 'electric-suppliers'
-  | 'electric-consumers'
-  | 'players'
-  | 'transformers'
-  | 'poles';
+export type CoreDecoratorName = 'cables' | 'players' | 'transformers' | 'poles';
 
-export type BlockDecorationType =
+export const coreDecorators: CoreDecoratorName[] = ['cables', 'players', 'transformers', 'poles'] as const;
+
+export type BlockDecoratorName = 'electrics' | 'electric-suppliers' | 'electric-consumers' | CoreDecoratorName;
+
+export type BlockDecoratorType =
   | CableDecorator
   | ElectricConsumerDecorator
   | ElectricSupplierDecorator
@@ -37,7 +34,7 @@ export type CoreDecorations = {
 };
 
 export type PartialBlockDecorations = {
-  [K in keyof CoreDecorations]?: Partial<BlockDecorationType>;
+  [K in keyof CoreDecorations]?: Partial<BlockDecoratorType>;
 };
 
 export type BlockCategoryRecords = {
@@ -48,3 +45,7 @@ export type BlockCategoryRecords = {
 };
 
 export type BlockDecorators = CoreDecorations & ElectricityDecoratorNameToType;
+
+export const isCoreDecorator = (name: BlockDecoratorName): name is CoreDecoratorName => {
+  return coreDecorators.includes(name as CoreDecoratorName);
+};

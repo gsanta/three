@@ -42,15 +42,19 @@ class ElectricityService {
     );
 
     if (supplier) {
-      this.electricityPathFinder.visit(supplier, (node) => {
-        edit.updateDecoration('electrics', node, { energized: true });
-      });
+      this.electricityPathFinder.visit(
+        supplier,
+        (node) => {
+          edit.updateDecoration('electrics', node, { energized: true });
+        },
+        ({ edgeId }) => {
+          edit.updateDecoration('electrics', edgeId, { energized: true });
+        },
+      );
     }
 
     edit.commit();
   }
-
-  private updateElectricSystem() {}
 
   private electricityPathFinder: ElectricityPathFinder;
 

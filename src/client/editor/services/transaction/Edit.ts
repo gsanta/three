@@ -1,8 +1,8 @@
 import {
-  CoreDecorations,
-  BlockDecorationType,
+  BlockDecoratorType,
   BlockDecoratorName,
   BlockDecorators,
+  isCoreDecorator,
 } from '@/client/editor/models/block/BlockDecoration';
 import { PartialDeep } from 'type-fest';
 import BlockData, { mergeBlocks } from '@/client/editor/models/block/BlockData';
@@ -10,9 +10,10 @@ import BlockStore from '../../stores/block/BlockStore';
 import { Store } from '@/client/common/utils/store';
 import mergeDeep, { MergeStrategy } from '../../utils/mergeDeep';
 import BlockUpdater from './updaters/BlockUpdater';
-import TransactionHook from './TransactionHook';
 import { updateBlocks } from '../../stores/block/blockActions';
 import { BlockUpdate, DecorationUpdate, UpdateBlocks } from '../../stores/block/blockSlice.types';
+import ElectricityStore from '../../stores/electricity/ElectricityStore';
+import { isElectricityDecorator } from '../../stores/electricity/Electrics.types';
 
 type EditOptions = {
   arrayMergeStrategy?: MergeStrategy;
@@ -21,9 +22,9 @@ type EditOptions = {
 const getDefaultEditOptions = () => ({ arrayMergeStrategy: 'merge' as const });
 
 class Edit {
-  constructor(blockStore: BlockStore, dispatchStore: Store, systemHooks: TransactionHook[], close: () => void) {
-    this.store = blockStore;
-    this.systemHooks = systemHooks;
+  constructor(blockStore: BlockStore, dispatchStore: Store, electricsStore: ElectricityStore, close: () => void) {
+    this.blockStore = blockStore;
+    this.electricsStore = electricsStore;
     this.dispatchStore = dispatchStore;
 
     this.close = close;
@@ -41,7 +42,7 @@ class Edit {
     return this;
   }
 
-  createDecoration(data: BlockDecorationType): this {
+  createDecoration(data: BlockDecoratorType): this {
     this.updates.push({ type: 'update', decoration: data });
 
     return this;
@@ -52,7 +53,7 @@ class Edit {
     block: Partial<BlockData>,
     decoration: {
       type: T;
-      data: PartialDeep<CoreDecorations[T]>;
+      data: PartialDeep<BlockDecorators[T]>;
     },
   ) {
     this.updateBlock(id, block);
@@ -66,7 +67,7 @@ class Edit {
       return this;
     }
 
-    const origBlock = this.store.getBlocks()[id];
+    const origBlock = this.blockStore.getBlocks()[id];
     const [prevUpdate, index] = this.getBlockFromUpdates(id);
 
     const newBlock = this.mergeBlocks(prevUpdate?.block || origBlock, update, options);
@@ -92,17 +93,24 @@ class Edit {
 
     const mergedOptions = this.getMergedOptions(options);
 
-    const origDecoration = this.store.getDecorator(decoratorName, id);
+    let origDecorator: BlockDecoratorType | undefined;
+
+    if (isElectricityDecorator(decoratorName)) {
+      origDecorator = this.electricsStore.getDecorator(decoratorName, id) as BlockDecoratorType;
+    } else if (isCoreDecorator(decoratorName)) {
+      origDecorator = this.blockStore.getDecorator(decoratorName, id);
+    }
+
     const [prevUpdate, index] = this.getDecorationFromUpdates(id);
     const prevDecoration = prevUpdate?.decoration as BlockDecorators[T];
 
-    const updated = mergeDeep(prevDecoration || origDecoration, partial, mergedOptions.arrayMergeStrategy);
+    const updated = mergeDeep(prevDecoration || origDecorator, partial, mergedOptions.arrayMergeStrategy);
 
     if (index !== -1) {
       this.updates.splice(index, 1);
     }
 
-    this.updates.push({ type: 'update', decoration: updated });
+    this.updates.push({ type: 'update', decoration: updated as BlockDecoratorType });
 
     return this;
   }
@@ -119,7 +127,7 @@ class Edit {
       this.updates.splice(decorationIndex, 1);
     }
 
-    this.updates.push({ remove: this.store.getBlocks()[id] });
+    this.updates.push({ remove: this.blockStore.getBlocks()[id] });
 
     return this;
   }
@@ -222,14 +230,12 @@ class Edit {
 
     this.updates.forEach((update) => {
       if ('type' in update && update.type === 'update' && 'decoration' in update) {
-        const block = this.store.getBlock(update.decoration.id);
+        const block = this.blockStore.getBlock(update.decoration.id);
         this.updaters[block?.category]?.onUpdateDecorators(this, block, update.decoration);
       }
     });
 
     this.dispatchStore.dispatch(updateBlocks({ blockUpdates: this.updates, history }));
-
-    this.systemHooks.forEach((systemHook) => systemHook.onCommit(this.updates));
 
     this.updates = [];
   }
@@ -238,9 +244,9 @@ class Edit {
 
   private updaters: Record<string, BlockUpdater> = {};
 
-  private systemHooks: TransactionHook[];
+  private blockStore: BlockStore;
 
-  private store: BlockStore;
+  private electricsStore: ElectricityStore;
 
   private dispatchStore: Store;
 

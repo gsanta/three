@@ -5,7 +5,7 @@ import BlockConstantData from '@/client/editor/models/block/BlockConstantData';
 import CableDecorator from '@/client/editor/models/block/categories/CableDecorator';
 import mergeDeep from '@/client/editor/utils/mergeDeep';
 import { PartialDeep } from 'type-fest';
-import { BlockDecorationType, PartialBlockDecorations } from '@/client/editor/models/block/BlockDecoration';
+import { BlockDecoratorType, PartialBlockDecorations } from '@/client/editor/models/block/BlockDecoration';
 
 const defaultCableDecoration: Partial<CableDecorator> = {
   end1: null,
@@ -20,7 +20,7 @@ class CableFactory extends BlockFactory {
     return block;
   }
 
-  createDecorations(block: BlockData, overrides: PartialBlockDecorations): BlockDecorationType[] {
+  createDecorations(block: BlockData, overrides: PartialBlockDecorations): BlockDecoratorType[] {
     const decorations = this.blockTypeStore.getDecorations(block.type);
 
     const newDecorations = Object.values(decorations).map((decoration) => {
@@ -32,7 +32,7 @@ class CableFactory extends BlockFactory {
         ...override,
         id: block.id,
       };
-    }) as BlockDecorationType[];
+    }) as BlockDecoratorType[];
 
     return newDecorations;
   }

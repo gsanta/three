@@ -107,8 +107,6 @@ export const blockTypeSlice = createSlice({
           state.decorations[blockTypeName as BlockTypeName] = mergedDecorations;
         }
       });
-
-      console.log('end');
     },
   },
 });

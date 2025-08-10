@@ -17,7 +17,6 @@ class BlockModel {
     return this.block;
   }
 
-  getConduit;
 
   getId() {
     return this.block.id;

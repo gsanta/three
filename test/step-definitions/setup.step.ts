@@ -49,7 +49,7 @@ Given('I have a scene with:', async function (this: ExtendedWorld, table: any) {
   const data = table.hashes() as SceneHash[];
 
   for (const row of data) {
-    let pos: Num3;
+    let pos: Num3 = [0, 0, 0];
 
     if (row.POS) {
       pos = row.POS.split(',').map((num) => Number(num)) as Num3;

@@ -1,6 +1,6 @@
 import { Store } from '@/client/common/utils/store';
 import { BlockTypeName } from '../../models/block/BlockConstantData';
-import { BlockDecoratorName } from '../../models/block/BlockDecoration';
+import { BlockDecoratorName, CoreDecoratorName } from '../../models/block/BlockDecoration';
 
 class BlockTypeStore {
   constructor(store: Store) {
@@ -29,7 +29,7 @@ class BlockTypeStore {
     return this.getState().decorations[blockType] || {};
   }
 
-  getDecoration<T>(blockType: BlockTypeName, decoration: BlockDecoratorName) {
+  getDecoration<T>(blockType: BlockTypeName, decoration: CoreDecoratorName) {
     return (this.getState().decorations[blockType][decoration] || {}) as T;
   }
 

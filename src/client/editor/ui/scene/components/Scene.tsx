@@ -19,7 +19,6 @@ const Scene = () => {
 
   const orbitControlRef = useRef<OrbitControlsImpl>(null);
 
-  const currentAction = useAppSelector((state) => state.blockCategory.currentAction);
   const players = useAppSelector((state) => state.game.players);
 
   useEffect(() => {

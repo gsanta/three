@@ -74,11 +74,11 @@ class GameController {
 
     this.sceneStore.getCanvasState();
 
-    this.store.dispatch(selectPlayer(nextPlayer, reachableGrids));
+    this.store.dispatch(selectPlayer(nextPlayer));
   }
 
   startGame() {
-    this.serializer.import(game1 as SerializedState);
+    this.serializer.import(game1 as unknown as SerializedState);
 
     const players = this.gameStore.getPlayers();
 

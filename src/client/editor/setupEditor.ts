@@ -22,7 +22,6 @@ import EraseTool from './controllers/tools/EraseTool';
 import MoveTool from './controllers/tools/MoveTool';
 import RayTool from './controllers/tools/RayTool';
 import SelectTool from './controllers/tools/SelectTool';
-import BlockTypeSelectorService from './services/BlockTypeSelectorService';
 import BlockTypeStore from './stores/blockType/BlockTypeStore';
 import CableTool from './controllers/tools/CableTool';
 import CableDrawingService from './services/CableDrawingService';
@@ -39,7 +38,6 @@ type EditorContextType = {
   blockStore: BlockStore;
   blockCategoryStore: BlockCategoryStore;
   blockTypeStore: BlockTypeStore;
-  blockTypeSelectorService: BlockTypeSelectorService;
   buildService: BuildService;
   cableDrawingService: CableDrawingService;
   electricityService: ElectricityService;
@@ -66,8 +64,9 @@ export const setupEditor = () => {
   const sceneStore = new SceneStore();
   const toolStore = new ToolStore(store);
   const blockTypeStore = new BlockTypeStore(store);
+  const electricityStore = new ElectricityStore(store);
 
-  const transactionService = new TransactionService(blockStore, store, []);
+  const transactionService = new TransactionService(blockStore, store, electricityStore);
 
   const sceneService = isTestEnv()
     ? new TestSceneService(blockStore, transactionService)
@@ -100,7 +99,6 @@ export const setupEditor = () => {
     transactionService,
   );
 
-  const electricityStore = new ElectricityStore(store);
   const electricityService = new ElectricityService(electricityStore, transactionService);
 
   const buildService = new BuildService(blockStore, blockTypeStore, gameStore, gridStore);
@@ -154,13 +152,10 @@ export const setupEditor = () => {
     ),
   ]);
 
-  const blockTypeSelectorService = new BlockTypeSelectorService(blockTypeStore);
-
   const editorContext: EditorContextType = {
     blockCategoryStore: blockCategoryStore,
     blockStore: blockStore,
     blockTypeStore,
-    blockTypeSelectorService,
     buildService,
     cableDrawingService,
     electricityService,

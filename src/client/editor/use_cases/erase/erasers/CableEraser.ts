@@ -18,15 +18,15 @@ class CableEraser extends BlockEraser {
     const end2 = cable.end2;
 
     if (end1) {
-      this.removeConnection(edit, cable.id, end1);
+      this.removeConnection(edit, end1);
     }
 
     if (end2) {
-      this.removeConnection(edit, cable.id, end2);
+      this.removeConnection(edit, end2);
     }
   }
 
-  private removeConnection(edit: Edit, cableId: string, end: CableEnd) {
+  private removeConnection(edit: Edit, end: CableEnd) {
     this.blockStore.getBlock(end.device);
 
     edit.updateBlock(end.device, {
